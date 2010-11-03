@@ -1,0 +1,6 @@
+ADD_EXECUTABLE(lambert_test lambert_test.cpp)
+ADD_EXECUTABLE(propagate_lagrangian_test propagate_lagrangian_test.cpp)
+TARGET_LINK_LIBRARIES(lambert_test keplerian_toolbox_static ${MANDATORY_LIBRARIES})
+TARGET_LINK_LIBRARIES(propagate_lagrangian_test keplerian_toolbox_static ${MANDATORY_LIBRARIES})
+
+
