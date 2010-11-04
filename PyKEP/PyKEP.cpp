@@ -23,6 +23,7 @@
  *****************************************************************************/
 
 #include <boost/python/class.hpp>
+#include <boost/python/def.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/module.hpp>
@@ -46,24 +47,55 @@ static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolb
 	return boost::python::make_tuple(r,v);
 }
 
+#define get_constant(arg) \
+static inline double get_##arg() \
+{ \
+	return ASTRO_##arg; \
+}
+
+get_constant(AU);
+get_constant(MU_SUN);
+get_constant(EARTH_VELOCITY);
+get_constant(DEG2RAD);
+get_constant(RAD2DEG);
+get_constant(DAY2SEC);
+get_constant(SEC2DAY);
+get_constant(DAY2YEAR);
+get_constant(G0);
+
 BOOST_PYTHON_MODULE(_PyKEP) {
-	//Disable docstring c++ signature for sphinx compatibility
+	//Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
   
-	// Translate exceptions for this module.
-        //translate_exceptions();
+	//Exposing the arrays and vectors into python tuples
 	to_tuple_mapping<kep_toolbox::array6D>();
 	from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
 	to_tuple_mapping<kep_toolbox::array3D>();
 	from_python_sequence<kep_toolbox::array3D,fixed_size_policy>();
 	to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
 	from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
+
+	//Constants.
+#define expose_constant(arg) \
+def("_get_"#arg,&get_##arg);
+	expose_constant(AU);
+	expose_constant(MU_SUN);
+	expose_constant(EARTH_VELOCITY);
+	expose_constant(DEG2RAD);
+	expose_constant(RAD2DEG);
+	expose_constant(DAY2SEC);
+	expose_constant(SEC2DAY);
+	expose_constant(DAY2YEAR);
+	expose_constant(G0);
+
+	//Exposing enums
 	enum_<kep_toolbox::epoch::type>("epoch_type")
 		.value("MJD", kep_toolbox::epoch::MJD)
 		.value("MJD2000", kep_toolbox::epoch::MJD2000)
 		.value("JD", kep_toolbox::epoch::JD);
-	class_<kep_toolbox::epoch>("epoch","Epoch class.",init<const double &,kep_toolbox::epoch::type>())
+		
+	class_<kep_toolbox::epoch>("epoch","An epoch. An epoch represents a precise point in time",init<const double &,kep_toolbox::epoch::type>())
 		.def(repr(self));
 
 	// Base planet class.
@@ -74,6 +106,8 @@ BOOST_PYTHON_MODULE(_PyKEP) {
 	
 	// Solar system planet.
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("asteroid_gtoc5",init<optional<const int &> >());
+	
+	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Multiple revolution Lambert's problem",
@@ -100,5 +134,5 @@ BOOST_PYTHON_MODULE(_PyKEP) {
 		.def("is_reliable",&kep_toolbox::lambert_problem::is_reliable)
 		.def("get_Nmax",&kep_toolbox::lambert_problem::get_Nmax);
 
-	register_ptr_to_python<kep_toolbox::planet_ptr>();
+
 }
