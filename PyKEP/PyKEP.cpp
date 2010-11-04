@@ -29,6 +29,7 @@
 #include <boost/python/operators.hpp>
 #include <boost/python/register_ptr_to_python.hpp>
 #include <boost/python/self.hpp>
+#include <boost/python/docstring_options.hpp>
 #include <boost/utility.hpp>
 
 #include "../src/keplerian_toolbox.h"
@@ -46,9 +47,12 @@ static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolb
 }
 
 BOOST_PYTHON_MODULE(_PyKEP) {
+	//Disable docstring c++ signature for sphinx compatibility
+	docstring_options doc_options;
+	doc_options.disable_signatures();
+  
 	// Translate exceptions for this module.
         //translate_exceptions();
-
 	to_tuple_mapping<kep_toolbox::array6D>();
 	from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
 	to_tuple_mapping<kep_toolbox::array3D>();
@@ -72,8 +76,23 @@ BOOST_PYTHON_MODULE(_PyKEP) {
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("asteroid_gtoc5",init<optional<const int &> >());
 
 	// Lambert.
-	class_<kep_toolbox::lambert_problem>("lambert_problem",init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &> >())
-		.def("get_v1",&kep_toolbox::lambert_problem::get_v1,return_value_policy<copy_const_reference>())
+	class_<kep_toolbox::lambert_problem>("lambert_problem","Multiple revolution Lambert's problem",
+		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &> >(
+			"lambert_problem(r1,r2,t, mu = 1, cw = False)\n\n"
+			"- r1: 3D starting position\n"
+			"- r2: 3D final position\n"
+			"- t: time of flight\n"
+			"- mu: gravitational parameter\n"
+			"- cw: True for clock-wise motion, False otherwise\n\n"
+			"Units need to be consistent. The multirev Lambert's problem will be solved upon construction.\n\n"
+			"Example (non-dimensional units used)::\n\n"
+			"  l = lambert_problem([1,0,0],[0,1,0],pi / 2.)"
+		))
+		.def("get_v1",&kep_toolbox::lambert_problem::get_v1,return_value_policy<copy_const_reference>(),
+			"Returns a sequence of vectors containing the velovities at r1 of all solutions to the Lambert's Problem\n\n"
+			"Example (extracts the 0 revs solution::\n\n"
+			"  v10 = l.get_v1()[0]"
+		)
 		.def("get_v2",&kep_toolbox::lambert_problem::get_v2,return_value_policy<copy_const_reference>())
 		.def("get_a",&kep_toolbox::lambert_problem::get_a,return_value_policy<copy_const_reference>())
 		.def("get_p",&kep_toolbox::lambert_problem::get_p,return_value_policy<copy_const_reference>())
