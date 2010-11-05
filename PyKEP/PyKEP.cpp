@@ -94,15 +94,38 @@ def("_get_"#arg,&get_##arg);
 		.value("MJD", kep_toolbox::epoch::MJD)
 		.value("MJD2000", kep_toolbox::epoch::MJD2000)
 		.value("JD", kep_toolbox::epoch::JD);
-		
-	class_<kep_toolbox::epoch>("epoch","An epoch. An epoch represents a precise point in time",init<const double &,kep_toolbox::epoch::type>())
+	
+	// Epoch class
+	class_<kep_toolbox::epoch>("epoch","Represents a precise point in time",
+		init<const double &,kep_toolbox::epoch::type>(
+			"epoch(jd, jd_type)\n\n"
+			"- jd: a julian date\n"
+			"- jd_type: julian date type\n\n"
+			"Example::\n\n"
+			"  e = epoch(0,PyKEP.epoch_type.MJD2000)\n"
+		))
+		.def("jd",&kep_toolbox::epoch::jd,
+			"Returns the Julian Date\n\n"
+			"Example::\n\n"
+			"  jd = e.jd()"
+		)
+		.def("mjd",&kep_toolbox::epoch::mjd,
+			"Returns the Modified Julian Date\n\n"
+			"Example::\n\n"
+			"  jd = e.mjd()"
+		)
+		.def("mjd2000",&kep_toolbox::epoch::mjd2000,
+			"Returns the Modifeid Julian Date 2000\n\n"
+			"Example::\n\n"
+			"  jd = e.mjd2000()"
+		)
 		.def(repr(self));
 
 	// Base planet class.
 	class_<kep_toolbox::planet,boost::noncopyable>("_planet",no_init)
-		.def("get_eph",&planet_get_eph)
+		.def("eph",&planet_get_eph)
 		.def(repr(self))
-		.def("get_elements",&kep_toolbox::planet::get_elements);
+		.def("elements",&kep_toolbox::planet::get_elements);
 	
 	// Solar system planet.
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("asteroid_gtoc5",init<optional<const int &> >());
@@ -123,7 +146,7 @@ def("_get_"#arg,&get_##arg);
 			"  l = lambert_problem([1,0,0],[0,1,0],pi / 2.)"
 		))
 		.def("get_v1",&kep_toolbox::lambert_problem::get_v1,return_value_policy<copy_const_reference>(),
-			"Returns a sequence of vectors containing the velovities at r1 of all solutions to the Lambert's Problem\n\n"
+			"Returns a sequence of vectors containing the velocities at r1 of all solutions to the Lambert's Problem\n\n"
 			"Example (extracts the 0 revs solution::\n\n"
 			"  v10 = l.get_v1()[0]"
 		)

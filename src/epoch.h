@@ -56,8 +56,8 @@ public:
 
 	/** Types of non gregorian dates supported. Julian Date (JD) is the number of days passed since
 	 * January 1, 4713 BC at noon. Modified Julian Date (MJD) is the number of days passed since
-	 * November 17, 1858 at midnight. The Modified Julian Date 2000 (MJD2000) is the number of days passed since
-	* Juanuary 1, 2000 at midnight.
+	 * November 17, 1858 at 00:00 am. The Modified Julian Date 2000 (MJD2000) is the number of days passed since
+	* Juanuary 1, 2000 at 00:00am.
 	*/
 	enum type {MJD2000, MJD, JD};
 
