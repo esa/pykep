@@ -129,6 +129,16 @@ const  std::vector<double>& lambert_problem::get_p() const
 	return m_p;
 }
 
+/// Gets number of iterations
+/**
+ *
+ * \return an std::vector containing the iterations taken to compute each one of the solutions
+ */
+const  std::vector<int>& lambert_problem::get_iters() const
+{
+	return m_iters;
+}
+
 /// Gets N_max
 /**
  *

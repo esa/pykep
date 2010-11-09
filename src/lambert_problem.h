@@ -61,6 +61,7 @@ public:
 	const std::vector<array3D>& get_v2() const;
 	const std::vector<double>& get_a() const;
 	const std::vector<double>& get_p() const;
+	const std::vector<int>& get_iters() const;
 	bool is_reliable() const;
 	int get_Nmax() const;
 private:

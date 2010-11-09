@@ -41,22 +41,14 @@ and::
 Watch carefully the message in the terminal where the installation path is given to check 
 that the correct python dist-packages or site-packages directory has been located
 
-. Here is a typical example (obtained in a gentoo system)::
-
-  -- Python libraries: /usr/lib64/libpython2.6.so
-  -- Python library: /usr/lib64/libpython2.6.so
-  -- Python interpreter is: /usr/bin/python
-  -- Python packages dir is: site-packages
-  -- Python library version: 26
-  -- Python modules install path: lib/python2.6/site-packages
-  -- Configuring done
-  -- Generating done
-  -- Build files have been written to: /home/user/Documents/keplerian_toolbox/build
+Here is a typical example of the output obtained (gentoo system)::
   [ 47%] Built target keplerian_toolbox
   [ 94%] Built target keplerian_toolbox_static
   [100%] Built target _PyKEP
   Install the project...
-  -- Install configuration: ""
-  -- Up-to-date: /usr/local/lib/libkeplerian_toolbox.so
-  -- Up-to-date: /usr/local/lib/python2.6/site-packages/PyKEP/__init__.py
-  -- Up-to-date: /usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so
+  -- Install configuration: "Release"
+  -- Installing: /usr/local/lib/libkeplerian_toolbox.so
+  -- Installing: /usr/local/lib/python2.6/site-packages/PyKEP/__init__.py
+  -- Installing: /usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so
+  -- Removed runtime path from "/usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so"
+

@@ -12,4 +12,4 @@ MU_SUN = _PyKEP._get_MU_SUN()
 RAD2DEG = _PyKEP._get_RAD2DEG()
 SEC2DAY = _PyKEP._get_SEC2DAY()
 
-
+epoch.epoch_type = _PyKEP._epoch_type
