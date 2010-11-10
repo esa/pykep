@@ -102,13 +102,15 @@ def("_get_"#arg,&get_##arg);
 		.value("JD", kep_toolbox::epoch::JD);
 	
 	// Epoch class
-	class_<kep_toolbox::epoch>("epoch","Represents a precise point in time. Internal handling is made using boost::posix_time_ptime classes",
-		init<const double &,kep_toolbox::epoch::type>(
-			"epoch(jd, jd_type)\n\n"
+	class_<kep_toolbox::epoch>("epoch","Represents a precise point in time. The boost::posix_time_ptime classes are used to handle the conversion to and from string",
+		init<const double &,optional<kep_toolbox::epoch::type> >(
+			"PyKEP.epoch(jd[, jd_type=epoch.epoch_type.MJD2000])\n\n"
 			"- jd: a julian date\n"
-			"- jd_type: julian date type\n\n"
-			"Example::\n\n"
-			"  e = epoch(0,PyKEP.epoch.epoch_type.MJD2000)\n"
+			"- jd_type: julian date type, see :py:class:`PyKEP.epoch.epoch_type`\n\n"
+			"Examples::\n\n"
+			"  e1 = epoch(0)\n"  
+			"  e1 = epoch(0,epoch.epoch_type.MJD2000)\n"
+			"  e2 = epoch(54333, epoch.epoch_type.MJD)\n"
 		))
 		.def("jd",&kep_toolbox::epoch::jd,
 			"Returns the Julian Date\n\n"
@@ -145,12 +147,66 @@ def("_get_"#arg,&get_##arg);
 	);
 
 	// Base planet class.
-	class_<kep_toolbox::planet,boost::noncopyable>("_planet",no_init)
-		.def("eph",&planet_get_eph)
-		.def(repr(self))
-		.def("elements",&kep_toolbox::planet::get_elements);
 	
-	// Solar system planet.
+	//These serve to allow boost python to resolve correctly the overloaded function get_elements
+	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
+	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
+	
+	class_<kep_toolbox::planet>("planet","A planet ... contains the ephemerides calculations",
+		init<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, optional<const std::string &> >(
+			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
+			"- when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch\n"
+			"- orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)\n"
+			"- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)\n"
+			"- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)\n"
+			"- radius: body radius (SI units, i.e. meters)\n"
+			"- safe_radius: body distance safe for a spacecraft fly-by\n"
+			"- name: body name\n\n"
+			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb` to instantiate common objects"
+			"Example::\n\n"
+			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.9998805e-01 * AU, 1.6716812e-02, 8.8543531e-04 * DEG2RAD, 1.7540648e+02 * DEG2RAD, 2.8761578e+02 * DEG2RAD, 2.5760684e+02 * DEG2RAD), MU_SUN, 398600.4418e9, 6378000, 6900000,  'Earth'"
+		))
+		.def("eph",&planet_get_eph,
+			"PyKEP.planet.eph(when)\n\n"
+			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n\n"
+			"Retuns a tuple containing the planet position and velocity in SI units\n\n"		
+			"Example::\n\n"
+			"  r,v = earth.eph(epoch(5433))"
+		)
+		.def("orbital_elements",element_getter_epoch(&kep_toolbox::planet::get_elements),
+			"PyKEP.planet.orbital_elements(when)\n\n"
+			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the orbital elements are needed\n\n"
+			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the desired epoch (SI units used)\n\n"
+			"Example::\n\n"
+			"  elem = earth.orbital_elements(epoch(5433))"
+		 )
+		.def("orbital_elements",element_getter(&kep_toolbox::planet::get_elements),
+			"PyKEP.planet.orbital_elements()\n\n"
+			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the reference epoch (SI units used)\n\n"
+			"Example::\n\n"
+			"  elem = earth.orbital_elements()"
+		 )	
+		.def(repr(self));
+	
+	// A solar system planet
+	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system",
+		init<std::string>(
+			"PyKEP.planet_ss.eph(which)\n\n"
+			"- which: string containing the common planet name (e.g. 'earth')\n\n"
+			"Example::\n\n"
+			"  earth = planet_ss('earth')"
+		));	
+	
+	// A planet from the MPCORB database
+	class_<kep_toolbox::planet_mpcorb,bases<kep_toolbox::planet> >("planet_mpcorb","A planet from the mpcorb database",
+		init<std::string>(
+			"PyKEP.planet_mpcorb.eph(line)\n\n"
+			"- line: a line from the MPCORB database file\n\n"
+			"Example::\n\n"
+			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
+		));	
+	
+	// An asteroid from the gtoc5 bunch
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("asteroid_gtoc5",init<optional<const int &> >());
 	
 	register_ptr_to_python<kep_toolbox::planet_ptr>();
@@ -158,7 +214,7 @@ def("_get_"#arg,&get_##arg);
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
 		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &> >(
-			"lambert_problem(r1,r2,t, mu = 1, cw = False)\n\n"
+			"lambert_problem(r1, r2, t [, mu = 1, cw = False])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
 			"- r2: 3D final position (x2,y2,z2)\n"
 			"- t: time of flight\n"

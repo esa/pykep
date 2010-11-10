@@ -17,9 +17,8 @@ PyKEP Documentation
   .. automethod:: PyKEP.lambert_problem.get_Nmax()
 
   .. automethod:: PyKEP.lambert_problem.get_iters()
-
+ 
   .. automethod:: PyKEP.lambert_problem.is_reliable()
-
 
 
 .. autoclass:: PyKEP.epoch(*args)
@@ -37,3 +36,19 @@ PyKEP Documentation
 .. autofunction:: PyKEP.epoch_from_string(s)
 
 .. autofunction:: PyKEP.epoch_from_iso_string(s)
+
+.. autoclass:: PyKEP.planet(*args)
+
+  .. automethod:: PyKEP.planet.__init__(*args)
+
+  .. automethod:: PyKEP.planet.eph(*args)
+
+  .. automethod:: PyKEP.planet.orbital_elements(*args)
+
+.. autoclass:: PyKEP.planet_ss(*args)
+
+  .. automethod:: PyKEP.planet_ss.__init__(*args)
+
+.. autoclass:: PyKEP.planet_mpcorb(*args)
+
+  .. automethod:: PyKEP.planet_mpcorb.__init__(*args)

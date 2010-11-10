@@ -72,7 +72,7 @@ public:
 		*/
 	planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
 	/// Polymorphic copy constructor.
-	virtual planet_ptr clone() const = 0;
+	virtual planet_ptr clone() const;
 	virtual ~planet();
 	/** @name Getters */
 	//@{
@@ -139,7 +139,7 @@ public:
 
 	array3D get_velocity(const epoch& when) const;
 
-	/// Returns the planet orbital elements (a,e,i,Om,om,M)
+	/// Returns the planet orbital elements at a given epoch (a,e,i,Om,om,M)
 	/**
 	 * \param[in] when Epoch in which orbital elements are required
 	 *
@@ -147,7 +147,14 @@ public:
 	 * returned in range 0,2*pi
 	 */
 	array6D get_elements(const epoch& when) const;
-
+	
+	/// Returns the planet orbital elements at the reference epoch (a,e,i,Om,om,M)
+	/**
+	 * @return a boost array containing the planet elements in epoch (SI Units) (a,e,i,Om,om,M). Mean anomaly is
+	 * returned in range 0,2*pi
+	 */
+	array6D get_elements() const;
+	
 	/// Returns the planet name
 	std::string get_name() const;
 

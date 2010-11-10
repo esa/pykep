@@ -32,6 +32,12 @@ planet::planet(const epoch& ref_epoch, const array6D& orbital_elements_, const d
 	planet::build_planet(ref_epoch, orbital_elements_, mu_central_body_, mu_self_, radius_, safe_radius_, name_);
 }
 
+
+planet_ptr planet::clone() const
+{
+	return planet_ptr(new planet(*this));
+}
+
 void planet::build_planet(const epoch& ref_epoch, const array6D& orbital_elements_, const double & mu_central_body_, const double &mu_self_, const double & radius_, const double & safe_radius_, const std::string &name_)
 {
 	keplerian_elements = orbital_elements_;
@@ -77,6 +83,10 @@ array6D planet::get_elements(const epoch& when) const{
 	elements[5] = fmod(elements[5],2*M_PI);
 	if (elements[5] < 0) elements[5] = 2*M_PI + elements[5];
 	return ( elements );
+}
+
+array6D planet::get_elements() const{
+	return ( keplerian_elements );
 }
 
 /// Destructor.
