@@ -47,6 +47,13 @@ static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolb
 	return boost::python::make_tuple(r,v);
 }
 
+static inline tuple propagate_lagrangian_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double t, const double mu)
+{
+	kep_toolbox::array3D r(r0), v(v0);
+	kep_toolbox::propagate_lagrangian(r,v,t,mu);
+	return boost::python::make_tuple(r,v);
+}
+
 #define get_constant(arg) \
 static inline double get_##arg() \
 { \
@@ -131,6 +138,8 @@ def("_get_"#arg,&get_##arg);
 		
 	// Epoch constructors helpers
 	def("epoch_from_string",&kep_toolbox::epoch_from_string,
+		"PyKEP.epoch_from_string(s)\n\n"
+		"- s: string containing a date in the format 'YYYY-MM-DD HH:MM:SS'"
 		"Returns a :py:class:`PyKEP.epoch` object constructed from a from a delimited string containing a date."
 		"Excess digits in fractional seconds will be dropped. Ex: '1:02:03.123456999' => '1:02:03.123456'."
 		"This behavior depends on the precision defined in astro_constant.h used to compile.\n\n"
@@ -140,6 +149,8 @@ def("_get_"#arg,&get_##arg);
 	);
 
 	def("epoch_from_iso_string",&kep_toolbox::epoch_from_iso_string,
+	    	"PyKEP.epoch_from_iso_string(s)\n\n"
+		"- s: string containing a date in the iso format 'YYYYMMDDTHHMMSS'"
 		"Returns a :py:class:`PyKEP.epoch` object constructed from a from a non delimited iso form string containing a date.\n\n"
 		"NOTE: The function is based on the corresponding `boost date_time library function <http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/posix_time.html#ptime_from_string>`_\n\n"
 		"Example::\n\n"
@@ -206,8 +217,30 @@ def("_get_"#arg,&get_##arg);
 			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
 		));	
 	
-	// An asteroid from the gtoc5 bunch
-	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("asteroid_gtoc5",init<optional<const int &> >());
+	// A planet from the gtoc5 problem
+	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
+		init<const int &>(
+			"PyKEP.planet_gtoc5(ast_id)\n\n"
+			" - ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the original"
+			"data file distributed by the Russian, see the (`gtoc5 web portal <gtoc5.math.msu.su>`_. Earth is 7076\n\n"
+			"Example::\n\n"
+			"  russian_ast = planet_gtoc5(1)"
+		));
+	
+	// A planet from the gtoc2 problem
+	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
+		init<const int &>(
+			"PyKEP.planet_gtoc2(ast_id)\n\n"
+			" - ast_id: Construct from a consecutive id from 0 to 910 (Earth)."
+			"The order is that of the original data file from JPL\n\n"
+			"    - Group 1:   0 - 95\n"
+			"    - Group 2:  96 - 271\n"
+			"    - Group 3: 272 - 571\n"
+			"    - Group 4: 572 - 909\n"
+			"    - Earth:   910\n\n"
+			"Example::\n\n"
+			"  earth_gtoc2 = planet_gtoc2(910)"
+		));
 	
 	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
@@ -268,4 +301,16 @@ def("_get_"#arg,&get_##arg);
 			"  n_sol = Nmax*2+1"
 		)
 		.def(repr(self));
+		
+	//Lagrangian propagator for keplerian orbits
+	def("propagate_lagrangian",&propagate_lagrangian_wrapper,
+		"PyKEP.propagate_lagrangian(r,v,t,mu)\n\n"
+		"- r: start position, x,y,z\n"
+		"- v: start velocity, vx,vy,vz\n"
+		"- t: propagation time\n"
+		"- mu: central body gravity constant\n\n"
+		"Returns a tuple containing r and v, the final position and velocity after the propagation.\n\n"
+		"Example::\n\n"
+		"  r,v = propagate_lagrangian([1,0,0],[0,1,0],pi/2,1)"
+	);
 }

@@ -52,7 +52,7 @@ public:
 	 * data file from Russio
 	 * Asteroid: 1 - 7075
 	 * Earth: 7076
-	 * \param[in] name a string describing a planet
+	 * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
 	 */
 	asteroid_gtoc5(const int & = 7076);
 

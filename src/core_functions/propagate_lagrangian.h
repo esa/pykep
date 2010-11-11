@@ -47,9 +47,7 @@ namespace kep_toolbox {
  * \param[in] t propagation time
  * \param[in] mu central body gravitational parameter
  *
- * NOTE: The solver used for the kepler equation is a derivative free solver from the boost libraries. In the case
- * of hyperbolae, as the initial guess is rather poor it fails whenever the semimajor-axis is too small (e.g. a=0.03 in
- * non dimensional units). These cases however are rarely interesting.
+ * NOTE: The solver used for the kepler equation is a derivative free solver from the boost libraries. 
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
@@ -57,9 +55,8 @@ template<class vettore3D>
 		void propagate_lagrangian(vettore3D& r0, vettore3D& v0, const double &t, const double &mu)
 {
 		vettore3D r0_copy = r0, v0_copy = v0;
-	try {
 
-	double R = sqrt(r0[0]*r0[0] + r0[1]*r0[1] + r0[2]*r0[2]);
+		double R = sqrt(r0[0]*r0[0] + r0[1]*r0[1] + r0[2]*r0[2]);
 	double V = sqrt(v0[0]*v0[0] + v0[1]*v0[1] + v0[2]*v0[2]);
 	double energy = (V*V/2 - mu/R);
 	double a = - mu / 2.0 / energy;
@@ -115,17 +112,7 @@ template<class vettore3D>
 		r0[i] = F * r0[i] + G * v0[i];
 		v0[i] = Ft * temp[i] + Gt * v0[i];
 	}
-	
-	} catch (const std::exception& e) {
-                std::cout << "Numerical failiure in propagate_lagrangian.h!\n";
-                std::cout << "Exception thrown: " << e.what() << '\n';
-                std::cout << "Input data to propagate_lagrangian.h: " << std::endl;
-                std::cout << "r0: " << r0_copy << '\n';
-                std::cout << "v0: " << v0_copy << '\n';
-                std::cout << "t: " << t << '\n';
-                std::cout << "mu: " << mu << '\n';
 	}
-}
 }
 
 #endif // PROPAGATE_LAGRANGIAN_H

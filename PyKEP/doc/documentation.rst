@@ -37,6 +37,8 @@ PyKEP Documentation
 
 .. autofunction:: PyKEP.epoch_from_iso_string(s)
 
+
+
 .. autoclass:: PyKEP.planet(*args)
 
   .. automethod:: PyKEP.planet.__init__(*args)
@@ -52,3 +54,15 @@ PyKEP Documentation
 .. autoclass:: PyKEP.planet_mpcorb(*args)
 
   .. automethod:: PyKEP.planet_mpcorb.__init__(*args)
+
+.. autoclass:: PyKEP.planet_gtoc5(*args)
+
+  .. automethod:: PyKEP.planet_gtoc5.__init__(*args)
+
+.. autoclass:: PyKEP.planet_gtoc2(*args)
+
+  .. automethod:: PyKEP.planet_gtoc2.__init__(*args)
+
+.. autofunction:: PyKEP.propagate_lagrangian(*args)
+
+
