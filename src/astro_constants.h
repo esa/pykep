@@ -40,7 +40,7 @@
 #define ASTRO_G0 9.80665
 
 //This is used as a numerical proceure (e.g. newton-raphson or runge-kutta or regula-falsi) stopping criteria
-#define ASTRO_TOLERANCE 1e-12
+#define ASTRO_TOLERANCE 1e-16
 
 //This is used in the Lambert Problem and in the solution of kepler equation
 #define ASTRO_MAX_ITER 50

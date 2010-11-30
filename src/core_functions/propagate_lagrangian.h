@@ -44,19 +44,17 @@ namespace kep_toolbox {
  *
  * \param[in,out] r0 initial position vector. On output contains the propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested template type is boost::array<double,3))
  * \param[in,out] v0 initial velocity vector. On output contains the propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] t propagation time
+ * \param[in] t propagation time (can be negative)
  * \param[in] mu central body gravitational parameter
  *
- * NOTE: The solver used for the kepler equation is a derivative free solver from the boost libraries. 
+ * NOTE: The solver used for the kepler equation is a derivative free solver from the boost libraries.
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-template<class vettore3D>
-		void propagate_lagrangian(vettore3D& r0, vettore3D& v0, const double &t, const double &mu)
+template<class array3D>
+void propagate_lagrangian(array3D& r0, array3D& v0, const double &t, const double &mu)
 {
-		vettore3D r0_copy = r0, v0_copy = v0;
-
-		double R = sqrt(r0[0]*r0[0] + r0[1]*r0[1] + r0[2]*r0[2]);
+	double R = sqrt(r0[0]*r0[0] + r0[1]*r0[1] + r0[2]*r0[2]);
 	double V = sqrt(v0[0]*v0[0] + v0[1]*v0[1] + v0[2]*v0[2]);
 	double energy = (V*V/2 - mu/R);
 	double a = - mu / 2.0 / energy;
@@ -75,7 +73,7 @@ template<class vettore3D>
 		std::pair<double, double> result;
 		boost::uintmax_t iter = ASTRO_MAX_ITER;
 		boost::math::tools::eps_tolerance<double> tol(64);
-                result = boost::math::tools::bracket_and_solve_root(boost::bind(kepDE,_1,DM,sigma0,sqrta,a,R),DE,2.0,true,tol,iter);
+		result = boost::math::tools::bracket_and_solve_root(boost::bind(kepDE,_1,DM,sigma0,sqrta,a,R),DE,2.0,true,tol,iter);
 		DE = (result.first + result.second) / 2;
 		double r = a + (R - a) * cos(DE) + sigma0 * sqrta * sin(DE);
 
@@ -88,8 +86,8 @@ template<class vettore3D>
 	else{	//Solve Kepler's equation, hyperbolic case
 		sqrta = sqrt(-a);
 		double DN = sqrt(-mu / pow(a,3)) * t;
-                double DH;
-                t > 0 ? DH = 1 : DH = -1; // TODO: find a better initial guess. I tried with 0 and D (both have numercial problems and result in exceptions)
+		double DH;
+		t > 0 ? DH = 1 : DH = -1; // TODO: find a better initial guess. I tried with 0 and D (both have numercial problems and result in exceptions)
 
 		//Solve Kepler Equation for hyperbolae in DH (hyperbolic anomaly difference)
 		//newton_raphson(DH,boost::bind(kepDH,_1,DN,sigma0,sqrta,a,R),boost::bind(d_kepDH,_1,sigma0,sqrta,a,R),100,ASTRO_TOLERANCE);
@@ -112,7 +110,7 @@ template<class vettore3D>
 		r0[i] = F * r0[i] + G * v0[i];
 		v0[i] = Ft * temp[i] + Gt * v0[i];
 	}
-	}
+}
 }
 
 #endif // PROPAGATE_LAGRANGIAN_H

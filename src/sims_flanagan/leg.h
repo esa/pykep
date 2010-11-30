@@ -80,8 +80,7 @@ public:
 	/**
 	* Initialize a leg assuming that the user has or will initialize separately the spacecraft.
 	* The throttles are provided via two iterators pointing
-	* to the beginning and to the end of a throttle sequence. Each throttle is assumed to be represented
-	* in cartesian coordinates: \f$ x_i,y_i,z_i \in [0,1]\f$.
+	* to the beginning and to the end of a throttle sequence. 
 	*
 	* \param[in] epoch_i Inital epoch
 	* \param[in] state_i Initial sc_state (spacecraft state)
@@ -116,6 +115,26 @@ public:
 		}
 		mu = mu_;
 	}
+	
+	/// Initialize a leg
+	/**
+	* Initialize a leg assuming that the user has or will initialize separately the spacecraft.
+	* The throttles are provided via two iterators pointing to the beginning and to the end of 
+	* a sequence of doubles (\f$ x_1,y_1,z_1, ..., x_N,y_N,z_N \f$ containing the 
+	* cartesian components of each throttle \f$ x_i,y_i,z_i \in [0,1]\f$. The constructed leg
+	* will have by default equally spaced segments. 
+	*
+	* \param[in] epoch_i Inital epoch
+	* \param[in] state_i Initial sc_state (spacecraft state)
+	* \param[in] throttles_start iterator pointing to the beginning of a cartesian throttle sequence.
+	* \param[in] throttles_end iterator pointing to the end+1 of a cartesian throttle sequence.
+	* \param[in] epoch_f Final epoch. Needs to be later than epoch_i
+	* \param[in] state_f Final sc_state (spacecraft state)
+	* \param[in] mu_ Primary body gravitational constant
+	*
+	& \throws value_error if final epoch is before initial epoch, if mu_ not positive
+	*/
+	
 	template<typename it_type>
 			void set_leg(const epoch& epoch_i, const sc_state& state_i,
 					it_type throttles_start,
@@ -323,9 +342,10 @@ public:
 			propagate_lagrangian(rfwd, vfwd, manouver_time - current_time_fwd, mu);
 			current_time_fwd = manouver_time;
 
-			for (int j=0;j<3;j++)
-
-			dv[j] = max_thrust / mfwd * thrust_duration * throttles[i].get_value()[j];
+			for (int j=0;j<3;j++){
+				dv[j] = max_thrust / mfwd * thrust_duration * throttles[i].get_value()[j];
+			}
+			
 			norm_dv = norm(dv);
 			sum(vfwd,vfwd,dv);
 			mfwd *= exp( -norm_dv/isp/ASTRO_G0 );
@@ -349,8 +369,9 @@ public:
 			propagate_lagrangian(rback, vback, manouver_time - current_time_back, mu);
 			current_time_back = manouver_time;
 
-			for (int j=0;j<3;j++)
+			for (int j=0;j<3;j++){
 				dv[j] = - max_thrust / mback * thrust_duration * throttles[throttles.size() - i - 1].get_value()[j];
+			}
 			norm_dv = norm(dv);
 			sum(vback,vback,dv);
 			mback *= exp( norm_dv/isp/ASTRO_G0 );
@@ -386,7 +407,7 @@ public:
 	/**
 	* This methods loops on the vector containing the throttles \f$ (x_1,y_1,z_1,x_2,y_2,z_2,...,x_n,y_n,z_n) \f$
 	* and stores the magnitudes \f$ x_i^2 + y_i^2 + z_i^2 - 1\f$ at the locations indicated by the iterators. The
-	* iterators must have a distance of \f$ n\f$. If the stored values are not all \f$ \le 1\f$ then the trajectory
+	* iterators must have a distance of \f$ n\f$. If the stored values are not all \f$ \le 0 \f$ then the trajectory
 	* is unfeasible.
 	*
 	* @param[out] start std::vector<double>iterator from the first element where to store the magnitudes

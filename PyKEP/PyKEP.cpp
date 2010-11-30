@@ -35,8 +35,6 @@
 
 #include "../src/keplerian_toolbox.h"
 #include "boost_python_container_conversions.h"
-//#include "exceptions.h"
-//#include "../utils.h"
 
 using namespace boost::python;
 
@@ -71,11 +69,11 @@ get_constant(DAY2YEAR);
 get_constant(G0);
 
 BOOST_PYTHON_MODULE(_PyKEP) {
-	//Disable docstring c++ signature to allow sphinx autodoc to work properly
+	// Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
   
-	//Exposing the arrays and vectors into python tuples
+	// Exposing the arrays and vectors into python tuples
 	to_tuple_mapping<kep_toolbox::array6D>();
 	from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
 	to_tuple_mapping<kep_toolbox::array3D>();
@@ -83,7 +81,7 @@ BOOST_PYTHON_MODULE(_PyKEP) {
 	to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
 	from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
 
-	//Constants.
+	// Constants.
 #define expose_constant(arg) \
 def("_get_"#arg,&get_##arg);
 	expose_constant(AU);
@@ -96,7 +94,7 @@ def("_get_"#arg,&get_##arg);
 	expose_constant(DAY2YEAR);
 	expose_constant(G0);
 
-	//Exposing enums
+	// Exposing enums
 	enum_<kep_toolbox::epoch::type>("_epoch_type",
 			"Defines a julian date type exposing the corresponding c++ enum\n\n"
 			"One of\n\n"
@@ -159,7 +157,7 @@ def("_get_"#arg,&get_##arg);
 
 	// Base planet class.
 	
-	//These serve to allow boost python to resolve correctly the overloaded function get_elements
+	// These serve to allow boost python to resolve correctly the overloaded function get_elements
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
 	
