@@ -53,8 +53,8 @@ namespace kep_toolbox {
  * @see http://www.google.it/url?sa=t&source=web&cd=1&ved=0CBYQFjAA&url=http%3A%2F%2Fwww3.uta.edu%2Ffaculty%2Fsubbarao%2FMAE3304Astronautics%2FSampleStuff%2Fappend-d.pdf&ei=8eL0TKDUKMrrOcj2ybMI&usg=AFQjCNFLBgLMvPWSDsCvZMVOW3kJV9uh-Q
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-template<class array3D>
-void propagate_lagrangian_u(array3D& r0, array3D& v0, const double &t, const double &mu = 1)
+template<class T>
+void propagate_lagrangian_u(T& r0, T& v0, const double &t, const double &mu = 1)
 {
 	//If time is negative we need to invert time and velocities. Unlike the other formulation
 	//of the propagate lagrangian we cannot rely on negative times to automatically mean back-propagation
@@ -74,7 +74,8 @@ void propagate_lagrangian_u(array3D& r0, array3D& v0, const double &t, const dou
 	double VR0 = (r0[0]*v0[0] + r0[1]*v0[1] + r0[2]*v0[2]) / R0;
 
 	//solve kepler's equation in universal variables
-	double DS = sqrt(mu)*t_copy*std::abs(alpha);  //initial guess for the universal anomaly
+	double DS = 1;
+	alpha > 0 ? DS = sqrt(mu)*t_copy*std::abs(alpha) : DS = 1; //initial guess for the universal anomaly. For hyperbolas it is 1.... can be better?
 	//newton_raphson(DS,boost::bind(kepDS,_1,t_copy,R0,VR0,alpha,mu),boost::bind(d_kepDS,_1,R0,V0,alpha,mu),100,ASTRO_TOLERANCE);
 	std::pair<double, double> result;
 	boost::uintmax_t iter = ASTRO_MAX_ITER;
@@ -91,7 +92,7 @@ void propagate_lagrangian_u(array3D& r0, array3D& v0, const double &t, const dou
 	G = t_copy - 1/sqrt(mu)*DS*DS*DS*stumpff_s(z);
 
 	//compute the final position
-	array3D rf;
+	T rf;
 	rf[0] = F*r0[0] + G*v0[0];
 	rf[1] = F*r0[1] + G*v0[1];
 	rf[2] = F*r0[2] + G*v0[2];
@@ -102,7 +103,7 @@ void propagate_lagrangian_u(array3D& r0, array3D& v0, const double &t, const dou
 	Gt = 1 - DS*DS/RF*stumpff_c(z);
 
 	//compute the final velocity
-	array3D vf;
+	T vf;
 	vf[0] = Ft*r0[0] + Gt*v0[0];
 	vf[1] = Ft*r0[1] + Gt*v0[1];
 	vf[2] = Ft*r0[2] + Gt*v0[2];

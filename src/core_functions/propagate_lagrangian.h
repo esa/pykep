@@ -51,8 +51,8 @@ namespace kep_toolbox {
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-template<class array3D>
-void propagate_lagrangian(array3D& r0, array3D& v0, const double &t, const double &mu)
+template<class T>
+void propagate_lagrangian(T& r0, T& v0, const double &t, const double &mu)
 {
 	double R = sqrt(r0[0]*r0[0] + r0[1]*r0[1] + r0[2]*r0[2]);
 	double V = sqrt(v0[0]*v0[0] + v0[1]*v0[1] + v0[2]*v0[2]);

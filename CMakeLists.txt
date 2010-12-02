@@ -1,5 +1,7 @@
 PROJECT(Keplerian_Toolbox)
 
+ENABLE_TESTING()
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.0)
 # Setup and include CMake modules.
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake_modules)
@@ -23,7 +25,7 @@ OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 
 # Build Option: when active the examples in the folder example are compiled into executables
-OPTION(BUILD_EXAMPLES "Build examples'." OFF)
+OPTION(BUILD_TESTS "Build tests'." ON)
 
 # Build Option: when active the serialization module is activated
 OPTION(ENABLE_SERIALIZATION "Support for serialization" OFF)
@@ -39,6 +41,7 @@ SET(SRC_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)
 
 # If serialization support is requested look for the boost library and link to it
@@ -66,9 +69,9 @@ IF(BUILD_MAIN)
         TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${MANDATORY_LIBRARIES})
 ENDIF(BUILD_MAIN)
 
-IF(BUILD_EXAMPLES)
-        ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/examples")
-ENDIF(BUILD_EXAMPLES)
+IF(BUILD_TESTS)
+	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/tests")
+ENDIF(BUILD_TESTS)
 
 IF(BUILD_PYKEP)
         SET(LIB_INSTALL_PATH "lib")

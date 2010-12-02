@@ -32,11 +32,11 @@ namespace kep_toolbox {
 inline double stumpff_s(const double x) {
 	if (x > 0)
 	{
-		return (sqrt(x) - sin(sqrt(x)))/pow(sqrt(x),3);
+		return (sqrt(x) - sin(std::sqrt(x)))/pow(sqrt(x),3);
 	}
 	else if (x < 0)
 	{
-		return (sinh(sqrt(-x)) - sqrt(-x))/pow(sqrt(-x),3);
+		return (std::sinh(std::sqrt(-x)) - sqrt(-x))/pow(-x,3./2);
 	}
 	else
 	{
@@ -52,7 +52,7 @@ inline double stumpff_c(const double x) {
 	}
 	else if (x < 0)
 	{
-		return (cosh(sqrt(-x)) - 1)/(-x);
+		return (std::cosh(sqrt(-x)) - 1)/(-x);
 	}
 	else
 	{

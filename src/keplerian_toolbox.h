@@ -44,6 +44,7 @@
 #include"core_functions/par2ic.h"
 #include"core_functions/propagate_lagrangian.h"
 #include"core_functions/propagate_lagrangian_u.h"
+#include"core_functions/propagate_taylor.h"
 #include"lambert_problem.h"
 #include"sims_flanagan/fb_traj.h"
 #include"sims_flanagan/leg.h"
