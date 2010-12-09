@@ -19,5 +19,7 @@ int main() {
 	std::cout << r0 << v0 << m0 << std::endl;
     propagate_taylor(r0,v0,m0,u,-t,1.1,1,-12,-12);
     std::cout << r0 << v0 << m0 <<  std::endl;
+    propagate_taylor_step(r0,v0,m0,t,2,u,1,1);
+    std::cout << r0 << v0 << m0 <<  std::endl;
     return 0;
 }
