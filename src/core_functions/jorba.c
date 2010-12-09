@@ -11,24 +11,24 @@ next line defines the largest power of 2 such that 2^(LEXP2) and
 2^(-LEXP2) do not overflow/underflow the double arithmetic of your
 computer.
 */
-#define LEXP2 1023 
+#define LEXP2 1023
 
 #define DEBUG_LEVEL 0 /* to print some internal information */
 
 int taylor_step_fixed_thrust(MY_FLOAT *ti,
-                 MY_FLOAT *x,
-                 int      dir,
-                 int      step_ctl,
-                 double   log10abserr,
-                 double   log10relerr,
-                 MY_FLOAT *endtime,
-                 MY_FLOAT *ht,
+		 MY_FLOAT *x,
+		 int      dir,
+		 int      step_ctl,
+		 double   log10abserr,
+		 double   log10relerr,
+		 MY_FLOAT *endtime,
+		 MY_FLOAT *ht,
 		 int      *order,
-		 double mu,
-		 double veff,
-		 double ux,
-		 double uy,
-		 double uz)
+		double mu,
+		double veff,
+		double ux,
+		double uy,
+		double uz)
 /*
  * single integration step with taylor method. the parameters are:
  *
@@ -89,8 +89,8 @@ int taylor_step_fixed_thrust(MY_FLOAT *ti,
  * 0: ok.
  * 1: ok, and ti=endtime.  */
 {
-  MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT, MY_FLOAT*, int, double,double,double,double,double);
-  MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT, MY_FLOAT*, int, int, double,double,double,double,double);
+  MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT, MY_FLOAT*, int, double mu,double veff,double ux,double uy,double uz);
+  MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT, MY_FLOAT*, int, int, double mu,double veff,double ux,double uy,double uz);
   int compute_order_1_fixed_thrust(double, double, double, int*);
   int comp_order_other_fixed_thrust(double, double, double);
   double compute_stepsize_1_fixed_thrust(MY_FLOAT**, int, double, int);
@@ -152,9 +152,9 @@ int taylor_step_fixed_thrust(MY_FLOAT *ti,
   computation of the jet of derivatives up to order nt
 */
   if(step_ctl != 0) {
-    s=taylor_coefficients_fixed_thrustA(*ti,x,nt,1,veff,mu,ux,uy,uz);
+    s=taylor_coefficients_fixed_thrustA(*ti,x,nt,1, mu, veff, ux, uy, uz);
   } else {
-    s=taylor_coefficients_fixed_thrust(*ti,x,nt,veff,mu,ux,uy,uz);
+    s=taylor_coefficients_fixed_thrust(*ti,x,nt, mu, veff, ux, uy, uz);
  }
 
 /*
@@ -191,30 +191,30 @@ int taylor_step_fixed_thrust(MY_FLOAT *ti,
   flag_endtime=0;
   if (step_ctl != 0)
     {
-      if (dir == -1) { NegateMyFloatA(mtmp,h); AssignMyFloat(h, mtmp);} 
+      if (dir == -1) { NegateMyFloatA(mtmp,h); AssignMyFloat(h, mtmp);}
 /*
       we compare *ti+h with endtime. we modify h if necessary.
 */
       if (endtime != NULL)
-        {
-          AddMyFloatA(mtmp,h,*ti);
-          if (dir == 1) /* time goes forward */
-            {
-              if (MyFloatA_GE_B(mtmp,*endtime))
-                {
-                  SubstractMyFloatA(h,*endtime,*ti);
-                  flag_endtime=1;
-                }
-            }
-            else /* time goes backwards */
-            {
-              if (MyFloatA_GE_B(*endtime,mtmp))
-                {
-                  SubstractMyFloatA(h,*endtime,*ti);
-                  flag_endtime=1;
-                }
-            }
-        }
+	{
+	  AddMyFloatA(mtmp,h,*ti);
+	  if (dir == 1) /* time goes forward */
+	    {
+	      if (MyFloatA_GE_B(mtmp,*endtime))
+		{
+		  SubstractMyFloatA(h,*endtime,*ti);
+		  flag_endtime=1;
+		}
+	    }
+	    else /* time goes backwards */
+	    {
+	      if (MyFloatA_GE_B(*endtime,mtmp))
+		{
+		  SubstractMyFloatA(h,*endtime,*ti);
+		  flag_endtime=1;
+		}
+	    }
+	}
     }
 /*
   next lines are the summation of the taylor series (horner's method)
@@ -381,7 +381,7 @@ double compute_stepsize_2_fixed_thrust(MY_FLOAT **s, int nt, double xnorm, int f
   if (init == 0)
     {
       init=1;
-      InitMyFloat(h); 
+      InitMyFloat(h);
       InitMyFloat(hj);
       InitMyFloat(r);
       InitMyFloat(z);
@@ -544,26 +544,26 @@ double comp_stepsize_other_fixed_thrust(MY_FLOAT **s, int nd, int nt, double xno
 
 #include <stdio.h>
 #include <stdlib.h>
-MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order, int rflag,double veff, double mu, double ux, double uy, double uz)
+MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order, int rflag, double mu, double veff, double ux, double uy, double uz)
 {
-   /* input: 
-      t:     current value of the time variable 
+   /* input:
+      t:     current value of the time variable
       x:     array represent values of the state variables
       order: order of the taylor coefficients sought
-      rflag: recompute flag. If you call this routine with one order 
-             first, but then decided that you need a higher order of the
-             taylor polynomial. You can pass 0 to rflag. This routine 
-             will try to use the values already computed. Provided that 
-             both x and t have not been changed, and you did not modify 
-             the jet derivatives from the previous call.
+      rflag: recompute flag. If you call this routine with one order
+	     first, but then decided that you need a higher order of the
+	     taylor polynomial. You can pass 0 to rflag. This routine
+	     will try to use the values already computed. Provided that
+	     both x and t have not been changed, and you did not modify
+	     the jet derivatives from the previous call.
       Return Value:
-            Two D Array, rows are the taylor coefficients of the
-            state variables
+	    Two D Array, rows are the taylor coefficients of the
+	    state variables
 
      */
 
-    static int          _jz_ivars[14];
-    static MY_FLOAT     _jz_cvars[4];
+    static int          _jz_ivars[3];
+    static MY_FLOAT     _jz_cvars[15];
     static MY_FLOAT     *_jz_jet[26],  *_jz_save = NULL, *_jz_oneOverN=NULL,*_jz_theNs=NULL;
     static MY_FLOAT     _jz_tvar1, _jz_tvar2, _jz_tvar3, _jz_tvar4; /* tmp vars */
     static MY_FLOAT     _jz_uvar1, _jz_uvar2; /* tmp vars */
@@ -575,101 +575,155 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
     static int          _jz_lastOrder = 0, _jz_initialized=0, _jz_ginitialized=0;
     int                 _jz_i, _jz_j, _jz_k, _jz_l, _jz_m, _jz_n, _jz_oorder ;
     /* allocating memory if needed */
-    if(_jz_maxOrderUsed < order )  { 
-    	 if(_jz_ginitialized == 0) { 
-    	   InitMyFloat(_jz_tvar1); InitMyFloat(_jz_tvar2);InitMyFloat(_jz_tvar3);InitMyFloat(_jz_tvar4);
-    	   InitMyFloat(_jz_svar1); InitMyFloat(_jz_svar2);InitMyFloat(_jz_svar3);InitMyFloat(_jz_svar4);
-    	   InitMyFloat(_jz_svar5); InitMyFloat(_jz_zvar1);InitMyFloat(_jz_zvar2);
-    	   InitMyFloat(_jz_uvar1); InitMyFloat(_jz_uvar2);
-    	   InitMyFloat(_jz_wvar3);InitMyFloat(_jz_wvar4);
-    	   InitMyFloat(_jz_MyFloatZERO);
-    	   MakeMyFloatC(_jz_MyFloatZERO, "0", (double)0);
-    	   for(_jz_i=0; _jz_i<4; _jz_i++) {
-    	       InitMyFloat(_jz_cvars[_jz_i]);
-    	   }
-    	 }
-    	 if(rflag > 0) rflag = 0; /* have to recompute everything */
-    	 _jz_oorder=_jz_maxOrderUsed;
-    	 _jz_maxOrderUsed  = order;
-    	 if(_jz_ginitialized) { 
-    	   for(_jz_i=0; _jz_i< _jz_oorder+1; _jz_i++) {ClearMyFloat(_jz_oneOverN[_jz_i]); ClearMyFloat(_jz_theNs[_jz_i]);}    	   free(_jz_oneOverN); free(_jz_theNs);
-    	 }
-    	 _jz_theNs = (MY_FLOAT *)malloc((order+1) * sizeof(MY_FLOAT));
-    	 _jz_oneOverN = (MY_FLOAT *)malloc((order+1) * sizeof(MY_FLOAT));
-    	 for(_jz_i=0; _jz_i<order+1; _jz_i++) {InitMyFloat(_jz_oneOverN[_jz_i]);InitMyFloat(_jz_theNs[_jz_i]);}
-    	 MakeMyFloatC(_jz_theNs[0],"0.0", (double)0.0);
-    	 MakeMyFloatC(_jz_uvar1,"1.0", (double)1.0);
-    	 for(_jz_i = 1; _jz_i <= order; _jz_i++) {
-    		 AssignMyFloat(_jz_tvar2, _jz_theNs[_jz_i-1]);
-    		 AddMyFloatA(_jz_theNs[_jz_i], _jz_tvar2, _jz_uvar1);
+    if(_jz_maxOrderUsed < order )  {
+	 if(_jz_ginitialized == 0) {
+	   InitMyFloat(_jz_tvar1); InitMyFloat(_jz_tvar2);InitMyFloat(_jz_tvar3);InitMyFloat(_jz_tvar4);
+	   InitMyFloat(_jz_svar1); InitMyFloat(_jz_svar2);InitMyFloat(_jz_svar3);InitMyFloat(_jz_svar4);
+	   InitMyFloat(_jz_svar5); InitMyFloat(_jz_zvar1);InitMyFloat(_jz_zvar2);
+	   InitMyFloat(_jz_uvar1); InitMyFloat(_jz_uvar2);
+	   InitMyFloat(_jz_wvar3);InitMyFloat(_jz_wvar4);
+	   InitMyFloat(_jz_MyFloatZERO);
+	   MakeMyFloatC(_jz_MyFloatZERO, "0", (double)0);
+	   for(_jz_i=0; _jz_i<15; _jz_i++) {
+	       InitMyFloat(_jz_cvars[_jz_i]);
+	   }
+	 }
+	 if(rflag > 0) rflag = 0; /* have to recompute everything */
+	 _jz_oorder=_jz_maxOrderUsed;
+	 _jz_maxOrderUsed  = order;
+	 if(_jz_ginitialized) {
+	   for(_jz_i=0; _jz_i< _jz_oorder+1; _jz_i++) {ClearMyFloat(_jz_oneOverN[_jz_i]); ClearMyFloat(_jz_theNs[_jz_i]);}    	   free(_jz_oneOverN); free(_jz_theNs);
+	 }
+	 _jz_theNs = (MY_FLOAT *)malloc((order+1) * sizeof(MY_FLOAT));
+	 _jz_oneOverN = (MY_FLOAT *)malloc((order+1) * sizeof(MY_FLOAT));
+	 for(_jz_i=0; _jz_i<order+1; _jz_i++) {InitMyFloat(_jz_oneOverN[_jz_i]);InitMyFloat(_jz_theNs[_jz_i]);}
+	 MakeMyFloatC(_jz_theNs[0],"0.0", (double)0.0);
+	 MakeMyFloatC(_jz_uvar1,"1.0", (double)1.0);
+	 for(_jz_i = 1; _jz_i <= order; _jz_i++) {
+		 AssignMyFloat(_jz_tvar2, _jz_theNs[_jz_i-1]);
+		 AddMyFloatA(_jz_theNs[_jz_i], _jz_tvar2, _jz_uvar1);
 	}
-    	 AssignMyFloat(_jz_oneOverN[0],_jz_uvar1);
-    	 AssignMyFloat(_jz_oneOverN[1],_jz_uvar1);
-    	 for(_jz_i = 2; _jz_i <= order; _jz_i++) {
-    		 DivideMyFloatA(_jz_oneOverN[_jz_i], _jz_uvar1,_jz_theNs[_jz_i]);
+	 AssignMyFloat(_jz_oneOverN[0],_jz_uvar1);
+	 AssignMyFloat(_jz_oneOverN[1],_jz_uvar1);
+	 for(_jz_i = 2; _jz_i <= order; _jz_i++) {
+		 DivideMyFloatA(_jz_oneOverN[_jz_i], _jz_uvar1,_jz_theNs[_jz_i]);
 	}
-    	 if(_jz_ginitialized) {
-    	    for(_jz_i=0; _jz_i<(_jz_oorder+1)*(26); _jz_i++) { ClearMyFloat(_jz_save[_jz_i]);} free(_jz_save);
-    	 }
-    	 _jz_save = (MY_FLOAT *)malloc((order+1)* 26 *sizeof(MY_FLOAT));
-    	 for(_jz_i=0; _jz_i<(order+1)*(26); _jz_i++) { InitMyFloat(_jz_save[_jz_i]);}
-    	 for(_jz_j = 0, _jz_k = 0; _jz_j < 26 ;  _jz_j++, _jz_k += order+1) { _jz_jet[_jz_j] =& (_jz_save[_jz_k]); }
+	 if(_jz_ginitialized) {
+	    for(_jz_i=0; _jz_i<(_jz_oorder+1)*(26); _jz_i++) { ClearMyFloat(_jz_save[_jz_i]);} free(_jz_save);
+	 }
+	 _jz_save = (MY_FLOAT *)malloc((order+1)* 26 *sizeof(MY_FLOAT));
+	 for(_jz_i=0; _jz_i<(order+1)*(26); _jz_i++) { InitMyFloat(_jz_save[_jz_i]);}
+	 for(_jz_j = 0, _jz_k = 0; _jz_j < 26 ;  _jz_j++, _jz_k += order+1) { _jz_jet[_jz_j] =& (_jz_save[_jz_k]); }
 
-    	 /* True constants, initialized only once. */
-	 /* const: i_038=mu */
-	 _jz_ivars[0]=mu;
-	 /* negate: i_066=(-i_038) */
-	 _jz_ivars[1]=-_jz_ivars[0];
+	 /* True constants, initialized only once. */
+	 /* const: c_038=2.2222 */
+	 MakeMyFloatC(_jz_cvars[0],"2.2222",mu);
+	 /* negate: c_066=(-c_038) */
+	 NegateMyFloatA(_jz_cvars[1],_jz_cvars[0]);
 	 /* const: i_046=2 */
-	 _jz_ivars[2]=2;
+	 _jz_ivars[0]=2;
 	 /* const: i_049=3 */
-	 _jz_ivars[3]=3;
+	 _jz_ivars[1]=3;
 	 /* div: c_073=(i_049/i_046) */
-	 DivideMyFloatA(_jz_cvars[0], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[3]), MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[2]));
-	 /* const: i_040=ux */
-	 _jz_ivars[4]=ux;
-	 /* const: i_042=uy */
-	 _jz_ivars[5]=uy;
-	 /* const: i_044=uz */
-	 _jz_ivars[6]=uz;
-	 /* exponentiation: i_102=(i_040^i_046) */
-	 { double base;
-	 MyFloatToDouble(base,_jz_ivars[4]);
-	 _jz_ivars[7]=(int)pow(base, 2.000000000000000);
-	 } 
-	 /* exponentiation: i_103=(i_042^i_046) */
-	 { double base;
-	 MyFloatToDouble(base,_jz_ivars[5]);
-	 _jz_ivars[8]=(int)pow(base, 2.000000000000000);
-	 } 
-	 /* plus: i_104=(i_102+i_103) */
-	 _jz_ivars[9]=_jz_ivars[7]+_jz_ivars[8];
-	 /* exponentiation: i_105=(i_044^i_046) */
-	 { double base;
-	 MyFloatToDouble(base,_jz_ivars[6]);
-	 _jz_ivars[10]=(int)pow(base, 2.000000000000000);
-	 } 
-	 /* plus: i_106=(i_104+i_105) */
-	 _jz_ivars[11]=_jz_ivars[9]+_jz_ivars[10];
+	 DivideMyFloatA(_jz_cvars[2], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[0]));
+	 /* const: c_040=3.3333 */
+	 MakeMyFloatC(_jz_cvars[3],"3.3333",ux);
+	 /* const: c_042=4.4444 */
+	 MakeMyFloatC(_jz_cvars[4],"4.4444",uy);
+	 /* const: c_044=5.5555 */
+	 MakeMyFloatC(_jz_cvars[5],"5.5555",uz);
+	 /* exponentiation: c_102=(c_040^i_046) */
+		  /* integer exponent or half integer */
+		 AssignMyFloat(_jz_svar5,_jz_cvars[3]);
+		 { int n=2, m, mn=0;
+		   switch(n) {
+			  case 0: AssignMyFloat(_jz_cvars[6], _jz_oneOverN[0]); break;
+			  case 1: AssignMyFloat(_jz_cvars[6], _jz_svar5); break;
+			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_cvars[6],_jz_svar1,_jz_svar5); break;
+			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
+				  MultiplyMyFloatA(_jz_cvars[6],_jz_svar1,_jz_svar2); break;
+			  default:
+			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
+			     while(mn==0) {
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_cvars[6],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+			       }
+			   break;
+			  }
+		 }
+	 /* exponentiation: c_103=(c_042^i_046) */
+		  /* integer exponent or half integer */
+		 AssignMyFloat(_jz_svar5,_jz_cvars[4]);
+		 { int n=2, m, mn=0;
+		   switch(n) {
+			  case 0: AssignMyFloat(_jz_cvars[7], _jz_oneOverN[0]); break;
+			  case 1: AssignMyFloat(_jz_cvars[7], _jz_svar5); break;
+			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_cvars[7],_jz_svar1,_jz_svar5); break;
+			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
+				  MultiplyMyFloatA(_jz_cvars[7],_jz_svar1,_jz_svar2); break;
+			  default:
+			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
+			     while(mn==0) {
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_cvars[7],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+			       }
+			   break;
+			  }
+		 }
+	 /* plus: c_104=(c_102+c_103) */
+	 AddMyFloatA(_jz_cvars[8], _jz_cvars[6], _jz_cvars[7]);
+	 /* exponentiation: c_105=(c_044^i_046) */
+		  /* integer exponent or half integer */
+		 AssignMyFloat(_jz_svar5,_jz_cvars[5]);
+		 { int n=2, m, mn=0;
+		   switch(n) {
+			  case 0: AssignMyFloat(_jz_cvars[9], _jz_oneOverN[0]); break;
+			  case 1: AssignMyFloat(_jz_cvars[9], _jz_svar5); break;
+			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_cvars[9],_jz_svar1,_jz_svar5); break;
+			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
+				  MultiplyMyFloatA(_jz_cvars[9],_jz_svar1,_jz_svar2); break;
+			  default:
+			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
+			     while(mn==0) {
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_cvars[9],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+			       }
+			   break;
+			  }
+		 }
+	 /* plus: c_106=(c_104+c_105) */
+	 AddMyFloatA(_jz_cvars[10], _jz_cvars[8], _jz_cvars[9]);
 	 /* const: i_035=1 */
-	 _jz_ivars[12]=1;
+	 _jz_ivars[2]=1;
 	 /* div: c_107=(i_035/i_046) */
-	 DivideMyFloatA(_jz_cvars[1], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[12]), MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[2]));
-	 /* exponentiation: c_108=(i_106^c_107) */
-	 ExponentiateMyFloatA(_jz_cvars[2], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[11]), _jz_cvars[1]);
+	 DivideMyFloatA(_jz_cvars[11], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[2]), MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[0]));
+	 /* exponentiation: c_108=(c_106^c_107) */
+	 ExponentiateMyFloatA(_jz_cvars[12], _jz_cvars[10], _jz_cvars[11]);
 	 /* negate: c_109=(-c_108) */
-	 NegateMyFloatA(_jz_cvars[3],_jz_cvars[2]);
-	 /* const: i_036=veff */
-	 _jz_ivars[13]=veff;
-	 /* div: v_110=(c_109/i_036) */
-	 DivideMyFloatA(_jz_jet[25][0], _jz_cvars[3], MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[13]));
+	 NegateMyFloatA(_jz_cvars[13],_jz_cvars[12]);
+	 /* const: c_036=1.1111 */
+	 MakeMyFloatC(_jz_cvars[14],"1.1111",veff);
+	 /* div: v_110=(c_109/c_036) */
+	 DivideMyFloatA(_jz_jet[25][0], _jz_cvars[13], _jz_cvars[14]);
     }
 
     if(rflag) {
-    	 if(rflag < 0 ) return(NULL);
-    	 for(_jz_i = 0; rflag != 0 && _jz_i < 7; _jz_i++) {
-    		 if(MyFloatA_NEQ_B(_jz_jet[_jz_i][0], x[_jz_i])) rflag = 0;
-    	 }
+	 if(rflag < 0 ) return(NULL);
+	 for(_jz_i = 0; rflag != 0 && _jz_i < 7; _jz_i++) {
+		 if(MyFloatA_NEQ_B(_jz_jet[_jz_i][0], x[_jz_i])) rflag = 0;
+	 }
     }
 
     if(rflag == 0) {
@@ -682,103 +736,103 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 	 AssignMyFloat(_jz_jet[4][0], x[4]);
 	 AssignMyFloat(_jz_jet[5][0], x[5]);
 	 AssignMyFloat(_jz_jet[6][0], x[6]);
-	 /* mult: v_067=(i_066*v_027) */
-	 MultiplyMyFloatA(_jz_jet[7][0], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), _jz_jet[0][0]);
+	 /* mult: v_067=(c_066*v_027) */
+	 MultiplyMyFloatA(_jz_jet[7][0], _jz_cvars[1], _jz_jet[0][0]);
 	 /* exponentiation: v_068=(v_027^i_046) */
 		  /* integer exponent or half integer */
 		 AssignMyFloat(_jz_svar5,_jz_jet[0][0]);
-		 { int n=2, m, mn=0; 
+		 { int n=2, m, mn=0;
 		   switch(n) {
 			  case 0: AssignMyFloat(_jz_jet[8][0], _jz_oneOverN[0]); break;
 			  case 1: AssignMyFloat(_jz_jet[8][0], _jz_svar5); break;
 			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_jet[8][0],_jz_svar1,_jz_svar5); break;
 			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
-			          MultiplyMyFloatA(_jz_jet[8][0],_jz_svar1,_jz_svar2); break;
+				  MultiplyMyFloatA(_jz_jet[8][0],_jz_svar1,_jz_svar2); break;
 			  default:
 			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
 			     while(mn==0) {
-			        m=n; n /=2; if(n+n != m) {
-			           AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
-			           if(n==0){ mn=1;     AssignMyFloat(_jz_jet[8][0],_jz_svar1);}
-			         }
-			        if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
-			                   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_jet[8][0],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
 			       }
-			   break; 
+			   break;
 			  }
-		 } 
+		 }
 	 /* exponentiation: v_069=(v_028^i_046) */
 		  /* integer exponent or half integer */
 		 AssignMyFloat(_jz_svar5,_jz_jet[1][0]);
-		 { int n=2, m, mn=0; 
+		 { int n=2, m, mn=0;
 		   switch(n) {
 			  case 0: AssignMyFloat(_jz_jet[9][0], _jz_oneOverN[0]); break;
 			  case 1: AssignMyFloat(_jz_jet[9][0], _jz_svar5); break;
 			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_jet[9][0],_jz_svar1,_jz_svar5); break;
 			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
-			          MultiplyMyFloatA(_jz_jet[9][0],_jz_svar1,_jz_svar2); break;
+				  MultiplyMyFloatA(_jz_jet[9][0],_jz_svar1,_jz_svar2); break;
 			  default:
 			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
 			     while(mn==0) {
-			        m=n; n /=2; if(n+n != m) {
-			           AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
-			           if(n==0){ mn=1;     AssignMyFloat(_jz_jet[9][0],_jz_svar1);}
-			         }
-			        if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
-			                   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_jet[9][0],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
 			       }
-			   break; 
+			   break;
 			  }
-		 } 
+		 }
 	 /* plus: v_070=(v_068+v_069) */
 	 AddMyFloatA(_jz_jet[10][0], _jz_jet[8][0], _jz_jet[9][0]);
 	 /* exponentiation: v_071=(v_029^i_046) */
 		  /* integer exponent or half integer */
 		 AssignMyFloat(_jz_svar5,_jz_jet[2][0]);
-		 { int n=2, m, mn=0; 
+		 { int n=2, m, mn=0;
 		   switch(n) {
 			  case 0: AssignMyFloat(_jz_jet[11][0], _jz_oneOverN[0]); break;
 			  case 1: AssignMyFloat(_jz_jet[11][0], _jz_svar5); break;
 			  case 2: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_jet[11][0],_jz_svar1,_jz_svar5); break;
 			  case 3: AssignMyFloat(_jz_svar1, _jz_svar5); MultiplyMyFloatA(_jz_svar2,_jz_svar1,_jz_svar5);
-			          MultiplyMyFloatA(_jz_jet[11][0],_jz_svar1,_jz_svar2); break;
+				  MultiplyMyFloatA(_jz_jet[11][0],_jz_svar1,_jz_svar2); break;
 			  default:
 			   AssignMyFloat(_jz_svar1, _jz_oneOverN[0]); AssignMyFloat(_jz_svar2, _jz_svar5);
 			     while(mn==0) {
-			        m=n; n /=2; if(n+n != m) {
-			           AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
-			           if(n==0){ mn=1;     AssignMyFloat(_jz_jet[11][0],_jz_svar1);}
-			         }
-			        if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
-			                   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
+				m=n; n /=2; if(n+n != m) {
+				   AssignMyFloat(_jz_svar3, _jz_svar1); MultiplyMyFloatA(_jz_svar1, _jz_svar3, _jz_svar2);
+				   if(n==0){ mn=1;     AssignMyFloat(_jz_jet[11][0],_jz_svar1);}
+				 }
+				if(mn==0) {AssignMyFloat(_jz_svar3, _jz_svar2);AssignMyFloat(_jz_svar4, _jz_svar2);
+					   MultiplyMyFloatA(_jz_svar2, _jz_svar3,_jz_svar4);}
 			       }
-			   break; 
+			   break;
 			  }
-		 } 
+		 }
 	 /* plus: v_072=(v_070+v_071) */
 	 AddMyFloatA(_jz_jet[12][0], _jz_jet[10][0], _jz_jet[11][0]);
 	 /* exponentiation: v_074=(v_072^c_073) */
-	 ExponentiateMyFloatA(_jz_jet[13][0], _jz_jet[12][0], _jz_cvars[0]);
+	 ExponentiateMyFloatA(_jz_jet[13][0], _jz_jet[12][0], _jz_cvars[2]);
 	 /* div: v_075=(v_067/v_074) */
 	 DivideMyFloatA(_jz_jet[14][0], _jz_jet[7][0], _jz_jet[13][0]);
-	 /* div: v_076=(i_040/v_033) */
-	 DivideMyFloatA(_jz_jet[15][0], MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[4]), _jz_jet[6][0]);
+	 /* div: v_076=(c_040/v_033) */
+	 DivideMyFloatA(_jz_jet[15][0], _jz_cvars[3], _jz_jet[6][0]);
 	 /* plus: v_077=(v_075+v_076) */
 	 AddMyFloatA(_jz_jet[16][0], _jz_jet[14][0], _jz_jet[15][0]);
-	 /* mult: v_079=(i_066*v_028) */
-	 MultiplyMyFloatA(_jz_jet[17][0], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), _jz_jet[1][0]);
+	 /* mult: v_079=(c_066*v_028) */
+	 MultiplyMyFloatA(_jz_jet[17][0], _jz_cvars[1], _jz_jet[1][0]);
 	 /* div: v_087=(v_079/v_074) */
 	 DivideMyFloatA(_jz_jet[18][0], _jz_jet[17][0], _jz_jet[13][0]);
-	 /* div: v_088=(i_042/v_033) */
-	 DivideMyFloatA(_jz_jet[19][0], MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[5]), _jz_jet[6][0]);
+	 /* div: v_088=(c_042/v_033) */
+	 DivideMyFloatA(_jz_jet[19][0], _jz_cvars[4], _jz_jet[6][0]);
 	 /* plus: v_089=(v_087+v_088) */
 	 AddMyFloatA(_jz_jet[20][0], _jz_jet[18][0], _jz_jet[19][0]);
-	 /* mult: v_091=(i_066*v_029) */
-	 MultiplyMyFloatA(_jz_jet[21][0], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), _jz_jet[2][0]);
+	 /* mult: v_091=(c_066*v_029) */
+	 MultiplyMyFloatA(_jz_jet[21][0], _jz_cvars[1], _jz_jet[2][0]);
 	 /* div: v_099=(v_091/v_074) */
 	 DivideMyFloatA(_jz_jet[22][0], _jz_jet[21][0], _jz_jet[13][0]);
-	 /* div: v_100=(i_044/v_033) */
-	 DivideMyFloatA(_jz_jet[23][0], MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[6]), _jz_jet[6][0]);
+	 /* div: v_100=(c_044/v_033) */
+	 DivideMyFloatA(_jz_jet[23][0], _jz_cvars[5], _jz_jet[6][0]);
 	 /* plus: v_101=(v_099+v_100) */
 	 AddMyFloatA(_jz_jet[24][0], _jz_jet[22][0], _jz_jet[23][0]);
 
@@ -802,11 +856,11 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 	 /* compute the kth order derivatives of all vars */
 	 for(_jz_k = _jz_lastOrder; _jz_k < order; _jz_k++) {
 		 /* derivative for tmp variables */
-		 /* mult: v_067=(i_066*v_027) */
-		 MultiplyMyFloatA(_jz_jet[7][_jz_k], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), _jz_jet[0][_jz_k]);
+		 /* mult: v_067=(c_066*v_027) */
+		 MultiplyMyFloatA(_jz_jet[7][_jz_k], _jz_cvars[1], _jz_jet[0][_jz_k]);
 		 /* exponentiation: v_068=(v_027^i_046) */
 		 { /* exponentiation */
-				 /* expr^2 */ 
+				 /* expr^2 */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 int parity=(_jz_k&1), half=(_jz_k+1)>>1;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -821,13 +875,13 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 if(parity==0) {
 			     MultiplyMyFloatA(tmp2, _jz_jet[0][half], _jz_jet[0][half]);
 			     AddMyFloatA(_jz_jet[8][_jz_k], tmp2, tmp1);
-			 } else { 
+			 } else {
 			     AssignMyFloat(_jz_jet[8][_jz_k], tmp1);
 			 }
 		}
 		 /* exponentiation: v_069=(v_028^i_046) */
 		 { /* exponentiation */
-				 /* expr^2 */ 
+				 /* expr^2 */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 int parity=(_jz_k&1), half=(_jz_k+1)>>1;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -842,7 +896,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 if(parity==0) {
 			     MultiplyMyFloatA(tmp2, _jz_jet[1][half], _jz_jet[1][half]);
 			     AddMyFloatA(_jz_jet[9][_jz_k], tmp2, tmp1);
-			 } else { 
+			 } else {
 			     AssignMyFloat(_jz_jet[9][_jz_k], tmp1);
 			 }
 		}
@@ -850,7 +904,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 		 AddMyFloatA(_jz_jet[10][_jz_k], _jz_jet[8][_jz_k],_jz_jet[9][_jz_k]);
 		 /* exponentiation: v_071=(v_029^i_046) */
 		 { /* exponentiation */
-				 /* expr^2 */ 
+				 /* expr^2 */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 int parity=(_jz_k&1), half=(_jz_k+1)>>1;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -865,7 +919,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 if(parity==0) {
 			     MultiplyMyFloatA(tmp2, _jz_jet[2][half], _jz_jet[2][half]);
 			     AddMyFloatA(_jz_jet[11][_jz_k], tmp2, tmp1);
-			 } else { 
+			 } else {
 			     AssignMyFloat(_jz_jet[11][_jz_k], tmp1);
 			 }
 		}
@@ -873,7 +927,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 		 AddMyFloatA(_jz_jet[12][_jz_k], _jz_jet[10][_jz_k],_jz_jet[11][_jz_k]);
 		 /* exponentiation: v_074=(v_072^c_073) */
 		 { /* exponentiation */
-				 /* expr^(3/2)/ */ 
+				 /* expr^(3/2)/ */
 			 int  ppk=(3)*_jz_k, qqk=(2)*_jz_k, pq=5;
 			 static MY_FLOAT tmp1, tmp2, tmp3, tmpC, tmp;
 			 if(_jz_initialized==0) {
@@ -907,7 +961,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 SubstractMyFloatA(tmp, _jz_jet[7][_jz_k], tmp2);
 			 DivideMyFloatA(_jz_jet[14][_jz_k], tmp, _jz_jet[13][0]);
 		 }
-		 /* div: v_076=(i_040/v_033) */
+		 /* div: v_076=(c_040/v_033) */
 		 { /* division */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -921,8 +975,8 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 		 }
 		 /* plus: v_077=(v_075+v_076) */
 		 AddMyFloatA(_jz_jet[16][_jz_k], _jz_jet[14][_jz_k],_jz_jet[15][_jz_k]);
-		 /* mult: v_079=(i_066*v_028) */
-		 MultiplyMyFloatA(_jz_jet[17][_jz_k], MakeMyFloatB(_jz_tvar1,(double)_jz_ivars[1]), _jz_jet[1][_jz_k]);
+		 /* mult: v_079=(c_066*v_028) */
+		 MultiplyMyFloatA(_jz_jet[17][_jz_k], _jz_cvars[1], _jz_jet[1][_jz_k]);
 		 /* div: v_087=(v_079/v_074) */
 		 { /* division */
 			 static MY_FLOAT tmp1, tmp2, tmp;
@@ -937,7 +991,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 SubstractMyFloatA(tmp, _jz_jet[17][_jz_k], tmp2);
 			 DivideMyFloatA(_jz_jet[18][_jz_k], tmp, _jz_jet[13][0]);
 		 }
-		 /* div: v_088=(i_042/v_033) */
+		 /* div: v_088=(c_042/v_033) */
 		 { /* division */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -951,8 +1005,8 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 		 }
 		 /* plus: v_089=(v_087+v_088) */
 		 AddMyFloatA(_jz_jet[20][_jz_k], _jz_jet[18][_jz_k],_jz_jet[19][_jz_k]);
-		 /* mult: v_091=(i_066*v_029) */
-		 MultiplyMyFloatA(_jz_jet[21][_jz_k], MakeMyFloatB(_jz_uvar1,(double)_jz_ivars[1]), _jz_jet[2][_jz_k]);
+		 /* mult: v_091=(c_066*v_029) */
+		 MultiplyMyFloatA(_jz_jet[21][_jz_k], _jz_cvars[1], _jz_jet[2][_jz_k]);
 		 /* div: v_099=(v_091/v_074) */
 		 { /* division */
 			 static MY_FLOAT tmp1, tmp2, tmp;
@@ -967,7 +1021,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 			 SubstractMyFloatA(tmp, _jz_jet[21][_jz_k], tmp2);
 			 DivideMyFloatA(_jz_jet[22][_jz_k], tmp, _jz_jet[13][0]);
 		 }
-		 /* div: v_100=(i_044/v_033) */
+		 /* div: v_100=(c_044/v_033) */
 		 { /* division */
 			 static MY_FLOAT tmp1, tmp2, tmp;
 			 if(_jz_initialized==0) { InitMyFloat(tmp1);InitMyFloat(tmp2); InitMyFloat(tmp);}
@@ -981,7 +1035,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
 		 }
 		 /* plus: v_101=(v_099+v_100) */
 		 AddMyFloatA(_jz_jet[24][_jz_k], _jz_jet[22][_jz_k],_jz_jet[23][_jz_k]);
-		 /* constants: v_110=(c_109/i_036) ! */
+		 /* constants: v_110=(c_109/c_036) ! */
 		 AssignMyFloat(_jz_jet[25][_jz_k], _jz_MyFloatZERO);
 		 /* derivative of state variables */
 		 _jz_m = _jz_k+1;
@@ -1005,9 +1059,9 @@ MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order,
     _jz_ginitialized=1;
     return(_jz_jet);
 }
-MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order,double veff, double mu, double ux, double uy, double uz)
+MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order, double mu, double veff,double ux, double uy, double uz)
 {
-    return(taylor_coefficients_fixed_thrustA(t,x,order,0,veff,mu,ux,uy,uz));
+    return(taylor_coefficients_fixed_thrustA(t,x,order,0,mu,veff,ux,uy,uz));
 }
 
 /******************** Translation Info *****************************/
@@ -1017,7 +1071,7 @@ MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order,d
 ===================================================================================
 =======                                                                      ======
 =======                         Final Variable List                          ======
-	    (26 + 0) vars, (4 + 0) cvars and (14 + 0) ivars 
+	    (26 + 0) vars, (15 + 0) cvars and (3 + 0) ivars
 =======                                                                      ======
 ===================================================================================
 	v_027 (state variable)
@@ -1027,43 +1081,43 @@ MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order,d
 	v_031 (state variable)
 	v_032 (state variable)
 	v_033 (state variable)
-	i_038 = 22222                                    (0 0) (a number)
-	i_066 = (-i_038)                                 (1 0) (a number)
-	v_067 = (i_066*v_027)                            (7 0)
-	i_046 = 2                                        (2 0) (a number)
+	c_038 = 2.2222                                   (0 0)
+	c_066 = (-c_038)                                 (1 0)
+	v_067 = (c_066*v_027)                            (7 0)
+	i_046 = 2                                        (0 0) (a number)
 	v_068 = (v_027^i_046)                            (8 0)
 	v_069 = (v_028^i_046)                            (9 0)
 	v_070 = (v_068+v_069)                            (10 0)
 	v_071 = (v_029^i_046)                            (11 0)
 	v_072 = (v_070+v_071)                            (12 0)
-	i_049 = 3                                        (3 0) (a number)
-	c_073 = (i_049/i_046)                            (0 0)
+	i_049 = 3                                        (1 0) (a number)
+	c_073 = (i_049/i_046)                            (2 0)
 	v_074 = (v_072^c_073)                            (13 0)
 	v_075 = (v_067/v_074)                            (14 0)
-	i_040 = 33333                                    (4 0) (a number)
-	v_076 = (i_040/v_033)                            (15 0)
+	c_040 = 3.3333                                   (3 0)
+	v_076 = (c_040/v_033)                            (15 0)
 	v_077 = (v_075+v_076)                            (16 0)
-	v_079 = (i_066*v_028)                            (17 0)
+	v_079 = (c_066*v_028)                            (17 0)
 	v_087 = (v_079/v_074)                            (18 0)
-	i_042 = 44444                                    (5 0) (a number)
-	v_088 = (i_042/v_033)                            (19 0)
+	c_042 = 4.4444                                   (4 0)
+	v_088 = (c_042/v_033)                            (19 0)
 	v_089 = (v_087+v_088)                            (20 0)
-	v_091 = (i_066*v_029)                            (21 0)
+	v_091 = (c_066*v_029)                            (21 0)
 	v_099 = (v_091/v_074)                            (22 0)
-	i_044 = 55555                                    (6 0) (a number)
-	v_100 = (i_044/v_033)                            (23 0)
+	c_044 = 5.5555                                   (5 0)
+	v_100 = (c_044/v_033)                            (23 0)
 	v_101 = (v_099+v_100)                            (24 0)
-	i_102 = (i_040^i_046)                            (7 0) (a number)
-	i_103 = (i_042^i_046)                            (8 0) (a number)
-	i_104 = (i_102+i_103)                            (9 0) (a number)
-	i_105 = (i_044^i_046)                            (10 0) (a number)
-	i_106 = (i_104+i_105)                            (11 0) (a number)
-	i_035 = 1                                        (12 0) (a number)
-	c_107 = (i_035/i_046)                            (1 0)
-	c_108 = (i_106^c_107)                            (2 0)
-	c_109 = (-c_108)                                 (3 0)
-	i_036 = 11111                                    (13 0) (a number)
-	v_110 = (c_109/i_036)                            (25 0)
+	c_102 = (c_040^i_046)                            (6 0)
+	c_103 = (c_042^i_046)                            (7 0)
+	c_104 = (c_102+c_103)                            (8 0)
+	c_105 = (c_044^i_046)                            (9 0)
+	c_106 = (c_104+c_105)                            (10 0)
+	i_035 = 1                                        (2 0) (a number)
+	c_107 = (i_035/i_046)                            (11 0)
+	c_108 = (c_106^c_107)                            (12 0)
+	c_109 = (-c_108)                                 (13 0)
+	c_036 = 1.1111                                   (14 0)
+	v_110 = (c_109/c_036)                            (25 0)
 ===================================================================
 =========                                                  ========
 =========          Differential Equations                  ========
@@ -1079,3 +1133,4 @@ MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order,d
 	 v_033'=v_110
 */
 /*************** END  END  END ***************************************/
+

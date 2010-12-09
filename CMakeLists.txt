@@ -17,6 +17,8 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 # Initialise (empty) list of libraries to link against.
 SET(MANDATORY_LIBRARIES "")
 
+#
+
 # Provides build options to CMake
 # Build Option: when active the file main.cpp is built and linked to the PaGMO static library
 OPTION(BUILD_MAIN "Build 'main.cpp'." ON)

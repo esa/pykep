@@ -47,8 +47,8 @@ namespace kep_toolbox {
  * @see http://www.maia.ub.es/~angel/taylor
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-template<class array3D>
-void propagate_taylor(array3D& r0, array3D& v0, double m0, array3D& u, const double &t, const double &mu, const double &veff, const int &log10tolerance=-9, const int &log10rtolerance=-9){
+template<class T>
+void propagate_taylor(T& r0, T& v0, double &m0, const T& u, const double &t, const double &mu, const double &veff, const int &log10tolerance=-9, const int &log10rtolerance=-9){
 	int i, order=20, itmp=0, direction;
 	MY_FLOAT  startT, stopT, nextT;
 	MY_FLOAT  xx[7];
@@ -69,10 +69,18 @@ void propagate_taylor(array3D& r0, array3D& v0, double m0, array3D& u, const dou
 	stopT = t;
 
 	/* the main loop */
+	T u_copy(u);
+	if (t>0) {
+		direction =1;
+	} else {
+		direction = -1;
+		u_copy[0] = -u_copy[0];
+		u_copy[1] = -u_copy[1];
+		u_copy[2] = -u_copy[2];
+	}
 
-	(t>0) ? direction =1 : direction = -1;
 	do  {
-		itmp = taylor_step_fixed_thrust( &startT, xx, direction, 1, log10tolerance, log10rtolerance, &stopT, &nextT, &order, mu, veff, u[0], u[1], u[2]);
+		itmp = taylor_step_fixed_thrust( &startT, xx, direction, 1, log10tolerance, log10rtolerance, &stopT, &nextT, &order, mu, veff, u_copy[0], u_copy[1], u_copy[2]);
 	    } while(itmp == 0); /* while */
 	r0[0] = xx[0];
 	r0[1] = xx[1];

@@ -31,7 +31,9 @@
 #include <boost/python/register_ptr_to_python.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/docstring_options.hpp>
+#include <boost/python/overloads.hpp>
 #include <boost/utility.hpp>
+
 
 #include "../src/keplerian_toolbox.h"
 #include "boost_python_container_conversions.h"
@@ -45,11 +47,21 @@ static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolb
 	return boost::python::make_tuple(r,v);
 }
 
-static inline tuple propagate_lagrangian_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double t, const double mu)
+static inline tuple propagate_lagrangian_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &t, const double &mu)
 {
 	kep_toolbox::array3D r(r0), v(v0);
 	kep_toolbox::propagate_lagrangian(r,v,t,mu);
 	return boost::python::make_tuple(r,v);
+}
+
+static inline tuple propagate_taylor_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &m0, const kep_toolbox::array3D &u, const double &t, const double &mu, const double &veff, const int &log10tolerance, const int &log10rtolerance)
+{
+	kep_toolbox::array3D r(r0), v(v0);
+	double m(m0);
+	std::cout << u << std::endl;
+	kep_toolbox::propagate_taylor(r,v,m,u,t,mu,veff,log10tolerance,log10rtolerance);
+	std::cout << u << std::endl;
+	return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m));
 }
 
 #define get_constant(arg) \
@@ -67,6 +79,7 @@ get_constant(DAY2SEC);
 get_constant(SEC2DAY);
 get_constant(DAY2YEAR);
 get_constant(G0);
+
 
 BOOST_PYTHON_MODULE(_PyKEP) {
 	// Disable docstring c++ signature to allow sphinx autodoc to work properly
@@ -299,9 +312,9 @@ def("_get_"#arg,&get_##arg);
 			"  n_sol = Nmax*2+1"
 		)
 		.def(repr(self));
-		
+
 	//Lagrangian propagator for keplerian orbits
-	def("propagate_lagrangian",&propagate_lagrangian_wrapper,
+	def("propagate_lagrangian", &propagate_lagrangian_wrapper,
 		"PyKEP.propagate_lagrangian(r,v,t,mu)\n\n"
 		"- r: start position, x,y,z\n"
 		"- v: start velocity, vx,vy,vz\n"
@@ -310,5 +323,23 @@ def("_get_"#arg,&get_##arg);
 		"Returns a tuple containing r and v, the final position and velocity after the propagation.\n\n"
 		"Example::\n\n"
 		"  r,v = propagate_lagrangian([1,0,0],[0,1,0],pi/2,1)"
+	);
+
+
+	//Taylor propagation of constant thrust arcs
+	def("propagate_taylor",&propagate_taylor_wrapper,
+		"PyKEP.propagate_taylor(r,v,m,u,t,mu,veff,log10tol,log10rtol)\n\n"
+		"- r: start position, x,y,z\n"
+		"- v: start velocity, vx,vy,vz\n"
+		"- m: starting mass"
+		"- t: propagation time\n"
+		"- u: fixed inertial thrust, ux,uy,uz\n"
+		"- mu: central body gravity constant\n\n"
+		"- veff: the product (Isp g0) \n\n"
+		"- log10tol: the logartihm of the absolute tolerance passed to Jorba's' taylor propagator \n\n"
+		"- log10rtol: the logartihm of the relative tolerance passed to Jorba's' taylor propagator \n\n"
+		"Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
+		"Example::\n\n"
+		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
 	);
 }
