@@ -88,8 +88,8 @@ void propagate_lagrangian_u(T& r0, T& v0, const double &t, const double &mu = 1)
 	double C = stumpff_c(alpha*DS*DS);
 	//
 	double z = alpha*DS*DS;
-	F = 1 - DS*DS/R0*stumpff_c(z);
-	G = t_copy - 1/sqrt(mu)*DS*DS*DS*stumpff_s(z);
+	F = 1 - DS*DS/R0*C;
+	G = t_copy - 1/sqrt(mu)*DS*DS*DS*S;
 
 	//compute the final position
 	T rf;
@@ -99,8 +99,8 @@ void propagate_lagrangian_u(T& r0, T& v0, const double &t, const double &mu = 1)
 	double RF = sqrt(rf[0]*rf[0] + rf[1]*rf[1] + rf[2]*rf[2]);
 
 	//compute the lagrangian coefficients Ft, Gt
-	Ft = sqrt(mu)/RF/R0*(z*stumpff_s(z) - 1)*DS;
-	Gt = 1 - DS*DS/RF*stumpff_c(z);
+	Ft = sqrt(mu)/RF/R0*(z*S - 1)*DS;
+	Gt = 1 - DS*DS/RF*C;
 
 	//compute the final velocity
 	T vf;

@@ -22,7 +22,7 @@ int main() {
 	int count=0;
 
 	// Experiment Settings
-	unsigned int Ntrials = 500;
+	unsigned int Ntrials = 3000;
 
 	// Start Experiment
 	for (unsigned int i = 0; i<Ntrials; ++i){

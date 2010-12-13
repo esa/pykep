@@ -11,8 +11,8 @@ using namespace std;
 using namespace kep_toolbox;
 int main() {
 	// Preamble
-	array3D r0,v0,r0_cp,v0_cp;
-	double tof;
+	array3D r0,v0,r0_cp,v0_cp,u;
+	double tof,m0;
 	boost::mt19937 rng;
 	boost::uniform_int<> dist(0, 1);
 	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > rand_bit(rng, dist);
@@ -22,19 +22,23 @@ int main() {
 	int count=0;
 
 	// Experiment Settings
-	unsigned int Ntrials = 50000;
+	unsigned int Ntrials = 3000;
 
 	// Start Experiment
 	for (unsigned int i = 0; i<Ntrials; ++i){
 		//1 - generate a random propagation set-up
 		r0[0] = drng() * 2; r0[1] = drng() * 2; r0[2] = drng() * 2;
 		v0[0] = drng() * 2; v0[1] = drng() * 2; v0[2] = drng() * 2;
+		m0 = drng()*1000 + 1000;
+		u[0] = drng() * 0;
+		u[1] = drng() * 0;
+		u[2] = drng() * 0;
 		tof = drng() * 20;
 		r0_cp = r0;
 		v0_cp = v0;
 		//2 - propagate back and forth
-		propagate_lagrangian_u(r0,v0,tof,1.0);
-		propagate_lagrangian_u(r0,v0,-tof,1.0);
+		propagate_taylor_jorba(r0,v0,m0,u,tof,1.0,1.0,-14,-14);
+		propagate_taylor_jorba(r0,v0,m0,u,-tof,1.0,1.0,-14,-14);
 		diff(r0_cp,r0,r0_cp);
 		err = norm(r0_cp);
 		err_max = std::max(err_max,err);
@@ -49,5 +53,4 @@ int main() {
 	} else {
 		return 1;
 	}
-
 }

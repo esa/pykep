@@ -9,7 +9,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake_modules)
 # Configuration for GCC.
 IF(CMAKE_COMPILER_IS_GNUCXX)
 	# Add to the base flags extra warnings, and set up message reporting from the compiler so that it is Eclipse-friendly.
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0 -ffast-math")
 	# Suggested for multithreaded code.
 	ADD_DEFINITIONS(-D_REENTRANT)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -90,4 +90,3 @@ IF(BUILD_PYKEP)
         )
         ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
 ENDIF(BUILD_PYKEP)
-
