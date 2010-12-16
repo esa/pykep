@@ -25,18 +25,15 @@
 #ifndef M2E_H
 #define M2E_H
 
-#include"../astro_constants.h"
-#include"../numerics/newton_raphson.h"
 #include<boost/bind.hpp>
 #include<cmath>
 
+#include"../astro_constants.h"
+#include"../core_functions/kepler_equations.h"
+#include"../numerics/newton_raphson.h"
+
 namespace kep_toolbox {
-	inline double kepE(const double& E, const double& M, const double& eccentricity ){
-		return ( E - eccentricity*sin(E) - M );
-	}
-	inline double d_kepE(const double& E, const double& eccentricity){
-		return ( 1 - eccentricity*cos(E) );
-	}
+
 	inline double m2e(const double& M, const double & eccentricity) {
 		double E = M + eccentricity * cos(M);
 		newton_raphson(E,boost::bind(kepE,_1,M, eccentricity),boost::bind(d_kepE,_1, eccentricity),100,ASTRO_TOLERANCE);

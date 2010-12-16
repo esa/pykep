@@ -35,8 +35,8 @@
 #include <boost/utility.hpp>
 
 
-#include "../src/keplerian_toolbox.h"
-#include "boost_python_container_conversions.h"
+#include "../../src/keplerian_toolbox.h"
+#include "../boost_python_container_conversions.h"
 
 using namespace boost::python;
 
@@ -50,7 +50,7 @@ static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolb
 static inline tuple propagate_lagrangian_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &t, const double &mu)
 {
 	kep_toolbox::array3D r(r0), v(v0);
-	kep_toolbox::propagate_lagrangian(r,v,t,mu);
+	kep_toolbox::propagate_lagrangian_u(r,v,t,mu);
 	return boost::python::make_tuple(r,v);
 }
 
@@ -81,7 +81,7 @@ get_constant(DAY2YEAR);
 get_constant(G0);
 
 
-BOOST_PYTHON_MODULE(_PyKEP) {
+BOOST_PYTHON_MODULE(_core) {
 	// Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
@@ -331,13 +331,13 @@ def("_get_"#arg,&get_##arg);
 		"PyKEP.propagate_taylor(r,v,m,u,t,mu,veff,log10tol,log10rtol)\n\n"
 		"- r: start position, x,y,z\n"
 		"- v: start velocity, vx,vy,vz\n"
-		"- m: starting mass"
+		"- m: starting mass\n"
 		"- t: propagation time\n"
 		"- u: fixed inertial thrust, ux,uy,uz\n"
 		"- mu: central body gravity constant\n\n"
-		"- veff: the product (Isp g0) \n\n"
-		"- log10tol: the logartihm of the absolute tolerance passed to Jorba's' taylor propagator \n\n"
-		"- log10rtol: the logartihm of the relative tolerance passed to Jorba's' taylor propagator \n\n"
+		"- veff: the product (Isp g0) defining the engine efficiency \n\n"
+		"- log10tol: the logarithm of the absolute tolerance passed to taylor propagator \n\n"
+		"- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
 		"Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
 		"Example::\n\n"
 		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"

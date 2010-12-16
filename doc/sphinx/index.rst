@@ -9,8 +9,8 @@ Welcome to PyKEP's documentation!
 
 PyKEP is a scientific library providing basic tools for astrodynamics research. Algoritmic efficiency is 
 a main focus of the library, which is written in C++ and exposed to Python using the boost::python library. At the library core
-is the implementation of a solver for the multiple revolutions Lambert's problem, objects representing the Sims-Flanagan low-thrust model,
-efficient keplerian propagators and more .... in its current version the library is only supporting unix systems (tested on various linux
+is the implementation of an efficient solver for the multiple revolutions Lambert's problem, objects representing the Sims-Flanagan low-thrust model,
+efficient keplerian propagators and Taylor-integrators and more .... in its current version the library is only supporting unix systems (tested on various linux
 distributions and MacOSX)
 
 Contents:

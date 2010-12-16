@@ -1,11 +1,13 @@
+
+#include <vector>
+#include <numeric>
+
 #include "leg.h"
 #include "sc_state.h"
 #include "../astro_constants.h"
 #include "../core_functions/array3D_operations.h"
 #include "../core_functions/propagate_lagrangian.h"
 #include"../exceptions.h"
-#include <vector>
-#include <numeric>
 
 namespace kep_toolbox{ namespace sims_flanagan{
 

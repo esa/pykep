@@ -29,6 +29,8 @@
 #include<cmath>
 #include<boost/array.hpp>
 
+#include"../exceptions.h"
+
 namespace kep_toolbox {
 
 template<class T>

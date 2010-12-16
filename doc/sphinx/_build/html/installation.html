@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Install PyKEP &mdash; PyKEP v1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyKEP v1 documentation" href="index.html" />
+    <link rel="next" title="PyKEP Documentation" href="documentation.html" />
+    <link rel="prev" title="Download PyKEP" href="downloading.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="documentation.html" title="PyKEP Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="downloading.html" title="Download PyKEP"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyKEP v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="install-pykep">
+<span id="howtoinstall"></span><h1>Install PyKEP<a class="headerlink" href="#install-pykep" title="Permalink to this headline">¶</a></h1>
+<p>Assuming you have just downloaded the source code following the instructions given, see <a class="reference internal" href="downloading.html#howtodownload"><em>Download PyKEP</em></a>, you will have
+created a directory keptoolbox in your current directory, move there:</p>
+<div class="highlight-python"><pre>cd keptoolbox</pre>
+</div>
+<p>You will now need to create a build directory where to build the source code, so:</p>
+<div class="highlight-python"><pre>mkdir build</pre>
+</div>
+<p>You can now move there:</p>
+<div class="highlight-python"><pre>cd build</pre>
+</div>
+<p>and have ccmake help you select the options that are most suitable for you:</p>
+<div class="highlight-python"><pre>ccmake ../</pre>
+</div>
+<p>At this point (after pressing c once to configure) you should be seeing something like this on the screen:</p>
+<img alt="_images/ccmake.png" src="_images/ccmake.png" />
+<p>You need to activate the option BUILD_PYKEP. As for the other options, just ignore them, they are useful only for c++ developers / users.
+Upon pressing &#8216;c&#8217; again, cmake tries to locate the boost python library necessary to build the code and, in case it is successfull,
+displays something like</p>
+<img alt="_images/ccmake2.png" src="_images/ccmake2.png" />
+<p>You can now press &#8216;g&#8217; to generate a make file and exit ccmake utility. You are back to the prompt where you can now type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">make</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-python"><pre>sudo make install</pre>
+</div>
+<p>Watch carefully the message in the terminal where the installation path is given to check
+that the correct python dist-packages or site-packages directory has been located</p>
+<dl class="docutils">
+<dt>Here is a typical example of the output obtained (gentoo system)::</dt>
+<dd>[ 47%] Built target keplerian_toolbox
+[ 94%] Built target keplerian_toolbox_static
+[100%] Built target _PyKEP
+Install the project...
+&#8211; Install configuration: &#8220;Release&#8221;
+&#8211; Installing: /usr/local/lib/libkeplerian_toolbox.so
+&#8211; Installing: /usr/local/lib/python2.6/site-packages/PyKEP/__init__.py
+&#8211; Installing: /usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so
+&#8211; Removed runtime path from &#8220;/usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so&#8221;</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="downloading.html"
+                        title="previous chapter">Download PyKEP</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="documentation.html"
+                        title="next chapter">PyKEP Documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/installation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="documentation.html" title="PyKEP Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="downloading.html" title="Download PyKEP"
+             >previous</a> |</li>
+        <li><a href="index.html">PyKEP v1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, PyKEP Development Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+    </div>
+  </body>
+</html>

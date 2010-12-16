@@ -30,6 +30,7 @@
 #endif
 
 namespace kep_toolbox {
+namespace sims_flanagan{
 
 /// Spacecraft
 /**
@@ -38,30 +39,39 @@ namespace kep_toolbox {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
+
 class spacecraft
 {
+	friend std::ostream &operator<<(std::ostream &s, const spacecraft &in );
 public:
-	spacecraft():mass(0),thrust(0),isp(0) {}
-	spacecraft(const double &mass_, const double &thrust_, const double &isp_) : mass(mass_),thrust(thrust_),isp(isp_) {}
-	const double& get_mass() const {return mass;}
-	const double& get_thrust() const {return thrust;}
-	const double& get_isp() const {return isp;}
+	spacecraft():m_mass(0),m_thrust(0),m_isp(0) {}
+	spacecraft(const double &mass_, const double &thrust_, const double &isp_) : m_mass(mass_), m_thrust(thrust_), m_isp(isp_) {}
+	double get_mass() const {return m_mass;}
+	double get_thrust() const {return m_thrust;}
+	double get_isp() const {return m_isp;}
+	void set_mass(const double _mass) {m_mass=_mass;}
+	void set_thrust(const double _thrust) {m_thrust=_thrust;}
+	void set_isp(const double _isp) {m_isp=_isp;}
+	std::string human_readable() const;
 private:
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & mass;
-		ar & thrust;
-		ar & isp;
+		ar & m_mass;
+		ar & m_thrust;
+		ar & m_isp;
 	}
 #endif
-	double mass;
-	double thrust;
-	double isp;
+	double m_mass;
+	double m_thrust;
+	double m_isp;
 };
 
-} //Namespaces
+std::ostream &operator<<(std::ostream &s, const spacecraft &in );
+
+
+}} //Namespaces
 
 #endif // SPACECRAFT_H

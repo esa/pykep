@@ -32,6 +32,7 @@
 #include "../planet.h"
 #include "sc_state.h"
 #include "../exceptions.h"
+#include "spacecraft.h"
 
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 #include "../serialization.h"

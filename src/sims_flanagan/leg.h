@@ -32,6 +32,7 @@
 #include "spacecraft.h"
 #include "../core_functions/array3D_operations.h"
 #include "../core_functions/propagate_lagrangian.h"
+#include "../core_functions/propagate_taylor.h"
 #include "sc_state.h"
 #include "../epoch.h"
 #include "throttle.h"
@@ -74,13 +75,13 @@ public:
 	/**
 	* Default constructor.
 	*/
-	leg():t_i(),x_i(),throttles(),t_f(),x_f(),sc(),mu(0) {}
+	leg():t_i(),x_i(),throttles(),t_f(),x_f(),sc(),mu(0),m_hf(false),m_tol(-10) {}
 
 	/// Initialize a leg
 	/**
 	* Initialize a leg assuming that the user has or will initialize separately the spacecraft.
 	* The throttles are provided via two iterators pointing
-	* to the beginning and to the end of a throttle sequence. 
+	* to the beginning and to the end of a throttle sequence.
 	*
 	* \param[in] epoch_i Inital epoch
 	* \param[in] state_i Initial sc_state (spacecraft state)
@@ -93,11 +94,11 @@ public:
 	& \throws value_error if final epoch is before initial epoch, if mu_ not positive
 	*/
 	template<typename it_type>
-			void set_leg(const epoch& epoch_i, const sc_state& state_i,
-					it_type throttles_start,
-					it_type throttles_end,
-					const epoch& epoch_f, const sc_state& state_f,
-					double mu_, typename boost::enable_if<boost::is_same<typename std::iterator_traits<it_type>::value_type,throttle> >::type * = 0)
+	void set_leg(const epoch& epoch_i, const sc_state& state_i,
+		     it_type throttles_start,
+		     it_type throttles_end,
+		     const epoch& epoch_f, const sc_state& state_f,
+		     double mu_, typename boost::enable_if<boost::is_same<typename std::iterator_traits<it_type>::value_type,throttle> >::type * = 0)
 	{
 		if (epoch_f.mjd2000() <= epoch_i.mjd2000())
 		{
@@ -119,10 +120,10 @@ public:
 	/// Initialize a leg
 	/**
 	* Initialize a leg assuming that the user has or will initialize separately the spacecraft.
-	* The throttles are provided via two iterators pointing to the beginning and to the end of 
-	* a sequence of doubles (\f$ x_1,y_1,z_1, ..., x_N,y_N,z_N \f$ containing the 
+	* The throttles are provided via two iterators pointing to the beginning and to the end of
+	* a sequence of doubles (\f$ x_1,y_1,z_1, ..., x_N,y_N,z_N \f$ containing the
 	* cartesian components of each throttle \f$ x_i,y_i,z_i \in [0,1]\f$. The constructed leg
-	* will have by default equally spaced segments. 
+	* will have by default equally spaced segments.
 	*
 	* \param[in] epoch_i Inital epoch
 	* \param[in] state_i Initial sc_state (spacecraft state)
@@ -136,16 +137,16 @@ public:
 	*/
 	
 	template<typename it_type>
-			void set_leg(const epoch& epoch_i, const sc_state& state_i,
-					it_type throttles_start,
-					it_type throttles_end,
-					const epoch& epoch_f, const sc_state& state_f,
-					double mu_, typename boost::enable_if<boost::is_same<typename std::iterator_traits<it_type>::value_type,double> >::type * = 0)
+	void set_leg(const epoch& epoch_i, const sc_state& state_i,
+		it_type throttles_start,
+		it_type throttles_end,
+		const epoch& epoch_f, const sc_state& state_f,
+		double mu_, typename boost::enable_if<boost::is_same<typename std::iterator_traits<it_type>::value_type,double> >::type * = 0)
 	{
-// 		if (epoch_f.mjd2000() <= epoch_i.mjd2000())
-// 		{
-// 			throw_value_error("Final epoch is before initial epoch");
-// 		}
+		// 		if (epoch_f.mjd2000() <= epoch_i.mjd2000())
+		// 		{
+		// 			throw_value_error("Final epoch is before initial epoch");
+		// 		}
 		if (std::distance(throttles_start,throttles_end) % 3 || std::distance(throttles_start,throttles_end) <= 0) {
 			throw_value_error("The length of the throttles list must be positive and a multiple of 3");
 		}
@@ -175,7 +176,7 @@ public:
 	/// Sets the leg's spacecraft
 	/**
 	*
-	* In order for the trajectory leg to be able to propagate the states, information on the
+	*In order for the trajectory leg to be able to propagate the states, information on the
 	* low-thrust propulsion system used needs to be available. This is provided by the object
 	* spacecraft private member of the class and can be set using this setter.
 	*
@@ -199,7 +200,7 @@ public:
 	* \param[in] e iterator pointing to the end of a throttles sequence
 	*/
 	template<typename it_type>
-			void set_throttles(it_type b, it_type e) { throttles.assign(b, e); }
+	void set_throttles(it_type b, it_type e) { throttles.assign(b, e); }
 
 	/// Sets the throttles size
 	/**
@@ -245,6 +246,15 @@ public:
 	*
 	*/
 	void set_t_f(epoch e) { t_f = e; }
+
+	/// Sets the leg high difelity state
+	/**
+	* Activates the evaluation of the state-mismatches using a high-fidelity model. Resulting leg
+	* is a real low-thrust trajectory (i.e. no impulses approximation)
+	*
+	*/
+	void set_high_fidelity(bool state) { m_hf = state; }
+
 
 	/** @name Getters*/
 	//@{
@@ -313,8 +323,20 @@ public:
 	* @param[in] begin iterator pointing to the beginning of the memory where the mismatches will be stored
 	* @param[in] begin iterator pointing to the end of the memory where the mismatches will be stored
 	*/
+
 	template<typename it_type>
-			void get_mismatch_con(it_type begin, it_type end) const
+	void get_mismatch_con(it_type begin, it_type end) const
+	{
+		if (m_hf) {
+			get_mismatch_con_low_thrust(begin, end);
+		} else {
+			get_mismatch_con_chemical(begin, end);
+		}
+	}
+
+protected:
+	template<typename it_type>
+	void get_mismatch_con_chemical(it_type begin, it_type end) const
 	{
 		assert(end - begin == 7);
 		(void)end;
@@ -336,7 +358,7 @@ public:
 		double current_time_fwd = t_i.mjd2000() * ASTRO_DAY2SEC;
 		for (int i = 0; i < n_seg_fwd; i++) {
 			double thrust_duration = (throttles[i].get_end().mjd2000() -
-						throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
+						  throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
 			double manouver_time = (throttles[i].get_start().mjd2000() +
 						throttles[i].get_end().mjd2000()) / 2. * ASTRO_DAY2SEC;
 			propagate_lagrangian(rfwd, vfwd, manouver_time - current_time_fwd, mu);
@@ -345,7 +367,7 @@ public:
 			for (int j=0;j<3;j++){
 				dv[j] = max_thrust / mfwd * thrust_duration * throttles[i].get_value()[j];
 			}
-			
+
 			norm_dv = norm(dv);
 			sum(vfwd,vfwd,dv);
 			mfwd *= exp( -norm_dv/isp/ASTRO_G0 );
@@ -362,7 +384,7 @@ public:
 		double current_time_back = t_f.mjd2000() * ASTRO_DAY2SEC;
 		for (int i = 0; i < n_seg_back; i++) {
 			double thrust_duration = (throttles[throttles.size() - i - 1].get_end().mjd2000() -
-						throttles[throttles.size() - i - 1].get_start().mjd2000()) * ASTRO_DAY2SEC;
+						  throttles[throttles.size() - i - 1].get_start().mjd2000()) * ASTRO_DAY2SEC;
 			double manouver_time = (throttles[throttles.size() - i - 1].get_start().mjd2000() +
 						throttles[throttles.size() - i - 1].get_end().mjd2000()) / 2. * ASTRO_DAY2SEC;
 			// manouver_time - current_time_back is negative, so this should propagate backwards
@@ -389,6 +411,63 @@ public:
 		begin[6] = mfwd - mback;
 	}
 
+
+	template<typename it_type>
+	void get_mismatch_con_low_thrust(it_type begin, it_type end) const
+	{
+		assert(end - begin == 7);
+		(void)end;
+		size_t n_seg = throttles.size();
+		const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+
+		//Aux variables
+		double max_thrust = sc.get_thrust();
+		double veff = sc.get_isp()*ASTRO_G0;
+		array3D thrust;
+
+		//Initial state
+		array3D rfwd = x_i.get_position();
+		array3D vfwd = x_i.get_velocity();
+		double mfwd = x_i.get_mass();
+
+		//Forward Propagation
+		for (int i = 0; i < n_seg_fwd; i++) {
+			double thrust_duration = (throttles[i].get_end().mjd2000() -
+						  throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
+
+			for (int j=0;j<3;j++){
+				thrust[j] = max_thrust * throttles[i].get_value()[j];
+			}
+			propagate_taylor(rfwd,vfwd,mfwd,thrust,thrust_duration,mu,veff,m_tol,m_tol);
+		}
+
+		//Final state
+		array3D rback = x_f.get_position();
+		array3D vback = x_f.get_velocity();
+		double mback = x_f.get_mass();
+
+		//Backward Propagation
+		for (int i = 0; i < n_seg_back; i++) {
+			double thrust_duration = (throttles[throttles.size() - i - 1].get_end().mjd2000() -
+						  throttles[throttles.size() - i - 1].get_start().mjd2000()) * ASTRO_DAY2SEC;
+			for (int j=0;j<3;j++){
+				thrust[j] = max_thrust * throttles[throttles.size() - i - 1].get_value()[j];
+			}
+			propagate_taylor(rback,vback,mback,thrust,-thrust_duration,mu,veff,m_tol,m_tol);
+		}
+
+		//Return the mismatch
+		diff(rfwd,rfwd,rback);
+		diff(vfwd,vfwd,vback);
+
+		std::copy(rfwd.begin(), rfwd.end(), begin);
+		std::copy(vfwd.begin(), vfwd.end(), begin + 3);
+		begin[6] = mfwd - mback;
+	}
+
+
+
+public:
 	/// Evaluate the state mismatch
 	/**
 	* This method overloads the same method using iterators but the mismatch values are stored
@@ -414,7 +493,7 @@ public:
 	* @param[out] start std::vector<double>iterator to the last+1 element where to store the magnitudes
 	*/
 	template<typename it_type>
-		void get_throttles_con(it_type start, it_type end) const {
+	void get_throttles_con(it_type start, it_type end) const {
 		if ( (end - start) != (int)throttles.size()) {
 			throw_value_error("Iterators distance is incompatible with the throttles size");
 		}
@@ -440,34 +519,38 @@ public:
 		for (std::vector<double>::size_type i = 0; i < throttles.size(); ++i)
 		{
 			tmp += (throttles[i].get_end().mjd2000() -throttles[i].get_start().mjd2000())
-			* ASTRO_DAY2SEC * throttles[i].get_norm() * sc.get_thrust() / sc.get_mass();
+					* ASTRO_DAY2SEC * throttles[i].get_norm() * sc.get_thrust() / sc.get_mass();
 		}
 		return tmp;
 	}
 
 private:
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & t_i;
-		ar & x_i;
-		ar & throttles;
-		ar & t_f;
-		ar & x_f;
-		ar & sc;
-		ar & mu;
-	}
+		friend class boost::serialization::access;
+		template <class Archive>
+		void serialize(Archive &ar, const unsigned int)
+		{
+			ar & t_i;
+			ar & x_i;
+			ar & throttles;
+			ar & t_f;
+			ar & x_f;
+			ar & sc;
+			ar & mu;
+			ar & m_hf;
+			ar & m_tol;
+		}
 #endif
-	epoch t_i;
-	sc_state x_i;
-	std::vector<throttle> throttles;
-	epoch t_f;
-	sc_state x_f;
-	spacecraft sc;
-	double mu;
-};
+		epoch t_i;
+		sc_state x_i;
+		std::vector<throttle> throttles;
+		epoch t_f;
+		sc_state x_f;
+		spacecraft sc;
+		double mu;
+		bool m_hf;
+		int m_tol;
+	};
 
 std::ostream &operator<<(std::ostream &s, const leg &in );
 

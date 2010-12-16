@@ -29,7 +29,15 @@
 #include"stumpff.h"
 
 namespace kep_toolbox {
-	//With the eccentric anomaly (DE)
+	//With the eccentric anomaly (E)
+	inline double kepE(const double& E, const double& M, const double& eccentricity ){
+		return ( E - eccentricity*sin(E) - M );
+	}
+	inline double d_kepE(const double& E, const double& eccentricity){
+		return ( 1 - eccentricity*cos(E) );
+	}
+
+	//With the eccentric anomaly difference (DE)
 	inline double kepDE(const double& DE, const double& DM, const double& sigma0, const double& sqrta, const double& a, const double& R){
 		return ( (-DM + DE + sigma0 / sqrta * (1 - cos(DE)) - (1 - R / a) * sin(DE)) );
 	}
@@ -38,7 +46,7 @@ namespace kep_toolbox {
 		return ( (1 + sigma0 / sqrta * sin(DE) - (1 - R / a) * cos(DE)) );
 	}
 
-	//With the hyperbolic anomaly (DH)
+	//With the hyperbolic anomaly difference (DH)
 	inline double kepDH(const double& DH, const double& DN, const double& sigma0, const double& sqrta, const double& a, const double& R){
 		return ( -DN -DH + sigma0/sqrta * (cosh(DH) - 1) + (1 - R / a) * sinh(DH) );
 	}
@@ -46,7 +54,7 @@ namespace kep_toolbox {
 	inline double d_kepDH(const double& DH, const double& sigma0, const double& sqrta, const double& a, const double& R){
 		return ( -1 + sigma0 / sqrta * sinh(DH) + (1 - R / a) * cosh(DH) );
 	}
-	//With the universal anomaly (DS)
+	//With the universal anomaly difference (DS)
 	inline double kepDS(const double& DS, const double& DT, const double& r0, const double& vr0, const double& alpha, const double& mu){
 		double S = stumpff_s(alpha*DS*DS);
 		double C = stumpff_c(alpha*DS*DS);
