@@ -2,8 +2,8 @@
 PyKEP Documentation
 ===================
 
-List of main PyKEP elements
-============================
+List of main PyKEP elements in the core module
+==============================================
 
 =========================================	========= 	================================================
 Name						Type      	Description
@@ -20,6 +20,18 @@ Name						Type      	Description
 :func:`PyKEP.propagate_lagrangian`		function	propagates pure keplerian motion using Lagrange coefficients and universal variables
 :func:`PyKEP.propagate_taylor`			function	propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
 =========================================  	=========	================================================
+
+List of main PyKEP elements in the sims_flanagan module
+=======================================================
+
+=========================================	========= 	================================================
+Name						Type      	Description
+=========================================	=========	================================================
+:class:`PyKEP.sims_flanagan.spacecraft`		class		represents a nuclear electric propelled spacecraft
+:class:`PyKEP.sims_flanagan.sc_state`		class		represent the spacecraft state (r,v,m)
+:class:`PyKEP.sims_flanagan.leg`		class		represents one leg in the Sims-Flanagan model
+=========================================  	=========	================================================
+
 
 List of constants defined within PyKEP
 =============================================
@@ -101,6 +113,30 @@ Detailed Documentation
 .. autoclass:: PyKEP.planet_gtoc2(*args)
 
   .. automethod:: PyKEP.planet_gtoc2.__init__(*args)
+
+.. autoclass:: PyKEP.sims_flanagan.spacecraft(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.spacecraft.__init__(*args)
+
+.. autoclass:: PyKEP.sims_flanagan.sc_state(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.sc_state.__init__(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.sc_state.set(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.sc_state.get(*args)
+
+.. autoclass:: PyKEP.sims_flanagan.leg(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.__init__(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.set(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.high_fidelity(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.mismatch_constraints(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.throttles_constraints(*args)
 
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 

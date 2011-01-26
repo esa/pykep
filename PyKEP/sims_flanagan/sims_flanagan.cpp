@@ -153,10 +153,10 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"  t1.end = epoch_from_string('2002-01-23 00:00:00')"
 		)
 		.add_property("value",make_function(&kep_toolbox::sims_flanagan::throttle::get_value,return_value_policy<copy_const_reference>()),&kep_toolbox::sims_flanagan::throttle::set_value,
-				"The cartesian components of the throttle\n\n"
-				"Example::\n\n"
-				"  components = t1.value"
-				"  t1.value = (0.3,0.3,0.2)"
+			"The cartesian components of the throttle\n\n"
+			"Example::\n\n"
+			"  components = t1.value"
+			"  t1.value = (0.3,0.3,0.2)"
 		)
 		.def("norm", &kep_toolbox::sims_flanagan::throttle::get_norm,
 			"Calculates the throttle norm. If greater than 1 the resulting thrust will be greater than its maximum allowed value\n\n"
@@ -167,7 +167,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 
 	//Leg class
 	typedef void (kep_toolbox::sims_flanagan::leg::*leg_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&);
-	class_<kep_toolbox::sims_flanagan::leg>("leg", "represents one leg in the sims-flanagan model",
+	class_<kep_toolbox::sims_flanagan::leg>("leg", "represents one low-thrust  trajectory leg in the sims-flanagan model",
 		init<const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const std::vector<double>&, const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const kep_toolbox::sims_flanagan::spacecraft&, const double>(
 			"PyKEP.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)\n\n"
 			"- start: starting epoch\n"
@@ -191,22 +191,22 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" l = PyKEP.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"
 		))
 		.def("set", leg_setter(&kep_toolbox::sims_flanagan::leg::set_leg),
-			"Resets the leg, leaving the spacecraft and the central body gravitational parameter unchanged"
+			"Resets the leg, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
 			"Example::\n\n"
 			" l.set(start,x0,(0,0,0,1,0,0,1,0,0,0,0,0),end,xe)"
 		)
 		.def("high_fidelity", &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
-			"Defines the propagation model (low fidelity is roughly ten time faster)\n"
+			"Defines the propagation model (low fidelity is roughly ten time faster)\n\n"
 			"Example::\n\n"
 			" l.high_fidelity(True)\n"
 		)
 		.def("mismatch_constraints", &get_mismatch_wrapper,
-			"Returns a tuple containing the state mismatch of the leg x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be feasible)\n"
+			"Returns a tuple containing the state mismatch of the leg x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be feasible)\n\n"
 			"Example::\n\n"
 			" ceq = l.mismatch_constraints()\n"
 		)
 		.def("throttles_constraints", &get_throttles_con_wrapper,
-			"Returns a tuple containing the throttles magnitudes minus one\n"
+			"Returns a tuple containing the throttle magnitudes minus one\n\n"
 			"Example::\n\n"
 			" c = l.throttles_constraints()\n"
 		);
