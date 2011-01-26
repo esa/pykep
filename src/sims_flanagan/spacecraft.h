@@ -25,6 +25,8 @@
 #ifndef SPACECRAFT_H
 #define SPACECRAFT_H
 
+#include <iostream>
+
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 #include "../serialization.h"
 #endif

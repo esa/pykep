@@ -89,10 +89,14 @@ BOOST_PYTHON_MODULE(_core) {
 	// Exposing the arrays and vectors into python tuples
 	to_tuple_mapping<kep_toolbox::array6D>();
 	from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
+	to_tuple_mapping<kep_toolbox::array7D>();
+	from_python_sequence<kep_toolbox::array7D,fixed_size_policy>();
 	to_tuple_mapping<kep_toolbox::array3D>();
 	from_python_sequence<kep_toolbox::array3D,fixed_size_policy>();
 	to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
 	from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
+	to_tuple_mapping<std::vector<double> >();
+	from_python_sequence<std::vector<double>, variable_capacity_policy>();
 
 	// Constants.
 #define expose_constant(arg) \

@@ -26,6 +26,7 @@
 #define SC_STATE_H
 
 #include <boost/lexical_cast.hpp>
+#include<iostream>
 
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 #include "../serialization.h"
@@ -118,6 +119,13 @@ public:
 	/// Sets the mass
 	void set_mass(const double& mass_){ mass = mass_; }
 	//@}
+	std::string human_readable() const {
+		std::ostringstream s;
+		s << "r = " << position << " ";
+		s << "v = " << velocity << " ";
+		s << "m = " << mass;
+		return s.str();
+	}
 private:
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 	friend class boost::serialization::access;
