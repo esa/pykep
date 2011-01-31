@@ -71,6 +71,7 @@ public:
 		* \param[in] name C++ string containing the planet name. Default value is "Unknown"
 		*/
 	planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
+	planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0) {};
 	/// Polymorphic copy constructor.
 	virtual planet_ptr clone() const;
 	virtual ~planet();
@@ -173,7 +174,6 @@ protected:
 	* \param[in] name C++ string containing the planet name. Default value is "Unknown"
 	*/
 	void build_planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double & radius, const double & safe_radius, const std::string &name = "Unknown");
-	planet() {};
 private:
 #ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
 	friend class boost::serialization::access;

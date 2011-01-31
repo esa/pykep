@@ -29,6 +29,9 @@
 
 namespace kep_toolbox {
 
+const array3D lambert_problem::default_r1 = {{1,0,0}};
+const array3D lambert_problem::default_r2 = {{0,1,0}};
+
 /// Constructor
 /** It constructs and solves a Lambert problem.
  *

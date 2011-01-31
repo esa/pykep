@@ -34,7 +34,7 @@
 #include <boost/python/overloads.hpp>
 #include <boost/utility.hpp>
 
-
+#include "../utils.h"
 #include "../../src/keplerian_toolbox.h"
 #include "../boost_python_container_conversions.h"
 
@@ -149,7 +149,9 @@ def("_get_"#arg,&get_##arg);
 			"Example::\n\n"
 			"  jd = e.mjd2000()"
 		)
-		.def(repr(self));
+		.def(repr(self))
+		.def_pickle(generic_pickle_suite<kep_toolbox::epoch>())
+		.def(init<>());
 		
 	// Epoch constructors helpers
 	def("epoch_from_string",&kep_toolbox::epoch_from_string,
@@ -212,7 +214,9 @@ def("_get_"#arg,&get_##arg);
 			"Example::\n\n"
 			"  elem = earth.orbital_elements()"
 		 )	
-		.def(repr(self));
+		.def(repr(self))
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet>())
+		.def(init<>());
 	
 	// A solar system planet
 	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system",
@@ -221,7 +225,9 @@ def("_get_"#arg,&get_##arg);
 			"- which: string containing the common planet name (e.g. 'earth')\n\n"
 			"Example::\n\n"
 			"  earth = planet_ss('earth')"
-		));	
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet_ss>())
+		.def(init<>());
 	
 	// A planet from the MPCORB database
 	class_<kep_toolbox::planet_mpcorb,bases<kep_toolbox::planet> >("planet_mpcorb","A planet from the mpcorb database",
@@ -230,7 +236,9 @@ def("_get_"#arg,&get_##arg);
 			"- line: a line from the MPCORB database file\n\n"
 			"Example::\n\n"
 			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
-		));	
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
+		.def(init<>());
 	
 	// A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
@@ -240,7 +248,9 @@ def("_get_"#arg,&get_##arg);
 			"data file distributed by the Russian, see the (`gtoc5 web portal <gtoc5.math.msu.su>`_. Earth is 7076\n\n"
 			"Example::\n\n"
 			"  russian_ast = planet_gtoc5(1)"
-		));
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
+		.def(init<>());
 	
 	// A planet from the gtoc2 problem
 	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
@@ -255,7 +265,9 @@ def("_get_"#arg,&get_##arg);
 			"    - Earth:   910\n\n"
 			"Example::\n\n"
 			"  earth_gtoc2 = planet_gtoc2(910)"
-		));
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc2>())
+		.def(init<>());
 	
 	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
@@ -315,7 +327,9 @@ def("_get_"#arg,&get_##arg);
 			"  Nmax = l.get_Nmax()\n"
 			"  n_sol = Nmax*2+1"
 		)
-		.def(repr(self));
+		.def(repr(self))
+		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>())
+		.def(init<>());;
 
 	//Lagrangian propagator for keplerian orbits
 	def("propagate_lagrangian", &propagate_lagrangian_wrapper,

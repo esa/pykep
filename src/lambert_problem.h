@@ -25,9 +25,15 @@
 #ifndef KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
 #define KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
 
+#include <cmath>
 #include<vector>
 
 #include "astro_constants.h"
+#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+#include "serialization.h"
+#endif
+
+
 
 
 namespace kep_toolbox {
@@ -54,9 +60,11 @@ namespace kep_toolbox {
 
 class lambert_problem
 {
+	static const array3D default_r1;
+	static const array3D default_r2;
 public:
 	friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
-	lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu = 1., const int &cw = 0);
+	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0);
 	const std::vector<array3D>& get_v1() const;
 	const std::vector<array3D>& get_v2() const;
 	const std::vector<double>& get_a() const;
@@ -65,6 +73,29 @@ public:
 	bool is_reliable() const;
 	int get_Nmax() const;
 private:
+#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & const_cast<array3D&> (m_r1);
+		ar & const_cast<array3D&> (m_r2);
+		ar & const_cast<double&> (m_tof);
+		ar & const_cast<double&> (m_mu);
+		ar & m_lw;
+		ar & m_v1;
+		ar & m_v2;
+		ar & m_iters;
+		ar & m_a;
+		ar & m_p;
+		ar & m_s;
+		ar & m_c;
+		ar & m_iters;
+		ar & m_Nmax;
+		ar & m_has_converged;
+	}
+#endif
+
 	const array3D m_r1, m_r2;
 	const double m_tof;
 	const double m_mu;

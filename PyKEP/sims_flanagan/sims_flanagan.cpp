@@ -38,6 +38,7 @@
 
 #include "../../src/keplerian_toolbox.h"
 #include "../boost_python_container_conversions.h"
+#include "../utils.h"
 
 using namespace boost::python;
 
@@ -86,7 +87,9 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Example::\n\n"
 			"  T = sc.isp"
 			"  sc.isp = 2000"
-			);
+			)
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::spacecraft>())
+		.def(init<>());
 
 	// Spacecraft state class
 	class_<kep_toolbox::sims_flanagan::sc_state>("sc_state","Represents the state of a spacecraft as position, velocity and mass",
@@ -126,7 +129,9 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Example::\n\n"
 			" state = x0.get()"
 		)
-		.def("__repr__", &kep_toolbox::sims_flanagan::sc_state::human_readable);
+		.def("__repr__", &kep_toolbox::sims_flanagan::sc_state::human_readable)
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::sc_state>())
+		.def(init<>());
 
 	//Spacecraft throttle class
 	class_<kep_toolbox::sims_flanagan::throttle>("throttle", "represents one thrusting phase (segment). If the throttle is, say, (1,0,0) th thrust will be (T,0,0), where T is the maximum value possible for a particular spacecraft",
@@ -163,7 +168,9 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Example::\n\n"
 			" c = t1.norm()"
 		)
-		.def("__repr__", &kep_toolbox::sims_flanagan::throttle::human_readable);
+		.def("__repr__", &kep_toolbox::sims_flanagan::throttle::human_readable)
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::throttle>())
+		.def(init<>());
 
 	//Leg class
 	typedef void (kep_toolbox::sims_flanagan::leg::*leg_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&);
@@ -209,5 +216,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Returns a tuple containing the throttle magnitudes minus one\n\n"
 			"Example::\n\n"
 			" c = l.throttles_constraints()\n"
-		);
+		)
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>())
+		.def(init<>());
 }
