@@ -29,9 +29,9 @@
 #include<vector>
 
 #include "astro_constants.h"
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "serialization.h"
-#endif
+// Serialization code (END)
 
 
 
@@ -73,7 +73,7 @@ public:
 	bool is_reliable() const;
 	int get_Nmax() const;
 private:
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -94,7 +94,7 @@ private:
 		ar & m_Nmax;
 		ar & m_has_converged;
 	}
-#endif
+// Serialization code (END)
 
 	const array3D m_r1, m_r2;
 	const double m_tof;

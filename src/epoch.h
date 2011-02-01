@@ -30,9 +30,9 @@
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "serialization.h"
-#endif
+// Serialization code (END)
 
 
 /// Keplerian Toolbox
@@ -83,14 +83,16 @@ public:
 	//@}
 
 private:
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+
+// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & mjd2000_m;
 	}
-#endif
+// Serialization code (END)
+
 	/// the modified julian date 2000 stored in a double
 	double mjd2000_m;
 };

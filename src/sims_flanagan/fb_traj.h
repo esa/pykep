@@ -34,9 +34,9 @@
 #include "../exceptions.h"
 #include "spacecraft.h"
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "../serialization.h"
-#endif
+// Serialization code (END)
 
 namespace kep_toolbox { namespace sims_flanagan{
 
@@ -203,7 +203,7 @@ private:
 	     *
 	     */
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
         friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -212,7 +212,7 @@ private:
 		ar & planets;
 		ar & total_n_seg;
         }
-#endif
+// Serialization code (END)
 };
 
 std::ostream &operator<<(std::ostream &s, const fb_traj &in );

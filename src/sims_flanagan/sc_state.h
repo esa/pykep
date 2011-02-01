@@ -28,9 +28,9 @@
 #include <boost/lexical_cast.hpp>
 #include<iostream>
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "../serialization.h"
-#endif
+// Serialization code (END)
 
 #include "../astro_constants.h"
 
@@ -127,7 +127,7 @@ public:
 		return s.str();
 	}
 private:
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -136,7 +136,7 @@ private:
 		ar & velocity;
 		ar & mass;
 	}
-#endif
+// Serialization code (END)
 	array3D position;
 	array3D velocity;
 	double mass;

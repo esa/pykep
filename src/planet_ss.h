@@ -26,9 +26,9 @@
 #define PLANET_SS_H
 
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "serialization.h"
-#endif
+// Serialization code (END)
 
 #include"planet.h"
 
@@ -52,21 +52,21 @@ public:
 	planet_ss(const std::string & = "earth");
 	planet_ptr clone() const;
 private:
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<planet>(*this);
 	}
-#endif
+// Serialization code (END)
 };
 
 
 } /// End of namespace kep_toolbox
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 BOOST_CLASS_EXPORT(kep_toolbox::planet_ss);
-#endif
+// Serialization code (END)
 
 #endif // PLANET_SS_H

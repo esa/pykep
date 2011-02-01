@@ -27,9 +27,9 @@
 
 #include <iostream>
 
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 #include "../serialization.h"
-#endif
+// Serialization code (END)
 
 namespace kep_toolbox {
 namespace sims_flanagan{
@@ -56,7 +56,7 @@ public:
 	void set_isp(const double _isp) {m_isp=_isp;}
 	std::string human_readable() const;
 private:
-#ifdef KEP_TOOLBOX_ENABLE_SERIALIZATION
+// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -65,7 +65,7 @@ private:
 		ar & m_thrust;
 		ar & m_isp;
 	}
-#endif
+// Serialization code (END)
 	double m_mass;
 	double m_thrust;
 	double m_isp;

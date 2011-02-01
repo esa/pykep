@@ -9,7 +9,9 @@ SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake_modules)
 # Configuration for GCC.
 IF(CMAKE_COMPILER_IS_GNUCXX)
 	# Add to the base flags extra warnings, and set up message reporting from the compiler so that it is Eclipse-friendly.
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0 -ffast-math")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0")
+	# This flag is suggested for performance. One can chek with the tests what difference it really makes
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
 	# Suggested for multithreaded code.
 	ADD_DEFINITIONS(-D_REENTRANT)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -29,9 +31,6 @@ OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
 
-# Build Option: when active the serialization module is activated
-OPTION(ENABLE_SERIALIZATION "Support for serialization" OFF)
-
 # Keplerian_toolbox lib source files.
 SET(SRC_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
@@ -47,16 +46,15 @@ SET(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)
 
-# If serialization support is requested look for the boost library and link to it
-IF(ENABLE_SERIALIZATION)
-        FIND_LIBRARY(SERIALIZATION_LIBRARY NAMES boost_serialization)
-        IF(NOT SERIALIZATION_LIBRARY)
-                MESSAGE(FATAL_ERROR "Serialization support was enabled but no libboost_serialization found.")
-        ENDIF(NOT SERIALIZATION_LIBRARY)
-        MESSAGE(STATUS "Boost serialization library: ${SERIALIZATION_LIBRARY}")
-        SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${SERIALIZATION_LIBRARY})
-        ADD_DEFINITIONS(-DKEP_TOOLBOX_ENABLE_SERIALIZATION)
-ENDIF(ENABLE_SERIALIZATION)
+# Look for the serialization boost library and link to it
+FIND_LIBRARY(SERIALIZATION_LIBRARY NAMES boost_serialization)
+IF(NOT SERIALIZATION_LIBRARY)
+	MESSAGE(FATAL_ERROR "Serialization support was enabled but no libboost_serialization found.")
+ENDIF(NOT SERIALIZATION_LIBRARY)
+MESSAGE(STATUS "Boost serialization library: ${SERIALIZATION_LIBRARY}")
+SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${SERIALIZATION_LIBRARY})
+
+
 
 FIND_LIBRARY(BOOST_DATE_TIME_LIBRARY NAMES boost_date_time)
 IF(NOT BOOST_DATE_TIME_LIBRARY)
