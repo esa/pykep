@@ -34,7 +34,7 @@ Name						Type      	Description
 
 
 List of constants defined within PyKEP
-=============================================
+=========================================
 
 =================================	=============================================================================
 Name					Description
@@ -71,7 +71,6 @@ Detailed Documentation
  
   .. automethod:: PyKEP.lambert_problem.is_reliable()
 
-
 .. autoclass:: PyKEP.epoch(*args)
 
   .. automethod:: PyKEP.epoch.__init__(*args)
@@ -87,8 +86,6 @@ Detailed Documentation
 .. autofunction:: PyKEP.epoch_from_string(s)
 
 .. autofunction:: PyKEP.epoch_from_iso_string(s)
-
-
 
 .. autoclass:: PyKEP.planet(*args)
 
@@ -137,6 +134,10 @@ Detailed Documentation
   .. automethod:: PyKEP.sims_flanagan.leg.mismatch_constraints(*args)
 
   .. automethod:: PyKEP.sims_flanagan.leg.throttles_constraints(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.set_mu(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.set_spacecraft(*args)
 
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 

@@ -97,7 +97,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"PyKEP.sims_flanagan.sc_state(r,v,m)\n\n"
 			"- r: triplet containing the position vector in cartesian coordiantes\n"
 			"- v: triplet containing the velocity vector in cartesian coordiantes\n"
-			"- m: mass\n"
+			"- m: mass\n\n"
 			"Examples::\n\n"
 			" x0 = sims_flanagan.sc_state((1,0,0),(0,1,0),1000)"
 		))
@@ -197,10 +197,23 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" mu = PyKEP.MU_SUN\n"
 			" l = PyKEP.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"
 		))
+		.def(init<>())
 		.def("set", leg_setter(&kep_toolbox::sims_flanagan::leg::set_leg),
 			"Resets the leg, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
 			"Example::\n\n"
 			" l.set(start,x0,(0,0,0,1,0,0,1,0,0,0,0,0),end,xe)"
+		)
+		.def("set_mu", &kep_toolbox::sims_flanagan::leg::set_mu,
+			"Sets the leg central body gravitational parameter\n\n"
+			"Example::\n\n"
+			" l.set_mu(PyKEP.MU_SUN)"
+		)
+		.def("set_spacecraft", &kep_toolbox::sims_flanagan::leg::set_spacecraft,
+			"Sets the leg spacecraft\n\n"
+			"Example::\n\n"
+			" sc = PyKEP.sims_flanagan.spacecraft(4500,0.05,2500)\n"
+			" l = PyKEP.sims_flanagan.leg()"
+			" l.set_spacecraft(sc)"
 		)
 		.def("high_fidelity", &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
 			"Defines the propagation model (low fidelity is roughly ten time faster)\n\n"
@@ -218,5 +231,5 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" c = l.throttles_constraints()\n"
 		)
 		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>())
-		.def(init<>());
+		;
 }
