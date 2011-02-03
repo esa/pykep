@@ -18,7 +18,7 @@ std::string spacecraft::human_readable() const {
 std::ostream &operator<<(std::ostream &s, const spacecraft &in ) {
 	s << "Spacecraft mass: " << in.get_mass() << std::endl;
 	s << "Spacecraft thrust: " << in.get_thrust() << std::endl;
-	s << "Spacecraft isp: " << in.get_isp() << std::endl;
+	s << "Spacecraft isp: " << in.get_isp();
 	return s;
 };
 

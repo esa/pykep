@@ -215,8 +215,8 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" l = PyKEP.sims_flanagan.leg()"
 			" l.set_spacecraft(sc)"
 		)
-		.def("high_fidelity", &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
-			"Defines the propagation model (low fidelity is roughly ten time faster)\n\n"
+		.add_property("high_fidelity", &kep_toolbox::sims_flanagan::leg::get_high_fidelity, &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
+			"If True propagation is not impulsive, but continuous\n\n"
 			"Example::\n\n"
 			" l.high_fidelity(True)\n"
 		)
@@ -230,6 +230,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Example::\n\n"
 			" c = l.throttles_constraints()\n"
 		)
+		.def("__repr__", &kep_toolbox::sims_flanagan::leg::human_readable)
 		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>())
 		;
 }

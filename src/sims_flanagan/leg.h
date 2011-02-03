@@ -71,6 +71,7 @@ class leg
 	friend std::ostream &operator<<(std::ostream &s, const leg &in );
 
 public:
+	std::string human_readable() const;
 	/// Constructor.
 	/**
 	* Default constructor. Constructs a meaningless leg that will need to be properly initialized
@@ -291,6 +292,8 @@ public:
 	*/
 	const spacecraft& get_spacecraft() const { return m_sc; }
 
+	double get_mu() const { return m_mu; }
+
 	/// Gets the throttle vector size
 	/**
 	* Returns the throttle vector size (number of segments)
@@ -332,6 +335,7 @@ public:
 	* @return const reference to the initial sc_state
 	*/
 	const sc_state& get_x_i() const {return x_i;}
+	bool get_high_fidelity() const { return m_hf; }
 	//@}
 
 	/** @name Leg Feasibility*/

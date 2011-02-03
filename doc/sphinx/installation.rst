@@ -43,12 +43,20 @@ that the correct python dist-packages or site-packages directory has been locate
 
 Here is a typical example of the output obtained (gentoo system)::
   [ 47%] Built target keplerian_toolbox
+
   [ 94%] Built target keplerian_toolbox_static
+
   [100%] Built target _PyKEP
+
   Install the project...
+
   -- Install configuration: "Release"
+
   -- Installing: /usr/local/lib/libkeplerian_toolbox.so
+
   -- Installing: /usr/local/lib/python2.6/site-packages/PyKEP/__init__.py
+
   -- Installing: /usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so
+
   -- Removed runtime path from "/usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so"
 
