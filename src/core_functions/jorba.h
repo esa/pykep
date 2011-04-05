@@ -7,6 +7,9 @@ typedef double MY_FLOAT;
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
+#include "../config.h"
+
 /*
  *  MY_FLOAT is the data type to be used in computing derivatives.
  *  It may be 'float', 'double' or user defined private data types
@@ -99,6 +102,7 @@ typedef double MY_FLOAT;
 MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order, double mu,double veff,double ux,double uy,double uz);
 
 MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order, int reuse_last_computation, double mu,double veff,double ux,double uy,double uz);
-int taylor_step_fixed_thrust(MY_FLOAT *ti, MY_FLOAT *x, int dir, int step_ctl,
+
+__KEP_TOOL_VISIBLE int taylor_step_fixed_thrust(MY_FLOAT *ti, MY_FLOAT *x, int dir, int step_ctl,
 				double log10abserr, double log10relerr,
 				MY_FLOAT *endtime, MY_FLOAT *ht, int *order, double mu,double veff,double ux,double uy,double uz);
