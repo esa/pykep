@@ -75,7 +75,7 @@ private:
 } /// End of namespace kep_toolbox
 
 // Serialization code
-BOOST_CLASS_EXPORT(kep_toolbox::planet_mpcorb);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_mpcorb);
 // Serialization code (END)
 
 #endif // PLANET_MPCORB_H

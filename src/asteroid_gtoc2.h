@@ -82,7 +82,7 @@ private:
 } // Namespaces
 
 // Serialization code
-BOOST_CLASS_EXPORT(kep_toolbox::asteroid_gtoc2);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc2);
 // Serialization code (END)
 
 #endif //ASTEROID_GTOC2_H

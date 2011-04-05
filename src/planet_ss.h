@@ -67,7 +67,7 @@ private:
 } /// End of namespace kep_toolbox
 
 // Serialization code
-BOOST_CLASS_EXPORT(kep_toolbox::planet_ss);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss);
 // Serialization code (END)
 
 #endif // PLANET_SS_H

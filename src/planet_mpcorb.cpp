@@ -73,3 +73,7 @@ planet_ptr planet_mpcorb::clone() const
 }
 
 } //namespace
+
+// Serialization code
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_mpcorb);
+// Serialization code (END)

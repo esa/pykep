@@ -967,3 +967,7 @@ planet_ptr asteroid_gtoc2::clone() const
 }
 
 } //namespace
+
+// Serialization code
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::asteroid_gtoc2);
+// Serialization code (END)

@@ -129,3 +129,7 @@ planet_ptr planet_ss::clone() const
 }
 
 } //namespace
+
+// Serialization code
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_ss);
+// Serialization code (END)
