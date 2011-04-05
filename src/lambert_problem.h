@@ -32,6 +32,7 @@
 // Serialization code
 #include "serialization.h"
 // Serialization code (END)
+#include "config.h"
 
 
 
@@ -58,7 +59,7 @@ namespace kep_toolbox {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class lambert_problem
+class __KEP_TOOL_VISIBLE lambert_problem
 {
 	static const array3D default_r1;
 	static const array3D default_r2;

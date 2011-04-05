@@ -31,6 +31,7 @@
 // Serialization code (END)
 
 #include"planet.h"
+#include "config.h"
 
 namespace kep_toolbox{
 
@@ -42,7 +43,7 @@ namespace kep_toolbox{
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class planet_ss : public planet
+class __KEP_TOOL_VISIBLE planet_ss : public planet
 {
 public:
 	/**

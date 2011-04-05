@@ -6,6 +6,7 @@
 #include "../astro_constants.h"
 #include "../epoch.h"
 #include "../serialization.h"
+#include "../config.h"
 
 
 namespace kep_toolbox {
@@ -47,7 +48,7 @@ coding.leg_start_epoch(2, x.begin());
  *
  * Mass is not in the chromosome, and is considered fixed for the whole trajectory.
  */
-class base_format : public cartesian_coding_tag {
+class __KEP_TOOL_VISIBLE base_format : public cartesian_coding_tag {
 
 public:
 	/// Constructor.
@@ -310,7 +311,7 @@ public:
      * leg end epoch expressed in MJD2000
      * leg end mass expressed in kg
      */
-    class mass_format : public cartesian_coding_tag {
+class __KEP_TOOL_VISIBLE mass_format : public cartesian_coding_tag {
     public:
 	template<typename it_type>
 	mass_format(it_type begin, it_type end)

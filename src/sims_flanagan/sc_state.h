@@ -33,6 +33,7 @@
 // Serialization code (END)
 
 #include "../astro_constants.h"
+#include "../config.h"
 
 namespace kep_toolbox {
 namespace sims_flanagan{
@@ -44,7 +45,7 @@ namespace sims_flanagan{
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class sc_state
+class __KEP_TOOL_VISIBLE sc_state
 {
 public:
 	/** @name Constructors*/

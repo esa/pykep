@@ -83,6 +83,7 @@ IF(BUILD_PYKEP)
         # Request linking against the Python libs, in addition to our mandatory libs.
         TARGET_LINK_LIBRARIES(keplerian_toolbox ${MANDATORY_LIBRARIES} ${PYTHON_LIBRARY})
         # Add the definitions needed when building the PaGMO DLL.
+	SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
         INSTALL(TARGETS keplerian_toolbox
                 RUNTIME DESTINATION ${LIB_INSTALL_PATH}
                 LIBRARY DESTINATION ${LIB_INSTALL_PATH}

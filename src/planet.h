@@ -32,6 +32,7 @@
 
 // Serialization code
 #include "serialization.h"
+#include "config.h"
 // Serialization code (END)
 
 #include "astro_constants.h"
@@ -55,7 +56,7 @@ typedef boost::shared_ptr<planet> planet_ptr;
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class planet
+class __KEP_TOOL_VISIBLE planet
 {
 	friend std::ostream &operator<<(std::ostream &, const planet &);
 public:

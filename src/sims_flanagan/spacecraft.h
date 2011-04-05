@@ -30,6 +30,7 @@
 // Serialization code
 #include "../serialization.h"
 // Serialization code (END)
+#include "../config.h"
 
 namespace kep_toolbox {
 namespace sims_flanagan{
@@ -42,7 +43,7 @@ namespace sims_flanagan{
  */
 
 
-class spacecraft
+class __KEP_TOOL_VISIBLE spacecraft
 {
 	friend std::ostream &operator<<(std::ostream &s, const spacecraft &in );
 public:

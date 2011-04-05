@@ -30,6 +30,7 @@
 // Serialization code (END)
 
 #include "planet.h"
+#include "config.h"
 
 namespace kep_toolbox{
 
@@ -43,7 +44,7 @@ namespace kep_toolbox{
  * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class asteroid_gtoc5 : public planet
+class __KEP_TOOL_VISIBLE asteroid_gtoc5 : public planet
 {
 public:
 	/// Constructor

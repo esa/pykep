@@ -10,6 +10,7 @@
 
 #include "../astro_constants.h"
 #include "../epoch.h"
+#include "../config.h"
 
 namespace kep_toolbox { namespace sims_flanagan{
 
@@ -22,7 +23,7 @@ namespace kep_toolbox { namespace sims_flanagan{
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class throttle {
+class __KEP_TOOL_VISIBLE throttle {
 public:
 	throttle():m_start(),m_end() {
 		m_value[0] = 0;

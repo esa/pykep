@@ -37,6 +37,7 @@
 // Serialization code
 #include "../serialization.h"
 // Serialization code (END)
+#include "../config.h"
 
 namespace kep_toolbox { namespace sims_flanagan{
 
@@ -61,7 +62,7 @@ namespace kep_toolbox { namespace sims_flanagan{
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class fb_traj
+class __KEP_TOOL_VISIBLE fb_traj
 {
 	friend std::ostream &operator<<(std::ostream &s, const fb_traj &in );
 public:

@@ -33,6 +33,7 @@
 // Serialization code
 #include "serialization.h"
 // Serialization code (END)
+#include "config.h"
 
 
 /// Keplerian Toolbox
@@ -51,7 +52,7 @@ namespace kep_toolbox {
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class epoch {
+class __KEP_TOOL_VISIBLE epoch {
 public:
 
 	/** Types of non gregorian dates supported. Julian Date (JD) is the number of days passed since

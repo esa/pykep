@@ -41,6 +41,7 @@
 // Serialization code
 #include "../serialization.h"
 // Serialization code (END)
+#include "../config.h"
 
 namespace kep_toolbox {
 /// Sims-Flanagan transcription of low-thrust trajectories
@@ -66,7 +67,7 @@ namespace sims_flanagan{
 *
 * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
 */
-class leg
+class __KEP_TOOL_VISIBLE leg
 {
 	friend std::ostream &operator<<(std::ostream &s, const leg &in );
 
