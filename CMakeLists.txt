@@ -31,6 +31,8 @@ OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
 
+SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION_DYN_LINK=1")
+
 # Keplerian_toolbox lib source files.
 SET(SRC_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp

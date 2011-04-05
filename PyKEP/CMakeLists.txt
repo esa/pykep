@@ -1,7 +1,12 @@
 INCLUDE(PyKEPPythonSetup.cmake)
 SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} keplerian_toolbox)
 SET(PYKEP_INSTALL_PATH ${PYTHON_MODULES_PATH}/PyKEP)
+
+# Definitions needed for windows ... (using dlls)
 ADD_DEFINITIONS(-DKEP_TOOL_DLL_IMPORT_API)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DYNAMIC_LIB_KEP_TOOL_USE_FLAGS}")
+
+# Macro used for each module to select the correct extension according to the OS
 MACRO(PYTHON_CPPMODULE arg1)
 	SET_TARGET_PROPERTIES(${arg1} PROPERTIES PREFIX "")
 	IF(PYDEXTENSION)
