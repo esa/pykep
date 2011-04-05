@@ -210,7 +210,7 @@ private:
 
 };
 
-std::ostream &operator<<(std::ostream &s, const planet &body);
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const planet &body);
 } /// End of namespace kep_toolbox
 
 // Serialization code

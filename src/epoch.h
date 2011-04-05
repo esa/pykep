@@ -98,7 +98,7 @@ private:
 	double mjd2000_m;
 };
 
-std::ostream &operator<<(std::ostream &s, const epoch &epoch_in );
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const epoch &epoch_in );
 
 __KEP_TOOL_VISIBLE epoch epoch_from_string(const std::string date);
 

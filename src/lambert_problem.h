@@ -111,7 +111,7 @@ private:
 	bool m_has_converged;
 
 };
-std::ostream &operator<<(std::ostream &, const lambert_problem &);
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);
 } //namespaces
 
 #endif // KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
