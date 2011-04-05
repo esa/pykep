@@ -100,9 +100,9 @@ private:
 
 std::ostream &operator<<(std::ostream &s, const epoch &epoch_in );
 
-epoch epoch_from_string(const std::string date);
+__KEP_TOOL_VISIBLE epoch epoch_from_string(const std::string date);
 
-epoch epoch_from_iso_string(const std::string date);
+__KEP_TOOL_VISIBLE epoch epoch_from_iso_string(const std::string date);
 
 
 } // end of namespace kep_toolbox
