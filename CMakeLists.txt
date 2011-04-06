@@ -62,22 +62,17 @@ IF(BUILD_PYKEP)
 	SET(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
 ENDIF(BUILD_PYKEP)
 MESSAGE(STATUS "Required Boost libraries: ${REQUIRED_BOOST_LIBS}")
-
 FIND_PACKAGE(Boost 1.42.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
 MESSAGE(STATUS "Detected Boost version: ${Boost_VERSION}")
 MESSAGE(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
 MESSAGE(STATUS "Boost libraries: ${Boost_LIBRARIES}")
-
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-
 SET(MANDATORY_BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-IF(BUILD_PYKEP)
-	SET(MANDATORY_BOOST_LIBS ${MANDATORY_BOOST_LIBS} ${Boost_PYTHON_LIBRARY})
-ENDIF(BUILD_PYKEP)
 SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${MANDATORY_BOOST_LIBS})
 	
 #Build Static Library
 ADD_LIBRARY(keplerian_toolbox_static STATIC ${SRC_LIST})
+
 
 # Build main and link it to pagmo_static library.
 IF(BUILD_MAIN)
@@ -92,26 +87,19 @@ ENDIF(BUILD_TESTS)
 
 #Build PyKEP
 IF(BUILD_PYKEP)
-        SET(LIB_INSTALL_PATH "lib")
-        INCLUDE(FindPythonLibs)
-        ADD_LIBRARY(keplerian_toolbox SHARED ${SRC_LIST})
-        # Request linking against the Python libs, in addition to our mandatory libs.
-        TARGET_LINK_LIBRARIES(keplerian_toolbox ${MANDATORY_LIBRARIES} ${PYTHON_LIBRARY})
-        # Add the definitions needed when building the PaGMO DLL.
+	SET(MANDATORY_BOOST_LIBS ${MANDATORY_BOOST_LIBS} ${Boost_PYTHON_LIBRARY})
+	SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${MANDATORY_BOOST_LIBS})
+	SET(LIB_INSTALL_PATH "lib")
+	INCLUDE(FindPythonLibs)
+	ADD_LIBRARY(keplerian_toolbox SHARED ${SRC_LIST})
+	# Request linking against the Python libs, in addition to our mandatory libs.
+	TARGET_LINK_LIBRARIES(keplerian_toolbox ${MANDATORY_LIBRARIES} ${PYTHON_LIBRARY})
+	# Add the definitions needed when building the PaGMO DLL.
 		SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
-        INSTALL(TARGETS keplerian_toolbox
-                RUNTIME DESTINATION ${LIB_INSTALL_PATH}
-                LIBRARY DESTINATION ${LIB_INSTALL_PATH}
-        )
-        ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
+	INSTALL(TARGETS keplerian_toolbox
+		RUNTIME DESTINATION ${LIB_INSTALL_PATH}
+		LIBRARY DESTINATION ${LIB_INSTALL_PATH}
+	)
+	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
 ENDIF(BUILD_PYKEP)
 
-#ADD_LIBRARY(keplerian_toolbox SHARED ${SRC_LIST})
- #       # Request linking against the Python libs, in addition to our mandatory libs.
- #       TARGET_LINK_LIBRARIES(keplerian_toolbox ${MANDATORY_LIBRARIES} ${PYTHON_LIBRARY})
-  #      # Add the definitions needed when building the PaGMO DLL.
-	#SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
-
-#ADD_EXECUTABLE(mainlol main.cpp)
-#SET_TARGET_PROPERTIES(mainlol PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_IMPORT_API ${DYNAMIC_LIB_KEP_TOOL_USE_FLAGS}")
-#TARGET_LINK_LIBRARIES(mainlol keplerian_toolbox ${MANDATORY_LIBRARIES})
