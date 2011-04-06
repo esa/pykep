@@ -6,7 +6,7 @@ Install PyKEP
 Using Windows Binaries
 ----------------------
 
-Download the `binaries <http://sourceforge.net/projects/keptoolbox/files/Windows/PyKEP-1.0_python27_mgw.rar/download>`_
+Download the `binaries <http://sourceforge.net/projects/keptoolbox/files/Windows/>`_
 and extract the whole folder as it is in your python site-packages directory 
 (e.g. extract to C:/Python27/Lib/site-packages/)
 

@@ -28,7 +28,7 @@ efficient keplerian propagators, Taylor-integrators and more ....
 
 PyKEP has been compiled and installed succesfully on the following platforms and with Python 2.7:
 
-* Windows (XP) [`binaries available <http://sourceforge.net/projects/keptoolbox/files/Windows/PyKEP-1.0_python27_mgw.rar/download>`_]
+* Windows (XP) [`binaries available <http://sourceforge.net/projects/keptoolbox/files/Windows/>`_]
 * Linux (Gentoo) [Follow the guide below and compile the code]
 * Apple OSX (Leopard) [Follow the guide below and compile the code]
 
