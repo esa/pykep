@@ -1,6 +1,6 @@
 .. _howtodownload:
 
-Download PyKEP
+Download PyKEP code
 ======================
 
 PyKEP source code is managed via the `keplerian_toolbox sourceforge project <http://sourceforge.net/projects/keptoolbox/>`_.

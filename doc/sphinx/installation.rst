@@ -3,6 +3,16 @@
 Install PyKEP
 ======================
 
+Using Windows Binaries
+----------------------
+
+Download the `binaries <http://sourceforge.net/projects/keptoolbox/files/Windows/PyKEP-1.0_python27_mgw.rar/download>`_
+and extract the whole folder as it is in your python site-packages directory 
+(e.g. extract to C:/Python27/Lib/site-packages/)
+
+Compiling and Installing under Unix
+-----------------------------------
+
 Assuming you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have 
 created a directory keptoolbox in your current directory, move there::
 
@@ -60,3 +70,14 @@ Here is a typical example of the output obtained (gentoo system)::
 
   -- Removed runtime path from "/usr/local/lib/python2.6/site-packages/PyKEP/_PyKEP.so"
 
+Compiling and Installing under Windows
+--------------------------------------
+
+Same as under Unix, just make sure that
+
+* You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared). 
+* Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)
+* Check, when running CMake, that all libraries are found correctly
+* When running a make install, Windows will probably put your PyKEP directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
+* Put all dll (boost and keplerian_toolbox) in PyKEP/core
+* Hope for the best (honestly, if it works for you just download the binaries.... it is easier)
