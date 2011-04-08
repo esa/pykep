@@ -201,19 +201,28 @@ def("_get_"#arg,&get_##arg);
 			"Example::\n\n"
 			"  r,v = earth.eph(epoch(5433))"
 		)
-		.def("orbital_elements",element_getter_epoch(&kep_toolbox::planet::get_elements),
-			"PyKEP.planet.orbital_elements(when)\n\n"
-			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the orbital elements are needed\n\n"
-			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the desired epoch (SI units used)\n\n"
+//		.def("orbital_elements",element_getter_epoch(&kep_toolbox::planet::get_elements),
+//			"PyKEP.planet.orbital_elements(when)\n\n"
+//			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the orbital elements are needed\n\n"
+//			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the desired epoch (SI units used)\n\n"
+//			"Example::\n\n"
+//			"  elem = earth.orbital_elements(epoch(5433))"
+//		)
+		.add_property("orbital_elements",element_getter(&kep_toolbox::planet::get_elements),
+			"A tuple containing the six orbital elements a,e,i,W,w,M at the reference epoch (SI units used)\n\n"
 			"Example::\n\n"
-			"  elem = earth.orbital_elements(epoch(5433))"
-		 )
-		.def("orbital_elements",element_getter(&kep_toolbox::planet::get_elements),
-			"PyKEP.planet.orbital_elements()\n\n"
-			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the reference epoch (SI units used)\n\n"
+			"  elem = earth.orbital_elements"
+		)
+		.add_property("ref_epoch",&kep_toolbox::planet::get_ref_epoch,
+			"The reference epoch for M in :py:class:`PyKEP.planet.orbital_elements`\n\n"
 			"Example::\n\n"
-			"  elem = earth.orbital_elements()"
-		 )	
+			"  epoch = earth.ref_epoch"
+		)
+		.add_property("radius",&kep_toolbox::planet::get_radius,
+			"The planet radius\n\n"
+			"Example::\n\n"
+			"  R = earth.radius"
+			)
 		.def(repr(self))
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet>())
 		.def(init<>());
@@ -237,6 +246,26 @@ def("_get_"#arg,&get_##arg);
 			"Example::\n\n"
 			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
 		))
+		.add_property("H",&kep_toolbox::planet_mpcorb::get_H,
+			"The asteroid absolute magnitude. This is assuming an albedo of 0.25 and using the formula at www.physics.sfasu.edu/astro/asteroids/sizemagnitude.html\n"
+			"Example::\n\n"
+			"  H = apophis.H"
+			)
+		.add_property("n_observations",&kep_toolbox::planet_mpcorb::get_n_observations,
+			"Number of observations made on the asteroid\n"
+			"Example::\n\n"
+			"  R = apophis.n_observations"
+			)
+		.add_property("n_oppositions",&kep_toolbox::planet_mpcorb::get_n_oppositions,
+			"The planet radius\n"
+			"Example::\n\n"
+			"  R = apophis.n_oppositions"
+			)
+		.add_property("year_of_discovery",&kep_toolbox::planet_mpcorb::get_year_of_discovery,
+			"The year the asteroid was first discovered. In case the aastroid has been observed only once (n_observations), this number is, instead, the Arc Length in days\n"
+			"Example::\n\n"
+			"  R = apophis.year_of_discovery"
+			)
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
 		.def(init<>());
 	

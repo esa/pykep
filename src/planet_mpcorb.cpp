@@ -4,7 +4,7 @@
 #include"planet_mpcorb.h"
 #include"exceptions.h"
 
-static const int mpcorb_format[8][2] =
+static const int mpcorb_format[12][2] =
 {
 	{92,11},	// a (AU)
 	{70,9},		// e
@@ -13,7 +13,11 @@ static const int mpcorb_format[8][2] =
 	{37,9},		// omega (deg)
 	{26,9},		// M (deg)
 	{20,5},		// Epoch (shitty format)
-	{166,28}	// Asteroid readable name
+	{166,28},	// Asteroid readable name
+	{8,5},		// Absolute Magnitude
+	{117,5},	// Number of observations
+	{123,3},	// Number of oppositions
+	{127,4},	// Year of First Observation (only if the number of oppositions is larger than 1)
 };
 
 namespace kep_toolbox{
@@ -36,17 +40,50 @@ planet_mpcorb::planet_mpcorb(const std::string& line)
 	for (int i = 2; i < 6; ++i) {
 		elem[i] *= ASTRO_DEG2RAD;
 	}
+
 	// Deal with MPCORB data format
 	tmp.clear();
 	tmp.append(&linecopy[mpcorb_format[6][0]],mpcorb_format[6][1]);
 	boost::algorithm::trim(tmp);
 	kep_toolbox::epoch epoch(packed_date2epoch(tmp));
 
+	// Extract absolute magnitude
+	tmp.clear();
+	tmp.append(&linecopy[mpcorb_format[8][0]],mpcorb_format[8][1]);
+	boost::algorithm::trim(tmp);
+	m_H = boost::lexical_cast<double>(tmp);
+
+	// Extract number of observations
+	tmp.clear();
+	tmp.append(&linecopy[mpcorb_format[9][0]],mpcorb_format[9][1]);
+	boost::algorithm::trim(tmp);
+
+	m_n_observations = boost::lexical_cast<unsigned int>(tmp);
+
+	// Extract number of oppositions
+	tmp.clear();
+	tmp.append(&linecopy[mpcorb_format[10][0]],mpcorb_format[10][1]);
+	boost::algorithm::trim(tmp);
+
+	m_n_oppositions = boost::lexical_cast<unsigned int>(tmp);
+
+	// Extract the year of discovery (if only one observation is made this field will, instead, contain the Arc length in Days)
+	tmp.clear();
+	tmp.append(&linecopy[mpcorb_format[11][0]],mpcorb_format[11][1]);
+	boost::algorithm::trim(tmp);
+
+	m_year_of_discovery = boost::lexical_cast<unsigned int>(tmp);
+
+	//Now we estimate the asteroid radius, safe_radius and gravity parametes with hyper simplified assumptions
+	double radius = 1329000 * std::pow(10,-m_H * 0.2); // This is assuming an albedo of 0.25 (www.physics.sfasu.edu/astro/asteroids/sizemagnitude.html)
+	double mu_planet = 4./3. * M_PI * std::pow(radius,3) * 2800 * ASTRO_CAVENDISH;
+
 	// Record asteroid name.
 	tmp.clear();
 	tmp.append(&linecopy[mpcorb_format[7][0]],mpcorb_format[7][1]);
 	boost::algorithm::trim(tmp);
-	build_planet(epoch,elem,ASTRO_MU_SUN,100,100,100,tmp);
+
+	build_planet(epoch,elem,ASTRO_MU_SUN,mu_planet,radius,radius*1.1,tmp);
 }
 
 

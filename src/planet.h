@@ -108,7 +108,7 @@ public:
 	 *
 	 * @return const reference to radius (SI Units)
 	 */
-	const double& get_radius() const {return radius;}
+	double get_radius() const {return radius;}
 
 	/// Getter for the planet safe-radius
 	/**
@@ -118,7 +118,7 @@ public:
 	 *
 	 * @return const reference to safe_radius (SI Units)
 	 */
-	const double& get_safe_radius() const {return safe_radius;}
+	double get_safe_radius() const {return safe_radius;}
 
 	//@}
 
@@ -159,6 +159,9 @@ public:
 	
 	/// Returns the planet name
 	std::string get_name() const;
+
+	/// Returns the reference epoch
+	epoch get_ref_epoch() const {return epoch(ref_mjd2000);}
 
 	//@}
 

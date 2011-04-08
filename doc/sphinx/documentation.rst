@@ -93,7 +93,11 @@ Detailed Documentation
 
   .. automethod:: PyKEP.planet.eph(*args)
 
-  .. automethod:: PyKEP.planet.orbital_elements(*args)
+  .. autoattribute:: PyKEP.planet.orbital_elements
+
+  .. autoattribute:: PyKEP.planet.radius
+
+  .. autoattribute:: PyKEP.planet.ref_epoch
 
 .. autoclass:: PyKEP.planet_ss(*args)
 
@@ -102,6 +106,14 @@ Detailed Documentation
 .. autoclass:: PyKEP.planet_mpcorb(*args)
 
   .. automethod:: PyKEP.planet_mpcorb.__init__(*args)
+
+  .. autoattribute:: PyKEP.planet_mpcorb.H
+
+  .. autoattribute:: PyKEP.planet_mpcorb.n_observations
+
+  .. autoattribute:: PyKEP.planet_mpcorb.n_oppositions
+
+  .. autoattribute:: PyKEP.planet_mpcorb.year_of_discovery
 
 .. autoclass:: PyKEP.planet_gtoc5(*args)
 
