@@ -134,20 +134,20 @@ def("_get_"#arg,&get_##arg);
 			"  e1 = epoch(0,epoch.epoch_type.MJD2000)\n"
 			"  e2 = epoch(54333, epoch.epoch_type.MJD)\n"
 		))
-		.def("jd",&kep_toolbox::epoch::jd,
+		.add_property("jd",&kep_toolbox::epoch::jd,
 			"Returns the Julian Date\n\n"
 			"Example::\n\n"
-			"  jd = e.jd()"
+			"  jd = e.jd"
 		)
-		.def("mjd",&kep_toolbox::epoch::mjd,
+		.add_property("mjd",&kep_toolbox::epoch::mjd,
 			"Returns the Modified Julian Date\n\n"
 			"Example::\n\n"
-			"  jd = e.mjd()"
+			"  jd = e.mjd"
 		)
-		.def("mjd2000",&kep_toolbox::epoch::mjd2000,
+		.add_property("mjd2000",&kep_toolbox::epoch::mjd2000,
 			"Returns the Modifeid Julian Date 2000\n\n"
 			"Example::\n\n"
-			"  jd = e.mjd2000()"
+			"  jd = e.mjd2000"
 		)
 		.def(repr(self))
 		.def_pickle(generic_pickle_suite<kep_toolbox::epoch>())
@@ -207,7 +207,12 @@ def("_get_"#arg,&get_##arg);
 //			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the desired epoch (SI units used)\n\n"
 //			"Example::\n\n"
 //			"  elem = earth.orbital_elements(epoch(5433))"
-//		)
+//		)		
+		.add_property("name",&kep_toolbox::planet::get_name,
+			"The planet Name\n\n"
+			"Example::\n\n"
+			"  name = earth.name()"
+		)
 		.add_property("orbital_elements",element_getter(&kep_toolbox::planet::get_elements),
 			"A tuple containing the six orbital elements a,e,i,W,w,M at the reference epoch (SI units used)\n\n"
 			"Example::\n\n"
