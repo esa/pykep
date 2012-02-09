@@ -113,6 +113,47 @@ const  std::vector<array3D>& lambert_problem::get_v2() const
 	return m_v2;
 }
 
+/// Gets r1
+/**
+ *
+ * \return a 3-d array with the cartesian components of r1
+ */
+const array3D& lambert_problem::get_r1() const
+{
+	return m_r1;
+}
+
+/// Gets r2
+/**
+ *
+ * \return a 3-d array with the cartesian components of r2
+ */
+const array3D& lambert_problem::get_r2() const
+{
+	return m_r2;
+}
+
+/// Gets the time of flight between r1 and r2
+/**
+ *
+ * \return the time of flight
+ */
+const double& lambert_problem::get_tof() const
+{
+	return m_tof;
+}
+
+/// Gets gravitational parameter
+/**
+ *
+ * \return the gravitational parameter
+ */
+const double& lambert_problem::get_mu() const
+{
+	return m_mu;
+}
+
+
 /// Gets semi-major axes
 /**
  *

@@ -331,6 +331,26 @@ def("_get_"#arg,&get_##arg);
 			"Example (extracts v2 for the 0 revs solution)::\n\n"
 			"  v20 = l.get_v2()[0]"			
 		)
+		.def("get_r1",&kep_toolbox::lambert_problem::get_r1,return_value_policy<copy_const_reference>(),
+			"Returns a vector containing the r1 defining the Lambert's Problem\n\n"
+			"Example ::\n\n"
+			"  r1 = l.get_r1()"
+		)
+		.def("get_r2",&kep_toolbox::lambert_problem::get_r2,return_value_policy<copy_const_reference>(),
+			"Returns a vector containing the r2 defining the Lambert's Problem\n\n"
+			"Example ::\n\n"
+			"  r2 = l.get_r2()"	
+		)
+		.def("get_tof",&kep_toolbox::lambert_problem::get_tof,return_value_policy<copy_const_reference>(),
+			"Returns the time of flight defining the Lambert's Problem\n\n"
+			"Example::\n\n"
+			"  t = l.get_tof()"
+		)
+		.def("get_mu",&kep_toolbox::lambert_problem::get_mu,return_value_policy<copy_const_reference>(),
+			"Returns the gravitational parameter defining the Lambert's Problem\n\n"
+			"Example::\n\n"
+			"  mu = l.get_mu()"
+		)
 		.def("get_a",&kep_toolbox::lambert_problem::get_a,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the semi-major axes of all computed solutions to the Lambert's Problem\n\n"
 			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"

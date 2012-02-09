@@ -68,6 +68,10 @@ public:
 	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0);
 	const std::vector<array3D>& get_v1() const;
 	const std::vector<array3D>& get_v2() const;
+	const array3D& get_r1() const;
+	const array3D& get_r2() const;
+	const double& get_tof() const;
+	const double& get_mu() const;
 	const std::vector<double>& get_a() const;
 	const std::vector<double>& get_p() const;
 	const std::vector<int>& get_iters() const;
