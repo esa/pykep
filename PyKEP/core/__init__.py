@@ -34,6 +34,8 @@ try:
 	__extensions__['pygmo']=True
 except:
 	pass
+      
+__version__ = '1.1.0'
 	
 #Importing various utilities
 if (__extensions__['matplotlib'] == True):

@@ -125,7 +125,7 @@ public:
 			legs[i].set_x_i(sc_state(start_pos, dv, coding.leg_start_mass(i, b)));
 			legs[i].set_throttles_size(coding.n_segments(i));
 			for(size_t j = 0; j < legs[i].get_throttles_size(); ++j)
-				legs[i].set_throttle(j, throttle(coding.segment_start_epoch(i, j, b),
+				legs[i].set_throttles(j, throttle(coding.segment_start_epoch(i, j, b),
 								 coding.segment_end_epoch(i, j, b),
 								 coding.segment_thrust(i, j, b)));
 			legs[i].set_t_f(coding.leg_end_epoch(i, b));

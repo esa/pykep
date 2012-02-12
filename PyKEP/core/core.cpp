@@ -86,7 +86,7 @@ BOOST_PYTHON_MODULE(_core) {
 	docstring_options doc_options;
 	doc_options.disable_signatures();
   
-	// Exposing the arrays and vectors into python tuples
+	// Exposing the arrays and vectors of doubles into python tuples
 	to_tuple_mapping<kep_toolbox::array6D>();
 	from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
 	to_tuple_mapping<kep_toolbox::array7D>();

@@ -58,6 +58,10 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 	// Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
+	
+	// Exposing vectors of throttles into python lists of throttles
+	to_tuple_mapping<std::vector<kep_toolbox::sims_flanagan::throttle> >();
+	from_python_sequence<std::vector<kep_toolbox::sims_flanagan::throttle>, variable_capacity_policy>();
 
 	// Spacecraft class
 	class_<kep_toolbox::sims_flanagan::spacecraft>("spacecraft","Contains design parameters of a NEP spacecraft",
@@ -174,6 +178,8 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 
 	//Leg class
 	typedef void (kep_toolbox::sims_flanagan::leg::*leg_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&);
+	typedef const std::vector<kep_toolbox::sims_flanagan::throttle>& (kep_toolbox::sims_flanagan::leg::*throttles_getter)();
+
 	class_<kep_toolbox::sims_flanagan::leg>("leg", "represents one low-thrust  trajectory leg in the sims-flanagan model",
 		init<const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const std::vector<double>&, const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const kep_toolbox::sims_flanagan::spacecraft&, const double>(
 			"PyKEP.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)\n\n"
@@ -199,7 +205,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		))
 		.def(init<>())
 		.def("set", leg_setter(&kep_toolbox::sims_flanagan::leg::set_leg),
-			"Resets the leg, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
+			"Sets leg's data, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
 			"Example::\n\n"
 			" l.set(start,x0,(0,0,0,1,0,0,1,0,0,0,0,0),end,xe)"
 		)
@@ -214,6 +220,44 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" sc = PyKEP.sims_flanagan.spacecraft(4500,0.05,2500)\n"
 			" l = PyKEP.sims_flanagan.leg()"
 			" l.set_spacecraft(sc)"
+		)
+		.def("get_mu", &kep_toolbox::sims_flanagan::leg::get_mu,
+			"Gets the leg central body gravitational parameter\n\n"
+			"Example::\n\n"
+			" mu = l.get_mu()"
+		)
+		.def("get_spacecraft", &kep_toolbox::sims_flanagan::leg::get_spacecraft,return_value_policy<copy_const_reference>(),
+			"Gets the leg spacecraft\n\n"
+			"Example::\n\n"
+			" sc = PyKEP.sims_flanagan.spacecraft(4500,0.05,2500)\n"
+			" l = PyKEP.sims_flanagan.leg()"
+			" l.set_spacecraft(sc)"
+			" sc2 = l.get_spacecraft()"
+		)		
+		.def("get_throttles", throttles_getter(&kep_toolbox::sims_flanagan::leg::get_throttles),return_value_policy<copy_const_reference>(),
+			"Gets the leg central body gravitational parameter\n\n"
+			"Example::\n\n"
+			" mu = l.get_mu()"
+		)		
+		.def("get_xi", &kep_toolbox::sims_flanagan::leg::get_x_i ,return_value_policy<copy_const_reference>(),
+			"Gets the initial spacecraft state\n\n"
+			"Example::\n\n"
+			" xi = l.get_xi()"
+		)
+		.def("get_xf", &kep_toolbox::sims_flanagan::leg::get_x_f ,return_value_policy<copy_const_reference>(),
+			"Gets the final spacecraft state\n\n"
+			"Example::\n\n"
+			" xf = l.get_xf()"
+		)
+		.def("get_ti", &kep_toolbox::sims_flanagan::leg::get_t_i ,return_value_policy<copy_const_reference>(),
+			"Gets the initial leg epoch\n\n"
+			"Example::\n\n"
+			" ti = l.get_ti()"
+		)
+		.def("get_tf", &kep_toolbox::sims_flanagan::leg::get_t_f ,return_value_policy<copy_const_reference>(),
+			"Gets the final leg epoch\n\n"
+			"Example::\n\n"
+			" tf = l.get_tf()"
 		)
 		.add_property("high_fidelity", &kep_toolbox::sims_flanagan::leg::get_high_fidelity, &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
 			"If True propagation is not impulsive, but continuous\n\n"

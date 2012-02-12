@@ -82,7 +82,7 @@ public:
 
 	/// Constructs the leg from epochs, sc_states and cartesian components of throttles
 	/**
-	* Constructs entirely a leg assuming high fidelity propagation switched off.
+	* Constructs entirely a leg assuming high fidelity propagation switched off and equally spaced segments
 	*
 	* \param[in] epoch_i Inital epoch
 	* \param[in] state_i Initial sc_state (spacecraft state)
@@ -237,12 +237,19 @@ public:
 	void set_throttles_size(const int& size) { throttles.resize(size); }
 
 	/**
+	* Sets the throttles
+	*
+	* \param[in] t std::vector of throttles
+	*/
+	void set_throttles(const std::vector<throttle>& t) { throttles = t; }
+	
+	/**
 	* Sets the ith throttle
 	*
 	* \param[in] index the index of the throttle
 	* \param[in] t the throttle
 	*/
-	void set_throttle(int index, const throttle& t) { throttles[index] = t; }
+	void set_throttles(int index, const throttle& t) { throttles[index] = t; }
 
 	/// Sets the final sc_state
 	/**
@@ -292,7 +299,11 @@ public:
 	* @return sc const reference to spacecraft object
 	*/
 	const spacecraft& get_spacecraft() const { return m_sc; }
-
+	
+	/// Gets the gravitational parameter
+	/**
+	* @return the gravitational parameter
+	*/
 	double get_mu() const { return m_mu; }
 
 	/// Gets the throttle vector size
@@ -303,7 +314,21 @@ public:
 	*/
 	size_t get_throttles_size() const {return throttles.size();}
 
-	const throttle& get_throttle(int index) { return throttles[index]; }
+	/// Gets the i-th throttle
+	/**
+	* Returns the i-th throttle
+	*
+	* @return const ref to the i-th throttle
+	*/	
+	const throttle& get_throttles(int index) { return throttles[index]; }
+	
+	/// Gets the throttles
+	/**
+	* Returns all throttles
+	*
+	* @return const ref to a vector of throttle
+	*/	
+	const std::vector<throttle>& get_throttles() { return throttles; }
 
 	/// Gets the leg's initial epoch
 	/**
