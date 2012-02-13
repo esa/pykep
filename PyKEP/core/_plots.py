@@ -48,7 +48,11 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 		z[i] = r[2]/units
 
 	#Actual plot commands
-	ax.plot(x, y, z, label=plnt.name + " " +  t0.__repr__()[0:11], c=color)
+	if legend:
+		label=plnt.name + " " +  t0.__repr__()[0:11]
+	else:
+		label=None
+	ax.plot(x, y, z, label=label, c=color)
 	ax.scatter(x[0],y[0],z[0])
 	
 	if legend:
@@ -123,7 +127,11 @@ def plot_lambert(ax,l, N=60, sol=0, units = 1.0, color = 'b', legend = False):
 		r,v = propagate_lagrangian(r,v,dt,mu)
 	
 	#And we plot
-	ax.plot(x, y, z, c=color, label='Lambert solution (' + str((sol+1)/2) + ' revs.)')
+	if legend:
+		label = 'Lambert solution (' + str((sol+1)/2) + ' revs.)'
+	else:
+		label = None
+	ax.plot(x, y, z, c=color, label=label)
 	
 	if legend:
 		ax.legend()
@@ -162,7 +170,11 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 		r,v = propagate_lagrangian(r,v,dt,mu)
 	
 	#And we plot
-	ax.plot(x, y, z, c=color, label='ballistic arc')
+	if legend:
+		label = 'ballistic arc'
+	else:
+		label = None
+	ax.plot(x, y, z, c=color, label=label)
 	
 	if legend:
 		ax.legend()
@@ -204,12 +216,16 @@ def plot_taylor(ax,r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = Fa
 		r,v,m = propagate_taylor(r,v,m,u,dt,mu,veff,-10,-10)
 	
 	#And we plot
-	ax.plot(x, y, z, c=color, label='constant thrust arc')
+	if legend:
+		label = 'constant thrust arc'
+	else:
+		label = None
+	ax.plot(x, y, z, c=color, label=label)
 	
 	if legend:
 		ax.legend()		
 
-def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = False):
+def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
 	"""
 	Plots a Sims-Flanagan leg
 		      
@@ -220,7 +236,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = 
 	  * units:	the length unit to be used in the plot
 	  * color:	matplotlib color to use to plot the trajectory and the grid points
 	  * legend	when True it plots also the legend
-	  * no_traj 	when True skips the plot of the trajectory (only mid-points and grid points)
+	  * plot_line: 	when True plots also the trajectory (between mid-points and grid points)
 	  
 	EXAMPLE:
 	    from mpl_toolkits.mplot3d import Axes3D
@@ -282,17 +298,20 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = 
 	#We compute all points by propagation
 	for i,t in enumerate(throttles[:fwd_seg]):
 		dt = (t.end.mjd - t.start.mjd)*DAY2SEC
+		alpha = min(norm(t.value),1.0)
 		#Keplerian propagation and dV application
 		if leg.high_fidelity == False:
 			dV = [max_thrust / m * dt * dumb for dumb in t.value]
-			plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=color)
+			if plot_line:
+				plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v = propagate_lagrangian(r,v,dt/2,mu)
 			x[2*i+1] = r[0]/units
 			y[2*i+1] = r[1]/units
 			z[2*i+1] = r[2]/units
 			#v= v+dV
 			v = [a+b for a,b in zip(v,dV)]
-			plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=color)
+			if plot_line:
+				plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v = propagate_lagrangian(r,v,dt/2,mu)
 			x[2*i+2] = r[0]/units
 			y[2*i+2] = r[1]/units
@@ -301,12 +320,14 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = 
 		#Taylor propagation of constant thrust u
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
-			plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=color)
+			if plot_line:
+				plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v,m = propagate_taylor(r,v,m,u,dt/2,mu,isp*G0,-10,-10)
 			x[2*i+1] = r[0]/units
 			y[2*i+1] = r[1]/units
 			z[2*i+1] = r[2]/units
-			plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=color)
+			if plot_line:
+				plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v,m = propagate_taylor(r,v,m,u,dt/2,mu,isp*G0,-10,-10)
 			x[2*i+2] = r[0]/units
 			y[2*i+2] = r[1]/units
@@ -335,16 +356,19 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = 
 	
 	for i,t in enumerate(throttles[-1:-back_seg-1:-1]):
 		dt = (t.end.mjd - t.start.mjd)*DAY2SEC
+		alpha = min(norm(t.value),1.0)
 		if leg.high_fidelity == False:
 			dV = [max_thrust / m * dt * dumb for dumb in t.value]
-			plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=color)
+			if plot_line:
+				plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
 			x[-2*i-2] = r[0]/units
 			y[-2*i-2] = r[1]/units
 			z[-2*i-2] = r[2]/units
 			#v= v+dV
 			v = [a-b for a,b in zip(v,dV)]
-			plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=color)
+			if plot_line:
+				plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
 			x[-2*i-3] = r[0]/units
 			y[-2*i-3] = r[1]/units
@@ -352,12 +376,14 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = 
 			m *= exp( norm(dV)/isp/G0 )
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
-			plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=color)
+			if plot_line:
+				plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
 			x[-2*i-2] = r[0]/units
 			y[-2*i-2] = r[1]/units
 			z[-2*i-2] = r[2]/units
-			plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=color)
+			if plot_line:
+				plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
 			x[-2*i-3] = r[0]/units
 			y[-2*i-3] = r[1]/units

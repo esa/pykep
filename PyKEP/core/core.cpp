@@ -58,9 +58,7 @@ static inline tuple propagate_taylor_wrapper(const kep_toolbox::array3D &r0, con
 {
 	kep_toolbox::array3D r(r0), v(v0);
 	double m(m0);
-	std::cout << u << std::endl;
 	kep_toolbox::propagate_taylor(r,v,m,u,t,mu,veff,log10tolerance,log10rtolerance);
-	std::cout << u << std::endl;
 	return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m));
 }
 
