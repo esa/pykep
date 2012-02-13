@@ -15,29 +15,7 @@ SEC2DAY = _core._get_SEC2DAY()
 epoch.epoch_type = _core._epoch_type
 
 
-"""Detecting Installed Extensions"""
-# Fill up the __extensions__ variable with all detected extensions
 
-__extensions__ = {'matplotlib': False, 'mplot3d': False,'pygmo': False}
-try:
-	import matplotlib
-	__extensions__['matplotlib']=True
-except:
-	pass
-try:
-	import mpl_toolkits.mplot3d
-	__extensions__['mplot3d']=True
-except:
-	pass
-try:
-	import PyGMO
-	__extensions__['pygmo']=True
-except:
-	pass
-      
-__version__ = '1.1.0'
 	
-#Importing various utilities
-if (__extensions__['matplotlib'] == True):
-	from _plots import *
+
 

@@ -1,7 +1,13 @@
 try:
-	from PyGMO.problem import base
+	from PyGMO.problem import base as PyGMO_problem
 
-	class mga_lt_earth_mars(base):
+	"""
+	This example on the use of PyKEP constructs, using he PyGMO syntax, an interplanetary low-thrust optimization
+	problem that can be then solved using one of the available PagMO solvers. The problem is a non-linear constrained
+	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
+	are also demonstrated
+	"""
+	class mga_lt_earth_mars(PyGMO_problem):
 		"""
 		This constructs a PaGMO.problem object that represents a low-thrust transfer between Earth and Mars. The decision vector
 		contains [t0,T,mf,Vx,Vy,Vz,[throttles]] in the following units: [mjd2000, days, kg, m/s,m/s,m/s, [non-dimensional]]
@@ -9,7 +15,7 @@ try:
 		def __init__(self,mass=1000,Tmax=0.05,Isp=2500,Vinf=3,nseg=10):
 			#First we call the constructor for the base PyGMO problem 
 			#(dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
-			super(mga_lt_earth_mars,self).__init__(6 + nseg*3,0,1,8 + nseg,nseg+1,1e-5)
+			super(mga_lt_earth_mars,self).__init__(6 + nseg*3,0,1,8 + nseg,nseg+1,1e-4)
 			
 			#We then define some data members (we use the double underscore to indicate they are private)
 			from PyKEP import planet_ss, MU_SUN
@@ -86,8 +92,20 @@ try:
 			plot_sf_leg(ax, self.__leg, units=AU,N=10)
 			#The planets
 			plot_planet(ax, self.__earth, start, units=AU, legend = True,color=(0.8,0.8,1))
-			plot_planet(ax, self.__mars, end, units=AU, legend = True,color=(0.6,0.6,0.6))
+			plot_planet(ax, self.__mars, end, units=AU, legend = True,color=(0.8,0.8,1))
 			plt.show()
+			
+	def run_example1():
+		from PyGMO import algorithm, island
+		prob = mga_lt_earth_mars(nseg=20)
+		algo = algorithm.scipy_slsqp(max_iter = 150)
+		algo2 = algorithm.mbh(algo,5,0.05)
+		algo2.screen_output = True
+		isl = island(algo2,prob,1)
+		print "Running Monotonic Basin Hopping ...."
+		isl.evolve(1); isl.join()
+		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
+		prob.plot(isl.population.champion.x)
 
 except:
-	print "Could not import PyGMO. PyGMO is required for this PyKEP example"
+	print "Could not import PyGMO. PyGMO is required for some PyKEP examples"
