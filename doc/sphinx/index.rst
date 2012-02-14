@@ -45,4 +45,6 @@ Contents:
   downloading
   installation
   documentation
+  examples
+  imagegallery
   credits
