@@ -46,5 +46,4 @@ Contents:
   installation
   documentation
   examples
-  imagegallery
   credits
