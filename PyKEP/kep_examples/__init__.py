@@ -5,4 +5,4 @@ run_example() methods!!!
 
 from _ex1 import *
 from _ex2 import *
-
+from _ex3 import *
