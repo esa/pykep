@@ -114,6 +114,7 @@ std::ostream &kep_toolbox::operator<<(std::ostream &s, const kep_toolbox::planet
 	s << "Own gravity parameter: " << boost::lexical_cast<std::string>(body.mu_self) << std::endl;
 	s << "Central body gravity parameter: " << boost::lexical_cast<std::string>(body.mu_central_body) << std::endl;
 	s << "Planet radius: " << boost::lexical_cast<std::string>(body.radius) << std::endl;
+	s << "Planet safe radius: " << boost::lexical_cast<std::string>(body.safe_radius) << std::endl;	
 	s << "Planet keplerian elements: "<<std::endl;
 	array6D elem = body.get_elements(epoch(body.ref_mjd2000));
 	s << "Semi major axis (AU): " << boost::lexical_cast<std::string>(elem[0] / ASTRO_AU) << std::endl;

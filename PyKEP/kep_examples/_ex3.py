@@ -2,10 +2,11 @@ try:
 	from PyGMO.problem import base as PyGMO_problem
 
 	"""
-	This example on the use of PyKEP constructs, using he PyGMO syntax, an interplanetary low-thrust optimization
-	problem that can be then solved using one of the available PagMO solvers. The problem is a non-linear constrained
+	This example on the use of PyKEP constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
+	problem that can be then solved using one of the available PyGMO solvers. The problem is a non-linear constrained
 	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
-	are also demonstrated
+	are also demonstrated via the plot method. The interplanetary mission modelled is a lt-mga mission Earth-Venus-Mercury.
+	
 	"""
 	class mga_lt_EVMe(PyGMO_problem):
 		"""
@@ -19,10 +20,10 @@ try:
 		]
 		in the following units: [mjd2000, days, kg, m/s,m/s,m/s, [non-dimensional]]
 		"""
-		def __init__(self, mass=3000, Tmax=0.5, Isp=3500, Vinf_dep=3, Vinf_arr=1, nseg1=10, nseg2=15):
+		def __init__(self, mass=2000, Tmax=0.5, Isp=3500, Vinf_dep=3, Vinf_arr=2, nseg1=5, nseg2=20):
 			#First we call the constructor for the base PyGMO problem 
 			#(dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
-			super(mga_lt_EVMe,self).__init__(17 + 3 * (nseg1+nseg2), 0, 1, 14 + nseg1+nseg2 + 2, nseg1+nseg2 + 2, 1e-4)
+			super(mga_lt_EVMe,self).__init__(17 + 3 * (nseg1+nseg2), 0, 1, 14 + 1 + nseg1+nseg2 + 3, nseg1+nseg2 + 3, 1e-4)
 			
 			#We then define some data members (we use the double underscore to indicate they are private)
 			from PyKEP import planet_ss, MU_SUN
@@ -41,6 +42,8 @@ try:
 			self.__leg2.set_spacecraft(self.__sc)
 			self.__nseg1 = nseg1
 			self.__nseg2 = nseg2
+			
+			#And the box-bouds (launch windows, allowed velocities etc.)
 			lb = [3000,100,mass/2] + [-self.__Vinf_dep]*3 + [-6000]*3 + [200,mass/9] + [-6000]*3 + [-self.__Vinf_arr]*3 + [-1,-1,-1] * (nseg1+nseg2)
 			ub = [4000,1000,mass]   + [self.__Vinf_dep]*3  + [6000]*3  + [2000,mass]    + [6000]*3  + [ self.__Vinf_arr]*3 + [1,1,1]    * (nseg1+nseg2)
 			self.set_bounds(lb,ub)
@@ -53,6 +56,8 @@ try:
 		def _compute_constraints_impl(self,x):
 			from PyKEP import epoch, AU, EARTH_VELOCITY
 			from PyKEP.sims_flanagan import leg, sc_state
+			from numpy.linalg import norm
+			from math import sqrt, asin, acos
 			
 			t_E = epoch(x[0])
 			t_V = epoch(x[0] + x[1])
@@ -75,13 +80,24 @@ try:
 			xe = sc_state(rM, v ,x[10])
 			self.__leg2.set(t_E,x0,x[(-3 * self.__nseg2):],t_V,xe)
 			
-			#Assembling the constraint vector
+			#Defining the boundary costraints
+			#departure
 			v_dep_con = (x[3]  * x[3]  + x[4]  * x[4]  + x[5]  * x[5]  - self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
+			#arrival
 			v_arr_con = (x[14] * x[14] + x[15] * x[15] + x[16] * x[16] - self.__Vinf_arr * self.__Vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
+			#fly-by at Venus
+			v_rel_in2  = x[6]*x[6] +x[7]*x[7]+x[8]*x[8]
+			v_rel_out2 = x[11]*x[11]+x[12]*x[12]+x[13]*x[13]
+			
+			e_max = 1 + self.__venus.radius * 1.1 / self.__venus.mu_self * v_rel_in2
+			alpha = acos( (x[6]*x[11] + x[7]*x[12] + x[8]*x[13]) / sqrt(v_rel_in2 * v_rel_out2) )
+			
+			DV_fb_eq_con = (v_rel_in2 - v_rel_out2) /  (EARTH_VELOCITY * EARTH_VELOCITY)
+			alpha_fb_ineq_con = alpha - 2 * asin(1/e_max)
+			
+			#Assembling the constraint vector			
+			retval = list(self.__leg1.mismatch_constraints() + self.__leg2.mismatch_constraints()) + [DV_fb_eq_con] + list(self.__leg1.throttles_constraints() + self.__leg2.throttles_constraints()) + [v_dep_con] + [v_arr_con] + [alpha_fb_ineq_con]
 
-			retval = list(self.__leg1.mismatch_constraints() + self.__leg2.mismatch_constraints()
-				+ self.__leg1.throttles_constraints() + self.__leg2.throttles_constraints()) + [v_dep_con] + [v_arr_con]
-				
 			
 			#We then scale all constraints to non dimensiona values
 			retval[0] /= AU
@@ -143,20 +159,20 @@ try:
 			plot_sf_leg(ax, self.__leg1, units=AU,N=10)
 			plot_sf_leg(ax, self.__leg2, units=AU,N=10)			
 			#The planets
-			plot_planet(ax, self.__earth, t_E, units=AU, legend = True,color=(0.8,0.8,1))
-			plot_planet(ax, self.__venus, t_V, units=AU, legend = True,color=(0.8,0.8,1))			
-			plot_planet(ax, self.__mercury, t_M, units=AU, legend = True,color=(0.8,0.8,1))
+			plot_planet(ax, self.__earth, t_E, units=AU, legend = True,color=(0.7,0.7,1))
+			plot_planet(ax, self.__venus, t_V, units=AU, legend = True,color=(0.7,0.7,1))			
+			plot_planet(ax, self.__mercury, t_M, units=AU, legend = True,color=(0.7,0.7,1))
 			plt.show()
 			
 	def run_example3():
 		from PyGMO import algorithm, island
 		prob = mga_lt_EVMe()
-		#algo = algorithm.scipy_slsqp(max_iter = 1000, acc =1e-4)
-		algo = algorithm.snopt(major_iter=2000, opt_tol=1e-3, feas_tol=1e-9)
+		algo = algorithm.scipy_slsqp(max_iter = 500, acc =1e-5)
+		#algo = algorithm.snopt(major_iter=2000, opt_tol=1e-3, feas_tol=1e-9)
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
-		print "Running the Scipy slsqp solver ...."
+		print "Running Monotonic Basin Hopping ...."
 		isl.evolve(1); isl.join()
 		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
 		prob.plot(isl.population.champion.x)

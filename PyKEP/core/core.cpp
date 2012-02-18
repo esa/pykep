@@ -199,13 +199,21 @@ def("_get_"#arg,&get_##arg);
 			"Example::\n\n"
 			"  r,v = earth.eph(epoch(5433))"
 		)
-//		.def("orbital_elements",element_getter_epoch(&kep_toolbox::planet::get_elements),
-//			"PyKEP.planet.orbital_elements(when)\n\n"
-//			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the orbital elements are needed\n\n"
-//			"Returns a tuple containing the six orbital elements a,e,i,W,w,M at the desired epoch (SI units used)\n\n"
-//			"Example::\n\n"
-//			"  elem = earth.orbital_elements(epoch(5433))"
-//		)		
+		.add_property("safe_radius",&kep_toolbox::planet::get_safe_radius,
+			"The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
+			"Example::\n\n"
+			"  Rs = earth.safe_radius"
+			)
+		.add_property("mu_self",&kep_toolbox::planet::get_mu_self,
+			"The planet radius\n\n"
+			"Example::\n\n"
+			"  mu_pla = earth.mu_self"
+			)
+		.add_property("mu_central_body",&kep_toolbox::planet::get_mu_central_body,
+			"The planet radius\n\n"
+			"Example::\n\n"
+			"  mu = earth.mu_central_body"
+			)
 		.add_property("name",&kep_toolbox::planet::get_name,
 			"The planet Name\n\n"
 			"Example::\n\n"
