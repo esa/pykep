@@ -19,6 +19,8 @@ Name						Type      	Description
 :class:`PyKEP.lambert_problem`			class		solves the multirevolution lambert problem
 :func:`PyKEP.propagate_lagrangian`		function	propagates pure keplerian motion using Lagrange coefficients and universal variables
 :func:`PyKEP.propagate_taylor`			function	propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
+:func:`PyKEP.fb_con`     			function	computes the feasibility of a fly-by defined by a planet and the spacecarft relative in and out velocities
+:func:`PyKEP.fb_prop`   			function	propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
 =========================================  	=========	================================================
 
 List of main PyKEP elements in the sims_flanagan module
@@ -155,3 +157,6 @@ Detailed Documentation
 
 .. autofunction:: PyKEP.propagate_taylor(*args)
 
+.. autofunction:: PyKEP.fb_con(*args)
+
+.. autofunction:: PyKEP.fb_prop(*args)

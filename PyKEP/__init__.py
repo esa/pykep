@@ -6,25 +6,25 @@ __all__ = ['core', 'sims_flanagan', 'orbit_plots', 'kep_examples']
 
 __extensions__ = {'matplotlib': False, 'mplot3d': False,'pygmo': False}
 try:
-	import matplotlib
+	from matplotlib import __version__ as matplotlib_ver
 	__extensions__['matplotlib']=True
-	del matplotlib
+
+	#We detect the version and if more than 1.1.0 mplot3d is there
+	mver = matplotlib_ver.split('.')
+	mver = int(mver[0])*100 + int(mver[1])*10 + int(mver[2])
+	if mver >= 110:
+		__extensions__['mplot3d']=True
+	del mver
 except:
 	pass
+
 try:
-	import mpl_toolkits.mplot3d
-	__extensions__['mplot3d']=True
-	del mpl_toolkits
-except:
-	pass
-try:
-	import PyGMO
+	from  PyGMO import __version__ as pygmo_ver
 	__extensions__['pygmo']=True
-	del PyGMO
 except:
 	pass
-      
-__version__ = '1.1.0'
+
+__version__ = '1.1.1'
 
 # For convenience, bring all core classes into the root namespace when importing *.
 from core import *
