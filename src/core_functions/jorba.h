@@ -1,4 +1,27 @@
-/************************************************************************/
+/*****************************************************************************
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
+
 #ifndef _TAYLOR_H_
 #define _TAYLOR_H_
 typedef double MY_FLOAT;
@@ -104,5 +127,5 @@ MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order, 
 MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order, int reuse_last_computation, double mu,double veff,double ux,double uy,double uz);
 
 __KEP_TOOL_VISIBLE int taylor_step_fixed_thrust(MY_FLOAT *ti, MY_FLOAT *x, int dir, int step_ctl,
-				double log10abserr, double log10relerr,
-				MY_FLOAT *endtime, MY_FLOAT *ht, int *order, double mu,double veff,double ux,double uy,double uz);
+                double log10abserr, double log10relerr,
+                MY_FLOAT *endtime, MY_FLOAT *ht, int *order, double mu,double veff,double ux,double uy,double uz);

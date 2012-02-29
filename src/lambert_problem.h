@@ -1,26 +1,26 @@
 /*****************************************************************************
-*   Copyright (C) 2004-2009 The PaGMO development team,                     *
-*   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
-*   http://apps.sourceforge.net/mediawiki/pagmo                             *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
-*   act@esa.int                                                             *
-*                                                                           *
-*   This program is free software; you can redistribute it and/or modify    *
-*   it under the terms of the GNU General Public License as published by    *
-*   the Free Software Foundation; either version 2 of the License, or       *
-*   (at your option) any later version.                                     *
-*                                                                           *
-*   This program is distributed in the hope that it will be useful,         *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
-*   GNU General Public License for more details.                            *
-*                                                                           *
-*   You should have received a copy of the GNU General Public License       *
-*   along with this program; if not, write to the                           *
-*   Free Software Foundation, Inc.,                                         *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
-*****************************************************************************/
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
 
 #ifndef KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
 #define KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
@@ -61,58 +61,58 @@ namespace kep_toolbox {
 
 class __KEP_TOOL_VISIBLE lambert_problem
 {
-	static const array3D default_r1;
-	static const array3D default_r2;
+    static const array3D default_r1;
+    static const array3D default_r2;
 public:
-	friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
-	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0);
-	const std::vector<array3D>& get_v1() const;
-	const std::vector<array3D>& get_v2() const;
-	const array3D& get_r1() const;
-	const array3D& get_r2() const;
-	const double& get_tof() const;
-	const double& get_mu() const;
-	const std::vector<double>& get_a() const;
-	const std::vector<double>& get_p() const;
-	const std::vector<int>& get_iters() const;
-	bool is_reliable() const;
-	int get_Nmax() const;
+    friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
+    lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0);
+    const std::vector<array3D>& get_v1() const;
+    const std::vector<array3D>& get_v2() const;
+    const array3D& get_r1() const;
+    const array3D& get_r2() const;
+    const double& get_tof() const;
+    const double& get_mu() const;
+    const std::vector<double>& get_a() const;
+    const std::vector<double>& get_p() const;
+    const std::vector<int>& get_iters() const;
+    bool is_reliable() const;
+    int get_Nmax() const;
 private:
 // Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & const_cast<array3D&> (m_r1);
-		ar & const_cast<array3D&> (m_r2);
-		ar & const_cast<double&> (m_tof);
-		ar & const_cast<double&> (m_mu);
-		ar & m_lw;
-		ar & m_v1;
-		ar & m_v2;
-		ar & m_iters;
-		ar & m_a;
-		ar & m_p;
-		ar & m_s;
-		ar & m_c;
-		ar & m_iters;
-		ar & m_Nmax;
-		ar & m_has_converged;
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar & const_cast<array3D&> (m_r1);
+        ar & const_cast<array3D&> (m_r2);
+        ar & const_cast<double&> (m_tof);
+        ar & const_cast<double&> (m_mu);
+        ar & m_lw;
+        ar & m_v1;
+        ar & m_v2;
+        ar & m_iters;
+        ar & m_a;
+        ar & m_p;
+        ar & m_s;
+        ar & m_c;
+        ar & m_iters;
+        ar & m_Nmax;
+        ar & m_has_converged;
+    }
 // Serialization code (END)
 
-	const array3D m_r1, m_r2;
-	const double m_tof;
-	const double m_mu;
-	int m_lw;
-	std::vector<array3D> m_v1;
-	std::vector<array3D> m_v2;
-	std::vector<int> m_iters;
-	std::vector<double> m_a;
-	std::vector<double> m_p;
-	double m_s,m_c;
-	int m_Nmax;
-	bool m_has_converged;
+    const array3D m_r1, m_r2;
+    const double m_tof;
+    const double m_mu;
+    int m_lw;
+    std::vector<array3D> m_v1;
+    std::vector<array3D> m_v2;
+    std::vector<int> m_iters;
+    std::vector<double> m_a;
+    std::vector<double> m_p;
+    double m_s,m_c;
+    int m_Nmax;
+    bool m_has_converged;
 
 };
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);

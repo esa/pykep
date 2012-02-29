@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -26,24 +26,24 @@
 #define CONVERT_DATES_H
 
 namespace kep_toolbox {
-	inline double jd2mjd(const double & in){
-		return ( in - 2400000.5 );
-	}
-	inline double jd2mjd2000(const double & in){
-		return ( in - 2451544.5 );
-	}
-	inline double mjd2jd(const double & in){
-		return ( in + 2400000.5 );
-	}
-	inline double mjd2mjd2000(const double & in){
-		return ( in - 51544 );
-	}
-	inline double mjd20002jd(const double & in){
-		return ( in + 2451544.5 );
-	}
-	inline double mjd20002mjd(const double & in){
-		return ( in + 51544 );
-	}
+    inline double jd2mjd(const double & in){
+        return ( in - 2400000.5 );
+    }
+    inline double jd2mjd2000(const double & in){
+        return ( in - 2451544.5 );
+    }
+    inline double mjd2jd(const double & in){
+        return ( in + 2400000.5 );
+    }
+    inline double mjd2mjd2000(const double & in){
+        return ( in - 51544 );
+    }
+    inline double mjd20002jd(const double & in){
+        return ( in + 2451544.5 );
+    }
+    inline double mjd20002mjd(const double & in){
+        return ( in + 51544 );
+    }
 }
 
 #endif // CONVERT_DATES_H

@@ -7,7 +7,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.0)
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake_modules)
 
  IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE Release CACHE STRING 
+	SET(CMAKE_BUILD_TYPE Release CACHE STRING
 			"Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
 	FORCE)
 ENDIF(NOT CMAKE_BUILD_TYPE)
@@ -41,15 +41,15 @@ SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION
 
 # Keplerian_toolbox lib source files.
 SET(SRC_LIST
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)
@@ -69,7 +69,7 @@ MESSAGE(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 SET(MANDATORY_BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
 SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${MANDATORY_BOOST_LIBS})
-	
+
 #Build Static Library
 ADD_LIBRARY(keplerian_toolbox_static STATIC ${SRC_LIST})
 
@@ -77,7 +77,7 @@ ADD_LIBRARY(keplerian_toolbox_static STATIC ${SRC_LIST})
 # Build main and link it to pagmo_static library.
 IF(BUILD_MAIN)
 	ADD_EXECUTABLE(main main.cpp)
-        TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${MANDATORY_LIBRARIES})
+	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${MANDATORY_LIBRARIES})
 ENDIF(BUILD_MAIN)
 
 # Build Tests

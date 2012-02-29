@@ -47,6 +47,7 @@
 #include"core_functions/propagate_lagrangian.h"
 #include"core_functions/propagate_lagrangian_u.h"
 #include"core_functions/propagate_taylor.h"
+#include"core_functions/propagate_taylor_s.h"
 #include"core_functions/propagate_taylor_jorba.h"
 #include"lambert_problem.h"
 #include"sims_flanagan/fb_traj.h"

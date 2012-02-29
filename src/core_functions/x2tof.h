@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,6 +21,7 @@
  *   Free Software Foundation, Inc.,                                         *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
+
 
 #ifndef X2TOF_H
 #define X2TOF_H
@@ -49,31 +50,31 @@ namespace kep_toolbox {
  */
 inline double x2tof(const double &x,const double &s,const double &c,const int &lw, const int &N = 0)
 {
-	double am,a,alfa,beta;
+    double am,a,alfa,beta;
 
-	am = s/2;
-	a = am/(1-x*x);
-	if (x < 1)	//ellipse
-	{
-		beta = 2 * asin (sqrt((s - c)/(2*a)));
-		if (lw) beta = -beta;
-		alfa = 2 * acos(x);
-	}
-	else
-	{
-		alfa = 2 * boost::math::acosh(x);
-		beta = 2 * boost::math::asinh(sqrt ((s - c)/(-2 * a)));
-		if (lw) beta = -beta;
-	}
+    am = s/2;
+    a = am/(1-x*x);
+    if (x < 1)	//ellipse
+    {
+        beta = 2 * asin (sqrt((s - c)/(2*a)));
+        if (lw) beta = -beta;
+        alfa = 2 * acos(x);
+    }
+    else
+    {
+        alfa = 2 * boost::math::acosh(x);
+        beta = 2 * boost::math::asinh(sqrt ((s - c)/(-2 * a)));
+        if (lw) beta = -beta;
+    }
 
-	if (a > 0)
-	{
-		return (a * sqrt (a)* ( (alfa - sin(alfa)) - (beta - sin(beta)) + 2*M_PI*N));
-	}
-	else
-	{
-		return (-a * sqrt(-a)*( (sinh(alfa) - alfa) - ( sinh(beta) - beta)) );
-	}
+    if (a > 0)
+    {
+        return (a * sqrt (a)* ( (alfa - sin(alfa)) - (beta - sin(beta)) + 2*M_PI*N));
+    }
+    else
+    {
+        return (-a * sqrt(-a)*( (sinh(alfa) - alfa) - ( sinh(beta) - beta)) );
+    }
 
 }
 

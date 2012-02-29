@@ -1,26 +1,26 @@
 /*****************************************************************************
-*   Copyright (C) 2004-2009 The PaGMO development team,                     *
-*   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
-*   http://apps.sourceforge.net/mediawiki/pagmo                             *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
-*   act@esa.int                                                             *
-*                                                                           *
-*   This program is free software; you can redistribute it and/or modify    *
-*   it under the terms of the GNU General Public License as published by    *
-*   the Free Software Foundation; either version 2 of the License, or       *
-*   (at your option) any later version.                                     *
-*                                                                           *
-*   This program is distributed in the hope that it will be useful,         *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
-*   GNU General Public License for more details.                            *
-*                                                                           *
-*   You should have received a copy of the GNU General Public License       *
-*   along with this program; if not, write to the                           *
-*   Free Software Foundation, Inc.,                                         *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
-*****************************************************************************/
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
 
 
 #include <iostream>
@@ -48,16 +48,16 @@ epoch::epoch():mjd2000_m(0) {}
 * \param[in] epoch_type One of [epoch::MJD2000, epoch::MJD, epoch::JD]
 */
 epoch::epoch(const double &epoch_in, type epoch_type):mjd2000_m(epoch_in){
-	switch (epoch_type) {
-	case MJD2000 :
-		break;
-	case MJD :
-		mjd2000_m = mjd2mjd2000(epoch_in);
-		break;
-	case JD :
-		mjd2000_m = jd2mjd2000(epoch_in);
-		break;
-	}
+    switch (epoch_type) {
+    case MJD2000 :
+        break;
+    case MJD :
+        mjd2000_m = mjd2mjd2000(epoch_in);
+        break;
+    case JD :
+        mjd2000_m = jd2mjd2000(epoch_in);
+        break;
+    }
 }
 
 /// Constructor.
@@ -159,7 +159,7 @@ ptime epoch::get_posix_time() const{
 *
 */
 void epoch::set_posix_time(const boost::posix_time::ptime& posix_time){
-    
+
     mjd2000_m = epoch(posix_time).mjd2000();
 }
 
@@ -167,27 +167,27 @@ void epoch::set_posix_time(const boost::posix_time::ptime& posix_time){
 /**
  *  Builds an epoch from a delimited string. Excess digits in fractional seconds will be dropped. Ex: "1:02:03.123456999" => "1:02:03.123456".
  *  This behavior depends on the precision defined in astro_constant.h used to compile
- * 
- * Example: 
+ *
+ * Example:
  * 	std::string ts("2002-01-20 23:59:54.003");
  * 	epoch e(epoch_from_string(ts))
  *
  */
 epoch epoch_from_string(const std::string date) {
-	return epoch(boost::posix_time::ptime(boost::posix_time::time_from_string(date)));
+    return epoch(boost::posix_time::ptime(boost::posix_time::time_from_string(date)));
 }
 
 /// Returns an epoch constructed from a non delimited iso string containing a date
 /**
  *  Builds an epoch from a non delimited iso string containing a date.
- * 
- * Example: 
+ *
+ * Example:
  * 	std::string ts("20020131T235959");
  * 	epoch e(epoch_from_iso_string(ts))
  *
  */
 epoch epoch_from_iso_string(const std::string date) {
-	return epoch(boost::posix_time::ptime(boost::posix_time::from_iso_string(date)));
+    return epoch(boost::posix_time::ptime(boost::posix_time::from_iso_string(date)));
 }
 
 
@@ -204,6 +204,6 @@ epoch epoch_from_iso_string(const std::string date) {
  *
  */
 std::ostream &kep_toolbox::operator<<(std::ostream &s, const kep_toolbox::epoch &now) {
-	s << now.get_posix_time();
-	return s;
+    s << now.get_posix_time();
+    return s;
 }

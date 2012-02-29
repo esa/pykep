@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -29,43 +29,43 @@
 #include"stumpff.h"
 
 namespace kep_toolbox {
-	//With the eccentric anomaly (E)
-	inline double kepE(const double& E, const double& M, const double& eccentricity ){
-		return ( E - eccentricity*sin(E) - M );
-	}
-	inline double d_kepE(const double& E, const double& eccentricity){
-		return ( 1 - eccentricity*cos(E) );
-	}
+    //With the eccentric anomaly (E)
+    inline double kepE(const double& E, const double& M, const double& eccentricity ){
+        return ( E - eccentricity*sin(E) - M );
+    }
+    inline double d_kepE(const double& E, const double& eccentricity){
+        return ( 1 - eccentricity*cos(E) );
+    }
 
-	//With the eccentric anomaly difference (DE)
-	inline double kepDE(const double& DE, const double& DM, const double& sigma0, const double& sqrta, const double& a, const double& R){
-		return ( (-DM + DE + sigma0 / sqrta * (1 - cos(DE)) - (1 - R / a) * sin(DE)) );
-	}
+    //With the eccentric anomaly difference (DE)
+    inline double kepDE(const double& DE, const double& DM, const double& sigma0, const double& sqrta, const double& a, const double& R){
+        return ( (-DM + DE + sigma0 / sqrta * (1 - cos(DE)) - (1 - R / a) * sin(DE)) );
+    }
 
-	inline double d_kepDE(const double& DE, const double& sigma0, const double& sqrta, const double& a, const double& R){
-		return ( (1 + sigma0 / sqrta * sin(DE) - (1 - R / a) * cos(DE)) );
-	}
+    inline double d_kepDE(const double& DE, const double& sigma0, const double& sqrta, const double& a, const double& R){
+        return ( (1 + sigma0 / sqrta * sin(DE) - (1 - R / a) * cos(DE)) );
+    }
 
-	//With the hyperbolic anomaly difference (DH)
-	inline double kepDH(const double& DH, const double& DN, const double& sigma0, const double& sqrta, const double& a, const double& R){
-		return ( -DN -DH + sigma0/sqrta * (cosh(DH) - 1) + (1 - R / a) * sinh(DH) );
-	}
+    //With the hyperbolic anomaly difference (DH)
+    inline double kepDH(const double& DH, const double& DN, const double& sigma0, const double& sqrta, const double& a, const double& R){
+        return ( -DN -DH + sigma0/sqrta * (cosh(DH) - 1) + (1 - R / a) * sinh(DH) );
+    }
 
-	inline double d_kepDH(const double& DH, const double& sigma0, const double& sqrta, const double& a, const double& R){
-		return ( -1 + sigma0 / sqrta * sinh(DH) + (1 - R / a) * cosh(DH) );
-	}
-	//With the universal anomaly difference (DS)
-	inline double kepDS(const double& DS, const double& DT, const double& r0, const double& vr0, const double& alpha, const double& mu){
-		double S = stumpff_s(alpha*DS*DS);
-		double C = stumpff_c(alpha*DS*DS);
-		double retval = -sqrt(mu)*DT + r0*vr0*DS*DS*C/sqrt(mu) + (1-alpha*r0)*DS*DS*DS*S + r0*DS;
-		return ( retval );
-	}
-	inline double d_kepDS(const double& DS, const double& r0, const double& vr0, const double& alpha, const double& mu){
-		double S = stumpff_s(alpha*DS*DS);
-		double C = stumpff_c(alpha*DS*DS);
-		double retval = r0*vr0/sqrt(mu)*DS * (1-alpha*DS*DS*S) + (1-alpha*r0)*DS*DS*C + r0;
-		return ( retval );
-	}
+    inline double d_kepDH(const double& DH, const double& sigma0, const double& sqrta, const double& a, const double& R){
+        return ( -1 + sigma0 / sqrta * sinh(DH) + (1 - R / a) * cosh(DH) );
+    }
+    //With the universal anomaly difference (DS)
+    inline double kepDS(const double& DS, const double& DT, const double& r0, const double& vr0, const double& alpha, const double& mu){
+        double S = stumpff_s(alpha*DS*DS);
+        double C = stumpff_c(alpha*DS*DS);
+        double retval = -sqrt(mu)*DT + r0*vr0*DS*DS*C/sqrt(mu) + (1-alpha*r0)*DS*DS*DS*S + r0*DS;
+        return ( retval );
+    }
+    inline double d_kepDS(const double& DS, const double& r0, const double& vr0, const double& alpha, const double& mu){
+        double S = stumpff_s(alpha*DS*DS);
+        double C = stumpff_c(alpha*DS*DS);
+        double retval = r0*vr0/sqrt(mu)*DS * (1-alpha*DS*DS*S) + (1-alpha*r0)*DS*DS*C + r0;
+        return ( retval );
+    }
 }
 #endif // KEPLER_EQUATIONS_H

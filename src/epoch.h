@@ -1,26 +1,26 @@
 /*****************************************************************************
-*   Copyright (C) 2004-2009 The PaGMO development team,                     *
-*   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
-*   http://apps.sourceforge.net/mediawiki/pagmo                             *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
-*   act@esa.int                                                             *
-*                                                                           *
-*   This program is free software; you can redistribute it and/or modify    *
-*   it under the terms of the GNU General Public License as published by    *
-*   the Free Software Foundation; either version 2 of the License, or       *
-*   (at your option) any later version.                                     *
-*                                                                           *
-*   This program is distributed in the hope that it will be useful,         *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
-*   GNU General Public License for more details.                            *
-*                                                                           *
-*   You should have received a copy of the GNU General Public License       *
-*   along with this program; if not, write to the                           *
-*   Free Software Foundation, Inc.,                                         *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
-*****************************************************************************/
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
 
 #ifndef KEPLERIAN_TOOLBOX_EPOCH_H
 #define KEPLERIAN_TOOLBOX_EPOCH_H
@@ -55,47 +55,47 @@ namespace kep_toolbox {
 class __KEP_TOOL_VISIBLE epoch {
 public:
 
-	/** Types of non gregorian dates supported. Julian Date (JD) is the number of days passed since
-	 * January 1, 4713 BC at noon. Modified Julian Date (MJD) is the number of days passed since
-	 * November 17, 1858 at 00:00 am. The Modified Julian Date 2000 (MJD2000) is the number of days passed since
-	* Juanuary 1, 2000 at 00:00am.
-	*/
-	enum type {MJD2000, MJD, JD};
+    /** Types of non gregorian dates supported. Julian Date (JD) is the number of days passed since
+     * January 1, 4713 BC at noon. Modified Julian Date (MJD) is the number of days passed since
+     * November 17, 1858 at 00:00 am. The Modified Julian Date 2000 (MJD2000) is the number of days passed since
+    * Juanuary 1, 2000 at 00:00am.
+    */
+    enum type {MJD2000, MJD, JD};
 
-	/** @name Constructors */
-	//@{
-	epoch();
-	epoch(const double &epoch_in, type epoch_type = MJD2000);
-	epoch(const boost::gregorian::greg_year &year, const boost::gregorian::greg_month &month, const boost::gregorian::greg_day &day);
-	epoch(const boost::posix_time::ptime& posix_time);
-	//@}
+    /** @name Constructors */
+    //@{
+    epoch();
+    epoch(const double &epoch_in, type epoch_type = MJD2000);
+    epoch(const boost::gregorian::greg_year &year, const boost::gregorian::greg_month &month, const boost::gregorian::greg_day &day);
+    epoch(const boost::posix_time::ptime& posix_time);
+    //@}
 
-	/** @name Computing non-gregorian dates */
-	//@{
-	double mjd2000 () const;
-	double jd () const;
-	double mjd () const;
-	//@}
+    /** @name Computing non-gregorian dates */
+    //@{
+    double mjd2000 () const;
+    double jd () const;
+    double mjd () const;
+    //@}
 
-	/** @name Interface to boost::posix_time::ptime */
-	//@{
-	boost::posix_time::ptime get_posix_time() const;
-	void set_posix_time(const boost::posix_time::ptime&);
-	//@}
+    /** @name Interface to boost::posix_time::ptime */
+    //@{
+    boost::posix_time::ptime get_posix_time() const;
+    void set_posix_time(const boost::posix_time::ptime&);
+    //@}
 
 private:
 
 // Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & mjd2000_m;
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar & mjd2000_m;
+    }
 // Serialization code (END)
 
-	/// the modified julian date 2000 stored in a double
-	double mjd2000_m;
+    /// the modified julian date 2000 stored in a double
+    double mjd2000_m;
 };
 
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const epoch &epoch_in );

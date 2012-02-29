@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -31,35 +31,35 @@
 namespace kep_toolbox {
     template<class vettore3D>
     inline void sum(vettore3D& out, const vettore3D& v1,const vettore3D& v2){
-		out[0] = v1[0]+v2[0];
-		out[1] = v1[1]+v2[1];
-		out[2] = v1[2]+v2[2];
-	}
+        out[0] = v1[0]+v2[0];
+        out[1] = v1[1]+v2[1];
+        out[2] = v1[2]+v2[2];
+    }
     template<class vettore3D>
     inline void diff(vettore3D& out, const vettore3D& v1,const vettore3D& v2){
-		out[0] = v1[0]-v2[0];
-		out[1] = v1[1]-v2[1];
-		out[2] = v1[2]-v2[2];
-	}
-	template<class vettore3D>
-	inline double dot(const vettore3D& v1,const vettore3D& v2){
-		return (v1[0]*v2[0] +  v1[1]*v2[1]+ v1[2]*v2[2]);
-	}
-	template<class vettore3D>
-	inline double norm(const vettore3D& v1){
-	        return std::sqrt(v1[0]*v1[0] +  v1[1]*v1[1]+ v1[2]*v1[2]);
-	}
-	template<class vettore3D>
-	inline void cross(vettore3D& out, const vettore3D& v1,const vettore3D& v2){
-		out[0] = v1[1]*v2[2] - v1[2]*v2[1];
-		out[1] = v1[2]*v2[0] - v1[0]*v2[2];
-		out[2] = v1[0]*v2[1] - v1[1]*v2[0];
-	}
-	template<class vettore3D>
-	inline void vers(vettore3D& out, const vettore3D& in){
-		double c = norm(in);
-		for (int i = 0;i<3;++i) out[i] = in[i]/c;
-	}
+        out[0] = v1[0]-v2[0];
+        out[1] = v1[1]-v2[1];
+        out[2] = v1[2]-v2[2];
+    }
+    template<class vettore3D>
+    inline double dot(const vettore3D& v1,const vettore3D& v2){
+        return (v1[0]*v2[0] +  v1[1]*v2[1]+ v1[2]*v2[2]);
+    }
+    template<class vettore3D>
+    inline double norm(const vettore3D& v1){
+            return std::sqrt(v1[0]*v1[0] +  v1[1]*v1[1]+ v1[2]*v1[2]);
+    }
+    template<class vettore3D>
+    inline void cross(vettore3D& out, const vettore3D& v1,const vettore3D& v2){
+        out[0] = v1[1]*v2[2] - v1[2]*v2[1];
+        out[1] = v1[2]*v2[0] - v1[0]*v2[2];
+        out[2] = v1[0]*v2[1] - v1[1]*v2[0];
+    }
+    template<class vettore3D>
+    inline void vers(vettore3D& out, const vettore3D& in){
+        double c = norm(in);
+        for (int i = 0;i<3;++i) out[i] = in[i]/c;
+    }
 }
 
 #endif // ARRAY3D_OPERATIONS_H

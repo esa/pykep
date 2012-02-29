@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -46,20 +46,20 @@ namespace kep_toolbox{
 class __KEP_TOOL_VISIBLE planet_ss : public planet
 {
 public:
-	/**
-	 * Construct a planet from its common name (e.g. VENUS)
-	 * \param[in] name a string describing a planet
-	 */
-	planet_ss(const std::string & = "earth");
-	planet_ptr clone() const;
+    /**
+     * Construct a planet from its common name (e.g. VENUS)
+     * \param[in] name a string describing a planet
+     */
+    planet_ss(const std::string & = "earth");
+    planet_ptr clone() const;
 private:
 // Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<planet>(*this);
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar & boost::serialization::base_object<planet>(*this);
+    }
 // Serialization code (END)
 };
 

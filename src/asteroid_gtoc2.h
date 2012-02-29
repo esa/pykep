@@ -1,9 +1,9 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -47,37 +47,37 @@ namespace kep_toolbox{
 class __KEP_TOOL_VISIBLE asteroid_gtoc2 : public planet
 {
 public:
-	/// Constructor
-	/**
-	 * Construct from a consecutive id from 0 to 910 (Earth). The order is that of the original
-	 * data file from JPL
-	 * Group 1:   0 - 95
-	 * Group 2:  96 - 271
-	 * Group 3: 272 - 571
-	 * Group 4: 572 - 909
-	 * Earth:   910
-	 * \param[in] name a string describing a planet
-	 */
-	asteroid_gtoc2(const int & = 0);
+    /// Constructor
+    /**
+     * Construct from a consecutive id from 0 to 910 (Earth). The order is that of the original
+     * data file from JPL
+     * Group 1:   0 - 95
+     * Group 2:  96 - 271
+     * Group 3: 272 - 571
+     * Group 4: 572 - 909
+     * Earth:   910
+     * \param[in] name a string describing a planet
+     */
+    asteroid_gtoc2(const int & = 0);
 
-	/// Getter
-	/**
-	 * Gets the group id of the asteroid as defined in the original JPL data file
-	 *
-	 */
-	int get_group() const;
-	planet_ptr clone() const;
+    /// Getter
+    /**
+     * Gets the group id of the asteroid as defined in the original JPL data file
+     *
+     */
+    int get_group() const;
+    planet_ptr clone() const;
 private:
 // Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<planet>(*this);
-		ar & m_group;
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar & boost::serialization::base_object<planet>(*this);
+        ar & m_group;
+    }
 // Serialization code (END)
-	int m_group;
+    int m_group;
 };
 } // Namespaces
 

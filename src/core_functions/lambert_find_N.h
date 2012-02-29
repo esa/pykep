@@ -1,26 +1,26 @@
 /*****************************************************************************
-*   Copyright (C) 2004-2009 The PaGMO development team,                     *
-*   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
-*   http://apps.sourceforge.net/mediawiki/pagmo                             *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
-*   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
-*   act@esa.int                                                             *
-*                                                                           *
-*   This program is free software; you can redistribute it and/or modify    *
-*   it under the terms of the GNU General Public License as published by    *
-*   the Free Software Foundation; either version 2 of the License, or       *
-*   (at your option) any later version.                                     *
-*                                                                           *
-*   This program is distributed in the hope that it will be useful,         *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
-*   GNU General Public License for more details.                            *
-*                                                                           *
-*   You should have received a copy of the GNU General Public License       *
-*   along with this program; if not, write to the                           *
-*   Free Software Foundation, Inc.,                                         *
-*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
-*****************************************************************************/
+ *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
+ *   http://keptoolbox.sourceforge.net/index.html                            *
+ *   http://keptoolbox.sourceforge.net/credits.html                          *
+ *                                                                           *
+ *   act@esa.int                                                             *
+ *                                                                           *
+ *   This program is free software; you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation; either version 2 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program; if not, write to the                           *
+ *   Free Software Foundation, Inc.,                                         *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
+ *****************************************************************************/
 
 #ifndef KEPLERIAN_TOOLBOX_LAMBERT_FIND_N_H
 #define KEPLERIAN_TOOLBOX_LAMBERT_FIND_N_H
@@ -50,14 +50,14 @@ namespace kep_toolbox {
  */
 
 inline int lambert_find_N(const double &s,const double &c, const double &tof, const int &lw) {
-	double Tm = M_PI/2 * sqrt(2*s*s*s);		//Minimum energy ellipse period
-	int Ntemp = tof / Tm;				//It is either Nmax=Ntemp or Nmax = Ntemp-1
-	if (Ntemp == 0) return 0;
-	double Tmax = x2tof(0,s,c,lw,Ntemp);
-	if (tof > Tmax) return Ntemp;
-	std::pair<double,double> res = boost::math::tools::brent_find_minima(boost::bind(x2tof,_1,s,c,lw,Ntemp),0.0,0.5,8);
-	if (res.second < tof) return Ntemp;
-	return Ntemp - 1;
+    double Tm = M_PI/2 * sqrt(2*s*s*s);		//Minimum energy ellipse period
+    int Ntemp = tof / Tm;				//It is either Nmax=Ntemp or Nmax = Ntemp-1
+    if (Ntemp == 0) return 0;
+    double Tmax = x2tof(0,s,c,lw,Ntemp);
+    if (tof > Tmax) return Ntemp;
+    std::pair<double,double> res = boost::math::tools::brent_find_minima(boost::bind(x2tof,_1,s,c,lw,Ntemp),0.0,0.5,8);
+    if (res.second < tof) return Ntemp;
+    return Ntemp - 1;
 }
 
 } //namespaces
