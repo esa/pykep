@@ -24,7 +24,7 @@ try:
 except:
 	pass
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 # For convenience, bring all core classes into the root namespace when importing *.
 from core import *
