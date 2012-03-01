@@ -62,6 +62,14 @@ static inline tuple propagate_taylor_wrapper(const kep_toolbox::array3D &r0, con
     return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m));
 }
 
+static inline tuple propagate_taylor_s_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &m0, const kep_toolbox::array3D &u, const double &s, const double &mu=1.0, const double &veff=1.0, const double &c=1.0, const double &alpha=1.5, const int &log10tolerance=-10, const int &log10rtolerance=-10)
+{
+    kep_toolbox::array3D r(r0), v(v0);
+    double m(m0); double dt(0);
+    kep_toolbox::propagate_taylor_s(r,v,m,dt,u,s,mu,veff,c,alpha,log10tolerance,log10rtolerance);
+    return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m),double(dt));
+}
+
 static inline tuple fb_con_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet &pl)
 {
     double eq(0), ineq(0);
@@ -418,7 +426,7 @@ def("_get_"#arg,&get_##arg);
     );
 
 
-    //Taylor propagation of constant thrust arcs
+    //Taylor propagation of inertially constant thrust arcs
     def("propagate_taylor",&propagate_taylor_wrapper,
         "PyKEP.propagate_taylor(r,v,m,u,t,mu,veff,log10tol,log10rtol)\n\n"
         "- r: start position, x,y,z\n"
@@ -433,6 +441,26 @@ def("_get_"#arg,&get_##arg);
         "Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
         "Example::\n\n"
         "  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
+    );
+    
+    //Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)
+    def("propagate_taylor_s",&propagate_taylor_s_wrapper,
+        "PyKEP.propagate_taylor(r,v,m,u,s,[mu=1[,veff=1[,c=1[,alpha=1.5[,log10tol=-10,[log10rtol=-10]]]]]]])\n\n"
+        "- r: start position, x,y,z\n"
+        "- v: start velocity, vx,vy,vz\n"
+        "- m: starting mass\n"
+        "- t: starting time\n"
+        "- u: fixed inertial thrust, ux,uy,uz\n"
+        "- s: propagation pseudo-time\n"
+        "- mu: central body gravity constant\n\n"
+        "- veff: the product (Isp g0) defining the engine efficiency \n\n"
+        "- c: constant coefficient in the generalized Sundmann transform \n\n"
+        "- alpha: r exponent in the generalized Sundmann transform \n\n"
+        "- log10tol: the logarithm of the absolute tolerance passed to taylor propagator \n\n"
+        "- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
+        "Returns a tuple containing r, v, m and t the final position, velocity, mass and time after the propagation pseudo-time s\n\n"
+        "Example::\n\n"
+        "  r,v,m,t = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
     );
 
     //Fly-by helper functions

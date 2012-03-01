@@ -170,7 +170,7 @@ double propagate_taylor_step(T& r0, T& v0, double &m0, const double &h, const in
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 template<class T>
-void propagate_taylor(T& r0, T& v0, double &m0, const T& u, const double &t0, const double &mu, const double &veff, const int &log10tolerance=-10, const int &log10rtolerance=-10, const int &max_iter = 10000, const int &max_order = 3000){
+void propagate_taylor(T& r0, T& v0, double &m0, const T& u, const double &t0, const double &mu = 1, const double &veff = 1, const int &log10tolerance=-10, const int &log10rtolerance=-10, const int &max_iter = 10000, const int &max_order = 3000){
 
     boost::array<double,7> dumb;
     boost::array<double,21> dumb2;

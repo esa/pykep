@@ -33,6 +33,11 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
+    //This is just an example on some keplerian toolbox routine use.
+    //In this main you can add your code and have it compile by activating the relative option 
+    //in ccmake. Better practice should be to develop your main elsewhere and link it to the keplerian toolbox  library
+    
+
     array3D r0 = {{0, 1, 2}};
     array3D v0 = {{0, -0.2, 0.1}};
     array3D rcp(r0); array3D vcp(v0);
