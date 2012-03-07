@@ -445,11 +445,10 @@ def("_get_"#arg,&get_##arg);
     
     //Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)
     def("propagate_taylor_s",&propagate_taylor_s_wrapper,
-        "PyKEP.propagate_taylor(r,v,m,u,s,[mu=1[,veff=1[,c=1[,alpha=1.5[,log10tol=-10,[log10rtol=-10]]]]]]])\n\n"
+        "PyKEP.propagate_taylor_s(r,v,m,u,s,mu,veff=1,c=1,alpha=1.5,log10tol=-10,log10rtol=-10])\n\n"
         "- r: start position, x,y,z\n"
         "- v: start velocity, vx,vy,vz\n"
         "- m: starting mass\n"
-        "- t: starting time\n"
         "- u: fixed inertial thrust, ux,uy,uz\n"
         "- s: propagation pseudo-time\n"
         "- mu: central body gravity constant\n\n"
