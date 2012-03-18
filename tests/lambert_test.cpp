@@ -29,7 +29,10 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/random.hpp>
 
-#include "../src/keplerian_toolbox.h"
+#include "../src/lambert_problem.h"
+#include "../src/core_functions/propagate_lagrangian.h"
+#include "../src/core_functions/array3D_operations.h"
+#include "../src/astro_constants.h"
 
 using namespace std;
 using namespace kep_toolbox;
@@ -73,5 +76,9 @@ int main() {
     std::cout << "Max error: " << err_max <<std::endl;
     std::cout << "Average Error: " << acc / count <<std::endl;
     std::cout << "Number of Problems Solved: " << count << std::endl;
-    return 0;
+    if (err_max < 1e-6) {
+	return 0;
+    } else {
+	return 1;
+    }
 }
