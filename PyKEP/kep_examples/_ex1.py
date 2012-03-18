@@ -88,7 +88,7 @@ try:
 			fig = plt.figure()
 			ax = fig.gca(projection='3d')
 			#The Sun
-			ax.scatter(0,0,0, color='y')
+			ax.scatter([0],[0],[0], color='y')
 			#The leg
 			plot_sf_leg(ax, self.__leg, units=AU,N=10)
 			#The planets

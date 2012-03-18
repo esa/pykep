@@ -152,7 +152,7 @@ try:
 			ax = fig.gca(projection='3d')
 
 			#The Sun
-			ax.scatter(0,0,0, color='y')
+			ax.scatter([0],[0],[0], color='y')
 			#The legs
 			plot_sf_leg(ax, self.__leg1, units=AU,N=10)
 			plot_sf_leg(ax, self.__leg2, units=AU,N=10)
