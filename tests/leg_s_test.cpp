@@ -31,9 +31,10 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
+    int n_seg=15;
 	double mu = ASTRO_MU_SUN;
 	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
-	sims_flanagan::leg_s phase1(15);
+    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
 	phase1.set_mu(mu);
 	phase1.set_sc(sc);
 	planet_ss earth("earth");
@@ -42,9 +43,16 @@ int main() {
 	sims_flanagan::sc_state x0(r,v,sc.get_mass());
 	earth.get_eph(epoch(100),r,v);
 	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
-	std::vector<double> throttles(15*3,0.0);
-	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.2,sc,mu);
-	std::cout << phase1.compute_mismatch_con()[0] << std::endl;
-
+	std::vector<double> throttles(n_seg*3,0.1423);
+	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
+    for (int i=0; i< 8;++i){
+        std::cout << phase1.compute_mismatch_con()[i] << ", ";
+    }
+    std::cout<< std::endl;
+    for (int i=0; i< n_seg;++i){
+        std::cout << phase1.compute_throttles_con()[i] << ", ";
+    }
+    std::cout<< std::endl;
 	return 0;
 }
+

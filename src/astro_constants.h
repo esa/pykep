@@ -73,5 +73,19 @@ namespace std
 		os << ']';
 		return os;
 	}
+    
+    /// Overload stream insertion operator for array3D
+	inline ostream &operator<<(ostream &os, const std::vector<double> &v)
+	{
+		os << '[';
+		for (kep_toolbox::array3D::size_type i = 0; i < 3; ++i) {
+			os << boost::lexical_cast<std::string>(v[i]);
+			if (i != v.size() - 1) {
+				os << ", ";
+			}
+		}
+		os << ']';
+		return os;
+	}
 }
 #endif // ASTRO_CONSTANTS_H

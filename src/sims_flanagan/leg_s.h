@@ -50,7 +50,7 @@ namespace sims_flanagan{
 /**
 * This class represents, generically, a low-thrust leg (phase) as a sequence of successive
 * constant low-thrust segments. The segment duration is equally distributed in the pseudo
-* time space \f$ds = c r^\alpha dt \f$
+* time space \f$dt = c r^\alpha ds \f$
 * The leg achieves to transfer a given spacecraft from an initial to a final state in the
 * pseudo-time given (and can thus be considered as feasible) whenever the method evaluate_mismatch
 * returns all zeros (8 values) and the method get_throttles_con returns all values less than zero.
@@ -65,7 +65,7 @@ namespace sims_flanagan{
 */
 class __KEP_TOOL_VISIBLE leg_s
 {
-	friend std::ostream &operator<<(std::ostream &s, const leg &in );
+	friend std::ostream &operator<<(std::ostream &s, const leg_s &in );
 
 public:
 	std::string human_readable() const;
@@ -79,7 +79,7 @@ public:
 	/**
 	 * Constructs an empty leg allocating memory for a given number of segments.
 	*/
-	leg_s(const unsigned int& n_seg, const double& tol=1e-10): m_ti(), m_xi(), m_throttles(n_seg), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(), m_tol(tol), m_states(n_seg+2), m_ceq(8), m_cineq(n_seg), m_dv(n_seg) {}
+	leg_s(const unsigned int& n_seg, const double& c, const double &alpha, const double& tol=-10): m_ti(), m_xi(), m_throttles(n_seg), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(), m_c(c), m_alpha(alpha), m_tol(tol), m_states(n_seg+2), m_ceq(8), m_cineq(n_seg), m_dv(n_seg) {}
 
 	/// Sets the leg's data
 	/**
@@ -115,6 +115,9 @@ public:
 		if (std::distance(throttles_start,throttles_end) / 3 != (int)m_throttles.size()) {
 			throw_value_error("The number of segments in the leg do not match the length of the supplied throttle sequence");
 		}
+        if (epoch_i.mjd2000() >= epoch_f.mjd2000()) {
+			throw_value_error("Final epoch must be strictly after initial epoch");
+        }
 
 		if (mu_<=0)
 		{
@@ -276,7 +279,7 @@ public:
 			for (int j=0;j<3;j++){
 				thrust[j] = max_thrust * m_throttles[i].get_value()[j];
 			}
-			propagate_taylor_s(rfwd,vfwd,mfwd,tfwd,thrust,ds,m_mu,veff,1.0,1.5,m_tol,m_tol);
+			propagate_taylor_s(rfwd,vfwd,mfwd,tfwd,thrust,ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
 		}
 
 		//Final state
@@ -290,7 +293,7 @@ public:
 			for (int j=0;j<3;j++){
 				thrust[j] = max_thrust * m_throttles[m_throttles.size() - i - 1].get_value()[j];
 			}
-			propagate_taylor_s(rback,vback,mback,tback,thrust,-ds,m_mu,veff,1.0,1.5,m_tol,m_tol);
+			propagate_taylor_s(rback,vback,mback,tback,thrust,-ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
 		}
 
 		//Return the mismatch
@@ -337,13 +340,14 @@ private:
 		ar & m_throttles;
 		ar & m_tf;
 		ar & m_xf;
+        ar & m_sf;
 		ar & m_sc;
 		ar & m_mu;
 		ar & m_tol;
-		//ar & m_states;
+		ar & m_states;
 		ar & m_ceq;
 		ar & m_cineq;
-		//ar & m_dv;
+		ar & m_dv;
 	}
 	// Serialization code (END)
 	epoch m_ti;
@@ -354,6 +358,8 @@ private:
 	double m_sf;
 	spacecraft m_sc;
 	double m_mu;
+    double m_c;
+    double m_alpha;
 	int m_tol;
 
 	mutable std::vector<boost::array<double, 8> > m_states;
@@ -362,7 +368,7 @@ private:
 	mutable std::vector<double> m_dv;
 };
 
-std::ostream &operator<<(std::ostream &s, const leg &in );
+std::ostream &operator<<(std::ostream &s, const leg_s &in );
 
 }} //namespaces
 #endif // LEG_H

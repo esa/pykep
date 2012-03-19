@@ -138,7 +138,7 @@ double propagate_taylor_s_step(T& r0, T& v0, double &m0, double &t0 , const doub
     xm_n1 = std::max(xm_n1,std::abs(x[n-1][7]));
 
     if (eps_r*xm < eps_a) {
-        rho_m = std::min(pow((1/xm_n),1./n),pow((1/xm_n1),1./(n-1)));
+        rho_m = std::min(pow((1./xm_n),1./n),pow((1/xm_n1),1./(n-1)));
     } else {
         rho_m = std::min(pow((xm/xm_n),1./n),pow((xm/xm_n1),1./(n-1)));
     }

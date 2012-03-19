@@ -35,7 +35,7 @@
 namespace kep_toolbox{ namespace sims_flanagan{
 
 
-std::string leg::human_readable() const {
+std::string leg_s::human_readable() const {
 	std::ostringstream s;
 	s << *this;
 	return s.str();
@@ -52,7 +52,7 @@ std::string leg::human_readable() const {
  * \return reference to s
  *
  */
-std::ostream &operator<<(std::ostream &s, const leg &in ){
+std::ostream &operator<<(std::ostream &s, const leg_s &in ){
 	s << std::setprecision(15);
 	s << "Number of segments: " << in.m_throttles.size() << std::endl << std::endl;
 	s << in.get_spacecraft() << std::endl;
@@ -65,7 +65,7 @@ std::ostream &operator<<(std::ostream &s, const leg &in ){
 	s << "State at arrival: " << in.get_xf() << std::endl;
 
 	s << std::endl << "Throttles values: " << std::endl;
-	for (size_t i=0; i<in.get_throttles_size(); i++) {
+	for (size_t i=0; i<in.m_throttles.size(); i++) {
 		s << "\t\t\t" << in.m_throttles[i].get_value()[0] << " " << in.m_throttles[i].get_value()[1] << " " << in.m_throttles[i].get_value()[2] << std::endl;
 	}
 
