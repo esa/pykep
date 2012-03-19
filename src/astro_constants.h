@@ -60,11 +60,12 @@ typedef boost::array<double,7> array7D;
 
 namespace std
 {
-	/// Overload stream insertion operator for array3D
-	inline ostream &operator<<(ostream &os, const kep_toolbox::array3D &v)
+	/// Overload stream insertion operator for arrayND
+	template <unsigned int N>
+	inline ostream &operator<<(ostream &os, const boost::array<double,N> &v)
 	{
 		os << '[';
-		for (kep_toolbox::array3D::size_type i = 0; i < 3; ++i) {
+		for (kep_toolbox::array3D::size_type i = 0; i < v.size(); ++i) {
 			os << boost::lexical_cast<std::string>(v[i]);
 			if (i != v.size() - 1) {
 				os << ", ";
@@ -73,12 +74,10 @@ namespace std
 		os << ']';
 		return os;
 	}
-    
-    /// Overload stream insertion operator for array3D
 	inline ostream &operator<<(ostream &os, const std::vector<double> &v)
 	{
 		os << '[';
-		for (kep_toolbox::array3D::size_type i = 0; i < 3; ++i) {
+		for (kep_toolbox::array3D::size_type i = 0; i < v.size(); ++i) {
 			os << boost::lexical_cast<std::string>(v[i]);
 			if (i != v.size() - 1) {
 				os << ", ";
@@ -87,5 +86,6 @@ namespace std
 		os << ']';
 		return os;
 	}
+
 }
 #endif // ASTRO_CONSTANTS_H

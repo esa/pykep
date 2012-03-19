@@ -73,13 +73,13 @@ public:
 	/**
 	* Default constructor. Constructs a meaningless leg.
 	*/
-	leg_s(): m_ti(), m_xi(), m_throttles(), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(0), m_tol(-10), m_states(), m_ceq(8), m_cineq(), m_dv() {}
+	leg_s(): m_ti(), m_xi(), m_throttles(), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(0), m_c(), m_alpha(), m_tol(-10), m_states(), m_ceq(), m_cineq(), m_dv() {}
 
 	/// Constructor
 	/**
 	 * Constructs an empty leg allocating memory for a given number of segments.
 	*/
-	leg_s(const unsigned int& n_seg, const double& c, const double &alpha, const double& tol=-10): m_ti(), m_xi(), m_throttles(n_seg), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(), m_c(c), m_alpha(alpha), m_tol(tol), m_states(n_seg+2), m_ceq(8), m_cineq(n_seg), m_dv(n_seg) {}
+	leg_s(const unsigned int& n_seg, const double& c, const double &alpha, const double& tol=-10): m_ti(), m_xi(), m_throttles(n_seg), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(), m_c(c), m_alpha(alpha), m_tol(tol), m_states(n_seg+2), m_ceq(), m_cineq(n_seg), m_dv(n_seg) {}
 
 	/// Sets the leg's data
 	/**
@@ -115,9 +115,9 @@ public:
 		if (std::distance(throttles_start,throttles_end) / 3 != (int)m_throttles.size()) {
 			throw_value_error("The number of segments in the leg do not match the length of the supplied throttle sequence");
 		}
-        if (epoch_i.mjd2000() >= epoch_f.mjd2000()) {
+		if (epoch_i.mjd2000() >= epoch_f.mjd2000()) {
 			throw_value_error("Final epoch must be strictly after initial epoch");
-        }
+		}
 
 		if (mu_<=0)
 		{
@@ -203,22 +203,6 @@ public:
 	*/
 	size_t get_n_seg() const {return m_throttles.size(); }
 
-	/// Gets the i-th throttle
-	/**
-	* Returns the i-th throttle
-	*
-	* @return const ref to the i-th throttle
-	*/	
-	const throttle& get_throttles(int index) { return m_throttles[index]; }
-	
-	/// Gets the throttles
-	/**
-	* Returns all throttles
-	*
-	* @return const ref to a vector of throttle
-	*/	
-	const std::vector<throttle>& get_throttles() { return m_throttles; }
-
 	/// Gets the leg's initial epoch
 	/**
 	* Gets the epoch at the beginning of the leg
@@ -258,7 +242,7 @@ public:
 	/// Returns the computed state mismatch constraints (8 equality constraints)
 	/**
 	*/
-	const std::vector<double>&  compute_mismatch_con() const {
+	const boost::array<double,8>&  compute_mismatch_con() const {
 		size_t n_seg = m_throttles.size();
 		const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
@@ -340,7 +324,7 @@ private:
 		ar & m_throttles;
 		ar & m_tf;
 		ar & m_xf;
-        ar & m_sf;
+		ar & m_sf;
 		ar & m_sc;
 		ar & m_mu;
 		ar & m_tol;
@@ -358,12 +342,12 @@ private:
 	double m_sf;
 	spacecraft m_sc;
 	double m_mu;
-    double m_c;
-    double m_alpha;
+	double m_c;
+	double m_alpha;
 	int m_tol;
 
 	mutable std::vector<boost::array<double, 8> > m_states;
-	mutable std::vector<double> m_ceq;
+	mutable boost::array<double, 8> m_ceq;
 	mutable std::vector<double> m_cineq;
 	mutable std::vector<double> m_dv;
 };
