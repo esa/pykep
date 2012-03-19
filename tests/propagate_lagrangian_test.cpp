@@ -29,7 +29,8 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/random.hpp>
 
-#include "../src/keplerian_toolbox.h"
+#include "../src/core_functions/propagate_lagrangian.h"
+#include "../src/core_functions/array3D_operations.h"
 
 using namespace std;
 using namespace kep_toolbox;
