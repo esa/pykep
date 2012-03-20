@@ -254,6 +254,7 @@ public:
 		double veff = m_sc.get_isp()*ASTRO_G0;
 		array3D thrust;
 		double ds = m_sf/n_seg; //pseudo-time interval for each segment
+		double dt = (m_tf.mjd2000() - m_ti.mjd2000()) * ASTRO_DAY2SEC; //length of the leg in seconds
 
 		//Initial state
 		array3D rfwd = m_xi.get_position();
@@ -290,7 +291,7 @@ public:
 		std::copy(rfwd.begin(), rfwd.end(), m_ceq.begin());
 		std::copy(vfwd.begin(), vfwd.end(), m_ceq.begin() + 3);
 		m_ceq[6] = mfwd - mback;
-		m_ceq[7] = tfwd + tback;
+		m_ceq[7] = (tfwd - tback - dt);
 		return m_ceq;
 	}
 	/// Returns the computed throttles constraints (n_seg inequality constraints)
