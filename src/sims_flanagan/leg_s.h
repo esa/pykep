@@ -331,6 +331,8 @@ private:
 		ar & m_sf;
 		ar & m_sc;
 		ar & m_mu;
+		ar & m_c;
+		ar & m_alpha;
 		ar & m_tol;
 		ar & m_states;
 		ar & m_ceq;

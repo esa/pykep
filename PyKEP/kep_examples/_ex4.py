@@ -26,7 +26,7 @@ try:
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
 			self.__nseg = nseg
-			self.set_bounds([4000,60,70, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[6000,71,5000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
+			self.set_bounds([4000,60,70, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[6000,1500,5000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
 
 		#This is the objective function
 		def _objfun_impl(self,x):
@@ -35,7 +35,7 @@ try:
 		#And these are the constraints
 		def _compute_constraints_impl(self,x):
 			from PyKEP import epoch, AU, EARTH_VELOCITY, DAY2SEC
-			from PyKEP.sims_flanagan import leg, sc_state
+			from PyKEP.sims_flanagan import sc_state
 			
 			start = epoch(x[0])
 			end = epoch(x[0] + x[1])
@@ -46,7 +46,6 @@ try:
 			
 			r,v = self.__mars.eph(end)
 			xe = sc_state(r, v ,x[3])
-			
 			self.__leg.set(start,x0,x[-3 * self.__nseg:],end,xe, x[2] * DAY2SEC)
 			v_inf_con = (x[4] * x[4] + x[5] * x[5] + x[6] * x[6] - self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
 			retval = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
@@ -59,7 +58,7 @@ try:
 			retval[4] /= EARTH_VELOCITY
 			retval[5] /= EARTH_VELOCITY
 			retval[6] /= self.__sc.mass
-			retval[7] /= (DAY2SEC * 365.25)
+			retval[7] /= (365.25 * DAY2SEC)
 			return retval
 			
 			
