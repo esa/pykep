@@ -121,10 +121,13 @@ public:
 
 		if (mu_<=0)
 		{
-			throw_value_error("Gravity parameter must be larger than zero");
+			throw_value_error("Gravity parameter must be larger than zero (forgot to set it?)");
 		}
 		if (epoch_i.mjd() >= epoch_f.mjd()) {
 			throw_value_error("Final epoch must be after the initial epoch");
+		}
+		if (sc_.get_mass() == 0){
+			throw_value_error("Spacecraft mass must be larger than zero (forgot to set it?)");
 		}
 
 		//We fill up all leg's data member

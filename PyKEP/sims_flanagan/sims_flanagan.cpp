@@ -42,6 +42,7 @@
 
 using namespace boost::python;
 
+
 static inline kep_toolbox::array7D get_mismatch_wrapper(const kep_toolbox::sims_flanagan::leg& l) {
 	kep_toolbox::sims_flanagan::sc_state x;
 	l.get_mismatch_con(x);
@@ -275,6 +276,92 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" c = l.throttles_constraints()\n"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg::human_readable)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>())
-		;
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>());
+    
+    
+    typedef void (kep_toolbox::sims_flanagan::leg_s::*leg_s_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const double&);
+	class_<kep_toolbox::sims_flanagan::leg_s>("leg_s", "Represents an interplanetary leg (using the Sundmann variable)",
+		init<const unsigned int&, const double& , const double &, optional<const double&> >(
+			"PyKEP.sims_flanagan.leg_s(n_seg, c, alpha, [tol])\n\n"
+			"- n_seg: number of segments\n"
+			"- c: constant in the SUndmann transformation dt = cr^(alpha ds)\n"
+			"- alpha: exponent in the SUndmann transformation dt = cr^(alpha ds)\n"
+			"- tol: tolerance set in the Taylor integration of the leg\n\n"
+			"Example::\n\n"
+			" from PyKEP import *\n"
+			" l = sims_flanagan.leg_s(25,1.0/AU,1.0)\n"
+		))
+		.def(init<>())
+		.def("set", leg_s_setter(&kep_toolbox::sims_flanagan::leg_s::set_leg),
+			"Sets leg's data\n\n"
+			"Example::\n\n"
+			" from PyKEP import *\n"
+			" l = sims_flanagan.leg_s(4,1.0/AU,1.0)\n"
+			" start = epoch(0)\n"
+			" end = epoch(340)\n"
+			" earth = planet_ss('earth')\n"
+			" mars = planet_ss('mars')\n"
+			" r,v = earth.eph(start)\n"
+			" x0 = sims_flanagan.sc_state(r,v,sc.mass)\n"
+			" r,v = mars.eph(end)\n"
+			" xe = sims_flanagan.sc_state(r, v ,sc.mass)\n"
+			" ds = 1.2 * 365.25 * DAY2SEC\n"
+			" l.set_mu(MU_SUN)\n"
+			" l.set_spacecraft(sc)\n"
+			" l.set(start, x0, (1,0,0,0,0,1,0,0,0,0,1,0), end, xe, ds)\n"
+		)
+		.def("set_mu", &kep_toolbox::sims_flanagan::leg_s::set_mu,
+			"Sets the leg central body gravitational parameter\n\n"
+			"Example::\n\n"
+			" l.set_mu(PyKEP.MU_SUN)"
+		)
+		.def("set_spacecraft", &kep_toolbox::sims_flanagan::leg_s::set_sc,
+			"Sets the leg spacecraft\n\n"
+			"Example::\n\n"
+			" sc = PyKEP.sims_flanagan.spacecraft(4500,0.05,2500)\n"
+			" l = PyKEP.sims_flanagan.leg()"
+			" l.set_spacecraft(sc)"
+		)
+		.def("get_mu", &kep_toolbox::sims_flanagan::leg_s::get_mu,
+			"Gets the leg central body gravitational parameter\n\n"
+			"Example::\n\n"
+			" mu = l.get_mu()"
+		)
+		.def("get_spacecraft", &kep_toolbox::sims_flanagan::leg_s::get_spacecraft,return_value_policy<copy_const_reference>(),
+			"Gets the leg spacecraft\n\n"
+			"Example::\n\n"
+			" sc = l.get_spacecraft()"
+		)		
+		.def("get_xi", &kep_toolbox::sims_flanagan::leg_s::get_xi ,return_value_policy<copy_const_reference>(),
+			"Gets the initial spacecraft state\n\n"
+			"Example::\n\n"
+			" xi = l.get_xi()"
+		)
+		.def("get_xf", &kep_toolbox::sims_flanagan::leg_s::get_xf ,return_value_policy<copy_const_reference>(),
+			"Gets the final spacecraft state\n\n"
+			"Example::\n\n"
+			" xf = l.get_xf()"
+		)
+		.def("get_ti", &kep_toolbox::sims_flanagan::leg_s::get_ti ,return_value_policy<copy_const_reference>(),
+			"Gets the initial leg epoch\n\n"
+			"Example::\n\n"
+			" ti = l.get_ti()"
+		)
+		.def("get_tf", &kep_toolbox::sims_flanagan::leg_s::get_tf ,return_value_policy<copy_const_reference>(),
+			"Gets the final leg epoch\n\n"
+			"Example::\n\n"
+			" tf = l.get_tf()"
+		)
+		.def("mismatch_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_mismatch_con, return_value_policy<copy_const_reference>(),
+			"Returns an 8-dim tuple containing the state mismatch of the leg (x,y,z,vx,vy,vz,m,t) (needs to be all zeros for the leg to be feasible)\n\n"
+			"Example::\n\n"
+			" ceq = l.mismatch_constraints()\n"
+		)
+		.def("throttles_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_throttles_con, return_value_policy<copy_const_reference>(),
+			"Returns a nseg-dim tuple containing the throttle magnitudes minus one (needs to be all negative for the leg to be feasible)\n\n"
+			"Example::\n\n"
+			" c = l.throttles_constraints()\n"
+		)
+		.def("__repr__", &kep_toolbox::sims_flanagan::leg_s::human_readable)
+		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());
 }

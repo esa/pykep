@@ -449,7 +449,7 @@ def("_get_"#arg,&get_##arg);
     
     //Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)
     def("propagate_taylor_s",&propagate_taylor_s_wrapper,
-        "PyKEP.propagate_taylor_s(r,v,m,u,s,mu,veff=1,c=1,alpha=1.5,log10tol=-10,log10rtol=-10])\n\n"
+        "PyKEP.propagate_taylor_s(r,v,m,u,s,mu,veff,c=1,alpha,log10tol,log10rtol])\n\n"
         "- r: start position, x,y,z\n"
         "- v: start velocity, vx,vy,vz\n"
         "- m: starting mass\n"
@@ -463,7 +463,7 @@ def("_get_"#arg,&get_##arg);
         "- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
         "Returns a tuple containing r, v, m and t the final position, velocity, mass and time after the propagation pseudo-time s\n\n"
         "Example::\n\n"
-        "  r,v,m,t = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
+        "  r,v,m,t = propagate_taylor_s([1,0,0],[0,1,0],100,[0,0,0],pi/2,1.0,1.0,1.0,1.0,-10,-10)"
     );
 
     //Fly-by helper functions

@@ -53,8 +53,13 @@ std::string leg_s::human_readable() const {
  *
  */
 std::ostream &operator<<(std::ostream &s, const leg_s &in ){
+	s << "Leg in the Sundmann Variable dt = cr^(alpha) ds: " << std::endl << std::endl;
 	s << std::setprecision(15);
-	s << "Number of segments: " << in.m_throttles.size() << std::endl << std::endl;
+	s << "Number of segments: " << in.m_throttles.size() << std::endl;
+	s << "c: " << in.m_c << std::endl;
+	s << "alpha: " << in.m_alpha << std::endl;
+	s << "Taylor integration tol: " << in.m_tol << std::endl<< std::endl;
+
 	s << in.get_spacecraft() << std::endl;
 	s << "Central body gravitational parameter: " << in.get_mu() << std::endl << std::endl;
 	s << "Departure date: " << in.get_ti() << ", mjd2000: " << in.get_ti().mjd2000() << std::endl;
@@ -66,7 +71,7 @@ std::ostream &operator<<(std::ostream &s, const leg_s &in ){
 
 	s << std::endl << "Throttles values: " << std::endl;
 	for (size_t i=0; i<in.m_throttles.size(); i++) {
-		s << "\t\t\t" << in.m_throttles[i].get_value()[0] << " " << in.m_throttles[i].get_value()[1] << " " << in.m_throttles[i].get_value()[2] << std::endl;
+		s << "\t\t\t" << in.m_throttles[i].get_value()[0] << "\t" << in.m_throttles[i].get_value()[1] << "\t" << in.m_throttles[i].get_value()[2] << std::endl;
 	}
 
 	try
@@ -76,10 +81,10 @@ std::ostream &operator<<(std::ostream &s, const leg_s &in ){
 	}
 	catch (...)
 	{
-		s << std::endl << "Mismatch at the midpoint: NUMERICAL ERROR!! COULD NOT CALCULATE THE STATE MISMATCH, CHECK YOUR DATA" << std::endl;
+		s << std::endl << "Mismatch at the midpoint: ERROR!! COULD NOT CALCULATE THE STATE MISMATCH, CHECK YOUR DATA" << std::endl;
 	}
 
-	s << "Throttle magnitude constraints (if negative satisfied): " << in.compute_throttles_con();
+	s << "Throttle magnitude constraints (if <=0 are satisfied): " << in.compute_throttles_con();
 	return s;
 }
 
