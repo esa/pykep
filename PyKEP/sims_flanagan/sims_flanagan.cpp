@@ -301,6 +301,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" end = epoch(340)\n"
 			" earth = planet_ss('earth')\n"
 			" mars = planet_ss('mars')\n"
+			" sc = sims_flanagan.spacecraft(4500,0.05,2500)\n"
 			" r,v = earth.eph(start)\n"
 			" x0 = sims_flanagan.sc_state(r,v,sc.mass)\n"
 			" r,v = mars.eph(end)\n"
@@ -361,6 +362,11 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Returns a nseg-dim tuple containing the throttle magnitudes minus one (needs to be all negative for the leg to be feasible)\n\n"
 			"Example::\n\n"
 			" c = l.throttles_constraints()\n"
+		)
+		.def("states", &kep_toolbox::sims_flanagan::leg_s::compute_states, return_value_policy<copy_const_reference>(),
+			"Returns a nseg+2 tuple containing 8-dim tuples of the spacecraft state\n\n"
+			"Example::\n\n"
+			" states = l.states()\n"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg_s::human_readable)
 		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());

@@ -22,7 +22,7 @@ try:
 			self.__mars = planet_ss('mars')
 			self.__sc = spacecraft(mass,Tmax,Isp)
 			self.__Vinf = Vinf*1000
-			self.__leg = leg_s(nseg,1.0/(AU**1.5),1.5)
+			self.__leg = leg_s(nseg,1.0/((3*AU)**1.5),1.5)
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
 			self.__nseg = nseg
@@ -58,7 +58,7 @@ try:
 			retval[4] /= EARTH_VELOCITY
 			retval[5] /= EARTH_VELOCITY
 			retval[6] /= self.__sc.mass
-			retval[7] /= (365.25 * DAY2SEC)
+			retval[7] /= (365.25 *5* DAY2SEC)
 			return retval
 			
 			

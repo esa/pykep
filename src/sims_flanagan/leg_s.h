@@ -244,7 +244,14 @@ public:
 
 	/// Returns the computed state mismatch constraints (8 equality constraints)
 	/**
+	* The main trajectory computations are made here. The method propagates the leg's throttle sequence 
+	* to return the 8-mismatch constraints (leg with the Sundmann variable). For efficiency purposes the method
+	* does not store any of the computed intermediate steps. If those are also needed use the slower method 
+	* compute_states.
+	* 
+	* @return const reference to the m_ceq data member that contains, after the call to this method, the 8 mismatches
 	*/
+	
 	const boost::array<double,8>&  compute_mismatch_con() const {
 		size_t n_seg = m_throttles.size();
 		const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
@@ -296,6 +303,9 @@ public:
 	}
 	/// Returns the computed throttles constraints (n_seg inequality constraints)
 	/**
+	* Computes the throttles constraints frm the throttle vector performing a fairly straight forward computation
+	* 
+	* @return const reference to the m_ceq data member that contains, after the call to this method, the 8 mismatches
 	*/
 	const std::vector<double>&  compute_throttles_con() const {
 		for (size_t i=0; i<m_throttles.size();++i){
@@ -304,15 +314,73 @@ public:
 		}
 		return m_cineq;
 	}
+	/**
+	* The main trajectory computations are made here. Less efficiently than in compute_mismatch_con, but storing 
+	* more info on the way. The method propagates the leg's throttle sequence to return the spacecraft state at each time.
+	* The code is redundand with compute_mismatch_con, the choice to have it redundand stems from the need to have 
+	* compute_mismatch_con method to be as efficient as possible, while compute_states can also be unefficient. 
+	* 
+	* @return a (n_seg + 2) vector of 8-dim arrays containing t,x,y,z,vx,vy,vz,m
+	*/
+	const std::vector<boost::array<double,8> >& compute_states() const  {
+		size_t n_seg = m_throttles.size();
+		const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+
+		//Aux variables
+		double max_thrust = m_sc.get_thrust();
+		double veff = m_sc.get_isp()*ASTRO_G0;
+		array3D thrust;
+		double ds = m_sf/n_seg; //pseudo-time interval for each segment
+		double dt = (m_tf.mjd2000() - m_ti.mjd2000()) * ASTRO_DAY2SEC; //length of the leg in seconds
+
+		//Initial state
+		array3D rfwd = m_xi.get_position();
+		array3D vfwd = m_xi.get_velocity();
+		double mfwd = m_xi.get_mass();
+		double tfwd = 0;
+
+		record_states(tfwd,rfwd,vfwd,mfwd,0);
+		
+		//Forward Propagation
+		for (int i = 0; i < n_seg_fwd; i++) {
+			for (int j=0;j<3;j++){
+				thrust[j] = max_thrust * m_throttles[i].get_value()[j];
+			}
+			propagate_taylor_s(rfwd,vfwd,mfwd,tfwd,thrust,ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
+			record_states(tfwd,rfwd,vfwd,mfwd,i+1);
+		}
+
+		//Final state
+		array3D rback = m_xf.get_position();
+		array3D vback = m_xf.get_velocity();
+		double mback = m_xf.get_mass();
+		double tback = 0;
+
+		record_states(dt + tback,rback,vback,mback,n_seg+1);
+		
+		//Backward Propagation
+		for (int i = 0; i < n_seg_back; i++) {
+			for (int j=0;j<3;j++){
+				thrust[j] = max_thrust * m_throttles[m_throttles.size() - i - 1].get_value()[j];
+			}
+			propagate_taylor_s(rback,vback,mback,tback,thrust,-ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
+			record_states(dt + tback,rback,vback,mback,n_seg-i);
+		}
+
+		//Return the states
+		return m_states; 
+	  
+	}
+
 	//const std::vector<double>&  compute_dvs() const { return m_dv; }
-	//const std::vector<boost::array<double,8> >& compute_states() const { return m_states; }
+
 
 protected:
-	void record_states(const double& t, const array3D& r, const array3D& v,const double& m,const unsigned int& idx) {
-		assert(idx < m_states.size());
+	void record_states(const double& t, const array3D& r, const array3D& v,const double& m,const unsigned int& idx) const {
+		assert((idx+1) < m_states.size());
 		m_states[idx][0] = t;
-		std::copy(r.begin(),r.end(),m_states[idx].begin());
-		std::copy(v.begin(),v.end(),m_states[idx].begin()+3);
+		std::copy(r.begin(),r.end(),m_states[idx].begin()+1);
+		std::copy(v.begin(),v.end(),m_states[idx].begin()+4);
 		m_states[idx][7] = m;
 	}
 	//@}
