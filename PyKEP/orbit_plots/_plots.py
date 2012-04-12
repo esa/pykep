@@ -399,4 +399,125 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	if legend:
 		ax.legend()
   
+def plot_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
+	"""
+	Plots a trajectory leg
+		      
+	USAGE: plot_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = False):
+	  * ax:		3D axis object created using fig.gca(projection='3d')
+	  * leg:	a PyKEP.sims_flanagan.leg
+	  * N:		number of points to be plotted along one arc
+	  * units:	the length unit to be used in the plot
+	  * color:	matplotlib color to use to plot the trajectory and the grid points
+	  * legend	when True it plots also the legend
+	  * plot_line: 	when True plots also the trajectory (between mid-points and grid points)
+	  
+	EXAMPLE:
+	    from mpl_toolkits.mplot3d import Axes3D
+	    import matplotlib.pyplot as plt
+
+	    fig = plt.figure()
+	    ax = fig.gca(projection='3d')
+	    t1 = epoch(0)
+	    pl = planet_ss('earth')
+	    rE,vE = pl.eph(t1)
+	    plot_planet(ax, pl,t0=t1, units=AU)
+
+	    t2 = epoch(440)
+	    pl = planet_ss('mars')
+	    rM, vM = pl.eph(t2)
+	    plot_planet(ax, pl,t0=t2, units=AU)
+
+	    sc = sims_flanagan.spacecraft(4500,0.5,2500)
+	    x0 = sims_flanagan.sc_state(rE,vE,sc.mass)
+	    xe = sims_flanagan.sc_state(rM,vM,sc.mass)
+	    l = sims_flanagan.leg(t1,x0,[1,0,0]*5,t2,xe,sc,MU_SUN)
+
+	    plot_sf_leg(ax,l,units=AU)
+	"""
+	from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
+	import numpy as np
+	from scipy.linalg import norm
+	from math import exp
 	
+	#We compute the number of segments for forward and backward propagation
+	n_seg = len(leg.get_throttles())
+	fwd_seg =  (n_seg+1)/2
+	back_seg = n_seg/2
+
+	#We extract information on the spacecraft
+
+	sc = leg.get_spacecraft()
+	isp = sc.isp
+	max_thrust = sc.thrust
+	
+	#And on the leg
+	throttles = leg.get_throttles()
+	mu = leg.get_mu()
+	
+	#Forward propagation
+	
+	#x,y,z contain the cartesian components of all points containd in states
+	x = [0.0]*(fwd_seg+1)
+	y = [0.0]*(fwd_seg+1)
+	z = [0.0]*(fwd_seg+1)
+	
+	state = leg.get_xi()
+	
+	#Initial conditions
+	r = state.r; v = state.v; m = state.m
+	x[0] = r[0]/units
+	y[0] = r[1]/units
+	z[0] = r[2]/units
+	
+	#We compute all points by propagation
+	for i,t in enumerate(throttles[:fwd_seg]):
+		dt = (t.end.mjd - t.start.mjd) * DAY2SEC
+		alpha = min(norm(t.value),1.0)
+		
+		#Taylor propagation of constant thrust u
+		u = [max_thrust * dumb for dumb in t.value]
+		if plot_line:
+			plot_taylor(ax,r,v,m,u,dt,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+		r,v,m = propagate_taylor(r,v,m,u,dt,mu,isp*G0,-10,-10)
+		x[i+1] = r[0]/units
+		y[i+1] = r[1]/units
+		z[i+1] = r[2]/units
+		
+	ax.scatter(x[:-1], y[:-1], z[:-1], label='nodes',marker='o')
+	ax.scatter(x[-1],y[-1],z[-1], marker='^', c='y', label='mismatch point')
+	
+	#Backward propagation
+	
+	#x,y,z will contain the cartesian components of 
+	x = [0.0]*(back_seg+1)
+	y = [0.0]*(back_seg+1)
+	z = [0.0]*(back_seg+1)
+	
+	state = leg.get_xf()
+	
+	#Final conditions
+	r = state.r; v = state.v; m = state.m
+	x[-1] = r[0]/units
+	y[-1] = r[1]/units
+	z[-1] = r[2]/units
+	
+	for i,t in enumerate(throttles[-1:-back_seg-1:-1]):
+		dt = (t.end.mjd - t.start.mjd)*DAY2SEC
+		alpha = min(norm(t.value),1.0)
+
+		u = [max_thrust * dumb for dumb in t.value]
+		if plot_line:
+			plot_taylor(ax,r,v,m,u,-dt,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+		r,v,m = propagate_taylor(r,v,m,u,-dt,mu,isp*G0,-10,-10)
+		x[-i-2] = r[0]/units
+		y[-i-2] = r[1]/units
+		z[-i-2] = r[2]/units
+
+
+	ax.scatter(x[1:], y[1:], z[1:], marker = 'o')
+	ax.scatter(x[0],  y[0],  z[0], marker='^', c='y')
+	
+	if legend:
+		ax.legend()
+  

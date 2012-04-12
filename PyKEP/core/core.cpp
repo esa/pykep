@@ -113,12 +113,16 @@ BOOST_PYTHON_MODULE(_core) {
     from_python_sequence<kep_toolbox::array7D,fixed_size_policy>();
     to_tuple_mapping<boost::array<double,8> >();
     from_python_sequence<boost::array<double,8>,fixed_size_policy>();
+    to_tuple_mapping<boost::array<double,11> >();
+    from_python_sequence<boost::array<double,11>,fixed_size_policy>();
     to_tuple_mapping<kep_toolbox::array3D>();
     from_python_sequence<kep_toolbox::array3D,fixed_size_policy>();
     to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
     from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
     to_tuple_mapping<std::vector<boost::array<double,8> > >();
     from_python_sequence<std::vector<boost::array<double,8> >,variable_capacity_policy>();
+    to_tuple_mapping<std::vector<boost::array<double,11> > >();
+    from_python_sequence<std::vector<boost::array<double,11> >,variable_capacity_policy>();
     to_tuple_mapping<std::vector<double> >();
     from_python_sequence<std::vector<double>, variable_capacity_policy>();
 

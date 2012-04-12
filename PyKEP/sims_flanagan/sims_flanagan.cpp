@@ -238,7 +238,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		.def("get_throttles", throttles_getter(&kep_toolbox::sims_flanagan::leg::get_throttles),return_value_policy<copy_const_reference>(),
 			"Gets the leg central body gravitational parameter\n\n"
 			"Example::\n\n"
-			" mu = l.get_mu()"
+			" t = l.get_throttles()"
 		)		
 		.def("get_xi", &kep_toolbox::sims_flanagan::leg::get_x_i ,return_value_policy<copy_const_reference>(),
 			"Gets the initial spacecraft state\n\n"
@@ -353,6 +353,11 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Example::\n\n"
 			" tf = l.get_tf()"
 		)
+		.def("get_throttles", &kep_toolbox::sims_flanagan::leg_s::get_throttles, return_value_policy<copy_const_reference>(),
+			"Reurns a tuple containing the leg's throttles\n\n"
+			"Example::\n\n"
+			" th = l.get_throttles()"
+		)	
 		.def("mismatch_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_mismatch_con, return_value_policy<copy_const_reference>(),
 			"Returns an 8-dim tuple containing the state mismatch of the leg (x,y,z,vx,vy,vz,m,t) (needs to be all zeros for the leg to be feasible)\n\n"
 			"Example::\n\n"
@@ -364,7 +369,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" c = l.throttles_constraints()\n"
 		)
 		.def("states", &kep_toolbox::sims_flanagan::leg_s::compute_states, return_value_policy<copy_const_reference>(),
-			"Returns a nseg+2 tuple containing 8-dim tuples of the spacecraft state\n\n"
+			"Returns a nseg+2 tuple containing 11-dim tuples of the spacecraft state: (t,x,y,z,vx,vy,vz,m,ux,uy,uz)\n\n"
 			"Example::\n\n"
 			" states = l.states()\n"
 		)

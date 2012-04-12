@@ -166,7 +166,7 @@ try:
 		from PyGMO import algorithm, island
 		prob = mga_lt_EVMe()
 		algo = algorithm.scipy_slsqp(max_iter = 500, acc =1e-5)
-		#algo = algorithm.snopt(major_iter=2000, opt_tol=1e-3, feas_tol=1e-9)
+		#algo = algorithm.snopt(major_iter=500, opt_tol=1e-3, feas_tol=1e-9)
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)

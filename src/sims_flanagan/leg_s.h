@@ -322,14 +322,15 @@ public:
 	* 
 	* @return a (n_seg + 2) vector of 8-dim arrays containing t,x,y,z,vx,vy,vz,m
 	*/
-	const std::vector<boost::array<double,8> >& compute_states() const  {
+	const std::vector<boost::array<double,11> >& compute_states() const  {
 		size_t n_seg = m_throttles.size();
 		const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
 		//Aux variables
 		double max_thrust = m_sc.get_thrust();
 		double veff = m_sc.get_isp()*ASTRO_G0;
-		array3D thrust;
+		array3D thrust = {{0,0,0}};
+		array3D zeros = {{0,0,0}};
 		double ds = m_sf/n_seg; //pseudo-time interval for each segment
 		double dt = (m_tf.mjd2000() - m_ti.mjd2000()) * ASTRO_DAY2SEC; //length of the leg in seconds
 
@@ -339,51 +340,76 @@ public:
 		double mfwd = m_xi.get_mass();
 		double tfwd = 0;
 
-		record_states(tfwd,rfwd,vfwd,mfwd,0);
+		record_states(tfwd,rfwd,vfwd,mfwd,zeros,0);
 		
 		//Forward Propagation
 		for (int i = 0; i < n_seg_fwd; i++) {
 			for (int j=0;j<3;j++){
 				thrust[j] = max_thrust * m_throttles[i].get_value()[j];
 			}
-			propagate_taylor_s(rfwd,vfwd,mfwd,tfwd,thrust,ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
-			record_states(tfwd,rfwd,vfwd,mfwd,i+1);
+			try {
+				propagate_taylor_s(rfwd,vfwd,mfwd,tfwd,thrust,ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
+			}
+			catch (...) {
+				throw_value_error("Could not compute the states ... check your data!!!");
+			}
+			record_states(tfwd,rfwd,vfwd,mfwd,thrust,i+1);
 		}
 
 		//Final state
 		array3D rback = m_xf.get_position();
 		array3D vback = m_xf.get_velocity();
 		double mback = m_xf.get_mass();
-		double tback = 0;
+		double tback = 0; 
 
-		record_states(dt + tback,rback,vback,mback,n_seg+1);
+		record_states(dt + tback,rback,vback,mback,zeros,n_seg+1);
 		
 		//Backward Propagation
 		for (int i = 0; i < n_seg_back; i++) {
 			for (int j=0;j<3;j++){
 				thrust[j] = max_thrust * m_throttles[m_throttles.size() - i - 1].get_value()[j];
 			}
-			propagate_taylor_s(rback,vback,mback,tback,thrust,-ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
-			record_states(dt + tback,rback,vback,mback,n_seg-i);
+			try {
+				propagate_taylor_s(rback,vback,mback,tback,thrust,-ds,m_mu,veff,m_c, m_alpha, m_tol,m_tol);
+			}
+			catch (...) {
+				throw_value_error("Could not compute the states ... check your data!!!");
+			}
+			record_states(dt + tback,rback,vback,mback,thrust, n_seg-i);
 		}
-
 		//Return the states
 		return m_states; 
-	  
 	}
 
 	//const std::vector<double>&  compute_dvs() const { return m_dv; }
-
+	const 	std::vector<throttle>& get_throttles() {
+	  	size_t n_seg = m_throttles.size();
+		const size_t n_seg_fwd = (n_seg + 1) / 2;
+		std::vector<boost::array<double,11> > states;
+		states = compute_states();
+		for (size_t i = 0; i < n_seg_fwd; ++i) {
+			m_throttles[i].set_start(epoch(states[i][0] * ASTRO_SEC2DAY + m_ti.mjd2000()));
+			m_throttles[i].set_end(epoch(states[i+1][0] * ASTRO_SEC2DAY + m_ti.mjd2000()));
+		}
+		
+		for (size_t i = n_seg_fwd; i < n_seg; ++i) {
+			m_throttles[i].set_start(epoch(states[i+1][0] * ASTRO_SEC2DAY + m_ti.mjd2000()));
+			m_throttles[i].set_end(epoch(states[i+2][0] * ASTRO_SEC2DAY + m_ti.mjd2000()));
+		}
+		return m_throttles;
+	}
+	//@}
 
 protected:
-	void record_states(const double& t, const array3D& r, const array3D& v,const double& m,const unsigned int& idx) const {
+	void record_states(const double& t, const array3D& r, const array3D& v,const double& m, const array3D& thrust, const unsigned int& idx) const {
 		assert((idx+1) < m_states.size());
 		m_states[idx][0] = t;
 		std::copy(r.begin(),r.end(),m_states[idx].begin()+1);
 		std::copy(v.begin(),v.end(),m_states[idx].begin()+4);
 		m_states[idx][7] = m;
+		std::copy(thrust.begin(),thrust.end(),m_states[idx].begin()+8);
 	}
-	//@}
+
 
 private:
 	// Serialization code
@@ -420,7 +446,7 @@ private:
 	double m_alpha;
 	int m_tol;
 
-	mutable std::vector<boost::array<double, 8> > m_states;
+	mutable std::vector<boost::array<double, 11> > m_states;
 	mutable boost::array<double, 8> m_ceq;
 	mutable std::vector<double> m_cineq;
 	mutable std::vector<double> m_dv;
