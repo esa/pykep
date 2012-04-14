@@ -16,19 +16,19 @@ try:
 			super(mga_lt_earth_mars_sundmann,self).__init__(7 + nseg*3,0,1,9 + nseg,nseg+1,1e-4)
 			
 			#We then define some data members (we use the double underscore to indicate they are private)
-			from PyKEP import planet_ss, MU_SUN, AU
+			from PyKEP import planet_ss, MU_SUN, AU, planet_gtoc5
 			from PyKEP.sims_flanagan import spacecraft, leg_s
 			self.__earth = planet_ss('earth')
-			self.__mars = planet_ss('venus')
+			self.__mars = planet_ss('jupiter')
 			self.__sc = spacecraft(mass,Tmax,Isp)
 			self.__Vinf = Vinf*1000
 			#here we construct the trajectory leg in the Sundmann variable t = (r/10AU)^1.5 s
-			self.__leg = leg_s(nseg,1.0/((10*AU)**1.5),1.5)
+			self.__leg = leg_s(nseg,1.0/(100*AU)**1.0,1.0)
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
 			self.__nseg = nseg
 			#The bounds on the Sundmann variable can be evaluated considering circular orbits at r=1AUand r=0.7AU (for example)
-			self.set_bounds([0,100,30000, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[3000,1500,70000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
+			self.set_bounds([5000,2400,10000, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[8000,2500,150000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
 
 		#This is the objective function
 		def _objfun_impl(self,x):
@@ -54,7 +54,7 @@ try:
 				retval = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
 			except:
 				print "warning: CANNOT EVALUATE constraints .... possible problem in the taylor integration in the Sundmann variable"
-				return (1e14,)*8
+				return (1e14,)*(8+1+self.__nseg+2)
 			#We then scale all constraints to non dimensiona values
 			retval[0] /= AU
 			retval[1] /= AU
@@ -99,10 +99,11 @@ try:
 			plt.show()
 			
 	def run_example4():
-		from PyGMO import algorithm, island
-		prob = mga_lt_earth_mars_sundmann(nseg=20)
-		algo = algorithm.scipy_slsqp(max_iter = 2000, acc=1e-5)
-		#algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
+		from PyGMO import algorithm, island,population
+		N=20
+		prob = mga_lt_earth_mars_sundmann(nseg=N)
+		#algo = algorithm.scipy_slsqp(max_iter = 500, acc=1e-5)
+		algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
