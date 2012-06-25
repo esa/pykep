@@ -62,9 +62,9 @@ inline void fb_prop(array3D &v_out, const array3D& v_in, const array3D& v_pla, c
     kep_toolbox::vers(j_hat,j_hat);
     kep_toolbox::array3D k_hat= {{0,0,0}};
     kep_toolbox::cross(k_hat,i_hat,j_hat);
-    v_out[0] = v_pla[0] + v_rel_in_norm * cos(delta) * i_hat[0] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[0] + v_rel_in_norm * sin(beta) * cos(delta) * k_hat[0];
-    v_out[1] = v_pla[1] + v_rel_in_norm * cos(delta) * i_hat[1] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[1] + v_rel_in_norm * sin(beta) * cos(delta) * k_hat[1];
-    v_out[2] = v_pla[2] + v_rel_in_norm * cos(delta) * i_hat[2] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[2] + v_rel_in_norm * sin(beta) * cos(delta) * k_hat[2];
+    v_out[0] = v_pla[0] + v_rel_in_norm * cos(delta) * i_hat[0] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[0] + v_rel_in_norm * sin(beta) * sin(delta) * k_hat[0];
+    v_out[1] = v_pla[1] + v_rel_in_norm * cos(delta) * i_hat[1] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[1] + v_rel_in_norm * sin(beta) * sin(delta) * k_hat[1];
+    v_out[2] = v_pla[2] + v_rel_in_norm * cos(delta) * i_hat[2] + v_rel_in_norm * cos(beta) * sin(delta) * j_hat[2] + v_rel_in_norm * sin(beta) * sin(delta) * k_hat[2];
     return;
 }
 } // namespace end
