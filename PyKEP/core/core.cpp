@@ -29,6 +29,7 @@
 #include <boost/python/module.hpp>
 #include <boost/python/operators.hpp>
 #include <boost/python/register_ptr_to_python.hpp>
+#include <boost/python/converter/registry.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/overloads.hpp>
@@ -123,8 +124,16 @@ BOOST_PYTHON_MODULE(_core) {
     from_python_sequence<std::vector<boost::array<double,8> >,variable_capacity_policy>();
     to_tuple_mapping<std::vector<boost::array<double,11> > >();
     from_python_sequence<std::vector<boost::array<double,11> >,variable_capacity_policy>();
-    to_tuple_mapping<std::vector<double> >();
-    from_python_sequence<std::vector<double>, variable_capacity_policy>();
+    
+	boost::python::type_info info = boost::python::type_id<std::vector<double> >();
+	const boost::python::converter::registration* reg = boost::python::converter::registry::query(info);
+	if (reg == NULL)
+	{
+	  	//registry YourType
+		to_tuple_mapping<std::vector<double> >();
+		from_python_sequence<std::vector<double>,variable_capacity_policy>();
+	}
+
 
     // Constants.
 #define expose_constant(arg) \
