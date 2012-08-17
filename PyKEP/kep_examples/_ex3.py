@@ -2,7 +2,7 @@ try:
 	from PyGMO.problem import base as PyGMO_problem
 
 	"""
-	This example on the use of PyKEP constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
+	This example constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
 	problem that can be then solved using one of the available PyGMO solvers. The problem is a non-linear constrained
 	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
 	are also demonstrated via the plot method. The interplanetary mission modelled is a lt-mga mission Earth-Venus-Mercury.

@@ -1,6 +1,5 @@
 try:
 	from PyGMO.problem import base as PyGMO_problem
-
 	"""
 	This example demonstarates the use of the interplanetary leg in the Sundmann variable to obtain automated mesh optimization
 	"""
