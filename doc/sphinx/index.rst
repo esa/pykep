@@ -45,5 +45,5 @@ Contents:
   downloading
   installation
   documentation
-  examples
+  examples/index
   credits

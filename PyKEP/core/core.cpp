@@ -22,6 +22,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
+#include <boost/python.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/copy_const_reference.hpp>
@@ -101,52 +102,49 @@ get_constant(SEC2DAY);
 get_constant(DAY2YEAR);
 get_constant(G0);
 
+#define PYKEP_REGISTER_CONVERTER(T,policy) \
+{\
+boost::python::type_info info = boost::python::type_id<T >(); \
+const boost::python::converter::registration* reg = boost::python::converter::registry::query(info); \
+if (reg == NULL) \
+{ \
+	to_tuple_mapping<T >();\
+	from_python_sequence<T,policy>();\
+}\
+}
+
+#define EXPOSE_CONSTANT(arg) \
+def("_get_"#arg,&get_##arg);
+
+typedef boost::array<double,8> array8D;
+typedef boost::array<double,11> array11D;
 
 BOOST_PYTHON_MODULE(_core) {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;
-    doc_options.disable_signatures();
-
-    // Exposing the arrays and vectors of doubles into python tuples
-    to_tuple_mapping<kep_toolbox::array6D>();
-    from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
-    to_tuple_mapping<kep_toolbox::array7D>();
-    from_python_sequence<kep_toolbox::array7D,fixed_size_policy>();
-    to_tuple_mapping<boost::array<double,8> >();
-    from_python_sequence<boost::array<double,8>,fixed_size_policy>();
-    to_tuple_mapping<boost::array<double,11> >();
-    from_python_sequence<boost::array<double,11>,fixed_size_policy>();
-    to_tuple_mapping<kep_toolbox::array3D>();
-    from_python_sequence<kep_toolbox::array3D,fixed_size_policy>();
-    to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
-    from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
-    to_tuple_mapping<std::vector<boost::array<double,8> > >();
-    from_python_sequence<std::vector<boost::array<double,8> >,variable_capacity_policy>();
-    to_tuple_mapping<std::vector<boost::array<double,11> > >();
-    from_python_sequence<std::vector<boost::array<double,11> >,variable_capacity_policy>();
+    doc_options.disable_signatures();    
     
-	boost::python::type_info info = boost::python::type_id<std::vector<double> >();
-	const boost::python::converter::registration* reg = boost::python::converter::registry::query(info);
-	if (reg == NULL)
-	{
-	  	//registry YourType
-		to_tuple_mapping<std::vector<double> >();
-		from_python_sequence<std::vector<double>,variable_capacity_policy>();
-	}
-
-
-    // Constants.
-#define expose_constant(arg) \
-def("_get_"#arg,&get_##arg);
-    expose_constant(AU);
-    expose_constant(MU_SUN);
-    expose_constant(EARTH_VELOCITY);
-    expose_constant(DEG2RAD);
-    expose_constant(RAD2DEG);
-    expose_constant(DAY2SEC);
-    expose_constant(SEC2DAY);
-    expose_constant(DAY2YEAR);
-    expose_constant(G0);
+    //Register std converters to lists if not already registered by some other module
+    PYKEP_REGISTER_CONVERTER(std::vector<double>,variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array3D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array6D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array7D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(array8D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(array11D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<kep_toolbox::array3D>, variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<array8D>, variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<array11D>,variable_capacity_policy)
+    
+    // Expose the astrodynamical constants.
+    EXPOSE_CONSTANT(AU);
+    EXPOSE_CONSTANT(MU_SUN);
+    EXPOSE_CONSTANT(EARTH_VELOCITY);
+    EXPOSE_CONSTANT(DEG2RAD);
+    EXPOSE_CONSTANT(RAD2DEG);
+    EXPOSE_CONSTANT(DAY2SEC);
+    EXPOSE_CONSTANT(SEC2DAY);
+    EXPOSE_CONSTANT(DAY2YEAR);
+    EXPOSE_CONSTANT(G0);
 
     // Exposing enums
     enum_<kep_toolbox::epoch::type>("_epoch_type",
