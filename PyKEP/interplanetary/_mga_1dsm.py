@@ -266,7 +266,7 @@ class mga_1dsm(base_problem):
 		plt.show()
 	
 	def set_tof(self, minimum, maximum):
-	  	"""
+		"""
 		Sets the minimum and maximum time of flight allowed (in days)
 		"""
 		lb = list(self.lb)
@@ -276,7 +276,7 @@ class mga_1dsm(base_problem):
 		self.set_bounds(lb,ub)
 		
 	def set_launch_window(self, start, end):
-	  	"""
+		"""
 		Sets the launch window allowed in terms of starting and ending epoch
 		"""
 		lb = list(self.lb)
@@ -286,12 +286,12 @@ class mga_1dsm(base_problem):
 		self.set_bounds(lb,ub)
 		
 	def set_vinf(self, vinf):
-	  	"""
+		"""
 		Sets the allowed launch vinf (in km/s)
 		"""
 		lb = list(self.lb)
 		ub = list(self.ub)
-		lb[0] = 0
-		ub[0] = vinf * 1000
+		lb[3] = 0
+		ub[3] = vinf * 1000
 		self.set_bounds(lb,ub)
 		
