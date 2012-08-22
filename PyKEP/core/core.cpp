@@ -104,9 +104,9 @@ get_constant(G0);
 
 #define PYKEP_REGISTER_CONVERTER(T,policy) \
 {\
-boost::python::type_info info = boost::python::type_id<T >(); \
+/* boost::python::type_info info = boost::python::type_id<T >(); \
 const boost::python::converter::registration* reg = boost::python::converter::registry::query(info); \
-if (reg == NULL) \
+if (reg == NULL) */ \
 { \
 	to_tuple_mapping<T >();\
 	from_python_sequence<T,policy>();\
