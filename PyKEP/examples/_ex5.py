@@ -154,7 +154,11 @@ try:
 		print "Running a Self-Adaptive Differential Evolution Algorithm .... on 8 parallel islands"
 		archi.evolve(10); archi.join()
 		isl = min(archi, key=lambda x:x.population.champion.f[0])
+		print "Done!! Best solution found is: " + str(isl.population.champion.f[0]/1000) + " km / sec"
+		print "Chromsome: " + str(isl.population.champion.x)
 		prob.plot(isl.population.champion.x)
+
+		
 
 except:
 	print 'Could not import PyGMO. PyGMO is required for some PyKEP examples'
