@@ -34,7 +34,6 @@ Name						Type      	Description
 :class:`PyKEP.sims_flanagan.leg`		class		represents one leg in the Sims-Flanagan model
 =========================================  	=========	================================================
 
-
 List of constants defined within PyKEP
 =========================================
 
