@@ -16,7 +16,7 @@ def run_example2():
 	t2 = epoch(640)
 	dt = (t2.mjd2000 - t1.mjd2000) * DAY2SEC
 
-	ax.scatter(0,0,0, color='y')
+	ax.scatter([0],[0],[0], color='y')
 
 	pl = planet_ss('earth')
 	plot_planet(ax,pl, t0=t1, color=(0.8,0.8,1), legend=True, units = AU)

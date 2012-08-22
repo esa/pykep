@@ -25,54 +25,34 @@
 #include <iostream>
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/random.hpp>
 
-#include "../src/core_functions/propagate_lagrangian_u.h"
-#include "../src/core_functions/array3D_operations.h"
+#include "../src/keplerian_toolbox.h"
 
 using namespace std;
 using namespace kep_toolbox;
 int main() {
-	// Preamble
-	array3D r0,v0,r0_cp,v0_cp;
-	double tof;
-	boost::mt19937 rng;
-	boost::uniform_int<> dist(0, 1);
-	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > rand_bit(rng, dist);
-	boost::uniform_real<> dist1(-2,2);
-	boost::variate_generator<boost::mt19937&, boost::uniform_real<> > drng(rng, dist1);
-	double acc=0,err_max=0,err=0;
-	int count=0;
-
-	// Experiment Settings
-	unsigned int Ntrials = 50000;
-
-	// Start Experiment
-	for (unsigned int i = 0; i<Ntrials; ++i){
-		//1 - generate a random propagation set-up
-		r0[0] = drng() * 2; r0[1] = drng() * 2; r0[2] = drng() * 2;
-		v0[0] = drng() * 2; v0[1] = drng() * 2; v0[2] = drng() * 2;
-		tof = drng() * 20;
-		r0_cp = r0;
-		v0_cp = v0;
-		//2 - propagate back and forth
-		propagate_lagrangian_u(r0,v0,tof,1.0);
-		propagate_lagrangian_u(r0,v0,-tof,1.0);
-		diff(r0_cp,r0,r0_cp);
-		err = norm(r0_cp);
-		err_max = std::max(err_max,err);
-		acc += err;
-		count ++;
-	}
-	std::cout << "Max error: " << err_max << std::endl;
-	std::cout << "Average Error: " << acc / count << std::endl;
-	std::cout << "Number of Propagations Made: " << count << std::endl;
-	if (err_max < 1e-7) {
-		return 0;
-	} else {
-		return 1;
-	}
-
+    int n_seg=15;
+	double mu = ASTRO_MU_SUN;
+	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
+    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
+	phase1.set_mu(mu);
+	phase1.set_sc(sc);
+	planet_ss earth("earth");
+	array3D r,v;
+	earth.get_eph(epoch(0),r,v);
+	sims_flanagan::sc_state x0(r,v,sc.get_mass());
+	earth.get_eph(epoch(100),r,v);
+	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
+	std::vector<double> throttles(n_seg*3,0.1423);
+	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
+    for (int i=0; i< 8;++i){
+        std::cout << phase1.compute_mismatch_con()[i] << ", ";
+    }
+    std::cout<< std::endl;
+    for (int i=0; i< n_seg;++i){
+        std::cout << phase1.compute_throttles_con()[i] << ", ";
+    }
+    std::cout<< std::endl;
+	return 0;
 }
+

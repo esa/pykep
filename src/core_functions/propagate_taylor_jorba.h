@@ -56,7 +56,7 @@ void propagate_taylor_jorba(T& r0, T& v0, double &m0, const T& u, const double &
     InitMyFloat(startT);
     InitMyFloat(stopT);
     InitMyFloat(nextT);
-    for(i=0; i<7; i++) InitMyFloat(xx[i]);
+    for(i=0; i<7; i++) {InitMyFloat(xx[i]) };
 
     /* assign initials */
     xx[0] = r0[0];

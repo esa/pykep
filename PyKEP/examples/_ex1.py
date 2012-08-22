@@ -12,7 +12,7 @@ try:
 		This constructs a PaGMO.problem object that represents a low-thrust transfer between Earth and Mars. The decision vector
 		contains [t0,T,mf,Vx,Vy,Vz,[throttles]] in the following units: [mjd2000, days, kg, m/s,m/s,m/s, [non-dimensional]]
 		"""
-		def __init__(self,mass=1250,Tmax=0.05,Isp=2500,Vinf=2.5,nseg=20):
+		def __init__(self,mass=1000,Tmax=0.05,Isp=2500,Vinf=3.0,nseg=20):
 			#First we call the constructor for the base PyGMO problem 
 			#(dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
 			super(mga_lt_earth_mars,self).__init__(6 + nseg*3,0,1,8 + nseg,nseg+1,1e-4)
@@ -28,7 +28,7 @@ try:
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
 			self.__nseg = nseg
-			self.set_bounds([4000,60,self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[6000,1500,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
+			self.set_bounds([2480,2400,self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[2490,2500,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
 
 		#This is the objective function
 		def _objfun_impl(self,x):
@@ -88,7 +88,7 @@ try:
 			fig = plt.figure()
 			ax = fig.gca(projection='3d')
 			#The Sun
-			ax.scatter(0,0,0, color='y')
+			ax.scatter([0],[0],[0], color='y')
 			#The leg
 			plot_sf_leg(ax, self.__leg, units=AU,N=10)
 			#The planets
@@ -98,13 +98,14 @@ try:
 			
 	def run_example1():
 		from PyGMO import algorithm, island
-		prob = mga_lt_earth_mars(nseg=20)
-		algo = algorithm.scipy_slsqp(max_iter = 2000, acc=1e-5)
-		#algo = algorithm.snopt(major_iter=500, opt_tol=1e-5, feas_tol=1e-11)
+		prob = mga_lt_earth_mars(nseg=15)
+		prob.high_fidelity(True)
+		algo = algorithm.scipy_slsqp(max_iter = 500, acc=1e-5)
+		#algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
-		print "Running Monotonic Basin Hopping ...."
+		print "Running Monotonic Basin Hopping .... this will take a while"
 		isl.evolve(1); isl.join()
 		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
 		prob.plot(isl.population.champion.x)

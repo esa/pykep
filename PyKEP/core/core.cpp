@@ -22,6 +22,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
+#include <boost/python.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/copy_const_reference.hpp>
@@ -29,6 +30,7 @@
 #include <boost/python/module.hpp>
 #include <boost/python/operators.hpp>
 #include <boost/python/register_ptr_to_python.hpp>
+#include <boost/python/converter/registry.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/overloads.hpp>
@@ -100,36 +102,49 @@ get_constant(SEC2DAY);
 get_constant(DAY2YEAR);
 get_constant(G0);
 
+#define PYKEP_REGISTER_CONVERTER(T,policy) \
+{\
+/* boost::python::type_info info = boost::python::type_id<T >(); \
+const boost::python::converter::registration* reg = boost::python::converter::registry::query(info); \
+if (reg == NULL) */ \
+{ \
+	to_tuple_mapping<T >();\
+	from_python_sequence<T,policy>();\
+}\
+}
+
+#define EXPOSE_CONSTANT(arg) \
+def("_get_"#arg,&get_##arg);
+
+typedef boost::array<double,8> array8D;
+typedef boost::array<double,11> array11D;
 
 BOOST_PYTHON_MODULE(_core) {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;
-    doc_options.disable_signatures();
-
-    // Exposing the arrays and vectors of doubles into python tuples
-    to_tuple_mapping<kep_toolbox::array6D>();
-    from_python_sequence<kep_toolbox::array6D,fixed_size_policy>();
-    to_tuple_mapping<kep_toolbox::array7D>();
-    from_python_sequence<kep_toolbox::array7D,fixed_size_policy>();
-    to_tuple_mapping<kep_toolbox::array3D>();
-    from_python_sequence<kep_toolbox::array3D,fixed_size_policy>();
-    to_tuple_mapping<std::vector<kep_toolbox::array3D> >();
-    from_python_sequence<std::vector<kep_toolbox::array3D>,variable_capacity_policy>();
-    to_tuple_mapping<std::vector<double> >();
-    from_python_sequence<std::vector<double>, variable_capacity_policy>();
-
-    // Constants.
-#define expose_constant(arg) \
-def("_get_"#arg,&get_##arg);
-    expose_constant(AU);
-    expose_constant(MU_SUN);
-    expose_constant(EARTH_VELOCITY);
-    expose_constant(DEG2RAD);
-    expose_constant(RAD2DEG);
-    expose_constant(DAY2SEC);
-    expose_constant(SEC2DAY);
-    expose_constant(DAY2YEAR);
-    expose_constant(G0);
+    doc_options.disable_signatures();    
+    
+    //Register std converters to python lists if not already registered by some other module
+    PYKEP_REGISTER_CONVERTER(std::vector<double>,variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array3D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array6D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(kep_toolbox::array7D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(array8D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(array11D,fixed_size_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<kep_toolbox::array3D>, variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<array8D>, variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<array11D>,variable_capacity_policy)
+    
+    // Expose the astrodynamical constants.
+    EXPOSE_CONSTANT(AU);
+    EXPOSE_CONSTANT(MU_SUN);
+    EXPOSE_CONSTANT(EARTH_VELOCITY);
+    EXPOSE_CONSTANT(DEG2RAD);
+    EXPOSE_CONSTANT(RAD2DEG);
+    EXPOSE_CONSTANT(DAY2SEC);
+    EXPOSE_CONSTANT(SEC2DAY);
+    EXPOSE_CONSTANT(DAY2YEAR);
+    EXPOSE_CONSTANT(G0);
 
     // Exposing enums
     enum_<kep_toolbox::epoch::type>("_epoch_type",
@@ -445,11 +460,10 @@ def("_get_"#arg,&get_##arg);
     
     //Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)
     def("propagate_taylor_s",&propagate_taylor_s_wrapper,
-        "PyKEP.propagate_taylor(r,v,m,u,s,[mu=1[,veff=1[,c=1[,alpha=1.5[,log10tol=-10,[log10rtol=-10]]]]]]])\n\n"
+        "PyKEP.propagate_taylor_s(r,v,m,u,s,mu,veff,c=1,alpha,log10tol,log10rtol])\n\n"
         "- r: start position, x,y,z\n"
         "- v: start velocity, vx,vy,vz\n"
         "- m: starting mass\n"
-        "- t: starting time\n"
         "- u: fixed inertial thrust, ux,uy,uz\n"
         "- s: propagation pseudo-time\n"
         "- mu: central body gravity constant\n\n"
@@ -460,7 +474,7 @@ def("_get_"#arg,&get_##arg);
         "- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
         "Returns a tuple containing r, v, m and t the final position, velocity, mass and time after the propagation pseudo-time s\n\n"
         "Example::\n\n"
-        "  r,v,m,t = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
+        "  r,v,m,t = propagate_taylor_s([1,0,0],[0,1,0],100,[0,0,0],pi/2,1.0,1.0,1.0,1.0,-10,-10)"
     );
 
     //Fly-by helper functions

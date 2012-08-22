@@ -25,7 +25,7 @@
 #include <vector>
 #include <numeric>
 
-#include "leg.h"
+#include "leg_s.h"
 #include "sc_state.h"
 #include "../astro_constants.h"
 #include "../core_functions/array3D_operations.h"
@@ -35,7 +35,7 @@
 namespace kep_toolbox{ namespace sims_flanagan{
 
 
-std::string leg::human_readable() const {
+std::string leg_s::human_readable() const {
 	std::ostringstream s;
 	s << *this;
 	return s.str();
@@ -52,41 +52,39 @@ std::string leg::human_readable() const {
  * \return reference to s
  *
  */
-std::ostream &operator<<(std::ostream &s, const leg &in ){
+std::ostream &operator<<(std::ostream &s, const leg_s &in ){
+	s << "Leg in the Sundmann Variable dt = cr^(alpha) ds: " << std::endl << std::endl;
 	s << std::setprecision(15);
-	s << "High-fidelity propagation: " << in.get_high_fidelity() << std::endl;
-	s << "Number of segments: " << in.throttles.size() << std::endl << std::endl;
+	s << "Number of segments: " << in.m_throttles.size() << std::endl;
+	s << "c: " << in.m_c << std::endl;
+	s << "alpha: " << in.m_alpha << std::endl;
+	s << "Taylor integration tol: " << in.m_tol << std::endl<< std::endl;
+
 	s << in.get_spacecraft() << std::endl;
 	s << "Central body gravitational parameter: " << in.get_mu() << std::endl << std::endl;
-	s << "Departure date: " << in.get_t_i() << ", mjd2000: " << in.get_t_i().mjd2000() << std::endl;
-	s << "Arrival date: " << in.get_t_f() << ", mjd2000: " << in.get_t_f().mjd2000() << std::endl;
-	s << "Initial mass: " << in.get_x_i().get_mass() << " kg" << std::endl;
-	s << "Final mass: " << in.get_x_f().get_mass() << " kg" << std::endl;
-	s << "State at departure: " << in.get_x_i() << std::endl;
-	s << "State at arrival: " << in.get_x_f() << std::endl;
+	s << "Departure date: " << in.get_ti() << ", mjd2000: " << in.get_ti().mjd2000() << std::endl;
+	s << "Arrival date: " << in.get_tf() << ", mjd2000: " << in.get_tf().mjd2000() << std::endl;
+	s << "Initial mass: " << in.get_xi().get_mass() << " kg" << std::endl;
+	s << "Final mass: " << in.get_xf().get_mass() << " kg" << std::endl;
+	s << "State at departure: " << in.get_xi() << std::endl;
+	s << "State at arrival: " << in.get_xf() << std::endl;
 
 	s << std::endl << "Throttles values: " << std::endl;
-	for (size_t i=0; i<in.get_throttles_size(); i++) {
-		s << "\t\t\t" << in.throttles[i].get_value()[0] << " " << in.throttles[i].get_value()[1] << " " << in.throttles[i].get_value()[2] << std::endl;
+	for (size_t i=0; i<in.m_throttles.size(); i++) {
+		s << "\t\t\t" << in.m_throttles[i].get_value()[0] << "\t" << in.m_throttles[i].get_value()[1] << "\t" << in.m_throttles[i].get_value()[2] << std::endl;
 	}
 
-	std::vector<double> temp(in.get_throttles_size());
-	in.get_throttles_con(temp.begin(), temp.end());
-	sc_state mism;
 	try
 	{
-		in.get_mismatch_con(mism);
 		s << std::endl << "Mismatch at the midpoint: ";
-		s << mism.get_position() << " " << mism.get_velocity() << " " << mism.get_mass() << std::endl;
+		s << in.compute_mismatch_con() << std::endl;
 	}
 	catch (...)
 	{
-		s << std::endl << "Mismatch at the midpoint: NUMERICAL ERROR!! COULD NOT CALCULATE THE STATE MISMATCH, CHECK YOUR DATA" << std::endl;
+		s << std::endl << "Mismatch at the midpoint: ERROR!! COULD NOT CALCULATE THE STATE MISMATCH, CHECK YOUR DATA" << std::endl;
 	}
 
-	s << "Throttle magnitude constraints (if negative satisfied): [";
-	for (size_t i=0;i< in.get_throttles_size();i++) s << temp[i] << " ";
-	s << "]";
+	s << "Throttle magnitude constraints (if <=0 are satisfied): " << in.compute_throttles_con();
 	return s;
 }
 

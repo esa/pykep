@@ -2,7 +2,7 @@ try:
 	from PyGMO.problem import base as PyGMO_problem
 
 	"""
-	This example on the use of PyKEP constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
+	This example constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
 	problem that can be then solved using one of the available PyGMO solvers. The problem is a non-linear constrained
 	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
 	are also demonstrated via the plot method. The interplanetary mission modelled is a lt-mga mission Earth-Venus-Mercury.
@@ -152,7 +152,7 @@ try:
 			ax = fig.gca(projection='3d')
 
 			#The Sun
-			ax.scatter(0,0,0, color='y')
+			ax.scatter([0],[0],[0], color='y')
 			#The legs
 			plot_sf_leg(ax, self.__leg1, units=AU,N=10)
 			plot_sf_leg(ax, self.__leg2, units=AU,N=10)
@@ -166,7 +166,7 @@ try:
 		from PyGMO import algorithm, island
 		prob = mga_lt_EVMe()
 		algo = algorithm.scipy_slsqp(max_iter = 500, acc =1e-5)
-		#algo = algorithm.snopt(major_iter=2000, opt_tol=1e-3, feas_tol=1e-9)
+		#algo = algorithm.snopt(major_iter=500, opt_tol=1e-3, feas_tol=1e-9)
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)

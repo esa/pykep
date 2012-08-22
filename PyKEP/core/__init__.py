@@ -16,6 +16,3 @@ epoch.epoch_type = _core._epoch_type
 
 
 
-	
-
-
