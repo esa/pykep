@@ -5,6 +5,7 @@ from core import *
 
 __doc__ = 'PyKEP is the answer'
 __all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples']
+__version__ = '1.1.3'
 
 """Detecting Installed Extensions"""
 # Fill up the __extensions__ variable with all detected extensions
