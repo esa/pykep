@@ -3,7 +3,8 @@ from PyKEP import epoch,DAY2SEC,planet_ss,MU_SUN,lambert_problem,propagate_lagra
 from math import pi, cos, sin, acos
 from scipy.linalg import norm
 """
-This class represents an mga-1DSM global optimization problem (single and multi-objective)
+This class represents a global optimization problem (box-bounded, continuous) relative to an interplanetary trajectory modelled
+as a Multiple Gravity Assist trajectory that allows one only Deep Space Manouvre between each leg.
 
 SEE : Izzo: "Global Optimization and Space Pruning for Spacecraft Trajectory Design, Spacecraft Trajectory Optimization, Conway, B. (Eds.), Cambridge University Press, pp.178-199, 2010)
 
@@ -41,7 +42,7 @@ class mga_1dsm(base_problem):
 		self.seq = seq
 		
 		#And we compute the bounds
-		lb = [t0[0].mjd2000,0.0,0.0,1e-5     ,0.0     ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n-1)
+		lb = [t0[0].mjd2000,0.0,0.0,0.0      ,1e-5    ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n-1)
 		ub = [t0[1].mjd2000,1.0,1.0,vinf*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n-1)
 		
 		#Accounting that each planet has a different safe radius......
@@ -55,7 +56,7 @@ class mga_1dsm(base_problem):
 	def _objfun_impl(self,x):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n))
-		#a[-i] = x[-1-(i-1)*4]
+
 		for i in xrange(self.__n-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
@@ -187,6 +188,7 @@ class mga_1dsm(base_problem):
 		#Last Delta-v
 		print "\nArrival at " + self.seq[-1].name
 		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		print "Arrival epoch: " + str(t_P[-1]) + " (" + str(t_P[-1].mjd2000) + " mjd2000) " 
 		print "Arrival Vinf: " + str(DV[-1]) + "m/s"
 		print "Total mission time: " + str(sum(T)/365.25) + " years"
 

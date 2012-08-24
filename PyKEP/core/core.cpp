@@ -426,7 +426,7 @@ BOOST_PYTHON_MODULE(_core) {
         )
         .def(repr(self))
         .def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>())
-        .def(init<>());;
+        .def(init<>());
 
     //Lagrangian propagator for keplerian orbits
     def("propagate_lagrangian", &propagate_lagrangian_wrapper,
