@@ -34,7 +34,7 @@
 #include "serialization.h"
 #include "config.h"
 // Serialization code (END)
-
+#include"exceptions.h"
 #include "astro_constants.h"
 #include "epoch.h"
 
@@ -121,6 +121,23 @@ public:
     double get_safe_radius() const {return safe_radius;}
 
     //@}
+    
+    /** @name Setters */
+    /// Setter for the planet safe-radius
+    /**
+     * Sets the safe-radius of the planet. This is intended to be the minimum distance
+     * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
+     * on the spacecraft trajectory
+     *
+     * \param[in] safe_radius Minimum allowed planetary distance (in planetary radius units)
+     * \throws value_error if safe_radius in < 1
+     */
+    void set_safe_radius(double sr) {
+        if (sr <=1) {
+            throw_value_error("Trying to set a safe_radius that is smaller than the planetary radius");
+        }
+        safe_radius = sr * get_radius();
+    }
 
     /** @name Ephemerides calculations */
     //@{

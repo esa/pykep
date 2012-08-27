@@ -236,10 +236,11 @@ BOOST_PYTHON_MODULE(_core) {
             "Example::\n\n"
             "  r,v = earth.eph(epoch(5433))"
         )
-        .add_property("safe_radius",&kep_toolbox::planet::get_safe_radius,
+        .add_property("safe_radius",&kep_toolbox::planet::get_safe_radius, &kep_toolbox::planet::set_safe_radius, 
             "The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
             "Example::\n\n"
             "  Rs = earth.safe_radius"
+            "  earth.safe_radius = 1.05"
             )
         .add_property("mu_self",&kep_toolbox::planet::get_mu_self,
             "The planet radius\n\n"
