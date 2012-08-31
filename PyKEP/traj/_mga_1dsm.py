@@ -297,3 +297,11 @@ class mga_1dsm(base_problem):
 		ub[3] = vinf * 1000
 		self.set_bounds(lb,ub)
 		
+	def extract_lt_ic(self, x):
+		"""
+		Extract an initial guess to generate a possible low-thrust trajectory using mga_lt_nep
+		"""
+		x = list()
+		
+		
+		
