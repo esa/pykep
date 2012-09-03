@@ -296,6 +296,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	y[0] = r[1]/units
 	z[0] = r[2]/units
 	
+	
 	#We compute all points by propagation
 	for i,t in enumerate(throttles[:fwd_seg]):
 		dt = (t.end.mjd - t.start.mjd)*DAY2SEC

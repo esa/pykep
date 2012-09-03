@@ -20,12 +20,12 @@ class mga_lt_nep(base_problem):
 	"""
 	Constructs an mga_lt problem
 	
-	USAGE: opt_prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], nseg = [10]*2, 
+	USAGE: opt_prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
 	multi_objective = False, fb_rel_vel = 6)
 
 	* seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
-	* nseg: list of integers containing the number of segments to be used for each leg (len(nseg) = len(seq)-1)
+	* n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
 	* t0: list of PyKEP epochs defining the launch window
 	* T: minimum and maximum time of each leg (days)
 	* vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
@@ -36,18 +36,18 @@ class mga_lt_nep(base_problem):
 	* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
 	* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], nseg = [10]*2, 
+	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
 	multi_objective = False, fb_rel_vel = 6):
 		#1) We comute the problem dimensions .... and call the base problem constructor
 		self.__n_legs = len(seq) - 1
 		n_fb = self.__n_legs - 1
 		# 1a) The decision vector length
-		dim = 1 + self.__n_legs * 8 + sum(nseg) * 3
+		dim = 1 + self.__n_legs * 8 + sum(n_seg) * 3
 		# 1b) The total number of constraints (mismatch + fly-by + boundary + throttles
-		c_dim = self.__n_legs * 7 + n_fb * 2 + 2 + sum(nseg)
+		c_dim = self.__n_legs * 7 + n_fb * 2 + 2 + sum(n_seg)
 		# 1c) The number of inequality constraints (boundary + fly-by angle + throttles)
-		c_ineq_dim = 2 + n_fb + sum(nseg)
+		c_ineq_dim = 2 + n_fb + sum(n_seg)
 		# 1d) the number of objectives
 		f_dim = multi_objective + 1
 		#First we call the constructor for the base PyGMO problem 
@@ -59,7 +59,7 @@ class mga_lt_nep(base_problem):
 		#public:
 		self.seq = seq
 		#private:
-		self.__nseg = nseg
+		self.__n_seg = n_seg
 		self.__Vinf_dep = Vinf_dep*1000
 		self.__Vinf_arr = Vinf_arr*1000
 		self.__sc = spacecraft(mass,Tmax,Isp)
@@ -68,13 +68,13 @@ class mga_lt_nep(base_problem):
 		self.__leg.set_spacecraft(self.__sc)
 		fb_rel_vel*=1000
 		#3) We compute the bounds
-		lb = [t0[0].mjd2000] + [0, mass / 2, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * self.__n_legs + [-1,-1,-1] * sum(self.__nseg)
-		ub = [t0[1].mjd2000] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel] * self.__n_legs + [1,1,1] * sum(self.__nseg)
+		lb = [t0[0].mjd2000] + [0, mass / 2, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * self.__n_legs + [-1,-1,-1] * sum(self.__n_seg)
+		ub = [t0[1].mjd2000] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel] * self.__n_legs + [1,1,1] * sum(self.__n_seg)
 		#3a ... and account for the bounds on the vinfs......
 		lb[3:6] = [-self.__Vinf_dep]*3
 		ub[3:6] = [self.__Vinf_dep]*3
-		lb[-sum(self.__nseg)*3-3:-sum(self.__nseg)*3] = [-self.__Vinf_arr]*3
-		ub[-sum(self.__nseg)*3-3:-sum(self.__nseg)*3] = [self.__Vinf_arr]*3
+		lb[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [-self.__Vinf_arr]*3
+		ub[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [self.__Vinf_arr]*3
 		# 3b... and for the time of flight
 		lb[1:1+8*self.__n_legs:8] = [el[0] for el in T]
 		ub[1:1+8*self.__n_legs:8] = [el[1] for el in T]
@@ -115,7 +115,7 @@ class mga_lt_nep(base_problem):
 			x0 = sc_state(r_P[i],v,m0)
 			v = [a+b for a,b in zip(v_P[i+1],x[(6 + i * 8):(11 + i * 8)])]
 			xe = sc_state(r_P[i+1], v ,x[2 + i * 8])
-			throttles = x[(1 + 8*self.__n_legs + 3*sum(self.__nseg[:i])):(1 + 8*self.__n_legs + 3*sum(self.__nseg[:i])+3*self.__nseg[i])]
+			throttles = x[(1 + 8*self.__n_legs + 3*sum(self.__n_seg[:i])):(1 + 8*self.__n_legs + 3*sum(self.__n_seg[:i])+3*self.__n_seg[i])]
 			self.__leg.set(t_P[i],x0,throttles,t_P[i+1],xe)
 			#update mass!
 			m0 = x[2+8*i]
@@ -194,7 +194,7 @@ class mga_lt_nep(base_problem):
 			x0 = sc_state(r_P[i],v,m0)
 			v = [a+b for a,b in zip(v_P[i+1],x[(6 + i * 8):(11 + i * 8)])]
 			xe = sc_state(r_P[i+1], v ,x[2 + i * 8])
-			throttles = x[(1 +8 * self.__n_legs + 3*sum(self.__nseg[:i])):(1 +8 * self.__n_legs + 3*sum(self.__nseg[:i])+3*self.__nseg[i])]
+			throttles = x[(1 +8 * self.__n_legs + 3*sum(self.__n_seg[:i])):(1 +8 * self.__n_legs + 3*sum(self.__n_seg[:i])+3*self.__n_seg[i])]
 			self.__leg.set(t_P[i],x0,throttles,t_P[i+1],xe)
 			#update mass!
 			m0 = x[2+8*i]
@@ -205,4 +205,74 @@ class mga_lt_nep(base_problem):
 			plot_planet(ax, planet, t_P[i], units=AU, legend = True,color=(0.7,0.7,1))
 
 		plt.show()
-			
+		
+	def high_fidelity(self, boolean):
+		self.__leg.high_fidelity = boolean
+		
+	def ic_from_mga_1dsm(self,x):
+	  
+		from math import pi, cos, sin, acos
+		from scipy.linalg import norm
+		from PyKEP import propagate_lagrangian,lambert_problem, DAY2SEC, fb_prop
+	  
+		retval = list([0.0]*self.dimension)
+		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
+		T = list([0]*(self.__n_legs))
+
+		for i in xrange(self.__n_legs-1):	
+			j = i+1;
+			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
+		T[0] = x[5] - sum(T)
+		
+		retval[0] = x[0]
+		for i in xrange(self.__n_legs):
+			retval[1+8*i] = T[i]
+			retval[2+8*i] = self.__sc.mass
+		
+		#2 - We compute the epochs and ephemerides of the planetary encounters
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
+		
+		for i,planet in enumerate(self.seq):
+			t_P[i] = epoch(x[0] + sum(T[0:i]))
+			r_P[i],v_P[i] = self.seq[i].eph(t_P[i])
+
+		#3 - We start with the first leg
+		theta = 2*pi*x[1]
+		phi = acos(2*x[2]-1)-pi/2
+
+		Vinfx = x[3]*cos(phi)*cos(theta)
+		Vinfy =	x[3]*cos(phi)*sin(theta)
+		Vinfz = x[3]*sin(phi)
+		
+		retval[3:6] = [Vinfx,Vinfy,Vinfz]
+
+		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
+		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,MU_SUN)
+
+		#Lambert arc to reach seq[1]
+		dt = (1-x[4])*T[0]*DAY2SEC
+		l = lambert_problem(r,r_P[1],dt,MU_SUN)
+		v_end_l = l.get_v2()[0]
+		v_beg_l = l.get_v1()[0]
+
+		retval[6:9] = [a-b for a,b in zip(v_end_l,v_P[1])]
+
+		#4 - And we proceed with each successive leg
+		for i in range(1,self.__n_legs):
+			#Fly-by 
+			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
+			retval[3+i*8:6+i*8] = [a-b for a,b in zip(v_out,v_P[i])]
+			#s/c propagation before the DSM
+			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,MU_SUN)
+			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
+			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
+			l = lambert_problem(r,r_P[i+1],dt,MU_SUN)
+			v_end_l = l.get_v2()[0]
+			v_beg_l = l.get_v1()[0]
+			#DSM occuring at time nu2*T2
+			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
+			retval[6+i*8:9+i*8] = [a-b for a,b in zip(v_end_l,v_P[i+1])]
+		return retval

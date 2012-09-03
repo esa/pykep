@@ -30,8 +30,8 @@ class mga_1dsm(base_problem):
 	* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
 	"""
 	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False):
-		self.__n = len(seq) - 1
-		dim = 6 + (self.__n-1) * 4
+		self.__n_legs = len(seq) - 1
+		dim = 6 + (self.__n_legs-1) * 4
 		obj_dim = multi_objective + 1
 		#First we call the constructor for the base PyGMO problem 
 		#As our problem is n dimensional, box-bounded (may be multi-objective), we write
@@ -42,8 +42,8 @@ class mga_1dsm(base_problem):
 		self.seq = seq
 		
 		#And we compute the bounds
-		lb = [t0[0].mjd2000,0.0,0.0,0.0      ,1e-5    ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n-1)
-		ub = [t0[1].mjd2000,1.0,1.0,vinf*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n-1)
+		lb = [t0[0].mjd2000,0.0,0.0,0.0      ,1e-5    ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n_legs-1)
+		ub = [t0[1].mjd2000,1.0,1.0,vinf*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n_legs-1)
 		
 		#Accounting that each planet has a different safe radius......
 		for i,pl in enumerate(seq[1:-1]):
@@ -55,18 +55,18 @@ class mga_1dsm(base_problem):
 	#Objective function
 	def _objfun_impl(self,x):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
+		T = list([0]*(self.__n_legs))
 
-		for i in xrange(self.__n-1):	
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -93,7 +93,7 @@ class mga_1dsm(base_problem):
 		DV[0] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			#Fly-by 
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
 			#s/c propagation before the DSM
@@ -119,18 +119,18 @@ class mga_1dsm(base_problem):
 		Prints human readable information on the trajectory represented by the decision vector x
 		"""
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
+		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n-1):	
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -166,7 +166,7 @@ class mga_1dsm(base_problem):
 		print "DSM magnitude: " + str(DV[0]) + "m/s"
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			print "\nleg no. " + str(i+1) + ": " + self.seq[i].name + " to " + self.seq[i+1].name 
 			print "Duration: " + str(T[i]) + "days"
 			#Fly-by 
@@ -209,18 +209,18 @@ class mga_1dsm(base_problem):
 		ax.scatter(0,0,0, color='y')
 		
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
+		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n-1):	
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -250,7 +250,7 @@ class mga_1dsm(base_problem):
 		DV[0] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			#Fly-by 
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
 			#s/c propagation before the DSM
@@ -296,12 +296,3 @@ class mga_1dsm(base_problem):
 		lb[3] = 0
 		ub[3] = vinf * 1000
 		self.set_bounds(lb,ub)
-		
-	def extract_lt_ic(self, x):
-		"""
-		Extract an initial guess to generate a possible low-thrust trajectory using mga_lt_nep
-		"""
-		x = list()
-		
-		
-		
