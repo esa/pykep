@@ -1,4 +1,4 @@
-def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', legend = False):
+def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=80, legend = False):
 	"""
 	Plots the planet position and its orbit
 		      
@@ -8,6 +8,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 	  * t0:		PyKEP.epoch object indicating when we want to plot the planet position
 	  * units:	the length unit to be used in the plot
 	  * color:	matplotlib color to use to plot the line
+	  * s:		planet size (pixel^2)
 	  * legend	when True it plots also the legend with the planet name
 	  
 	EXAMPLE:
@@ -53,7 +54,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 	else:
 		label=None
 	ax.plot(x, y, z, label=label, c=color)
-	ax.scatter([x[0]],[y[0]],[z[0]])
+	ax.scatter([x[0]],[y[0]],[z[0]], s=s, marker='o', alpha=0.8, c = color)
 	
 	if legend:
 		ax.legend()
