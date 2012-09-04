@@ -485,7 +485,7 @@ BOOST_PYTHON_MODULE(_core) {
         "- vout: vout, cartesian coordinates of the relative hyperbolic velocity after the fly-by\n"
         "- pl: fly-by planet\n\n"
         "Returns a tuple containing (eq, ineq). \n"
-        "  eq represents the violation of the equality constraint |vin|² =|vout|².\n"
+        "  eq represents the violation of the equality constraint norm(vin)**2 = norm(vout)**2.\n"
         "  ineq represents the violation of the inequality constraint on the hyperbola asymptote maximum deflection\n\n"
         "Example::\n\n"
         "  v2_eq, delta_ineq = fb_con(vin, vout, planet_ss('earth'))\n"

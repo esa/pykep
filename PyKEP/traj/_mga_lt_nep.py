@@ -2,43 +2,43 @@ from PyGMO.problem import base as base_problem
 from PyKEP import planet_ss,epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from PyKEP.sims_flanagan import leg, spacecraft, sc_state
 
-"""
-This class represents, as a global optimization problem (linearly constrained, high diemensional), a low-thrust
-interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with legs represented by an impulsive transcription...
 
-The decision vector (chromosome) is:
-[t0] + 
-[T1, mf1, Vxi1, Vyi1, Vzi1, Vxf1, Vyf1, Vzf1] +
-[T2, mf2, Vxi2, Vyi2, Vzi2, Vxf2, Vyf2, Vzf2] + .....
-[throttles1] + [throttles2] + ....
-
-SEE : Yam, C.H., di Lorenzo, D., and Izzo, D.,	 Low-Thrust Trajectory Design as a Constrained Global Optimization Problem, 
-Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
-"""
 
 class mga_lt_nep(base_problem):
 	"""
-	Constructs an mga_lt problem
-	
-	USAGE: opt_prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
-	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
-	multi_objective = False, fb_rel_vel = 6)
+	This class represents, as a global optimization problem (linearly constrained, high diemensional), a low-thrust
+	interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with legs represented by an impulsive transcription...
 
-	* seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
-	* n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
-	* t0: list of PyKEP epochs defining the launch window
-	* T: minimum and maximum time of each leg (days)
-	* vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
-	* vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
-	* mass: spacecraft starting mass
-	* Tmax: maximum thrust
-	* Isp: engine specific impulse
-	* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
-	* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
+	The decision vector (chromosome) is:
+	[t0] + 
+	[T1, mf1, Vxi1, Vyi1, Vzi1, Vxf1, Vyf1, Vzf1] +
+	[T2, mf2, Vxi2, Vyi2, Vzi2, Vxf2, Vyf2, Vzf2] + .....
+	[throttles1] + [throttles2] + ....
+
+	SEE : Yam, C.H., di Lorenzo, D., and Izzo, D.,	 Low-Thrust Trajectory Design as a Constrained Global Optimization Problem, 
+	Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
 	"""
 	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
 	multi_objective = False, fb_rel_vel = 6):
+		"""
+		prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
+		t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
+		multi_objective = False, fb_rel_vel = 6)
+
+		* seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
+		* n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
+		* t0: list of PyKEP epochs defining the launch window
+		* T: minimum and maximum time of each leg (days)
+		* vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
+		* vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
+		* mass: spacecraft starting mass
+		* Tmax: maximum thrust
+		* Isp: engine specific impulse
+		* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
+		* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
+		"""
+		
 		#1) We comute the problem dimensions .... and call the base problem constructor
 		self.__n_legs = len(seq) - 1
 		n_fb = self.__n_legs - 1
@@ -155,6 +155,13 @@ class mga_lt_nep(base_problem):
 	
 	#And this helps visualizing the trajectory
 	def plot(self,x):
+		"""	
+		Plots the trajectory represented by the decision vector x
+		
+		Example::
+		
+		  prob.plot(x)
+		"""
 		import matplotlib as mpl
 		from mpl_toolkits.mplot3d import Axes3D
 		import matplotlib.pyplot as plt
@@ -207,10 +214,24 @@ class mga_lt_nep(base_problem):
 		plt.show()
 		
 	def high_fidelity(self, boolean):
+		"""	
+		Sets the trajectory to high fidelity mode
+		
+		Example::
+		
+		  prob.high_fidelity(True)
+		"""
 		self.__leg.high_fidelity = boolean
 		
 	def ic_from_mga_1dsm(self,x):
-	  
+		"""
+		Returns an initial guess for the low-thrust trajectory, converting the mga_1dsm solution x_dsm. The user
+		is responsible that this operation actually makes sense (no checks)
+		
+		Example::
+		
+		  x_lt= prob.ic_from_mga_1dsm(x)
+		"""
 		from math import pi, cos, sin, acos
 		from scipy.linalg import norm
 		from PyKEP import propagate_lagrangian,lambert_problem, DAY2SEC, fb_prop

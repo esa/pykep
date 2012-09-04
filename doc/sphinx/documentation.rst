@@ -2,7 +2,7 @@
 PyKEP Documentation
 ===================
 
-List of main PyKEP elements in the core module
+The core module
 ==============================================
 
 =========================================	========= 	================================================
@@ -23,7 +23,7 @@ Name						Type      	Description
 :func:`PyKEP.fb_prop`   			function	propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
 =========================================  	=========	================================================
 
-List of main PyKEP elements in the sims_flanagan module
+The sims_flanagan module
 =======================================================
 
 =========================================	========= 	================================================
@@ -34,7 +34,18 @@ Name						Type      	Description
 :class:`PyKEP.sims_flanagan.leg`		class		represents one leg in the Sims-Flanagan model
 =========================================  	=========	================================================
 
-List of constants defined within PyKEP
+The traj module
+=======================================================
+
+=========================================	========= 	================================================
+Name						Type      	Description
+=========================================	=========	================================================
+:class:`PyKEP.traj.mga_1dsm`			class		A generic multiple Gravity Assist Trajectory with one deep space manouvre optimization problem (requires PyGMO)
+:class:`PyKEP.traj.mga_lt_nep`			class		A generic multiple Gravity Assist Trajectory low-thrust optimization problem (requires PyGMO)
+=========================================  	=========	================================================
+
+
+Constants defined within PyKEP namespace
 =========================================
 
 =================================	=============================================================================
@@ -159,3 +170,27 @@ Detailed Documentation
 .. autofunction:: PyKEP.fb_con(*args)
 
 .. autofunction:: PyKEP.fb_prop(*args)
+
+.. autoclass:: PyKEP.traj.mga_1dsm(*args)
+ 
+   .. automethod:: PyKEP.traj.mga_1dsm.__init__(*args)
+   
+   .. automethod:: PyKEP.traj.mga_1dsm.set_tof(*args)
+   
+   .. automethod:: PyKEP.traj.mga_1dsm.set_launch_window(*args)
+   
+   .. automethod:: PyKEP.traj.mga_1dsm.set_vinf(*args)
+   
+   .. automethod:: PyKEP.traj.mga_1dsm.pretty(*args)
+   
+   .. automethod:: PyKEP.traj.mga_1dsm.plot(*args)
+   
+.. autoclass:: PyKEP.traj.mga_lt_nep(*args)
+ 
+   .. automethod:: PyKEP.traj.mga_lt_nep.__init__(*args)
+   
+   .. automethod:: PyKEP.traj.mga_lt_nep.high_fidelity(*args)
+   
+   .. automethod:: PyKEP.traj.mga_lt_nep.ic_from_mga_1dsm(*args)
+       
+   .. automethod:: PyKEP.traj.mga_lt_nep.plot(*args)
