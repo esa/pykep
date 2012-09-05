@@ -116,6 +116,7 @@ try:
 
 		#This transforms the leg into a high fidelity one
 		def high_fidelity(self,boolean):
+			self.reset_caches()
 			self.__leg.high_fidelity = boolean
 
 		#And this help visualizing the trajectory

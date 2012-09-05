@@ -18,7 +18,7 @@ class mga_1dsm(base_problem):
 	NOTE: The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
 
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False):
+	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, add_vinf=True, multi_objective = False):
 		"""
 		prob = mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False)
 
@@ -28,6 +28,7 @@ class mga_1dsm(base_problem):
 		* vinf: maximum launch hyperbolic velocity allowed
 		* multi-objective: when True defines the problem as a multi-objective problem, minimizing total DV and time of flight
 		"""
+		self.__add_vinf = add_vinf
 		self.__n_legs = len(seq) - 1
 		dim = 6 + (self.__n_legs-1) * 4
 		obj_dim = multi_objective + 1
@@ -106,6 +107,9 @@ class mga_1dsm(base_problem):
 
 		#Last Delta-v
 		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		
+		if self.__add_vinf:
+			DV[0] += x[3]
 
 		if self.f_dimension == 1:
 			return (sum(DV),)

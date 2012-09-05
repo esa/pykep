@@ -20,7 +20,7 @@ class mga_lt_nep(base_problem):
 	"""
 	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
-	multi_objective = False, fb_rel_vel = 6):
+	multi_objective = False, fb_rel_vel = 6, high_fidelity=False):
 		"""
 		prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 		t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
@@ -39,7 +39,7 @@ class mga_lt_nep(base_problem):
 		* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
 		"""
 		
-		#1) We comute the problem dimensions .... and call the base problem constructor
+		#1) We compute the problem dimensions .... and call the base problem constructor
 		self.__n_legs = len(seq) - 1
 		n_fb = self.__n_legs - 1
 		# 1a) The decision vector length
@@ -66,6 +66,7 @@ class mga_lt_nep(base_problem):
 		self.__leg = leg()
 		self.__leg.set_mu(MU_SUN)
 		self.__leg.set_spacecraft(self.__sc)
+		self.__leg.high_fidelity = high_fidelity
 		fb_rel_vel*=1000
 		#3) We compute the bounds
 		lb = [t0[0].mjd2000] + [0, mass / 2, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * self.__n_legs + [-1,-1,-1] * sum(self.__n_seg)
@@ -81,6 +82,8 @@ class mga_lt_nep(base_problem):
 		
 		#4) And we set the bounds
 		self.set_bounds(lb,ub)
+		
+
 
 	#Objective function
 	def _objfun_impl(self,x):
@@ -144,8 +147,8 @@ class mga_lt_nep(base_problem):
 			ceq[3+i*7] /= EARTH_VELOCITY
 			ceq[4+i*7] /= EARTH_VELOCITY
 			ceq[5+i*7] /= EARTH_VELOCITY
-			ceq[6+i*7] /= 1000
-
+			ceq[6+i*7] /= self.__sc.mass
+			
 		#We assemble the constraint vector
 		retval = list()
 		retval.extend(ceq)
@@ -221,12 +224,17 @@ class mga_lt_nep(base_problem):
 		
 		  prob.high_fidelity(True)
 		"""
+		# We avoid here that objfun and constraint are kept that have been evaluated wrt a different fidelity
+		self.reset_caches()
+		# We set the propagation fidelity
 		self.__leg.high_fidelity = boolean
 		
 	def ic_from_mga_1dsm(self,x):
 		"""
 		Returns an initial guess for the low-thrust trajectory, converting the mga_1dsm solution x_dsm. The user
-		is responsible that this operation actually makes sense (no checks)
+		is responsible that this operation actually makes sense (no checks). The conversion is done by importing in the
+		low-thrust encoding a) the launch date b) all the legs durations, c) the in and out relative velocities at each planet.
+		All throttles are put to zero.
 		
 		Example::
 		
@@ -297,3 +305,29 @@ class mga_lt_nep(base_problem):
 			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
 			retval[6+i*8:9+i*8] = [a-b for a,b in zip(v_end_l,v_P[i+1])]
 		return retval
+		
+	def double_segments(self, x):
+		"""
+		Returns the decision vector encoding a low trust trajectory having double the number of segments with respect to x
+		and a 'similar' throttle history. In case high fidelity is True, and x is a feasible trajectory, the returned decision vector
+		also encodes a feasible trajectory that can be further optimized
+		
+		Example::
+		  
+		  prob = traj.mga_lt_nep(nseg=[[10],[20]])
+		  pop = population(prob,1)
+		  .......OPTIMIZE.......
+		  x = prob.double_segments(pop.champion.x)
+		  prob = traj.mga_lt_nep(nseg=[[20],[40]])
+		  pop = population(prob)
+		  pop.push_back(x)
+		  .......OPTIMIZE AGAIN......
+		"""
+		y = list()
+		y.extend(x[:-sum(self.__n_seg)*3])
+		for i in range(sum(self.__n_seg)):
+			y.extend(x[-(sum(self.__n_seg)-i)*3:-(sum(self.__n_seg)-1-i)*3]*2)
+		y.extend(x[-3:]*2)
+		return y
+		
+		
