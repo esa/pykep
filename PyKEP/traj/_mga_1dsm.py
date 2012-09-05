@@ -18,7 +18,7 @@ class mga_1dsm(base_problem):
 	NOTE: The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
 
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, add_vinf=True, multi_objective = False):
+	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, add_vinf=False, multi_objective = False):
 		"""
 		prob = mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False)
 
