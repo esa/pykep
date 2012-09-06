@@ -59,8 +59,8 @@ class mga_lt_nep(base_problem):
 		self.seq = seq
 		#private:
 		self.__n_seg = n_seg
-		self.__Vinf_dep = Vinf_dep*1000
-		self.__Vinf_arr = Vinf_arr*1000
+		self.__vinf_dep = vinf_dep*1000
+		self.__vinf_arr = vinf_arr*1000
 		self.__sc = spacecraft(mass,Tmax,Isp)
 		self.__leg = leg()
 		self.__leg.set_mu(MU_SUN)
@@ -71,13 +71,13 @@ class mga_lt_nep(base_problem):
 		lb = [t0[0].mjd2000] + [0, mass / 2, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * self.__n_legs + [-1,-1,-1] * sum(self.__n_seg)
 		ub = [t0[1].mjd2000] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel] * self.__n_legs + [1,1,1] * sum(self.__n_seg)
 		#3a ... and account for the bounds on the vinfs......
-		lb[3:6] = [-self.__Vinf_dep]*3
-		ub[3:6] = [self.__Vinf_dep]*3
-		lb[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [-self.__Vinf_arr]*3
-		ub[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [self.__Vinf_arr]*3
+		lb[3:6] = [-self.__vinf_dep]*3
+		ub[3:6] = [self.__vinf_dep]*3
+		lb[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [-self.__vinf_arr]*3
+		ub[-sum(self.__n_seg)*3-3:-sum(self.__n_seg)*3] = [self.__vinf_arr]*3
 		# 3b... and for the time of flight
-		lb[1:1+8*self.__n_legs:8] = [el[0] for el in T]
-		ub[1:1+8*self.__n_legs:8] = [el[1] for el in T]
+		lb[1:1+8*self.__n_legs:8] = [el[0] for el in tof]
+		ub[1:1+8*self.__n_legs:8] = [el[1] for el in tof]
 		
 		#4) And we set the bounds
 		self.set_bounds(lb,ub)
@@ -126,9 +126,9 @@ class mga_lt_nep(base_problem):
 
 		#Adding the boundary constraints
 		#departure
-		v_dep_con = (x[3] ** 2  + x[4] ** 2  + x[5] **2  - self.__Vinf_dep ** 2) / (EARTH_VELOCITY**2)
+		v_dep_con = (x[3] ** 2  + x[4] ** 2  + x[5] **2  - self.__vinf_dep ** 2) / (EARTH_VELOCITY**2)
 		#arrival
-		v_arr_con = (x[6 + (self.__n_legs-1)*8]**2 + x[7+ (self.__n_legs-1)*8]**2 + x[8+ (self.__n_legs-1)*8]**2 - self.__Vinf_arr ** 2) / (EARTH_VELOCITY**2)
+		v_arr_con = (x[6 + (self.__n_legs-1)*8]**2 + x[7+ (self.__n_legs-1)*8]**2 + x[8+ (self.__n_legs-1)*8]**2 - self.__vinf_arr ** 2) / (EARTH_VELOCITY**2)
 		cineq.append(v_dep_con*100)
 		cineq.append(v_arr_con*100)
 
