@@ -2,8 +2,6 @@ from PyGMO.problem import base as base_problem
 from PyKEP import planet_ss,epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from PyKEP.sims_flanagan import leg, spacecraft, sc_state
 
-
-
 class mga_lt_nep(base_problem):
 	"""
 	This class represents, as a global optimization problem (linearly constrained, high diemensional), a low-thrust
@@ -19,17 +17,17 @@ class mga_lt_nep(base_problem):
 	Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
 	"""
 	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
-	t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
+	t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], vinf_dep=2.5, vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
 	multi_objective = False, fb_rel_vel = 6, high_fidelity=False):
 		"""
 		prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 		t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
-		multi_objective = False, fb_rel_vel = 6)
+		multi_objective = False, fb_rel_vel = 6, high_fidelity=False)
 
 		* seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
 		* n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
 		* t0: list of PyKEP epochs defining the launch window
-		* T: minimum and maximum time of each leg (days)
+		* tof: minimum and maximum time of each leg (days)
 		* vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
 		* vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
 		* mass: spacecraft starting mass
@@ -37,6 +35,7 @@ class mga_lt_nep(base_problem):
 		* Isp: engine specific impulse
 		* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
 		* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
+		* high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.
 		"""
 		
 		#1) We compute the problem dimensions .... and call the base problem constructor
