@@ -18,7 +18,13 @@ class mga_1dsm(base_problem):
 	NOTE: The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
 
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, add_vinf=False, multi_objective = False):
+	def __init__(self, 
+			seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], 
+			t0 = [epoch(0),epoch(1000)], 
+			tof = [1.0,5.0], 
+			vinf = 2.5, 
+			add_vinf=False, 
+			multi_objective = False):
 		"""
 		prob = mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False)
 
@@ -26,6 +32,7 @@ class mga_1dsm(base_problem):
 		* t0:   list of PyKEP epochs defining the launch window
 		* tof:  minimum and maximum time of flight allowed (in years)
 		* vinf: maximum launch hyperbolic velocity allowed
+		* add_vinf: consider the launch vinf in the objective function
 		* multi-objective: when True defines the problem as a multi-objective problem, minimizing total DV and time of flight
 		"""
 		self.__add_vinf = add_vinf

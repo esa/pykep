@@ -16,9 +16,19 @@ class mga_lt_nep(base_problem):
 	SEE : Yam, C.H., di Lorenzo, D., and Izzo, D.,	 Low-Thrust Trajectory Design as a Constrained Global Optimization Problem, 
 	Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
-	t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], vinf_dep=2.5, vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
-	multi_objective = False, fb_rel_vel = 6, high_fidelity=False):
+	def __init__(self,
+		seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], 
+		n_seg = [10]*2, 
+		t0 = [epoch(0),epoch(1000)], 
+		tof = [[200,500],[200,500]], 
+		vinf_dep=2.5, 
+		vinf_arr=2.0, 
+		mass=4000.0, 
+		Tmax=1.0, 
+		Isp=2000.0,
+		fb_rel_vel = 6, 
+		multi_objective = False, 
+		high_fidelity=False):
 		"""
 		prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2, 
 		t0 = [epoch(0),epoch(1000)], T = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
@@ -33,8 +43,8 @@ class mga_lt_nep(base_problem):
 		* mass: spacecraft starting mass
 		* Tmax: maximum thrust
 		* Isp: engine specific impulse
-		* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
 		* fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
+		* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
 		* high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.
 		"""
 		
