@@ -22,19 +22,22 @@ class mga_1dsm(base_problem):
 			seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], 
 			t0 = [epoch(0),epoch(1000)], 
 			tof = [1.0,5.0], 
-			vinf = 2.5, 
+			vinf = [0.5,2.5]
 			add_vinf=False, 
 			multi_objective = False):
 		"""
-		prob = mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False)
+		Constructs an mga_1dsm problem
 
-		* seq:  list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
-		* t0:   list of PyKEP epochs defining the launch window
-		* tof:  minimum and maximum time of flight allowed (in years)
-		* vinf: maximum launch hyperbolic velocity allowed
-		* add_vinf: consider the launch vinf in the objective function
-		* multi-objective: when True defines the problem as a multi-objective problem, minimizing total DV and time of flight
+		USAGE: traj.mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf = False)
+
+		* seq: list of PyKEP planets defining the encounter sequence (including the starting launch)
+		* t0: list of two epochs defining the launch window
+		* tof: list of two floats defining the minimum and maximum allowed mission lenght (years)
+		* vinf: list of two floats defining the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec
+		* multi_objective: when True constructs a multiobjective problem (dv, T)
+		* add_vinf: when True the computed Dv includes the initial hyperbolic velocity (at launch)
 		"""
+		
 		self.__add_vinf = add_vinf
 		self.__n_legs = len(seq) - 1
 		dim = 6 + (self.__n_legs-1) * 4
@@ -48,8 +51,8 @@ class mga_1dsm(base_problem):
 		self.seq = seq
 		
 		#And we compute the bounds
-		lb = [t0[0].mjd2000,0.0,0.0,0.0      ,1e-5    ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n_legs-1)
-		ub = [t0[1].mjd2000,1.0,1.0,vinf*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n_legs-1)
+		lb = [t0[0].mjd2000,0.0,0.0,vinf[0]*1000,1e-5    ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n_legs-1)
+		ub = [t0[1].mjd2000,1.0,1.0,vinf[1]*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n_legs-1)
 		
 		#Accounting that each planet has a different safe radius......
 		for i,pl in enumerate(seq[1:-1]):
