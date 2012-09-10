@@ -223,7 +223,7 @@ BOOST_PYTHON_MODULE(_core) {
             "- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)\n"
             "- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)\n"
             "- radius: body radius (SI units, i.e. meters)\n"
-            "- safe_radius: body distance safe for a spacecraft fly-by\n"
+            "- safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)\n"
             "- name: body name\n\n"
             "NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb` to instantiate common objects"
             "Example::\n\n"
