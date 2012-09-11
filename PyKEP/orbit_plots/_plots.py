@@ -32,7 +32,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=8
 	a = plnt.orbital_elements[0]
 	
 	#orbital period in days
-	T = 2*pi*sqrt(a**3/MU_SUN) * SEC2DAY
+	T = 2*pi*sqrt(a**3/plnt.mu_central_body) * SEC2DAY
 	
 	#points where the orbit will be plotted
 	when = np.linspace(0,T,N)
@@ -158,7 +158,7 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 	#We define the integration time ...
 	dt = t / (N-1)
 	
-	#... and calcuate the cartesian components for r
+	#... and calculate the cartesian components for r
 	x = [0.0]*N
 	y = [0.0]*N
 	z = [0.0]*N
@@ -176,7 +176,7 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 	else:
 		label = None
 	ax.plot(x, y, z, c=color, label=label)
-	
+
 	if legend:
 		ax.legend()
 		

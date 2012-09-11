@@ -340,4 +340,3 @@ class mga_1dsm(base_problem):
 	def human_readable_extra(self):
              return ("\n\t Sequence: " + [pl.name for pl in self.seq].__repr__() +
 		     "\n\t Add launcher vinf to the objective?: " + self.__add_vinf.__repr__())
-             
