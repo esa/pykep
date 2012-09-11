@@ -284,6 +284,10 @@ BOOST_PYTHON_MODULE(_core) {
             "Example::\n\n"
             "  earth = planet_ss('earth')"
         ))
+	    .def("__copy__", &Py_copy_from_ctor<kep_toolbox::planet_ss>)
+	    .def("__deepcopy__", &Py_deepcopy_from_ctor<kep_toolbox::planet_ss>)
+	    .def("cpp_loads", &py_cpp_loads<kep_toolbox::planet_ss>)
+		.def("cpp_dumps", &py_cpp_dumps<kep_toolbox::planet_ss>)
         .def_pickle(generic_pickle_suite<kep_toolbox::planet_ss>())
         .def(init<>());
 

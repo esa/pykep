@@ -1,4 +1,4 @@
-import core, sims_flanagan
+import core, sims_flanagan, orbit_plots, examples, traj
 
 # For convenience, bring all core classes into the root namespace when importing *.
 from core import *
@@ -28,14 +28,5 @@ try:
 	__extensions__['pygmo']=True
 except:
 	pass
-      
-#Importing dependent modules
-if (__extensions__['matplotlib']):
-	import orbit_plots
-
-if (__extensions__['pygmo']):
-	import traj
-	
-import examples
 	
 __all__ += filter(lambda name: not name.startswith('_'),dir(core))
