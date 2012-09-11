@@ -68,7 +68,7 @@ public:
         * \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
         * \param[in] mu_self The gravitational parameter of the planet (SI units)
         * \param[in] radius radius of the planet (SI units)
-        * \param[in] safe_radius mimimual distance that is safe during a fly-by of the planet (SI units)
+        * \param[in] safe_radius mimimual radius that is safe during a fly-by of the planet (SI units)
         * \param[in] name C++ string containing the planet name. Default value is "Unknown"
         */
     planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
