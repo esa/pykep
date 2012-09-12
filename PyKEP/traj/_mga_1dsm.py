@@ -23,25 +23,28 @@ class mga_1dsm(base_problem):
 			t0 = [epoch(0),epoch(1000)], 
 			tof = [1.0,5.0], 
 			vinf = [0.5,2.5],
-			add_vinf=False, 
+			add_vinf_dep=False, 
+			add_vinf_arr=True,
 			multi_objective = False):
 		"""
 		Constructs an mga_1dsm problem
 
-		USAGE: traj.mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf = False)
+		USAGE: traj.mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
 
 		* seq: list of PyKEP planets defining the encounter sequence (including the starting launch)
 		* t0: list of two epochs defining the launch window
 		* tof: list of two floats defining the minimum and maximum allowed mission lenght (years)
 		* vinf: list of two floats defining the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec
 		* multi_objective: when True constructs a multiobjective problem (dv, T)
-		* add_vinf: when True the computed Dv includes the initial hyperbolic velocity (at launch)
+		* add_vinf_dep: when True the computed Dv includes the initial hyperbolic velocity (at launch)
+		* add_vinf_arr: when True the computed Dv includes the final hyperbolic velocity (at the last planet)
 		"""
 		
 		#Sanity checks ...... all planets need to have the same mu_central_body
 		if ( [r.mu_central_body for r in seq].count(seq[0].mu_central_body)!=len(seq) ):
 			raise ValueError('All planets in the sequence need to have exactly the same mu_central_body')
-		self.__add_vinf = add_vinf
+		self.__add_vinf_dep = add_vinf_dep
+		self.__add_vinf_arr = add_vinf_arr
 		self.__n_legs = len(seq) - 1
 		dim = 6 + (self.__n_legs-1) * 4
 		obj_dim = multi_objective + 1
@@ -79,7 +82,7 @@ class mga_1dsm(base_problem):
 		t_P = list([None] * (self.__n_legs+1))
 		r_P = list([None] * (self.__n_legs+1))
 		v_P = list([None] * (self.__n_legs+1))
-		DV = list([None] * (self.__n_legs+1))
+		DV = list([0.0] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -98,7 +101,7 @@ class mga_1dsm(base_problem):
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,self.common_mu)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
 
@@ -113,16 +116,17 @@ class mga_1dsm(base_problem):
 			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,self.common_mu)
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
 			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#Last Delta-v
-		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		if self.__add_vinf_arr:
+			DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
 		
-		if self.__add_vinf:
+		if self.__add_vinf_dep:
 			DV[0] += x[3]
 
 		if self.f_dimension == 1:
@@ -177,7 +181,7 @@ class mga_1dsm(base_problem):
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,self.common_mu)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
 
@@ -198,7 +202,7 @@ class mga_1dsm(base_problem):
 			print "DSM after " + str(x[8+(i-1)*4]*T[i]) + " days"
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,self.common_mu)
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
@@ -265,7 +269,7 @@ class mga_1dsm(base_problem):
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,self.common_mu)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
@@ -282,7 +286,7 @@ class mga_1dsm(base_problem):
 			plot_kepler(ax,r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU)
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,self.common_mu)
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
 			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
@@ -339,4 +343,5 @@ class mga_1dsm(base_problem):
 		
 	def human_readable_extra(self):
              return ("\n\t Sequence: " + [pl.name for pl in self.seq].__repr__() +
-		     "\n\t Add launcher vinf to the objective?: " + self.__add_vinf.__repr__())
+		     "\n\t Add launcher vinf to the objective?: " + self.__add_vinf_dep.__repr__() +
+		     "\n\t Add final vinf to the objective?: " + self.__add_vinf_arr.__repr__())
