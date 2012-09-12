@@ -210,7 +210,7 @@ std::ostream &operator<<(std::ostream &s, const lambert_problem &lp) {
     s << "Chord: " << lp.m_c << std::endl;
     s << "Time of Flight: " << lp.m_tof / sqrt(pow(norm(lp.m_r1),3) / lp.m_mu) << std::endl;
     s << std::endl;
-    s << "Multiple revolutions active" << (lp.m_multi_revs? "True":"False");
+    s << "Multiple revolutions active: " << (lp.m_multi_revs? "True":"False") << std::endl;
     if (lp.m_multi_revs) {
     	s << "Maximum number of revolutions: " << lp.m_Nmax << std::endl;
     }
