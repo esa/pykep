@@ -283,7 +283,7 @@ class mga_1dsm(base_problem):
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
 			l = lambert_problem(r,r_P[i+1],dt,self.common_mu)
-			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
+			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU, N=1000)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2

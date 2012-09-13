@@ -286,6 +286,17 @@ BOOST_PYTHON_MODULE(_core) {
         ))
         .def_pickle(generic_pickle_suite<kep_toolbox::planet_ss>())
         .def(init<>());
+	
+    // A Jupiter system moon
+    class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A moon from the Jupiter system",
+        init<std::string>(
+            "PyKEP.planet_js.eph(which)\n\n"
+            "- which: string containing the common planet name (e.g. 'io')\n\n"
+            "Example::\n\n"
+            "  io = planet_js('io')"
+        ))
+        .def_pickle(generic_pickle_suite<kep_toolbox::planet_js>())
+        .def(init<>());
 
     // A planet from the MPCORB database
     class_<kep_toolbox::planet_mpcorb,bases<kep_toolbox::planet> >("planet_mpcorb","A planet from the mpcorb database",

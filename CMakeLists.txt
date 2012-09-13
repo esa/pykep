@@ -48,9 +48,10 @@ SET(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_js.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)
