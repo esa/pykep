@@ -65,7 +65,7 @@ class __KEP_TOOL_VISIBLE lambert_problem
     static const array3D default_r2;
 public:
     friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
-    lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0);
+    lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0, const bool multi_revs=true);
     const std::vector<array3D>& get_v1() const;
     const std::vector<array3D>& get_v2() const;
     const array3D& get_r1() const;
@@ -98,6 +98,7 @@ private:
         ar & m_iters;
         ar & m_Nmax;
         ar & m_has_converged;
+		ar & m_multi_revs;
     }
 // Serialization code (END)
 
@@ -113,6 +114,7 @@ private:
     double m_s,m_c;
     int m_Nmax;
     bool m_has_converged;
+    bool m_multi_revs;
 
 };
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);

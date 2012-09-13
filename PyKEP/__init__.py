@@ -3,10 +3,6 @@ import core, sims_flanagan
 # For convenience, bring all core classes into the root namespace when importing *.
 from core import *
 
-__doc__ = 'PyKEP is the answer'
-__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'traj']
-__version__ = '1.1.3'
-
 """Detecting Installed Extensions"""
 # Fill up the __extensions__ variable with all detected extensions
 __extensions__ = {'matplotlib': False, 'mplot3d': False,'pygmo': False}
@@ -28,14 +24,11 @@ try:
 	__extensions__['pygmo']=True
 except:
 	pass
-      
-#Importing dependent modules
-if (__extensions__['matplotlib']):
-	import orbit_plots
-
-if (__extensions__['pygmo']):
-	import traj
 	
-import examples
+__doc__ = 'PyKEP is the answer'
+__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'traj']
+__version__ = '1.1.3'
+
+import orbit_plots, examples, traj
 	
 __all__ += filter(lambda name: not name.startswith('_'),dir(core))

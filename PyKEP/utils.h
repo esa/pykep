@@ -13,6 +13,19 @@
 #include <sstream>
 #include <string>
 
+
+template <class T>
+inline T Py_copy_from_ctor(const T &x)
+{
+	return T(x);
+}
+
+template <class T>
+inline T Py_deepcopy_from_ctor(const T &x, boost::python::dict)
+{
+	return T(x);
+}
+
 // Generic pickle suite for C++ classes with default constructor.
 template <class T>
 struct generic_pickle_suite : boost::python::pickle_suite
@@ -42,5 +55,22 @@ struct generic_pickle_suite : boost::python::pickle_suite
 		ia >> x;
 	}
 };
+
+template <class T>
+inline void py_cpp_loads(T &x, const std::string &s)
+{
+	std::stringstream ss(s);
+	boost::archive::text_iarchive ia(ss);
+	ia >> x;
+}
+
+template <class T>
+inline std::string py_cpp_dumps(const T &x)
+{
+	std::stringstream ss;
+	boost::archive::text_oarchive oa(ss);
+	oa << x;
+	return ss.str();
+}
 
 #endif //PYKEP_UTILS_H

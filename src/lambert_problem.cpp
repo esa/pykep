@@ -40,9 +40,10 @@ const array3D lambert_problem::default_r2 = {{0,1,0}};
  * \param[in] tof time of flight
  * \param[in] mu gravity parameter
  * \param[in] cw when 1 a retrograde orbit is assumed
+ * \param[in] multi_revs when true computes also all multiple revolutions soluitons
  */
-lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw) :
-                m_r1(r1), m_r2(r2),m_tof(tof),m_mu(mu),m_has_converged(true)
+lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw, const bool multi_revs) :
+                m_r1(r1), m_r2(r2),m_tof(tof),m_mu(mu),m_has_converged(true), m_multi_revs(multi_revs)
 {
     // 1 - Computing non dimensional units
     double R = norm(r1);
@@ -61,7 +62,10 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
     if (cw) m_lw = (m_lw+1) % 2;				//changed to retrograde motion
 
     // 3 - computing maximum number of revolutions
-    m_Nmax = lambert_find_N(m_s,m_c,tof/T,m_lw);
+    m_Nmax = 0;
+    if (m_multi_revs) {
+    	m_Nmax = lambert_find_N(m_s,m_c,tof/T,m_lw);
+    }
 
     // 4 - computing all solutions
     m_v1.resize(m_Nmax * 2 +1);
@@ -206,7 +210,10 @@ std::ostream &operator<<(std::ostream &s, const lambert_problem &lp) {
     s << "Chord: " << lp.m_c << std::endl;
     s << "Time of Flight: " << lp.m_tof / sqrt(pow(norm(lp.m_r1),3) / lp.m_mu) << std::endl;
     s << std::endl;
-    s << "Maximum number of revolutions: " << lp.m_Nmax << std::endl;
+    s << "Multiple revolutions active: " << (lp.m_multi_revs? "True":"False") << std::endl;
+    if (lp.m_multi_revs) {
+    	s << "Maximum number of revolutions: " << lp.m_Nmax << std::endl;
+    }
     s << "Solutions: " << std::endl;
     s << "0 revs, Iters: " << lp.m_iters[0] << ", a: " << lp.m_a[0] << ", p: " << lp.m_p[0] <<std::endl;
     s <<"\tv1= " << lp.m_v1[0] << " v2= " << lp.m_v2[0] << std::endl;
