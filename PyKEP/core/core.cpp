@@ -42,6 +42,11 @@
 
 using namespace boost::python;
 
+static inline double closest_distance_wrapper(const kep_toolbox::array3D& r0, const kep_toolbox::array3D& v0, const kep_toolbox::array3D& r1, const kep_toolbox::array3D& v1, const double &mu)
+{
+    return kep_toolbox::closest_distance(r0, v0, r1, v1, mu);
+}
+
 static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolbox::epoch &when)
 {
     kep_toolbox::array3D r, v;
@@ -517,5 +522,18 @@ BOOST_PYTHON_MODULE(_core) {
               "Returns the cartesian components of the spacecarft velocity after the encounter. \n"
               "Example::\n\n"
         "  vout = fb_prop([1,0,0],[0,1,0],2,3.1415/2,1)\n"
+    );
+    
+    //Basic Astrodynamics
+    def("closest_distance",&closest_distance_wrapper,
+              "PyKEP.closest_distance(r0,v0,r1,v1,mu)\n\n"
+              "- r0: initial position (cartesian)\n"
+              "- v0: initial velocity (cartesian)\n"
+              "- r1: final position (cartesian)\n"
+              "- v1: final velocity (cartesian)\n"
+              "- mu: planet gravitational constant\n\n"
+              "Returns the closest distance along a keplerian orbit defined by r0,v0,r1,v1 (it assumes the orbit actually exists). \n"
+              "Example::\n\n"
+        "  d = closest_distance([1,0,0],[0,1,0],[],[],1.0)\n"
     );
 }

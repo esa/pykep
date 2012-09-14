@@ -97,7 +97,7 @@ void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6
     for (i=0; i<3; i++)
         temp+=evett[i]*r0[i];
 
-    //4 - We compute ni: the true anomaly
+    //4 - We compute ni: the true anomaly (in 0, 2*PI)
     ni = acos(temp/E[1]/R0);
 
     temp = 0.0;

@@ -38,6 +38,7 @@
 #include"core_functions/convert_dates.h"
 #include"core_functions/ic2par.h"
 #include"core_functions/par2ic.h"
+#include"core_functions/closest_distance.h"
 #include"core_functions/kepler_equations.h"
 #include"core_functions/lambert_2d.h"
 #include"core_functions/lambert_3d.h"
