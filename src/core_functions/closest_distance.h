@@ -32,10 +32,12 @@
  * This template function returns the closest distance along a keplerian orbit defined by r1,v1,r2,v2. This can be or not the
  * periplanet, depending on the geometry.
  *
- * \param[in,out] r0 initial position vector (of dimension 3)
- * \param[in,out] v0 initial velocity vector (of dimension 3)
- * \param[in,out] r1 final position vector (of dimension 3)
- * \param[in,out] v1 final velocity vector (of dimension 3)
+ * \param[in] d_min minimum distance along the defined orbit
+ * \param[in] ra apoapsis radius
+ * \param[in] r0 initial position vector (of dimension 3)
+ * \param[in] v0 initial velocity vector (of dimension 3)
+ * \param[in] r1 final position vector (of dimension 3)
+ * \param[in] v1 final velocity vector (of dimension 3)
  * \param[in] mu central body gravitational parameter
  *
  * NOTE: multiple revolutions are not accounted for
@@ -45,7 +47,7 @@
 
 namespace kep_toolbox {
 template<class vettore3D>
-double closest_distance(const vettore3D& r0, const vettore3D& v0, const vettore3D& r1, const vettore3D& v1, const double &mu)
+void closest_distance(double& d_min, double& ra, const vettore3D& r0, const vettore3D& v0, const vettore3D& r1, const vettore3D& v1, const double &mu)
 {
     double h[3];
     double Dum_Vec[3];
@@ -78,10 +80,15 @@ double closest_distance(const vettore3D& r0, const vettore3D& v0, const vettore3
     e  = sqrt(evett[0]*evett[0] + evett[1]*evett[1] +evett[2]*evett[2]);
     
     //5 - In a circular orbit everything is easier
-    if (e < 1e-12) return R0;
+    if (e < 1e-12) {
+	d_min = R0;
+	ra = R0;
+	return;
+    }
 
     //6 - The periplanet is now calculated 
     rp = p/(1+e);
+    ra = p/(1-e);
 
     //7 - We now compute the true anomaly relative to r0 (in 0-2pi)
     temp = 0.0;
@@ -105,10 +112,11 @@ double closest_distance(const vettore3D& r0, const vettore3D& v0, const vettore3
 
     if (ni0>ni1) //the periplanet is transversed in the zero-th revolution
     {
-	return rp;
+	d_min = rp;
     } else {//the periplanet is not transversed in the zero-th revolution
-	return std::min(R0,R1);
+	d_min = std::min(R0,R1);
     }
+    return;
 }
 }
 #endif // CLOSEST_DISTANCE_H
