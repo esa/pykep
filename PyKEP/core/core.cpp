@@ -111,13 +111,18 @@ get_constant(G0);
 
 #define PYKEP_REGISTER_CONVERTER(T,policy) \
 {\
-/* boost::python::type_info info = boost::python::type_id<T >(); \
-const boost::python::converter::registration* reg = boost::python::converter::registry::query(info); \
-if (reg == NULL) */ \
-{ \
+   boost::python::type_info info = boost::python::type_id<T >(); \
+   const boost::python::converter::registration* reg = boost::python::converter::registry::query(info); \
+   if (reg == NULL)  \
+   {\
 	to_tuple_mapping<T >();\
 	from_python_sequence<T,policy>();\
-}\
+   }\
+   else if ((*reg).m_to_python == NULL)\
+   {\
+	to_tuple_mapping<T >();\
+	from_python_sequence<T,policy>();\
+   }\
 }
 
 #define EXPOSE_CONSTANT(arg) \
@@ -302,7 +307,7 @@ BOOST_PYTHON_MODULE(_core) {
     class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A moon from the Jupiter system",
         init<std::string>(
             "PyKEP.planet_js.eph(which)\n\n"
-            "- which: string containing the common planet name (e.g. 'io')\n\n"
+            "- which: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
             "Example::\n\n"
             "  io = planet_js('io')"
         ))
