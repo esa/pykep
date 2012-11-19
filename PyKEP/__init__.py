@@ -26,7 +26,7 @@ except:
 try:
 	from PyGMO import __version__ as pygmo_ver
 	__extensions__['pygmo']=True
-except Error:
+except:
 	pass
 
 import orbit_plots, examples, traj
