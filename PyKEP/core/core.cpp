@@ -137,7 +137,7 @@ BOOST_PYTHON_MODULE(_core) {
     doc_options.disable_signatures();    
     
     //Register std converters to python lists if not already registered by some other module
-    PYKEP_REGISTER_CONVERTER(std::vector<double>,variable_capacity_policy)
+    PYKEP_REGISTER_CONVERTER(std::vector<double >, variable_capacity_policy)
     PYKEP_REGISTER_CONVERTER(kep_toolbox::array3D,fixed_size_policy)
     PYKEP_REGISTER_CONVERTER(kep_toolbox::array6D,fixed_size_policy)
     PYKEP_REGISTER_CONVERTER(kep_toolbox::array7D,fixed_size_policy)

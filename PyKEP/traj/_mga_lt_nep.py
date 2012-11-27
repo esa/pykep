@@ -125,7 +125,7 @@ class mga_lt_nep(base_problem):
 			#First Leg
 			v = [a+b for a,b in zip(v_P[i],x[(3 + i * 8):(6 + i * 8)])]
 			x0 = sc_state(r_P[i],v,m0)
-			v = [a+b for a,b in zip(v_P[i+1],x[(6 + i * 8):(11 + i * 8)])]
+			v = [a+b for a,b in zip(v_P[i+1],x[(6 + i * 8):(9 + i * 8)])]
 			xe = sc_state(r_P[i+1], v ,x[2 + i * 8])
 			throttles = x[(1 + 8*self.__n_legs + 3*sum(self.__n_seg[:i])):(1 + 8*self.__n_legs + 3*sum(self.__n_seg[:i])+3*self.__n_seg[i])]
 			self.__leg.set(t_P[i],x0,throttles,t_P[i+1],xe)
