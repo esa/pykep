@@ -72,7 +72,7 @@ public:
         * \param[in] name C++ string containing the planet name. Default value is "Unknown"
         */
     planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
-    planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0) {};
+    planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0), cached_epoch(epoch(0)), cached_r(array3D()), cached_v(array3D()) {};
     /// Polymorphic copy constructor.
     virtual planet_ptr clone() const;
     virtual ~planet();
