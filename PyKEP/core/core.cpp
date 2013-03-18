@@ -100,6 +100,7 @@ static inline double get_##arg() \
 }
 
 get_constant(AU);
+get_constant(JR);
 get_constant(MU_SUN);
 get_constant(EARTH_VELOCITY);
 get_constant(DEG2RAD);
@@ -149,6 +150,7 @@ BOOST_PYTHON_MODULE(_core) {
     
     // Expose the astrodynamical constants.
     EXPOSE_CONSTANT(AU);
+    EXPOSE_CONSTANT(JR);
     EXPOSE_CONSTANT(MU_SUN);
     EXPOSE_CONSTANT(EARTH_VELOCITY);
     EXPOSE_CONSTANT(DEG2RAD);
