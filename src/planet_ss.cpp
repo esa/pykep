@@ -44,8 +44,9 @@ planet_ss::planet_ss(const std::string& name)
     boost::algorithm::to_lower(lower_case_name);
     switch ( mapped_planets[lower_case_name] ) {
     case (1): {
-            double E[6] = {3.8717591e-01 * ASTRO_AU, 2.0563012e-01,7.0057713e+00 * ASTRO_DEG2RAD,4.8323635e+01 * ASTRO_DEG2RAD, 2.9131238e+01 * ASTRO_DEG2RAD, 1.7274971e+02 * ASTRO_DEG2RAD};
+            double E[6] = {3.772942436743051E-01 * ASTRO_AU, 2.200014582454420E-01, 7.072030953380287E+00 * ASTRO_DEG2RAD, 4.754470860361798E+01 * ASTRO_DEG2RAD, 2.767991252328971E+01 * ASTRO_DEG2RAD, 1.899912269338703E+02 * ASTRO_DEG2RAD};
             std::copy(E, E + 6, keplerian_elements_.begin());
+            mjd2000 = epoch(2458849.5,epoch::JD).mjd2000();
             radius_ = 2440000;
             safe_radius_ = radius_ * 1.1;
             mu_self_ = 22032e9;
@@ -53,8 +54,9 @@ planet_ss::planet_ss(const std::string& name)
         }
         break;
     case (2): {
-            double E[6] = {7.2347372e-01 * ASTRO_AU, 6.757291e-03, 3.3948519e+00 * ASTRO_DEG2RAD, 7.6659746e+01 * ASTRO_DEG2RAD, 5.5219953e+01 * ASTRO_DEG2RAD, 4.9298376e+01 * ASTRO_DEG2RAD};
+            double E[6] = {7.159637980420038E-01 * ASTRO_AU, 1.103010682131625E-02, 3.416850348494068E+00 * ASTRO_DEG2RAD, 7.675615379502699E+01 * ASTRO_DEG2RAD, 1.337130135915192E+02 * ASTRO_DEG2RAD, 1.537146531316461E+02 * ASTRO_DEG2RAD};
             std::copy(E, E + 6, keplerian_elements_.begin());
+            mjd2000 = epoch(2458849.5,epoch::JD).mjd2000();
             radius_ = 6052000;
             safe_radius_ = radius_ * 1.1;
             mu_self_ = 324859e9;
@@ -62,9 +64,9 @@ planet_ss::planet_ss(const std::string& name)
         }
         break;
     case (3): {
-            double E[6] = {9.9998805e-01 * ASTRO_AU, 1.6716812e-02, 8.8543531e-04 * ASTRO_DEG2RAD, 1.7540648e+02 * ASTRO_DEG2RAD, 2.8761578e+02 * ASTRO_DEG2RAD, 2.5760684e+02 * ASTRO_DEG2RAD};
+            double E[6] = {1.016281672453605E+00 * ASTRO_AU, 2.467020792109220E-02, 1.812249943317730E-03 * ASTRO_DEG2RAD, 1.420066138465537E+02 * ASTRO_DEG2RAD, 3.142255714626496E+02 * ASTRO_DEG2RAD, 3.472751672370176E+00 * ASTRO_DEG2RAD};
             std::copy(E, E + 6, keplerian_elements_.begin());
-            mjd2000 = epoch(54000.0,epoch::MJD).mjd2000();
+            mjd2000 = epoch(2458849.5,epoch::JD).mjd2000();
             radius_ = 6378000;
             safe_radius_ = radius_*1.1;
             mu_self_ = 398600.4418e9;
@@ -72,7 +74,7 @@ planet_ss::planet_ss(const std::string& name)
         }
         break;
     case (4): {
-            double E[6] = { 1.5239844e+00 * ASTRO_AU, 9.3314935e-02, 1.8506136e+00 * ASTRO_DEG2RAD, 4.9535248e+01 * ASTRO_DEG2RAD, 2.865642e+02 * ASTRO_DEG2RAD, 1.909443e+01  * ASTRO_DEG2RAD };
+            double E[6] = { 1.519223936334168E+00 * ASTRO_AU, 9.868757921143217E-02, 1.846247867207550E+00 * ASTRO_DEG2RAD, 4.925441005680170E+01 * ASTRO_DEG2RAD, 2.868638400110784E+02 * ASTRO_DEG2RAD, 2.473483982901654E+02  * ASTRO_DEG2RAD };
             std::copy(E, E + 6, keplerian_elements_.begin());
             radius_ = 3397000;
             safe_radius_ = radius_*1.1;

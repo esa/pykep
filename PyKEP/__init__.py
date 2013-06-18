@@ -20,13 +20,13 @@ try:
 	if mver >= 110:
 		__extensions__['mplot3d']=True
 	del mver
-except:
+except ImportError:
 	pass
 
 try:
 	from PyGMO import __version__ as pygmo_ver
 	__extensions__['pygmo']=True
-except:
+except ImportError:
 	pass
 
 import orbit_plots, examples, traj

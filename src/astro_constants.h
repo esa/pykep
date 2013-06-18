@@ -30,12 +30,13 @@
 #include <boost/lexical_cast.hpp>
 
 #define ASTRO_AU 149597870660.0
+#define ASTRO_JR 71492000.0 
 #define ASTRO_MU_SUN 1.32712428e20
 #define ASTRO_EARTH_VELOCITY 29784.6905
 #define ASTRO_DEG2RAD (M_PI/*boost::math::constants::pi<double>()*//180.0)
 #define ASTRO_RAD2DEG (180.0/*boost::math::constants::pi<double>()*/ /M_PI)
 #define ASTRO_DAY2SEC 86400.0 //needs to be a double
-#define ASTRO_SEC2DAY 1.157407407407407407407407407e-05
+#define ASTRO_SEC2DAY (1. / 86400.0)
 #define ASTRO_DAY2YEAR (1. / 365.25)
 #define ASTRO_G0 9.80665
 #define ASTRO_CAVENDISH 73.6687e-11

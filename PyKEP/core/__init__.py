@@ -3,6 +3,7 @@ from _core import *
 
 """Defining astronomical constants defined in the keplerian_toolbox file astro_constants.h"""
 AU = _core._get_AU()
+JR = _core._get_JR()
 DAY2SEC = _core._get_DAY2SEC()
 DAY2YEAR = _core._get_DAY2YEAR()
 DEG2RAD = _core._get_DEG2RAD()

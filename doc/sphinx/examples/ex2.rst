@@ -20,4 +20,5 @@ While not published yet, the multi-rev solver implemented in PyKEP is extremely 
 a Lambert's solver, please contact us. In our solver we use a transformation that deforms the time of flight curves into lines, thus allowing uniform
 consistent convergence properties for all possible geometries.
 
-The code for this example can be studied `here <http://keptoolbox.git.sourceforge.net/git/gitweb.cgi?p=keptoolbox/keptoolbox;a=blob;f=PyKEP/kep_examples/_ex2.py>`_
+The code for this example can be studied `here 
+<http://sourceforge.net/p/keptoolbox/code/ci/ef0454a6a69403a1786a4e7920c3fe036a916ad2/tree/PyKEP/examples/_ex2.py>`_
