@@ -58,175 +58,178 @@ typedef boost::shared_ptr<planet> planet_ptr;
 
 class __KEP_TOOL_VISIBLE planet
 {
-    friend std::ostream &operator<<(std::ostream &, const planet &);
+	friend std::ostream &operator<<(std::ostream &, const planet &);
 public:
-    /// Constructor
-    /**
-        * Constructs a planet from its elements and its phyisical parameters
-        * \param[in] ref_epoch epoch to which the elements are referred to
-        * \param[in] elem A STL vector containing the keplerian parameters (a,e,i,Om,om,M). (SI units)
-        * \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
-        * \param[in] mu_self The gravitational parameter of the planet (SI units)
-        * \param[in] radius radius of the planet (SI units)
-        * \param[in] safe_radius mimimual radius that is safe during a fly-by of the planet (SI units)
-        * \param[in] name C++ string containing the planet name. Default value is "Unknown"
-        */
-    planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
-    planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0), cached_epoch(epoch(0)), cached_r(array3D()), cached_v(array3D()) {};
-    /// Polymorphic copy constructor.
-    virtual planet_ptr clone() const;
-    virtual ~planet();
-    /** @name Getters */
-    //@{
-    /// Gets the planet position and velocity
-    /**
-        * \param[in] when Epoch in which ephemerides are required
-        * \param[out] r Planet position at epoch (SI units)
-        * \param[out] v Planet velocity at epoch (SI units)
-        */
-    void get_eph(const epoch& when, array3D &r, array3D &v) const;
+	/// Constructor
+	/**
+		* Constructs a planet from its elements and its phyisical parameters
+		* \param[in] ref_epoch epoch to which the elements are referred to
+		* \param[in] elem A STL vector containing the keplerian parameters (a,e,i,Om,om,M). (SI units)
+		* \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
+		* \param[in] mu_self The gravitational parameter of the planet (SI units)
+		* \param[in] radius radius of the planet (SI units)
+		* \param[in] safe_radius mimimual radius that is safe during a fly-by of the planet (SI units)
+		* \param[in] name C++ string containing the planet name. Default value is "Unknown"
+		*/
+	planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
+	planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0), cached_epoch(epoch(0)), cached_r(array3D()), cached_v(array3D()) {};
+	/// Polymorphic copy constructor.
+	virtual planet_ptr clone() const;
+	virtual ~planet();
+	/** @name Getters */
+	//@{
+	/// Gets the planet position and velocity
+	/**
+		* \param[in] when Epoch in which ephemerides are required
+		* \param[out] r Planet position at epoch (SI units)
+		* \param[out] v Planet velocity at epoch (SI units)
+		*/
+	void get_eph(const epoch& when, array3D &r, array3D &v) const;
 
-    /// Getter for the central body gravitational parameter
-    /**
-     * Gets the gravitational parameter of the central body
-     *
-     * @return mu_central_body (SI Units)
-     */
-    double get_mu_central_body() const {return mu_central_body;}
+	/// Getter for the central body gravitational parameter
+	/**
+	 * Gets the gravitational parameter of the central body
+	 *
+	 * @return mu_central_body (SI Units)
+	 */
+	double get_mu_central_body() const {return mu_central_body;}
 
-    /// Getter for the planet gravitational parameter
-    /**
-     * Gets the gravitational parameter of the planet
-     *
-     * @return mu_self (SI Units)
-     */
-    double get_mu_self() const {return mu_self;}
+	/// Getter for the planet gravitational parameter
+	/**
+	 * Gets the gravitational parameter of the planet
+	 *
+	 * @return mu_self (SI Units)
+	 */
+	double get_mu_self() const {return mu_self;}
 
-    /// Getter for the planet radius
-    /**
-     * Gets the radius of the planet
-     *
-     * @return const reference to radius (SI Units)
-     */
-    double get_radius() const {return radius;}
+	/// Getter for the planet radius
+	/**
+	 * Gets the radius of the planet
+	 *
+	 * @return const reference to radius (SI Units)
+	 */
+	double get_radius() const {return radius;}
 
-    /// Getter for the planet safe-radius
-    /**
-     * Gets the safe-radius of the planet. This is intended to be the minimum distance
-     * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
-     * on the spacecraft trajectory
-     *
-     * @return const reference to safe_radius (SI Units)
-     */
-    double get_safe_radius() const {return safe_radius;}
+	/// Getter for the planet safe-radius
+	/**
+	 * Gets the safe-radius of the planet. This is intended to be the minimum distance
+	 * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
+	 * on the spacecraft trajectory
+	 *
+	 * @return const reference to safe_radius (SI Units)
+	 */
+	double get_safe_radius() const {return safe_radius;}
 
-    //@}
-    
-    /** @name Setters */
-    /// Setter for the planet safe-radius
-    /**
-     * Sets the safe-radius of the planet. This is intended to be the minimum distance
-     * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
-     * on the spacecraft trajectory
-     *
-     * \param[in] safe_radius Minimum allowed planetary distance (in planetary radius units)
-     * \throws value_error if safe_radius in < 1
-     */
-    void set_safe_radius(double sr) {
-        if (sr <=1) {
-            throw_value_error("Trying to set a safe_radius that is smaller than the planetary radius");
-        }
-        safe_radius = sr * get_radius();
-    }
+	//@}
 
-    /** @name Ephemerides calculations */
-    //@{
-    /// Returns the planet position
-    /**
-     * \param[in] when Epoch in which position is requested
-     *
-     * @return a boost array containing the planet position in epoch (SI Units)
-     */
-    array3D get_position(const epoch& when) const;
+	/** @name Setters */
+	/// Setter for the planet safe-radius
+	/**
+	 * Sets the safe-radius of the planet. This is intended to be the minimum distance
+	 * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
+	 * on the spacecraft trajectory
+	 *
+	 * \param[in] safe_radius Minimum allowed planetary distance (in planetary radius units)
+	 * \throws value_error if safe_radius in < 1
+	 */
+	void set_safe_radius(double sr) {
+		if (sr <=1) {
+			throw_value_error("Trying to set a safe_radius that is smaller than the planetary radius");
+		}
+		safe_radius = sr * get_radius();
+	}
 
-    /// Returns the planet velocity
-    /**
-      * \param[in] when Epoch in which velocity is requested
-      *
-      * @return a boost array containing the planet velocity in epoch (SI Units)
-      */
+	/** @name Ephemerides calculations */
+	//@{
+	/// Returns the planet position
+	/**
+	 * \param[in] when Epoch in which position is requested
+	 *
+	 * @return a boost array containing the planet position in epoch (SI Units)
+	 */
+	array3D get_position(const epoch& when) const;
 
-    array3D get_velocity(const epoch& when) const;
+	/// Returns the planet velocity
+	/**
+	  * \param[in] when Epoch in which velocity is requested
+	  *
+	  * @return a boost array containing the planet velocity in epoch (SI Units)
+	  */
 
-    /// Returns the planet orbital elements at a given epoch (a,e,i,Om,om,M)
-    /**
-     * \param[in] when Epoch in which orbital elements are required
-     *
-     * @return a boost array containing the planet elements in epoch (SI Units) (a,e,i,Om,om,M). Mean anomaly is
-     * returned in range 0,2*pi
-     */
-    array6D get_elements(const epoch& when) const;
+	array3D get_velocity(const epoch& when) const;
 
-    /// Returns the planet orbital elements at the reference epoch (a,e,i,Om,om,M)
-    /**
-     * @return a boost array containing the planet elements in epoch (SI Units) (a,e,i,Om,om,M). Mean anomaly is
-     * returned in range 0,2*pi
-     */
-    array6D get_elements() const;
+	/// Returns the planet orbital elements at a given epoch (a,e,i,Om,om,M)
+	/**
+	 * \param[in] when Epoch in which orbital elements are required
+	 *
+	 * @return a boost array containing the planet elements in epoch (SI Units) (a,e,i,Om,om,M). Mean anomaly is
+	 * returned in range 0,2*pi
+	 */
+	array6D get_elements(const epoch& when) const;
 
-    /// Returns the planet name
-    std::string get_name() const;
+	/// Returns the planet orbital elements at the reference epoch (a,e,i,Om,om,M)
+	/**
+	 * @return a boost array containing the planet elements in epoch (SI Units) (a,e,i,Om,om,M). Mean anomaly is
+	 * returned in range 0,2*pi
+	 */
+	array6D get_elements() const;
 
-    /// Returns the reference epoch
-    epoch get_ref_epoch() const {return epoch(ref_mjd2000);}
+	/// Returns the planet name
+	std::string get_name() const;
 
-    //@}
+	/// Returns the reference epoch
+	epoch get_ref_epoch() const {return epoch(ref_mjd2000);}
+
+	//@}
+
+	/// Computes the orbital period
+	double compute_period() const;
 
 protected:
-    /// Builds the planet assiging all values to members
-    /**
-    * Constructs a planet from its elements and its phyisical parameters
-    * \param[in] ref_epoch epoch to which the elements are referred to
-    * \param[in] elem A STL vector containing the keplerian parameters (a,e,i,Om,om,M). AU and degrees are assumed
-    * \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
-    * \param[in] mu_self The gravitational parameter of the planet (SI units)
-    * \param[in] radius radius of the planet (SI units)
-    * \param[in] safe_radius mimimual distance that is safe during a fly-by of the planet (SI units)
-    * \param[in] name C++ string containing the planet name. Default value is "Unknown"
-    */
-    void build_planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double & radius, const double & safe_radius, const std::string &name = "Unknown");
+	/// Builds the planet assiging all values to members
+	/**
+	* Constructs a planet from its elements and its phyisical parameters
+	* \param[in] ref_epoch epoch to which the elements are referred to
+	* \param[in] elem A STL vector containing the keplerian parameters (a,e,i,Om,om,M). AU and degrees are assumed
+	* \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
+	* \param[in] mu_self The gravitational parameter of the planet (SI units)
+	* \param[in] radius radius of the planet (SI units)
+	* \param[in] safe_radius mimimual distance that is safe during a fly-by of the planet (SI units)
+	* \param[in] name C++ string containing the planet name. Default value is "Unknown"
+	*/
+	void build_planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double & radius, const double & safe_radius, const std::string &name = "Unknown");
 private:
 // Serialization code
-    friend class boost::serialization::access;
-    template <class Archive>
-    void serialize(Archive &ar, const unsigned int)
-    {
-        ar & keplerian_elements;
-        ar & mean_motion;
-        ar & ref_mjd2000;
-        ar & radius;
-        ar & safe_radius;
-        ar & mu_self;
-        ar & mu_central_body;
-        ar & cached_epoch;
-        ar & cached_r;
-        ar & cached_v;
-        ar & m_name;
-    }
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & keplerian_elements;
+		ar & mean_motion;
+		ar & ref_mjd2000;
+		ar & radius;
+		ar & safe_radius;
+		ar & mu_self;
+		ar & mu_central_body;
+		ar & cached_epoch;
+		ar & cached_r;
+		ar & cached_v;
+		ar & m_name;
+	}
 // Serialization code (END)
-    array6D keplerian_elements;
-    double mean_motion;
-    double ref_mjd2000;
-    double radius;
-    double safe_radius;
-    double mu_self;
-    double mu_central_body;
+	array6D keplerian_elements;
+	double mean_motion;
+	double ref_mjd2000;
+	double radius;
+	double safe_radius;
+	double mu_self;
+	double mu_central_body;
 
-    mutable epoch cached_epoch;
-    mutable array3D cached_r;
-    mutable array3D cached_v;
+	mutable epoch cached_epoch;
+	mutable array3D cached_r;
+	mutable array3D cached_v;
 
-    std::string m_name;
+	std::string m_name;
 
 };
 
