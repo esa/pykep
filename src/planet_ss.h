@@ -38,7 +38,9 @@ namespace kep_toolbox{
 /// Solar System Planet (keplerian)
 /**
  * This class derives from the planet class and allow to instantiate planets of
- * the solar system by referring to their common names.
+ * the solar system by referring to their common names. The ephemeris used
+ * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
+ * valid in the timeframe 1800AD - 2050 AD
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */

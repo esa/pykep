@@ -151,31 +151,34 @@ planet_ss::planet_ss(const std::string& name)
 		throw_value_error(std::string("unknown planet name") + name);
 		}
 	}
-	mjd2000 = epoch(2451545.0,epoch::JD).mjd2000();
 	keplerian_elements_[0] = jpl_elements[0] * ASTRO_AU;
 	keplerian_elements_[1] = jpl_elements[1];
 	keplerian_elements_[2] = jpl_elements[2] * ASTRO_DEG2RAD;
 	keplerian_elements_[3] = jpl_elements[5] * ASTRO_DEG2RAD;
 	keplerian_elements_[4] = (jpl_elements[4] - jpl_elements[5]) * ASTRO_DEG2RAD;
 	keplerian_elements_[5] = (jpl_elements[3] - jpl_elements[4]) * ASTRO_DEG2RAD;
-	build_planet(epoch(mjd2000,epoch::MJD2000),keplerian_elements_,mu_central_body_,mu_self_,radius_,safe_radius_,lower_case_name);
+	build_planet(epoch(2451545.0,epoch::JD),keplerian_elements_,mu_central_body_,mu_self_,radius_,safe_radius_,lower_case_name);
 }
 
 void planet_ss::get_eph(const epoch& when, array3D &r, array3D &v) const{
+	if (when.mjd2000() <=-73048.0 || when.mjd2000()>=18263.0) {
+		throw_value_error("Ephemeris of planet_ss are out of range [1800-2050]");
+	}
 	if(when.mjd2000() != cached_epoch.mjd2000() || cached_epoch.mjd2000() == 0) {
-		double elements[6];
+		// algorithm from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt downloded 2013
+		array6D elements, elements2;
 		double dt = (when.mjd2000() - ref_mjd2000) / 36525.0; // Number of centuries passed since J2000.0
 		for(unsigned int i= 0;i<6;++i) {
 			elements[i] = (jpl_elements[i] + jpl_elements_dot[i] * dt);
 		}
-		elements[0] = elements[0] * ASTRO_AU;
-		elements[1] = elements[1];
-		elements[2] = elements[2] * ASTRO_DEG2RAD;
-		elements[3] = elements[5] * ASTRO_DEG2RAD;
-		elements[4] = (elements[4] - elements[5]) * ASTRO_DEG2RAD;
-		elements[5] = (elements[3] - elements[4]) * ASTRO_DEG2RAD;
-		elements[5] = m2e(elements[5],elements[1]);
-		par2ic(elements, mu_central_body, cached_r, cached_v);
+		elements2[0] = elements[0] * ASTRO_AU;
+		elements2[1] = elements[1];
+		elements2[2] = elements[2] * ASTRO_DEG2RAD;
+		elements2[3] = elements[5] * ASTRO_DEG2RAD;
+		elements2[4] = (elements[4] - elements[5]) * ASTRO_DEG2RAD;
+		elements2[5] = (elements[3] - elements[4]) * ASTRO_DEG2RAD;
+		elements2[5] = m2e(elements2[5],elements2[1]);
+		par2ic(elements2, mu_central_body, cached_r, cached_v);
 		cached_epoch = when;
 	}
 	r = cached_r;
