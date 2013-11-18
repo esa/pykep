@@ -84,7 +84,7 @@ public:
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	void get_eph(const epoch& when, array3D &r, array3D &v) const;
+	virtual void get_eph(const epoch& when, array3D &r, array3D &v) const;
 
 	/// Getter for the central body gravitational parameter
 	/**
@@ -217,6 +217,8 @@ private:
 		ar & m_name;
 	}
 // Serialization code (END)
+
+protected:
 	array6D keplerian_elements;
 	double mean_motion;
 	double ref_mjd2000;
@@ -224,7 +226,6 @@ private:
 	double safe_radius;
 	double mu_self;
 	double mu_central_body;
-
 	mutable epoch cached_epoch;
 	mutable array3D cached_r;
 	mutable array3D cached_v;
