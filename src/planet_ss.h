@@ -54,6 +54,12 @@ public:
 	 */
 	planet_ss(const std::string & = "earth");
 	planet_ptr clone() const;
+	/// Computes the planet/system position and velocity w.r.t the Sun
+	/**
+		* \param[in] when Epoch in which ephemerides are required
+		* \param[out] r Planet position at epoch (SI units)
+		* \param[out] v Planet velocity at epoch (SI units)
+		*/
 	void get_eph(const epoch& when, array3D &r, array3D &v) const;
 private:
 // Serialization code
