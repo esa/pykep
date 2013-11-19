@@ -47,25 +47,25 @@ namespace kep_toolbox{
 class __KEP_TOOL_VISIBLE asteroid_gtoc5 : public planet
 {
 public:
-    /// Constructor
-    /**
-     * Construct from a consecutive id from 1 to 7076 (Earth). The order is that of the original
-     * data file from Russio
-     * Asteroid: 1 - 7075
-     * Earth: 7076
-     * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
-     */
-    asteroid_gtoc5(const int & = 7076);
+	/// Constructor
+	/**
+	 * Construct from a consecutive id from 1 to 7076 (Earth). The order is that of the original
+	 * data file from Russio
+	 * Asteroid: 1 - 7075
+	 * Earth: 7076
+	 * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
+	 */
+	asteroid_gtoc5(const int & = 7076);
 
-    planet_ptr clone() const;
+	planet_ptr clone() const;
 private:
 // Serialization code
-    friend class boost::serialization::access;
-    template <class Archive>
-    void serialize(Archive &ar, const unsigned int)
-    {
-        ar & boost::serialization::base_object<planet>(*this);
-    }
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<planet>(*this);
+	}
 // Serialization code (END)
 };
 

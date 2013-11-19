@@ -57,7 +57,6 @@ planet_ss::planet_ss(const std::string& name)
 	mapped_planets["mars"] = 4; mapped_planets["jupiter"] = 5; mapped_planets["saturn"] = 6;
 	mapped_planets["uranus"] = 7; mapped_planets["neptune"] = 8; mapped_planets["pluto"] = 9;
 
-	double mjd2000 = 0;
 	array6D keplerian_elements_;
 	double mu_central_body_;
 	double mu_self_;

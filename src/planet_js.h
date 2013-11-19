@@ -34,7 +34,7 @@ namespace kep_toolbox{
 /// Solar System Planet (keplerian)
 /**
  * This class derives from the planet class and allow to instantiate moons of
- * the Jupiter system by referring to their common names. Ephemerides are those 
+ * the Jupiter system by referring to their common names. Ephemerides are those
  * used during the GTOC6 competition
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
@@ -43,20 +43,20 @@ namespace kep_toolbox{
 class __KEP_TOOL_VISIBLE planet_js : public planet
 {
 public:
-    /**
-     * Construct a Jupiter moon from its common name
-     * \param[in] name a string describing a planet
-     */
-    planet_js(const std::string & = "io");
-    planet_ptr clone() const;
+	/**
+	 * Construct a Jupiter moon from its common name
+	 * \param[in] name a string describing a planet
+	 */
+	planet_js(const std::string & = "io");
+	planet_ptr clone() const;
 private:
 // Serialization code
-    friend class boost::serialization::access;
-    template <class Archive>
-    void serialize(Archive &ar, const unsigned int)
-    {
-        ar & boost::serialization::base_object<planet>(*this);
-    }
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<planet>(*this);
+	}
 // Serialization code (END)
 };
 
