@@ -36,6 +36,7 @@
 #include"../astro_constants.h"
 #include"x2tof.h"
 #include"../exceptions.h"
+#define D_ALP 1.5
 
 namespace kep_toolbox {
 
@@ -44,7 +45,7 @@ inline double tof_curve(const double& ix,const double& s,const double& c,const d
 }
 
 inline double tof_curve_multi_rev(const double& ix,const double& s,const double& c,const double& tof,const int &lw, const int &N){
-    return ( kep_toolbox::x2tof(atan(ix) * 2 / M_PI,s,c,lw,N) - tof);
+    return ( log( kep_toolbox::x2tof( (exp(ix*D_ALP)-1.0) / (exp(ix*D_ALP)+1.0),s,c,lw,N) ) - log(tof) );
 }
 
 
@@ -83,7 +84,15 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
     }
 
     if (c > s) {
-        throw_value_error("Chord needs to be at least twice the semiperimeter");
+        throw_value_error("The chord needs to be smaller than the semiperimeter");
+    }
+    
+    if (c < s - 1) {
+        throw_value_error("The chord needs to be larger than s - 1");
+    }
+    
+    if (s < 1) {
+        throw_value_error("The semiperimeter st be larger than 1 as r1 is used as unit");
     }
 
     if ( branch!='l' && branch!='r' ) {
@@ -92,8 +101,8 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
 
     //0 - Some geometry
     const double am = s/2.0;					//semi-major axis of the minimum energy ellipse
-    const double r2 = 2 * s - c - 1;				//r2 in r1 units
-    double tmp = acos ( (1 - c * c) / r2 / 2 + r2 / 2 );
+    const double r2 = 2.0 * s - c - 1.0;				//r2 in r1 units
+    double tmp = acos ( (1.0 - c * c) / r2 / 2.0 + r2 / 2.0 );
     const double theta = (lw ? 2*M_PI-tmp : tmp);			//transfer angle
     const double lambda = sqrt (r2) * cos (theta/2.0) / s;
 
@@ -102,55 +111,54 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
     //1 - We solve the tof equation
     double x;
     if (N==0) { //no multi-rev
-        double ia = log(1 - .5);
-        double ib = log(1 + .5);
-        retval = regula_falsi(ia,ib, boost::bind(kep_toolbox::tof_curve,_1,s,c,tof,lw), ASTRO_MAX_ITER,1e-9);
+        double ia = -0.69314718056; //log(1 - .5);
+        double ib = 0.4054651081;   //log(1 + .5);
+        retval = regula_falsi(ia,ib, boost::bind(kep_toolbox::tof_curve,_1,s,c,tof,lw), ASTRO_MAX_ITER,1e-12);
 
-        x = exp(ia)-1;
+        x = exp(ia)-1.0;
     }
     else {	//multiple revolutions solution
         //left branch by default
-        double ia = tan(-.5234 * M_PI/2);
-        double ib = tan(-.2234 * M_PI/2);
-        //if the right branch is selected, the initial guess changes
-        if (branch=='r') {
-            ia = tan(.7234 * M_PI/2);
-            ib = tan(.5234 * M_PI/2);
-        }
-        retval = regula_falsi(ia,ib, boost::bind(kep_toolbox::tof_curve_multi_rev,_1,s,c,tof,lw,N), ASTRO_MAX_ITER,1e-9);
-        x = atan(ia) * 2 /M_PI;
+	double ia = -1.0;
+	double ib = -0.5;
+	if (branch=='r') {
+		ia = 1.0;
+		ib = 0.5;
+	}
+        retval = regula_falsi(ia,ib, boost::bind(kep_toolbox::tof_curve_multi_rev,_1,s,c,tof,lw,N), ASTRO_MAX_ITER,1e-12);
+        x = (exp(ia*D_ALP)-1.0) / (exp(ia*D_ALP)+1.0);
     }
 
     //3 - Using the Battin variable we recover all our outputs
-    a = am/(1 - x*x);
+    a = am/(1.0 - x*x);
 
     double beta,alfa,eta2,eta,psi,sigma1;
 
-    if (x < 1)	// ellipse
+    if (x < 1.0)	// ellipse
     {
-        beta = 2 * asin (sqrt( (s-c)/(2*a) ));
+        beta = 2.0 * asin (sqrt( (s-c)/(2.0*a) ));
         if (lw) beta = -beta;
-        alfa=2*acos(x);
-        psi=(alfa-beta)/2;
-        eta2=2*a*pow(sin(psi),2)/s;
+        alfa=2.0*acos(x);
+        psi=(alfa-beta)/2.0;
+        eta2=2.0*a*pow(sin(psi),2.0)/s;
         eta=sqrt(eta2);
     }
     else		// hyperbola
     {
-        beta = 2*boost::math::asinh(sqrt((c-s)/(2*a)));
+        beta = 2.0*boost::math::asinh(sqrt((c-s)/(2.0*a)));
         if (lw) beta = -beta;
-        alfa = 2*boost::math::acosh(x);
-        psi = (alfa-beta)/2;
-        eta2 = -2 * a * pow(sinh(psi),2)/s;
+        alfa = 2.0*boost::math::acosh(x);
+        psi = (alfa-beta)/2.0;
+        eta2 = -2.0 * a * pow(sinh(psi),2.0)/s;
         eta = sqrt(eta2);
     }
 
-    p = ( r2 / (am * eta2) ) * pow (sin (theta/2),2);
-    sigma1 = (1/(eta * sqrt(am)) )* (2 * lambda * am - (lambda + x * eta));
+    p = ( r2 / (am * eta2) ) * pow (sin (theta/2.0),2.0);
+    sigma1 = (1.0/(eta * sqrt(am)) )* (2.0 * lambda * am - (lambda + x * eta));
     vr1 = sigma1;
     vt1 = sqrt(p);
     vt2 = vt1 / r2;
-    vr2 = -vr1 + (vt1 - vt2)/tan(theta/2);
+    vr2 = -vr1 + (vt1 - vt2)/tan(theta/2.0);
     return retval;
 }
 } //namespaces
