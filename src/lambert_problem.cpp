@@ -42,7 +42,7 @@ const array3D lambert_problem::default_r2 = {{0,1,0}};
  * \param[in] cw when 1 a retrograde orbit is assumed
  * \param[in] multi_revs when true computes also all multiple revolutions soluitons
  */
-lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw, const bool multi_revs) :
+lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw, const int &multi_revs) :
 				m_r1(r1), m_r2(r2),m_tof(tof),m_mu(mu),m_has_converged(true), m_multi_revs(multi_revs)
 {
 	// 1 - Computing non dimensional units
@@ -63,10 +63,10 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 
 	// 3 - computing maximum number of revolutions
 	m_Nmax = 0;
-	if (m_multi_revs) {
+	if (m_multi_revs>0) {
 		m_Nmax = lambert_find_N(m_s,m_c,tof/T,m_lw);
 	}
-
+	m_Nmax = std::min(m_multi_revs,m_Nmax);
 	// 4 - computing all solutions
 	m_v1.resize(m_Nmax * 2 +1);
 	m_v2.resize(m_Nmax * 2 +1);

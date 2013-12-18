@@ -54,7 +54,7 @@ inline double tof_curve_multi_rev(const double& ix,const double& s,const double&
 /**
  * This function solves a Lambert problem in its 'minimal' two-dimensional formulation.
  * It makes use of the Battin's variable \f$x$\f and the 'Izzo' plane to rectify
- * the time of flight curves (i.e. [log(x+1),log(tof)] and [tan(x*pi/2),tof] for the mutirev case)
+ * the time of flight curves (i.e. [log(x+1),log(tof)] and [log[(x+1)/(1-x)],log(tof)] for the mutirev case)
  *
  * \param[out] vr1 radial component of the velocity at r1
  * \param[out] vt1 tangential component of the velocity at r1

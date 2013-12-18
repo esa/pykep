@@ -385,14 +385,14 @@ BOOST_PYTHON_MODULE(_core) {
 
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
-		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const bool&> >(
+		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
 			"lambert_problem(r1, r2, t [, mu = 1, cw = False])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
 			"- r2: 3D final position (x2,y2,z2)\n"
 			"- t: time of flight\n"
-			"- mu: gravitational parameter\n"
-			"- cw: True for clock-wise motion, False otherwise\n\n"
-			"- multi_revs: True if multiple revolutions have to be computed"
+			"- mu: gravitational parameter (default is 1)\n"
+			"- cw: True for clock-wise motion, False otherwise (default is True)\n"
+			"- multi_revs: Maximum number of multirevs to be computed (default is 5)\n"
 			"NOTE: Units need to be consistent.\n\n"
 			"NOTE: The multirev Lambert's problem will be solved upon construction and its solution stored in data members.\n\n"
 			"Example (non-dimensional units used)::\n\n"

@@ -61,7 +61,7 @@ int main() {
 		//2 - Solve the lambert problem
 		try
 		{
-			lambert_problem lp(r1,r2,tof);
+			lambert_problem lp(r1,r2,tof,1.0,1,5);
 
 
 			//3 - Check its precision using propagate_lagrangian

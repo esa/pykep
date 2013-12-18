@@ -50,7 +50,7 @@ namespace kep_toolbox {
  * NOTE: The class has been tested extensively via monte carlo runs checked with numerical propagation. After 500000
  * lambert solvers a maximum error of 10^-8 has been found defined as the magnitude of the difference between r2 and
  * the same vector as evaluated propagating numerically with the v1 found. Average number of iterations is 7. Speed is
- * 3.2 sec to call lambert_3d 500374 times. Tests have been made on a 2.16Ghz Intel Core Duo
+ * 3.2 sec to call lambert_3d 500374 times (N=0). Tests have been made on a 2.16Ghz Intel Core Duo
  *
  * @see kep_toolbox::lambert_2d
  * @see kep_toolbox::lambert_3d
@@ -65,7 +65,7 @@ class __KEP_TOOL_VISIBLE lambert_problem
 	static const array3D default_r2;
 public:
 	friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
-	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0, const bool multi_revs=true);
+	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0, const int &multi_revs=5);
 	const std::vector<array3D>& get_v1() const;
 	const std::vector<array3D>& get_v2() const;
 	const array3D& get_r1() const;
@@ -114,7 +114,7 @@ private:
 	double m_s,m_c;
 	int m_Nmax;
 	bool m_has_converged;
-	bool m_multi_revs;
+	int m_multi_revs;
 
 };
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);
