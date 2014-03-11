@@ -29,6 +29,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/random.hpp>
 
+#include "../src/lambert_problem1220.h"
 #include "../src/lambert_problem.h"
 #include "../src/core_functions/propagate_lagrangian.h"
 #include "../src/core_functions/array3D_operations.h"
@@ -40,7 +41,7 @@ int main() {
 	// Preamble
 	array3D r1,r2;
 	double tof;
-	boost::mt19937 rng;
+	boost::mt19937 rng(1234);
 	boost::uniform_int<> dist(0, 1);
 	boost::variate_generator<boost::mt19937&, boost::uniform_int<> > rand_bit(rng, dist);
 	boost::uniform_real<> dist1(-2,2);
@@ -49,27 +50,32 @@ int main() {
 	int count=0;
 
 	// Experiment Settings
-	unsigned int Ntrials = 4380;
+	unsigned int Ntrials = 120000;
 
 	// Start Experiment
 	for (unsigned int i = 0; i<Ntrials; ++i){
 		//1 - generate a random problem geometry
 		r1[0] = drng(); r1[1] = drng(); r1[2] = drng();
 		r2[0] = drng(); r2[1] = drng(); r2[2] = drng();
-		tof = (drng () + 2) / 4 * 100;
+		tof = (drng () + 2) / 4 * 100 + 0.1;
 
 		//2 - Solve the lambert problem
 		try
 		{
-			lambert_problem lp(r1,r2,tof,1.0,1,5);
-
+			double mu = 1.0;
+			int revs_max = 20;
+			int cw = rand_bit();
+			lambert_problem lp(r1,r2,tof,mu,cw,revs_max);
 
 			//3 - Check its precision using propagate_lagrangian
 			for (unsigned int i = 0; i < lp.get_v1().size(); ++i){
 				array3D r1_p(r1),v1_p,err;
 				v1_p = lp.get_v1()[i];
-				propagate_lagrangian(r1_p,v1_p,tof,1.0);
+				propagate_lagrangian(r1_p,v1_p,tof,mu);
 				diff(err,r2,r1_p);
+				if (norm(err) > 1e-2) {
+					std::cout << r1 << "\n"  << r2 << "\n" << tof;
+				}
 				err_max = std::max(err_max,norm(err));
 				acc += norm(err);
 

@@ -107,7 +107,7 @@ inline int lambert_3d (vettore3D &v1, vettore3D &v2, double &a, double &p,
     vers(ir1,r1);
     vers(ir2,r2);
     (lw ? cross(ih,ir2,ir1) : cross(ih,ir1,ir2));     //here is the singularity: as when ir1||ir2 this plane is not defined!!
-    if (ih[0]+ih[1]+ih[2] == 0) {
+	if (norm(ih) == 0) {
         throw_value_error("lambert problem is singular in 3D as the transfer angle is 180*n degrees");
     }
     vers(ih,ih);
