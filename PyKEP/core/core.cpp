@@ -391,7 +391,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"- r2: 3D final position (x2,y2,z2)\n"
 			"- t: time of flight\n"
 			"- mu: gravitational parameter (default is 1)\n"
-			"- cw: True for clock-wise motion, False otherwise (default is True)\n"
+			"- cw: True for retrograde motion (clockwise), False if counter-clock wise (default is False)\n"
 			"- multi_revs: Maximum number of multirevs to be computed (default is 5)\n"
 			"NOTE: Units need to be consistent.\n\n"
 			"NOTE: The multirev Lambert's problem will be solved upon construction and its solution stored in data members.\n\n"
@@ -430,17 +430,11 @@ BOOST_PYTHON_MODULE(_core) {
 			"Example::\n\n"
 			"  mu = l.get_mu()"
 		)
-		.def("get_a",&kep_toolbox::lambert_problem::get_a,return_value_policy<copy_const_reference>(),
+		.def("get_x",&kep_toolbox::lambert_problem::get_a,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the semi-major axes of all computed solutions to the Lambert's Problem\n\n"
 			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
 			"Example (extracts a for the 0 revs solution)::\n\n"
 			"  a0 = l.get_a()[0]"
-		)
-		.def("get_p",&kep_toolbox::lambert_problem::get_p,return_value_policy<copy_const_reference>(),
-			"Returns a sequence containing the semilatus rectum (parameter) of all computed solutions to the Lambert's Problem\n\n"
-			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
-			"Example (extracts p for the 0 revs solution)::\n\n"
-			"  p0 = l.get_p()[0]"
 		)
 		.def("get_iters",&kep_toolbox::lambert_problem::get_iters,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the number of iterations employed to compute each solution to the Lambert's Problem\n\n"
@@ -448,14 +442,8 @@ BOOST_PYTHON_MODULE(_core) {
 			"Example (extracts the number of iterations employed for the 0 revs solution)::\n\n"
 			"  p0 = l.get_iters()[0]"
 		)
-		.def("is_reliable",&kep_toolbox::lambert_problem::is_reliable,
-			"Returns True if all solutions to the Lambert's problem have been solved using less iterations than the maximum number of iterations allowed. This is set at compile time in the c++ header file astro_constants.h\n\n"
-			"Example::\n\n"
-			"  if l.is_reliable():\n"
-			"    n_sol = len(l.get_a())"
-		)
 		.def("get_Nmax",&kep_toolbox::lambert_problem::get_Nmax,
-			"Returns the maximum number of revolutions for which a solution exists. The total number of solution to the Lambert's problem will thus be n_sol = Nmax*2 + 1\n\n"
+			"Returns the maximum number of revolutions allowed. The total number of solution to the Lambert's problem will thus be n_sol = Nmax*2 + 1\n\n"
 			"Example::\n\n"
 			"  Nmax = l.get_Nmax()\n"
 			"  n_sol = Nmax*2+1"
