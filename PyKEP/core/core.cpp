@@ -227,7 +227,7 @@ BOOST_PYTHON_MODULE(_core) {
 
 	// These serve to allow boost python to resolve correctly the overloaded function get_elements
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
-	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
+	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
 
 	class_<kep_toolbox::planet>("planet","A planet ... contains the ephemerides calculations",
 		init<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, optional<const std::string &> >(
@@ -430,11 +430,11 @@ BOOST_PYTHON_MODULE(_core) {
 			"Example::\n\n"
 			"  mu = l.get_mu()"
 		)
-		.def("get_x",&kep_toolbox::lambert_problem::get_a,return_value_policy<copy_const_reference>(),
-			"Returns a sequence containing the semi-major axes of all computed solutions to the Lambert's Problem\n\n"
+		.def("get_x",&kep_toolbox::lambert_problem::get_x,return_value_policy<copy_const_reference>(),
+			"Returns a sequence containing the x values of all computed solutions to the Lambert's Problem\n\n"
 			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
 			"Example (extracts a for the 0 revs solution)::\n\n"
-			"  a0 = l.get_a()[0]"
+			"  x0 = l.get_x()[0]"
 		)
 		.def("get_iters",&kep_toolbox::lambert_problem::get_iters,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the number of iterations employed to compute each solution to the Lambert's Problem\n\n"
