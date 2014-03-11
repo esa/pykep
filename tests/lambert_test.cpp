@@ -29,7 +29,6 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/random.hpp>
 
-#include "../src/lambert_problem1220.h"
 #include "../src/lambert_problem.h"
 #include "../src/core_functions/propagate_lagrangian.h"
 #include "../src/core_functions/array3D_operations.h"
