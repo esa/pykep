@@ -94,5 +94,5 @@ planet_ptr planet_js::clone() const
 } //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_js);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_js)
 // Serialization code (END)

@@ -67,13 +67,12 @@ public:
 	const double& get_mu() const;
 	const std::vector<double>& get_x() const;
 	const std::vector<int>& get_iters() const;
-	bool is_reliable() const;
 	int get_Nmax() const;
 private:
-	int householder(const double T, double& x0, const double lambda, const int N, const double eps, const int itermax);
-	void dTdx(double &DT,double &DDT,double &DDDT,const double x0, const double tof, const double lambda);
-	void x2tof(double &tof,const double x0,const double lambda, const int N);
-	void x2tof2(double &tof,const double x0,const double lambda, const int N);
+	int householder(const double T, double& x0, const int N, const double eps, const int itermax);
+	void dTdx(double &DT,double &DDT,double &DDDT,const double x0, const double tof);
+	void x2tof(double &tof,const double x0, const int N);
+	void x2tof2(double &tof,const double x0, const int N);
 	double hypergeometricF(double z, double tol);
 	friend class boost::serialization::access;
 	template <class Archive>
@@ -89,6 +88,7 @@ private:
 		ar & m_x;
 		ar & m_s;
 		ar & m_c;
+		ar & m_lambda;
 		ar & m_iters;
 		ar & m_Nmax;
 		ar & m_has_converged;
@@ -103,7 +103,7 @@ private:
 	std::vector<array3D> m_v2;
 	std::vector<int> m_iters;
 	std::vector<double> m_x;
-	double m_s,m_c;
+	double m_s,m_c,m_lambda;
 	int m_Nmax;
 	bool m_has_converged;
 	int m_multi_revs;

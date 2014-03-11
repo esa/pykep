@@ -33,20 +33,7 @@ int main() {
     //Our reccomendation is to use the keplerian toolbox Python interface PyGMO
     //
     //You can comile this main linking it to the keplerian_toolbox library
-    
-
-    array3D r0 = {{0.22, 1, 2}};
-    array3D v0 = {{0.012, -0.2, 0.1}};
-    array3D rcp(r0); array3D vcp(v0);
-    //array3D v0 = {{0, 1, 0}};
-    const array3D u = {{0.001,0.0023,-0.0023}};
-
-    double m0=1000.0; double t0=0;
-    std::cout << "r0: " << r0 << std::endl << "v0: "<< v0 << std::endl << "m0: " << m0 << std::endl << "t0: " << t0 << std::endl;
-    double sf = 1.2;
-    propagate_taylor_s(r0,v0,m0,t0,u,sf, 1.1, 1.1, 1.1, 1.5,-14,-14);
-    std::cout << "r0: " << r0 << std::endl << "v0: "<< v0 << std::endl << "m0: " << m0 << std::endl << "t0: " << t0 << std::endl;
-    propagate_taylor(r0,v0,m0,u,-t0, 1.1, 1.1,-14,-14);
-    std::cout << "r0: " << r0 << std::endl << "v0: "<< v0 << std::endl << "m0: " << m0 << std::endl << "t0: " << t0 << std::endl;
+	lambert_problem lp;
+	std::cout << lp << std::endl;
     return 0;
 }

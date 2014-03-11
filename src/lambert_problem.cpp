@@ -22,10 +22,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "lambert_problem.h"
-#include "core_functions/array3D_operations.h"
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
+
+#include "lambert_problem.h"
+#include "core_functions/array3D_operations.h"
+#include"exceptions.h"
+
 
 namespace kep_toolbox {
 
@@ -46,23 +49,31 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 				m_r1(r1), m_r2(r2),m_tof(tof),m_mu(mu),m_has_converged(true), m_multi_revs(multi_revs)
 {
 	// 0 - Sanity checks
-
+	if (tof <= 0) {
+		throw_value_error("Time of flight is negative!");
+	}
+	if (mu <= 0) {
+		throw_value_error("Gravity parameter is zero or negative!");
+	}
 	// 1 - Getting lambda and T
-	double c = sqrt( (r2[0]-r1[0])*(r2[0]-r1[0]) + (r2[1]-r1[1])*(r2[1]-r1[1]) + (r2[2]-r1[2])*(r2[2]-r1[2]));
+	m_c = sqrt( (r2[0]-r1[0])*(r2[0]-r1[0]) + (r2[1]-r1[1])*(r2[1]-r1[1]) + (r2[2]-r1[2])*(r2[2]-r1[2]));
 	double R1 = norm(m_r1);
 	double R2 = norm(m_r2);
-	double s = (c+R1+R2) / 2.0;
+	m_s = (m_c+R1+R2) / 2.0;
 	array3D ir1,ir2,ih,it1,it2;
 	vers(ir1,r1);
 	vers(ir2,r2);
 	cross(ih,ir1,ir2);
 	vers(ih,ih);
-	double lambda2 = 1.0 - c/s;
-	double lambda = sqrt(lambda2);
+	if (ih[2] == 0) {
+		throw_value_error("The angular momentum vector has no z component, impossible to define automatically clock or counterclockwise");
+	}
+	double lambda2 = 1.0 - m_c/m_s;
+	m_lambda = sqrt(lambda2);
 
 	if (ih[2] < 0.0) // Transfer angle is larger than 180 degrees as seen from abive the z axis
 	{
-		lambda = -lambda;
+		m_lambda = -m_lambda;
 		cross(it1,ir1,ih);
 		cross(it2,ir2,ih);
 	} else {
@@ -73,17 +84,17 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 	vers(it2,it2);
 
 	if (cw) { // Retrograde motion
-		lambda = -lambda;
+		m_lambda = -m_lambda;
 		it1[0] = -it1[0]; it1[1] = -it1[1]; it1[2] = -it1[2];
 		it2[0] = -it2[0]; it2[1] = -it2[1]; it2[2] = -it2[2];
 	}
-	double lambda3 = lambda*lambda2;
-	double T = sqrt(2.0*mu/s/s/s) * tof;
+	double lambda3 = m_lambda*lambda2;
+	double T = sqrt(2.0*m_mu/m_s/m_s/m_s) * m_tof;
 
 	// 2 - We now have lambda, T and we will find all x
 	// 2.1 - Let us first detect the maximum number of revolutions for which there exists a solution
 	m_Nmax = T/M_PI;
-	double T00 = acos(lambda) + lambda*sqrt(1.0-lambda2);
+	double T00 = acos(m_lambda) + m_lambda*sqrt(1.0-lambda2);
 	double T0 = (T00 + m_Nmax*M_PI);
 	double T1 = 2.0/3.0 * (1.0 - lambda3),DT=0.0,DDT=0.0,DDDT=0.0;
 	if (m_Nmax >0) {
@@ -93,7 +104,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 			double T_min=T0;
 			double x_old=0.0,x_new = 0.0;
 			while (1) {
-				dTdx(DT,DDT,DDDT,x_old,T_min,lambda);
+				dTdx(DT,DDT,DDDT,x_old,T_min);
 				if (!DT == 0.0) {
 						x_new = x_old - DT * DDT / (DDT * DDT - DT * DDDT / 2.0);
 				}
@@ -101,7 +112,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 				if ( (err<1e-13) || (it>12) ) {
 					break;
 				}
-				x2tof(T_min,x_new,lambda,m_Nmax);
+				x2tof(T_min,x_new,m_Nmax);
 				x_old=x_new;
 				it++;
 			}
@@ -131,7 +142,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 		m_x[0] = pow((T/T00),0.69314718055994529 / log(T1/T00)) - 1.0;
 	}
 	// 3.1.2 Householder iterations
-	m_iters[0] = householder(T, m_x[0], lambda, 0.0, 1e-5, 15);
+	m_iters[0] = householder(T, m_x[0], 0.0, 1e-5, 15);
 	// 3.2 multi rev solutions
 	double tmp;
 	for (int i=1;i<m_Nmax+1;++i)
@@ -139,24 +150,24 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 		//3.2.1 left Householder iterations
 		tmp = pow((i*M_PI+M_PI) / (8.0*T), 2.0/3.0);
 		m_x[2*i-1] = (tmp-1)/(tmp+1);
-		m_iters[2*i-1] = householder(T, m_x[2*i-1], lambda, i, 1e-8, 15);
+		m_iters[2*i-1] = householder(T, m_x[2*i-1], i, 1e-8, 15);
 		//3.2.1 right Householder iterations
 		tmp = pow((8.0*T)/(i*M_PI), 2.0/3.0);
 		m_x[2*i] = (tmp-1)/(tmp+1);
-		m_iters[2*i] = householder(T, m_x[2*i], lambda, i, 1e-8, 15);
+		m_iters[2*i] = householder(T, m_x[2*i], i, 1e-8, 15);
 	}
 
 	// 4 - For each found x value we reconstruct the terminal velocities
-	double gamma = sqrt(mu*s/2.0);
-	double rho = (R1-R2) / c;
+	double gamma = sqrt(m_mu*m_s/2.0);
+	double rho = (R1-R2) / m_c;
 	double sigma = sqrt(1-rho*rho);
 	double vr1,vt1,vr2,vt2,y;
 	for (size_t i=0;i< m_x.size();++i)
 	{
 		y = sqrt(1.0-lambda2+lambda2*m_x[i]*m_x[i]);
-		vr1 = gamma *((lambda*y-m_x[i])-rho*(lambda*y+m_x[i]))/R1;
-		vr2 = -gamma*((lambda*y-m_x[i])+rho*(lambda*y+m_x[i]))/R2;
-		double vt = gamma*sigma*(y+lambda*m_x[i]);
+		vr1 = gamma *((m_lambda*y-m_x[i])-rho*(m_lambda*y+m_x[i]))/R1;
+		vr2 = -gamma*((m_lambda*y-m_x[i])+rho*(m_lambda*y+m_x[i]))/R2;
+		double vt = gamma*sigma*(y+m_lambda*m_x[i]);
 		vt1 = vt/R1;
 		vt2 = vt/R2;
 		for (int j=0; j<3;++j) m_v1[i][j] = vr1 * ir1[j] + vt1 * it1[j];
@@ -164,7 +175,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 	}
 }
 
-int lambert_problem::householder(const double T, double& x0, const double lambda, const int N,
+int lambert_problem::householder(const double T, double& x0, const int N,
 						const double eps, const int iter_max) {
 	int it=0;
 	double err = 1.0;
@@ -172,8 +183,8 @@ int lambert_problem::householder(const double T, double& x0, const double lambda
 	double tof=0.0, delta=0.0,DT=0.0,DDT=0.0,DDDT=0.0;
 	while ( (err>eps) && (it < iter_max) )
 	{
-			x2tof(tof,x0,lambda,N);
-			dTdx(DT,DDT,DDDT,x0,tof,lambda);
+			x2tof(tof,x0,N);
+			dTdx(DT,DDT,DDDT,x0,tof);
 			delta = tof-T;
 			double DT2 = DT*DT;
 			xnew = x0 - delta * (DT2-delta*DDT/2.0) / (DT*(DT2-delta*DDT) + DDDT*delta*delta/6.0);
@@ -185,10 +196,10 @@ int lambert_problem::householder(const double T, double& x0, const double lambda
 }
 
 void lambert_problem::dTdx(double &DT,double &DDT,double &DDDT,const double x,
-							 const double T, const double lambda)
+							 const double T)
 {
-	double l2 = lambda*lambda;
-	double l3 = l2*lambda;
+	double l2 = m_lambda*m_lambda;
+	double l3 = l2*m_lambda;
 	double umx2 = 1.0-x*x;
 	double y = sqrt(1.0-l2*umx2);
 	double y2 = y*y;
@@ -198,57 +209,57 @@ void lambert_problem::dTdx(double &DT,double &DDT,double &DDDT,const double x,
 	DDDT = 1.0 / umx2 * (7.0*x*DDT+8.0*DT-6.0*(1.0-l2)*l2*l3*x/y3/y2);
 }
 
-void lambert_problem::x2tof2(double &tof,const double x,const double lambda, const int N)
+void lambert_problem::x2tof2(double &tof,const double x, const int N)
 {
 	double a = 1.0 / (1.0-x*x);
 	if (a>0)	//ellipse
 	{
 		double alfa = 2.0*acos(x);
-		double beta = 2.0 * asin (sqrt(lambda*lambda/a));
-		if (lambda<0.0) beta = -beta;
+		double beta = 2.0 * asin (sqrt(m_lambda*m_lambda/a));
+		if (m_lambda<0.0) beta = -beta;
 		tof =  ((a * sqrt (a)* ( (alfa - sin(alfa)) - (beta - sin(beta)) + 2.0*M_PI*N)) / 2.0);
 	}
 	else
 	{
 		double alfa = 2.0*boost::math::acosh(x);
-		double beta = 2.0 * boost::math::asinh(sqrt(-lambda*lambda/a));
-		if (lambda<0.0) beta = -beta;
+		double beta = 2.0 * boost::math::asinh(sqrt(-m_lambda*m_lambda/a));
+		if (m_lambda<0.0) beta = -beta;
 		tof =  ( -a * sqrt (-a)* ( (beta - sinh(beta)) - (alfa - sinh(alfa)) ) / 2.0);
 	}
 }
 
-void lambert_problem::x2tof(double &tof,const double x,const double lambda, const int N)
+void lambert_problem::x2tof(double &tof,const double x, const int N)
 {
 	double battin = 0.01;
 	double lagrange = 0.2;
 	double dist = fabs(x-1);
 	if (dist < lagrange && dist > battin) { // We use Lagrange tof expression
-		x2tof2(tof,x,lambda,N);
+		x2tof2(tof,x,N);
 		return;
 	}
-	double K = lambda*lambda;
+	double K = m_lambda*m_lambda;
 	double E = x*x-1.0;
 	double rho = fabs(E);
 	double z = sqrt(1+K*E);
 	if (dist < battin) { // We use Battin series tof expression
-		double eta = z-lambda*x;
-		double S1 = 0.5*(1.0-lambda-x*eta);
+		double eta = z-m_lambda*x;
+		double S1 = 0.5*(1.0-m_lambda-x*eta);
 		double Q = hypergeometricF(S1,1e-11);
 		Q = 4.0/3.0*Q;
-		tof = (eta*eta*eta*Q+4.0*lambda*eta)/2.0 + N*M_PI / pow(rho,1.5);
+		tof = (eta*eta*eta*Q+4.0*m_lambda*eta)/2.0 + N*M_PI / pow(rho,1.5);
 		return;
 	} else { // We use Lancaster tof expresion
 		double y=sqrt(rho);
-		double g = x*z - lambda*E;
+		double g = x*z - m_lambda*E;
 		double d = 0.0;
 		if (E<0) {
 			double l = acos(g);
 			d=N*M_PI+l;
 		} else {
-			double f = y*(z-lambda*x);
+			double f = y*(z-m_lambda*x);
 			d=log(f+g);
 		}
-		tof = (x-lambda*z-d/y)/E;
+		tof = (x-m_lambda*z-d/y)/E;
 		return;
 	}
 }
@@ -269,17 +280,6 @@ double lambert_problem::hypergeometricF(double z, double tol) {
 		j=j+1;
 	}
 	return Sj;
-}
-
-/// Reliability check
-/** Checks that all lambert solver calls have terminated within the maximum allowed iteration
- * indicating convergence of the tof curve solution
- *
- * \return true if all solutions have converged
- */
-bool lambert_problem::is_reliable() const
-{
-	return m_has_converged;
 }
 
 /// Gets velocity at r1
@@ -332,6 +332,12 @@ const double& lambert_problem::get_tof() const
 	return m_tof;
 }
 
+/// Gets the x variable
+/**
+ * Gets the x variable for each solution found (0 revs, 1,1,2,2,3,3 .... N,N)
+ *
+ * \return the x variables in an std::vector
+ */
 const std::vector<double>& lambert_problem::get_x() const
 {
 	return m_x;
@@ -346,7 +352,6 @@ const double& lambert_problem::get_mu() const
 {
 	return m_mu;
 }
-
 
 /// Gets number of iterations
 /**
@@ -370,10 +375,27 @@ int lambert_problem::get_Nmax() const
 
 /// Streaming operator
 std::ostream &operator<<(std::ostream &s, const lambert_problem &lp) {
-	s << "Lambert's problem:" << std::endl;
+	s << std::setprecision(14) << "Lambert's problem:" << std::endl;
+	s << "mu = " << lp.m_mu << std::endl;
 	s << "r1 = " << lp.m_r1 << std::endl;
 	s << "r2 = " << lp.m_r2 << std::endl;
-	s << "Time of flight: " << lp.m_tof <<std::endl;
+	s << "Time of flight: " << lp.m_tof <<std::endl<< std::endl;
+	s << "chord = " << lp.m_c << std::endl;
+	s << "semiperimeter = " << lp.m_c << std::endl;
+	s << "lambda = " << lp.m_lambda << std::endl;
+	s << "non dimensional time of flight = " << lp.m_tof * sqrt(2*lp.m_mu/lp.m_s/lp.m_s/lp.m_s) << std::endl << std::endl;
+	s << "Maximum number of revolutions: " << lp.m_Nmax << std::endl;
+	s << "Solutions: " << std::endl;
+	s << "0 revs, Iters: " << lp.m_iters[0] << ", x: " << lp.m_x[0] << ", a: " << lp.m_s / 2.0 / (1-lp.m_x[0]*lp.m_x[0]) <<std::endl;
+	s <<"\tv1= " << lp.m_v1[0] << " v2= " << lp.m_v2[0] << std::endl;
+	for (int i=0; i<lp.m_Nmax;++i)
+	{
+		s << i+1 << " revs,  left. Iters: " << lp.m_iters[1+2*i] << ", x: " << lp.m_x[1+2*i] << ", a: " << lp.m_s / 2.0 / (1-lp.m_x[1+2*i]*lp.m_x[1+2*i]) <<std::endl;
+		s << "\tv1= " << lp.m_v1[1+2*i] << " v2= " << lp.m_v2[1+2*i] << std::endl;
+		s << i+1 << " revs, right. Iters: " << lp.m_iters[2+2*i] << ", a: " << lp.m_x[2+2*i] << ", a: " << lp.m_s / 2.0 / (1-lp.m_x[2+2*i]*lp.m_x[2+2*i]) <<std::endl;
+		s << "\tv1= " << lp.m_v1[2+2*i] << " v2= " << lp.m_v2[2+2*i] << std::endl;
+
+	}
 	return s;
 }
 
