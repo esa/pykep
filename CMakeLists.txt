@@ -14,7 +14,7 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Configuration for GCC.
 IF(CMAKE_COMPILER_IS_GNUCXX)
-	# Add to the base flags extra warnings, and set up message reporting from the compiler so that it is Eclipse-friendly.
+		# Add t o the base flags extra warnings, and set up message reporting from the compiler so that it is Eclipse-friendly.
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0 -ffast-math")
 	# This flag is suggested for performance. One can check with the tests what difference it really makes
 	#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
@@ -48,9 +48,10 @@ SET(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_js.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
+#	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)

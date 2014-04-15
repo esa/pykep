@@ -38,7 +38,9 @@ namespace kep_toolbox{
 /// Solar System Planet (keplerian)
 /**
  * This class derives from the planet class and allow to instantiate planets of
- * the solar system by referring to their common names.
+ * the solar system by referring to their common names. The ephemeris used
+ * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
+ * valid in the timeframe 1800AD - 2050 AD
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
@@ -46,28 +48,40 @@ namespace kep_toolbox{
 class __KEP_TOOL_VISIBLE planet_ss : public planet
 {
 public:
-    /**
-     * Construct a planet from its common name (e.g. VENUS)
-     * \param[in] name a string describing a planet
-     */
-    planet_ss(const std::string & = "earth");
-    planet_ptr clone() const;
+	/**
+	 * Construct a planet from its common name (e.g. VENUS)
+	 * \param[in] name a string describing a planet
+	 */
+	planet_ss(const std::string & = "earth");
+	planet_ptr clone() const;
+	/// Computes the planet/system position and velocity w.r.t the Sun
+	/**
+		* \param[in] when Epoch in which ephemerides are required
+		* \param[out] r Planet position at epoch (SI units)
+		* \param[out] v Planet velocity at epoch (SI units)
+		*/
+	void get_eph(const epoch& when, array3D &r, array3D &v) const;
 private:
 // Serialization code
-    friend class boost::serialization::access;
-    template <class Archive>
-    void serialize(Archive &ar, const unsigned int)
-    {
-        ar & boost::serialization::base_object<planet>(*this);
-    }
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<planet>(*this);
+		ar & jpl_elements;
+		ar & jpl_elements_dot;
+	}
 // Serialization code (END)
+
+	array6D jpl_elements;
+	array6D jpl_elements_dot;
 };
 
 
 } /// End of namespace kep_toolbox
 
 // Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss)
 // Serialization code (END)
 
 #endif // PLANET_SS_H

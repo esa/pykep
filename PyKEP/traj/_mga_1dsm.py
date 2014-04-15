@@ -2,47 +2,64 @@ from PyGMO.problem import base as base_problem
 from PyKEP import epoch,DAY2SEC,planet_ss,MU_SUN,lambert_problem,propagate_lagrangian,fb_prop, AU
 from math import pi, cos, sin, acos
 from scipy.linalg import norm
-"""
-This class represents an mga-1DSM global optimization problem (single and multi-objective)
 
-SEE : Izzo: "Global Optimization and Space Pruning for Spacecraft Trajectory Design, Spacecraft Trajectory Optimization, Conway, B. (Eds.), Cambridge University Press, pp.178-199, 2010)
-
-The decision vector is [t0,u,v,Vinf,eta1,T] + [beta, rp/rV, eta2,a2] ..... in the units: [mjd2000,nd,nd,km/s,nd,years] + [rad,nd,nd,nd] + ....
-where Vinf = Vinf_mag*(cos(theta)*cos(phi)i+cos(theta)*sin(phi)j+sin(phi)k) and theta = 2*pi*u and phi = acos(2*v-1)-pi/2
-
-Each leg time-of-flight can be obtained as Tn = T*an, T(n-1) = (T - Tn)*a(n-1), .... , Ti = (T-T(i+1)-T(i+2)- .... - Tn)*ai
-
-NOTE: The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
-
-"""
 class mga_1dsm(base_problem):
 	"""
-	Constructs a global optimization problem (box-bounded, continuous) representing an interplanetary trajectory modelled
+	This class represents a global optimization problem (box-bounded, continuous) relative to an interplanetary trajectory modelled
 	as a Multiple Gravity Assist trajectory that allows one only Deep Space Manouvre between each leg.
-	
-	USAGE: opt_prob = mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False)
 
-	* seq:  list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
-	* t0:   list of PyKEP epochs defining the launch window
-	* tof:  minimum and maximum time of flight allowed (in years)
-	* vinf: maximum launch hyperbolic velocity allowed
-	* multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
+	SEE : Izzo: "Global Optimization and Space Pruning for Spacecraft Trajectory Design, Spacecraft Trajectory Optimization, Conway, B. (Eds.), Cambridge University Press, pp.178-199, 2010)
+
+	The decision vector is [t0,u,v,Vinf,eta1,T] + [beta, rp/rV, eta2,a2] ..... in the units: [mjd2000,nd,nd,km/s,nd,years] + [rad,nd,nd,nd] + ....
+	where Vinf = Vinf_mag*(cos(theta)*cos(phi)i+cos(theta)*sin(phi)j+sin(phi)k) and theta = 2*pi*u and phi = acos(2*v-1)-pi/2
+
+	Each leg time-of-flight can be obtained as Tn = T*an, T(n-1) = (T - Tn)*a(n-1), .... , Ti = (T-T(i+1)-T(i+2)- .... - Tn)*ai
+
+	NOTE: The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
+
 	"""
-	def __init__(self, seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = 2.5, multi_objective = False):
-		self.__n = len(seq) - 1
-		dim = 6 + (self.__n-1) * 4
+	def __init__(self, 
+			seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], 
+			t0 = [epoch(0),epoch(1000)], 
+			tof = [1.0,5.0], 
+			vinf = [0.5,2.5],
+			add_vinf_dep=False, 
+			add_vinf_arr=True,
+			multi_objective = False):
+		"""
+		Constructs an mga_1dsm problem
+
+		USAGE: traj.mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
+
+		* seq: list of PyKEP planets defining the encounter sequence (including the starting launch)
+		* t0: list of two epochs defining the launch window
+		* tof: list of two floats defining the minimum and maximum allowed mission lenght (years)
+		* vinf: list of two floats defining the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec
+		* multi_objective: when True constructs a multiobjective problem (dv, T)
+		* add_vinf_dep: when True the computed Dv includes the initial hyperbolic velocity (at launch)
+		* add_vinf_arr: when True the computed Dv includes the final hyperbolic velocity (at the last planet)
+		"""
+		
+		#Sanity checks ...... all planets need to have the same mu_central_body
+		if ( [r.mu_central_body for r in seq].count(seq[0].mu_central_body)!=len(seq) ):
+			raise ValueError('All planets in the sequence need to have exactly the same mu_central_body')
+		self.__add_vinf_dep = add_vinf_dep
+		self.__add_vinf_arr = add_vinf_arr
+		self.__n_legs = len(seq) - 1
+		dim = 6 + (self.__n_legs-1) * 4
 		obj_dim = multi_objective + 1
 		#First we call the constructor for the base PyGMO problem 
 		#As our problem is n dimensional, box-bounded (may be multi-objective), we write
 		#(dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
 		super(mga_1dsm,self).__init__(dim,0,obj_dim,0,0,0)
 
-		#We then define all planets in the sequence as data members
+		#We then define all planets in the sequence  and the common central body gravity as data members
 		self.seq = seq
+		self.common_mu = seq[0].mu_central_body
 		
 		#And we compute the bounds
-		lb = [t0[0].mjd2000,0.0,0.0,1e-5     ,0.0     ,tof[0]*365.25] + [0   ,1.1 ,1e-5    ,1e-5]     * (self.__n-1)
-		ub = [t0[1].mjd2000,1.0,1.0,vinf*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n-1)
+		lb = [t0[0].mjd2000,0.0,0.0,vinf[0]*1000,1e-5    ,tof[0]*365.25] + [-2*pi   ,1.1 ,1e-5    ,1e-5]     * (self.__n_legs-1)
+		ub = [t0[1].mjd2000,1.0,1.0,vinf[1]*1000,1.0-1e-5,tof[1]*365.25] + [2*pi,30.0,1.0-1e-5,1.0-1e-5] * (self.__n_legs-1)
 		
 		#Accounting that each planet has a different safe radius......
 		for i,pl in enumerate(seq[1:-1]):
@@ -54,18 +71,18 @@ class mga_1dsm(base_problem):
 	#Objective function
 	def _objfun_impl(self,x):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
-		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n-1):	
+		T = list([0]*(self.__n_legs))
+
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([0.0] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -80,11 +97,11 @@ class mga_1dsm(base_problem):
 		Vinfz = x[3]*sin(phi)
 
 		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
-		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,MU_SUN)
+		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu)
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,MU_SUN)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
 
@@ -92,21 +109,25 @@ class mga_1dsm(base_problem):
 		DV[0] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			#Fly-by 
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
 			#s/c propagation before the DSM
-			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,MU_SUN)
+			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,MU_SUN)
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
 			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#Last Delta-v
-		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		if self.__add_vinf_arr:
+			DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		
+		if self.__add_vinf_dep:
+			DV[0] += x[3]
 
 		if self.f_dimension == 1:
 			return (sum(DV),)
@@ -114,22 +135,26 @@ class mga_1dsm(base_problem):
 			return (sum(DV), sum(T))
 
 	def pretty(self,x):
-	  	"""
+		"""
 		Prints human readable information on the trajectory represented by the decision vector x
+		
+		Example::
+		
+		  prob.pretty(x)
 		"""
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
+		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n-1):	
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -150,13 +175,13 @@ class mga_1dsm(base_problem):
 		print "VINF: " + str(x[3] / 1000) + " km/sec"
 
 		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
-		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,MU_SUN)
+		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu)
 		
 		print "DSM after " + str(x[4]*T[0]) + " days"
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,MU_SUN)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
 
@@ -165,7 +190,7 @@ class mga_1dsm(base_problem):
 		print "DSM magnitude: " + str(DV[0]) + "m/s"
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			print "\nleg no. " + str(i+1) + ": " + self.seq[i].name + " to " + self.seq[i+1].name 
 			print "Duration: " + str(T[i]) + "days"
 			#Fly-by 
@@ -173,11 +198,11 @@ class mga_1dsm(base_problem):
 			print "Fly-by epoch: " + str(t_P[i]) + " (" + str(t_P[i].mjd2000) + " mjd2000) " 
 			print "Fly-by radius: " + str(x[7+(i-1)*4]) + " planetary radii"
 			#s/c propagation before the DSM
-			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,MU_SUN)
+			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
 			print "DSM after " + str(x[8+(i-1)*4]*T[i]) + " days"
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,MU_SUN)
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
@@ -187,14 +212,19 @@ class mga_1dsm(base_problem):
 		#Last Delta-v
 		print "\nArrival at " + self.seq[-1].name
 		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
+		print "Arrival epoch: " + str(t_P[-1]) + " (" + str(t_P[-1].mjd2000) + " mjd2000) " 
 		print "Arrival Vinf: " + str(DV[-1]) + "m/s"
 		print "Total mission time: " + str(sum(T)/365.25) + " years"
 
 
 	#Plot of the trajectory
 	def plot(self,x):
-	  	"""
+		"""
 		Plots the trajectory represented by the decision vector x
+		
+		Example::
+		
+		  prob.plot(x)
 		"""
 		import matplotlib as mpl
 		from mpl_toolkits.mplot3d import Axes3D
@@ -207,18 +237,18 @@ class mga_1dsm(base_problem):
 		ax.scatter(0,0,0, color='y')
 		
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
-		T = list([0]*(self.__n))
+		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n-1):	
+		for i in xrange(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		#2 - We compute the epochs and ephemerides of the planetary encounters
-		t_P = list([None] * (self.__n+1))
-		r_P = list([None] * (self.__n+1))
-		v_P = list([None] * (self.__n+1))
-		DV = list([None] * (self.__n+1))
+		t_P = list([None] * (self.__n_legs+1))
+		r_P = list([None] * (self.__n_legs+1))
+		v_P = list([None] * (self.__n_legs+1))
+		DV = list([None] * (self.__n_legs+1))
 		
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
@@ -234,12 +264,12 @@ class mga_1dsm(base_problem):
 		Vinfz = x[3]*sin(phi)
 
 		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
-		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,MU_SUN)
-		plot_kepler(ax,r_P[0],v0,x[4]*T[0]*DAY2SEC,MU_SUN,N = 100, color='b', legend=False, units = AU)
+		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu)
+		plot_kepler(ax,r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU)
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
-		l = lambert_problem(r,r_P[1],dt,MU_SUN)
+		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
 		plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
@@ -248,16 +278,18 @@ class mga_1dsm(base_problem):
 		DV[0] = norm([a-b for a,b in zip(v_beg_l,v)])
 
 		#4 - And we proceed with each successive leg
-		for i in range(1,self.__n):
+		for i in range(1,self.__n_legs):
 			#Fly-by 
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
 			#s/c propagation before the DSM
-			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,MU_SUN)
-			plot_kepler(ax,r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,MU_SUN,N = 100, color='b', legend=False, units = AU)
+			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
+			plot_kepler(ax,r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU)
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
-			l = lambert_problem(r,r_P[i+1],dt,MU_SUN)
-			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
+
+			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
+			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU, N=1000)
+
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
@@ -267,7 +299,12 @@ class mga_1dsm(base_problem):
 	
 	def set_tof(self, minimum, maximum):
 		"""
-		Sets the minimum and maximum time of flight allowed (in days)
+		Sets the minimum and maximum time of flight allowed (in years)
+		
+		Example::
+		  m = 3
+		  M = 5
+		  prob.set_tof(m,M)
 		"""
 		lb = list(self.lb)
 		ub = list(self.ub)
@@ -277,7 +314,13 @@ class mga_1dsm(base_problem):
 		
 	def set_launch_window(self, start, end):
 		"""
-		Sets the launch window allowed in terms of starting and ending epoch
+		Sets the launch window allowed in terms of starting and ending epochs
+		
+		Example::
+		
+		  start = epoch(0)
+		  end = epoch(1000)
+		  prob.set_launch_window(start, end)
 		"""
 		lb = list(self.lb)
 		ub = list(self.ub)
@@ -288,6 +331,11 @@ class mga_1dsm(base_problem):
 	def set_vinf(self, vinf):
 		"""
 		Sets the allowed launch vinf (in km/s)
+		
+		Example::
+		  
+		  M = 5
+		  prob.set_vinf(M)
 		"""
 		lb = list(self.lb)
 		ub = list(self.ub)
@@ -295,3 +343,7 @@ class mga_1dsm(base_problem):
 		ub[3] = vinf * 1000
 		self.set_bounds(lb,ub)
 		
+	def human_readable_extra(self):
+             return ("\n\t Sequence: " + [pl.name for pl in self.seq].__repr__() +
+		     "\n\t Add launcher vinf to the objective?: " + self.__add_vinf_dep.__repr__() +
+		     "\n\t Add final vinf to the objective?: " + self.__add_vinf_arr.__repr__())

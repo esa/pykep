@@ -1,4 +1,4 @@
-def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', legend = False):
+def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=80, legend = False):
 	"""
 	Plots the planet position and its orbit
 		      
@@ -8,6 +8,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 	  * t0:		PyKEP.epoch object indicating when we want to plot the planet position
 	  * units:	the length unit to be used in the plot
 	  * color:	matplotlib color to use to plot the line
+	  * s:		planet size (pixel^2)
 	  * legend	when True it plots also the legend with the planet name
 	  
 	EXAMPLE:
@@ -31,7 +32,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 	a = plnt.orbital_elements[0]
 	
 	#orbital period in days
-	T = 2*pi*sqrt(a**3/MU_SUN) * SEC2DAY
+	T = 2*pi*sqrt(a**3/plnt.mu_central_body) * SEC2DAY
 	
 	#points where the orbit will be plotted
 	when = np.linspace(0,T,N)
@@ -53,7 +54,7 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', leg
 	else:
 		label=None
 	ax.plot(x, y, z, label=label, c=color)
-	ax.scatter([x[0]],[y[0]],[z[0]])
+	ax.scatter([x[0]],[y[0]],[z[0]], s=s, marker='o', alpha=0.8, c = color)
 	
 	if legend:
 		ax.legend()
@@ -157,7 +158,7 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 	#We define the integration time ...
 	dt = t / (N-1)
 	
-	#... and calcuate the cartesian components for r
+	#... and calculate the cartesian components for r
 	x = [0.0]*N
 	y = [0.0]*N
 	z = [0.0]*N
@@ -175,7 +176,7 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 	else:
 		label = None
 	ax.plot(x, y, z, c=color, label=label)
-	
+
 	if legend:
 		ax.legend()
 		
@@ -294,6 +295,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	x[0] = r[0]/units
 	y[0] = r[1]/units
 	z[0] = r[2]/units
+	
 	
 	#We compute all points by propagation
 	for i,t in enumerate(throttles[:fwd_seg]):

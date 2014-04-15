@@ -43,7 +43,7 @@ try:
 			self.__nseg1 = nseg1
 			self.__nseg2 = nseg2
 
-			#And the box-bouds (launch windows, allowed velocities etc.)
+			#And the box-bounds (launch windows, allowed velocities etc.)
 			lb = [3000,100,mass/2] + [-self.__Vinf_dep]*3 + [-6000]*3 + [200,mass/9] + [-6000]*3 + [-self.__Vinf_arr]*3 + [-1,-1,-1] * (nseg1+nseg2)
 			ub = [4000,1000,mass]   + [self.__Vinf_dep]*3  + [6000]*3  + [2000,mass]    + [6000]*3  + [ self.__Vinf_arr]*3 + [1,1,1]    * (nseg1+nseg2)
 			self.set_bounds(lb,ub)
@@ -116,6 +116,7 @@ try:
 
 		#This transforms the leg into a high fidelity one
 		def high_fidelity(self,boolean):
+			self.reset_caches()
 			self.__leg.high_fidelity = boolean
 
 		#And this help visualizing the trajectory

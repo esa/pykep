@@ -22,62 +22,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
+#ifndef PLANET_JS_H
+#define PLANET_JS_H
 
-#ifndef X2TOF_H
-#define X2TOF_H
+#include "serialization.h"
+#include "planet.h"
+#include "config.h"
 
-#include<cmath>
+namespace kep_toolbox{
 
-#include <boost/math/special_functions/acosh.hpp>
-#include <boost/math/special_functions/asinh.hpp>
-
-namespace kep_toolbox {
-/// Convert the Battin's variable x to time of flight in a non dimensional Lambert's problem
+/// Solar System Planet (keplerian)
 /**
- * A Lambert problem is defined by \f$ r_1,r_2,t\f$ and \f$ \mu\f$. Assuming as length units \f$ |r_1|\f$ and as velocity
- * units \f$ \sqrt(\mu/|r_1|)\f$ (i.e. \f$ \mu = 1\f$) the Lambert's problem is only defined by \f$ r_2,t\f$. Employing these units
- * this function returns the time-of flight from the Battin's variable \f$ x\f$.
- *
- * \param[in] x Battin's variable
- * \param[in] s half perimeter of the triangle defined by r1,r2
- * \param[in] c chord defined by the r1,r2 triangle
- * \param[in] lw switch between long and short way solutions (when lw=1 the long way solution sselected)
- * \param[in] N multiple revolutions (default is 0)
- *
- * \see Battin "Introduction to the Mahematics and Methods of Astrodynamic"
+ * This class derives from the planet class and allow to instantiate moons of
+ * the Jupiter system by referring to their common names. Ephemerides are those
+ * used during the GTOC6 competition
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-inline double x2tof(const double &x,const double &s,const double &c,const int &lw, const int &N = 0)
+
+class __KEP_TOOL_VISIBLE planet_js : public planet
 {
-    double am,a,alfa,beta;
-
-    am = s/2;
-    a = am/(1-x*x);
-    if (x < 1)	//ellipse
+public:
+	/**
+	 * Construct a Jupiter moon from its common name
+	 * \param[in] name a string describing a planet
+	 */
+	planet_js(const std::string & = "io");
+	planet_ptr clone() const;
+private:
+// Serialization code
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
 	{
-        beta = 2 * asin (sqrt((s - c)/(2*a)));
-        if (lw) beta = -beta;
-		alfa = 2 * acos(x);
-    }
-    else
-    {
-        alfa = 2 * boost::math::acosh(x);
-        beta = 2 * boost::math::asinh(sqrt ((s - c)/(-2 * a)));
-        if (lw) beta = -beta;
-    }
+		ar & boost::serialization::base_object<planet>(*this);
+	}
+// Serialization code (END)
+};
 
-    if (a > 0)
-    {
-        return (a * sqrt (a)* ( (alfa - sin(alfa)) - (beta - sin(beta)) + 2*M_PI*N));
-    }
-    else
-    {
-        return (-a * sqrt(-a)*( (sinh(alfa) - alfa) - ( sinh(beta) - beta)) );
-    }
 
-}
+} /// End of namespace kep_toolbox
 
-} //namespace
+// Serialization code
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_js);
+// Serialization code (END)
 
-#endif // X2TOF_H
+#endif // PLANET_JS_H

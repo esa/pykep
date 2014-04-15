@@ -28,4 +28,5 @@ fly-by. he selected launch windows is 2016-2017, the launch hyperbolic velocity 
 To solve such a global optimization problem, we use jDE, a self-adaptive version of differential evolution and the generalized migration
 operator, thus computing the solution in eight paralel threads.
 
-The code for this example can be studied `here <http://keptoolbox.git.sourceforge.net/git/gitweb.cgi?p=keptoolbox/keptoolbox;a=blob;f=PyKEP/kep_examples/_ex5.py>`_
+The code for this example can be studied `here 
+<http://sourceforge.net/p/keptoolbox/code/ci/ef0454a6a69403a1786a4e7920c3fe036a916ad2/tree/PyKEP/examples/_ex5.py>`_

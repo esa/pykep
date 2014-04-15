@@ -7108,21 +7108,21 @@ namespace kep_toolbox{
 
 asteroid_gtoc5::asteroid_gtoc5(const int &astid_)
 {
-    int astid = astid_ - 1;
-    if (astid_ < 1  || astid_ > 7076) {
-        throw_value_error("Wrong asteroid id ... check your code");
-    }
-    array6D elem = {{gtoc5_asteroids_data[astid][1] * ASTRO_AU, gtoc5_asteroids_data[astid][2], gtoc5_asteroids_data[astid][3] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][4] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][5] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][6] * ASTRO_DEG2RAD}};
-    build_planet(epoch(gtoc5_asteroids_data[astid][0],epoch::MJD), elem, ASTRO_MU_SUN,
-        0, // the body gravitational parameter, undefined
-        0, // the body radius, undefined
-        0, // the body safe radius, undefined
-        std::string("GTOC5 asteroid row: ") + boost::lexical_cast<std::string>(astid_));
+	int astid = astid_ - 1;
+	if (astid_ < 1  || astid_ > 7076) {
+		throw_value_error("Wrong asteroid id ... check your code");
+	}
+	array6D elem = {{gtoc5_asteroids_data[astid][1] * ASTRO_AU, gtoc5_asteroids_data[astid][2], gtoc5_asteroids_data[astid][3] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][4] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][5] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][6] * ASTRO_DEG2RAD}};
+	build_planet(epoch(gtoc5_asteroids_data[astid][0],epoch::MJD), elem, ASTRO_MU_SUN,
+		0, // the body gravitational parameter, undefined
+		0, // the body radius, undefined
+		0, // the body safe radius, undefined
+		std::string("GTOC5 asteroid row: ") + boost::lexical_cast<std::string>(astid_));
 }
 
 planet_ptr asteroid_gtoc5::clone() const
 {
-    return planet_ptr(new asteroid_gtoc5(*this));
+	return planet_ptr(new asteroid_gtoc5(*this));
 }
 
 } //namespace
