@@ -8,4 +8,4 @@ using the boost::python library. At the library core is the implementation of an
 for the multiple revolutions Lambert’s problem, objects representing the Sims-Flanagan low-thrust model,
 efficient keplerian propagators, Taylor-integrators and more ...
 
-Check the official web-page at http://esa.github.io/pykep/
+Check the official documentation at http://esa.github.io/pykep/
