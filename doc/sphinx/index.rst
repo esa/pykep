@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 ==========================================
-Welcome to PyKEP's (V1.1.3) documentation!
+Welcome to PyKEP's documentation!
 ==========================================
 +----------------------------+--------------------------------+
 |                            |                                |                            
