@@ -8,4 +8,4 @@ The `git <http://git-scm.com/>`_ versioning system is needed to access the code.
 
 * open a terminal and type::
 
-    git clone git://keptoolbox.git.sourceforge.net/gitroot/keptoolbox/keptoolbox
+    git clone https://github.com/esa/pykep.git
