@@ -386,7 +386,7 @@ BOOST_PYTHON_MODULE(_core) {
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
 		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
-			"lambert_problem(r1, r2, t [, mu = 1, cw = False])\n\n"
+			"lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
 			"- r2: 3D final position (x2,y2,z2)\n"
 			"- t: time of flight\n"
