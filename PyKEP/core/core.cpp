@@ -433,7 +433,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def("get_x",&kep_toolbox::lambert_problem::get_x,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the x values of all computed solutions to the Lambert's Problem\n\n"
 			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
-			"Example (extracts a for the 0 revs solution)::\n\n"
+			"Example (extracts x for the 0 revs solution)::\n\n"
 			"  x0 = l.get_x()[0]"
 		)
 		.def("get_iters",&kep_toolbox::lambert_problem::get_iters,return_value_policy<copy_const_reference>(),
