@@ -22,15 +22,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "lambert_problem.h"
+#include "lambert_problemOLD.h"
 #include "core_functions/array3D_operations.h"
 #include "core_functions/lambert_find_N.h"
 #include "core_functions/lambert_3d.h"
 
 namespace kep_toolbox {
 
-const array3D lambert_problem::default_r1 = {{1,0,0}};
-const array3D lambert_problem::default_r2 = {{0,1,0}};
+const array3D lambert_problemOLD::default_r1 = {{1,0,0}};
+const array3D lambert_problemOLD::default_r2 = {{0,1,0}};
 
 /// Constructor
 /** It constructs and solves a Lambert problem.
@@ -42,7 +42,7 @@ const array3D lambert_problem::default_r2 = {{0,1,0}};
  * \param[in] cw when 1 a retrograde orbit is assumed
  * \param[in] multi_revs when true computes also all multiple revolutions soluitons
  */
-lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw, const int &multi_revs) :
+lambert_problemOLD::lambert_problemOLD(const array3D &r1, const array3D &r2, const double &tof, const double& mu, const int &cw, const int &multi_revs) :
 				m_r1(r1), m_r2(r2),m_tof(tof),m_mu(mu),m_has_converged(true), m_multi_revs(multi_revs)
 {
 	// 1 - Computing non dimensional units
@@ -92,7 +92,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
  *
  * \return true if all solutions have converged
  */
-bool lambert_problem::is_reliable() const
+bool lambert_problemOLD::is_reliable() const
 {
 	return m_has_converged;
 }
@@ -102,7 +102,7 @@ bool lambert_problem::is_reliable() const
  *
  * \return an std::vector containing 3-d arrays with the cartesian components of the velocities at r1 for all 2N_max+1 solutions
  */
-const std::vector<array3D>& lambert_problem::get_v1() const
+const std::vector<array3D>& lambert_problemOLD::get_v1() const
 {
 	return m_v1;
 }
@@ -112,7 +112,7 @@ const std::vector<array3D>& lambert_problem::get_v1() const
  *
  * \return an std::vector containing 3-d arrays with the cartesian components of the velocities at r2 for all 2N_max+1 solutions
  */
-const  std::vector<array3D>& lambert_problem::get_v2() const
+const  std::vector<array3D>& lambert_problemOLD::get_v2() const
 {
 	return m_v2;
 }
@@ -122,7 +122,7 @@ const  std::vector<array3D>& lambert_problem::get_v2() const
  *
  * \return a 3-d array with the cartesian components of r1
  */
-const array3D& lambert_problem::get_r1() const
+const array3D& lambert_problemOLD::get_r1() const
 {
 	return m_r1;
 }
@@ -132,7 +132,7 @@ const array3D& lambert_problem::get_r1() const
  *
  * \return a 3-d array with the cartesian components of r2
  */
-const array3D& lambert_problem::get_r2() const
+const array3D& lambert_problemOLD::get_r2() const
 {
 	return m_r2;
 }
@@ -142,7 +142,7 @@ const array3D& lambert_problem::get_r2() const
  *
  * \return the time of flight
  */
-const double& lambert_problem::get_tof() const
+const double& lambert_problemOLD::get_tof() const
 {
 	return m_tof;
 }
@@ -152,7 +152,7 @@ const double& lambert_problem::get_tof() const
  *
  * \return the gravitational parameter
  */
-const double& lambert_problem::get_mu() const
+const double& lambert_problemOLD::get_mu() const
 {
 	return m_mu;
 }
@@ -163,7 +163,7 @@ const double& lambert_problem::get_mu() const
  *
  * \return an std::vector containing the semi-major axes all 2N_max+1 solutions
  */
-const  std::vector<double>& lambert_problem::get_a() const
+const  std::vector<double>& lambert_problemOLD::get_a() const
 {
 	return m_a;
 }
@@ -172,7 +172,7 @@ const  std::vector<double>& lambert_problem::get_a() const
  *
  * \return an std::vector containing the parameters of all 2N_max+1 solutions
  */
-const  std::vector<double>& lambert_problem::get_p() const
+const  std::vector<double>& lambert_problemOLD::get_p() const
 {
 	return m_p;
 }
@@ -182,7 +182,7 @@ const  std::vector<double>& lambert_problem::get_p() const
  *
  * \return an std::vector containing the iterations taken to compute each one of the solutions
  */
-const  std::vector<int>& lambert_problem::get_iters() const
+const  std::vector<int>& lambert_problemOLD::get_iters() const
 {
 	return m_iters;
 }
@@ -192,13 +192,13 @@ const  std::vector<int>& lambert_problem::get_iters() const
  *
  * \return the maximum number of revolutions. The number of solutions to the problem will be Nmax*2 +1
  */
-int lambert_problem::get_Nmax() const
+int lambert_problemOLD::get_Nmax() const
 {
 	return m_Nmax;
 }
 
 /// Streaming operator
-std::ostream &operator<<(std::ostream &s, const lambert_problem &lp) {
+std::ostream &operator<<(std::ostream &s, const lambert_problemOLD &lp) {
 	s << "Lambert's problem:" << std::endl;
 	s << "r1 = " << lp.m_r1 << std::endl;
 	s << "r2 = " << lp.m_r2 << std::endl;

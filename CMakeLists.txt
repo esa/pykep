@@ -44,6 +44,7 @@ SET(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problemOLD.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
