@@ -93,6 +93,13 @@ static inline kep_toolbox::array3D fb_prop_wrapper(const kep_toolbox::array3D& v
 	return retval;
 }
 
+static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet &pl)
+{
+	double dV(0);
+	kep_toolbox::fb_vel(dV, vin_rel, vout_rel, pl);
+	return dV;
+}
+
 #define get_constant(arg) \
 static inline double get_##arg() \
 { \
@@ -593,6 +600,16 @@ BOOST_PYTHON_MODULE(_core) {
 			  "Returns the cartesian components of the spacecarft velocity after the encounter. \n"
 			  "Example::\n\n"
 		"  vout = fb_prop([1,0,0],[0,1,0],2,3.1415/2,1)\n"
+	);
+	def("fb_vel",&fb_vel_wrapper,
+		"PyKEP.fb_vel(vin,vout,pl)\n\n"
+		"- vin: cartesian coordinates of the relative hyperbolic velocity before the fly-by\n"
+		"- vout: vout, cartesian coordinates of the relative hyperbolic velocity after the fly-by\n"
+		"- pl: fly-by planet\n\n"
+		"Returns a number dV. \n"
+        "  dV represents the norm of the delta-V needed to make a given fly-by possible. dV is necessary to fix the magnitude and the direction of vout.\n\n"
+		"Example::\n\n"
+		"  dV = fb_vel(vin, vout, planet_ss('earth'))\n"
 	);
 
 	//Basic Astrodynamics
