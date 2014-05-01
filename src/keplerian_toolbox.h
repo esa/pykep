@@ -47,6 +47,7 @@
 #include"core_functions/par2ic.h"
 #include"core_functions/fb_con.h"
 #include"core_functions/fb_prop.h"
+#include"core_functions/fb_vel.h"
 #include"core_functions/propagate_lagrangian.h"
 #include"core_functions/propagate_lagrangian_u.h"
 #include"core_functions/propagate_taylor.h"
