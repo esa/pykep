@@ -135,9 +135,9 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 	// 3.1 0 rev solution
 	// 3.1.1 initial guess
 	if (T>=T00) {
-		m_x[0] = pow((T00/T),2.0/3.0) - 1.0;
+		m_x[0] = -(T-T00)/(T-T00+4);
 	} else if (T<=T1) {
-		m_x[0] = 2.0*T1/T - 1.0;
+		m_x[0] = T1*(T1-T) / ( 2.0/5.0*(1-lambda2*lambda3) * T ) + 1;
 	} else {
 		m_x[0] = pow((T/T00),0.69314718055994529 / log(T1/T00)) - 1.0;
 	}

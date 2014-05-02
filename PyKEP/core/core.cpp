@@ -93,6 +93,13 @@ static inline kep_toolbox::array3D fb_prop_wrapper(const kep_toolbox::array3D& v
 	return retval;
 }
 
+static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet &pl)
+{
+	double dV(0);
+	kep_toolbox::fb_vel(dV, vin_rel, vout_rel, pl);
+	return dV;
+}
+
 #define get_constant(arg) \
 static inline double get_##arg() \
 { \
@@ -386,7 +393,7 @@ BOOST_PYTHON_MODULE(_core) {
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
 		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
-			"lambert_problem(r1, r2, t [, mu = 1, cw = False])\n\n"
+			"lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
 			"- r2: 3D final position (x2,y2,z2)\n"
 			"- t: time of flight\n"
@@ -433,7 +440,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def("get_x",&kep_toolbox::lambert_problem::get_x,return_value_policy<copy_const_reference>(),
 			"Returns a sequence containing the x values of all computed solutions to the Lambert's Problem\n\n"
 			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
-			"Example (extracts a for the 0 revs solution)::\n\n"
+			"Example (extracts x for the 0 revs solution)::\n\n"
 			"  x0 = l.get_x()[0]"
 		)
 		.def("get_iters",&kep_toolbox::lambert_problem::get_iters,return_value_policy<copy_const_reference>(),
@@ -450,6 +457,75 @@ BOOST_PYTHON_MODULE(_core) {
 		)
 		.def(repr(self))
 		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>())
+		.def(init<>());
+
+	// Lambert problem OLD.
+	class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a multiple revolution Lambert's problem",
+		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
+			"lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])\n\n"
+			"- r1: starting position (x1,y1,z1)\n"
+			"- r2: 3D final position (x2,y2,z2)\n"
+			"- t: time of flight\n"
+			"- mu: gravitational parameter (default is 1)\n"
+			"- cw: True for retrograde motion (clockwise), False if counter-clock wise (default is False)\n"
+			"- multi_revs: Maximum number of multirevs to be computed (default is 5)\n"
+			"NOTE: Units need to be consistent.\n\n"
+			"NOTE: The multirev Lambert's problem will be solved upon construction and its solution stored in data members.\n\n"
+			"Example (non-dimensional units used)::\n\n"
+			"  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )"
+		))
+		.def("get_v1",&kep_toolbox::lambert_problemOLD::get_v1,return_value_policy<copy_const_reference>(),
+			"Returns a sequence of vectors containing the velocities at r1 of all computed solutions to the Lambert's Problem\n\n"
+			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
+			"Example (extracts v1 for the 0 revs solution)::\n\n"
+			"  v10 = l.get_v1()[0]"
+		)
+		.def("get_v2",&kep_toolbox::lambert_problemOLD::get_v2,return_value_policy<copy_const_reference>(),
+			"Returns a sequence of vectors containing the velocities at r2 of all computed solutions to the Lambert's Problem\n\n"
+			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
+			"Example (extracts v2 for the 0 revs solution)::\n\n"
+			"  v20 = l.get_v2()[0]"
+		)
+		.def("get_r1",&kep_toolbox::lambert_problemOLD::get_r1,return_value_policy<copy_const_reference>(),
+			"Returns a vector containing the r1 defining the Lambert's Problem\n\n"
+			"Example ::\n\n"
+			"  r1 = l.get_r1()"
+		)
+		.def("get_r2",&kep_toolbox::lambert_problemOLD::get_r2,return_value_policy<copy_const_reference>(),
+			"Returns a vector containing the r2 defining the Lambert's Problem\n\n"
+			"Example ::\n\n"
+			"  r2 = l.get_r2()"
+		)
+		.def("get_tof",&kep_toolbox::lambert_problemOLD::get_tof,return_value_policy<copy_const_reference>(),
+			"Returns the time of flight defining the Lambert's Problem\n\n"
+			"Example::\n\n"
+			"  t = l.get_tof()"
+		)
+		.def("get_mu",&kep_toolbox::lambert_problemOLD::get_mu,return_value_policy<copy_const_reference>(),
+			"Returns the gravitational parameter defining the Lambert's Problem\n\n"
+			"Example::\n\n"
+			"  mu = l.get_mu()"
+		)
+		.def("get_x",&kep_toolbox::lambert_problemOLD::get_a,return_value_policy<copy_const_reference>(),
+			"Returns a sequence containing the a values of all computed solutions to the Lambert's Problem\n\n"
+			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
+			"Example (extracts a for the 0 revs solution)::\n\n"
+			"  x0 = l.get_a()[0]"
+		)
+		.def("get_iters",&kep_toolbox::lambert_problemOLD::get_iters,return_value_policy<copy_const_reference>(),
+			"Returns a sequence containing the number of iterations employed to compute each solution to the Lambert's Problem\n\n"
+			"Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...\n\n"
+			"Example (extracts the number of iterations employed for the 0 revs solution)::\n\n"
+			"  p0 = l.get_iters()[0]"
+		)
+		.def("get_Nmax",&kep_toolbox::lambert_problemOLD::get_Nmax,
+			"Returns the maximum number of revolutions allowed. The total number of solution to the Lambert's problem will thus be n_sol = Nmax*2 + 1\n\n"
+			"Example::\n\n"
+			"  Nmax = l.get_Nmax()\n"
+			"  n_sol = Nmax*2+1"
+		)
+		.def(repr(self))
+		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problemOLD>())
 		.def(init<>());
 
 	//Lagrangian propagator for keplerian orbits
@@ -524,6 +600,16 @@ BOOST_PYTHON_MODULE(_core) {
 			  "Returns the cartesian components of the spacecarft velocity after the encounter. \n"
 			  "Example::\n\n"
 		"  vout = fb_prop([1,0,0],[0,1,0],2,3.1415/2,1)\n"
+	);
+	def("fb_vel",&fb_vel_wrapper,
+		"PyKEP.fb_vel(vin,vout,pl)\n\n"
+		"- vin: cartesian coordinates of the relative hyperbolic velocity before the fly-by\n"
+		"- vout: vout, cartesian coordinates of the relative hyperbolic velocity after the fly-by\n"
+		"- pl: fly-by planet\n\n"
+		"Returns a number dV. \n"
+        "  dV represents the norm of the delta-V needed to make a given fly-by possible. dV is necessary to fix the magnitude and the direction of vout.\n\n"
+		"Example::\n\n"
+		"  dV = fb_vel(vin, vout, planet_ss('earth'))\n"
 	);
 
 	//Basic Astrodynamics
