@@ -32,6 +32,7 @@
 #include"planet_mpcorb.h"
 #include"asteroid_gtoc2.h"
 #include"asteroid_gtoc5.h"
+#include"asteroid_gtoc7.h"
 #include"lambert_problem.h"
 #include"lambert_problemOLD.h"
 #include"core_functions/array3D_operations.h"

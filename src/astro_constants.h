@@ -29,9 +29,9 @@
 #include<boost/array.hpp>
 #include <boost/lexical_cast.hpp>
 
-#define ASTRO_AU 149597870660.0
+#define ASTRO_AU 149597870691.0
 #define ASTRO_JR 71492000.0 
-#define ASTRO_MU_SUN 1.32712428e20
+#define ASTRO_MU_SUN 1.32712440018e20
 #define ASTRO_EARTH_VELOCITY 29784.6905
 #define ASTRO_DEG2RAD (M_PI/*boost::math::constants::pi<double>()*//180.0)
 #define ASTRO_RAD2DEG (180.0/*boost::math::constants::pi<double>()*/ /M_PI)

@@ -371,6 +371,17 @@ BOOST_PYTHON_MODULE(_core) {
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
 		.def(init<>());
 
+	// A planet from the gtoc7 problem
+	class_<kep_toolbox::asteroid_gtoc7,bases<kep_toolbox::planet> >("planet_gtoc7",
+		init<const int &>(
+			"PyKEP.planet_gtoc7(ast_id)\n\n"
+			" - ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original"
+			"Example::\n\n"
+			"  earth = planet_gtoc7(0)"
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc7>())
+		.def(init<>());
+
 	// A planet from the gtoc2 problem
 	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
 		init<const int &>(
