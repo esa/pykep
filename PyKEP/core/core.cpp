@@ -250,6 +250,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"Example::\n\n"
 			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.9998805e-01 * AU, 1.6716812e-02, 8.8543531e-04 * DEG2RAD, 1.7540648e+02 * DEG2RAD, 2.8761578e+02 * DEG2RAD, 2.5760684e+02 * DEG2RAD), MU_SUN, 398600.4418e9, 6378000, 6900000,  'Earth'"
 		))
+		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
 		.def("eph",&planet_get_eph,
 			"PyKEP.planet.eph(when)\n\n"
 			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n\n"

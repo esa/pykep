@@ -60,6 +60,8 @@ class __KEP_TOOL_VISIBLE planet
 {
 	friend std::ostream &operator<<(std::ostream &, const planet &);
 public:
+	/// Default dummy constructor
+	planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0), cached_epoch(epoch(0)), cached_r(array3D()), cached_v(array3D()) {};
 	/// Constructor
 	/**
 		* Constructs a planet from its elements and its phyisical parameters
@@ -72,7 +74,21 @@ public:
 		* \param[in] name C++ string containing the planet name. Default value is "Unknown"
 		*/
 	planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
-	planet():mean_motion(0),ref_mjd2000(0), radius(0), safe_radius(0), mu_self(0), mu_central_body(0), cached_epoch(epoch(0)), cached_r(array3D()), cached_v(array3D()) {};
+
+	/// Constructor
+	/**
+		* Constructs a planet from its position at epoch and its phyisical parameters
+		* \param[in] ref_epoch epoch to which the elements are referred to
+		* \param[in] r0 A STL vector containing the planet position
+		* \param[in] v0 A STL vector containing the planet velociy
+		* \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
+		* \param[in] mu_self The gravitational parameter of the planet (SI units)
+		* \param[in] radius radius of the planet (SI units)
+		* \param[in] safe_radius mimimual radius that is safe during a fly-by of the planet (SI units)
+		* \param[in] name C++ string containing the planet name. Default value is "Unknown"
+	*/
+	planet(const epoch& ref_epoch, const array3D& r0, const array3D& v0, const double & mu_central_body, const double &mu_self, const double &radius, const double &safe_radius, const std::string &name = "Unknown");
+
 	/// Polymorphic copy constructor.
 	virtual planet_ptr clone() const;
 	virtual ~planet();

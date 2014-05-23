@@ -57,6 +57,27 @@ planet::planet(const epoch& ref_epoch, const array6D& orbital_elements_, const d
 	planet::build_planet(ref_epoch, orbital_elements_, mu_central_body_, mu_self_, radius_, safe_radius_, name_);
 }
 
+planet::planet(const epoch& ref_epoch, const array3D& r0, const array3D& v0, const double & mu_central_body_, const double &mu_self_, const double & radius_, const double & safe_radius_, const std::string &name_)
+{
+	if (radius_ <= 0) {
+		throw_value_error("The planet radius needs to be strictly positive");
+	}
+	if (mu_central_body_ <= 0) {
+		throw_value_error("The central body gravitational parameter needs to be strictly positive");
+	}
+	if (mu_self_ <= 0) {
+		throw_value_error("The gravitational parameter of the planet needs to be strictly positive");
+	}
+	for (int i = 0; i < 3; ++i) {
+		cached_r[i] = 0;
+		cached_v[i] = 0;
+	}
+	array6D orbital_elements;
+	ic2par(r0,v0, mu_central_body_, orbital_elements);
+	orbital_elements[5] = e2m(orbital_elements[5],orbital_elements[1]);
+	planet::build_planet(ref_epoch, orbital_elements, mu_central_body_, mu_self_, radius_, safe_radius_, name_);
+}
+
 
 planet_ptr planet::clone() const
 {
