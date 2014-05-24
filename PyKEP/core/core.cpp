@@ -236,19 +236,21 @@ BOOST_PYTHON_MODULE(_core) {
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
 	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
 
-	class_<kep_toolbox::planet>("planet","A planet ... contains the ephemerides calculations",
+	class_<kep_toolbox::planet>("planet","Base class for all planet objects. Ephemerides are Keplerian.",
 		init<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, optional<const std::string &> >(
-			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
+			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n"
+			"PyKEP.planet(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
 			"- when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch\n"
 			"- orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)\n"
+			"- r,v: position and velocity of an object at when (SI units)\n"
 			"- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)\n"
 			"- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)\n"
 			"- radius: body radius (SI units, i.e. meters)\n"
 			"- safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)\n"
 			"- name: body name\n\n"
-			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb` to instantiate common objects"
+			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb`, :py:class:`PyKEP.planet_js` to instantiate common objects"
 			"Example::\n\n"
-			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.9998805e-01 * AU, 1.6716812e-02, 8.8543531e-04 * DEG2RAD, 1.7540648e+02 * DEG2RAD, 2.8761578e+02 * DEG2RAD, 2.5760684e+02 * DEG2RAD), MU_SUN, 398600.4418e9, 6378000, 6900000,  'Earth'"
+			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.99e-01 * AU, 1.67e-02, 8.85e-04 * DEG2RAD, 1.75e+02 * DEG2RAD, 2.87e+02 * DEG2RAD, 2.57e+02 * DEG2RAD), MU_SUN, 398600e9, 6378000, 6900000,  'Earth')"
 		))
 		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
 		.def("eph",&planet_get_eph,
