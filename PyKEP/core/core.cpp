@@ -636,4 +636,14 @@ BOOST_PYTHON_MODULE(_core) {
 			  "Example::\n\n"
 		"  d,ra = closest_distance([1,0,0],[0,1,0],[],[],1.0)\n"
 	);
+
+	def("barker",&kep_toolbox::barker,
+			  "PyKEP.barker(r1,v2,mu)\n\n"
+			  "- r1: initial position (cartesian)\n"
+			  "- r2: final position (cartesian)\n"
+			  "- mu: gravity parameter\n"
+			  "Returns the time of flight as evaluated by the Barker equation. \n"
+			  "Example:: \n\n"
+			  "  t = barker([1,0,0],[0,1,0],1.0)"
+	);
 }
