@@ -1,12 +1,12 @@
 try:
 	from PyGMO.problem import base as PyGMO_problem
 	"""
-	This example demonstarates the use of the interplanetary leg in the Sundmann variable to obtain automated mesh optimization
+	This example demonstrates the use of the interplanetary leg in Sundman's variable to obtain automated mesh optimization
 	"""
 	class mga_lt_earth_mars_sundmann(PyGMO_problem):
 		"""
 		This constructs a PaGMO.problem object that represents a low-thrust transfer between Earth and Mars. 
-		The interplantary leg uses the Sundmann variable. The decision vector
+		The interplantary leg uses Sundman's variable. The decision vector
 		contains [t0,T,sf,mf,Vx,Vy,Vz,[throttles]] in the following units: [mjd2000, days, days, kg, m/s,m/s,m/s, [non-dimensional]]
 		"""
 		def __init__(self,mass=1000,Tmax=0.1,Isp=2500,Vinf=3.0,nseg=20):
@@ -21,12 +21,12 @@ try:
 			self.__mars = planet_ss('jupiter')
 			self.__sc = spacecraft(mass,Tmax,Isp)
 			self.__Vinf = Vinf*1000
-			#here we construct the trajectory leg in the Sundmann variable t = (r/10AU)^1.5 s
+			#here we construct the trajectory leg in Sundman's variable t = (r/10AU)^1.5 s
 			self.__leg = leg_s(nseg,1.0/(100*AU)**1.0,1.0)
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
 			self.__nseg = nseg
-			#The bounds on the Sundmann variable can be evaluated considering circular orbits at r=1AUand r=0.7AU (for example)
+			#The bounds on Sundman's variable can be evaluated considering circular orbits at r=1AU and r=0.7AU (for example)
 			self.set_bounds([5000,2400,10000, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[8000,2500,150000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
 
 		#This is the objective function
@@ -54,7 +54,7 @@ try:
 			except:
 				print "warning: CANNOT EVALUATE constraints .... possible problem in the taylor integration in the Sundmann variable"
 				return (1e14,)*(8+1+self.__nseg+2)
-			#We then scale all constraints to non dimensiona values
+			#We then scale all constraints to non-dimensional values
 			retval[0] /= AU
 			retval[1] /= AU
 			retval[2] /= AU
@@ -66,7 +66,7 @@ try:
 			return retval
 			
 			
-		#And this help visualizing the trajectory
+		#And this helps to visualize the trajectory
 		def plot(self,x):
 			import matplotlib as mpl
 			from mpl_toolkits.mplot3d import Axes3D
