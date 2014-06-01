@@ -3,9 +3,9 @@ try:
 
 	"""
 	This example constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
-	problem that can be then solved using one of the available PyGMO solvers. The problem is a non-linear constrained
-	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
-	are also demonstrated via the plot method. The interplanetary mission modelled is a lt-mga mission Earth-Venus-Mercury.
+	problem that can then be solved using one of the available PyGMO solvers. The problem is a non-linear constrained
+	problem that uses the Sims-Flanagan transcription to model the low-thrust trajectory. PyKEP plotting capabilities
+	are also demonstrated via the plot method. The interplanetary mission modelled is an LT-MGA Earth-Venus-Mercury mission.
 
 	"""
 	class mga_lt_EVMe(PyGMO_problem):
@@ -43,7 +43,7 @@ try:
 			self.__nseg1 = nseg1
 			self.__nseg2 = nseg2
 
-			#And the box-bounds (launch windows, allowed velocities etc.)
+			#And the box-bounds (launch windows, allowed velocities, etc.)
 			lb = [3000,100,mass/2] + [-self.__Vinf_dep]*3 + [-6000]*3 + [200,mass/9] + [-6000]*3 + [-self.__Vinf_arr]*3 + [-1,-1,-1] * (nseg1+nseg2)
 			ub = [4000,1000,mass]   + [self.__Vinf_dep]*3  + [6000]*3  + [2000,mass]    + [6000]*3  + [ self.__Vinf_arr]*3 + [1,1,1]    * (nseg1+nseg2)
 			self.set_bounds(lb,ub)
@@ -81,7 +81,7 @@ try:
 			xe = sc_state(rM, v ,x[10])
 			self.__leg2.set(t_E,x0,x[(-3 * self.__nseg2):],t_V,xe)
 
-			#Defining the costraints
+			#Defining the constraints
 			#departure
 			v_dep_con = (x[3]  * x[3]  + x[4]  * x[4]  + x[5]  * x[5]  - self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
 			#arrival
@@ -92,7 +92,7 @@ try:
 			#Assembling the constraints
 			retval = list(self.__leg1.mismatch_constraints() + self.__leg2.mismatch_constraints()) + [DV_eq] + list(self.__leg1.throttles_constraints() + self.__leg2.throttles_constraints()) + [v_dep_con] + [v_arr_con] + [alpha_ineq]
 
-			#We then scale all constraints to non dimensional values
+			#We then scale all constraints to non-dimensional values
 			#leg 1
 			retval[0] /= AU
 			retval[1] /= AU
@@ -114,12 +114,12 @@ try:
 
 			return retval
 
-		#This transforms the leg into a high fidelity one
+		#This transforms the leg into a high-fidelity one
 		def high_fidelity(self,boolean):
 			self.reset_caches()
 			self.__leg.high_fidelity = boolean
 
-		#And this help visualizing the trajectory
+		#And this helps to visualize the trajectory
 		def plot(self,x):
 			import matplotlib as mpl
 			from mpl_toolkits.mplot3d import Axes3D
