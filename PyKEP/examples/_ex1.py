@@ -2,10 +2,10 @@ try:
 	from PyGMO.problem import base as PyGMO_problem
 
 	"""
-	This example on the use of PyKEP constructs, using he PyGMO syntax, an interplanetary low-thrust optimization
-	problem that can be then solved using one of the available PagMO solvers. The problem is a non-linear constrained
-	problem thas uses the sims-flanagan transcription to model the low-thrust trajectory. PyKEP plots capabilities
-	are also demonstrated
+	This example on the use of PyKEP constructs, using the PyGMO syntax, is an interplanetary low-thrust optimization
+	problem that can then be solved using one of the available PagMO solvers. The problem is a non-linear constrained
+	problem that uses the Sims-Flanagan transcription to model the low-thrust trajectory. PyKEP plotting capabilities
+	are also demonstrated.
 	"""
 	class mga_lt_earth_mars(PyGMO_problem):
 		"""
@@ -53,7 +53,7 @@ try:
 			v_inf_con = (x[3] * x[3] + x[4] * x[4] + x[5] * x[5] - self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
 			retval = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
 			
-			#We then scale all constraints to non dimensiona values
+			#We then scale all constraints to non-dimensional values
 			retval[0] /= AU
 			retval[1] /= AU
 			retval[2] /= AU
@@ -67,7 +67,7 @@ try:
 		def high_fidelity(self,boolean):
 			self.__leg.high_fidelity = boolean
 			
-		#And this help visualizing the trajectory
+		#And this helps to visualize the trajectory
 		def plot(self,x):
 			import matplotlib as mpl
 			from mpl_toolkits.mplot3d import Axes3D
@@ -105,10 +105,10 @@ try:
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
-		print "Running Monotonic Basin Hopping .... this will take a while"
+		print "Running Monotonic Basin Hopping .... this will take a while."
 		isl.evolve(1); isl.join()
 		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
 		prob.plot(isl.population.champion.x)
 
 except:
-	print "Could not import PyGMO. PyGMO is required for some PyKEP examples"
+	print "Could not import PyGMO. PyGMO is required for some PyKEP examples."
