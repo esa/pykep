@@ -29,10 +29,10 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
-    //This is just an example on how to use the keplerian toolbox in c++
-    //Our reccomendation is to use the keplerian toolbox Python interface PyGMO
+    //This is just an example on how to use the Keplerian toolbox in c++
+    //Our recommendation is to use the Keplerian toolbox Python interface PyGMO
     //
-    //You can comile this main linking it to the keplerian_toolbox library
+    //You can compile this main linking it to the keplerian_toolbox library
 	lambert_problem lp;
 	std::cout << lp << std::endl;
     return 0;
