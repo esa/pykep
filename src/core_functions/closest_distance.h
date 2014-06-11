@@ -32,8 +32,8 @@
  * This template function returns the closest distance along a keplerian orbit defined by r1,v1,r2,v2. This can be or not the
  * periplanet, depending on the geometry.
  *
- * \param[in] d_min minimum distance along the defined orbit
- * \param[in] ra apoapsis radius
+ * \param[out] d_min minimum distance along the defined orbit
+ * \param[out] ra apoapsis radius
  * \param[in] r0 initial position vector (of dimension 3)
  * \param[in] v0 initial velocity vector (of dimension 3)
  * \param[in] r1 final position vector (of dimension 3)
