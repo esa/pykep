@@ -42,6 +42,12 @@
 
 using namespace boost::python;
 
+static inline kep_toolbox::array6D ic2par_wrapper(const kep_toolbox::array3D& r0, const kep_toolbox::array3D& v0, const double &mu)
+{
+	kep_toolbox::array6D parameters;
+	kep_toolbox::ic2par(r0, v0, mu,parameters );
+	return parameters;
+}
 static inline tuple closest_distance_wrapper(const kep_toolbox::array3D& r0, const kep_toolbox::array3D& v0, const kep_toolbox::array3D& r1, const kep_toolbox::array3D& v1, const double &mu)
 {
 	double min_d, ra;
@@ -640,7 +646,7 @@ BOOST_PYTHON_MODULE(_core) {
 	);
 
 	def("barker",&kep_toolbox::barker,
-			  "PyKEP.barker(r1,v2,mu)\n\n"
+			  "PyKEP.barker(r1,r2,mu)\n\n"
 			  "- r1: initial position (cartesian)\n"
 			  "- r2: final position (cartesian)\n"
 			  "- mu: gravity parameter\n"
@@ -648,4 +654,15 @@ BOOST_PYTHON_MODULE(_core) {
 			  "Example:: \n\n"
 			  "  t = barker([1,0,0],[0,1,0],1.0)"
 	);
+
+	def("ic2par", &ic2par_wrapper,
+		"PyKEP.ic2par(r1,v2,mu)\n\n"
+		"- r1: initial position (cartesian)\n"
+		"- r2: final position (cartesian)\n"
+		"- mu: gravity parameter\n"
+		"Returns the osculating keplerian elements \n"
+		"Example:: \n\n"
+		"  el = ic2par([1,0,0],[0,1,0],1.0)"
+	);
+
 }
