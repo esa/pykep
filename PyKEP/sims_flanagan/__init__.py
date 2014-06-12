@@ -135,7 +135,7 @@ def _get_states(self):
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
-			x_bak[-2*i-2],y_bak[2*i-2],z_bak[2*i-2] = r
+			x_bak[-2*i-2],y_bak[-2*i-2],z_bak[-2*i-2] = r
 			vx_bak[-2*i-2],vy_bak[-2*i-2],vz_bak[-2*i-2] = v
 			mass_bak[-2*i-2] = m
 
