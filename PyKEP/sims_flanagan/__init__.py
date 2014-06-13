@@ -96,21 +96,21 @@ def _get_states(self):
 	#Backward propagation
 
 	#x,y,z will contain the cartesian components of
-	x_bak = [0.123]*(fwd_seg*2+1)
-	y_bak = [0.123]*(fwd_seg*2+1)
-	z_bak = [0.123]*(fwd_seg*2+1)
-	vx_bak = [0.0]*(fwd_seg*2+1)
-	vy_bak = [0.0]*(fwd_seg*2+1)
-	vz_bak = [0.0]*(fwd_seg*2+1)
-	mass_bak = [0.0]*(fwd_seg*2+1)
+	x_back = [0.123]*(back_seg*2+1)
+	y_back = [0.123]*(back_seg*2+1)
+	z_back = [0.123]*(back_seg*2+1)
+	vx_back = [0.0]*(back_seg*2+1)
+	vy_back = [0.0]*(back_seg*2+1)
+	vz_back = [0.0]*(back_seg*2+1)
+	mass_back = [0.0]*(back_seg*2+1)
 
 	state = self.get_xf()
 
 	#Final conditions
 	r = state.r; v = state.v; m = state.m
-	x_bak[-1],y_bak[-1],z_bak[-1] = r
-	vx_bak[-1],vy_bak[-1],vz_bak[-1] = v
-	mass_bak[-1] = m
+	x_back[-1],y_back[-1],z_back[-1] = r
+	vx_back[-1],vy_back[-1],vz_back[-1] = v
+	mass_back[-1] = m
 
 	for i,t in enumerate(throttles[-1:-back_seg-1:-1]):
 		t_grid[-2*i-2] =  t.end.mjd2000 -(t.end.mjd2000 - t.start.mjd2000)/2.
@@ -120,38 +120,38 @@ def _get_states(self):
 		if self.high_fidelity == False:
 			dV = [max_thrust / m * dt * dumb for dumb in t.value]
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
-			x_bak[-2*i-2],y_bak[-2*i-2],z_bak[-2*i-2] = r
-			vx_bak[-2*i-2],vy_bak[-2*i-2],vz_bak[-2*i-2] = v
-			mass_bak[-2*i-2] = m
+			x_back[-2*i-2],y_back[-2*i-2],z_back[-2*i-2] = r
+			vx_back[-2*i-2],vy_back[-2*i-2],vz_back[-2*i-2] = v
+			mass_back[-2*i-2] = m
 			#v= v+dV
 			v = [a-b for a,b in zip(v,dV)]
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
 			m *= exp( norm(dV)/isp/G0 )
 
-			x_bak[-2*i-3],y_bak[-2*i-3],z_bak[-2*i-3] = r
-			vx_bak[-2*i-3],vy_bak[-2*i-3],vz_bak[-2*i-3] = v
-			mass_bak[-2*i-3] = m
+			x_back[-2*i-3],y_back[-2*i-3],z_back[-2*i-3] = r
+			vx_back[-2*i-3],vy_back[-2*i-3],vz_back[-2*i-3] = v
+			mass_back[-2*i-3] = m
 
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
-			x_bak[-2*i-2],y_bak[-2*i-2],z_bak[-2*i-2] = r
-			vx_bak[-2*i-2],vy_bak[-2*i-2],vz_bak[-2*i-2] = v
-			mass_bak[-2*i-2] = m
+			x_back[-2*i-2],y_back[-2*i-2],z_back[-2*i-2] = r
+			vx_back[-2*i-2],vy_back[-2*i-2],vz_back[-2*i-2] = v
+			mass_back[-2*i-2] = m
 
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
-			x_bak[-2*i-3],y_bak[-2*i-3],z_bak[-2*i-3] = r
-			vx_bak[-2*i-3],vy_bak[-2*i-3],vz_bak[-2*i-3] = v
-			mass_bak[-2*i-3] = m
+			x_back[-2*i-3],y_back[-2*i-3],z_back[-2*i-3] = r
+			vx_back[-2*i-3],vy_back[-2*i-3],vz_back[-2*i-3] = v
+			mass_back[-2*i-3] = m
 
 	t_grid[-2*i-3] = t.start.mjd2000
-	x = x+x_bak
-	y = y+y_bak
-	z = z+z_bak
-	vx = vx+vx_bak
-	vy = vy+vy_bak
-	vz = vz+vz_bak
-	mass = mass+mass_bak
+	x = x+x_back
+	y = y+y_back
+	z = z+z_back
+	vx = vx+vx_back
+	vy = vy+vy_back
+	vz = vz+vz_back
+	mass = mass+mass_back
 
 	return t_grid, zip(x,y,z), zip(vx,vy,vz), mass
 
