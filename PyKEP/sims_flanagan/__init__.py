@@ -12,6 +12,7 @@ def _get_states(self):
 	Returns the spacecraft states (t,r,v,m) at the leg grid points
 
 	Examples::
+
 	  times,r,v,m = PyKEP.sims_flanagan.leg.get_states()
 	"""
 	from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
