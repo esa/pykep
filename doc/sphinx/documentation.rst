@@ -73,15 +73,11 @@ Detailed Documentation
 
   .. automethod:: PyKEP.lambert_problem.get_v2()
 
-  .. automethod:: PyKEP.lambert_problem.get_a()
-
-  .. automethod:: PyKEP.lambert_problem.get_p()
+  .. automethod:: PyKEP.lambert_problem.get_x()
 
   .. automethod:: PyKEP.lambert_problem.get_Nmax()
 
   .. automethod:: PyKEP.lambert_problem.get_iters()
- 
-  .. automethod:: PyKEP.lambert_problem.is_reliable()
 
 .. autoclass:: PyKEP.epoch(*args)
 
