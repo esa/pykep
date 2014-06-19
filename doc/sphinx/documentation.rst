@@ -14,13 +14,13 @@ Name						Type      	Description
 :class:`PyKEP.planet`      			class      	represents a generic planet in a keplerian motion around its primary 
 :class:`PyKEP.planet_ss`      			class      	represents a solar system planet in keplerian motion around the sun
 :class:`PyKEP.planet_mpcorb`      		class      	represents an asteroid from the `MPCORB database <http://www.minorplanetcenter.org/iau/MPCORB.html>`_ 
-:class:`PyKEP.planet_gtoc5`      		class      	represents an asteroid from the `GTOC5 competition <http://gtoc5.math.msu.su/>`_ asteroid list
-:class:`PyKEP.planet_gtoc2` 			class		represents an asteroid from the `GTOC2 competition <http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm>`_ asteroid list
 :class:`PyKEP.lambert_problem`			class		solves the multirevolution lambert problem
 :func:`PyKEP.propagate_lagrangian`		function	propagates pure keplerian motion using Lagrange coefficients and universal variables
 :func:`PyKEP.propagate_taylor`			function	propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
-:func:`PyKEP.fb_con`     			function	computes the feasibility of a fly-by defined by a planet and the spacecarft relative in and out velocities
+:func:`PyKEP.fb_con`     			function	returns violation of velocity and angular constraint during a fly-by
+:func:`PyKEP.fb_vel`   		        	function	returns the violation of the velocity and angular constraint during a fly-by in terms of one single DV
 :func:`PyKEP.fb_prop`   			function	propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
+:func:`PyKEP.barker`   	        		function	computes the (parabolic) time-of-flight from the Barker equation
 =========================================  	=========	================================================
 
 The sims_flanagan module
@@ -127,14 +127,6 @@ Detailed Documentation
 
   .. autoattribute:: PyKEP.planet_mpcorb.year_of_discovery
 
-.. autoclass:: PyKEP.planet_gtoc5(*args)
-
-  .. automethod:: PyKEP.planet_gtoc5.__init__(*args)
-
-.. autoclass:: PyKEP.planet_gtoc2(*args)
-
-  .. automethod:: PyKEP.planet_gtoc2.__init__(*args)
-
 .. autoclass:: PyKEP.sims_flanagan.spacecraft(*args)
 
   .. automethod:: PyKEP.sims_flanagan.spacecraft.__init__(*args)
@@ -146,6 +138,8 @@ Detailed Documentation
   .. automethod:: PyKEP.sims_flanagan.sc_state.set(*args)
 
   .. automethod:: PyKEP.sims_flanagan.sc_state.get(*args)
+  
+  .. automethod:: PyKEP.sims_flanagan.get_states()
 
 .. autoclass:: PyKEP.sims_flanagan.leg(*args)
 
@@ -170,6 +164,10 @@ Detailed Documentation
 .. autofunction:: PyKEP.fb_con(*args)
 
 .. autofunction:: PyKEP.fb_prop(*args)
+
+.. autofunction:: PyKEP.fb_vel(*args)
+
+.. autofunction:: PyKEP.barker(*args)
 
 .. autoclass:: PyKEP.traj.mga_1dsm(*args)
  
