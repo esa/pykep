@@ -42,6 +42,12 @@
 
 using namespace boost::python;
 
+static inline kep_toolbox::array6D ic2par_wrapper(const kep_toolbox::array3D& r0, const kep_toolbox::array3D& v0, const double &mu)
+{
+	kep_toolbox::array6D parameters;
+	kep_toolbox::ic2par(r0, v0, mu,parameters );
+	return parameters;
+}
 static inline tuple closest_distance_wrapper(const kep_toolbox::array3D& r0, const kep_toolbox::array3D& v0, const kep_toolbox::array3D& r1, const kep_toolbox::array3D& v1, const double &mu)
 {
 	double min_d, ra;
@@ -236,20 +242,23 @@ BOOST_PYTHON_MODULE(_core) {
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
 	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
 
-	class_<kep_toolbox::planet>("planet","A planet ... contains the ephemerides calculations",
+	class_<kep_toolbox::planet>("planet","Base class for all planet objects. Ephemerides are Keplerian.",
 		init<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, optional<const std::string &> >(
-			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
+			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n"
+			"PyKEP.planet(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
 			"- when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch\n"
 			"- orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)\n"
+			"- r,v: position and velocity of an object at when (SI units)\n"
 			"- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)\n"
 			"- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)\n"
 			"- radius: body radius (SI units, i.e. meters)\n"
 			"- safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)\n"
 			"- name: body name\n\n"
-			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb` to instantiate common objects"
+			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb`, :py:class:`PyKEP.planet_js` to instantiate common objects"
 			"Example::\n\n"
-			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.9998805e-01 * AU, 1.6716812e-02, 8.8543531e-04 * DEG2RAD, 1.7540648e+02 * DEG2RAD, 2.8761578e+02 * DEG2RAD, 2.5760684e+02 * DEG2RAD), MU_SUN, 398600.4418e9, 6378000, 6900000,  'Earth'"
+			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.99e-01 * AU, 1.67e-02, 8.85e-04 * DEG2RAD, 1.75e+02 * DEG2RAD, 2.87e+02 * DEG2RAD, 2.57e+02 * DEG2RAD), MU_SUN, 398600e9, 6378000, 6900000,  'Earth')"
 		))
+		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
 		.def("eph",&planet_get_eph,
 			"PyKEP.planet.eph(when)\n\n"
 			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n\n"
@@ -369,6 +378,17 @@ BOOST_PYTHON_MODULE(_core) {
 			"  russian_ast = planet_gtoc5(1)"
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
+		.def(init<>());
+
+	// A planet from the gtoc7 problem
+	class_<kep_toolbox::asteroid_gtoc7,bases<kep_toolbox::planet> >("planet_gtoc7",
+		init<const int &>(
+			"PyKEP.planet_gtoc7(ast_id)\n\n"
+			" - ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original"
+			"Example::\n\n"
+			"  earth = planet_gtoc7(0)"
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc7>())
 		.def(init<>());
 
 	// A planet from the gtoc2 problem
@@ -624,4 +644,25 @@ BOOST_PYTHON_MODULE(_core) {
 			  "Example::\n\n"
 		"  d,ra = closest_distance([1,0,0],[0,1,0],[],[],1.0)\n"
 	);
+
+	def("barker",&kep_toolbox::barker,
+			  "PyKEP.barker(r1,r2,mu)\n\n"
+			  "- r1: initial position (cartesian)\n"
+			  "- r2: final position (cartesian)\n"
+			  "- mu: gravity parameter\n"
+			  "Returns the time of flight as evaluated by the Barker equation. \n"
+			  "Example:: \n\n"
+			  "  t = barker([1,0,0],[0,1,0],1.0)"
+	);
+
+	def("ic2par", &ic2par_wrapper,
+		"PyKEP.ic2par(r1,v2,mu)\n\n"
+		"- r1: initial position (cartesian)\n"
+		"- r2: final position (cartesian)\n"
+		"- mu: gravity parameter\n"
+		"Returns the osculating keplerian elements (WARNING: singular for zero inclination)\n"
+		"Example:: \n\n"
+		"  el = ic2par([1,0,0],[0,1,0],1.0)"
+	);
+
 }

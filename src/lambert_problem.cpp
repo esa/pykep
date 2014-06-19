@@ -105,7 +105,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 			double x_old=0.0,x_new = 0.0;
 			while (1) {
 				dTdx(DT,DDT,DDDT,x_old,T_min);
-				if (!DT == 0.0) {
+				if (DT != 0.0) {
 						x_new = x_old - DT * DDT / (DDT * DDT - DT * DDDT / 2.0);
 				}
 				err=fabs(x_old-x_new);

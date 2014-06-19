@@ -43,10 +43,10 @@ static const double jupiter_el[6] = {5.20288700, 0.04838624, 1.30439695,  34.396
 static const double jupiter_el_dot[6] = {-0.00011607, -0.00013253, -0.00183714, 3034.74612775, 0.21252668, 0.20469106};
 static const double saturn_el[6] = {9.53667594, 0.05386179, 2.48599187,  49.95424423, 92.59887831, 113.66242448};
 static const double saturn_el_dot[6] = {-0.00125060, -0.00050991, 0.00193609, 1222.49362201, -0.41897216, -0.28867794};
-static const double neptune_el[6] = {19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503};
-static const double neptune_el_dot[6] = {-0.00196176, -0.00004397, -0.00242939, 428.48202785, 0.40805281, 0.04240589};
-static const double uranus_el[6] = {30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574};
-static const double uranus_el_dot[6] = {0.00026291, 0.00005105, 0.00035372, 218.45945325, -0.32241464, -0.00508664};
+static const double uranus_el[6] = {19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503};
+static const double uranus_el_dot[6] = {-0.00196176, -0.00004397, -0.00242939, 428.48202785, 0.40805281, 0.04240589};
+static const double neptune_el[6] = {30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574};
+static const double neptune_el_dot[6] = {0.00026291, 0.00005105, 0.00035372, 218.45945325, -0.32241464, -0.00508664};
 static const double pluto_el[6] = {39.48211675, 0.24882730, 17.14001206, 238.92903833, 224.06891629, 110.30393684};
 static const double pluto_el_dot[6] = {-0.00031596, 0.00005170, 0.00004818, 145.20780515, -0.04062942, -0.01183482};
 
@@ -120,20 +120,20 @@ planet_ss::planet_ss(const std::string& name)
 		}
 		break;
 	case (7): {
-			std::copy(neptune_el,neptune_el+6,&jpl_elements[0]);
-			std::copy(neptune_el_dot,neptune_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 25559000;
+			std::copy(uranus_el,uranus_el+6,&jpl_elements[0]);
+			std::copy(uranus_el_dot,uranus_el_dot+6,&jpl_elements_dot[0]);
+			radius_ = 25362000;
 			safe_radius_ = radius_*1.1;
 			mu_self_ = 5793939e9;
 			mu_central_body_ = ASTRO_MU_SUN;
 		}
 		break;
 	case (8): {
-			std::copy(uranus_el,uranus_el+6,&jpl_elements[0]);
-			std::copy(uranus_el_dot,uranus_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 24764000;
+			std::copy(neptune_el,neptune_el+6,&jpl_elements[0]);
+			std::copy(neptune_el_dot,neptune_el_dot+6,&jpl_elements_dot[0]);
+			radius_ = 24622000;
 			safe_radius_ = radius_*1.1;
-			mu_self_ = 6836528e9;
+			mu_self_ = 6836529e9;
 			mu_central_body_ = ASTRO_MU_SUN;
 		}
 		break;
