@@ -5,62 +5,62 @@ PyKEP Documentation
 The core module
 ==============================================
 
-=========================================	========= 	================================================
-Name						Type      	Description
-=========================================	=========	================================================
-:class:`PyKEP.epoch`       			class      	represents an epoch (i.e. a fixed point in time)
-:func:`PyKEP.epoch_from_string`			function	helper function to construct an epoch from a string containing a date in the format YYYY-MM-DD HH:MM:SS
-:func:`PyKEP.epoch_from_iso_string`		function	helper function to construct an epoch from a string containing a date in the ISO format YYYYMMDDTHHMMSS
-:class:`PyKEP.planet`      			class      	represents a generic planet in a keplerian motion around its primary 
-:class:`PyKEP.planet_ss`      			class      	represents a solar system planet in keplerian motion around the sun
-:class:`PyKEP.planet_mpcorb`      		class      	represents an asteroid from the `MPCORB database <http://www.minorplanetcenter.org/iau/MPCORB.html>`_ 
-:class:`PyKEP.lambert_problem`			class		solves the multirevolution lambert problem
-:func:`PyKEP.propagate_lagrangian`		function	propagates pure keplerian motion using Lagrange coefficients and universal variables
-:func:`PyKEP.propagate_taylor`			function	propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
-:func:`PyKEP.fb_con`     			function	returns violation of velocity and angular constraint during a fly-by
-:func:`PyKEP.fb_vel`   		        	function	returns the violation of the velocity and angular constraint during a fly-by in terms of one single DV
-:func:`PyKEP.fb_prop`   			function	propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
-:func:`PyKEP.barker`   	        		function	computes the (parabolic) time-of-flight from the Barker equation
-=========================================  	=========	================================================
+=========================================       =========       ================================================
+Name                                            Type            Description
+=========================================       =========       ================================================
+:class:`PyKEP.epoch`                            class           represents an epoch (i.e. a fixed point in time)
+:func:`PyKEP.epoch_from_string`                 function        helper function to construct an epoch from a string containing a date in the format YYYY-MM-DD HH:MM:SS
+:func:`PyKEP.epoch_from_iso_string`             function        helper function to construct an epoch from a string containing a date in the ISO format YYYYMMDDTHHMMSS
+:class:`PyKEP.planet`                           class           represents a generic planet in a keplerian motion around its primary 
+:class:`PyKEP.planet_ss`                        class           represents a solar system planet in keplerian motion around the sun
+:class:`PyKEP.planet_mpcorb`                    class           represents an asteroid from the `MPCORB database <http://www.minorplanetcenter.org/iau/MPCORB.html>`_ 
+:class:`PyKEP.lambert_problem`                  class           solves the multirevolution lambert problem
+:func:`PyKEP.propagate_lagrangian`              function        propagates pure keplerian motion using Lagrange coefficients and universal variables
+:func:`PyKEP.propagate_taylor`                  function        propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
+:func:`PyKEP.fb_con`                            function        returns violation of velocity and angular constraint during a fly-by
+:func:`PyKEP.fb_vel`                            function        returns the violation of the velocity and angular constraint during a fly-by in terms of one single DV
+:func:`PyKEP.fb_prop`                           function        propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
+:func:`PyKEP.barker`                            function        computes the (parabolic) time-of-flight from the Barker equation
+=========================================       =========       ================================================
 
 The sims_flanagan module
 =======================================================
 
-=========================================	========= 	================================================
-Name						Type            Description
-=========================================	=========	================================================
+=========================================       =========       ================================================
+Name                                            Type            Description
+=========================================       =========       ================================================
 :class:`PyKEP.sims_flanagan.spacecraft`         class           represents a nuclear electric propelled spacecraft
 :class:`PyKEP.sims_flanagan.sc_state`           class           represent the spacecraft state (r,v,m)
 :class:`PyKEP.sims_flanagan.leg`                class           represents one leg in the Sims-Flanagan model
 =========================================       =========       ================================================
 
-The traj module
+The traj module (requires PyGMO)
 =======================================================
 
-=========================================	========= 	================================================
-Name						Type      	Description
-=========================================	=========	================================================
-:class:`PyKEP.traj.mga_1dsm`			class		A generic multiple Gravity Assist Trajectory with one deep space manouvre optimization problem (requires PyGMO)
-:class:`PyKEP.traj.mga_lt_nep`			class		A generic multiple Gravity Assist Trajectory low-thrust optimization problem (requires PyGMO)
-=========================================  	=========	================================================
+=========================================       =========       ================================================
+Name                                            Type            Description
+=========================================       =========       ================================================
+:class:`PyKEP.traj.mga_1dsm`                    class           A multiple Gravity Assist Trajectory with one deep space manouvre 
+:class:`PyKEP.traj.mga_lt_nep`                  class           A multiple Gravity Assist Trajectory low-thrust optimization problem
+=========================================       =========       ================================================
 
 
 Constants defined within PyKEP namespace
 =========================================
 
-=================================	=============================================================================
-Name					Description
-=================================	=============================================================================
-PyKEP.AU				An astronomical unit in meters
-PyKEP.DAY2SEC				Conversion factor from days to seconds
-PyKEP.DAY2YEAR				Conversion factor from days to years
-PyKEP.DEG2RAD				Conversion factor from degrees to radians
-PyKEP.RAD2DEG				Conversion factor from radians to degree
-PyKEP.SEC2DAY				Conversion factor from seconds to days
-PyKEP.MU_SUN				Sun gravitational constyant in m^3/s^2
-PyKEP.EARTH_VELOCITY			Square root of MU_SUN/AU. Average earth velocity in meters per seconds.
-PyKEP.G0				The standard gravity acceleration at ground level 
-=================================	=============================================================================
+=================================       =============================================================================
+Name                                    Description
+=================================       =============================================================================
+PyKEP.AU                                An astronomical unit in meters
+PyKEP.DAY2SEC                           Conversion factor from days to seconds
+PyKEP.DAY2YEAR                          Conversion factor from days to years
+PyKEP.DEG2RAD                           Conversion factor from degrees to radians
+PyKEP.RAD2DEG                           Conversion factor from radians to degree
+PyKEP.SEC2DAY                           Conversion factor from seconds to days
+PyKEP.MU_SUN                            Sun gravitational constyant in m^3/s^2
+PyKEP.EARTH_VELOCITY                    Square root of MU_SUN/AU. Average earth velocity in meters per seconds.
+PyKEP.G0                                The standard gravity acceleration at ground level 
+=================================       =============================================================================
 
 Detailed Documentation
 ======================
@@ -134,8 +134,6 @@ Detailed Documentation
   .. automethod:: PyKEP.sims_flanagan.sc_state.set(*args)
 
   .. automethod:: PyKEP.sims_flanagan.sc_state.get(*args)
-  
-  .. automethod:: PyKEP.sims_flanagan.get_states()
 
 .. autoclass:: PyKEP.sims_flanagan.leg(*args)
 
@@ -152,6 +150,8 @@ Detailed Documentation
   .. automethod:: PyKEP.sims_flanagan.leg.set_mu(*args)
 
   .. automethod:: PyKEP.sims_flanagan.leg.set_spacecraft(*args)
+
+  .. automethod:: PyKEP.sims_flanagan.leg.get_states()
 
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 
