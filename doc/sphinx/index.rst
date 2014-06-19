@@ -30,10 +30,10 @@ PyKEP has been compiled and installed succesfully on the following platforms and
 
 * Windows (XP) [`binaries available <http://sourceforge.net/projects/keptoolbox/files/Windows/>`_]
 * Linux (Gentoo) [Follow the guide below and compile the code]
-* Apple OSX (Leopard) [Follow the guide below and compile the code]
+* Apple OSX (10.8 and above) [Follow the guide below and compile the code]
 
-PyKEP has been used by the European Space Agency's Advanced Concepts Team during the Global Trajectory Optimization
-Competitions (GTOC), in particular `GTOC4 <http://cct.cnes.fr/cct02/gtoc4/index.htm>`_ and `GTOC5 <http://gtoc5.math.msu.su/>`_.
+PyKEP has been used by the European Space Agency's Advanced Concepts Team during
+different Global Trajectory Optimization Competitions `GTOC <http://sophia.estec.esa.int/gtoc_portal>`_
 
 Contents:
 ---------
