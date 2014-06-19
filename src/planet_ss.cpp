@@ -120,20 +120,20 @@ planet_ss::planet_ss(const std::string& name)
 		}
 		break;
 	case (7): {
-			std::copy(neptune_el,neptune_el+6,&jpl_elements[0]);
-			std::copy(neptune_el_dot,neptune_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 25559000;
+			std::copy(uranus_el,uranus_el+6,&jpl_elements[0]);
+			std::copy(uranus_el_dot,uranus_el_dot+6,&jpl_elements_dot[0]);
+			radius_ = 25362000;
 			safe_radius_ = radius_*1.1;
 			mu_self_ = 5793939e9;
 			mu_central_body_ = ASTRO_MU_SUN;
 		}
 		break;
 	case (8): {
-			std::copy(uranus_el,uranus_el+6,&jpl_elements[0]);
-			std::copy(uranus_el_dot,uranus_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 24764000;
+			std::copy(neptune_el,neptune_el+6,&jpl_elements[0]);
+			std::copy(neptune_el_dot,neptune_el_dot+6,&jpl_elements_dot[0]);
+			radius_ = 24622000;
 			safe_radius_ = radius_*1.1;
-			mu_self_ = 6836528e9;
+			mu_self_ = 6836529e9;
 			mu_central_body_ = ASTRO_MU_SUN;
 		}
 		break;
