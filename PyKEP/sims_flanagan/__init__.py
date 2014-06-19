@@ -3,13 +3,16 @@
 This module contains all the classes that allow to construct efficiently
 low-thrust tajectories using our own flavour of the Sims-Flanagan model: a trajectory
 transcription method that forms the basis for MALTO, the software in use in JPL 
-for preliminary interplanetary trajectory design
+for preliminary interplanetary trajectory design.
 """
 from _sims_flanagan import *
 
 def _get_states(self):
 	"""
+	Returns the spacecraft states (t,r,v,m) at the leg grid points
 
+	Examples::
+	  times,r,v,m = PyKEP.sims_flanagan.leg.get_states()
 	"""
 	from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
 	import numpy as np

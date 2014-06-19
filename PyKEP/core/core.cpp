@@ -660,7 +660,7 @@ BOOST_PYTHON_MODULE(_core) {
 		"- r1: initial position (cartesian)\n"
 		"- r2: final position (cartesian)\n"
 		"- mu: gravity parameter\n"
-		"Returns the osculating keplerian elements \n"
+		"Returns the osculating keplerian elements (WARNING: singular for zero inclination)\n"
 		"Example:: \n\n"
 		"  el = ic2par([1,0,0],[0,1,0],1.0)"
 	);
