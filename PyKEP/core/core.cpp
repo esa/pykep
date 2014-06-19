@@ -312,7 +312,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def(init<>());
 
 	// A solar system planet
-	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system",
+	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system. Ephemerides are the JPL low-precision alternative (http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf)",
 		init<std::string>(
 			"PyKEP.planet_ss.eph(which)\n\n"
 			"- which: string containing the common planet name (e.g. 'earth')\n\n"
@@ -327,7 +327,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def(init<>());
 
 	// A Jupiter system moon
-	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A moon from the Jupiter system",
+	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A Galilean moon from Jupiter. Ephemerides are Keplerian.",
 		init<std::string>(
 			"PyKEP.planet_js.eph(which)\n\n"
 			"- which: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
