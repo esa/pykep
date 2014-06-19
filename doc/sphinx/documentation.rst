@@ -27,12 +27,12 @@ The sims_flanagan module
 =======================================================
 
 =========================================	========= 	================================================
-Name						Type      	Description
+Name						Type            Description
 =========================================	=========	================================================
-:class:`PyKEP.sims_flanagan.spacecraft`		class		represents a nuclear electric propelled spacecraft
-:class:`PyKEP.sims_flanagan.sc_state`		class		represent the spacecraft state (r,v,m)
-:class:`PyKEP.sims_flanagan.leg`		class		represents one leg in the Sims-Flanagan model
-=========================================  	=========	================================================
+:class:`PyKEP.sims_flanagan.spacecraft`         class           represents a nuclear electric propelled spacecraft
+:class:`PyKEP.sims_flanagan.sc_state`           class           represent the spacecraft state (r,v,m)
+:class:`PyKEP.sims_flanagan.leg`                class           represents one leg in the Sims-Flanagan model
+=========================================       =========       ================================================
 
 The traj module
 =======================================================
