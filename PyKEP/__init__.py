@@ -4,7 +4,7 @@ import core, sims_flanagan
 from core import *
 
 __doc__ = 'PyKEP is the answer ... but what was the question?'
-__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'traj', 'phasing']
+__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'trajectory_optimisation', 'phasing']
 __version__ = '1.2.0'
 
 """Detecting Installed Extensions"""
@@ -46,6 +46,6 @@ try:
 except ImportError:
 	pass
 
-import orbit_plots, examples, traj, phasing
+import orbit_plots, examples, trajectory_optimisation, phasing
 	
 __all__ += filter(lambda name: not name.startswith('_'),dir(core))
