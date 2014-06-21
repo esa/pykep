@@ -11,8 +11,8 @@ Name                                            Type            Description
 :class:`PyKEP.epoch`                            class           represents an epoch (i.e. a fixed point in time)
 :func:`PyKEP.epoch_from_string`                 function        helper function to construct an epoch from a string containing a date in the format YYYY-MM-DD HH:MM:SS
 :func:`PyKEP.epoch_from_iso_string`             function        helper function to construct an epoch from a string containing a date in the ISO format YYYYMMDDTHHMMSS
-:class:`PyKEP.planet`                           class           represents a generic planet in a keplerian motion around its primary 
-:class:`PyKEP.planet_ss`                        class           represents a solar system planet in keplerian motion around the sun
+:class:`PyKEP.planet`                           class           a generic planet, ephemerides are keplerian
+:class:`PyKEP.planet_ss`                        class           a solar system planet, ephemerides are the `JPL low-precision <http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf>`_
 :class:`PyKEP.planet_mpcorb`                    class           represents an asteroid from the `MPCORB database <http://www.minorplanetcenter.org/iau/MPCORB.html>`_ 
 :class:`PyKEP.lambert_problem`                  class           solves the multirevolution lambert problem
 :func:`PyKEP.propagate_lagrangian`              function        propagates pure keplerian motion using Lagrange coefficients and universal variables
@@ -34,14 +34,15 @@ Name                                            Type            Description
 :class:`PyKEP.sims_flanagan.leg`                class           represents one leg in the Sims-Flanagan model
 =========================================       =========       ================================================
 
-The traj module (requires PyGMO)
+The trajopt module (requires PyGMO)
 =======================================================
 
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
-:class:`PyKEP.traj.mga_1dsm`                    class           A multiple Gravity Assist Trajectory with one deep space manouvre 
-:class:`PyKEP.traj.mga_lt_nep`                  class           A multiple Gravity Assist Trajectory low-thrust optimization problem
+:class:`PyKEP.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre 
+:class:`PyKEP.trajopt.mga_lt_nep`               class           A multiple Gravity Assist Trajectory low-thrust optimization problem
+:class:`PyKEP.trajopt.mr_lt_nep`                class           A multiple ransezvous low-thrust optimization problem
 =========================================       =========       ================================================
 
 
@@ -51,7 +52,7 @@ Constants defined within PyKEP namespace
 =================================       =============================================================================
 Name                                    Description
 =================================       =============================================================================
-PyKEP.AU                                An astronomical unit in meters
+PyKEP.AU                                One astronomical unit in meters
 PyKEP.DAY2SEC                           Conversion factor from days to seconds
 PyKEP.DAY2YEAR                          Conversion factor from days to years
 PyKEP.DEG2RAD                           Conversion factor from degrees to radians
@@ -59,7 +60,7 @@ PyKEP.RAD2DEG                           Conversion factor from radians to degree
 PyKEP.SEC2DAY                           Conversion factor from seconds to days
 PyKEP.MU_SUN                            Sun gravitational constyant in m^3/s^2
 PyKEP.EARTH_VELOCITY                    Square root of MU_SUN/AU. Average earth velocity in meters per seconds.
-PyKEP.G0                                The standard gravity acceleration at ground level 
+PyKEP.G0                                The standard gravity acceleration at ground level in m/s^2
 =================================       =============================================================================
 
 Detailed Documentation
@@ -153,6 +154,36 @@ Detailed Documentation
 
   .. automethod:: PyKEP.sims_flanagan.leg.get_states()
 
+.. autoclass:: PyKEP.trajopt.mga_1dsm(*args)
+ 
+   .. automethod:: PyKEP.trajopt.mga_1dsm.__init__(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_1dsm.set_tof(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_1dsm.set_launch_window(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_1dsm.set_vinf(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_1dsm.pretty(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_1dsm.plot(*args)
+   
+.. autoclass:: PyKEP.trajopt.mga_lt_nep(*args)
+ 
+   .. automethod:: PyKEP.trajopt.mga_lt_nep.__init__(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_lt_nep.high_fidelity(*args)
+   
+   .. automethod:: PyKEP.trajopt.mga_lt_nep.ic_from_mga_1dsm(*args)
+       
+   .. automethod:: PyKEP.trajopt.mga_lt_nep.plot(*args)
+
+.. autoclass:: PyKEP.trajopt.mr_lt_nep(*args)
+ 
+   .. automethod:: PyKEP.trajopt.mr_lt_nep.__init__(*args)
+       
+   .. automethod:: PyKEP.trajopt.mr_lt_nep.plot(*args)
+
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 
 .. autofunction:: PyKEP.propagate_taylor(*args)
@@ -165,26 +196,3 @@ Detailed Documentation
 
 .. autofunction:: PyKEP.barker(*args)
 
-.. autoclass:: PyKEP.traj.mga_1dsm(*args)
- 
-   .. automethod:: PyKEP.traj.mga_1dsm.__init__(*args)
-   
-   .. automethod:: PyKEP.traj.mga_1dsm.set_tof(*args)
-   
-   .. automethod:: PyKEP.traj.mga_1dsm.set_launch_window(*args)
-   
-   .. automethod:: PyKEP.traj.mga_1dsm.set_vinf(*args)
-   
-   .. automethod:: PyKEP.traj.mga_1dsm.pretty(*args)
-   
-   .. automethod:: PyKEP.traj.mga_1dsm.plot(*args)
-   
-.. autoclass:: PyKEP.traj.mga_lt_nep(*args)
- 
-   .. automethod:: PyKEP.traj.mga_lt_nep.__init__(*args)
-   
-   .. automethod:: PyKEP.traj.mga_lt_nep.high_fidelity(*args)
-   
-   .. automethod:: PyKEP.traj.mga_lt_nep.ic_from_mga_1dsm(*args)
-       
-   .. automethod:: PyKEP.traj.mga_lt_nep.plot(*args)
