@@ -400,9 +400,9 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	
 	if legend:
 		ax.legend()
-  
+""" 
 def plot_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
-	"""
+	###
 	Plots a trajectory leg
 		      
 	USAGE: plot_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = False):
@@ -436,7 +436,7 @@ def plot_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
 	    l = sims_flanagan.leg(t1,x0,[1,0,0]*5,t2,xe,sc,MU_SUN)
 
 	    plot_sf_leg(ax,l,units=AU)
-	"""
+	###
 	from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
 	import numpy as np
 	from scipy.linalg import norm
@@ -522,4 +522,4 @@ def plot_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
 	
 	if legend:
 		ax.legend()
-  
+  """

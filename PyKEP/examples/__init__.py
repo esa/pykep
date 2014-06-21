@@ -11,3 +11,4 @@ if __extensions__['pygmo']:
 	from _ex3 import run_example3
 	from _ex4 import run_example4
 	from _ex5 import run_example5
+	from _ex6 import run_example6

@@ -10,14 +10,14 @@ This plot is produced by the following code:
 .. code-block:: python
 
    from PyKEP import *
-   kep_examples.run_example4(nseg=20)
+   examples.run_example4(nseg=20)
    
 In this case, an interplanetary trajectory is computed using a new type of leg using Sundmann's variable rather than time and thus obtaining
 automated mesh adaptation. By letting time flow slower when near the sun, we obtain segments of different length depending on their distance from the Sun.
 This translate in a more efficient segment distribution, both from the Taylor integration perspective and for the thrust numerical grid perspective. In case the user has a license for SNOPT, the use of this typically result in a performance gain
 
-The code for this example can be studied `here 
-<http://sourceforge.net/p/keptoolbox/code/ci/ef0454a6a69403a1786a4e7920c3fe036a916ad2/tree/PyKEP/examples/_ex4.py>`_
+The code for this example can be studied `here. Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex4.py>`_
 
 
 A preliminary study of this unique technique, can be found in the paper below.

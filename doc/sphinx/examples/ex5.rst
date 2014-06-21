@@ -13,7 +13,7 @@ These plots are produced by the following code:
 .. code-block:: python
 
    from PyKEP import *
-   kep_examples.run_example5()
+   examples.run_example5()
 
 after the self-adaptive differential evolution algorithm concludes its computations. 
 
@@ -28,5 +28,5 @@ fly-by. he selected launch windows is 2016-2017, the launch hyperbolic velocity 
 To solve such a global optimization problem, we use jDE, a self-adaptive version of differential evolution and the generalized migration
 operator, thus computing the solution in eight paralel threads.
 
-The code for this example can be studied `here 
-<http://sourceforge.net/p/keptoolbox/code/ci/ef0454a6a69403a1786a4e7920c3fe036a916ad2/tree/PyKEP/examples/_ex5.py>`_
+The code for this example can be studied `here. Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex5.py>`_

@@ -20,29 +20,29 @@ class mr_lt_nep(base_problem):
             seq=[PyKEP.planet_gtoc7(3413),PyKEP.planet_gtoc7(234), PyKEP.planet_gtoc7(11432)], 
             n_seg=5, 
             t0=[13000, 13200],
-            tof=[1, 365.25 * 3], 
+            leg_tof=[1, 365.25 * 3], 
             rest=[30., 365.25], 
             mass=[800, 2000], 
             Tmax=0.3, 
             Isp=3000., 
-            max_total_time=365.25 * 6, 
+            traj_tof=365.25 * 6, 
             objective='mass',
             c_tol = 1e-05
     ):
         """
         prob = mr_lt_nep(seq=[PyKEP.planet_gtoc7(3413),PyKEP.planet_gtoc7(234), PyKEP.planet_gtoc7(11432)], n_seg=5, t0=[13000, 13200],
-                    tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3, 
-                    Isp=3000., max_total_time=365.25 * 6, objective='mass', c_tol=1e-05)
+                    leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3, 
+                    Isp=3000., traj_tof=365.25 * 6, objective='mass', c_tol=1e-05)
 
         * seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)
         * n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
         * t0: list of two PyKEP epochs defining the launch window
-        * tof: list of two floats defining the minimum and maximum time of each leg (days)
+        * leg_tof: list of two floats defining the minimum and maximum time of each leg (days)
         * rest: list of two floats defining the minimum and maximum time the spacecraft can rest at one planet (days)
         * mass: list of two floats defining the minimum final spacecraft mass and the starting spacecraft mass (kg)
         * Tmax: maximum thrust (N)
         * Isp: engine specific impulse (sec)
-        * max_total_time maximum total mission duration (days)
+        * traj_tof maximum total mission duration (days)
         * c_tol: tolerance on the constraints
         """
         # Number of legs
@@ -66,19 +66,28 @@ class mr_lt_nep(base_problem):
         self.__nseg = n_seg
         self.__dim_leg = 4 + n_seg * 3
         self.__start_mass = mass[1]
-        self.__max_total_time = max_total_time
+        self.__max_total_time = traj_tof
+
+        # We create n distinct legs objects
+        self.__legs = []
+        for i in range(n):
+            self.__legs.append(PyKEP.sims_flanagan.leg())
+        for leg in self.__legs:
+            leg.high_fidelity = True
+            leg.set_mu(PyKEP.MU_SUN)
+
         if not objective in ['mass', 'time']:
             raise ValueError("Error in defining the objective. Was it one of mass or time?")
         self.__objective = objective
         
         # We set the ptoblem box-bounds
         # set leg bounds
-        lb_leg = [t0[0],                  tof[0], rest[0], mass[0]] + [-1] * n_seg * 3
-        ub_leg = [t0[1]+max_total_time*n, tof[1], rest[1], mass[1]] + [1] * n_seg * 3
+        lb_leg = [t0[0],            leg_tof[0], rest[0], mass[0]] + [-1] * n_seg * 3
+        ub_leg = [t0[1]+traj_tof*n, leg_tof[1], rest[1], mass[1]] + [1] * n_seg * 3
 
         # set n leg bounds
         lb = lb_leg * n
-        ub = [t0[1], tof[1], rest[1], mass[1]] + [1] * n_seg * 3 + ub_leg * (n-1)
+        ub = [t0[1], leg_tof[1], rest[1], mass[1]] + [1] * n_seg * 3 + ub_leg * (n-1)
 
         # set total time bounds
         lb += [1.]
@@ -115,15 +124,12 @@ class mr_lt_nep(base_problem):
             xe = PyKEP.sims_flanagan.sc_state(r, v, x[3])
             
             # Building the SF leg
-            leg = PyKEP.sims_flanagan.leg()
-            leg.high_fidelity = True
-            leg.set_mu(PyKEP.MU_SUN)
-            leg.set_spacecraft(PyKEP.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
-            leg.set(start, x0, x[-3 * self.__nseg:], end, xe)
+            self.__legs[i].set_spacecraft(PyKEP.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
+            self.__legs[i].set(start, x0, x[-3 * self.__nseg:], end, xe)
                 
             # Setting all constraints
-            eqs.extend(leg.mismatch_constraints())
-            ineqs.extend(leg.throttles_constraints())
+            eqs.extend(self.__legs[i].mismatch_constraints())
+            ineqs.extend(self.__legs[i].throttles_constraints())
 
             eqs[-7] /= PyKEP.AU
             eqs[-6] /= PyKEP.AU
@@ -149,27 +155,38 @@ class mr_lt_nep(base_problem):
     def resting_times(self, x):
         return list(x[2::self.__dim_leg])
 
-if __name__ == "__main__":
-    import PyGMO
-    algo = PyGMO.algorithm.snopt(
-        screen_output=True,
-        major_iter=1500,
-        opt_tol=1e-02,
-        feas_tol=1e-09)
+    def plot(self,x):
+        import matplotlib as mpl
+        from mpl_toolkits.mplot3d import Axes3D
+        import matplotlib.pyplot as plt
+        from PyKEP import epoch, AU
+        from PyKEP.sims_flanagan import sc_state
+        from PyKEP.orbit_plots import plot_planet, plot_sf_leg
+        
+        # Creating the axis ........
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
 
-    prob = mr_lt_nep(
-                        t0=[9600,9700],
-                        seq=[PyKEP.planet_gtoc7(5318), PyKEP.planet_gtoc7(14254), PyKEP.planet_gtoc7(7422)], 
-                        n_seg=5, 
-                        mass=[800,2000], 
-                    )
-    pop = PyGMO.population(prob, 1)
+        # Plotting the Sun ........
+        ax.scatter([0],[0],[0], color='y')
 
-    # Initial guess
-    x = pop.champion.x
+        # Computing the legs
+        self._compute_constraints_impl(x)
 
-    pop = algo.evolve(pop)
-    if prob.feasibility_x(pop.champion.x):
-        print "FEASIBILE!!!"
-    else:
-        print "INFEASIBLE :("
+        # Plotting the legs
+        for leg in self.__legs:
+            plot_sf_leg(ax, leg, units=AU,N=10)
+
+        # Plotting the PyKEP.planets both at departure and arrival dates   
+        for i in range(self.__num_legs):
+            idx = i*self.__dim_leg
+            plot_planet(ax, self.__seq[i], epoch(x[idx]), units=AU, legend = True,color=(0.7,0.7,1),s=30)
+            plot_planet(ax, self.__seq[i+1], epoch(x[idx]+x[idx+1]), units=AU, legend = False,color=(0.7,0.7,1),s=30)
+
+        plt.show()
+
+        return ax
+
+
+
+
