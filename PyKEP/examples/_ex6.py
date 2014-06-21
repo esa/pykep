@@ -26,11 +26,8 @@ def run_example6(n_seg = 5 ):
                     )
 
     pop = population(prob, 1)
-
-    # Initial guess
-    x = pop.champion.x
-
     pop = algo.evolve(pop)
+    
     solution = pop.champion.x
     if prob.feasibility_x(solution):
         print "FEASIBILE!!!"

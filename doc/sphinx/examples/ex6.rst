@@ -1,7 +1,7 @@
 Asteroid hopping in the main belt (requires PyGMO)
 ==========================================================
 
-.. figure:: ../images/gallery6.jpg
+.. figure:: ../images/gallery6.gif
    :align: left
    
 
@@ -17,8 +17,8 @@ if a feasible solution is reached. Repeat several times in case unfeasible solut
 This example demonstrates the use of the mr_lt_nep class in the trajopt module. The class derives from
 PyGMO problem.base and represents the optimization of a multiple randezvous mission of a low-thrust spacecraft.
 The initial guess is taken from one of the trajectory submitted by the ACT/ISAS team to the 7th edition
-of the global trajectory optimisation competition <http://sophia.estec.esa.int/gtoc_portal/>`_.
+of the `global trajectory optimisation competition <http://sophia.estec.esa.int/gtoc_portal/>`_.
 
 
-The code for this example can be studied `here. Feel free to leave comments.
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_
+The code for this example can be studied `here. 
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_ Feel free to leave comments.

@@ -21,8 +21,8 @@ transfer between the Earth and Mars as an NLP global optimization problem (using
 and it then attempts to find one solution using the Monotonic Basin Hopping meta-algorithm connected to an SQP local optimization technique (from SciPy). In case
 the user has a license for SNOPT, the use of this typically result in a performance gain
 
-The code for this example can be studied `here. Feel free to leave comments.
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex1.py>`_
+The code for this example can be studied `here. 
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_ Feel free to leave comments.
 
 A reference where the methodology is studied more in depth is:
 
