@@ -1,4 +1,8 @@
 class dbscan():
+    """
+    This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
+    Essentially, it locates clusters 
+    """
 
     import PyKEP
     import numpy

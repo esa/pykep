@@ -150,17 +150,17 @@ try:
 			self.__leg2.set(t_E,x0,x[(-3 * self.__nseg2):],t_V,xe)
 
 			fig = plt.figure()
-			ax = fig.gca(projection='3d')
+			axis = fig.gca(projection='3d')
 
 			#The Sun
-			ax.scatter([0],[0],[0], color='y')
+			axis.scatter([0],[0],[0], color='y')
 			#The legs
-			plot_sf_leg(ax, self.__leg1, units=AU,N=10)
-			plot_sf_leg(ax, self.__leg2, units=AU,N=10)
+			plot_sf_leg(self.__leg1, units=AU,N=10, ax = axis)
+			plot_sf_leg(self.__leg2, units=AU,N=10, ax = axis)
 			#The planets
-			plot_planet(ax, self.__earth, t_E, units=AU, legend = True,color=(0.7,0.7,1))
-			plot_planet(ax, self.__venus, t_V, units=AU, legend = True,color=(0.7,0.7,1))
-			plot_planet(ax, self.__mercury, t_M, units=AU, legend = True,color=(0.7,0.7,1))
+			plot_planet(self.__earth, t_E, units=AU, legend = True,color=(0.7,0.7,1), ax = axis)
+			plot_planet(self.__venus, t_V, units=AU, legend = True,color=(0.7,0.7,1), ax = axis)
+			plot_planet(self.__mercury, t_M, units=AU, legend = True,color=(0.7,0.7,1), ax = axis)
 			plt.show()
 
 	def run_example3():

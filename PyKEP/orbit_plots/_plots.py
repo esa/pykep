@@ -1,15 +1,15 @@
-def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=80, legend = False):
+def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=40, legend = False, ax = None):
 	"""
 	Plots the planet position and its orbit
 		      
-	USAGE: plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units=AU, legend = False):
+	USAGE: plot_planet(plnt, ax = None, t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=40, legend = False):
 	  * ax:		3D axis object created using fig.gca(projection='3d')
 	  * plnt:	PyKEP.planet object we want to plot
 	  * t0:		PyKEP.epoch object indicating when we want to plot the planet position
 	  * units:	the length unit to be used in the plot
 	  * color:	matplotlib color to use to plot the line
 	  * s:		planet size (pixel^2)
-	  * legend	when True it plots also the legend with the planet name
+	  * legend	when True plots the legend with the planet name and the epoch
 	  
 	EXAMPLE:
 	  from mpl_toolkits.mplot3d import Axes3D
@@ -18,12 +18,19 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=8
 	  fig = plt.figure()
 	  ax = fig.gca(projection='3d')
 	  pl = planet_ss('earth')
-	  plot_planet(ax,pl)
+	  plot_planet(pl, ax = ax)
 	  plt.show()
 	"""
 	from PyKEP import MU_SUN, SEC2DAY, epoch, AU
 	from math import pi,sqrt
 	import numpy as np
+	import matplotlib.pyplot as plt
+
+	if ax is None:
+		fig = plt.figure()
+		axis = fig.gca(projection='3d')
+	else:
+		axis = ax
 	
 	if t0 == 'PyKEP.epoch(0)':
 		t0 = epoch(0)
@@ -53,13 +60,17 @@ def plot_planet(ax,plnt,t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=8
 		label=plnt.name + " " +  t0.__repr__()[0:11]
 	else:
 		label=None
-	ax.plot(x, y, z, label=label, c=color)
-	ax.scatter([x[0]],[y[0]],[z[0]], s=s, marker='o', alpha=0.8, c = color)
+	axis.plot(x, y, z, label=label, c=color)
+	axis.scatter([x[0]],[y[0]],[z[0]], s=s, marker='o', alpha=0.8, c = color)
 	
 	if legend:
-		ax.legend()
+		axis.legend()
+
+	if ax is None: # show only if axis is not set
+		plt.show()
+	return axis
 	
-def plot_lambert(ax,l, N=60, sol=0, units = 1.0, color = 'b', legend = False):
+def plot_lambert(l, N=60, sol=0, units = 1.0, color = 'b', legend = False, ax = None):
 	"""
 	Plots a particular solution to a Lambert's problem
 	      
@@ -101,7 +112,13 @@ def plot_lambert(ax,l, N=60, sol=0, units = 1.0, color = 'b', legend = False):
 	"""
 	from PyKEP import propagate_lagrangian, AU
 	import numpy as np
+	import matplotlib.pyplot as plt
 	
+	if ax is None:
+		fig = plt.figure()
+		axis = fig.gca(projection='3d')
+	else:
+		axis = ax
 		
 	if sol > l.get_Nmax()*2:
 		raise ValueError("sol must be in 0 .. NMax*2 \n * Nmax is the maximum number of revolutions for which there exist a solution to the Lambert's problem \n * You can compute Nmax calling the get_Nmax() method of the lambert_problem object")
@@ -132,12 +149,16 @@ def plot_lambert(ax,l, N=60, sol=0, units = 1.0, color = 'b', legend = False):
 		label = 'Lambert solution (' + str((sol+1)/2) + ' revs.)'
 	else:
 		label = None
-	ax.plot(x, y, z, c=color, label=label)
+	axis.plot(x, y, z, c=color, label=label)
 	
 	if legend:
-		ax.legend()
+		axis.legend()
 
-def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
+	if ax is None: # show only if axis is not set
+		plt.show()
+	return axis
+
+def plot_kepler(r,v,t,mu, N=60, units = 1, color = 'b', legend = False, ax = None):
 	"""
 	Plots the result of a keplerian propagation
 		      
@@ -154,7 +175,14 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 	"""
 	
 	from PyKEP import propagate_lagrangian
+	import matplotlib.pyplot as plt
   
+	if ax is None:
+		fig = plt.figure()
+		axis = fig.gca(projection='3d')
+	else:
+		axis = ax
+
 	#We define the integration time ...
 	dt = t / (N-1)
 	
@@ -175,12 +203,16 @@ def plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
 		label = 'ballistic arc'
 	else:
 		label = None
-	ax.plot(x, y, z, c=color, label=label)
+	axis.plot(x, y, z, c=color, label=label)
 
 	if legend:
-		ax.legend()
+		axis.legend()
+
+	if ax is None: # show only if axis is not set
+		plt.show()
+	return axis
 		
-def plot_taylor(ax,r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = False):
+def plot_taylor(r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = False, ax = None):
 	"""
 	Plots the result of a taylor propagation of constant thrust
 		      
@@ -200,7 +232,14 @@ def plot_taylor(ax,r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = Fa
 	"""
 	
 	from PyKEP import propagate_taylor
+	import matplotlib.pyplot as plt
   
+	if ax is None:
+		fig = plt.figure()
+		axis = fig.gca(projection='3d')
+	else:
+		axis = ax
+
 	#We define the integration time ...
 	dt = t / (N-1)
 	
@@ -221,12 +260,16 @@ def plot_taylor(ax,r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = Fa
 		label = 'constant thrust arc'
 	else:
 		label = None
-	ax.plot(x, y, z, c=color, label=label)
+	axis.plot(x, y, z, c=color, label=label)
 	
 	if legend:
-		ax.legend()		
+		axis.legend()
 
-def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
+	if ax is None: # show only if axis is not set
+		plt.show()
+	return axis	
+
+def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line = True, ax = None):
 	"""
 	Plots a Sims-Flanagan leg
 		      
@@ -266,6 +309,13 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	import numpy as np
 	from scipy.linalg import norm
 	from math import exp
+	import matplotlib.pyplot as plt
+
+	if ax is None:
+		fig = plt.figure()
+		axis = fig.gca(projection='3d')
+	else:
+		axis = ax
 	
 	#We compute the number of segments for forward and backward propagation
 	n_seg = len(leg.get_throttles())
@@ -305,7 +355,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 		if leg.high_fidelity == False:
 			dV = [max_thrust / m * dt * dumb for dumb in t.value]
 			if plot_line:
-				plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_kepler(r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha), ax=axis)
 			r,v = propagate_lagrangian(r,v,dt/2,mu)
 			x[2*i+1] = r[0]/units
 			y[2*i+1] = r[1]/units
@@ -313,7 +363,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 			#v= v+dV
 			v = [a+b for a,b in zip(v,dV)]
 			if plot_line:
-				plot_kepler(ax,r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_kepler(r,v,dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha), ax=axis)
 			r,v = propagate_lagrangian(r,v,dt/2,mu)
 			x[2*i+2] = r[0]/units
 			y[2*i+2] = r[1]/units
@@ -323,13 +373,13 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
 			if plot_line:
-				plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_taylor(r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v,m = propagate_taylor(r,v,m,u,dt/2,mu,isp*G0,-10,-10)
 			x[2*i+1] = r[0]/units
 			y[2*i+1] = r[1]/units
 			z[2*i+1] = r[2]/units
 			if plot_line:
-				plot_taylor(ax,r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_taylor(r,v,m,u,dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v,m = propagate_taylor(r,v,m,u,dt/2,mu,isp*G0,-10,-10)
 			x[2*i+2] = r[0]/units
 			y[2*i+2] = r[1]/units
@@ -337,9 +387,9 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 		
 	x_grid = x[::2]; y_grid = y[::2]; z_grid = z[::2]
 	x_midpoint = x[1::2]; y_midpoint = y[1::2]; z_midpoint = z[1::2]
-	ax.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1], label='nodes',marker='o')
-	ax.scatter(x_midpoint, y_midpoint, z_midpoint, label='mid-points',marker='x')
-	ax.scatter(x_grid[-1],y_grid[-1],z_grid[-1], marker='^', c='y', label='mismatch point')
+	axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1], label='nodes',marker='o')
+	axis.scatter(x_midpoint, y_midpoint, z_midpoint, label='mid-points',marker='x')
+	axis.scatter(x_grid[-1],y_grid[-1],z_grid[-1], marker='^', c='y', label='mismatch point')
 	
 	#Backward propagation
 	
@@ -362,7 +412,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 		if leg.high_fidelity == False:
 			dV = [max_thrust / m * dt * dumb for dumb in t.value]
 			if plot_line:
-				plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_kepler(r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
 			x[-2*i-2] = r[0]/units
 			y[-2*i-2] = r[1]/units
@@ -370,7 +420,7 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 			#v= v+dV
 			v = [a-b for a,b in zip(v,dV)]
 			if plot_line:
-				plot_kepler(ax,r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_kepler(r,v,-dt/2,mu,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v = propagate_lagrangian(r,v,-dt/2,mu)
 			x[-2*i-3] = r[0]/units
 			y[-2*i-3] = r[1]/units
@@ -379,13 +429,13 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 		else:
 			u = [max_thrust * dumb for dumb in t.value]
 			if plot_line:
-				plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_taylor(r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
 			x[-2*i-2] = r[0]/units
 			y[-2*i-2] = r[1]/units
 			z[-2*i-2] = r[2]/units
 			if plot_line:
-				plot_taylor(ax,r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
+				plot_taylor(r,v,m,u,-dt/2,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha),ax=axis)
 			r,v,m = propagate_taylor(r,v,m,u,-dt/2,mu,isp*G0,-10,-10)
 			x[-2*i-3] = r[0]/units
 			y[-2*i-3] = r[1]/units
@@ -394,132 +444,13 @@ def plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True
 	x_grid = x[::2]; y_grid = y[::2]; z_grid = z[::2]
 	x_midpoint = x[1::2]; y_midpoint = y[1::2]; z_midpoint = z[1::2]
 	
-	ax.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker = 'o')
-	ax.scatter(x_midpoint, y_midpoint, z_midpoint, marker = 'x')
-	ax.scatter(x_grid[0],y_grid[0],z_grid[0], marker='^', c='y')
+	axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker = 'o')
+	axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker = 'x')
+	axis.scatter(x_grid[0],y_grid[0],z_grid[0], marker='^', c='y')
 	
 	if legend:
-		ax.legend()
-""" 
-def plot_leg(ax, leg, N=5, units=1, color='b', legend=False, plot_line = True):
-	###
-	Plots a trajectory leg
-		      
-	USAGE: plot_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = False):
-	  * ax:		3D axis object created using fig.gca(projection='3d')
-	  * leg:	a PyKEP.sims_flanagan.leg
-	  * N:		number of points to be plotted along one arc
-	  * units:	the length unit to be used in the plot
-	  * color:	matplotlib color to use to plot the trajectory and the grid points
-	  * legend	when True it plots also the legend
-	  * plot_line: 	when True plots also the trajectory (between mid-points and grid points)
-	  
-	EXAMPLE:
-	    from mpl_toolkits.mplot3d import Axes3D
-	    import matplotlib.pyplot as plt
+		axis.legend()
 
-	    fig = plt.figure()
-	    ax = fig.gca(projection='3d')
-	    t1 = epoch(0)
-	    pl = planet_ss('earth')
-	    rE,vE = pl.eph(t1)
-	    plot_planet(ax, pl,t0=t1, units=AU)
-
-	    t2 = epoch(440)
-	    pl = planet_ss('mars')
-	    rM, vM = pl.eph(t2)
-	    plot_planet(ax, pl,t0=t2, units=AU)
-
-	    sc = sims_flanagan.spacecraft(4500,0.5,2500)
-	    x0 = sims_flanagan.sc_state(rE,vE,sc.mass)
-	    xe = sims_flanagan.sc_state(rM,vM,sc.mass)
-	    l = sims_flanagan.leg(t1,x0,[1,0,0]*5,t2,xe,sc,MU_SUN)
-
-	    plot_sf_leg(ax,l,units=AU)
-	###
-	from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
-	import numpy as np
-	from scipy.linalg import norm
-	from math import exp
-	
-	#We compute the number of segments for forward and backward propagation
-	n_seg = len(leg.get_throttles())
-	fwd_seg =  (n_seg+1)/2
-	back_seg = n_seg/2
-
-	#We extract information on the spacecraft
-
-	sc = leg.get_spacecraft()
-	isp = sc.isp
-	max_thrust = sc.thrust
-	
-	#And on the leg
-	throttles = leg.get_throttles()
-	mu = leg.get_mu()
-	
-	#Forward propagation
-	
-	#x,y,z contain the cartesian components of all points containd in states
-	x = [0.0]*(fwd_seg+1)
-	y = [0.0]*(fwd_seg+1)
-	z = [0.0]*(fwd_seg+1)
-	
-	state = leg.get_xi()
-	
-	#Initial conditions
-	r = state.r; v = state.v; m = state.m
-	x[0] = r[0]/units
-	y[0] = r[1]/units
-	z[0] = r[2]/units
-	
-	#We compute all points by propagation
-	for i,t in enumerate(throttles[:fwd_seg]):
-		dt = (t.end.mjd - t.start.mjd) * DAY2SEC
-		alpha = min(norm(t.value),1.0)
-		
-		#Taylor propagation of constant thrust u
-		u = [max_thrust * dumb for dumb in t.value]
-		if plot_line:
-			plot_taylor(ax,r,v,m,u,dt,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
-		r,v,m = propagate_taylor(r,v,m,u,dt,mu,isp*G0,-10,-10)
-		x[i+1] = r[0]/units
-		y[i+1] = r[1]/units
-		z[i+1] = r[2]/units
-		
-	ax.scatter(x[:-1], y[:-1], z[:-1], label='nodes',marker='o')
-	ax.scatter(x[-1],y[-1],z[-1], marker='^', c='y', label='mismatch point')
-	
-	#Backward propagation
-	
-	#x,y,z will contain the cartesian components of 
-	x = [0.0]*(back_seg+1)
-	y = [0.0]*(back_seg+1)
-	z = [0.0]*(back_seg+1)
-	
-	state = leg.get_xf()
-	
-	#Final conditions
-	r = state.r; v = state.v; m = state.m
-	x[-1] = r[0]/units
-	y[-1] = r[1]/units
-	z[-1] = r[2]/units
-	
-	for i,t in enumerate(throttles[-1:-back_seg-1:-1]):
-		dt = (t.end.mjd - t.start.mjd)*DAY2SEC
-		alpha = min(norm(t.value),1.0)
-
-		u = [max_thrust * dumb for dumb in t.value]
-		if plot_line:
-			plot_taylor(ax,r,v,m,u,-dt,mu,isp*G0,N=N,units=units,color=(alpha,0,1-alpha))
-		r,v,m = propagate_taylor(r,v,m,u,-dt,mu,isp*G0,-10,-10)
-		x[-i-2] = r[0]/units
-		y[-i-2] = r[1]/units
-		z[-i-2] = r[2]/units
-
-
-	ax.scatter(x[1:], y[1:], z[1:], marker = 'o')
-	ax.scatter(x[0],  y[0],  z[0], marker='^', c='y')
-	
-	if legend:
-		ax.legend()
-  """
+	if ax is None: # show only if axis is not set
+		plt.show()
+	return axis	

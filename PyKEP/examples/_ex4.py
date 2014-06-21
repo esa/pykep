@@ -25,6 +25,7 @@ try:
 			self.__leg = leg_s(nseg,1.0/(100*AU)**1.0,1.0)
 			self.__leg.set_mu(MU_SUN)
 			self.__leg.set_spacecraft(self.__sc)
+			self.__leg.high_fidelity = False #This is needed to use the plotting function plot_sf_leg
 			self.__nseg = nseg
 			#The bounds on Sundman's variable can be evaluated considering circular orbits at r=1AU and r=0.7AU (for example)
 			self.set_bounds([5000,2400,10000, self.__sc.mass/10,-self.__Vinf,-self.__Vinf,-self.__Vinf] + [-1] * 3 *nseg,[8000,2500,150000,self.__sc.mass,self.__Vinf,self.__Vinf,self.__Vinf] + [1] * 3 * nseg)
@@ -73,7 +74,7 @@ try:
 			import matplotlib.pyplot as plt
 			from PyKEP import epoch, AU, DAY2SEC
 			from PyKEP.sims_flanagan import sc_state
-			from PyKEP.orbit_plots import plot_planet, plot_leg
+			from PyKEP.orbit_plots import plot_planet, plot_sf_leg
 			
 			start = epoch(x[0])
 			end = epoch(x[0] + x[1])
@@ -87,14 +88,14 @@ try:
 			self.__leg.set(start,x0,x[-3 * self.__nseg:],end,xe, x[2] * DAY2SEC)
 			
 			fig = plt.figure()
-			ax = fig.gca(projection='3d')
+			axis = fig.gca(projection='3d')
 			#The Sun
-			ax.scatter([0],[0],[0], color='y')
+			axis.scatter([0],[0],[0], color='y')
 			#The leg
-			plot_leg(ax, self.__leg, units=AU,N=10)
+			plot_sf_leg(self.__leg, units=AU,N=10, ax = axis)
 			#The planets
-			plot_planet(ax, self.__earth, start, units=AU, legend = True,color=(0.8,0.8,1))
-			plot_planet(ax, self.__mars, end, units=AU, legend = True,color=(0.8,0.8,1))
+			plot_planet(self.__earth, start, units=AU, legend = True,color=(0.8,0.8,1), ax = axis)
+			plot_planet(self.__mars, end, units=AU, legend = True,color=(0.8,0.8,1), ax = axis)
 			plt.show()
 			
 	def run_example4():

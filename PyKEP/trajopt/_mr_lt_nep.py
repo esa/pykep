@@ -165,27 +165,25 @@ class mr_lt_nep(base_problem):
         
         # Creating the axis ........
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        axis = fig.gca(projection='3d')
 
         # Plotting the Sun ........
-        ax.scatter([0],[0],[0], color='y')
+        axis.scatter([0],[0],[0], color='y')
 
         # Computing the legs
         self._compute_constraints_impl(x)
 
         # Plotting the legs
         for leg in self.__legs:
-            plot_sf_leg(ax, leg, units=AU,N=10)
+            plot_sf_leg(leg, units=AU,N=10, ax=axis)
 
         # Plotting the PyKEP.planets both at departure and arrival dates   
         for i in range(self.__num_legs):
             idx = i*self.__dim_leg
-            plot_planet(ax, self.__seq[i], epoch(x[idx]), units=AU, legend = True,color=(0.7,0.7,1),s=30)
-            plot_planet(ax, self.__seq[i+1], epoch(x[idx]+x[idx+1]), units=AU, legend = False,color=(0.7,0.7,1),s=30)
-
+            plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend = True,color=(0.7,0.7,1),s=30, ax=axis)
+            plot_planet(self.__seq[i+1], epoch(x[idx]+x[idx+1]), units=AU, legend = False,color=(0.7,0.7,1),s=30,ax=axis)
         plt.show()
-
-        return ax
+        return axis
 
 
 

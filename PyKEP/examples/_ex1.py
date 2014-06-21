@@ -76,33 +76,30 @@ try:
 			from PyKEP.sims_flanagan import sc_state
 			from PyKEP.orbit_plots import plot_planet, plot_sf_leg
 			
+			# Making sure the leg corresponds to the requested chromosome
+			self._compute_constraints_impl(x)
 			start = epoch(x[0])
 			end = epoch(x[0] + x[1])
-			r,v = self.__earth.eph(start)
-			v = [a+b for a,b in zip(v,x[3:6])]
-			x0 = sc_state(r,v,self.__sc.mass)
-			r,v = self.__mars.eph(end)
-			xe = sc_state(r, v ,x[2])
-			self.__leg.set(start,x0,x[-3 * self.__nseg:],end,xe)
 			
+			# Plotting commands
 			fig = plt.figure()
-			ax = fig.gca(projection='3d')
+			axis = fig.gca(projection='3d')
 			#The Sun
-			ax.scatter([0],[0],[0], color='y')
+			axis.scatter([0],[0],[0], color='y')
 			#The leg
-			plot_sf_leg(ax, self.__leg, units=AU,N=10)
+			plot_sf_leg(self.__leg, units=AU,N=10, ax = axis)
 			#The planets
-			plot_planet(ax, self.__earth, start, units=AU, legend = True,color=(0.8,0.8,1))
-			plot_planet(ax, self.__mars, end, units=AU, legend = True,color=(0.8,0.8,1))
+			plot_planet(self.__earth, start, units=AU, legend = True, color=(0.8,0.8,1), ax = axis)
+			plot_planet(self.__mars, end, units=AU, legend = True, color=(0.8,0.8,1), ax = axis)
 			plt.show()
 			
-	def run_example1():
+	def run_example1(n_restarts = 5):
 		from PyGMO import algorithm, island
 		prob = mga_lt_earth_mars(nseg=15)
 		prob.high_fidelity(True)
 		algo = algorithm.scipy_slsqp(max_iter = 500, acc=1e-5)
 		#algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
-		algo2 = algorithm.mbh(algo,5,0.05)
+		algo2 = algorithm.mbh(algo,n_restarts,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
 		print "Running Monotonic Basin Hopping .... this will take a while."

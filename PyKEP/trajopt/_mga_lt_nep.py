@@ -182,13 +182,12 @@ class mga_lt_nep(base_problem):
 		from PyKEP.orbit_plots import plot_planet, plot_sf_leg
 		
 		fig = plt.figure()
-		ax = fig.gca(projection='3d')
+		axis = fig.gca(projection='3d')
 
 		#Plotting the Sun ........
-		ax.scatter([0],[0],[0], color='y')
+		axis.scatter([0],[0],[0], color='y')
 		
 		#Plotting the legs .......
-		
 		# 1 - We decode the chromosome extracting the time of flights
 		T = list([0]*(self.__n_legs))
 		for i in range(self.__n_legs):
@@ -217,13 +216,14 @@ class mga_lt_nep(base_problem):
 			self.__leg.set(t_P[i],x0,throttles,t_P[i+1],xe)
 			#update mass!
 			m0 = x[2+8*i]
-			plot_sf_leg(ax, self.__leg, units=AU,N=10)
+			plot_sf_leg(self.__leg, units=AU,N=10, ax = axis)
 			
 		#Plotting planets
 		for i,planet in enumerate(self.seq):
-			plot_planet(ax, planet, t_P[i], units=AU, legend = True,color=(0.7,0.7,1))
+			plot_planet(planet, t_P[i], units=AU, legend = True,color=(0.7,0.7,1), ax = axis)
 
 		plt.show()
+		return axis
 		
 	def high_fidelity(self, boolean):
 		"""	

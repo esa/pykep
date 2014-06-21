@@ -233,8 +233,8 @@ class mga_1dsm(base_problem):
 
 		mpl.rcParams['legend.fontsize'] = 10
 		fig = plt.figure()
-		ax = fig.gca(projection='3d')
-		ax.scatter(0,0,0, color='y')
+		axis = fig.gca(projection='3d')
+		axis.scatter(0,0,0, color='y')
 		
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n_legs))
@@ -253,7 +253,7 @@ class mga_1dsm(base_problem):
 		for i,planet in enumerate(self.seq):
 			t_P[i] = epoch(x[0] + sum(T[0:i]))
 			r_P[i],v_P[i] = planet.eph(t_P[i])
-			plot_planet(ax, planet, t0=t_P[i], color=(0.8,0.6,0.8), legend=True, units = AU)
+			plot_planet(planet, t0=t_P[i], color=(0.8,0.6,0.8), legend=True, units = AU, ax=axis)
 
 		#3 - We start with the first leg
 		theta = 2*pi*x[1]
@@ -265,12 +265,12 @@ class mga_1dsm(base_problem):
 
 		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
 		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu)
-		plot_kepler(ax,r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU)
+		plot_kepler(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU, ax=axis)
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
 		l = lambert_problem(r,r_P[1],dt,self.common_mu, False, False)
-		plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU)
+		plot_lambert(l, sol = 0, color='r', legend=False, units = AU, ax=axis)
 		v_end_l = l.get_v2()[0]
 		v_beg_l = l.get_v1()[0]
 
@@ -283,19 +283,19 @@ class mga_1dsm(base_problem):
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
 			#s/c propagation before the DSM
 			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
-			plot_kepler(ax,r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU)
+			plot_kepler(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu,N = 100, color='b', legend=False, units = AU, ax=axis)
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
 
 			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
-			plot_lambert(ax,l, sol = 0, color='r', legend=False, units = AU, N=1000)
+			plot_lambert(l, sol = 0, color='r', legend=False, units = AU, N=1000, ax=axis)
 
 			v_end_l = l.get_v2()[0]
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
 			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
-
 		plt.show()
+		return axis
 	
 	def set_tof(self, minimum, maximum):
 		"""
