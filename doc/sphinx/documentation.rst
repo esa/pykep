@@ -46,6 +46,17 @@ Name                                            Type            Description
 =========================================       =========       ================================================
 
 
+The phasing module
+=======================================================
+
+=========================================       =========       ================================================
+Name                                            Type            Description
+=========================================       =========       ================================================
+:class:`PyKEP.phasing.knn`                      class           Finds the nearest-neighbouring PyKEP.planets
+:class:`PyKEP.phasing.dbscan`                   class           Detects clusters of PyKEP.planets
+=========================================       =========       ================================================
+
+
 Constants defined within PyKEP namespace
 =========================================
 
@@ -183,6 +194,22 @@ Detailed Documentation
    .. automethod:: PyKEP.trajopt.mr_lt_nep.__init__(*args)
        
    .. automethod:: PyKEP.trajopt.mr_lt_nep.plot(*args)
+
+.. autoclass:: PyKEP.phasing.knn(*args)
+ 
+   .. automethod:: PyKEP.phasing.knn.__init__(*args)
+
+   .. automethod:: PyKEP.phasing.knn.find_neighbours(*args)
+       
+.. autoclass:: PyKEP.phasing.dbscan(*args)
+ 
+   .. automethod:: PyKEP.phasing.dbscan.__init__(*args)
+
+   .. automethod:: PyKEP.phasing.dbscan.cluster(*args)
+
+   .. autoattribute:: PyKEP.phasing.dbscan.pretty(*args)
+
+   .. autoattribute:: PyKEP.phasing.dbscan.plot(*args)
 
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 

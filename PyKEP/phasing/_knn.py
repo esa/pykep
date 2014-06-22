@@ -1,7 +1,10 @@
 import PyKEP as pk
 class knn():
     """
-    blah
+    The class helps finding the k-nearest neighbours to a given planet from a list of planets. 
+    The problem of finding who is "close-by" can be efficiently solved using appropriate data structures. 
+    Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can also be queried efficiently 
+    for all asteroid within a given distance ('ball' query)
     """
     def _eph_normalize( self, eph ):
         """
@@ -72,10 +75,10 @@ class knn():
         """
         USAGE: knn = knn(planet_list, t, ref_r=pk.AU, ref_v=pk.EARTH_VELOCITY):
         
-        * planet_list   list of PyKEP planets
-        * t             epoch
-        * ref_r         reference radius
-        * ref_v         reference velocity
+        - planet_list   list of PyKEP planets (typically thousands)
+        - t             epoch
+        - ref_r         reference radius
+        - ref_v         reference velocity
         """
         import numpy as np
         import PyKEP as pk
@@ -89,13 +92,13 @@ class knn():
     def find_neighbours(self, query_planet, query_type='knn', *args, **kwargs ):
         """
         Finds the neighbours of a given planet at a given epoch. The user may query for the 
-        k-nearest neighbours or for all neighbours within a given "distance"
+        k-nearest neighbours or for all neighbours within a given distance
 
-        knn.find_neighbours(query_planet, query_type='knn', *args, **kwargs )
+        knn.find_neighbours(query_planet, query_type='knn', \*args, \*\*kwargs )
 
         - query_planet: the planet we want to find neighbours of. Can be an integer, in which case it refers to the idx in self.asteroid_list
         - query_type: one of 'knn' or 'ball'.
-        - *args, **args: according to the query type (read below)
+        - \*args, \*\*args: according to the query type (read below)
 
         Returns (neighb, neighb_ids, dists), where dist is only computed if 'knn' type query is made
 

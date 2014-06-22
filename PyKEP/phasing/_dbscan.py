@@ -1,21 +1,28 @@
+import PyKEP
+import numpy
+
 class dbscan():
     """
     This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
-    Essentially, it locates clusters 
+    Essentially, it locates planet clusters 
     """
 
-    import PyKEP
-    import numpy
+    def _axis_equal_3d(self, ax):
+        """Rescales 3D axis limits using equal scale."""
+        import numpy
+        extents = numpy.array([getattr(ax, 'get_{}lim'.format(dim))() for dim in 'xyz'])
+        sz = extents[:,1] - extents[:,0]
+        centers = numpy.mean(extents, axis=1)
+        maxsize = max(abs(sz))
+        r = maxsize/2
+        for ctr, dim in zip(centers, 'xyz'):
+            getattr(ax, 'set_{}lim'.format(dim))(ctr - r, ctr + r)
 
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.cluster import DBSCAN
-    from sklearn import metrics
-    
     def __init__(self, planet_list):
         """
         USAGE: cl = dbscan(planet_list):
         
-        * planet_list = list of PyKEP planets
+        - planet_list = list of PyKEP planets (typically thousands)
         """
         self._asteroids = planet_list 
         self.labels = None
@@ -25,17 +32,22 @@ class dbscan():
 
     def cluster(self, t, with_velocity=True, scaling='astro', eps=0.125, min_samples=10):
         """
-        USAGE: cluster(self, t):
+        USAGE: cl.cluster(self, t, with_velocity=True, scaling='astro', eps=0.125, min_samples=10)
         
-        * t: epoch (in MJD2000)
-        * with_velocity: when True clusters by position and velocity, otherwise only position is used
-        * scaling: one of 
+        - t: epoch (in MJD2000)
+        - with_velocity: when True clusters by position and velocity, otherwise only position is used
+        - scaling: one of 
           - None, or 
           - 'standard' (removing mean and scale to standard variance), or 
           - 'astro' (scaling by PyKEP.AU and PyKEP.EARTH_VELOCITY)
-        * eps: max distance between points in a cluster
-        * min_samples: minimum number of samples per cluster
+        - eps: max distance between points in a cluster
+        - min_samples: minimum number of samples per cluster
         """
+        import PyKEP
+        import numpy
+        from sklearn.preprocessing import StandardScaler
+        from sklearn.cluster import DBSCAN
+
         self._scaling = scaling
         self._epoch = PyKEP.epoch(t)
 
@@ -89,6 +101,7 @@ class dbscan():
                                                 len(self.core_members[label]), str(self.members[label]))
             
 
+
     def plot(self, ax=None, clusters=None, orbits=False, only_core=False):
         """Plots the clusters."""
         if self.n_clusters < 1:
@@ -107,19 +120,20 @@ class dbscan():
         axis.set_aspect('equal')       
 
         if orbits:
-            from PyKEP.orbit_plots import plot_planet, plot_sf_leg
+            from PyKEP.orbit_plots import plot_planet
             members = self.core_members if only_core else self.members
             for label in members if clusters is None else clusters:
                 for planet in members[label]:
-                    plot_planet(axis, self._asteroids[planet], t0=self._epoch, s=0)
+                    plot_planet(self._asteroids[planet], t0=self._epoch, s=0, ax=axis)
 
         X, labels = zip(*[(x, label)  for (x, label) in zip(self._X, self.labels) 
                           if label > -.5 and (clusters is None or label in clusters)])
         data = [[x[0], x[1], x[2]] for x in X] 
         axis.scatter(*zip(*data), c=labels)
 
-        gtoc7.utils.axis_equal_3d(axis)
+        self._axis_equal_3d(axis)
 
         if ax is None:
             plt.show()
 
+del PyKEP, numpy
