@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2014 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *   http://keptoolbox.sourceforge.net/index.html                            *
  *   http://keptoolbox.sourceforge.net/credits.html                          *
@@ -27,7 +27,7 @@
 
 #include "lambert_problem.h"
 #include "core_functions/array3D_operations.h"
-#include"exceptions.h"
+#include "exceptions.h"
 
 
 namespace kep_toolbox {

@@ -327,7 +327,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def(init<>());
 
 	// A Jupiter system moon
-	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A Galilean moon from Jupiter. Ephemerides are Keplerian.",
+	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A Galilean moon from Jupiter. Ephemerides are Keplerian thus highly unreliable.",
 		init<std::string>(
 			"PyKEP.planet_js.eph(which)\n\n"
 			"- which: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
@@ -368,7 +368,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
 		.def(init<>());
 
-	// A planet from the gtoc5 problem
+	/* A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
 		init<const int &>(
 			"PyKEP.planet_gtoc5(ast_id)\n\n"
@@ -407,6 +407,7 @@ BOOST_PYTHON_MODULE(_core) {
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc2>())
 		.def(init<>());
+	*/
 
 	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
@@ -480,7 +481,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def(init<>());
 
 	// Lambert problem OLD.
-	class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a multiple revolution Lambert's problem",
+	/*class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a multiple revolution Lambert's problem",
 		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
 			"lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
@@ -547,6 +548,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def(repr(self))
 		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problemOLD>())
 		.def(init<>());
+	*/
 
 	//Lagrangian propagator for keplerian orbits
 	def("propagate_lagrangian", &propagate_lagrangian_wrapper,
@@ -559,7 +561,6 @@ BOOST_PYTHON_MODULE(_core) {
 		"Example::\n\n"
 		"  r,v = propagate_lagrangian([1,0,0],[0,1,0],pi/2,1)"
 	);
-
 
 	//Taylor propagation of inertially constant thrust arcs
 	def("propagate_taylor",&propagate_taylor_wrapper,
