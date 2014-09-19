@@ -314,8 +314,8 @@ BOOST_PYTHON_MODULE(_core) {
 	// A solar system planet
 	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system. Ephemerides are the JPL low-precision alternative (http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf)",
 		init<std::string>(
-			"PyKEP.planet_ss.eph(which)\n\n"
-			"- which: string containing the common planet name (e.g. 'earth')\n\n"
+			"PyKEP.planet_ss(name)\n\n"
+			"- name: string containing the common planet name (e.g. 'earth')\n\n"
 			"Example::\n\n"
 			"  earth = planet_ss('earth')"
 		))
@@ -329,8 +329,8 @@ BOOST_PYTHON_MODULE(_core) {
 	// A Jupiter system moon
 	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A Galilean moon from Jupiter. Ephemerides are Keplerian thus highly unreliable.",
 		init<std::string>(
-			"PyKEP.planet_js.eph(which)\n\n"
-			"- which: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
+			"PyKEP.planet_js(name)\n\n"
+			"- name: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
 			"Example::\n\n"
 			"  io = planet_js('io')"
 		))
@@ -340,7 +340,7 @@ BOOST_PYTHON_MODULE(_core) {
 	// A planet from the MPCORB database
 	class_<kep_toolbox::planet_mpcorb,bases<kep_toolbox::planet> >("planet_mpcorb","A planet from the mpcorb database",
 		init<std::string>(
-			"PyKEP.planet_mpcorb.eph(line)\n\n"
+			"PyKEP.planet_mpcorb(line)\n\n"
 			"- line: a line from the MPCORB database file\n\n"
 			"Example::\n\n"
 			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
@@ -367,7 +367,21 @@ BOOST_PYTHON_MODULE(_core) {
 			)
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
 		.def(init<>());
-
+#ifdef PYGMO_ENABLE_SGP4
+		// A TLE satellite
+		class_<kep_toolbox::planet_tle,bases<kep_toolbox::planet> >("planet_tle","A satellite from TLE format. Ephemerides will be computed using the SGP4 orbit propagator",
+		init<std::string, std::string>(
+			"PyKEP.planet_tle(line1, line2)\n\n"
+			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
+			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
+			"Example::\n\n"
+			"line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
+			"line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
+			"arianne = planet_tle(line1, line2)"
+		))
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>())
+		.def(init<>());
+#endif 
 	/* A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
 		init<const int &>(
@@ -379,6 +393,7 @@ BOOST_PYTHON_MODULE(_core) {
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
 		.def(init<>());
+	*/
 
 	// A planet from the gtoc7 problem
 	class_<kep_toolbox::asteroid_gtoc7,bases<kep_toolbox::planet> >("planet_gtoc7",
@@ -391,6 +406,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc7>())
 		.def(init<>());
 
+	/*
 	// A planet from the gtoc2 problem
 	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
 		init<const int &>(

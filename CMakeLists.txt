@@ -53,7 +53,7 @@ SET(SRC_LIST
 	#${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problemOLD.cpp
 	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
 	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc7.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc7.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_js.cpp

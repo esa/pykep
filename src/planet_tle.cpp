@@ -44,7 +44,7 @@ try : planet(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1
 	array6D keplerian_elements;
 	double mu_central_body = kMU*1E09; // (m^3/s^2)
 	double mean_motion = m_tle.MeanMotion() * 2 * kPI / kSECONDS_PER_DAY; // [rad/s]
-	keplerian_elements[0] = std::pow((mu_central_body / mean_motion*mean_motion),1./3); // a [m]
+	keplerian_elements[0] = std::pow(mu_central_body / (mean_motion*mean_motion),1./3); // a [m]
 	keplerian_elements[1] = m_tle.Eccentricity(); // e
 	keplerian_elements[2] = m_tle.Inclination(false); // i [rad]
 	keplerian_elements[3] = m_tle.RightAscendingNode(false); // Om [rad]
