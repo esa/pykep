@@ -677,7 +677,9 @@ BOOST_PYTHON_MODULE(_core) {
 		"- r1: initial position (cartesian)\n"
 		"- r2: final position (cartesian)\n"
 		"- mu: gravity parameter\n"
-		"Returns the osculating keplerian elements (WARNING: singular for zero inclination)\n"
+		"Returns the osculating keplerian elements a,e,i,W,w,E\n"
+		"E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+		"NOTE: routine gets singular for zero inclination\n"
 		"Example:: \n\n"
 		"  el = ic2par([1,0,0],[0,1,0],1.0)"
 	);

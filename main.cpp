@@ -33,9 +33,11 @@ int main() {
     //Our recommendation is to use the Keplerian toolbox Python interface PyGMO
     //
     //You can compile this main linking it to the keplerian_toolbox library
-	planet_tle sat1;
+    std::string line1("1 25544U 98067A   14266.21457330  .00014240  00000-0  25195-3 0  1363");
+    std::string line2("2 25544  51.6476 333.7159 0002117 131.1360 342.8524 15.50569589906532");
+	planet_tle sat1(line1,line2);
 	array3D r,v;
-	sat1.get_eph(epoch(sat1.get_ref_epoch().mjd2000()+120./24./60) ,r,v);
+	sat1.get_eph(sat1.get_ref_epoch() ,r,v);
 
 	std::cout << sat1 << std::endl;
 	std::cout << r << std::endl;

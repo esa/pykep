@@ -74,8 +74,8 @@ void planet_tle::get_eph(const epoch& when, array3D &r, array3D &v) const{
 			Eci eci = m_sgp4_propagator.FindPosition(minutes_since);
 			position = eci.Position();
 			velocity = eci.Velocity();
-			cached_r[0] = position.x; cached_r[1] = position.y; cached_r[2] = position.z;
-			cached_v[0] = velocity.x; cached_v[1] = velocity.y; cached_v[2] = velocity.z;
+			cached_r[0] = position.x*1000; cached_r[1] = position.y*1000; cached_r[2] = position.z*1000;
+			cached_v[0] = velocity.x*1000; cached_v[1] = velocity.y*1000; cached_v[2] = velocity.z*1000;
 			cached_epoch = when;
 		}
 		catch (SatelliteException& e)

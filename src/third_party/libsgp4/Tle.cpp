@@ -70,12 +70,12 @@ void Tle::Initialize()
 {
     if (!IsValidLineLength(line_one_))
     {
-        throw TleException("Invalid length for line one");
+        throw TleException(std::string("Invalid length for line one: "+line_one_).c_str());
     }
 
     if (!IsValidLineLength(line_two_))
     {
-        throw TleException("Invalid length for line two");
+        throw TleException(std::string("Invalid length for line two: "+line_two_).c_str());
     }
 
     if (line_one_[0] != '1')
