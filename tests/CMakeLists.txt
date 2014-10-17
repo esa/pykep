@@ -28,4 +28,6 @@ ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_PyKEP_implemen
 ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_Jorba_implementation propagate_taylor_jorba_test)
 ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_in_the_Sundmann_Variable propagate_taylor_s_test)
 ADD_TEST(Testing_Leg_in_The_Sundmann_Variable leg_s_test)
-ADD_TEST(Testing_SGP4_propagation sgp4_test)
+IF(ENABLE_SGP4)
+        ADD_TEST(Testing_SGP4_propagation sgp4_test)
+ENDIF(ENABLE_SGP4)
