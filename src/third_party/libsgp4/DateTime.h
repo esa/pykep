@@ -24,6 +24,11 @@
 #include "TimeSpan.h"
 #include "Util.h"
 
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 namespace
 {
     static int daysInMonth[2][13] = {
@@ -140,8 +145,25 @@ public:
     {
         DateTime dt;
         struct timespec ts;
+        int res;
 
-        if (clock_gettime(CLOCK_REALTIME, &ts) == 0)
+
+    #ifdef __MACH__
+        // OS X does not have clock_gettime, use clock_get_time
+        // credits: https://gist.github.com/jbenet/1087739
+        clock_serv_t cclock;
+        mach_timespec_t mts;
+        host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+        clock_get_time(cclock, &mts);
+        mach_port_deallocate(mach_task_self(), cclock);
+        ts.tv_sec = mts.tv_sec;
+        ts.tv_nsec = mts.tv_nsec;
+        res = 0;
+    #else
+        res = clock_gettime(CLOCK_REALTIME, &ts);
+    #endif
+          
+        if (res == 0)
         {
             if (microseconds)
             {
