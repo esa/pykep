@@ -279,7 +279,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>());
     
     
-    typedef void (kep_toolbox::sims_flanagan::leg_s::*leg_s_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const double&);
+    /*typedef void (kep_toolbox::sims_flanagan::leg_s::*leg_s_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const double&);
 	class_<kep_toolbox::sims_flanagan::leg_s>("leg_s", "Represents an interplanetary leg (using the Sundmann variable)",
 		init<const unsigned int&, const double& , const double &, optional<const double&> >(
 			"PyKEP.sims_flanagan.leg_s(n_seg, c, alpha, [tol])\n\n"
@@ -375,4 +375,5 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg_s::human_readable)
 		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());
+		*/
 }

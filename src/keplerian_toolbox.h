@@ -30,6 +30,7 @@
 #include"planet_ss.h"
 #include"planet_js.h"
 #include"planet_mpcorb.h"
+#include"planet_tle.h"
 #include"asteroid_gtoc2.h"
 #include"asteroid_gtoc5.h"
 #include"asteroid_gtoc7.h"

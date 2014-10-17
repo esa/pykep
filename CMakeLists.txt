@@ -37,6 +37,12 @@ OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
 
+# Build Option: when active libsgp4 is also built and related classes activated
+OPTION(ENABLE_SGP4 "Build SGP4 related classes'." OFF)
+IF(ENABLE_SGP4)
+		ADD_DEFINITIONS(-DPYGMO_ENABLE_SGP4)
+ENDIF(ENABLE_SGP4)
+
 SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION_DYN_LINK=1")
 
 # Keplerian_toolbox lib source files.
@@ -44,19 +50,37 @@ SET(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problemOLD.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problemOLD.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc7.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_js.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp
-#	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/fb_traj.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
 	)
+
+# Additional files for SGP4 support.
+IF(ENABLE_SGP4)
+	SET(SRC_LIST ${SRC_LIST}
+		${CMAKE_CURRENT_SOURCE_DIR}/src/planet_tle.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Vector.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Util.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Tle.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/TimeSpan.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SolarPosition.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SGP4.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/OrbitalElements.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Observer.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Eci.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/DateTime.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/CoordTopocentric.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/CoordGeodetic.cpp
+	)
+ENDIF(ENABLE_SGP4)
 
 # Finding the boost libraries needed for the keplerian_toolbox
 set(Boost_ADDITIONAL_VERSIONS "1.46.1")
@@ -87,6 +111,9 @@ ENDIF(BUILD_MAIN)
 # Build Tests
 IF(BUILD_TESTS)
 	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/tests")
+	IF(ENABLE_SGP4)
+		FILE(COPY "${CMAKE_SOURCE_DIR}/tests/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	ENDIF(ENABLE_SGP4)
 ENDIF(BUILD_TESTS)
 
 #Build PyKEP

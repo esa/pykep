@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2012 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2014 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *   http://keptoolbox.sourceforge.net/index.html                            *
  *   http://keptoolbox.sourceforge.net/credits.html                          *
@@ -33,7 +33,14 @@ int main() {
     //Our recommendation is to use the Keplerian toolbox Python interface PyGMO
     //
     //You can compile this main linking it to the keplerian_toolbox library
-	lambert_problem lp;
-	std::cout << lp << std::endl;
+    std::string line1("1 25544U 98067A   14266.21457330  .00014240  00000-0  25195-3 0  1363");
+    std::string line2("2 25544  51.6476 333.7159 0002117 131.1360 342.8524 15.50569589906532");
+	planet_tle sat1(line1,line2);
+	array3D r,v;
+	sat1.get_eph(sat1.get_ref_epoch() ,r,v);
+
+	std::cout << sat1 << std::endl;
+	std::cout << r << std::endl;
+	std::cout << v << std::endl;
     return 0;
 }
