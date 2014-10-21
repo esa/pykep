@@ -381,7 +381,7 @@ std::ostream &operator<<(std::ostream &s, const lambert_problem &lp) {
 	s << "r2 = " << lp.m_r2 << std::endl;
 	s << "Time of flight: " << lp.m_tof <<std::endl<< std::endl;
 	s << "chord = " << lp.m_c << std::endl;
-	s << "semiperimeter = " << lp.m_c << std::endl;
+	s << "semiperimeter = " << lp.m_s << std::endl;
 	s << "lambda = " << lp.m_lambda << std::endl;
 	s << "non dimensional time of flight = " << lp.m_tof * sqrt(2*lp.m_mu/lp.m_s/lp.m_s/lp.m_s) << std::endl << std::endl;
 	s << "Maximum number of revolutions: " << lp.m_Nmax << std::endl;
