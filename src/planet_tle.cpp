@@ -23,6 +23,7 @@
  *****************************************************************************/
 
 #include <cmath>
+#include <string>
 
 #include "planet_tle.h"
 #include "exceptions.h"
@@ -50,7 +51,13 @@ try : planet(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1
 	keplerian_elements[3] = m_tle.RightAscendingNode(false); // Om [rad]
 	keplerian_elements[4] = m_tle.ArgumentPerigee(false); // om [rad]
 	keplerian_elements[5] = m_tle.MeanAnomaly(false); // M [rad]
-	build_planet(epoch(m_tle.Epoch().ToJulian(),epoch::JD),keplerian_elements,mu_central_body,mu_self,radius,safe_radius,m_tle.IntDesignator());
+
+    int year = std::stoi(m_tle.IntDesignator().substr(0,2));
+    std::string rest = m_tle.IntDesignator().substr(2);
+    int prefix = (year > 50)?(19):(20); 
+
+    std::string object_name(std::to_string(prefix)+std::to_string(year)+std::string("-")+rest);
+	build_planet(epoch(m_tle.Epoch().ToJulian(),epoch::JD),keplerian_elements,mu_central_body,mu_self,radius,safe_radius,object_name);
 }
 catch (TleException& e)
 {
