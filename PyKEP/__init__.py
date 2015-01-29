@@ -1,18 +1,8 @@
-import core
-import sims_flanagan
-
-# For convenience, bring all core classes into the root namespace when importing *.
-from core import *
-
-__doc__ = 'PyKEP is the answer ... but what was the question?'
-__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'trajopt', 'phasing']
-__version__ = '1.2.0'
-
-"""Detecting Installed Extensions"""
-# Fill up the __extensions__ variable with all detected extensions
+###########################################################
+# We check what extensions are available
+###########################################################
 __extensions__ = {'matplotlib': False, 'mplot3d': False, 'pygmo': False, 'scikit-learn': False, 'scipy': False}
-
-# First we check matplotlib and the availability of 3Dplots
+# 1 - matplotlib
 try:
     from matplotlib import __version__ as matplotlib_ver
     __extensions__['matplotlib'] = True
@@ -26,30 +16,44 @@ try:
 except ImportError:
     pass
 
-# We check if PyGMO is installed
+# 2 - PyGMO
 try:
     from PyGMO import __version__ as pygmo_ver
     __extensions__['pygmo'] = True
 except ImportError:
     pass
 
-# We check if scikit-learn is installed
+# 3 - scikit-learn is installed
 try:
     from sklearn import __version__ as sklearn_ver
     __extensions__['scikit-learn'] = True
 except ImportError:
     pass
 
-# We check if scipy is installed
+# 4 - scipy is installed
 try:
     from scipy import __version__ as scipy_ver
     __extensions__['scipy'] = True
 except ImportError:
     pass
 
+###########################################################
+# We import the submodules
+###########################################################
+import core
+import sims_flanagan
+
+# For convenience, bring all core classes into the root namespace when importing *.
+from core import *
 import orbit_plots
 import examples
 import trajopt
 import phasing
 
+###########################################################
+# We define PyKEP module
+###########################################################
+__doc__ = 'PyKEP is the answer ... but what was the question?'
+__all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'trajopt', 'phasing']
+__version__ = '1.2.0'
 __all__ += filter(lambda name: not name.startswith('_'), dir(core))
