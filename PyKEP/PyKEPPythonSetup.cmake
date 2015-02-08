@@ -1,34 +1,22 @@
-# Copyright (C) 2004-2009 The PaGMO development team,
-# Advanced Concepts Team (ACT), European Space Agency (ESA)
-# http://apps.sourceforge.net/mediawiki/pagmo
-# http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers
-# http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits
-# act@esa.int
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the
-# Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+# Lets find the python libraries (and Python.h)
 INCLUDE(FindPythonLibs)
-# We need the Python interpreter to figure out Python's version in SuckOSX.
-INCLUDE(FindPythonInterp)
+IF(PYTHONLIBS_FOUND)
+	INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+    MESSAGE(STATUS "Path to the python library: ${PYTHON_LIBRARIES}")
+	MESSAGE(STATUS "Path to where Python.h is found: ${PYTHON_INCLUDE_PATH}")
+	MESSAGE(STATUS "Version detected for python libraries: ${PYTHONLIBS_VERSION_STRING}")
+ELSE(PYTHONLIBS_FOUND)
+	MESSAGE(FATAL_ERROR "Unable to locate Python libraries.")
+ENDIF(PYTHONLIBS_FOUND)
 
-# Find Python libraries
-FIND_PACKAGE(PythonLibs REQUIRED)
-MESSAGE(STATUS "Python libraries: " "${PYTHON_LIBRARIES}")
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-MESSAGE(STATUS "Python library: " "${PYTHON_LIBRARY}")
+# Lets find the python interpreter
+INCLUDE(FindPythonInterp)
+IF(PYTHONINTERP_FOUND)
+    MESSAGE(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
+	MESSAGE(STATUS "Version detected for the python interpreter: ${PYTHON_VERSION_STRING}")
+ELSE(PYTHONINTERP_FOUND)
+	MESSAGE(FATAL_ERROR "Unable to locate Python Interpreter.")
+ENDIF(PYTHONINTERP_FOUND)
 
 # These flags are used to signal the need to override the default extension of the Python modules
 # depending on the architecture. Under Windows, for instance, CMake produces shared objects as
@@ -38,41 +26,17 @@ SET(PYDEXTENSION FALSE)
 SET(SOEXTENSION FALSE)
 
 IF(UNIX)
-	# We need the Python interpreter in order to detect the appropriate directory of modules installation.
-	IF(NOT PYTHONINTERP_FOUND)
-		MESSAGE(FATAL_ERROR "Unable to locate Python interpreter.")
-	ENDIF(NOT PYTHONINTERP_FOUND)
-	MESSAGE(STATUS "Python interpreter is: ${PYTHON_EXECUTABLE}")
-	# Now we must establish if the installation dir for Python modules is named 'site-packages' (as usual)
-	# or 'dist-packages' (apparently Ubuntu 9.04 or maybe Python 2.6, it's not clear).
-        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/PyKEP/python_packages_dir.py
-		OUTPUT_VARIABLE PY_PACKAGES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-	MESSAGE(STATUS "Python packages dir is: ${PY_PACKAGES_DIR}")
 	# SuckOSX suckages.
 	IF(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-		MESSAGE(STATUS "OSX system detected.")
 		SET(SOEXTENSION TRUE)
-		# Let's determine Python version by running the interpreter with the --version flag.
-		EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version ERROR_VARIABLE PY_VERSION_OSX ERROR_STRIP_TRAILING_WHITESPACE)
-		MESSAGE(STATUS "Python interpeter returns string: " ${PY_VERSION_OSX})
-		STRING(REGEX MATCH [0-9]*\\.[0-9]* PYTHON_LIBRARY_VERSION_DOT ${PY_VERSION_OSX})
-	ELSE(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-		# In sane Unix system we can fetch the Python version number directly from the library.
-		STRING(REGEX MATCH libpython[0-9]*\\.[0-9]* PYTHON_LIBRARY_VERSION_DOT ${PYTHON_LIBRARY})
 	ENDIF(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-	# Remove the dot from the Python version.
-	STRING(REGEX REPLACE libpython "" PYTHON_LIBRARY_VERSION_DOT ${PYTHON_LIBRARY_VERSION_DOT})
-	STRING(REGEX REPLACE \\. "" PYTHON_LIBRARY_VERSION ${PYTHON_LIBRARY_VERSION_DOT})
-	# Let's use CMAKE_INSTALL_PREFIX, so that if we specify a different install path it will be respected.
-	SET(PYTHON_MODULES_PATH lib/python${PYTHON_LIBRARY_VERSION_DOT}/${PY_PACKAGES_DIR})
-ELSE(UNIX)
-	STRING(REGEX MATCH python[0-9]* PYTHON_LIBRARY_VERSION ${PYTHON_LIBRARY})
-	STRING(REGEX REPLACE python "" PYTHON_LIBRARY_VERSION ${PYTHON_LIBRARY_VERSION})
-	SET(PYTHON_MODULES_PATH .)
-	IF(${PYTHON_LIBRARY_VERSION} GREATER 24 AND WIN32)
-		MESSAGE(STATUS "Python >= 2.5 detected on WIN32 platform. Output extension for compiled modules will be '.pyd'.")
-		SET(PYDEXTENSION TRUE)
-	ENDIF(${PYTHON_LIBRARY_VERSION} GREATER 24 AND WIN32)
+	ELSE(UNIX)
+	# Win32 suckages.
+	SET(PYDEXTENSION TRUE)
 ENDIF(UNIX)
-MESSAGE(STATUS "Python library version: " ${PYTHON_LIBRARY_VERSION})
+
+# We now construct the path where we will install all files by determining the system wide path for site-packages,
+# which is expected to be something like /usr/blah/blah/blah/lib/python2.7/site-packages. We then take the last 3
+# subdir to create lib/python2.7/site-packages (or dist-utils or whatever python version is correct)
+execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print '/'.join(get_python_lib().split('/')[-3:])" OUTPUT_VARIABLE PYTHON_MODULES_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 MESSAGE(STATUS "Python modules install path: " "${PYTHON_MODULES_PATH}")

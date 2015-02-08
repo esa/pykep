@@ -1,5 +1,3 @@
-INCLUDE(PyKEPPythonSetup.cmake)
-SET(LIBRARIES_4_PYKEP ${LIBRARIES_4_PYKEP} keplerian_toolbox)
 SET(PYKEP_INSTALL_PATH ${PYTHON_MODULES_PATH}/PyKEP)
 
 # Definitions needed for windows ... (using dlls)
