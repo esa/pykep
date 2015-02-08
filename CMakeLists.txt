@@ -1,37 +1,119 @@
 PROJECT(Keplerian_Toolbox)
 
-# Setting Mac OS X specific variables
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	MESSAGE(STATUS "OS X detected: ${CMAKE_SYSTEM_NAME}")
-	SET(CMAKE_MACOSX_RPATH OFF)
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# List of directories to search for CMake modules.
+# Commands like include() and find_package() search for files in directories listed
+# by this variable before checking the default modules that come with CMake.
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
 
+# We enable cmake test capability
 ENABLE_TESTING()
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.0)
-# Setup and include CMake modules.
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake_modules)
+# We set the minimum required cmake version
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12.2)
 
- IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE Release CACHE STRING
-			"Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-	FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+#Some screen output
+MESSAGE(STATUS "OS detected: ${CMAKE_SYSTEM_NAME}")
+MESSAGE(STATUS "CXX Compiler detected: ${CMAKE_CXX_COMPILER_ID}")
 
-# Configuration for GCC.
-IF(CMAKE_COMPILER_IS_GNUCXX)
-		# Add t o the base flags extra warnings, and set up message reporting from the compiler so that it is Eclipse-friendly.
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wdisabled-optimization -fmessage-length=0 -ffast-math -std=c++11")
-	# This flag is suggested for performance. One can check with the tests what difference it really makes
-	#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
-	# Suggested for multithreaded code.
-	ADD_DEFINITIONS(-D_REENTRANT)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+# Setting OS specific cmake variables
+# 1 - OSX
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	SET(CMAKE_MACOSX_RPATH OFF)
+	SET(CMAKE_OSX_ROOT "")
+	SET(CMAKE_OSX_DEPLOYMENT_TARGET "")
+	# Homebrew directory added to path
+	SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/lib)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+# 2 - NONE
+
+#Some screen output
+MESSAGE(STATUS "CMake Library additional search path: ${CMAKE_LIBRARY_PATH}")
+
+# Setting compiler secific flags
+INCLUDE(CheckCXXCompilerFlag)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+
+	CHECK_CXX_COMPILER_FLAG(-ftemplate-depth=256 CLANG_TEMPLATE_DEPTH)
+	IF(CLANG_TEMPLATE_DEPTH)
+		MESSAGE(STATUS "Enabling '-ftemplate-depth=256' compiler flag required since boost 1.54.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth=256")
+	ENDIF(CLANG_TEMPLATE_DEPTH)
+
+ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+
+	CHECK_CXX_COMPILER_FLAG(fno-strict-aliasing GNUCXX_NO_STRICT_ALIASING)
+	IF(GNUCXX_NO_STRICT_ALIASING)
+		MESSAGE(STATUS "Enabling '-fno-strict-aliasing' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing")
+	ENDIF(GNUCXX_NO_STRICT_ALIASING)
+
+	CHECK_CXX_COMPILER_FLAG(-Wnon-virtual-dtor GNUCXX_W_ALL)
+	IF(GNUCXX_W_ALL)
+		MESSAGE(STATUS "Enabling '-Wall' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+	ENDIF(GNUCXX_W_ALL)
+
+	CHECK_CXX_COMPILER_FLAG(-Wno-deprecated GNUCXX_W_EXTRA)
+	IF(GNUCXX_W_EXTRA)
+		MESSAGE(STATUS "Enabling '-Wextra' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
+	ENDIF(GNUCXX_W_EXTRA)
+
+	CHECK_CXX_COMPILER_FLAG(-Wno-ignored-qualifiers GNUCXX_W_NOEXCEPT)
+	IF(GNUCXX_W_NOEXCEPT)
+		MESSAGE(STATUS "Enabling '-Wnoexcept' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnoexcept")
+	ENDIF(GNUCXX_W_NOEXCEPT)
+
+	CHECK_CXX_COMPILER_FLAG(-Wno-ignored-qualifiers GNUCXX_W_DISOPT)
+	IF(GNUCXX_W_DISOPT)
+		MESSAGE(STATUS "Enabling '-Wdisabled-optimization' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdisabled-optimization")
+	ENDIF(GNUCXX_W_DISOPT)
+
+	CHECK_CXX_COMPILER_FLAG(-Wno-ignored-qualifiers GNUCXX_FASTMATH)
+	IF(GNUCXX_FASTMATH)
+		MESSAGE(STATUS "Enabling '-ffast-math' compiler flag.")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+	ENDIF(GNUCXX_FASTMATH)
+
+ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  # using Intel C++
+	CHECK_CXX_COMPILER_FLAG(-mieee-fp INTEL_IEEE_COMPLIANT)
+	IF(INTEL_IEEE_COMPLIANT)
+			MESSAGE(STATUS "Enabling '-mieee-fp' compiler flag to get IEEE compliant code")
+			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee-fp")
+	ENDIF(INTEL_IEEE_COMPLIANT)
+ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  # using Visual Studio C++
+ENDIF()
+
+# The following flags will be tried on all compilers
+# If a C++11 able compiler is detected, then the flag is added
+# otherwise an error is thrown
+CHECK_CXX_COMPILER_FLAG(-std=c++11 ALL_C11)
+IF(ALL_C11)
+	MESSAGE(STATUS "Enabling '-std=c++11' compiler flag")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ENDIF(ALL_C11)
+
+IF(NOT ALL_C11)
+	CHECK_CXX_COMPILER_FLAG(-std=c++0x ALL_C0X)
+	IF(ALL_C0X)
+		MESSAGE(STATUS "Enabling '-std=c++0x' compiler flag")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+	ELSE(ALL_C0X)
+	    MESSAGE(FATAL_ERROR "Unable to locate a c++11 compatible compiler")
+	ENDIF(ALL_C0X)
+ENDIF(NOT ALL_C11)
+
+# We finally set and log the compiler flags
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+MESSAGE(STATUS "CXX compilation flags: ${CMAKE_CXX_FLAGS}")
 
 # Initialise (empty) list of libraries to link against.
-SET(MANDATORY_LIBRARIES "")
-
-#
+SET(LIBRARIES_4_KEP_TOOLBOX "")
+SET(LIBRARIES_4_PYKEP "")
 
 # Provides build options to CMake
 # Build Option: when active the file main.cpp is built and linked to the PaGMO static library
@@ -51,46 +133,7 @@ ENDIF(ENABLE_SGP4)
 
 SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION_DYN_LINK=1")
 
-# Keplerian_toolbox lib source files.
-SET(SRC_LIST
-	${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problemOLD.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc2.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc5.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/asteroid_gtoc7.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_mpcorb.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_ss.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/planet_js.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c
-	)
-
-# Additional files for SGP4 support.
-IF(ENABLE_SGP4)
-	SET(SRC_LIST ${SRC_LIST}
-		${CMAKE_CURRENT_SOURCE_DIR}/src/planet_tle.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Vector.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Util.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Tle.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/TimeSpan.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SolarPosition.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SGP4.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/OrbitalElements.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Observer.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Eci.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/DateTime.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/CoordTopocentric.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/CoordGeodetic.cpp
-	)
-ENDIF(ENABLE_SGP4)
-
 # Finding the boost libraries needed for the keplerian_toolbox
-set(Boost_ADDITIONAL_VERSIONS "1.46.1")
-
 SET(REQUIRED_BOOST_LIBS serialization date_time)
 IF(BUILD_PYKEP)
 	SET(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
@@ -101,42 +144,28 @@ MESSAGE(STATUS "Detected Boost version: ${Boost_VERSION}")
 MESSAGE(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
 MESSAGE(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-SET(MANDATORY_BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${MANDATORY_BOOST_LIBS})
+SET(LIBRARIES_4_KEP_TOOLBOX ${LIBRARIES_4_KEP_TOOLBOX} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
+SET(LIBRARIES_4_PYKEP ${LIBRARIES_4_PYKEP} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_PYTHON_LIBRARY})
 
-#Build Static Library
-ADD_LIBRARY(keplerian_toolbox_static STATIC ${SRC_LIST})
+# Here we define the file list
+ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src")
 
-
-# Build main and link it to pagmo_static library.
+# Build main and link it to static library.
 IF(BUILD_MAIN)
 	ADD_EXECUTABLE(main main.cpp)
-	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${MANDATORY_LIBRARIES})
+	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${MANDATORY_LIBRARIES_4_KEP_TOOLBOX})
 ENDIF(BUILD_MAIN)
 
-# Build Tests
+# Build PyKEP and link it to dynamic library.
+IF(BUILD_PYKEP)
+	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
+ENDIF(BUILD_PYKEP)
+
+# Build Tests and link them to static library.
 IF(BUILD_TESTS)
 	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/tests")
 	IF(ENABLE_SGP4)
 		FILE(COPY "${CMAKE_SOURCE_DIR}/tests/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	ENDIF(ENABLE_SGP4)
 ENDIF(BUILD_TESTS)
-
-#Build PyKEP
-IF(BUILD_PYKEP)
-	SET(MANDATORY_BOOST_LIBS ${MANDATORY_BOOST_LIBS} ${Boost_PYTHON_LIBRARY})
-	SET(MANDATORY_LIBRARIES ${MANDATORY_LIBRARIES} ${MANDATORY_BOOST_LIBS})
-	SET(LIB_INSTALL_PATH "lib")
-	INCLUDE(FindPythonLibs)
-	ADD_LIBRARY(keplerian_toolbox SHARED ${SRC_LIST})
-	# Request linking against the Python libs, in addition to our mandatory libs.
-	TARGET_LINK_LIBRARIES(keplerian_toolbox ${MANDATORY_LIBRARIES} ${PYTHON_LIBRARY})
-	# Add the definitions needed when building the PaGMO DLL.
-		SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
-	INSTALL(TARGETS keplerian_toolbox
-		RUNTIME DESTINATION ${LIB_INSTALL_PATH}
-		LIBRARY DESTINATION ${LIB_INSTALL_PATH}
-	)
-	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
-ENDIF(BUILD_PYKEP)
 
