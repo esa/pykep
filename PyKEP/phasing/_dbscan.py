@@ -92,13 +92,13 @@ class dbscan():
         """Prints the cluster lists."""
         if self.labels is None:
             return 
-        print "Number of clusters: %d" % self.n_clusters
-        print "Size of dataset: %s" % str(self._X.shape)
-        print "Scaling: %s" % str(self._scaling)
-        print "Epoch: %s" % str(self._epoch)
-        for label in self.members.keys():
-            print "cluster %d (%d - %d): %s" % (label, len(self.members[label]), 
-                                                len(self.core_members[label]), str(self.members[label]))
+        print("Number of clusters: %d" % self.n_clusters)
+        print("Size of dataset: %s" % str(self._X.shape))
+        print("Scaling: %s" % str(self._scaling))
+        print("Epoch: %s" % str(self._epoch))
+        for label in list(self.members.keys()):
+            print("cluster %d (%d - %d): %s" % (label, len(self.members[label]), 
+                                                len(self.core_members[label]), str(self.members[label])))
             
 
 
@@ -126,10 +126,10 @@ class dbscan():
                 for planet in members[label]:
                     plot_planet(self._asteroids[planet], t0=self._epoch, s=0, ax=axis)
 
-        X, labels = zip(*[(x, label)  for (x, label) in zip(self._X, self.labels) 
-                          if label > -.5 and (clusters is None or label in clusters)])
+        X, labels = list(zip(*[(x, label)  for (x, label) in zip(self._X, self.labels) 
+                          if label > -.5 and (clusters is None or label in clusters)]))
         data = [[x[0], x[1], x[2]] for x in X] 
-        axis.scatter(*zip(*data), c=labels)
+        axis.scatter(*list(zip(*data)), c=labels)
 
         self._axis_equal_3d(axis)
 

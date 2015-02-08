@@ -53,7 +53,7 @@ try:
 			try: 
 				retval = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
 			except:
-				print "warning: CANNOT EVALUATE constraints .... possible problem in the Taylor integration in the Sundmann variable"
+				print("warning: CANNOT EVALUATE constraints .... possible problem in the Taylor integration in the Sundmann variable")
 				return (1e14,)*(8+1+self.__nseg+2)
 			#We then scale all constraints to non-dimensional values
 			retval[0] /= AU
@@ -107,11 +107,11 @@ try:
 		algo2 = algorithm.mbh(algo,5,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
-		print "Running Monotonic Basin Hopping ...."
+		print("Running Monotonic Basin Hopping ....")
 		isl.evolve(1); isl.join()
-		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
-		print isl.population.champion.x
+		print("Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x)))
+		print(isl.population.champion.x)
 		prob.plot(isl.population.champion.x)
 
 except:
-	print "Could not import PyGMO. PyGMO is required for some PyKEP examples"
+	print("Could not import PyGMO. PyGMO is required for some PyKEP examples")

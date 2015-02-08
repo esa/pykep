@@ -140,7 +140,7 @@ class knn():
             ]
             
         # split into three lists, one of objects, one of IDs, and one for distances
-        neighb, neighb_ids, dists = zip( *neighb ) if neighb != [] else ([], [], [])
+        neighb, neighb_ids, dists = list(zip( *neighb )) if neighb != [] else ([], [], [])
         
         return neighb, neighb_ids, dists
 del pk

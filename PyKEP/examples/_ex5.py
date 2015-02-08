@@ -14,16 +14,16 @@ def run_example5():
 	prob.set_launch_window(epoch(5844),epoch(6209))
 	prob.set_tof(0.7,3)
 	
-	print prob
+	print(prob)
 	
 	#We solve it!!
 	algo = jde(100)
 	topo = ring()
 	archi = archipelago(algo,prob,8,20, topology=topo)
-	print "Running a Self-Adaptive Differential Evolution Algorithm .... on 8 parallel islands"
+	print("Running a Self-Adaptive Differential Evolution Algorithm .... on 8 parallel islands")
 	archi.evolve(10); archi.join()
 	isl = min(archi, key=lambda x:x.population.champion.f[0])
-	print "Done!! Best solution found is: " + str(isl.population.champion.f[0]/1000) + " km / sec"
+	print("Done!! Best solution found is: " + str(isl.population.champion.f[0]/1000) + " km / sec")
 	prob.pretty(isl.population.champion.x)
 	prob.plot(isl.population.champion.x)
 

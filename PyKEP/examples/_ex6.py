@@ -30,10 +30,10 @@ def run_example6(n_seg = 5 ):
     
     solution = pop.champion.x
     if prob.feasibility_x(solution):
-        print "FEASIBILE!!!"
+        print("FEASIBILE!!!")
         ax = prob.plot(solution)
     else:
-        print "INFEASIBLE :("
+        print("INFEASIBLE :(")
         ax = None
 
     return prob,solution, ax

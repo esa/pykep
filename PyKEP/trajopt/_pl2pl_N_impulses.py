@@ -85,7 +85,7 @@ class pl2pl_N_impulses(base_problem):
 		#1 -  we 'decode' the chromosome recording the various deep space manouvres timing (days) in the list T
 		T = list([0]*(self.N_max-1))
 
-		for i in xrange(len(T)):	
+		for i in range(len(T)):	
 			T[i] = log(x[2 + 4*i])
 		total = sum(T)
 		T = [x[1]*time/total for time in T]
@@ -150,7 +150,7 @@ class pl2pl_N_impulses(base_problem):
 		#1 -  we 'decode' the chromosome recording the various deep space manouvres timing (days) in the list T
 		T = list([0]*(self.N_max-1))
 
-		for i in xrange(len(T)):	
+		for i in range(len(T)):	
 			T[i] = log(x[2 + 4*i])
 		total = sum(T)
 		T = [x[1]*time/total for time in T]

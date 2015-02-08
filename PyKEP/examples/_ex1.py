@@ -102,10 +102,10 @@ try:
 		algo2 = algorithm.mbh(algo,n_restarts,0.05)
 		algo2.screen_output = True
 		isl = island(algo2,prob,1)
-		print "Running Monotonic Basin Hopping .... this will take a while."
+		print("Running Monotonic Basin Hopping .... this will take a while.")
 		isl.evolve(1); isl.join()
-		print "Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x))
+		print("Is the solution found a feasible trajectory? " + str(prob.feasibility_x(isl.population.champion.x)))
 		prob.plot(isl.population.champion.x)
 
 except:
-	print "Could not import PyGMO. PyGMO is required for some PyKEP examples."
+	print("Could not import PyGMO. PyGMO is required for some PyKEP examples.")

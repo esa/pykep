@@ -73,7 +73,7 @@ class mga_1dsm(base_problem):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n_legs))
 
-		for i in xrange(self.__n_legs-1):	
+		for i in range(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
@@ -145,7 +145,7 @@ class mga_1dsm(base_problem):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n_legs-1):	
+		for i in range(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
@@ -161,7 +161,7 @@ class mga_1dsm(base_problem):
 			r_P[i],v_P[i] = self.seq[i].eph(t_P[i])
 
 		#3 - We start with the first leg
-		print "First Leg: " + self.seq[0].name + " to " + self.seq[1].name 
+		print("First Leg: " + self.seq[0].name + " to " + self.seq[1].name) 
 		
 		theta = 2*pi*x[1]
 		phi = acos(2*x[2]-1)-pi/2
@@ -170,14 +170,14 @@ class mga_1dsm(base_problem):
 		Vinfy =	x[3]*cos(phi)*sin(theta)
 		Vinfz = x[3]*sin(phi)
 		
-		print "Departure: " + str(t_P[0]) + " (" + str(t_P[0].mjd2000) + " mjd2000) " 
-		print "Duration: " + str(T[0]) + "days"
-		print "VINF: " + str(x[3] / 1000) + " km/sec"
+		print("Departure: " + str(t_P[0]) + " (" + str(t_P[0].mjd2000) + " mjd2000) ") 
+		print("Duration: " + str(T[0]) + "days")
+		print("VINF: " + str(x[3] / 1000) + " km/sec")
 
 		v0 = [a+b for a,b in zip(v_P[0],[Vinfx,Vinfy,Vinfz])]
 		r,v = propagate_lagrangian(r_P[0],v0,x[4]*T[0]*DAY2SEC,self.common_mu)
 		
-		print "DSM after " + str(x[4]*T[0]) + " days"
+		print("DSM after " + str(x[4]*T[0]) + " days")
 
 		#Lambert arc to reach seq[1]
 		dt = (1-x[4])*T[0]*DAY2SEC
@@ -187,19 +187,19 @@ class mga_1dsm(base_problem):
 
 		#First DSM occuring at time nu1*T1
 		DV[0] = norm([a-b for a,b in zip(v_beg_l,v)])
-		print "DSM magnitude: " + str(DV[0]) + "m/s"
+		print("DSM magnitude: " + str(DV[0]) + "m/s")
 
 		#4 - And we proceed with each successive leg
 		for i in range(1,self.__n_legs):
-			print "\nleg no. " + str(i+1) + ": " + self.seq[i].name + " to " + self.seq[i+1].name 
-			print "Duration: " + str(T[i]) + "days"
+			print("\nleg no. " + str(i+1) + ": " + self.seq[i].name + " to " + self.seq[i+1].name) 
+			print("Duration: " + str(T[i]) + "days")
 			#Fly-by 
 			v_out = fb_prop(v_end_l,v_P[i],x[7+(i-1)*4]*self.seq[i].radius,x[6+(i-1)*4],self.seq[i].mu_self)
-			print "Fly-by epoch: " + str(t_P[i]) + " (" + str(t_P[i].mjd2000) + " mjd2000) " 
-			print "Fly-by radius: " + str(x[7+(i-1)*4]) + " planetary radii"
+			print("Fly-by epoch: " + str(t_P[i]) + " (" + str(t_P[i].mjd2000) + " mjd2000) ") 
+			print("Fly-by radius: " + str(x[7+(i-1)*4]) + " planetary radii")
 			#s/c propagation before the DSM
 			r,v = propagate_lagrangian(r_P[i],v_out,x[8+(i-1)*4]*T[i]*DAY2SEC,self.common_mu)
-			print "DSM after " + str(x[8+(i-1)*4]*T[i]) + " days"
+			print("DSM after " + str(x[8+(i-1)*4]*T[i]) + " days")
 			#Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
 			dt = (1-x[8+(i-1)*4])*T[i]*DAY2SEC
 			l = lambert_problem(r,r_P[i+1],dt,self.common_mu, False, False)
@@ -207,14 +207,14 @@ class mga_1dsm(base_problem):
 			v_beg_l = l.get_v1()[0]
 			#DSM occuring at time nu2*T2
 			DV[i] = norm([a-b for a,b in zip(v_beg_l,v)])
-			print "DSM magnitude: " + str(DV[i]) + "m/s"
+			print("DSM magnitude: " + str(DV[i]) + "m/s")
 
 		#Last Delta-v
-		print "\nArrival at " + self.seq[-1].name
+		print("\nArrival at " + self.seq[-1].name)
 		DV[-1] = norm([a-b for a,b in zip(v_end_l,v_P[-1])])
-		print "Arrival epoch: " + str(t_P[-1]) + " (" + str(t_P[-1].mjd2000) + " mjd2000) " 
-		print "Arrival Vinf: " + str(DV[-1]) + "m/s"
-		print "Total mission time: " + str(sum(T)/365.25) + " years"
+		print("Arrival epoch: " + str(t_P[-1]) + " (" + str(t_P[-1].mjd2000) + " mjd2000) ") 
+		print("Arrival Vinf: " + str(DV[-1]) + "m/s")
+		print("Total mission time: " + str(sum(T)/365.25) + " years")
 
 
 	#Plot of the trajectory
@@ -239,7 +239,7 @@ class mga_1dsm(base_problem):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n_legs))
 		#a[-i] = x[-1-(i-1)*4]
-		for i in xrange(self.__n_legs-1):	
+		for i in range(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)

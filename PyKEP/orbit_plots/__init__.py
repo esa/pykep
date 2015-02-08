@@ -5,5 +5,5 @@ It makes use of matplotlib mplot 3D extension and thus is fairly in testing phas
 from PyKEP import __extensions__
 
 if (__extensions__['mplot3d']):
-	from _plots import *
+	from ._plots import *
 

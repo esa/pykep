@@ -40,15 +40,15 @@ except ImportError:
 ###########################################################
 # We import the submodules
 ###########################################################
-import core
-import sims_flanagan
+from . import core
+from . import sims_flanagan
 
 # For convenience, bring all core classes into the root namespace when importing *.
-from core import *
-import orbit_plots
-import examples
-import trajopt
-import phasing
+from .core import *
+from . import orbit_plots
+from . import examples
+from . import trajopt
+from . import phasing
 
 ###########################################################
 # We define PyKEP module
@@ -56,4 +56,4 @@ import phasing
 __doc__ = 'PyKEP is the answer ... but what was the question?'
 __all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'trajopt', 'phasing']
 __version__ = '1.2.0'
-__all__ += filter(lambda name: not name.startswith('_'), dir(core))
+__all__ += [name for name in dir(core) if not name.startswith('_')]

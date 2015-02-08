@@ -157,6 +157,6 @@ def _get_states(self):
 	vz = vz+vz_back
 	mass = mass+mass_back
 
-	return t_grid, zip(x,y,z), zip(vx,vy,vz), mass
+	return t_grid, list(zip(x,y,z)), list(zip(vx,vy,vz)), mass
 
 leg.get_states = _get_states

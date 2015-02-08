@@ -257,13 +257,13 @@ class mga_lt_nep(base_problem):
 		#1 -  we 'decode' the chromosome recording the various times of flight (days) in the list T
 		T = list([0]*(self.__n_legs))
 
-		for i in xrange(self.__n_legs-1):	
+		for i in range(self.__n_legs-1):	
 			j = i+1;
 			T[-j] = (x[5] - sum(T[-(j-1):])) * x[-1-(j-1)*4]
 		T[0] = x[5] - sum(T)
 		
 		retval[0] = x[0]
-		for i in xrange(self.__n_legs):
+		for i in range(self.__n_legs):
 			retval[1+8*i] = T[i]
 			retval[2+8*i] = self.__sc.mass
 		
