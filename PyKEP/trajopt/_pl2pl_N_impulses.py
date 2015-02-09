@@ -1,5 +1,5 @@
 from PyGMO.problem import base as base_problem
-from PyKEP import epoch,DAY2SEC,planet_ss,lambert_problem,propagate_lagrangian, SEC2DAY, AU, ic2par
+from PyKEP.core import epoch,DAY2SEC,planet_ss,lambert_problem,propagate_lagrangian, SEC2DAY, AU, ic2par
 from math import pi, cos, sin, log, acos
 from scipy.linalg import norm
 

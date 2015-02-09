@@ -2,7 +2,7 @@
 INCLUDE(FindPythonLibs)
 IF(PYTHONLIBS_FOUND)
 	INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-    MESSAGE(STATUS "Path to the python library: ${PYTHON_LIBRARIES}")
+    MESSAGE(STATUS "Python library: ${PYTHON_LIBRARIES}")
 	MESSAGE(STATUS "Path to where Python.h is found: ${PYTHON_INCLUDE_PATH}")
 	MESSAGE(STATUS "Version detected for python libraries: ${PYTHONLIBS_VERSION_STRING}")
 ELSE(PYTHONLIBS_FOUND)

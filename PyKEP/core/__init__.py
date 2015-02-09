@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-from _core import *
+from PyKEP.core._core import *
 
 """Defining astronomical constants defined in the keplerian_toolbox file astro_constants.h"""
 AU = _core._get_AU()

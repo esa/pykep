@@ -1,5 +1,5 @@
 from PyGMO.problem._base import base as base_problem
-import PyKEP
+from PyKEP.core import planet_gtoc7
 class mr_lt_nep(base_problem):
     """
     This class represents, as a global optimization problem (linearly constrained, 
@@ -17,7 +17,7 @@ class mr_lt_nep(base_problem):
     """
     def __init__(
             self,
-            seq=[PyKEP.planet_gtoc7(3413),PyKEP.planet_gtoc7(234), PyKEP.planet_gtoc7(11432)], 
+            seq=[planet_gtoc7(3413), planet_gtoc7(234), planet_gtoc7(11432)], 
             n_seg=5, 
             t0=[13000, 13200],
             leg_tof=[1, 365.25 * 3], 
@@ -105,6 +105,7 @@ class mr_lt_nep(base_problem):
 
 
     def _compute_constraints_impl(self, x_full):
+        import PyKEP
         sc_mass = self.__start_mass
         eqs = []
         ineqs = []

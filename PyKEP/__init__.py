@@ -40,15 +40,10 @@ except ImportError:
 ###########################################################
 # We import the submodules
 ###########################################################
-from . import core
-from . import sims_flanagan
+from PyKEP import core, sims_flanagan, orbit_plots, examples, trajopt, phasing
 
 # For convenience, bring all core classes into the root namespace when importing *.
-from .core import *
-from . import orbit_plots
-from . import examples
-from . import trajopt
-from . import phasing
+from PyKEP.core import *
 
 ###########################################################
 # We define PyKEP module

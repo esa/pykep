@@ -1,4 +1,5 @@
-import PyKEP as pk
+from PyKEP.core import AU, EARTH_VELOCITY
+
 class knn():
     """
     The class helps finding the k-nearest neighbours to a given planet from a list of planets. 
@@ -71,9 +72,9 @@ class knn():
         
         return cKDTree( e )
 
-    def __init__(self, planet_list, t, ref_r=pk.AU, ref_v=pk.EARTH_VELOCITY):
+    def __init__(self, planet_list, t, ref_r=AU, ref_v=EARTH_VELOCITY):
         """
-        USAGE: knn = knn(planet_list, t, ref_r=pk.AU, ref_v=pk.EARTH_VELOCITY):
+        USAGE: knn = knn(planet_list, t, ref_r=AU, ref_v=EARTH_VELOCITY):
         
         - planet_list   list of PyKEP planets (typically thousands)
         - t             epoch
@@ -143,5 +144,4 @@ class knn():
         neighb, neighb_ids, dists = list(zip( *neighb )) if neighb != [] else ([], [], [])
         
         return neighb, neighb_ids, dists
-del pk
     
