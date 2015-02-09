@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 
-#ifndef PROPAGATE_TAYLOR_S_H
-#define PROPAGATE_TAYLOR_S_H
+#ifndef KEP_TOOLBOX_PROPAGATE_TAYLOR_S_H
+#define KEP_TOOLBOX_PROPAGATE_TAYLOR_S_H
 
 #include<algorithm>
 #include<cmath>
@@ -235,4 +235,4 @@ void propagate_taylor_s(T& r0, T& v0, double &m0, double &t0, const T& thrust, c
 
 } //Namespace kep_toolbox
 
-#endif // PROPAGATE_TAYLOR_S_H
+#endif // KEP_TOOLBOX_PROPAGATE_TAYLOR_S_H

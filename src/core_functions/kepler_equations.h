@@ -22,12 +22,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEPLER_EQUATIONS_H
-#define KEPLER_EQUATIONS_H
+#ifndef KEP_TOOLBOX_KEPLER_EQUATIONS_H
+#define KEP_TOOLBOX_KEPLER_EQUATIONS_H
 
-#include<cmath>
-#include"stumpff.h"
-#include"array3D_operations.h"
+#include <cmath>
+#include "stumpff.h"
+#include "array3D_operations.h"
 
 namespace kep_toolbox {
     //With the eccentric anomaly (E)
@@ -82,4 +82,4 @@ namespace kep_toolbox {
         return ( retval );
     }
 }
-#endif // KEPLER_EQUATIONS_H
+#endif // KEP_TOOLBOX_KEPLER_EQUATIONS_H

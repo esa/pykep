@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef CLOSEST_DISTANCE_H
-#define CLOSEST_DISTANCE_H
+#ifndef KEP_TOOLBOX_CLOSEST_DISTANCE_H
+#define KEP_TOOLBOX_CLOSEST_DISTANCE_H
 
 #include<cmath>
 
@@ -119,4 +119,4 @@ void closest_distance(double& d_min, double& ra, const vettore3D& r0, const vett
     return;
 }
 }
-#endif // CLOSEST_DISTANCE_H
+#endif // KEP_TOOLBOX_CLOSEST_DISTANCE_H

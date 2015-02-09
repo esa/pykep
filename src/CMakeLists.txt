@@ -1,25 +1,24 @@
 # Keplerian_toolbox lib source files.
 SET(PYKEP_LIB_SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/epoch.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planet.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/lambert_problem.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/lambert_problemOLD.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/asteroid_gtoc2.cpp
-	#${CMAKE_CURRENT_SOURCE_DIR}/asteroid_gtoc5.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/asteroid_gtoc7.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planet_mpcorb.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planet_ss.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planet_js.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan/leg.cpp
 	#${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan/leg_s.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/core_functions/jorba.c
-	)
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc2.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc5.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc7.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_mpcorb.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_ss.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_js.cpp
+)
 
 # Additional files for SGP4 support.
 IF(ENABLE_SGP4)
 	SET(PYKEP_LIB_SRC_LIST ${PYKEP_LIB_SRC_LIST}
-		${CMAKE_CURRENT_SOURCE_DIR}/planet_tle.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_tle.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/Vector.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/Util.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/Tle.cpp
@@ -43,7 +42,6 @@ IF(BUILD_PYKEP)
 	SET(LIB_INSTALL_PATH "lib")
 	INCLUDE(FindPythonLibs)
 	ADD_LIBRARY(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
-	#SET(LIBRARIES_4_DYNAMIC ${LIBRARIES_4_DYNAMIC} ${PYTHON_LIBRARIES})
 	TARGET_LINK_LIBRARIES(keplerian_toolbox ${LIBRARIES_4_DYNAMIC})
 	SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
 	INSTALL(TARGETS keplerian_toolbox

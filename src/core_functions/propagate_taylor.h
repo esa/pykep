@@ -23,14 +23,14 @@
  *****************************************************************************/
 
 
-#ifndef PROPAGATE_TAYLOR_H
-#define PROPAGATE_TAYLOR_H
+#ifndef KEP_TOOLBOX_PROPAGATE_TAYLOR_H
+#define KEP_TOOLBOX_PROPAGATE_TAYLOR_H
 
-#include<algorithm>
-#include<cmath>
-#include<boost/array.hpp>
+#include <algorithm>
+#include <cmath>
+#include <boost/array.hpp>
 
-#include"../exceptions.h"
+#include "../exceptions.h"
 
 namespace kep_toolbox {
 
@@ -213,4 +213,4 @@ void propagate_taylor(T& r0, T& v0, double &m0, const T& u, const double &t0, co
 
 } //Namespace
 
-#endif // PROPAGATE_TAYLOR_H
+#endif // KEP_TOOLBOX_PROPAGATE_TAYLOR_H

@@ -26,10 +26,10 @@
 #include <boost/math/constants/constants.hpp>
 
 #include "planet.h"
-#include"core_functions/ic2par.h"
-#include"core_functions/par2ic.h"
-#include"core_functions/convert_anomalies.h"
-#include"exceptions.h"
+#include "../core_functions/ic2par.h"
+#include "../core_functions/par2ic.h"
+#include "../core_functions/convert_anomalies.h"
+#include "../exceptions.h"
 
 namespace kep_toolbox{
 

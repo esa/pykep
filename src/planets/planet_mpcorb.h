@@ -22,17 +22,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef PLANET_MPCORB_H
-#define PLANET_MPCORB_H
+#ifndef KEP_TOOLBOX_PLANET_MPCORB_H
+#define KEP_TOOLBOX_PLANET_MPCORB_H
 
 #include <string>
 
-// Serialization code
-#include "serialization.h"
-// Serialization code (END)
-
 #include "planet.h"
-#include "config.h"
+#include "../serialization.h"
+#include "../config.h"
 
 
 namespace kep_toolbox{
@@ -94,4 +91,4 @@ private:
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_mpcorb);
 // Serialization code (END)
 
-#endif // PLANET_MPCORB_H
+#endif // KEP_TOOLBOX_PLANET_MPCORB_H

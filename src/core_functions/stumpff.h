@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 
-#ifndef STUMPFF_H
-#define STUMPFF_H
+#ifndef KEP_TOOLBOX_STUMPFF_H
+#define KEP_TOOLBOX_STUMPFF_H
 
 #include<cmath>
 
@@ -64,4 +64,4 @@ inline double stumpff_c(const double x) {
 
 }
 
-#endif //STUMPFF_H
+#endif // KEP_TOOLBOX_STUMPFF_H

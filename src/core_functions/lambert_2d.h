@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEPLERIAN_TOOLBOX_LAMBERT_2D_H
-#define KEPLERIAN_TOOLBOX_LAMBERT_2D_H
+#ifndef KEP_TOOLBOX_LAMBERT_2D_H
+#define KEP_TOOLBOX_LAMBERT_2D_H
 
 #include<boost/bind.hpp>
 #include<cmath>
@@ -163,4 +163,4 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
 }
 } //namespaces
 
-#endif // KEPLERIAN_TOOLBOX_LAMBERT_2D_H
+#endif // KEP_TOOLBOX_LAMBERT_2D_H

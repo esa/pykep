@@ -22,41 +22,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef ASTEROID_GTOC5_H
-#define ASTEROID_GTOC5_H
-
-// Serialization code
-#include "serialization.h"
-// Serialization code (END)
+#ifndef KEP_TOOLBOX_PLANET_JS_H
+#define KEP_TOOLBOX_PLANET_JS_H
 
 #include "planet.h"
-#include "config.h"
+#include "../serialization.h"
+#include "../config.h"
 
 namespace kep_toolbox{
 
-/// A GTOC5 asteroid
+/// Solar System Planet (keplerian)
 /**
- * This class derives from the planet class and allow to instantiate asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 5th edition
+ * This class derives from the planet class and allow to instantiate moons of
+ * the Jupiter system by referring to their common names. Ephemerides are those
+ * used during the GTOC6 competition
  *
- * @see http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
- * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class __KEP_TOOL_VISIBLE asteroid_gtoc5 : public planet
+class __KEP_TOOL_VISIBLE planet_js : public planet
 {
 public:
-	/// Constructor
 	/**
-	 * Construct from a consecutive id from 1 to 7076 (Earth). The order is that of the original
-	 * data file from Russio
-	 * Asteroid: 1 - 7075
-	 * Earth: 7076
-	 * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
+	 * Construct a Jupiter moon from its common name
+	 * \param[in] name a string describing a planet
 	 */
-	asteroid_gtoc5(const int & = 7076);
-
+	planet_js(const std::string & = "io");
 	planet_ptr clone() const;
 private:
 // Serialization code
@@ -73,7 +64,7 @@ private:
 } /// End of namespace kep_toolbox
 
 // Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc5);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_js);
 // Serialization code (END)
 
-#endif //ASTEROID_GTOC5_H
+#endif // KEP_TOOLBOX_PLANET_JS_H

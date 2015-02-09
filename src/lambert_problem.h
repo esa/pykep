@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
-#define KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
+#ifndef KEP_TOOLBOX_LAMBERT_PROBLEM_H
+#define KEP_TOOLBOX_LAMBERT_PROBLEM_H
 
 #include <cmath>
 #include<vector>
@@ -112,4 +112,4 @@ private:
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);
 } //namespaces
 
-#endif // KEPLERIAN_TOOLBOX_LAMBERT_PROBLEM_H
+#endif // KEP_TOOLBOX_LAMBERT_PROBLEM_H

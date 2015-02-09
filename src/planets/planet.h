@@ -22,21 +22,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef PLANET_H
-#define PLANET_H
+#ifndef KEP_TOOLBOX_PLANET_H
+#define KEP_TOOLBOX_PLANET_H
 
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
 
-// Serialization code
-#include "serialization.h"
-#include "config.h"
-// Serialization code (END)
-#include"exceptions.h"
-#include "astro_constants.h"
-#include "epoch.h"
+#include "../serialization.h"
+#include "../config.h"
+#include "../exceptions.h"
+#include "../astro_constants.h"
+#include "../epoch.h"
 
 namespace kep_toolbox{
 
@@ -257,4 +255,4 @@ __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const planet &body)
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::planet)
 // Serialization code (END)
 
-#endif // PLANET_H
+#endif // KEP_TOOLBOX_PLANET_H

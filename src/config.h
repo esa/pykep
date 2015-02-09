@@ -1,5 +1,5 @@
-#ifndef KEP_TOOL_CONFIG_H
-#define KEP_TOOL_CONFIG_H
+#ifndef KEP_TOOLBOX_CONFIG_H
+#define KEP_TOOLBOX_CONFIG_H
 
 
 /// The following lines define the behaviour of the symbols that will be included in libraries. These are, by default, 

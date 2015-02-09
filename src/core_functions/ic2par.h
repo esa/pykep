@@ -22,10 +22,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef IC2PAR_H
-#define IC2PAR_H
+#ifndef KEP_TOOLBOX_IC2PAR_H
+#define KEP_TOOLBOX_IC2PAR_H
 
-#include<cmath>
+#include <cmath>
 
 
 namespace kep_toolbox {
@@ -115,4 +115,4 @@ void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6
 }
 }
 
-#endif // IC2PAR_H
+#endif // KEP_TOOLBOX_IC2PAR_H

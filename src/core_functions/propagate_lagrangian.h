@@ -23,15 +23,15 @@
  *****************************************************************************/
 
 
-#ifndef PROPAGATE_LAGRANGIAN_H
-#define PROPAGATE_LAGRANGIAN_H
+#ifndef KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H
+#define KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H
 
-#include<boost/bind.hpp>
-#include<boost/math/tools/roots.hpp>
+#include <boost/bind.hpp>
+#include <boost/math/tools/roots.hpp>
 
-#include"../astro_constants.h"
-#include"../numerics/newton_raphson.h"
-#include"kepler_equations.h"
+#include "../astro_constants.h"
+#include "../numerics/newton_raphson.h"
+#include "kepler_equations.h"
 
 
 
@@ -114,4 +114,4 @@ void propagate_lagrangian(T& r0, T& v0, const double &t, const double &mu)
 }
 }
 
-#endif // PROPAGATE_LAGRANGIAN_H
+#endif // KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H

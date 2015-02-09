@@ -22,37 +22,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef PLANET_SS_H
-#define PLANET_SS_H
+#ifndef KEP_TOOLBOX_PLANET_TLE_H
+#define KEP_TOOLBOX_PLANET_TLE_H
 
-
-// Serialization code
-#include "serialization.h"
-// Serialization code (END)
-
-#include"planet.h"
-#include "config.h"
+#include "planet.h"
+#include "../serialization.h"
+#include "../config.h"
+#include "../third_party/libsgp4/SGP4.h"
+#include "../third_party/libsgp4/Tle.h"
 
 namespace kep_toolbox{
 
-/// Solar System Planet (keplerian)
+/// A planet from TLE format
 /**
- * This class derives from the planet class and allow to instantiate planets of
- * the solar system by referring to their common names. The ephemeris used
- * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
- * valid in the timeframe 1800AD - 2050 AD
+ * This class derives from the planet class and allows to instantiate Earth-orbiting
+ * satellites from their Two Line Element format. The ephemerides will then be computed
+ * using SGP4/SDP4 orbital model. The third party C++ library SGP4 Satellite Library is
+ * used (source code in tp/libsgp4)
+ *
+ * NOTE: the constant used in the satellite data memebr initialization are not the pykep ones, rather the 
+ * constants defined in the sgp4lib are used (tp/libsgp4/Globals.h)
+ *
+ * @see http://celestrak.com/columns/v04n03/#FAQ01
+ * @see http://www.danrw.com/sgp4/
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_ss : public planet
+class __KEP_TOOL_VISIBLE planet_tle : public planet
 {
 public:
 	/**
-	 * Construct a planet from its common name (e.g. VENUS)
-	 * \param[in] name a string describing a planet
+	 * Construct a planet_tle from two strings containing the two line elements
+	 * \param[in] line1 first line
+	 * \param[in] line2 second line
 	 */
-	planet_ss(const std::string & = "earth");
+	planet_tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95", const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
 	planet_ptr clone() const;
 	/// Computes the planet/system position and velocity w.r.t the Sun
 	/**
@@ -62,26 +67,39 @@ public:
 		*/
 	void get_eph(const epoch& when, array3D &r, array3D &v) const;
 private:
-// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
+	void serialize(Archive &ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object<planet>(*this);
-		ar & jpl_elements;
-		ar & jpl_elements_dot;
+		ar & const_cast<std::string& >(m_line1);
+		ar & const_cast<std::string& >(m_line2);
+		boost::serialization::split_member(ar, *this, version);
 	}
-// Serialization code (END)
 
-	array6D jpl_elements;
-	array6D jpl_elements_dot;
-};
+	template <class Archive>
+		void save(Archive &, const unsigned int) const
+		{}
+
+	template <class Archive>
+		void load(Archive &, const unsigned int)
+		{
+			// NOTE: the Tle and SGP4 data members are not saved during serialization. Hence, upon loading,
+			// we are going to build them again from data. This set up was chosen to avoid implementing
+			// serialization of the third-party library libsgp4 objects
+			m_tle = Tle("TLE satellite", m_line1, m_line2);
+			m_sgp4_propagator = SGP4(m_tle);
+		}
+
+		const std::string m_line1;
+		const std::string m_line2;
+		Tle m_tle;
+		SGP4 m_sgp4_propagator;
+	};
 
 
 } /// End of namespace kep_toolbox
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss)
-// Serialization code (END)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_tle)
 
-#endif // PLANET_SS_H
+#endif // KEP_TOOLBOX_PLANET_TLE_H

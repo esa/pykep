@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 
-#ifndef X2TOF_H
-#define X2TOF_H
+#ifndef KEP_TOOLBOX_X2TOF_H
+#define KEP_TOOLBOX_X2TOF_H
 
 #include<cmath>
 
@@ -80,4 +80,4 @@ inline double x2tof(const double &x,const double &s,const double &c,const int &l
 
 } //namespace
 
-#endif // X2TOF_H
+#endif // KEP_TOOLBOX_X2TOF_H

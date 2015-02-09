@@ -26,7 +26,7 @@
 #include <fstream>
 #include <numeric>
 #include <algorithm>
-#include "../src/planet_tle.h"
+#include "../src/planets/planet_tle.h"
 #include "../src/core_functions/array3D_operations.h"
 
 using namespace kep_toolbox;

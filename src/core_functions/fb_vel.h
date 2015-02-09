@@ -21,12 +21,12 @@
  *   Free Software Foundation, Inc.,                                         *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
-#ifndef FB_VEL_H
-#define FB_VEL_H
+#ifndef KEP_TOOLBOX_FB_VEL_H
+#define KEP_TOOLBOX_FB_VEL_H
 
-#include<cmath>
+#include <cmath>
 
-#include"../planet.h"
+#include "../planets/planet.h"
 
 /// Compute fly-by constraints
 /**
@@ -63,5 +63,5 @@ inline void fb_vel(double& dV, const vettore3D& v_rel_in, const vettore3D& v_rel
 }
 } // namespace end
 
-#endif // FB_VEL_H
+#endif // KEP_TOOLBOX_FB_VEL_H
 

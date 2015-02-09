@@ -22,13 +22,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef FB_PROP_H
-#define FB_PROP_H
+#ifndef KEP_TOOLBOX_FB_PROP_H
+#define KEP_TOOLBOX_FB_PROP_H
 
-#include<cmath>
+#include <cmath>
 
-#include"../astro_constants.h"
-#include"../core_functions/array3D_operations.h"
+#include "../astro_constants.h"
+#include "../core_functions/array3D_operations.h"
 
 /// Propagate a fly-by hyperbola
 /**
@@ -69,4 +69,4 @@ inline void fb_prop(array3D &v_out, const array3D& v_in, const array3D& v_pla, c
 }
 } // namespace end
 
-#endif // FB_PROP_H
+#endif // KEP_TOOLBOX_FB_PROP_H

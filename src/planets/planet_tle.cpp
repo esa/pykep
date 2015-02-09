@@ -26,15 +26,15 @@
 #include <string>
 
 #include "planet_tle.h"
-#include "exceptions.h"
-#include "core_functions/par2ic.h"
-#include "core_functions/convert_anomalies.h"
-#include "third_party/libsgp4/Tle.h"
-#include "third_party/libsgp4/TleException.h"
-#include "third_party/libsgp4/Globals.h"
-#include "third_party/libsgp4/SGP4.h"
-#include "third_party/libsgp4/SatelliteException.h"
-#include "third_party/libsgp4/Eci.h"
+#include "../exceptions.h"
+#include "../core_functions/par2ic.h"
+#include "../core_functions/convert_anomalies.h"
+#include "../third_party/libsgp4/Tle.h"
+#include "../third_party/libsgp4/TleException.h"
+#include "../third_party/libsgp4/Globals.h"
+#include "../third_party/libsgp4/SGP4.h"
+#include "../third_party/libsgp4/SatelliteException.h"
+#include "../third_party/libsgp4/Eci.h"
 
 namespace kep_toolbox{
 

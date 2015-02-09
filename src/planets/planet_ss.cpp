@@ -22,10 +22,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include"planet_ss.h"
-#include"exceptions.h"
-#include"core_functions/par2ic.h"
-#include"core_functions/convert_anomalies.h"
+#include "planet_ss.h"
+#include "../exceptions.h"
+#include "../core_functions/par2ic.h"
+#include "../core_functions/convert_anomalies.h"
 
 namespace kep_toolbox{
 

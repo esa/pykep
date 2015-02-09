@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef _TAYLOR_H_
-#define _TAYLOR_H_
+#ifndef KEP_TOOLBOX_TAYLOR_H_
+#define KEP_TOOLBOX_TAYLOR_H_
 typedef double MY_FLOAT;
 
 #include<math.h>
@@ -120,7 +120,7 @@ typedef double MY_FLOAT;
 
 /************************************************************************/
 
-#endif
+#endif // KEP_TOOLBOX_TAYLOR_H_
 
 MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order, double mu,double veff,double ux,double uy,double uz);
 

@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 #include "asteroid_gtoc7.h"
-#include "exceptions.h"
-#include "astro_constants.h"
+#include "../exceptions.h"
+#include "../astro_constants.h"
 
 double gtoc7_asteroids_data[16257][7] = {
 {54000,0.999988049532578,0.0167168116316,0.0008854353079654,287.61577546182,175.40647696473,257.60683707535},

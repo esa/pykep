@@ -22,32 +22,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef PLANET_JS_H
-#define PLANET_JS_H
+#ifndef KEP_TOOLBOX_ASTEROID_GTOC7_H
+#define KEP_TOOLBOX_ASTEROID_GTOC7_H
 
-#include "serialization.h"
 #include "planet.h"
-#include "config.h"
+#include "../serialization.h"
+#include "../config.h"
 
 namespace kep_toolbox{
 
-/// Solar System Planet (keplerian)
+/// A GTOC7 asteroid
 /**
- * This class derives from the planet class and allow to instantiate moons of
- * the Jupiter system by referring to their common names. Ephemerides are those
- * used during the GTOC6 competition
+ * This class derives from the planet class and allow to instantiate asteroids
+ * from the Global Trajectory Optimization Competition (GTOC) 7th edition
  *
+ * @see http://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_js : public planet
+class __KEP_TOOL_VISIBLE asteroid_gtoc7 : public planet
 {
 public:
+	/// Constructor
 	/**
-	 * Construct a Jupiter moon from its common name
-	 * \param[in] name a string describing a planet
+	 * Construct from a consecutive id from 0 (Earth) to 16256 . The order is
+	 * that of the original data file from Turin
+	 * Earth: 0
+	 * Asteroid: 1 - 16256
+
+	 * \param[in] ast_id asteroid id
 	 */
-	planet_js(const std::string & = "io");
+	asteroid_gtoc7(int = 0);
+
 	planet_ptr clone() const;
 private:
 // Serialization code
@@ -64,7 +70,7 @@ private:
 } /// End of namespace kep_toolbox
 
 // Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_js);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc7);
 // Serialization code (END)
 
-#endif // PLANET_JS_H
+#endif // KEP_TOOLBOX_ASTEROID_GTOC7_H

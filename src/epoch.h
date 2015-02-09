@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEPLERIAN_TOOLBOX_EPOCH_H
-#define KEPLERIAN_TOOLBOX_EPOCH_H
+#ifndef KEP_TOOLBOX_EPOCH_H
+#define KEP_TOOLBOX_EPOCH_H
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -107,4 +107,4 @@ __KEP_TOOL_VISIBLE epoch epoch_from_iso_string(const std::string date);
 
 } // end of namespace kep_toolbox
 
-#endif // KEPLERIAN_TOOLBOX_EPOCH_H
+#endif // KEP_TOOLBOX_EPOCH_H

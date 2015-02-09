@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef ASTRO_CONSTANTS_H
-#define ASTRO_CONSTANTS_H
+#ifndef KEP_TOOLBOX_ASTRO_CONSTANTS_H
+#define KEP_TOOLBOX_ASTRO_CONSTANTS_H
 
 //#include<boost/math/constants/constants.hpp>
 #include<boost/array.hpp>
@@ -90,4 +90,4 @@ namespace std
 	}
 
 }
-#endif // ASTRO_CONSTANTS_H
+#endif // KEP_TOOLBOX_ASTRO_CONSTANTS_H

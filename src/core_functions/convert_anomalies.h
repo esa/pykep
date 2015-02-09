@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef M2E_H
-#define M2E_H
+#ifndef KEP_TOOLBOX_M2E_H
+#define KEP_TOOLBOX_M2E_H
 
 #include<boost/bind.hpp>
 #include<cmath>
@@ -43,4 +43,4 @@ namespace kep_toolbox {
         return (E - eccentricity * sin (E) );
     }
 }
-#endif // M2E_H
+#endif // KEP_TOOLBOX_M2E_H

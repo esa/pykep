@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 
-#ifndef PROPAGATE_TAYLOR_JORBA_H
-#define PROPAGATE_TAYLOR_JORBA_H
+#ifndef KEP_TOOLBOX_PROPAGATE_TAYLOR_JORBA_H
+#define KEP_TOOLBOX_PROPAGATE_TAYLOR_JORBA_H
 
 extern "C"{
     #include"jorba.h"
@@ -96,4 +96,4 @@ void propagate_taylor_jorba(T& r0, T& v0, double &m0, const T& u, const double &
 
 
 
-#endif // PROPAGATE_TAYLOR_JORBA_H
+#endif // KEP_TOOLBOX_PROPAGATE_TAYLOR_JORBA_H

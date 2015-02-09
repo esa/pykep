@@ -22,11 +22,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include<math.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include"jorba.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "jorba.h"
 
 #define _N_DIM_ 7
 
