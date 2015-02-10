@@ -684,4 +684,12 @@ BOOST_PYTHON_MODULE(_core) {
 		"  el = ic2par([1,0,0],[0,1,0],1.0)"
 	);
 
+    // For the three_impulses_approximation we need to distinguish the overloaded cases. We thus introduce new function pointers
+	double (*three_imp)(double, double, double, double, double, double, double, double, double) = &kep_toolbox::three_impulses_approx;
+	double (*three_imp_2_pl)(const kep_toolbox::planet&, const kep_toolbox::planet&) = &kep_toolbox::three_impulses_approx;
+    double (*three_imp_2_pl_2_ep)(const kep_toolbox::planet&, const kep_toolbox::planet&, const kep_toolbox::epoch&, const kep_toolbox::epoch&) = &kep_toolbox::three_impulses_approx;
+
+    def("_three_impulses_approx", three_imp);
+    def("_three_impulses_approx", three_imp_2_pl);
+    def("_three_impulses_approx", three_imp_2_pl_2_ep);
 }

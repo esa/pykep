@@ -20,7 +20,7 @@ def read_satcat(satcatfilename=None):
     """
     This function reads the satcat catalogue, as can be downloaded from http://www.celestrak.com/NORAD/elements/ 
     and returns a dictionary keyed with the sattelite international designator (e.g. "1958-002B"). Each entry
-    is a named tuple, see http://celestrak.com/satcat/satcat-format.asp for the meaning of all entries
+    is a named tuple, see http://celestrak.com/satcat/satcat-format.asp for the meaning of all entries. 
     """
     from collections import namedtuple
     satcatentry = namedtuple('satcatentry', 'noradn multnameflag payloadflag operationstatus name ownership launchdate launchsite decay period incl apogee perigee radarA orbitstatus')
@@ -45,7 +45,7 @@ def read_tle(tlefilename, verbose=False, with_name=False):
     * verbose: Activates some screen output to show the progress.
     * with_name: When True the TLE files does contains satellite names (i.e. when downloaded from space-track instead)
 
-    * planet_list: a list of PyKEP planets
+    * planet_list: a list of PyKEP tle_planets having as name their international designator (e.g. "1958-002B").
     """
     from PyKEP import planet_tle
     planet_list = []
