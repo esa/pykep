@@ -1,6 +1,6 @@
 """
 This module contains functions that allow to study the planetary phasing.
-That is the relative planetaery position
+That is the relative planetary position
 """
 from PyKEP import __extensions__
 
@@ -12,9 +12,9 @@ if (__extensions__['scikit-learn']):
 
 
 def three_impulses_approximation(pl1, pl2, ep1=None, ep2=None):
-	"""
+    """
     Returns the DV in m/s necessary for an orbit transfer between pl1 and pl2 assuming a perfect phasing.
-    The transfer will be made of three impulses. One to match apogees, one to match inclination and RAAN and 
+    The transfer will be made of three impulses. One to match apogees, one to match inclination and RAAN and
     one to match perigees. Two of the three impulses will be merged together at either departure or arrival.
     The argument of perigee is not matched, so that this approximation is only good for near-circular orbits.
 
@@ -28,8 +28,8 @@ def three_impulses_approximation(pl1, pl2, ep1=None, ep2=None):
     * ep1: arrival epoch (default value is ep1).
 
     * DV: estimated DV cost for the orbital trab=nsfer
+    """
 
-	"""
     from PyKEP.core._core import _three_impulses_approximation
     if ep2 is None:
         ep2 = ep1
