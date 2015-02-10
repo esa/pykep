@@ -55,6 +55,7 @@
 #include "core_functions/propagate_taylor.h"
 #include "core_functions/propagate_taylor_s.h"
 #include "core_functions/propagate_taylor_jorba.h"
+#include "core_functions/three_impulses_approximation.h"
 #include "lambert_problem.h"
 #include "sims_flanagan/fb_traj.h"
 #include "sims_flanagan/leg.h"

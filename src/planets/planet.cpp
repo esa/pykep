@@ -123,11 +123,12 @@ array3D planet::get_velocity(const epoch& when) const{
 }
 
 array6D planet::get_elements(const epoch& when) const{
-	array6D elements(keplerian_elements);
-	double dt = (when.mjd2000() - ref_mjd2000) * ASTRO_DAY2SEC;
-	elements[5] += mean_motion * dt;
-	elements[5] = fmod(elements[5],2*M_PI);
-	if (elements[5] < 0) elements[5] = 2*M_PI + elements[5];
+	array3D r,v;
+	array6D elements;
+	this->get_eph(when,r,v);
+	ic2par(r,v,mu_central_body,elements);
+	// As we want the mean anomaly we must convert (TODO: should we sum here the number of completed revs?)
+	elements[5] = e2m(elements[5], elements[1]);
 	return ( elements );
 }
 

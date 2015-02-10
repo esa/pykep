@@ -36,8 +36,7 @@
  * \param[out] dV is the delta-V thrust magnitude needed to make a fly-by possible. For a ballistic fly-by dV must be zero.
  * \param[in] v_rel_in  initial position vector. On output contains the propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested template type is boost::array<double,3))
  * \param[in] v_rel_out initial velocity vector. On output contains the propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] pl planet d
- * \param[in] safe safety factor (the number of planet radii one can safely perform the fly-by at)
+ * \param[in] pl a planet object
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  * @author Johannes Simon (johannessimon81_AT_gmail.com)
