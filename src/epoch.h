@@ -64,8 +64,7 @@ public:
 
 	/** @name Constructors */
 	//@{
-	epoch();
-	epoch(const double &epoch_in, type epoch_type = MJD2000);
+	epoch(const double &epoch_in = 0, type epoch_type = MJD2000);
 	epoch(const boost::gregorian::greg_year &year, const boost::gregorian::greg_month &month, const boost::gregorian::greg_day &day);
 	epoch(const boost::posix_time::ptime& posix_time);
 	//@}

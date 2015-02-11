@@ -37,12 +37,6 @@ using namespace boost::posix_time;
 
 /// Constructor.
 /**
- * Constructs an epoch initializing its mjd2000 to 0
- */
-epoch::epoch():mjd2000_m(0) {}
-
-/// Constructor.
-/**
 * Constructs an epoch from a non-gregorian date.
 * \param[in] epoch_in A double indicating the non-gregorian date
 * \param[in] epoch_type One of [epoch::MJD2000, epoch::MJD, epoch::JD]

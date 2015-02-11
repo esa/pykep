@@ -1,3 +1,5 @@
+.. _prepareyoursystem:
+
 Preparing your system to compile PyKEP
 ======================================
 

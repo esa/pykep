@@ -187,15 +187,7 @@ BOOST_PYTHON_MODULE(_core) {
 
 	// Epoch class
 	class_<kep_toolbox::epoch>("epoch","Represents a precise point in time. The boost::posix_time_ptime classes are used to handle the conversion to and from string",
-		init<const double &,optional<kep_toolbox::epoch::type> >(
-			"PyKEP.epoch(jd[, jd_type=epoch.epoch_type.MJD2000])\n\n"
-			"- jd: a julian date\n"
-			"- jd_type: julian date type, see :py:class:`PyKEP.epoch.epoch_type`\n\n"
-			"Examples::\n\n"
-			"  e1 = epoch(0)\n"
-			"  e1 = epoch(0,epoch.epoch_type.MJD2000)\n"
-			"  e2 = epoch(54333, epoch.epoch_type.MJD)\n"
-		))
+		init<optional<const double &, kep_toolbox::epoch::type> >())
 		.add_property("jd",&kep_toolbox::epoch::jd,
 			"Returns the Julian Date\n\n"
 			"Example::\n\n"
@@ -212,8 +204,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  jd = e.mjd2000"
 		)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::epoch>())
-		.def(init<>());
+		.def_pickle(generic_pickle_suite<kep_toolbox::epoch>());
 
 	// Epoch constructors helpers
 	def("epoch_from_string",&kep_toolbox::epoch_from_string,
@@ -243,21 +234,7 @@ BOOST_PYTHON_MODULE(_core) {
 	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
 
 	class_<kep_toolbox::planet>("planet","Base class for all planet objects. Ephemerides are Keplerian.",
-		init<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, optional<const std::string &> >(
-			"PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n"
-			"PyKEP.planet(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])\n\n"
-			"- when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch\n"
-			"- orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)\n"
-			"- r,v: position and velocity of an object at when (SI units)\n"
-			"- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)\n"
-			"- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)\n"
-			"- radius: body radius (SI units, i.e. meters)\n"
-			"- safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)\n"
-			"- name: body name\n\n"
-			"NOTE: use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb`, :py:class:`PyKEP.planet_js` to instantiate common objects"
-			"Example::\n\n"
-			"  earth = planet(epoch(54000,epoch.epoch_type.MJD),(9.99e-01 * AU, 1.67e-02, 8.85e-04 * DEG2RAD, 1.75e+02 * DEG2RAD, 2.87e+02 * DEG2RAD, 2.57e+02 * DEG2RAD), MU_SUN, 398600e9, 6378000, 6900000,  'Earth')"
-		))
+		init<optional<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, const std::string &> >())
 		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
 		.def("eph",&planet_get_eph,
 			"PyKEP.planet.eph(when)\n\n"
@@ -308,8 +285,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  T = earth.period"
 			)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet>())
-		.def(init<>());
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet>());
 
 	// A solar system planet
 	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system. Ephemerides are the JPL low-precision alternative (http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf)",
@@ -370,17 +346,16 @@ BOOST_PYTHON_MODULE(_core) {
 #ifdef PYGMO_ENABLE_SGP4
 		// A TLE satellite
 		class_<kep_toolbox::planet_tle,bases<kep_toolbox::planet> >("planet_tle","A satellite from TLE format. Ephemerides will be computed using the SGP4 orbit propagator",
-		init<std::string, std::string>(
+		init<optional<std::string, std::string> >(
 			"PyKEP.planet_tle(line1, line2)\n\n"
 			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
 			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
 			"Example::\n\n"
-			"line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
-			"line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
-			"arianne = planet_tle(line1, line2)"
+			"  line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
+			"  line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
+			"  arianne = planet_tle(line1, line2)"
 		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>())
-		.def(init<>());
+		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>());
 #endif 
 	/* A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
@@ -429,7 +404,7 @@ BOOST_PYTHON_MODULE(_core) {
 
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
-		init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, optional<const double &, const int &, const int&> >(
+		init<optional<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &, const int &, const int&> >(
 			"lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])\n\n"
 			"- r1: starting position (x1,y1,z1)\n"
 			"- r2: 3D final position (x2,y2,z2)\n"
@@ -437,8 +412,9 @@ BOOST_PYTHON_MODULE(_core) {
 			"- mu: gravitational parameter (default is 1)\n"
 			"- cw: True for retrograde motion (clockwise), False if counter-clock wise (default is False)\n"
 			"- multi_revs: Maximum number of multirevs to be computed (default is 5)\n\n"
-			"NOTE: Units need to be consistent.\n\n"
-			"NOTE: The multirev Lambert's problem will be solved upon construction and its solution stored in data members.\n\n"
+			".. note::\n"
+			"   Units need to be consistent.\n"
+			"   The multirev Lambert's problem will be solved upon construction and its solution stored in data members.\n\n"
 			"Example (non-dimensional units used)::\n\n"
 			"  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )"
 		))
@@ -493,8 +469,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  n_sol = Nmax*2+1"
 		)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>())
-		.def(init<>());
+		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>());
 
 	// Lambert problem OLD.
 	/*class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a multiple revolution Lambert's problem",
@@ -676,7 +651,7 @@ BOOST_PYTHON_MODULE(_core) {
 		"PyKEP.ic2par(r1,v2,mu)\n\n"
 		"- r1: initial position (cartesian)\n"
 		"- r2: final position (cartesian)\n"
-		"- mu: gravity parameter\n"
+		"- mu: gravity parameter\n\n"
 		"Returns the osculating keplerian elements a,e,i,W,w,E\n"
 		"E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
 		"NOTE: routine gets singular for zero inclination\n"

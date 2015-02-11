@@ -33,6 +33,8 @@
 
 namespace kep_toolbox{
 
+const array6D planet::default_elements = {{1.0,0.1,0.1,0.1,0.1,0.1}};
+
 planet::planet(const epoch& ref_epoch, const array6D& orbital_elements_, const double & mu_central_body_, const double &mu_self_, const double & radius_, const double & safe_radius_, const std::string &name_)
 {
 	if (orbital_elements_[0] <=0) {

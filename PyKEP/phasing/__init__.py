@@ -13,21 +13,25 @@ if (__extensions__['scikit-learn']):
 
 def three_impulses_approximation(pl1, pl2, ep1=None, ep2=None):
     """
-    Returns the DV in m/s necessary for an orbit transfer between pl1 and pl2 assuming a perfect phasing.
-    The transfer will be made of three impulses. One to match apogees, one to match inclination and RAAN and
-    one to match perigees. Two of the three impulses will be merged together at either departure or arrival.
-    The argument of perigee is not matched, so that this approximation is only good for near-circular orbits.
+DV = PyKEP.phasing.three_impulses_approximation(pl1, pl2, ep1=None, ep2=None)
 
-    USAGE: DV = three_impulses_approximation(pl1, pl2)
-           DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500))
-           DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500), ep2 = epoch(5700))
+- pl1: departure planet
+- pl2: arrival planet
+- ep1: departure epoch (optional and only useful for non keplerian planets)
+- ep1: arrival epoch (default value is ep1).
 
-    * pl1: departure planet
-    * pl2: arrival planet
-    * ep1: departure epoch (optional and only useful for non keplerian planets)
-    * ep1: arrival epoch (default value is ep1).
+- [out] DV: estimated DV cost for the orbital trab=nsfer
 
-    * DV: estimated DV cost for the orbital trab=nsfer
+Returns the DV in m/s necessary for an orbit transfer between pl1 and pl2 assuming a perfect phasing.
+The transfer will be made of three impulses. One to match apogees, one to match inclination and RAAN and
+one to match perigees. Two of the three impulses will be merged together at either departure or arrival.
+The argument of perigee is not matched, so that this approximation is only good for near-circular orbits.
+
+Examples::
+
+  DV = three_impulses_approximation(pl1, pl2)
+  DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500))
+  DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500), ep2 = epoch(5700))
     """
 
     from PyKEP.core._core import _three_impulses_approximation
