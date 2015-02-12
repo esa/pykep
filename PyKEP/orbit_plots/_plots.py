@@ -294,7 +294,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
     Plots a Sims-Flanagan leg
 
     Example::
-    
+
         from mpl_toolkits.mplot3d import Axes3D
         import matplotlib.pyplot as plt
 

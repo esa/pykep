@@ -6,7 +6,7 @@ class dbscan():
 
     """
     This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
-    Essentially, it locates planet clusters 
+    Essentially, it locates planet clusters
     """
 
     def _axis_equal_3d(self, ax):
