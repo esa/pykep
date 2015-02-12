@@ -10,7 +10,7 @@ Name                                            Type            Description
 :class:`PyKEP.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre 
 :class:`PyKEP.trajopt.pl2pl_N_impulses`         class           A direct transfer between planets allowing for many DSMs
 :class:`PyKEP.trajopt.mga_lt_nep`               class           A multiple Gravity Assist Trajectory low-thrust optimization problem
-:class:`PyKEP.trajopt.mr_lt_nep`                class           A multiple ransezvous low-thrust optimization problem
+:class:`PyKEP.trajopt.mr_lt_nep`                class           A multiple randezvous low-thrust optimization problem
 =========================================       =========       ================================================
 
 Detailed Documentation

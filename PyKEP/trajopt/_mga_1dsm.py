@@ -142,7 +142,7 @@ class mga_1dsm(base_problem):
 
     def pretty(self, x):
         """
-        prob.plot(self, x)
+        prob.plot(x)
 
         - x: encoded trajectory
 
@@ -239,7 +239,7 @@ class mga_1dsm(base_problem):
     # Plot of the trajectory
     def plot(self, x, ax=None):
         """
-        ax = prob.plot(self, x, ax=None)
+        ax = prob.plot(x, ax=None)
 
         - x: encoded trajectory
         - ax: matplotlib axis where to plot. If None figure and axis will be created
@@ -336,7 +336,7 @@ class mga_1dsm(base_problem):
 
     def set_tof(self, minimum, maximum):
         """
-        prob.set_tof(self, minimum, maximum)
+        prob.set_tof(minimum, maximum)
 
         - minimum: minimum tof (in years)
         - maximum: maximum tof (in years)
@@ -357,7 +357,7 @@ class mga_1dsm(base_problem):
 
     def set_launch_window(self, start, end):
         """
-        prob.set_launch_window(self, start, end)
+        prob.set_launch_window(start, end)
 
         - start: starting epoch
         - end: ending epoch
@@ -378,7 +378,7 @@ class mga_1dsm(base_problem):
 
     def set_vinf(self, vinf):
         """
-        prob.set_vinf(self, vinf)
+        prob.set_vinf(vinf)
 
         - vinf: allowed launch vinf (in km/s)
 

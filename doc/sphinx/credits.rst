@@ -1,4 +1,4 @@
-.. _credits:
+ .. _credits:
 
 Credits
 ======================
@@ -11,4 +11,4 @@ PyKEP is in use at the European Space Agency's Advanced Concepts Team since 2006
 
 Dario Izzo (madsax)
 
-Francesco Biscani (bluescarni)
+Francesco Biscani (bluescarni) 

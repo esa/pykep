@@ -138,7 +138,7 @@ class pl2pl_N_impulses(base_problem):
 
     def plot(self, x, ax=None):
         """
-        ax = prob.plot(self, x, ax=None)
+        ax = prob.plot(x, ax=None)
 
         - x: encoded trajectory
         - ax: matplotlib axis where to plot. If None figure and axis will be created
