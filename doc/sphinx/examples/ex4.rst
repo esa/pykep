@@ -17,7 +17,7 @@ automated mesh adaptation. By letting time flow slower when near the sun, we obt
 This translate in a more efficient segment distribution, both from the Taylor integration perspective and for the thrust numerical grid perspective. In case the user has a license for SNOPT, the use of this typically result in a performance gain
 
 The code for this example can be studied `here. 
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_ Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex4.py>`_ Feel free to leave comments.
 
 
 A preliminary study of this unique technique, can be found in the paper below.

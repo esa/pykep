@@ -8,6 +8,7 @@ The trajopt module (requires PyGMO)
 Name                                            Type            Description
 =========================================       =========       ================================================
 :class:`PyKEP.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre 
+:class:`PyKEP.trajopt.pl2pl_N_impulses`         class           A direct transfer between planets allowing for many DSMs
 :class:`PyKEP.trajopt.mga_lt_nep`               class           A multiple Gravity Assist Trajectory low-thrust optimization problem
 :class:`PyKEP.trajopt.mr_lt_nep`                class           A multiple ransezvous low-thrust optimization problem
 =========================================       =========       ================================================
@@ -28,6 +29,8 @@ Detailed Documentation
    .. automethod:: PyKEP.trajopt.mga_1dsm.pretty(*args)
    
    .. automethod:: PyKEP.trajopt.mga_1dsm.plot(*args)
+
+------------
    
 .. autoclass:: PyKEP.trajopt.mga_lt_nep(*args)
  
@@ -39,8 +42,16 @@ Detailed Documentation
        
    .. automethod:: PyKEP.trajopt.mga_lt_nep.plot(*args)
 
+------------
+
 .. autoclass:: PyKEP.trajopt.mr_lt_nep(*args)
  
    .. automethod:: PyKEP.trajopt.mr_lt_nep.__init__(*args)
        
    .. automethod:: PyKEP.trajopt.mr_lt_nep.plot(*args)
+
+------------
+
+.. autoclass:: PyKEP.trajopt.pl2pl_N_impulses(*args)
+
+   .. automethod:: PyKEP.trajopt.pl2pl_N_impulses.__init__(*args)

@@ -21,4 +21,4 @@ a Lambert's solver, please contact us. In our solver we use a transformation tha
 consistent convergence properties for all possible geometries.
 
 The code for this example can be studied `here. 
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_ Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex2.py>`_ Feel free to leave comments.

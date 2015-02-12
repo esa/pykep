@@ -5,17 +5,21 @@ from scipy.linalg import norm
 
 
 class pl2pl_N_impulses(base_problem):
-
     """
-    This class represents an N-impulse orbit transfer as a global optimization problem (box-bounded, continuous)
-    The decision vector is:
-        [t0,T] + [alpha,u,v,V_inf]*(N-2) +[alpha] + ([tf])..... in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]
-        Vinf = Vinf_mag*(cos(theta)*cos(phi)i+cos(theta)*sin(phi)j+sin(phi)k)
-        theta = 2*pi*u, phi = acos(2*v-1)-pi/2
+    This class is a PyGMO (http://esa.github.io/pygmo/) problem representing a single leg transfer
+    between two planets allowing up to a maximum number of impulsive Deep Space Manouvres.
 
-    Each leg time-of-flight can be obtained as T_n = T log(\alpha_n) / \sum_i(log(\alpha_i))
+    The decision vector is::
 
-    NOTE: The resulting problem is box-bounded (unconstrained).
+      [t0,T] + [alpha,u,v,V_inf]*(N-2) +[alpha] + ([tf])
+
+    ... in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]
+
+    Each leg time-of-flight can be decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i))
+
+    .. note::
+
+       The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
     """
 
     def __init__(self,
@@ -29,26 +33,16 @@ class pl2pl_N_impulses(base_problem):
                  t0=None
                  ):
         """
-        Constructs a pl2pl_N_impulses problem
+        prob = PyKEP.trajopt.pl2pl_N_impulses(start=planet_ss('earth'), target=planet_ss('venus'), N_max=3, tof=[20., 400.], vinf=[0., 4.], phase_free=True, multi_objective=False, t0=None)
 
-        USAGE: traj.pl2pl_N_impulses(
-                 start=planet_ss('earth'),
-                 target=planet_ss('venus'),
-                 N_max=3,
-                 tof=[20., 400.],
-                 vinf=[0., 4.],
-                 phase_free=True,
-                 multi_objective=False,
-                 t0=None)
-
-        * start:            a PyKEP planet defining the starting orbit
-        * target:           a PyKEP planet defining the target orbit
-        * N_max:            maximum number of impulses
-        * tof:              a list containing the box bounds [lower,upper] for the time of flight (days)
-        * vinf:             a list containing the box bounds [lower,upper] for each DV magnitude (km/sec)
-        * phase_free:       when True, no randezvous condition is enforced and the final orbit will be reached at an optimal true anomaly
-        * multi_objective:  when True, a multi-objective problem is constructed with DV and time of flight as objectives
-        * t0:               launch window defined as a list of two epochs [epoch,epoch]
+        - start:            a PyKEP planet defining the starting orbit
+        - target:           a PyKEP planet defining the target orbit
+        - N_max:            maximum number of impulses
+        - tof:              a list containing the box bounds [lower,upper] for the time of flight (days)
+        - vinf:             a list containing the box bounds [lower,upper] for each DV magnitude (km/sec)
+        - phase_free:       when True, no randezvous condition is enforced and the final orbit will be reached at an optimal true anomaly
+        - multi_objective:  when True, a multi-objective problem is constructed with DV and time of flight as objectives
+        - t0:               launch window defined as a list of two epochs [epoch,epoch]
         """
 
         # Sanity checks
@@ -142,22 +136,32 @@ class pl2pl_N_impulses(base_problem):
         else:
             return (DV1 + DV2 + DV_others, x[1])
 
-    def plot(self, x):
+    def plot(self, x, ax=None):
         """
-        Plots the trajectory represented by the decision vector x
+        ax = prob.plot(self, x, ax=None)
+
+        - x: encoded trajectory
+        - ax: matplotlib axis where to plot. If None figure and axis will be created
+        - [out] ax: matplotlib axis where to plot
+
+        Plots the trajectory represented by a decision vector x on the 3d axis ax
 
         Example::
 
-          prob.plot(x)
+          ax = prob.plot(x)
         """
         import matplotlib as mpl
         from mpl_toolkits.mplot3d import Axes3D
         import matplotlib.pyplot as plt
         from PyKEP.orbit_plots import plot_planet, plot_lambert, plot_kepler
 
-        mpl.rcParams['legend.fontsize'] = 10
-        fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        if ax is None:
+            mpl.rcParams['legend.fontsize'] = 10
+            fig = plt.figure()
+            axis = fig.gca(projection='3d')
+        else:
+            axis = ax
+
         axis.scatter(0, 0, 0, color='y')
 
         # 1 -  we 'decode' the chromosome recording the various deep space
