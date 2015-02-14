@@ -35,8 +35,9 @@ IF(UNIX)
 	SET(PYDEXTENSION TRUE)
 ENDIF(UNIX)
 
-# We now construct the path where we will install all files by determining the system wide path for site-packages,
+# We now construct the path where we will install the python module by determining the system wide path for site-packages,
 # which is expected to be something like /usr/blah/blah/blah/lib/python2.7/site-packages. We then take the last 3
 # subdir to create lib/python2.7/site-packages (or dist-utils or whatever python version is correct)
+# this will be then appended to the CMAKE_INSTALL_PATH to form /usr/local/lib/python2.7/site-packages or a local path
 execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print('/'.join(get_python_lib().split('/')[-3:]))" OUTPUT_VARIABLE PYTHON_MODULES_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 MESSAGE(STATUS "Python modules install path: " "${PYTHON_MODULES_PATH}")
