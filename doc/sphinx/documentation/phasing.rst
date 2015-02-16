@@ -9,7 +9,7 @@ Name                                                     Type            Descrip
 ==================================================       =========       ================================================
 :class:`PyKEP.phasing.knn`                               class           Finds the nearest-neighbour in a large list of :py:class:`PyKEP.planet`
 :class:`PyKEP.phasing.dbscan`                            class           Detects clusters in a large list of :py:class:`PyKEP.planet`
-:func:`PyKEP.phasing.three_impulses_approximation`       function        Computes the orbital transfer cost between two :py:class:`PyKEP.planet`
+:func:`PyKEP.phasing.three_impulses_approx`              function        Computes the orbital transfer cost between two :py:class:`PyKEP.planet`
 ==================================================       =========       ================================================
 
 Detailed Documentation
@@ -35,4 +35,4 @@ Detailed Documentation
 
 ------------
 
-.. autofunction:: PyKEP.phasing.three_impulses_approximation(*args)
+.. autofunction:: PyKEP.phasing.three_impulses_approx(*args)

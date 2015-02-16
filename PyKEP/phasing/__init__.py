@@ -11,9 +11,9 @@ if (__extensions__['scikit-learn']):
     from ._dbscan import *
 
 
-def three_impulses_approximation(pl1, pl2, ep1=None, ep2=None):
+def three_impulses_approx(pl1, pl2, ep1=None, ep2=None):
     """
-DV = PyKEP.phasing.three_impulses_approximation(pl1, pl2, ep1=None, ep2=None)
+DV = PyKEP.phasing.three_impulses_approx(pl1, pl2, ep1=None, ep2=None)
 
 - pl1: departure planet
 - pl2: arrival planet
@@ -29,14 +29,14 @@ The argument of perigee is not matched, so that this approximation is only good 
 
 Examples::
 
-  DV = three_impulses_approximation(pl1, pl2)
-  DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500))
-  DV = three_impulses_approximation(pl1, pl2, ep1 = epoch(5500), ep2 = epoch(5700))
+  DV = three_impulses_approx(pl1, pl2)
+  DV = three_impulses_approx(pl1, pl2, ep1 = epoch(5500))
+  DV = three_impulses_approx(pl1, pl2, ep1 = epoch(5500), ep2 = epoch(5700))
     """
 
-    from PyKEP.core._core import _three_impulses_approximation
+    from PyKEP.core._core import _three_impulses_approx
     if ep2 is None:
         ep2 = ep1
     if ep1 is None:
-        return _three_impulses_approximation(pl1, pl2)
-    return _three_impulses_approximation(pl1, pl2, ep1, ep2)
+        return _three_impulses_approx(pl1, pl2)
+    return _three_impulses_approx(pl1, pl2, ep1, ep2)
