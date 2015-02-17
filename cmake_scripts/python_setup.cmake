@@ -1,21 +1,45 @@
 # Lets find the python interpreter (FindPythonInterp actually does a decent job)
-INCLUDE(FindPythonInterp)
-IF(PYTHONINTERP_FOUND)
-    MESSAGE(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
-	MESSAGE(STATUS "Version detected for the python interpreter: ${PYTHON_VERSION_STRING}")
-ELSE(PYTHONINTERP_FOUND)
-	MESSAGE(FATAL_ERROR "Unable to locate Python Interpreter.")
-ENDIF(PYTHONINTERP_FOUND)
+# We only do it the first time
+IF(NOT DEFINED PYKEP_PYTHON_FLAG)
 
-# We now use the python executable to tell us (via the distutil package) all relevant libarry information
-# As the CMake script FindPythonLibs sucks biiiig time
-UNSET(PYTHON_INCLUDE_DIR CACHE)
-UNSET(PYTHON_MODULES_DIR CACHE)
-UNSET(PYTHON_LIBRARIES CACHE)
+	INCLUDE(FindPythonInterp)
+	IF(PYTHONINTERP_FOUND)
+	    MESSAGE(STATUS "Python interpreter: ${PYTHON_EXECUTABLE}")
+		MESSAGE(STATUS "Version detected for the python interpreter: ${PYTHON_VERSION_STRING}")
+	ELSE(PYTHONINTERP_FOUND)
+		MESSAGE(FATAL_ERROR "Unable to locate Python Interpreter.")
+	ENDIF(PYTHONINTERP_FOUND)
 
-EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())" OUTPUT_VARIABLE PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_MODULES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/cmake_scripts/find_python_library.py" OUTPUT_VARIABLE PYTHON_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+	# We now use the python executable to tell us (via the distutil package) all relevant library information
+	# As the CMake script FindPythonLibs sucks biiiig time
+	IF(NOT DEFINED PYTHON_INCLUDE_DIR)
+		EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())" OUTPUT_VARIABLE PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+	ENDIF(NOT DEFINED PYTHON_INCLUDE_DIR)
+	IF(NOT DEFINED PYTHON_MODULES_DIR)
+		EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_MODULES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+	ENDIF(NOT DEFINED PYTHON_MODULES_DIR)
+	IF(NOT DEFINED PYTHON_LIBRARIES)
+		EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/cmake_scripts/find_python_library.py" OUTPUT_VARIABLE PYTHON_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+	ENDIF(NOT DEFINED PYTHON_LIBRARIES)
+
+	SET(PYKEP_PYTHON_FLAG ${PYTHON_EXECUTABLE} CACHE STRING "Build PyGMO with specific Python compatibility.")
+	MARK_AS_ADVANCED(PYKEP_PYTHON_FLAG)
+
+ENDIF(NOT DEFINED PYKEP_PYTHON_FLAG)
+
+
+IF(NOT ${PYTHON_EXECUTABLE} STREQUAL ${PYKEP_PYTHON_FLAG})
+	UNSET(PYTHON_INCLUDE_DIR CACHE)
+	UNSET(PYTHON_MODULES_DIR CACHE)
+	UNSET(PYTHON_LIBRARIES CACHE)
+	#UNSET(PYKEP_PYTHON_FLAG CACHE)
+	SET(PYKEP_PYTHON_FLAG ${PYTHON_EXECUTABLE} CACHE STRING "Build PyGMO with specific Python compatibility.")
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())" OUTPUT_VARIABLE PYTHON_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON_MODULES_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/cmake_scripts/find_python_library.py" OUTPUT_VARIABLE PYTHON_LIBRARIES OUTPUT_STRIP_TRAILING_WHITESPACE)
+ENDIF(NOT ${PYTHON_EXECUTABLE} STREQUAL ${PYKEP_PYTHON_FLAG})
+
+
 
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR})
 MESSAGE(STATUS "Python includes path: "        "${PYTHON_INCLUDE_DIR}")
@@ -39,8 +63,8 @@ IF(UNIX)
 	SET(PYDEXTENSION TRUE)
 ENDIF(UNIX)
 
-MARK_AS_ADVANCED(CLEAR PYTHON_EXECUTABLE)
 # We make the variables cached so that we can change them in GUIs editors like ccmake 
+MARK_AS_ADVANCED(CLEAR PYTHON_EXECUTABLE)
 SET(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} CACHE PATH "The Python executable")
 SET(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_DIR} CACHE PATH "Path to the python include files, where pyconfig.h can be found")
 SET(PYTHON_MODULES_DIR ${PYTHON_MODULES_DIR} CACHE PATH "Path of site-packages, PyKEP will be installed in .../PyKEP")
