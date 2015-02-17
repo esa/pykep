@@ -1,10 +1,5 @@
 PROJECT(Keplerian_Toolbox)
 
-# List of directories to search for CMake modules.
-# Commands like include() and find_package() search for files in directories listed
-# by this variable before checking the default modules that come with CMake.
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
-
 # We enable cmake test capability
 ENABLE_TESTING()
 
@@ -27,7 +22,7 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 # 2 - NONE
 
 # Some screen output
-MESSAGE(STATUS "CMake Library additional search path: ${CMAKE_LIBRARY_PATH}")
+MESSAGE(STATUS "CMake additional search path for libraries: ${CMAKE_LIBRARY_PATH}")
 
 # We set compiler specific flags
 INCLUDE(cmake_scripts/set_compiler_flags.cmake)
@@ -41,12 +36,6 @@ OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
-
-# Build Option: when active libsgp4 is also built and related classes activated
-OPTION(ENABLE_SGP4 "Build SGP4 related classes'." OFF)
-IF(ENABLE_SGP4)
-		ADD_DEFINITIONS(-DPYGMO_ENABLE_SGP4)
-ENDIF(ENABLE_SGP4)
 
 SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION_DYN_LINK=1")
 

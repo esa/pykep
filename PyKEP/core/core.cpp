@@ -343,7 +343,7 @@ BOOST_PYTHON_MODULE(_core) {
 			)
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
 		.def(init<>());
-#ifdef PYGMO_ENABLE_SGP4
+
 		// A TLE satellite
 		class_<kep_toolbox::planet_tle,bases<kep_toolbox::planet> >("planet_tle","A satellite from TLE format. Ephemerides will be computed using the SGP4 orbit propagator",
 		init<optional<std::string, std::string> >(
@@ -356,7 +356,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  arianne = planet_tle(line1, line2)"
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>());
-#endif 
+
 	/* A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
 		init<const int &>(
