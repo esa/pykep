@@ -6,6 +6,13 @@ ENABLE_TESTING()
 # We set the minimum required cmake version
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12.2)
 
+# Set default build type to "Release", change it in the GUI if you need to build with debug.
+IF(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE Release CACHE STRING
+		"Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+	FORCE)
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
 #Some screen output
 MESSAGE(STATUS "OS detected: ${CMAKE_SYSTEM_NAME}")
 MESSAGE(STATUS "CXX Compiler detected: ${CMAKE_CXX_COMPILER_ID}")
