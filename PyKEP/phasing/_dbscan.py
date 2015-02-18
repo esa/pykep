@@ -109,7 +109,7 @@ class dbscan():
     def plot(self, ax=None, clusters=None, orbits=False, only_core=False):
         """Plots the clusters."""
         if self.n_clusters < 1:
-            return
+            return axis
 
         import matplotlib.pylab as plt
         from mpl_toolkits.mplot3d import Axes3D
@@ -140,5 +140,6 @@ class dbscan():
 
         if ax is None:
             plt.show()
+        return axis
 
 del PyKEP, numpy

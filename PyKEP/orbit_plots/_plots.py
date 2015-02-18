@@ -1,4 +1,4 @@
-def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, ax=None):
+def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=False, ax=None):
     """
     ax = plot_planet(plnt, ax = None, t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=40, legend = False)
 
@@ -62,7 +62,7 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', s=40, leg
         label = plnt.name + " " + t0.__repr__()[0:11]
     else:
         label = None
-    axis.plot(x, y, z, label=label, c=color)
+    axis.plot(x, y, z, label=label, c=color, alpha=alpha)
     axis.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=color)
 
     if legend:
