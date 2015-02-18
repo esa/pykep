@@ -357,7 +357,7 @@ BOOST_PYTHON_MODULE(_core) {
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>());
 
-	/* A planet from the gtoc5 problem
+	// A planet from the gtoc5 problem
 	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
 		init<const int &>(
 			"PyKEP.planet_gtoc5(ast_id)\n\n"
@@ -368,7 +368,7 @@ BOOST_PYTHON_MODULE(_core) {
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
 		.def(init<>());
-	*/
+	
 
 	// A planet from the gtoc7 problem
 	class_<kep_toolbox::asteroid_gtoc7,bases<kep_toolbox::planet> >("planet_gtoc7",
@@ -381,7 +381,7 @@ BOOST_PYTHON_MODULE(_core) {
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc7>())
 		.def(init<>());
 
-	/*
+	
 	// A planet from the gtoc2 problem
 	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
 		init<const int &>(
@@ -398,7 +398,7 @@ BOOST_PYTHON_MODULE(_core) {
 		))
 		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc2>())
 		.def(init<>());
-	*/
+	
 
 	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
