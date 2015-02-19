@@ -109,7 +109,7 @@ class dbscan():
     def plot(self, ax=None, clusters=None, orbits=False, only_core=False):
         """Plots the clusters."""
         if self.n_clusters < 1:
-            return axis
+            return
 
         import matplotlib.pylab as plt
         from mpl_toolkits.mplot3d import Axes3D
@@ -134,12 +134,56 @@ class dbscan():
         X, labels = list(zip(*[(x, label) for (x, label) in zip(self._X, self.labels)
                                if label > -.5 and (clusters is None or label in clusters)]))
         data = [[x[0], x[1], x[2]] for x in X]
-        axis.scatter(*list(zip(*data)), c=labels)
+        axis.scatter(*list(zip(*data)), c=labels, alpha=0.5)
 
         self._axis_equal_3d(axis)
 
         if ax is None:
             plt.show()
         return axis
+
+    def plot_cluster_evolution(self, cluster_id=None, only_core=False, epochs=range(7500, 8400, 100), skip=100, alpha=0.3):
+        """
+        Plots a cluster evolution at 9 prefixed epochs.
+
+
+        """
+        if self.n_clusters < 1:
+            print("No clusters have been found yet")
+            return
+        if cluster_id >= self.n_clusters or cluster_id < 0:
+            print("cluster_id should be larger then 0 and smaller than the number of clusters (-1)")
+            return
+        if len(epochs) != 9:
+            print("The epochs requested must be exactly 9 as to assemble 3x3 subplots")
+            return
+
+        import matplotlib.pylab as plt
+        from mpl_toolkits.mplot3d import Axes3D
+        from PyKEP.orbit_plots import plot_planet
+        from PyKEP import epoch
+
+        if only_core:
+            ids = self.core_members[cluster_id]
+        else:
+            ids = self.members[cluster_id]
+
+        fig = plt.figure()
+        for i, ep in enumerate(epochs):
+            print i
+            axis = fig.add_subplot(3, 3, i + 1, projection='3d')
+
+            plt.axis('off')
+            plt.title(epoch(ep).__repr__()[:11])
+            for pl in self._asteroids[::skip]:
+                axis = plot_planet(pl, ax=axis, alpha=0.05, s=0)
+            for cluster_member in ids:
+                r, v = self._asteroids[cluster_member].eph(epoch(ep))
+                axis.scatter([r[0]], [r[1]], [r[2]], marker='o', alpha=alpha)
+
+
+        plt.draw()
+        plt.show()
+        return fig
 
 del PyKEP, numpy
