@@ -13,6 +13,7 @@ Welcome
 .. image:: images/traj4.gif
 .. image:: images/traj5.gif
 .. image:: images/traj6.gif
+.. image:: images/logo_pykep.png
 
 
 PyKEP is a scientific library providing basic tools for astrodynamics research. Algoritmic efficiency is 
