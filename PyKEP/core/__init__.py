@@ -13,13 +13,20 @@ MU_SUN = _core._get_MU_SUN()
 RAD2DEG = _core._get_RAD2DEG()
 SEC2DAY = _core._get_SEC2DAY()
 
+from PyKEP.core._core import _epoch_type
 
-def _epoch_ctor(self, julian_date=0, julian_date_type="mjd2000"):
+EPOCH_TYPE = {
+    "jd": _epoch_type.JD,
+    "mjd": _epoch_type.MJD,
+    "mjd2000": _epoch_type.MJD2000
+}
+
+def _epoch_ctor(self, julian_date, julian_date_type=None):
     """
-PyKEP.epoch(julian_date=0, julian_date_type="mjd2000")
+PyKEP.epoch(julian_date, julian_date_type="mjd2000")
 
 - julian_date: a julian date
-- julian_date_type: julian date type, one of "jd", "mjd" and "mjd2000"
+- julian_date_type: julian date type, one of "jd", "mjd" and "mjd2000", defaults to "mjd2000"
 
 Examples::
 
@@ -27,19 +34,10 @@ Examples::
   e1 = epoch(0,"mjd2000")
   e2 = epoch(54333, "mjd")
     """
-    from PyKEP.core._core import _epoch_type
-
-    def epoch_type(x):
-        return {
-            "jd": _epoch_type.JD,
-            "mjd": _epoch_type.MJD,
-            "mjd2000": _epoch_type.MJD2000
-        }[x]
-    # We set the defaults or the kwargs
-    arg_list = []
-    arg_list.append(julian_date)
-    arg_list.append(epoch_type(julian_date_type))
-    self._orig_init(*arg_list)
+    if julian_date_type is None:
+        self._orig_init(julian_date)
+    else:
+        self._orig_init(julian_date, EPOCH_TYPE[julian_date_type])
 epoch._orig_init = epoch.__init__
 epoch.__init__ = _epoch_ctor
 
