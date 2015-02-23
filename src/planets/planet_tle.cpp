@@ -71,11 +71,11 @@ catch (SatelliteException& e)
 		throw_value_error(e.what());
 }
 
-void planet_tle::get_eph(const epoch& when, array3D &r, array3D &v) const{
+void planet_tle::get_eph(const double mjd2000, array3D &r, array3D &v) const{
 	Vector position;
 	Vector velocity;
-	double minutes_since = (when.mjd2000()-ref_mjd2000)*24*60;
-	if(when.mjd2000() != cached_epoch.mjd2000() || cached_epoch.mjd2000() == 0) 
+	double minutes_since = (mjd2000-ref_mjd2000)*24*60;
+	if(mjd2000 != cached_epoch_mjd2000 || cached_epoch_mjd2000 == 0) 
 	{
 		try 
 		{
@@ -84,7 +84,7 @@ void planet_tle::get_eph(const epoch& when, array3D &r, array3D &v) const{
 			velocity = eci.Velocity();
 			cached_r[0] = position.x*1000; cached_r[1] = position.y*1000; cached_r[2] = position.z*1000;
 			cached_v[0] = velocity.x*1000; cached_v[1] = velocity.y*1000; cached_v[2] = velocity.z*1000;
-			cached_epoch = when;
+			cached_epoch_mjd2000 = mjd2000;
 		}
 		catch (SatelliteException& e)
 		{

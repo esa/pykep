@@ -55,7 +55,14 @@ static inline tuple closest_distance_wrapper(const kep_toolbox::array3D& r0, con
 	return boost::python::make_tuple(min_d,ra);
 }
 
-static inline tuple planet_get_eph(const kep_toolbox::planet &p, const kep_toolbox::epoch &when)
+static inline tuple planet_get_eph1(const kep_toolbox::planet &p, const kep_toolbox::epoch &when)
+{
+	kep_toolbox::array3D r, v;
+	p.get_eph(when,r,v);
+	return boost::python::make_tuple(r,v);
+}
+
+static inline tuple planet_get_eph2(const kep_toolbox::planet &p, const double &when)
 {
 	kep_toolbox::array3D r, v;
 	p.get_eph(when,r,v);
@@ -232,17 +239,22 @@ BOOST_PYTHON_MODULE(_core) {
 	// These serve to allow boost python to resolve correctly the overloaded function get_elements
 	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
 	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
+	//typedef void (kep_toolbox::planet::*eph_getter1)(const kep_toolbox::epoch&, kep_toolbox::array3D& r, kep_toolbox::array3D& v) const;
+	//typedef void (kep_toolbox::planet::*eph_getter2)(const double, kep_toolbox::array3D& r, kep_toolbox::array3D& v) const;
 
 	class_<kep_toolbox::planet>("planet","Base class for all planet objects. Ephemerides are Keplerian.",
 		init<optional<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, const std::string &> >())
 		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
-		.def("eph",&planet_get_eph,
+		.def("eph",&planet_get_eph1,
 			"PyKEP.planet.eph(when)\n\n"
-			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n\n"
+			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n"
+			"        can also be a double in which case its interpreted as a mjd2000\n\n"
 			"Retuns a tuple containing the planet position and velocity in SI units\n\n"
 			"Example::\n\n"
-			"  r,v = earth.eph(epoch(5433))"
+			"  r,v = earth.eph(epoch(5433), 'mjd2000')\n"
+			"  r,v = earth.eph(5433)"
 		)
+		.def("eph",&planet_get_eph2," ")
 		.add_property("safe_radius",&kep_toolbox::planet::get_safe_radius, &kep_toolbox::planet::set_safe_radius,
 			"The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
 			"Example::\n\n"

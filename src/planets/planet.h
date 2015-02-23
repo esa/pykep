@@ -98,7 +98,17 @@ public:
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	virtual void get_eph(const epoch& when, array3D &r, array3D &v) const;
+	void get_eph(const epoch& when, array3D &r, array3D &v) const {
+		this->get_eph(when.mjd2000(), r, v);
+	};
+
+	/// Gets the planet position and velocity
+	/**
+		* \param[in] when mjd2000 in which ephemerides are required
+		* \param[out] r Planet position at epoch (SI units)
+		* \param[out] v Planet velocity at epoch (SI units)
+		*/
+	virtual void get_eph(const double mjd2000, array3D &r, array3D &v) const;
 
 	/// Getter for the central body gravitational parameter
 	/**
@@ -225,7 +235,7 @@ private:
 		ar & safe_radius;
 		ar & mu_self;
 		ar & mu_central_body;
-		ar & cached_epoch;
+		ar & cached_epoch_mjd2000;
 		ar & cached_r;
 		ar & cached_v;
 		ar & m_name;
@@ -240,7 +250,7 @@ protected:
 	double safe_radius;
 	double mu_self;
 	double mu_central_body;
-	mutable epoch cached_epoch;
+	mutable double cached_epoch_mjd2000;
 	mutable array3D cached_r;
 	mutable array3D cached_v;
 
