@@ -180,7 +180,6 @@ class dbscan():
                 r, v = self._asteroids[cluster_member].eph(epoch(ep))
                 axis.scatter([r[0]], [r[1]], [r[2]], marker='o', alpha=alpha)
 
-
         plt.draw()
         plt.show()
         return fig

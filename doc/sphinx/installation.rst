@@ -80,43 +80,38 @@ Unsing minGW things will be the same as under Unix, just make sure that
 Systems with both Python 2 and Python 3 installed
 -------------------------------------------------
 
-If your system has several versions of python installed the cmake python finder script are likely to mess up the versions. It is then
-a good idea to inspect the result of the command::
+If your system has several versions of python installed check the PYTHON_EXECUTABLE variable in cmake. The libraries, includes and site-packages directory are determined accordingly. If you want to change python version, just define explicitly such a variable. For example (assuming you are in a directory pykep/build)::
+
+  cmake ../ -DBUILD_PYKEP="ON"  -DPYTHON_EXECUTABLE="/usr/bin/python3.3m"   
+
+It is always good practice to check what cmake has actually located by typing::
 
   cmake ../
 
 which could look something like::
 
-  -- OS detected: Linux
-  -- CXX Compiler detected: GNU
-  -- CMake Library additional search path: 
-  -- Enabling '-Wall' compiler flag.
-  -- Enabling '-Wextra' compiler flag.
-  -- Enabling '-Wnoexcept' compiler flag.
-  -- Enabling '-Wdisabled-optimization' compiler flag.
-  -- Enabling '-ffast-math' compiler flag.
+  -- OS detected: Darwin
+  -- CXX Compiler detected: Clang
+  -- CMake additional search path for libraries: /usr/local/lib
+  -- Enabling '-ftemplate-depth=256' compiler flag required since boost 1.54.
   -- Enabling '-std=c++11' compiler flag
-  -- CXX compilation flags:  -Wall -Wextra -Wnoexcept -Wdisabled-optimization -ffast-math -std=c++11
-  -- Python library: /usr/lib64/libpython3.3m.so
-  -- Path to where Python.h is found: /usr/include/python3.3m
-  -- Version detected for python libraries: 3.3.2
-  -- Python interpreter: /usr/bin/python
-  -- Version detected for the python interpreter: 2.7.5
-  -- Python modules install path: lib/python2.7/site-packages
-  -- Required Boost libraries: serialization;date_time;python
-  -- Boost version: 1.53.0
+  -- CXX compilation flags:  -ftemplate-depth=256 -std=c++11
+  -- Python interpreter: /usr/local/bin/python3
+  -- Python interpreter verison: 3.4
+  -- Python includes path: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/include/python3.4m
+  -- Python modules install path: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages
+  -- Python library name: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/lib/libpython3.4.dylib
+  -- Required Boost libraries: serialization;date_time;python3
+  -- Boost version: 1.57.0
   -- Found the following Boost libraries:
   --   serialization
   --   date_time
-  --   python
-  -- Detected Boost version: 105300
-  -- Boost include dirs: /usr/include
-  -- Boost libraries: /usr/lib64/libboost_serialization-mt.so;/usr/lib64/libboost_date_time-mt.so;/usr/lib64/libboost_python-mt.so
+  --   python3
+  -- Detected Boost version: 105700
+  -- Boost include dirs: /usr/local/include
+  -- Boost libraries: /usr/local/lib/libboost_serialization-mt.dylib;/usr/local/lib/libboost_date_time-mt.dylib;/usr/local/lib/libboost_python3-mt.dylib
   -- Configuring done
   -- Generating done
-  -- Build files have been written to: /home/dario/Documents/pykep/build
-
-Here you clearly see that while 2.7.5 is detected for the interpreter, the libraries and includes are 3.3.2. In these messed up cases the best thing to do is to manually input to cmake the exact location of the libraries, the headers and the interpreter by setting explicitly the variables PYTHON_EXECUTABLE, PYTHON_INCLUDE_DIR  and PYTHON_LIBRARY. ere is an example that fixes the problem above by selecting explicitly python 3::
-
-  cmake ../ -DBUILD_PYKEP="ON"  -DPYTHON_LIBRARY="/usr/lib64/libpython3.3m.so" -DPYTHON_INCLUDE_DIR="/usr/include/python3.3m/" -DPYTHON_EXECUTABLE="/usr/bin/python3.3m"                                             
+  -- Build files have been written to: /Users/darioizzo/Documents/pykep/build
+                                        
 
