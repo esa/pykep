@@ -170,7 +170,6 @@ class dbscan():
 
         fig = plt.figure()
         for i, ep in enumerate(epochs):
-            print i
             axis = fig.add_subplot(3, 3, i + 1, projection='3d')
 
             plt.axis('off')
