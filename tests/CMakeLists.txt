@@ -5,9 +5,8 @@ ADD_EXECUTABLE(propagate_taylor_test propagate_taylor_test.cpp)
 ADD_EXECUTABLE(propagate_taylor_jorba_test propagate_taylor_jorba_test.cpp)
 ADD_EXECUTABLE(propagate_taylor_s_test propagate_taylor_s_test.cpp)
 ADD_EXECUTABLE(leg_s_test leg_s_test.cpp)
-IF(ENABLE_SGP4)
-	ADD_EXECUTABLE(sgp4_test sgp4_test.cpp)
-ENDIF(ENABLE_SGP4)
+ADD_EXECUTABLE(sgp4_test sgp4_test.cpp)
+
 
 TARGET_LINK_LIBRARIES(lambert_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(propagate_lagrangian_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
@@ -16,9 +15,7 @@ TARGET_LINK_LIBRARIES(propagate_taylor_test keplerian_toolbox_static ${LIBRARIES
 TARGET_LINK_LIBRARIES(propagate_taylor_jorba_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(propagate_taylor_s_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(leg_s_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
-IF(ENABLE_SGP4)
-	TARGET_LINK_LIBRARIES(sgp4_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
-ENDIF(ENABLE_SGP4)
+TARGET_LINK_LIBRARIES(sgp4_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 
 
 ADD_TEST(Testing_Multiple_Revolution_Lambert's_Solver lambert_test)
@@ -28,6 +25,5 @@ ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_PyKEP_implemen
 ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_Jorba_implementation propagate_taylor_jorba_test)
 ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_in_the_Sundmann_Variable propagate_taylor_s_test)
 ADD_TEST(Testing_Leg_in_The_Sundmann_Variable leg_s_test)
-IF(ENABLE_SGP4)
-        ADD_TEST(Testing_SGP4_propagation sgp4_test)
-ENDIF(ENABLE_SGP4)
+ADD_TEST(Testing_SGP4_propagation sgp4_test)
+

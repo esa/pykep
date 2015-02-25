@@ -71,34 +71,29 @@ catch (SatelliteException& e)
 		throw_value_error(e.what());
 }
 
-void planet_tle::get_eph(const double mjd2000, array3D &r, array3D &v) const{
+void planet_tle::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
 	Vector position;
 	Vector velocity;
 	double minutes_since = (mjd2000-ref_mjd2000)*24*60;
-	if(mjd2000 != cached_epoch_mjd2000 || cached_epoch_mjd2000 == 0) 
+
+	try 
 	{
-		try 
-		{
-			Eci eci = m_sgp4_propagator.FindPosition(minutes_since);
-			position = eci.Position();
-			velocity = eci.Velocity();
-			cached_r[0] = position.x*1000; cached_r[1] = position.y*1000; cached_r[2] = position.z*1000;
-			cached_v[0] = velocity.x*1000; cached_v[1] = velocity.y*1000; cached_v[2] = velocity.z*1000;
-			cached_epoch_mjd2000 = mjd2000;
-		}
-		catch (SatelliteException& e)
-		{
-			std::cout << "SatelliteException caught while computing ephemerides" << std::endl;
-			throw_value_error(e.what());
-		}
-		catch (DecayedException& e)
-		{
-			std::cout << "DecayedException caught while computing ephemerides" << std::endl;
-			throw_value_error(e.what());
-		}
+		Eci eci = m_sgp4_propagator.FindPosition(minutes_since);
+		position = eci.Position();
+		velocity = eci.Velocity();
+		r[0] = position.x*1000; r[1] = position.y*1000; r[2] = position.z*1000;
+		v[0] = velocity.x*1000; v[1] = velocity.y*1000; v[2] = velocity.z*1000;
 	}
-	r = cached_r;
-	v = cached_v;
+	catch (SatelliteException& e)
+	{
+		std::cout << "SatelliteException caught while computing ephemerides" << std::endl;
+		throw_value_error(e.what());
+	}
+	catch (DecayedException& e)
+	{
+		std::cout << "DecayedException caught while computing ephemerides" << std::endl;
+		throw_value_error(e.what());
+	}
 }
 
 

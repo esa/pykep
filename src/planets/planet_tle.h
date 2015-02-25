@@ -65,9 +65,9 @@ public:
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	void get_eph(const double mjd2000, array3D &r, array3D &v) const;
-	using planet::get_eph;
 private:
+	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int version)

@@ -27,6 +27,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
 #include <string>
 #include <vector>
 
@@ -92,23 +93,21 @@ public:
 	virtual ~planet();
 	/** @name Getters */
 	//@{
-	/// Gets the planet position and velocity
+	/// Gets the planet position and velocity from epoch
 	/**
 		* \param[in] when Epoch in which ephemerides are required
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	void get_eph(const epoch& when, array3D &r, array3D &v) const {
-		this->get_eph(when.mjd2000(), r, v);
-	};
+	void get_eph(const epoch& when, array3D &r, array3D &v) const; 
 
-	/// Gets the planet position and velocity
+	/// Gets the planet position and velocity from mjd2000
 	/**
-		* \param[in] when mjd2000 in which ephemerides are required
+		* \param[in]  when mjd2000 in which ephemerides are required
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	virtual void get_eph(const double mjd2000, array3D &r, array3D &v) const;
+	void get_eph(const double mjd2000, array3D &r, array3D &v) const;
 
 	/// Getter for the central body gravitational parameter
 	/**
@@ -222,8 +221,10 @@ protected:
 	* \param[in] name C++ string containing the planet name. Default value is "Unknown"
 	*/
 	void build_planet(const epoch& ref_epoch, const array6D& elem, const double & mu_central_body, const double &mu_self, const double & radius, const double & safe_radius, const std::string &name = "Unknown");
+
 private:
-// Serialization code
+	virtual void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -235,9 +236,6 @@ private:
 		ar & safe_radius;
 		ar & mu_self;
 		ar & mu_central_body;
-		ar & cached_epoch_mjd2000;
-		ar & cached_r;
-		ar & cached_v;
 		ar & m_name;
 	}
 // Serialization code (END)
@@ -250,7 +248,7 @@ protected:
 	double safe_radius;
 	double mu_self;
 	double mu_central_body;
-	mutable double cached_epoch_mjd2000;
+	mutable boost::optional<double> cached_epoch_mjd2000;
 	mutable array3D cached_r;
 	mutable array3D cached_v;
 

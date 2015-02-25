@@ -159,29 +159,24 @@ planet_ss::planet_ss(const std::string& name)
 	build_planet(epoch(2451545.0,epoch::JD),keplerian_elements_,mu_central_body_,mu_self_,radius_,safe_radius_,lower_case_name);
 }
 
-void planet_ss::get_eph(const double mjd2000, array3D &r, array3D &v) const{
+void planet_ss::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
 	if (mjd2000 <=-73048.0 || mjd2000>=18263.0) {
 		throw_value_error("Ephemeris of planet_ss are out of range [1800-2050]");
 	}
-	if(mjd2000 != cached_epoch_mjd2000 || cached_epoch_mjd2000 == 0) {
-		// algorithm from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt downloded 2013
-		array6D elements, elements2;
-		double dt = (mjd2000 - ref_mjd2000) / 36525.0; // Number of centuries passed since J2000.0
-		for(unsigned int i= 0;i<6;++i) {
-			elements[i] = (jpl_elements[i] + jpl_elements_dot[i] * dt);
-		}
-		elements2[0] = elements[0] * ASTRO_AU;
-		elements2[1] = elements[1];
-		elements2[2] = elements[2] * ASTRO_DEG2RAD;
-		elements2[3] = elements[5] * ASTRO_DEG2RAD;
-		elements2[4] = (elements[4] - elements[5]) * ASTRO_DEG2RAD;
-		elements2[5] = (elements[3] - elements[4]) * ASTRO_DEG2RAD;
-		elements2[5] = m2e(elements2[5],elements2[1]);
-		par2ic(elements2, mu_central_body, cached_r, cached_v);
-		cached_epoch_mjd2000 = mjd2000;
+	// algorithm from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt downloded 2013
+	array6D elements, elements2;
+	double dt = (mjd2000 - ref_mjd2000) / 36525.0; // Number of centuries passed since J2000.0
+	for(unsigned int i= 0;i<6;++i) {
+		elements[i] = (jpl_elements[i] + jpl_elements_dot[i] * dt);
 	}
-	r = cached_r;
-	v = cached_v;
+	elements2[0] = elements[0] * ASTRO_AU;
+	elements2[1] = elements[1];
+	elements2[2] = elements[2] * ASTRO_DEG2RAD;
+	elements2[3] = elements[5] * ASTRO_DEG2RAD;
+	elements2[4] = (elements[4] - elements[5]) * ASTRO_DEG2RAD;
+	elements2[5] = (elements[3] - elements[4]) * ASTRO_DEG2RAD;
+	elements2[5] = m2e(elements2[5],elements2[1]);
+	par2ic(elements2, mu_central_body, r, v);
 }
 
 planet_ptr planet_ss::clone() const

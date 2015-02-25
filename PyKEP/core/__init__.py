@@ -21,6 +21,7 @@ EPOCH_TYPE = {
     "mjd2000": _epoch_type.MJD2000
 }
 
+
 def _epoch_ctor(self, julian_date, julian_date_type=None):
     """
 PyKEP.epoch(julian_date, julian_date_type="mjd2000")

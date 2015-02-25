@@ -56,10 +56,9 @@ public:
 		* \param[out] r Planet position at epoch (SI units)
 		* \param[out] v Planet velocity at epoch (SI units)
 		*/
-	void get_eph(const double mjd2000, array3D &r, array3D &v) const;
-	using planet::get_eph;
 private:
-// Serialization code
+	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -68,7 +67,7 @@ private:
 		ar & jpl_elements;
 		ar & jpl_elements_dot;
 	}
-// Serialization code (END)
+
 
 	array6D jpl_elements;
 	array6D jpl_elements_dot;
@@ -77,8 +76,6 @@ private:
 
 } /// End of namespace kep_toolbox
 
-// Serialization code
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss)
-// Serialization code (END)
 
 #endif // KEP_TOOLBOX_PLANET_SS_H
