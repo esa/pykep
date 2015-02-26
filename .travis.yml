@@ -3,6 +3,10 @@ language: cpp
 compiler:
   - gcc
   - clang
+  
+os:
+  - linux
+  - osx
 
 before_install:
   - echo $LANG
@@ -21,8 +25,5 @@ branches:
   only:
     - master
  
-os:
-  - linux
-  - osx
 
-osx_image: xcode61
+
