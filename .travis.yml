@@ -12,7 +12,7 @@ before_install:
 
 script:
   - mkdir build && cd build
-  - cmake ../ -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages -DCMAKE_INSTALL_PREFIX="~/local/lib"
+  - cmake ../ -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages -"DCMAKE_INSTALL_PREFIX="~/local/lib"
   - make
   - make test
   - make install
