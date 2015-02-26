@@ -5,8 +5,9 @@ compiler:
   - clang
   
 os:
-  - linux
   - osx
+  - linux
+
 
 before_install:
   - echo $LANG
