@@ -4,7 +4,7 @@ compiler:
   - gcc
   - clang
   
-script: cmake
+script: cmake -DBUILD_PYKEP="ON"
 
 before_install:
   - echo $LANG
