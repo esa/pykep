@@ -27,7 +27,7 @@ script:
 after_success:
   - export PYTHONPATH=~/local/lib/python/site-packages
   - export LD_LIBRARY_PATH=~/local/lib
-  - python -c "import PyKEP; print(PyKEP.__version__); print(PyKEP.__extenssions__)"
+  - python -c "import PyKEP; print(PyKEP.__version__); print(PyKEP.__extensions__)"
 
 branches:
   only:
