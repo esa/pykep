@@ -3,6 +3,8 @@ language: cpp
 compiler:
   - gcc
   - clang
+  
+script: cmake -D
 
 before_install:
   - echo $LANG
