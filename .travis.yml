@@ -1,0 +1,36 @@
+language: cpp
+
+compiler:
+  - gcc
+  
+os:
+  - osx
+  - linux
+
+
+before_install:
+  - echo $LANG
+  - echo $LC_ALL
+  
+install:
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y libboost-python-dev libboost-date-time-dev libboost-serialization-dev; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm && brew link --force llvm; fi
+
+script:
+  - mkdir build && cd build
+  - cmake ../ -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages" -DCMAKE_INSTALL_PREFIX="~/local"
+  - make -j9
+  - make test
+  - make install
+  
+after_success:
+  - export PYTHONPATH=~/local/lib/python/site-packages
+  - export LD_LIBRARY_PATH=~/local/lib
+  - python -c "import PyKEP; print(PyKEP.__version__); print(PyKEP.__extensions__)"
+
+branches:
+  only:
+    - master
+ 
+
+
