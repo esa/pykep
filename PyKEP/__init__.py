@@ -50,5 +50,5 @@ from PyKEP.core import *
 ###########################################################
 __doc__ = 'PyKEP is the answer ... but what was the question?'
 __all__ = ['core', 'sims_flanagan', 'orbit_plots', 'examples', 'trajopt', 'phasing']
-__version__ = {'major': 1, 'minor': 2, 'bugfix': 1}
+__version__ = {'major': 1, 'minor': 2, 'bugfix': 2}
 __all__ += [name for name in dir(core) if not name.startswith('_')]
