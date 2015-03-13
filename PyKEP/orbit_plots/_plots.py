@@ -26,7 +26,8 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     from PyKEP import MU_SUN, SEC2DAY, epoch, AU
     from math import pi, sqrt
     import numpy as np
-    import matplotlib.pyplot as plt
+    import matplotlib.pylab as plt
+    from mpl_toolkits.mplot3d import Axes3D
 
     if ax is None:
         fig = plt.figure()
@@ -117,7 +118,8 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None):
     """
     from PyKEP import propagate_lagrangian, AU
     import numpy as np
-    import matplotlib.pyplot as plt
+    import matplotlib.pylab as plt
+    from mpl_toolkits.mplot3d import Axes3D
 
     if ax is None:
         fig = plt.figure()
@@ -182,7 +184,8 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
     """
 
     from PyKEP import propagate_lagrangian
-    import matplotlib.pyplot as plt
+    import matplotlib.pylab as plt
+    from mpl_toolkits.mplot3d import Axes3D
 
     if ax is None:
         fig = plt.figure()
@@ -321,7 +324,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
     import numpy as np
     from scipy.linalg import norm
     from math import exp
-    import matplotlib.pyplot as plt
+    import matplotlib.pylab as plt
+    from mpl_toolkits.mplot3d import Axes3D
 
     if ax is None:
         fig = plt.figure()
