@@ -18,7 +18,7 @@ install:
 
 script:
   - mkdir build && cd build
-  - cmake ../ -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages" -DCMAKE_INSTALL_PREFIX="~/local"
+  - cmake ../ -DBUILD_SPICE="ON" -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages" -DCMAKE_INSTALL_PREFIX="~/local"
   - make -j9
   - make test
   - make install
