@@ -44,7 +44,8 @@ OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
 
-SET(DYNAMIC_LIB_KEP_TOOL_USE_FLAGS "-DBOOST_THREAD_USE_DLL -DBOOST_SERIALIZATION_DYN_LINK=1")
+# Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
+OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
 
 # Finding the boost libraries needed for the keplerian_toolbox
 SET(REQUIRED_BOOST_LIBS serialization date_time)
@@ -77,6 +78,14 @@ ELSE(PYTHON_VERSION_MAJOR LESS 3)
 	SET(LIBRARIES_4_PYTHON_MODULES ${LIBRARIES_4_PYTHON_MODULES} ${Boost_PYTHON3_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
 ENDIF(PYTHON_VERSION_MAJOR LESS 3)
 
+# We build cspice static library and link it in PyKEP libraries
+IF(BUILD_SPICE)
+	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
+	SET(LIBRARIES_4_STATIC ${LIBRARIES_4_STATIC} cspice)
+    SET(LIBRARIES_4_DYNAMIC ${LIBRARIES_4_DYNAMIC} cspice)
+    ADD_DEFINITIONS(-DPYKEP_USING_SPICE)
+ENDIF(BUILD_SPICE)
+
 # Here we define the file list and make the static and dynamic library
 ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src")
 
@@ -95,6 +104,10 @@ ENDIF(BUILD_PYKEP)
 # Build Tests and link them to static library.
 IF(BUILD_TESTS)
 	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/de432s.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")		
 ENDIF(BUILD_TESTS)
 
