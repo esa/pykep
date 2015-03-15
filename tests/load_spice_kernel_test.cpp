@@ -55,7 +55,6 @@ int main() {
 	load_spice_kernel("C_G_1000012_2012_2017.bsp");
 	load_spice_kernel("pck00010.tpc");
 	load_spice_kernel("gm_de431.tpc");
-	load_spice_kernel("de432s.bsp");
 	int dim = 0;
 
 	// Some definitions
@@ -81,9 +80,6 @@ int main() {
 
 	std::cout << "Computing ephemerides at: " << when;
 	std::cout << ", on the ecliptic J2000 reference frame as seen from the solar system barycenter" << std::endl << std::endl;
-
-	spkezr_c ( "MARS BARYCENTER", spice_epoch, "ECLIPJ2000", "NONE", "SOLAR SYSTEM BARYCENTER", state, &lt );
-	std::cout << "MARS BARYCENTER: " << stream(state) << std::endl;
 
 	spkezr_c ( "CHURYUMOV-GERASIMENKO", spice_epoch, "ECLIPJ2000", "NONE", "SOLAR SYSTEM BARYCENTER", state, &lt );
 	std::cout << "CHURYUMOV-GERASIMENKO: " << stream(state)  << std::endl << std::endl;

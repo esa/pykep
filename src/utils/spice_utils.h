@@ -61,6 +61,7 @@ void load_spice_kernel(std::string file_name) {
     if (failed_c()) {
     	std::ostringstream msg;
     	msg << "Kernel file " << file_name << " could not be loaded by SPICE" << std::endl;
+        reset_c();
     	throw_value_error(msg.str());
     }
 }

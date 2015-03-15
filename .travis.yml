@@ -3,7 +3,7 @@ language: cpp
 compiler:
   - gcc
   - clang
-  
+
 os:
   - osx
   - linux
@@ -33,7 +33,7 @@ before_install:
   - tar -xjf cmake.tar.bz2
   - rm cmake.tar.bz2
   - export PATH=$(pwd)/cmake/bin:$PATH
-  
+
 install:
   # Get boost
   - wget https://github.com/Viq111/travis-container-packets/releases/download/boost-1.57.0/boost.tar.bz2
@@ -47,7 +47,7 @@ script:
   - make -j9
   - make test
   - make install
-  
+
 after_success:
   - export PYTHONPATH=~/local/lib/python/site-packages
   - export LD_LIBRARY_PATH=~/local/lib
@@ -56,6 +56,6 @@ after_success:
 branches:
   only:
     - master
- 
+
 
 
