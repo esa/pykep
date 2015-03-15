@@ -79,9 +79,9 @@ int main() {
 	std::cout << "Mars gravity parameter in km: " << std::setprecision(16) << mu_mars[0] << std::endl << std::endl;
 
 	std::cout << "Computing ephemerides at: " << when;
-	std::cout << ", on the ecliptic J2000 reference frame as seen from the solar system barycenter" << std::endl << std::endl;
+	std::cout << ", on the ecliptic J2000 reference frame as seen from the Sun" << std::endl << std::endl;
 
-	spkezr_c ( "CHURYUMOV-GERASIMENKO", spice_epoch, "ECLIPJ2000", "NONE", "SOLAR SYSTEM BARYCENTER", state, &lt );
+	spkezr_c ( "CHURYUMOV-GERASIMENKO", spice_epoch, "ECLIPJ2000", "NONE", "SUN", state, &lt );
 	std::cout << "CHURYUMOV-GERASIMENKO: " << stream(state)  << std::endl << std::endl;
 
     std::cout << "You can check results manually on-line at http://ssd.jpl.nasa.gov/horizons.cgi" << std::endl;
