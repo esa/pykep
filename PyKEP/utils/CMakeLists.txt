@@ -1,0 +1,3 @@
+ADD_LIBRARY(_utils SHARED utils.cpp)
+PYTHON_CPPMODULE(_utils)
+INSTALL(FILES __init__.py DESTINATION ${PYKEP_INSTALL_PATH}/utils)
