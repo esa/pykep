@@ -28,6 +28,11 @@
 #include "epoch.h"
 #include "lambert_problem.h"
 #include "lambert_problemOLD.h"
+
+#include "planets/base.h"
+#include "planets/keplerian.h"
+#include "planets/jpl_low_precision.h"
+
 #include "planets/planet.h"
 #include "planets/planet_ss.h"
 #include "planets/planet_js.h"

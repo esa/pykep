@@ -60,7 +60,6 @@ public:
 	unsigned int get_year_of_discovery() const {return m_year_of_discovery;};
 
 private:
-// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -71,7 +70,6 @@ private:
 		ar & m_n_oppositions;
 		ar & m_year_of_discovery;
 	}
-// Serialization code (END)
 
 	static int packed_date2number(char c);
 	// Absolute Magnitude
