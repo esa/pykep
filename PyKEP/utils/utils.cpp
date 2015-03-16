@@ -35,6 +35,7 @@ BOOST_PYTHON_MODULE(_utils) {
 	docstring_options doc_options;
 	doc_options.disable_signatures();
 	
+#ifdef PYKEP_USING_SPICE
 	// Spice utilities
 	def("load_spice_kernel",&kep_toolbox::utils::load_spice_kernel,
 			  "PyKEP.utils.load_spice_kernel(file_name)\n\n"
@@ -43,4 +44,5 @@ BOOST_PYTHON_MODULE(_utils) {
 			  "Example:: \n\n"
 			  "  t = utils.load_spice_kernel('de432s.bsp')"
 	);
+#endif
 }
