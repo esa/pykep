@@ -35,6 +35,7 @@
 #include "planets/mpcorb.h"
 #include "planets/tle.h"
 #include "planets/gtoc2.h"
+#include "planets/gtoc5.h"
 #include "planets/gtoc6.h"
 #include "planets/gtoc7.h"
 

@@ -36,6 +36,7 @@
 #include "../../src/planets/mpcorb.h"
 #include "../../src/planets/tle.h"
 #include "../../src/planets/gtoc2.h"
+#include "../../src/planets/gtoc5.h"
 #include "../../src/planets/gtoc6.h"
 #include "../../src/planets/gtoc7.h"
 #include "../utils.h"
@@ -169,6 +170,9 @@ BOOST_PYTHON_MODULE(_planets) {
 		.def(init<optional<const std::string &> >());
 
 		planet_kep_wrapper<planets::gtoc2>("gtoc2","An asteroid from gtoc2")
+		.def(init<optional<int> >());
+
+		planet_kep_wrapper<planets::gtoc5>("gtoc5","An asteroid from gtoc7")
 		.def(init<optional<int> >());
 
 		planet_kep_wrapper<planets::gtoc6>("gtoc6","A Jupiter moon from gtoc6")

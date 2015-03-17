@@ -5,8 +5,8 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
-    asteroid_gtoc7 pl1(33);
-    planets::gtoc7 pl2(33);
+    asteroid_gtoc5 pl1(33);
+    planets::gtoc5 pl2(33);
     array3D r,v,r1,v1;
  	pl1.get_eph(kep_toolbox::epoch(1.23),r ,v);
     std::cout << r << v << std::endl;
