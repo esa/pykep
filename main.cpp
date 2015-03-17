@@ -5,8 +5,8 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
-    planet_mpcorb pl1;
-    planets::keplerian pl2;
+    planet_tle pl1;
+    planets::tle pl2;
     array3D r,v,r1,v1;
  	pl1.get_eph(kep_toolbox::epoch(1.23),r ,v);
     std::cout << r << v << std::endl;
@@ -16,5 +16,10 @@ int main() {
     std::cout << pl1 << std::endl;
     std::cout << pl2 << std::endl;
 
+    std::cout << pl1.get_elements(kep_toolbox::epoch(0)) << std::endl;
+    std::cout << pl2.compute_elements() << std::endl;
+
+    std::cout << pl1.compute_period() << std::endl;
+    std::cout << pl2.compute_period() << std::endl;
     return 0;
 }

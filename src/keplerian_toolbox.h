@@ -33,6 +33,7 @@
 #include "planets/keplerian.h"
 #include "planets/jpl_low_precision.h"
 #include "planets/mpcorb.h"
+#include "planets/tle.h"
 
 #include "planets/planet.h"
 #include "planets/planet_ss.h"

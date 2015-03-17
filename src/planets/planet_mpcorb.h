@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_MPCORB_OLS_H
-#define KEP_TOOLBOX_PLANET_MPCORB_OLS_H
+#ifndef KEP_TOOLBOX_PLANET_MPCORB_OLD_H
+#define KEP_TOOLBOX_PLANET_MPCORB_OLD_H
 
 #include <string>
 

@@ -22,8 +22,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_TLE_H
-#define KEP_TOOLBOX_PLANET_TLE_H
+#ifndef KEP_TOOLBOX_PLANET_TLE_OLD_H
+#define KEP_TOOLBOX_PLANET_TLE_OLD_H
 
 #include "planet.h"
 #include "../serialization.h"
@@ -103,4 +103,4 @@ private:
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_tle)
 
-#endif // KEP_TOOLBOX_PLANET_TLE_H
+#endif // KEP_TOOLBOX_PLANET_TLE_OLD_H
