@@ -12,7 +12,8 @@ SET(PYKEP_LIB_SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/jpl_low_precision.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/tle.cpp
-
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc2.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc6.cpp
 
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc2.cpp

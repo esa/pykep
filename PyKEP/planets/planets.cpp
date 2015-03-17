@@ -35,6 +35,8 @@
 #include "../../src/planets/jpl_low_precision.h"
 #include "../../src/planets/mpcorb.h"
 #include "../../src/planets/tle.h"
+#include "../../src/planets/gtoc2.h"
+#include "../../src/planets/gtoc6.h"
 #include "../utils.h"
 
 using namespace boost::python;
@@ -140,7 +142,7 @@ BOOST_PYTHON_MODULE(_planets) {
 		.def_pickle(python_class_pickle_suite<planets::python_base>());
 
 		// We start exposing here the classes derived from base
-		// Planets deriving from base
+		// 1 - Planets deriving directly from base
 		planet_wrapper<planets::keplerian>("keplerian","A planet with Keplerian ephemerides")
 		.def(init<optional<const epoch&, const array6D&, double, double, double , double, const std::string &> >())
 		.def(init<const epoch&, const array3D&, const array3D&, double, double, double, double , optional<const std::string &> >())
@@ -161,7 +163,13 @@ BOOST_PYTHON_MODULE(_planets) {
 		planet_wrapper<planets::tle>("tle","An Earth satellite defined from the TLE format")
 		.def(init<optional<const std::string &> >());
 
-		// Planets deriving from keplerian
+		// 2 - Planets deriving from keplerian
 		planet_kep_wrapper<planets::mpcorb>("mpcorb","A planet from the MPCORB database")
+		.def(init<optional<const std::string &> >());
+
+		planet_kep_wrapper<planets::gtoc2>("gtoc2","An asteroid from gtoc2")
+		.def(init<optional<int> >());
+
+		planet_kep_wrapper<planets::gtoc6>("gtoc6","A Jupiter moon from gtoc6")
 		.def(init<optional<const std::string &> >());
 }

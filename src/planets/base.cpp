@@ -146,7 +146,7 @@ std::string base::get_name() const {return m_name;};
  * \throws value_error if safe_radius in < 1
  */
 void base::set_safe_radius(double sr) {
-	if (sr <=1) {
+	if (sr < 1) {
 		throw_value_error("Trying to set a safe_radius that is smaller than the planetary radius");
 	}
 	m_safe_radius = sr * get_radius();
