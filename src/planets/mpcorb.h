@@ -22,37 +22,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_MPCORB_OLS_H
-#define KEP_TOOLBOX_PLANET_MPCORB_OLS_H
+#ifndef KEP_TOOLBOX_PLANET_MPCORB_H
+#define KEP_TOOLBOX_PLANET_MPCORB_H
 
 #include <string>
 
-#include "planet.h"
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
 
-namespace kep_toolbox{
+namespace kep_toolbox { namespace planets {
 
 /// Minor Planet (keplerian)
 /**
- * This class derives from the planet class and allow to instantiate planets of
- * from the MPCORB database using their names or row id. The file MPCORB.DAT is searched
- * in the current directory.
+ * This class allows to instantiate keplerian planets from the MPCORB database.
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_mpcorb : public planet
+class __KEP_TOOL_VISIBLE mpcorb : public keplerian
 {
 public:
-	/**
-	 * Construct a minor planet from a line of the MPCORB.DAT file. Default value is the MPCORB.DAT line
-	 * for the dwarf planet Ceres.
-	 * \param[in] name a string containing one line of MPCORB.DAT
-	 */
-	planet_mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
+	mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
 	planet_ptr clone() const;
+
 	static epoch packed_date2epoch(std::string);
 	double get_H() const {return m_H;};
 	unsigned int get_n_observations() const {return m_n_observations;};
@@ -64,7 +58,7 @@ private:
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
+		ar & boost::serialization::base_object<keplerian>(*this);
 		ar & m_H;
 		ar & m_n_observations;
 		ar & m_n_oppositions;
@@ -83,10 +77,8 @@ private:
 };
 
 
-} /// End of namespace kep_toolbox
+}} /// End of namespace kep_toolbox
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_mpcorb);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::mpcorb);
 
-#endif // KEP_TOOLBOX_PLANET_MPCORB_OLS_H
+#endif // KEP_TOOLBOX_PLANET_MPCORB_H

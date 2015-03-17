@@ -26,7 +26,9 @@
 #include <boost/python/def.hpp>
 #include <boost/python/docstring_options.hpp>
 
-#include "../../src/utils/spice_utils.h"
+#ifdef PYKEP_USING_SPICE
+	#include "../../src/utils/spice_utils.h"
+#endif
 
 using namespace boost::python;
 

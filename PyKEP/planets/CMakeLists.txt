@@ -1,0 +1,3 @@
+ADD_LIBRARY(_planets SHARED planets.cpp)
+PYTHON_CPPMODULE(_planets)
+INSTALL(FILES __init__.py DESTINATION ${PYKEP_INSTALL_PATH}/planets)

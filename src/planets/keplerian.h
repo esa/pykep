@@ -22,71 +22,74 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_MPCORB_OLS_H
-#define KEP_TOOLBOX_PLANET_MPCORB_OLS_H
+#ifndef KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#define KEP_TOOLBOX_PLANET_KEPLERIAN_H
 
 #include <string>
+#include <vector>
 
-#include "planet.h"
+#include "base.h"
 #include "../serialization.h"
 #include "../config.h"
+#include "../exceptions.h"
+#include "../epoch.h"
 
+namespace kep_toolbox{ namespace planets {
 
-namespace kep_toolbox{
-
-/// Minor Planet (keplerian)
+/// A Keplerian Planet
 /**
- * This class derives from the planet class and allow to instantiate planets of
- * from the MPCORB database using their names or row id. The file MPCORB.DAT is searched
- * in the current directory.
+ * This class allows to instantiate a planet having keplerian ephemerides
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_mpcorb : public planet
+class __KEP_TOOL_VISIBLE keplerian : public base
 {
+
+static const array6D default_elements;
 public:
-	/**
-	 * Construct a minor planet from a line of the MPCORB.DAT file. Default value is the MPCORB.DAT line
-	 * for the dwarf planet Ceres.
-	 * \param[in] name a string containing one line of MPCORB.DAT
-	 */
-	planet_mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
-	planet_ptr clone() const;
-	static epoch packed_date2epoch(std::string);
-	double get_H() const {return m_H;};
-	unsigned int get_n_observations() const {return m_n_observations;};
-	unsigned int get_n_oppositions() const {return m_n_oppositions;};
-	unsigned int get_year_of_discovery() const {return m_year_of_discovery;};
+
+	keplerian(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
+	keplerian(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, const std::string &name = "Unknown");
+
+	virtual planet_ptr clone() const;
+	std::string human_readable_extra() const;
+
+	/** @name Getters */
+	//@{
+	array6D get_elements() const;
+	kep_toolbox::epoch get_ref_epoch() const;
+	double get_mean_motion() const;
+	//@}
+
+	/** @name Setters */
+	//@{
+	void set_elements(const array6D&);
+	void set_ref_epoch(const kep_toolbox::epoch&);
+	//@}
 
 private:
+	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
-		ar & m_H;
-		ar & m_n_observations;
-		ar & m_n_oppositions;
-		ar & m_year_of_discovery;
+		ar & boost::serialization::base_object<base>(*this);
+		ar & m_keplerian_elements;
+		ar & m_mean_motion;
+		ar & m_ref_mjd2000;
 	}
 
-	static int packed_date2number(char c);
-	// Absolute Magnitude
-	double m_H;
-	// Number of observations
-	unsigned int m_n_observations;
-	// Number of oppositions
-	unsigned int m_n_oppositions;
-	// Year the asteroid was first discovered
-	unsigned int m_year_of_discovery;
+protected:
+	array6D m_keplerian_elements;
+	double m_mean_motion;
+	double m_ref_mjd2000;
 };
 
+}} /// End of namespace kep_toolbox
 
-} /// End of namespace kep_toolbox
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::keplerian)
+// BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_mpcorb);
-// Serialization code (END)
-
-#endif // KEP_TOOLBOX_PLANET_MPCORB_OLS_H
+#endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H
