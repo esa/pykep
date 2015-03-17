@@ -34,8 +34,10 @@
 #include "planets/jpl_low_precision.h"
 #include "planets/mpcorb.h"
 #include "planets/tle.h"
-#include "planets/gtoc6.h"
 #include "planets/gtoc2.h"
+#include "planets/gtoc6.h"
+#include "planets/gtoc7.h"
+
 
 #include "planets/planet.h"
 #include "planets/planet_ss.h"

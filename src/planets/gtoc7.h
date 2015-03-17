@@ -22,55 +22,43 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_ASTEROID_GTOC7_OLD_H
-#define KEP_TOOLBOX_ASTEROID_GTOC7_OLD_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC7_H
+#define KEP_TOOLBOX_PLANET_GTOC7_H
 
-#include "planet.h"
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
 /// A GTOC7 asteroid
 /**
- * This class derives from the planet class and allow to instantiate asteroids
+ * This class allows to instantiate main belt asteroids
  * from the Global Trajectory Optimization Competition (GTOC) 7th edition
  *
  * @see http://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE asteroid_gtoc7 : public planet
+class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
 {
 public:
-	/// Constructor
-	/**
-	 * Construct from a consecutive id from 0 (Earth) to 16256 . The order is
-	 * that of the original data file from Turin
-	 * Earth: 0
-	 * Asteroid: 1 - 16256
-
-	 * \param[in] ast_id asteroid id
-	 */
-	asteroid_gtoc7(int = 0);
-
+	gtoc7(int = 0);
 	planet_ptr clone() const;
+
 private:
-// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
+		ar & boost::serialization::base_object<keplerian>(*this);
 	}
-// Serialization code (END)
 };
 
 
-} /// End of namespace kep_toolbox
+}} /// namespaces
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc7);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc7);
 
-#endif // KEP_TOOLBOX_ASTEROID_GTOC7_H
+
+#endif // KEP_TOOLBOX_PLANET_GTOC7_H
