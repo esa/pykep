@@ -1,11 +1,11 @@
 from PyGMO.problem import base as base_problem
-from PyKEP.core import epoch, DAY2SEC, planet_ss, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU
+from PyKEP.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU
+from PyKEP.planets import jpl_lp
 from math import pi, cos, sin, acos, log
 from scipy.linalg import norm
 
 
 class mga_1dsm(base_problem):
-
     """
     This class is a PyGMO (http://esa.github.io/pygmo/) problem representing a Multiple Gravity Assist
     trajectory allowing one only impulsive Deep Space Manouvre between each leg.
@@ -25,9 +25,9 @@ class mga_1dsm(base_problem):
        The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
     """
 
-    def __init__(self, seq=[planet_ss('earth'), planet_ss('venus'), planet_ss('earth')], t0=[epoch(0), epoch(1000)], tof=[1.0, 5.0], vinf=[0.5, 2.5], add_vinf_dep=False, add_vinf_arr=True, multi_objective=False):
+    def __init__(self, seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], t0=[epoch(0), epoch(1000)], tof=[1.0, 5.0], vinf=[0.5, 2.5], add_vinf_dep=False, add_vinf_arr=True, multi_objective=False):
         """
-        PyKEP.trajopt.mga_1dsm(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
+        PyKEP.trajopt.mga_1dsm(seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
 
         - seq: list of PyKEP planets defining the encounter sequence (including the starting launch)
         - t0: list of two epochs defining the launch window
@@ -41,8 +41,7 @@ class mga_1dsm(base_problem):
         # Sanity checks ...... all planets need to have the same
         # mu_central_body
         if ([r.mu_central_body for r in seq].count(seq[0].mu_central_body) != len(seq)):
-            raise ValueError(
-                'All planets in the sequence need to have exactly the same mu_central_body')
+            raise ValueError('All planets in the sequence need to have exactly the same mu_central_body')
         self.__add_vinf_dep = add_vinf_dep
         self.__add_vinf_arr = add_vinf_arr
         self.__n_legs = len(seq) - 1

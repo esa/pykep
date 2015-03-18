@@ -90,7 +90,9 @@ BOOST_PYTHON_MODULE(_planets) {
 	doc_options.disable_signatures();
 
 	// Base planet class. This must be python_base as to allow the virtual methods handled in python
-	class_<planets::python_base, boost::noncopyable>("_base", "All planets inherit from this class", init<>())
+	class_<planets::python_base, boost::noncopyable>("_base", "All planets inherit from this class", init<optional<double, double, double, double, const std::string&> >(
+			"PyKEP.planets._base(mu_central body, mu_self, radius, self_radius, name)\n\n"
+		))
 		.add_property("safe_radius", &planets::python_base::get_safe_radius, &planets::python_base::set_safe_radius,
 			"The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
 			"Example::\n\n"
@@ -160,28 +162,94 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  el = earth.ref_mjd2000"
 		);
 
-		planet_wrapper<planets::jpl_low_precision>("jpl_low_precision","A solar system planet that uses the JPL low-precision ephemerides")
-		.def(init<optional<const std::string &> >());
+		planet_wrapper<planets::jpl_low_precision>("jpl_lp","A solar system planet that uses the JPL low-precision ephemerides")
+		.def(init<optional<const std::string &> >(
+			"PyKEP.planets.jpl_lp(name)\n\n"
+			"- name: string containing the common planet name (e.g. 'earth', 'venus' etc.)\n\n"
+			"Example::\n\n"
+			"  earth = planets.jpl_lp('earth')"
+		));
 
 		planet_wrapper<planets::tle>("tle","An Earth satellite defined from the TLE format")
-		.def(init<optional<const std::string &> >());
+		.def(init<optional<const std::string &> >(
+			"PyKEP.planets.tle(line1, line2)\n\n"
+			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
+			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
+			"Example::\n\n"
+			"  line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
+			"  line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
+			"  arianne = planets.tle(line1, line2)"
+		));
 
+#ifdef PYKEP_USING_SPICE
 		planet_wrapper<planets::spice>("spice","A planet using the eph from the SPICE Toolbox")
 		.def(init<optional<const std::string &, const std::string &, const std::string &, const std::string &, double, double, double, double> >());
-
+#endif
 		// 2 - Planets deriving from keplerian
 		planet_kep_wrapper<planets::mpcorb>("mpcorb","A planet from the MPCORB database")
-		.def(init<optional<const std::string &> >());
+		.def(init<optional<const std::string &> >(
+			"PyKEP.planets.mpcorb(line)\n\n"
+			"- line: a line from the MPCORB database file\n\n"
+			"Example::\n\n"
+			"  apophis = planets.mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
+		))
+		.add_property("H",&kep_toolbox::planets::mpcorb::get_H,
+			"The asteroid absolute magnitude. This is assuming an albedo of 0.25 and using the formula at www.physics.sfasu.edu/astro/asteroids/sizemagnitude.html\n"
+			"Example::\n\n"
+			"  H = apophis.H"
+		)
+		.add_property("n_observations",&kep_toolbox::planets::mpcorb::get_n_observations,
+			"Number of observations made on the asteroid\n"
+			"Example::\n\n"
+			"  R = apophis.n_observations"
+		)
+		.add_property("n_oppositions",&kep_toolbox::planets::mpcorb::get_n_oppositions,
+			"The planet radius\n"
+			"Example::\n\n"
+			"  R = apophis.n_oppositions"
+		)
+		.add_property("year_of_discovery",&kep_toolbox::planets::mpcorb::get_year_of_discovery,
+			"The year the asteroid was first discovered. In case the asteroid has been observed only once (n_observations), this number is, instead, the Arc Length in days\n"
+			"Example::\n\n"
+			"  R = apophis.year_of_discovery"
+		);
 
 		planet_kep_wrapper<planets::gtoc2>("gtoc2","An asteroid from gtoc2")
-		.def(init<optional<int> >());
+		.def(init<optional<int> >(
+			"PyKEP.planets.gtoc2(ast_id)\n\n"
+			"- ast_id: Construct from a consecutive id from 0 to 910 (Earth)."
+			"The order is that of the original data file from JPL\n\n"
+			"-    Group 1:   0 - 95\n"
+			"-    Group 2:  96 - 271\n"
+			"-    Group 3: 272 - 571\n"
+			"-    Group 4: 572 - 909\n"
+			"-    Earth:   910\n\n"
+			"Example::\n\n"
+			"  earth_gtoc2 = planets.gtoc2(910)"
+		));
 
 		planet_kep_wrapper<planets::gtoc5>("gtoc5","An asteroid from gtoc7")
-		.def(init<optional<int> >());
+		.def(init<optional<int> >(
+			"PyKEP.planets.gtoc5(ast_id)\n\n"
+			"- ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the original"
+			"data file distributed by the Russian, see the (`gtoc portal <sophia.estec.esa.int/gtoc_portal/>`_). Earth is 7076\n\n"
+			"Example::\n\n"
+			"  russian_ast = planets.gtoc5(1)"
+		));
 
 		planet_kep_wrapper<planets::gtoc6>("gtoc6","A Jupiter moon from gtoc6")
-		.def(init<optional<const std::string &> >());
+		.def(init<optional<const std::string &> >(
+			"PyKEP.planets.gtoc6(name)\n\n"
+			"- name: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
+			"Example::\n\n"
+			"  io = planets.gtoc6('io')"
+		));
 
 		planet_kep_wrapper<planets::gtoc7>("gtoc7","An asteroid from gtoc7")
-		.def(init<optional<int> >());
+		.def(init<optional<int> >(
+			"PyKEP.planets.gtoc7(ast_id)\n\n"
+			"- ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original file , see the (`gtoc portal <sophia.estec.esa.int/gtoc_portal/>`_).\n\n"
+			"Example::\n\n"
+			"  earth = planets.gtoc7(0)"
+		));
 }

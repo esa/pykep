@@ -62,46 +62,6 @@ Detailed Documentation
 
 ------------
 
-.. autoclass:: PyKEP.planet(*args)
-
-  .. automethod:: PyKEP.planet.__init__(*args)
-
-  .. automethod:: PyKEP.planet.eph(*args)
-
-  .. autoattribute:: PyKEP.planet.orbital_elements
-
-  .. autoattribute:: PyKEP.planet.radius
-
-  .. autoattribute:: PyKEP.planet.ref_epoch
-
-------------
-
-.. autoclass:: PyKEP.planet_ss(*args)
-
-  .. automethod:: PyKEP.planet_ss.__init__(*args)
-
-------------
-
-.. autoclass:: PyKEP.planet_mpcorb(*args)
-
-  .. automethod:: PyKEP.planet_mpcorb.__init__(*args)
-
-  .. autoattribute:: PyKEP.planet_mpcorb.H
-
-  .. autoattribute:: PyKEP.planet_mpcorb.n_observations
-
-  .. autoattribute:: PyKEP.planet_mpcorb.n_oppositions
-
-  .. autoattribute:: PyKEP.planet_mpcorb.year_of_discovery
-
-------------
-
-.. autoclass:: PyKEP.planet_tle(*args)
-
-  .. automethod:: PyKEP.planet_tle.__init__(*args)
-
-------------
-
 .. autofunction:: PyKEP.propagate_lagrangian(*args)
 
 ------------

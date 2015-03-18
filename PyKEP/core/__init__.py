@@ -41,31 +41,3 @@ Examples::
         self._orig_init(julian_date, EPOCH_TYPE[julian_date_type])
 epoch._orig_init = epoch.__init__
 epoch.__init__ = _epoch_ctor
-
-
-def _planet_ctor(self, *args):
-    """
-PyKEP.planet(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
-
-PyKEP.planet(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
-
-- when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch
-- orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)
-- r,v: position and velocity of an object at when (SI units)
-- mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)
-- mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)
-- radius: body radius (SI units, i.e. meters)
-- safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)
-- name: body name
-
-.. note::
-
-   use the derived classes :py:class:`PyKEP.planet_ss`, :py:class:`PyKEP.planet_mpcorb`, :py:class:`PyKEP.planet_js`, :py:class:`PyKEP.planet_tle` to instantiate common planets, asteroids or satellites
-
-Example::
-
-  earth = planet(epoch(54000,"mjd"),(9.99e-01 * AU, 1.67e-02, 8.85e-04 * DEG2RAD, 1.75e+02 * DEG2RAD, 2.87e+02 * DEG2RAD, 2.57e+02 * DEG2RAD), MU_SUN, 398600e9, 6378000, 6900000,  'Earth')"
-    """
-    self._orig_init(*args)
-planet._orig_init = planet.__init__
-planet.__init__ = _planet_ctor
