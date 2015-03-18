@@ -2,7 +2,7 @@
 PyKEP Documentation
 ===================
 
-PyKEP is made of main modules called :ref:`core`, :ref:`simsflanagan`, :ref:`phasing`, :ref:`trajopt` and :ref:`orbitplots`. When we import PyKEP via::
+PyKEP is made of main modules called :ref:`core`, :ref:`simsflanagan`, :ref:`phasing`, :ref:`trajopt`, :ref:`orbitplots`, :ref:`planets`, :ref:`utils`. When we import PyKEP via::
 
   import PyKEP as pkp
 
@@ -36,6 +36,8 @@ Documentation of the main modules
   phasing
   trajopt
   orbitplots
+  planets
+  utils
 
 Constants defined within PyKEP namespace
 ========================================
