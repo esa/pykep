@@ -7,9 +7,9 @@ SET(PYKEP_LIB_SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/core_functions/jorba.c
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc2.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc5.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc7.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc2.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc5.cpp
+	#${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc7.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_ss.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planets/planet_js.cpp
@@ -27,6 +27,15 @@ SET(PYKEP_LIB_SRC_LIST
 	#${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/CoordTopocentric.cpp
 	#${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/CoordGeodetic.cpp
 )
+# Build GTOC-related datastructures afterward if enabled
+IF (BUILD_GTOC)
+	SET(PYKEP_LIB_SRC_LIST
+		${PYKEP_LIB_SRC_LIST}
+		${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc2.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc5.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/planets/asteroid_gtoc7.cpp
+	)
+ENDIF(BUILD_GTOC)
 
 #Build Static Library
 ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})

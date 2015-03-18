@@ -42,10 +42,13 @@ OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 
 # Build Option: when active the examples in the folder example are compiled into executables
-OPTION(BUILD_TESTS "Build tests'." ON)
+OPTION(BUILD_TESTS "Build tests." ON)
 
 # Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
-OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
+OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox." OFF)
+
+# Build Option: when active the GTOC-related datastructures are built
+OPTION(BUILD_GTOC "Build GTOC-related datastructures." ON)
 
 # Finding the boost libraries needed for the keplerian_toolbox
 SET(REQUIRED_BOOST_LIBS serialization date_time)
