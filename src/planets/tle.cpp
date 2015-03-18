@@ -38,6 +38,11 @@
 
 namespace kep_toolbox{ namespace planets{
 
+/**
+ * Construct a planet_tle from two strings containing the two line elements
+ * \param[in] line1 first line
+ * \param[in] line2 second line
+ */
 tle::tle(const std::string& line1, const std::string& line2)
 try : base(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1, line2)), m_sgp4_propagator(SGP4(m_tle))
 {
@@ -80,7 +85,7 @@ planet_ptr tle::clone() const
 	return planet_ptr(new tle(*this));
 }
 
-void tle::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
+void tle::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	Vector position;
 	Vector velocity;
 	double minutes_since = (mjd2000-m_ref_mjd2000)*24*60;

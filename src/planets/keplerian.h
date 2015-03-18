@@ -69,7 +69,7 @@ public:
 	//@}
 
 private:
-	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 
 	friend class boost::serialization::access;
 	template <class Archive>

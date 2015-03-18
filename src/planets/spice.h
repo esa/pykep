@@ -22,42 +22,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_TLE_H
-#define KEP_TOOLBOX_PLANET_TLE_H
+#ifndef KEP_TOOLBOX_PLANET_SPICE_H
+#define KEP_TOOLBOX_PLANET_SPICE_H
+
+#include <string>
 
 #include "base.h"
+#include "../utils/spice_utils.h"
 #include "../serialization.h"
 #include "../config.h"
-#include "../third_party/libsgp4/SGP4.h"
-#include "../third_party/libsgp4/Tle.h"
 
-namespace kep_toolbox{ namespace planets{
+namespace kep_toolbox{ namespace planets {
 
-/// A planet from TLE format
+/// A planet using the SPICE Toolbox
 /**
- * This class allows to instantiate Earth-orbiting
- * satellites from their Two Line Element format. The ephemerides will then be computed
- * using SGP4/SDP4 orbital model. The third party C++ library SGP4 Satellite Library is
- * used (source code in tp/libsgp4)
+ * This class allows to instantiate a planet that uses SPICE toolbox
+ * to compute the ephemerides.
  *
- * NOTE: the constant used to initialize the data_members are not the pykep ones, rather the 
- * constants defined in the sgp4lib are used (tp/libsgp4/Globals.h)
+ * NOTE: The class does not check upon construction that the required kernels are loaded 
+ * in memory. Its only when the ephemerides are actually called that an exception is thrown
+ * in case the required kernels are not loaded
  *
- * @see http://celestrak.com/columns/v04n03/#FAQ01
- * @see http://www.danrw.com/sgp4/
+ * @see http://naif.jpl.nasa.gov/naif/toolkit.html
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE tle : public base
+class __KEP_TOOL_VISIBLE spice : public base
 {
 public:
-	/**
-	 * Construct a planet_tle from two strings containing the two line elements
-	 * \param[in] line1 first line
-	 * \param[in] line2 second line
-	 */
-	tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95", const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
+	spice(const std::string & = "CHURYUMOV-GERASIMENKO", 
+		const std::string & = "SUN", 
+		const std::string & = "ECLIPJ2000", 
+		const std::string & = "NONE",
+		double = 0, // mu_central_body
+		double = 0, // mu_self
+		double = 0, // radius
+		double = 0  // safe_radius
+	);
 	planet_ptr clone() const;
 	std::string human_readable_extra() const;
 
@@ -66,38 +68,29 @@ private:
 
 	friend class boost::serialization::access;
 	template <class Archive>
-	void serialize(Archive &ar, const unsigned int version)
+	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<base>(*this);
-		ar & const_cast<std::string& >(m_line1);
-		ar & const_cast<std::string& >(m_line2);
-		boost::serialization::split_member(ar, *this, version);
+		ar & const_cast<std::string& >(m_target);
+		ar & const_cast<std::string& >(m_observer);
+		ar & const_cast<std::string& >(m_reference_frame);
+		ar & const_cast<std::string& >(m_aberrations);
 	}
 
-	template <class Archive>
-		void save(Archive &, const unsigned int) const
-		{}
+	const std::string m_target;
+	const std::string m_observer;
+	const std::string m_reference_frame;
+	const std::string m_aberrations;
 
-	template <class Archive>
-		void load(Archive &, const unsigned int)
-		{
-			// NOTE: the Tle and SGP4 data members are not saved during serialization. Hence, upon loading,
-			// we are going to build them again from data. This set up was chosen to avoid implementing
-			// serialization of the third-party library libsgp4 objects
-			m_tle = Tle("TLE satellite", m_line1, m_line2);
-			m_sgp4_propagator = SGP4(m_tle);
-		}
+	// Dummy variables that store intermidiate values to transfer to and from SPICE 
+	mutable SpiceDouble m_state[6];
+	mutable SpiceDouble m_lt;
 
-		const std::string m_line1;
-		const std::string m_line2;
-		Tle m_tle;
-		SGP4 m_sgp4_propagator;
-		double m_ref_mjd2000;
-	};
+};
 
 
 }} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::tle)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::spice)
 
-#endif // KEP_TOOLBOX_PLANET_TLE_H
+#endif // KEP_TOOLBOX_PLANET_SPICE_H

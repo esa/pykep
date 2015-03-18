@@ -32,7 +32,13 @@
 
 namespace kep_toolbox{ namespace planets {
 
-
+/// Constructor
+/** \param[in] mu_central_body gravitational parameter of the central attracting body [m^3/sec^2]
+ * \param[in] mu_self gravitational parameter of the body [m^3/sec^2]
+ * \param[in] radius body radius [m]
+ * \param[in] safe_radius body safe radius [m]
+ * \param[in] name body name
+*/
 base::base(
 	double mu_central_body, 
 	double mu_self, 
@@ -41,14 +47,17 @@ base::base(
 	const std::string &name) 
 	: m_mu_central_body(mu_central_body), m_mu_self(mu_self), m_radius(radius), m_safe_radius(safe_radius), m_name(name)
 {
-	if (radius <= 0) {
-		throw_value_error("The planet radius needs to be strictly positive");
+	if (radius < 0) {
+		throw_value_error("The planet radius needs to be positive");
 	}
-	if (mu_central_body <= 0) {
-		throw_value_error("The central body gravitational parameter needs to be strictly positive");
+	if (mu_central_body < 0) {
+		throw_value_error("The central body gravitational parameter needs to be positive");
 	}
-	if (mu_self <= 0) {
-		throw_value_error("The gravitational parameter of the planet needs to be strictly positive");
+	if (mu_self < 0) {
+		throw_value_error("The gravitational parameter of the planet needs to be positive");
+	}
+	if (radius > safe_radius) {
+		throw_value_error("Safe radius must be larger than radius");
 	}
 }
 

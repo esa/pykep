@@ -22,54 +22,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_JPL_LP_H
-#define KEP_TOOLBOX_PLANET_JPL_LP_H
+#include <string>
+#include <iostream>
+#include <iomanip>
 
-#include "base.h"
-#include "../serialization.h"
-#include "../config.h"
+#include "../src/planets/spice.h"
 
-namespace kep_toolbox{ namespace planets {
+// In this test we test the functionality of the SPICE planet
+using namespace kep_toolbox;
 
-/// Solar System Planet (jpl simplified ephemerides)
-/**
- * This class allows to instantiate planets of
- * the solar system by referring to their common names. The ephemeris used
- * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
- * valid in the timeframe 1800AD - 2050 AD
- *
- * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
- */
+int main() {
+	// We start loading the kernel containing the 67P comet (by default its in planet::spice)
+	utils::load_spice_kernel("C_G_1000012_2012_2017.bsp");
 
-class __KEP_TOOL_VISIBLE jpl_low_precision : public base
-{
-public:
+	// We instantiate the object
+	planets::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
 
-	jpl_low_precision(const std::string & = "earth");
-	planet_ptr clone() const;
-	std::string human_readable_extra() const;
+	// We stream to screen the newly created planet
+	std::cout << pl1 << std::endl;
 
-private:
-	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+	// We define the epoch to compute ephemeridess
+	kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
+	array3D r,v;
+ 	pl1.eph(when, r, v);
 
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<base>(*this);
-		ar & jpl_elements;
-		ar & jpl_elements_dot;
-		ar & const_cast<double&>(ref_mjd2000);
-	}
+    std::cout << "67P eph at: "<< when << std::endl;
+    std::cout << r << v << std::endl;
+	return failed_c();
+}
 
-	array6D jpl_elements;
-	array6D jpl_elements_dot;
-	const double ref_mjd2000;
-};
-
-
-}} /// End of namespaces
-
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::jpl_low_precision)
-
-#endif // KEP_TOOLBOX_PLANET_JPL_LP_H

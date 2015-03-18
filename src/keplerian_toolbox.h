@@ -34,11 +34,11 @@
 #include "planets/jpl_low_precision.h"
 #include "planets/mpcorb.h"
 #include "planets/tle.h"
+#include "planets/spice.h"
 #include "planets/gtoc2.h"
 #include "planets/gtoc5.h"
 #include "planets/gtoc6.h"
 #include "planets/gtoc7.h"
-
 
 #include "planets/planet.h"
 #include "planets/planet_ss.h"
@@ -75,6 +75,7 @@
 #include "sims_flanagan/sc_state.h"
 #include "sims_flanagan/spacecraft.h"
 #include "sims_flanagan/throttle.h"
+#include "utils/spice_utils.h"
 #include "astro_constants.h"
 
  

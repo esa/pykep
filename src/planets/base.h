@@ -53,14 +53,8 @@ typedef boost::shared_ptr<base> planet_ptr;
 class __KEP_TOOL_VISIBLE base
 {
 public:
-	/// Constructor
-	/**
-    */
 	base(double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
-
-	/// Polymorphic copy constructor.
 	virtual planet_ptr clone() const = 0;
-	/// Destructor
 	virtual ~base() {};
 
 	/// Ephemerides methods

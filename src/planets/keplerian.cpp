@@ -100,7 +100,7 @@ planet_ptr keplerian::clone() const
 	return planet_ptr(new keplerian(*this));
 }
 
-void keplerian::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
+void keplerian::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	double elements[6];
 	std::copy(m_keplerian_elements.begin(), m_keplerian_elements.end(), elements);
 	double dt = (mjd2000 - m_ref_mjd2000) * ASTRO_DAY2SEC;

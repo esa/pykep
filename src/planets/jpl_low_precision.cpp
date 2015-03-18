@@ -169,7 +169,7 @@ planet_ptr jpl_low_precision::clone() const
 }
 
 /// Computes the low-precision ephemerides
-void jpl_low_precision::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
+void jpl_low_precision::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	if (mjd2000 <=-73048.0 || mjd2000>=18263.0) {
 		throw_value_error("Ephemeris are out of range [1800-2050]");
 	}

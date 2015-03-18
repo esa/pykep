@@ -35,6 +35,7 @@
 #include "../../src/planets/jpl_low_precision.h"
 #include "../../src/planets/mpcorb.h"
 #include "../../src/planets/tle.h"
+#include "../../src/planets/spice.h"
 #include "../../src/planets/gtoc2.h"
 #include "../../src/planets/gtoc5.h"
 #include "../../src/planets/gtoc6.h"
@@ -164,6 +165,9 @@ BOOST_PYTHON_MODULE(_planets) {
 
 		planet_wrapper<planets::tle>("tle","An Earth satellite defined from the TLE format")
 		.def(init<optional<const std::string &> >());
+
+		planet_wrapper<planets::spice>("spice","A planet using the eph from the SPICE Toolbox")
+		.def(init<optional<const std::string &, const std::string &, const std::string &, const std::string &, double, double, double, double> >());
 
 		// 2 - Planets deriving from keplerian
 		planet_kep_wrapper<planets::mpcorb>("mpcorb","A planet from the MPCORB database")

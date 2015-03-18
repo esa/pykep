@@ -39,6 +39,13 @@ SET(PYKEP_LIB_SRC_LIST
 	#${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/CoordGeodetic.cpp
 )
 
+IF(BUILD_SPICE)
+	SET(PYKEP_LIB_SRC_LIST ${PYKEP_LIB_SRC_LIST}
+		${CMAKE_CURRENT_SOURCE_DIR}/planets/spice.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/utils/spice_utils.cpp
+	)
+ENDIF(BUILD_SPICE)
+
 #Build Static Library
 ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
 
