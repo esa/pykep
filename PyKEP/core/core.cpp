@@ -55,20 +55,6 @@ static inline tuple closest_distance_wrapper(const kep_toolbox::array3D& r0, con
 	return boost::python::make_tuple(min_d,ra);
 }
 
-static inline tuple planet_get_eph1(const kep_toolbox::planet &p, const kep_toolbox::epoch &when)
-{
-	kep_toolbox::array3D r, v;
-	p.get_eph(when,r,v);
-	return boost::python::make_tuple(r,v);
-}
-
-static inline tuple planet_get_eph2(const kep_toolbox::planet &p, const double &when)
-{
-	kep_toolbox::array3D r, v;
-	p.get_eph(when,r,v);
-	return boost::python::make_tuple(r,v);
-}
-
 static inline tuple propagate_lagrangian_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &t, const double &mu)
 {
 	kep_toolbox::array3D r(r0), v(v0);
@@ -92,7 +78,7 @@ static inline tuple propagate_taylor_s_wrapper(const kep_toolbox::array3D &r0, c
 	return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m),double(dt));
 }
 
-static inline tuple fb_con_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet &pl)
+static inline tuple fb_con_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planets::base &pl)
 {
 	double eq(0), ineq(0);
 	kep_toolbox::fb_con(eq, ineq, vin_rel, vout_rel, pl);
@@ -106,7 +92,7 @@ static inline kep_toolbox::array3D fb_prop_wrapper(const kep_toolbox::array3D& v
 	return retval;
 }
 
-static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet &pl)
+static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planets::base &pl)
 {
 	double dV(0);
 	kep_toolbox::fb_vel(dV, vin_rel, vout_rel, pl);
@@ -233,186 +219,6 @@ BOOST_PYTHON_MODULE(_core) {
 		"Example::\n\n"
 		"  e = PyKEP.epoch_from_iso_string('20020120T235954')"
 	);
-
-	// Base planet class.
-
-	// These serve to allow boost python to resolve correctly the overloaded function get_elements
-	typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter)() const;
-	//typedef kep_toolbox::array6D (kep_toolbox::planet::*element_getter_epoch)(const kep_toolbox::epoch &) const;
-	//typedef void (kep_toolbox::planet::*eph_getter1)(const kep_toolbox::epoch&, kep_toolbox::array3D& r, kep_toolbox::array3D& v) const;
-	//typedef void (kep_toolbox::planet::*eph_getter2)(const double, kep_toolbox::array3D& r, kep_toolbox::array3D& v) const;
-
-	class_<kep_toolbox::planet>("planet","Base class for all planet objects. Ephemerides are Keplerian.",
-		init<optional<const kep_toolbox::epoch&, const kep_toolbox::array6D&, const double& , const double &, const double &, const double &, const std::string &> >())
-		.def(init<const kep_toolbox::epoch&, const kep_toolbox::array3D&, const kep_toolbox::array3D&, const double& , const double &, const double &, const double &, optional<const std::string &> >())
-		.def("eph",&planet_get_eph1,
-			"PyKEP.planet.eph(when)\n\n"
-			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n"
-			"        can also be a double in which case its interpreted as a mjd2000\n\n"
-			"Retuns a tuple containing the planet position and velocity in SI units\n\n"
-			"Example::\n\n"
-			"  r,v = earth.eph(epoch(5433), 'mjd2000')\n"
-			"  r,v = earth.eph(5433)"
-		)
-		.def("eph",&planet_get_eph2," ")
-		.add_property("safe_radius",&kep_toolbox::planet::get_safe_radius, &kep_toolbox::planet::set_safe_radius,
-			"The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
-			"Example::\n\n"
-			"  Rs = earth.safe_radius"
-			"  earth.safe_radius = 1.05"
-			)
-		.add_property("mu_self",&kep_toolbox::planet::get_mu_self,
-			"The planet radius\n\n"
-			"Example::\n\n"
-			"  mu_pla = earth.mu_self"
-			)
-		.add_property("mu_central_body",&kep_toolbox::planet::get_mu_central_body,
-			"The planet radius\n\n"
-			"Example::\n\n"
-			"  mu = earth.mu_central_body"
-			)
-		.add_property("name",&kep_toolbox::planet::get_name,
-			"The planet Name\n\n"
-			"Example::\n\n"
-			"  name = earth.name()"
-		)
-		.add_property("orbital_elements",element_getter(&kep_toolbox::planet::get_elements),
-			"A tuple containing the six orbital elements a,e,i,W,w,M at the reference epoch (SI units used)\n\n"
-			"Example::\n\n"
-			"  elem = earth.orbital_elements"
-		)
-		.add_property("ref_epoch",&kep_toolbox::planet::get_ref_epoch,
-			"The reference epoch for M in :py:class:`PyKEP.planet.orbital_elements`\n\n"
-			"Example::\n\n"
-			"  epoch = earth.ref_epoch"
-		)
-		.add_property("radius",&kep_toolbox::planet::get_radius,
-			"The planet radius\n\n"
-			"Example::\n\n"
-			"  R = earth.radius"
-			)
-		.add_property("period",&kep_toolbox::planet::compute_period,
-			"The planet orbital period\n\n"
-			"Example::\n\n"
-			"  T = earth.period"
-			)
-		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet>());
-
-	// A solar system planet
-	class_<kep_toolbox::planet_ss,bases<kep_toolbox::planet> >("planet_ss","A planet from the solar system. Ephemerides are the JPL low-precision alternative (http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf)",
-		init<std::string>(
-			"PyKEP.planet_ss(name)\n\n"
-			"- name: string containing the common planet name (e.g. 'earth')\n\n"
-			"Example::\n\n"
-			"  earth = planet_ss('earth')"
-		))
-		.def("__copy__", &Py_copy_from_ctor<kep_toolbox::planet_ss>)
-		.def("__deepcopy__", &Py_deepcopy_from_ctor<kep_toolbox::planet_ss>)
-		.def("cpp_loads", &py_cpp_loads<kep_toolbox::planet_ss>)
-		.def("cpp_dumps", &py_cpp_dumps<kep_toolbox::planet_ss>)
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet_ss>())
-		.def(init<>());
-
-	// A Jupiter system moon
-	class_<kep_toolbox::planet_js,bases<kep_toolbox::planet> >("planet_js","A Galilean moon from Jupiter. Ephemerides are Keplerian thus highly unreliable.",
-		init<std::string>(
-			"PyKEP.planet_js(name)\n\n"
-			"- name: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
-			"Example::\n\n"
-			"  io = planet_js('io')"
-		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet_js>())
-		.def(init<>());
-
-	// A planet from the MPCORB database
-	class_<kep_toolbox::planet_mpcorb,bases<kep_toolbox::planet> >("planet_mpcorb","A planet from the mpcorb database",
-		init<std::string>(
-			"PyKEP.planet_mpcorb(line)\n\n"
-			"- line: a line from the MPCORB database file\n\n"
-			"Example::\n\n"
-			"  apophis = planet_mpcorb('99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109')"
-		))
-		.add_property("H",&kep_toolbox::planet_mpcorb::get_H,
-			"The asteroid absolute magnitude. This is assuming an albedo of 0.25 and using the formula at www.physics.sfasu.edu/astro/asteroids/sizemagnitude.html\n"
-			"Example::\n\n"
-			"  H = apophis.H"
-			)
-		.add_property("n_observations",&kep_toolbox::planet_mpcorb::get_n_observations,
-			"Number of observations made on the asteroid\n"
-			"Example::\n\n"
-			"  R = apophis.n_observations"
-			)
-		.add_property("n_oppositions",&kep_toolbox::planet_mpcorb::get_n_oppositions,
-			"The planet radius\n"
-			"Example::\n\n"
-			"  R = apophis.n_oppositions"
-			)
-		.add_property("year_of_discovery",&kep_toolbox::planet_mpcorb::get_year_of_discovery,
-			"The year the asteroid was first discovered. In case the aastroid has been observed only once (n_observations), this number is, instead, the Arc Length in days\n"
-			"Example::\n\n"
-			"  R = apophis.year_of_discovery"
-			)
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet_mpcorb>())
-		.def(init<>());
-
-		// A TLE satellite
-		class_<kep_toolbox::planet_tle,bases<kep_toolbox::planet> >("planet_tle","A satellite from TLE format. Ephemerides will be computed using the SGP4 orbit propagator",
-		init<optional<std::string, std::string> >(
-			"PyKEP.planet_tle(line1, line2)\n\n"
-			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
-			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
-			"Example::\n\n"
-			"  line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
-			"  line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
-			"  arianne = planet_tle(line1, line2)"
-		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::planet_tle>());
-
-	// A planet from the gtoc5 problem
-	class_<kep_toolbox::asteroid_gtoc5,bases<kep_toolbox::planet> >("planet_gtoc5",
-		init<const int &>(
-			"PyKEP.planet_gtoc5(ast_id)\n\n"
-			" - ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the original"
-			"data file distributed by the Russian, see the (`gtoc5 web portal <gtoc5.math.msu.su>`_. Earth is 7076\n\n"
-			"Example::\n\n"
-			"  russian_ast = planet_gtoc5(1)"
-		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc5>())
-		.def(init<>());
-	
-
-	// A planet from the gtoc7 problem
-	class_<kep_toolbox::asteroid_gtoc7,bases<kep_toolbox::planet> >("planet_gtoc7",
-		init<const int &>(
-			"PyKEP.planet_gtoc7(ast_id)\n\n"
-			" - ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original"
-			"Example::\n\n"
-			"  earth = planet_gtoc7(0)"
-		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc7>())
-		.def(init<>());
-
-	
-	// A planet from the gtoc2 problem
-	class_<kep_toolbox::asteroid_gtoc2,bases<kep_toolbox::planet> >("planet_gtoc2",
-		init<const int &>(
-			"PyKEP.planet_gtoc2(ast_id)\n\n"
-			" - ast_id: Construct from a consecutive id from 0 to 910 (Earth)."
-			"The order is that of the original data file from JPL\n\n"
-			"    - Group 1:   0 - 95\n"
-			"    - Group 2:  96 - 271\n"
-			"    - Group 3: 272 - 571\n"
-			"    - Group 4: 572 - 909\n"
-			"    - Earth:   910\n\n"
-			"Example::\n\n"
-			"  earth_gtoc2 = planet_gtoc2(910)"
-		))
-		.def_pickle(generic_pickle_suite<kep_toolbox::asteroid_gtoc2>())
-		.def(init<>());
-	
-
-	register_ptr_to_python<kep_toolbox::planet_ptr>();
 
 	// Lambert.
 	class_<kep_toolbox::lambert_problem>("lambert_problem","Represents a multiple revolution Lambert's problem",
@@ -673,8 +479,8 @@ BOOST_PYTHON_MODULE(_core) {
 
     // For the three_impulses_approximation we need to distinguish the overloaded cases. We thus introduce new function pointers
 	double (*three_imp)(double, double, double, double, double, double, double, double, double) = &kep_toolbox::three_impulses_approx;
-	double (*three_imp_2_pl)(const kep_toolbox::planet&, const kep_toolbox::planet&) = &kep_toolbox::three_impulses_approx;
-    double (*three_imp_2_pl_2_ep)(const kep_toolbox::planet&, const kep_toolbox::planet&, const kep_toolbox::epoch&, const kep_toolbox::epoch&) = &kep_toolbox::three_impulses_approx;
+	double (*three_imp_2_pl)(const kep_toolbox::planets::base&, const kep_toolbox::planets::base&) = &kep_toolbox::three_impulses_approx;
+    double (*three_imp_2_pl_2_ep)(const kep_toolbox::planets::base&, const kep_toolbox::planets::base&, const kep_toolbox::epoch&, const kep_toolbox::epoch&) = &kep_toolbox::three_impulses_approx;
 
     def("_three_impulses_approx", three_imp);
     def("_three_impulses_approx", three_imp_2_pl);

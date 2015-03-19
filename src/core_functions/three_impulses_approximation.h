@@ -28,7 +28,7 @@
 
 #include "../astro_constants.h"
 #include "../exceptions.h"
-#include "../planets/planet.h"
+#include "../planets/base.h"
 
 /// Computes the orbital transfer cost using a 3 impulse model
 /**
@@ -99,13 +99,13 @@ inline double three_impulses_approx(double a1, double e1, double i1, double W1, 
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-inline double three_impulses_approx(const planet &pl1, const planet &pl2)
+inline double three_impulses_approx(const planets::base &pl1, const planets::base &pl2)
 {
 	if (pl1.get_mu_central_body() != pl2.get_mu_central_body()) {
 		throw_value_error("The departure and arrival planets do not have the same central body gravitational parameter");
 	}
-    array6D el1 = pl1.get_elements();
-    array6D el2 = pl2.get_elements();
+    array6D el1 = pl1.compute_elements();
+    array6D el2 = pl2.compute_elements();
     return three_impulses_approx(el1[0], el1[1], el1[2], el1[3], el2[0], el2[1], el2[2], el2[3], pl1.get_mu_central_body());
 }
 
@@ -127,13 +127,13 @@ inline double three_impulses_approx(const planet &pl1, const planet &pl2)
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-inline double three_impulses_approx(const planet &pl1, const planet &pl2, const epoch &ep1, const epoch &ep2)
+inline double three_impulses_approx(const planets::base &pl1, const planets::base &pl2, const epoch &ep1, const epoch &ep2)
 {
 	if (pl1.get_mu_central_body() != pl2.get_mu_central_body()) {
 		throw_value_error("The departure and arrival planets do not have the same central body gravitational parameter");
 	}
-    array6D el1 = pl1.get_elements(ep1);
-    array6D el2 = pl2.get_elements(ep2);
+    array6D el1 = pl1.compute_elements(ep1);
+    array6D el2 = pl2.compute_elements(ep2);
     return three_impulses_approx(el1[0], el1[1], el1[2], el1[3], el2[0], el2[1], el2[2], el2[3], pl1.get_mu_central_body());
 }
 

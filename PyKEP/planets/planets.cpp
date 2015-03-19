@@ -28,6 +28,7 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/self.hpp>
 #include <boost/python/operators.hpp>
+#include <boost/python/register_ptr_to_python.hpp>
 
 #include "python_base.h"
 #include "../../src/planets/base.h"
@@ -88,6 +89,8 @@ BOOST_PYTHON_MODULE(_planets) {
 	// Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
+
+	register_ptr_to_python<kep_toolbox::planets::planet_ptr>();
 
 	// Base planet class. This must be python_base as to allow the virtual methods handled in python
 	class_<planets::python_base, boost::noncopyable>("_base", "The base class for all planets, it cannot be instantiated as it contains pure virtual methods", init<optional<double, double, double, double, const std::string&> >(
