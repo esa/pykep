@@ -6,6 +6,8 @@ transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
 from PyKEP.planets._planets import *
+from PyKEP.planets._planets import _base
+
 
 def _keplerian_ctor(self, *args):
     """

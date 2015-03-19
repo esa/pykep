@@ -7,6 +7,7 @@ The planets module
 ==================================================       =========       ================================================
 Name                                                     Type            Description
 ==================================================       =========       ================================================
+:class:`PyKEP.planets._base`                             class           The base class for all planets (cannot be instantiated)
 :class:`PyKEP.planets.keplerian`                         class           A simple planet with Keplerian ephemerides
 :class:`PyKEP.planets.jpl_lp`                            class           A solar system planet using jpl low-precision ephemerides
 :class:`PyKEP.planets.tle`                               class           An Earth artificial satellite from its TLE (ephemerides are computed via the SGP4 propagator)
@@ -20,6 +21,31 @@ Name                                                     Type            Descrip
 
 Detailed Documentation
 ======================
+
+.. autoclass:: PyKEP.planets._base(*args)
+
+  .. automethod:: PyKEP.planets._base.__init__(*args)
+
+  .. automethod:: PyKEP.planets._base.eph(*args)
+
+  .. automethod:: PyKEP.planets._base.osculating_elements(*args)
+
+  .. automethod:: PyKEP.planets._base.compute_period(*args)
+
+  .. automethod:: PyKEP.planets._base.human_readable_extra(*args)
+
+  .. autoattribute:: PyKEP.planets._base.mu_central_body
+
+  .. autoattribute:: PyKEP.planets._base.mu_self
+
+  .. autoattribute:: PyKEP.planets._base.radius
+
+  .. autoattribute:: PyKEP.planets._base.safe_radius
+
+  .. autoattribute:: PyKEP.planets._base.name
+
+
+------------
 
 .. autoclass:: PyKEP.planets.keplerian(*args)
 

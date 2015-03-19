@@ -41,11 +41,11 @@ namespace kep_toolbox{ namespace planets {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE jpl_low_precision : public base
+class __KEP_TOOL_VISIBLE jpl_lp : public base
 {
 public:
 
-	jpl_low_precision(const std::string & = "earth");
+	jpl_lp(const std::string & = "earth");
 	planet_ptr clone() const;
 	std::string human_readable_extra() const;
 
@@ -70,6 +70,6 @@ private:
 
 }} /// End of namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::jpl_low_precision)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::jpl_lp)
 
 #endif // KEP_TOOLBOX_PLANET_JPL_LP_H

@@ -90,39 +90,45 @@ BOOST_PYTHON_MODULE(_planets) {
 	doc_options.disable_signatures();
 
 	// Base planet class. This must be python_base as to allow the virtual methods handled in python
-	class_<planets::python_base, boost::noncopyable>("_base", "All planets inherit from this class", init<optional<double, double, double, double, const std::string&> >(
+	class_<planets::python_base, boost::noncopyable>("_base", "The base class for all planets, it cannot be instantiated as it contains pure virtual methods", init<optional<double, double, double, double, const std::string&> >(
 			"PyKEP.planets._base(mu_central body, mu_self, radius, self_radius, name)\n\n"
+			"- mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides)\n"
+			"- mu_self: 		Gravity parameter of the target\n"
+			"- radius: 			Radius of target body\n"
+			"- self_radius: 	Safe radius of target body\n"
+			"- name: 			Body name\n\n"
 		))
 		.add_property("safe_radius", &planets::python_base::get_safe_radius, &planets::python_base::set_safe_radius,
-			"The planet safe radius (distance at which it is safe for spacecraft to fly-by)\n\n"
+			"The body safe radius in [m](distance at which it is safe for spacecraft to fly-by)\n\n"
 			"Example::\n\n"
-			"  Rs = earth.safe_radius"
+			"  Rs = earth.safe_radius\n"
 			"  earth.safe_radius = 1.05"
 			)
 		.add_property("mu_self", &planets::python_base::get_mu_self, &planets::python_base::set_mu_self,
-			"The planet radius\n\n"
+			"The body gravity parameter in [m^3/s^2]\n\n"
 			"Example::\n\n"
 			"  mu_pla = earth.mu_self"
 			)
 		.add_property("mu_central_body", &planets::python_base::get_mu_central_body, &planets::python_base::set_mu_central_body,
-			"The planet radius\n\n"
+			"The central body gravity parameter in [m^3/s^2]\n\n"
 			"Example::\n\n"
 			"  mu = earth.mu_central_body"
 			)
 		.add_property("name", &planets::python_base::get_name, &planets::python_base::set_name,
-			"The planet Name\n\n"
+			"The body Name\n\n"
 			"Example::\n\n"
-			"  name = earth.name()"
+			"  name = earth.name"
 		)
 		.add_property("radius", &planets::python_base::get_radius, &planets::python_base::set_radius,
-			"The planet radius\n\n"
+			"The planet radius in [m]\n\n"
 			"Example::\n\n"
 			"  R = earth.radius"
 		)
-		.add_property("period",&planets::python_base::compute_period,
-			"The planet orbital period\n\n"
+		.def("compute_period",&planets::python_base::compute_period,
+			"The planet orbital period in [sec]\n\n"
 			"Example::\n\n"
-			"  T = earth.period"
+			"  T = earth.compute_period()\n"
+			"  T = earth.compute_period(epoch(2345.3, 'mjd2000'))"
 		)
 		.def("osculating_elements", &planets::python_base::compute_elements,
 			"Retruns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch\n"
@@ -131,24 +137,31 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  elem = earth.osculating_elements()\n"
 			"  elem = earth.osculating_elements(epoch(2345.3, 'mjd2000'))"
 		)
+		// Virtual methods that must be reimplemented
 		.def("eph",&eph_wrapper1,
-			"PyKEP.planet.eph(when)\n\n"
-			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed\n"
-			"        can also be a double in which case its interpreted as a mjd2000\n\n"
+			"PyKEP.planets._base.eph(when)\n\n"
+			"- when: a :py:class:`PyKEP.epoch` indicating the epoch at which the ephemerides are needed, it can also be a double in which case its interpreted as a mjd2000\n\n"
 			"Retuns a tuple containing the planet position and velocity in SI units\n\n"
+			".. note::\n\n"
+			"   This is a pure virtual method and must be reimplemented in the derived class\n\n"
 			"Example::\n\n"
 			"  r,v = earth.eph(epoch(5433), 'mjd2000')\n"
 			"  r,v = earth.eph(5433)"
 		)
 		.def("eph",&eph_wrapper2," ")
-		// Virtual methods can be reimplemented
-		.def("human_readable_extra", &planets::python_base::human_readable_extra, &planets::python_base::default_human_readable_extra)
+		// Virtual methods that can be reimplemented
+		.def("human_readable_extra", &planets::python_base::human_readable_extra,
+			"PyKEP.planets._base.human_readable_extra()\n\n"
+			"Retuns a string with extra information on the problem.\n\n"
+			".. note::\n\n"
+			"   This is a virtual method and can be reimplemented in the derived class. In which case __repr__ will append its returned value\n"
+		)
 		.def(repr(self))
 		.def_pickle(python_class_pickle_suite<planets::python_base>());
 
 		// We start exposing here the classes derived from base
 		// 1 - Planets deriving directly from base
-		planet_wrapper<planets::keplerian>("keplerian","A planet with Keplerian ephemerides")
+		planet_wrapper<planets::keplerian>("keplerian","A planet with Keplerian ephemerides, derives from :py:class:`PyKEP.planets._base`")
 		.def(init<optional<const epoch&, const array6D&, double, double, double , double, const std::string &> >())
 		.def(init<const epoch&, const array3D&, const array3D&, double, double, double, double , optional<const std::string &> >())
 		.add_property("orbital_elements", &planets::keplerian::get_elements, &planets::keplerian::set_elements,
@@ -162,7 +175,7 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  el = earth.ref_mjd2000"
 		);
 
-		planet_wrapper<planets::jpl_low_precision>("jpl_lp","A solar system planet that uses the JPL low-precision ephemerides")
+		planet_wrapper<planets::jpl_lp>("jpl_lp","A solar system planet that uses the JPL low-precision ephemerides, derives from :py:class:`PyKEP.planets._base`")
 		.def(init<optional<const std::string &> >(
 			"PyKEP.planets.jpl_lp(name)\n\n"
 			"- name: string containing the common planet name (e.g. 'earth', 'venus' etc.)\n\n"
@@ -170,7 +183,7 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  earth = planets.jpl_lp('earth')"
 		));
 
-		planet_wrapper<planets::tle>("tle","An Earth satellite defined from the TLE format")
+		planet_wrapper<planets::tle>("tle","An Earth satellite defined from the TLE format, derives from :py:class:`PyKEP.planets._base`")
 		.def(init<optional<const std::string &> >(
 			"PyKEP.planets.tle(line1, line2)\n\n"
 			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
@@ -182,11 +195,26 @@ BOOST_PYTHON_MODULE(_planets) {
 		));
 
 #ifdef PYKEP_USING_SPICE
-		planet_wrapper<planets::spice>("spice","A planet using the eph from the SPICE Toolbox")
-		.def(init<optional<const std::string &, const std::string &, const std::string &, const std::string &, double, double, double, double> >());
+		planet_wrapper<planets::spice>("spice","A planet using the eph from the SPICE Toolbox, derives from :py:class:`PyKEP.planets._base`")
+		.def(init<optional<const std::string &, const std::string &, const std::string &, const std::string &, double, double, double, double> >(
+			"PyKEP.planets.spice(target, observer, ref_frame, aberrations, mu_central_body, mu_self, radius, self_radius)\n\n"
+			"- target:			Target body (see `NAIF IDs <http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers>`_)\n"
+			"- observer:		Observer body (see `NAIF IDs <http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers>`_)\n"
+			"- ref_frame:		The reference frame (see `SPICE supported frames <http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Frames%20Supported%20in%20SPICE>`_)\n"
+			"- aberrations: 	Aberration correction type (see spkezr_c docs <http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html>`_)\n"
+			"- mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides)\n"
+			"- mu_self: 		Gravity parameter of the target\n"
+			"- radius: 			Radius of target body\n"
+			"- self_radius: 	Safe radius of target bodyn\n\n"
+			".. note::\n\n"
+			"   The presence of the corresponding kernel files are only checked upon call to the ephemerides method. As a consequence this object can still be constructed with invalid names\n"
+			"   or spelling mistakes. Only later the ephemerides call will fail throwing an excpetion\n\n"
+			"Example::\n\n"
+			"  planet = planets.spice('EARTH', 'SUN', 'ECLIPJ2000', 'NONE', MU_SUN, MU_EARTH, ERATH_R, EARTH_R * 1.05)"
+		));
 #endif
 		// 2 - Planets deriving from keplerian
-		planet_kep_wrapper<planets::mpcorb>("mpcorb","A planet from the MPCORB database")
+		planet_kep_wrapper<planets::mpcorb>("mpcorb","A planet from the MPCORB database, derives from :py:class:`PyKEP.planets.keplerian`")
 		.def(init<optional<const std::string &> >(
 			"PyKEP.planets.mpcorb(line)\n\n"
 			"- line: a line from the MPCORB database file\n\n"
@@ -214,7 +242,7 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  R = apophis.year_of_discovery"
 		);
 
-		planet_kep_wrapper<planets::gtoc2>("gtoc2","An asteroid from gtoc2")
+		planet_kep_wrapper<planets::gtoc2>("gtoc2","An asteroid from gtoc2, derives from :py:class:`PyKEP.planets.keplerian`")
 		.def(init<optional<int> >(
 			"PyKEP.planets.gtoc2(ast_id)\n\n"
 			"- ast_id: Construct from a consecutive id from 0 to 910 (Earth)."
@@ -228,16 +256,16 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  earth_gtoc2 = planets.gtoc2(910)"
 		));
 
-		planet_kep_wrapper<planets::gtoc5>("gtoc5","An asteroid from gtoc7")
+		planet_kep_wrapper<planets::gtoc5>("gtoc5","An asteroid from gtoc5, derives from :py:class:`PyKEP.planets.keplerian`")
 		.def(init<optional<int> >(
 			"PyKEP.planets.gtoc5(ast_id)\n\n"
 			"- ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the original"
-			"data file distributed by the Russian, see the (`gtoc portal <sophia.estec.esa.int/gtoc_portal/>`_). Earth is 7076\n\n"
+			"data file distributed by the Russian, see the (`gtoc portal <http://sophia.estec.esa.int/gtoc_portal/>`_). Earth is 7076\n\n"
 			"Example::\n\n"
 			"  russian_ast = planets.gtoc5(1)"
 		));
 
-		planet_kep_wrapper<planets::gtoc6>("gtoc6","A Jupiter moon from gtoc6")
+		planet_kep_wrapper<planets::gtoc6>("gtoc6","A Jupiter moon from gtoc6, derives from :py:class:`PyKEP.planets.keplerian`")
 		.def(init<optional<const std::string &> >(
 			"PyKEP.planets.gtoc6(name)\n\n"
 			"- name: string containing the common planet name (e.g. 'io', 'europa', 'callisto' or 'ganymede')\n\n"
@@ -245,10 +273,10 @@ BOOST_PYTHON_MODULE(_planets) {
 			"  io = planets.gtoc6('io')"
 		));
 
-		planet_kep_wrapper<planets::gtoc7>("gtoc7","An asteroid from gtoc7")
+		planet_kep_wrapper<planets::gtoc7>("gtoc7","An asteroid from gtoc7, derives from :py:class:`PyKEP.planets.keplerian`")
 		.def(init<optional<int> >(
 			"PyKEP.planets.gtoc7(ast_id)\n\n"
-			"- ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original file , see the (`gtoc portal <sophia.estec.esa.int/gtoc_portal/>`_).\n\n"
+			"- ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original file , see the (`gtoc portal <http://sophia.estec.esa.int/gtoc_portal/>`_).\n\n"
 			"Example::\n\n"
 			"  earth = planets.gtoc7(0)"
 		));

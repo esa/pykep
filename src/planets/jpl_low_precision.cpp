@@ -56,7 +56,7 @@ static const double pluto_el_dot[6] = {-0.00031596, 0.00005170, 0.00004818, 145.
  *
  * \param[in] name a string describing a planet
  */
-jpl_low_precision::jpl_low_precision(const std::string& name) : ref_mjd2000(epoch(2451545.0,epoch::JD).mjd2000())
+jpl_lp::jpl_lp(const std::string& name) : ref_mjd2000(epoch(2451545.0,epoch::JD).mjd2000())
 {
 	std::map<std::string, int> mapped_planets;
 	mapped_planets["mercury"] = 1; mapped_planets["venus"] = 2; mapped_planets["earth"] = 3;
@@ -163,13 +163,13 @@ jpl_low_precision::jpl_low_precision(const std::string& name) : ref_mjd2000(epoc
 }
 
 /// Polymorphic copy constructor.
-planet_ptr jpl_low_precision::clone() const
+planet_ptr jpl_lp::clone() const
 {
-	return planet_ptr(new jpl_low_precision(*this));
+	return planet_ptr(new jpl_lp(*this));
 }
 
 /// Computes the low-precision ephemerides
-void jpl_low_precision::eph_impl(double mjd2000, array3D &r, array3D &v) const {
+void jpl_lp::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	if (mjd2000 <=-73048.0 || mjd2000>=18263.0) {
 		throw_value_error("Ephemeris are out of range [1800-2050]");
 	}
@@ -190,7 +190,7 @@ void jpl_low_precision::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 }
 
 /// Extra informations streamed in human readable format
-std::string jpl_low_precision::human_readable_extra() const {
+std::string jpl_lp::human_readable_extra() const {
 	std::ostringstream s;
 	s << "Ephemerides type: JPL low-precision" << std::endl;
 	return s.str();
@@ -199,5 +199,5 @@ std::string jpl_low_precision::human_readable_extra() const {
 }} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::jpl_low_precision)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::jpl_lp)
 // Serialization code (END)

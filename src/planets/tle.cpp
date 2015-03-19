@@ -110,7 +110,10 @@ void tle::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	}
 }
 
-
+/// Getter for the reference mjd2000
+double tle::get_ref_mjd2000() const {
+	return m_ref_mjd2000;
+}
 
 /// Extra informations streamed in human readable format
 std::string tle::human_readable_extra() const {

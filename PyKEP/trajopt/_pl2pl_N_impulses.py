@@ -1,5 +1,6 @@
 from PyGMO.problem import base as base_problem
-from PyKEP.core import epoch, DAY2SEC, planet_ss, lambert_problem, propagate_lagrangian, SEC2DAY, AU, ic2par
+from PyKEP.core import epoch, DAY2SEC, lambert_problem, propagate_lagrangian, SEC2DAY, AU, ic2par
+from PyKEP.planets import jpl_lp
 from math import pi, cos, sin, log, acos
 from scipy.linalg import norm
 
@@ -23,8 +24,8 @@ class pl2pl_N_impulses(base_problem):
     """
 
     def __init__(self,
-                 start=planet_ss('earth'),
-                 target=planet_ss('venus'),
+                 start=jpl_lp('earth'),
+                 target=jpl_lp('venus'),
                  N_max=3,
                  tof=[20., 400.],
                  vinf=[0., 4.],
@@ -33,7 +34,7 @@ class pl2pl_N_impulses(base_problem):
                  t0=None
                  ):
         """
-        prob = PyKEP.trajopt.pl2pl_N_impulses(start=planet_ss('earth'), target=planet_ss('venus'), N_max=3, tof=[20., 400.], vinf=[0., 4.], phase_free=True, multi_objective=False, t0=None)
+        prob = PyKEP.trajopt.pl2pl_N_impulses(start=jpl_lp('earth'), target=jpl_lp('venus'), N_max=3, tof=[20., 400.], vinf=[0., 4.], phase_free=True, multi_objective=False, t0=None)
 
         - start:            a PyKEP planet defining the starting orbit
         - target:           a PyKEP planet defining the target orbit

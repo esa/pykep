@@ -3,7 +3,8 @@ def run_example2():
     from mpl_toolkits.mplot3d import Axes3D
 
     import matplotlib.pyplot as plt
-    from PyKEP import epoch, DAY2SEC, planet_ss, AU, MU_SUN, lambert_problem
+    from PyKEP import epoch, DAY2SEC, AU, MU_SUN, lambert_problem
+    from PyKEP.planets import jpl_lp
     from PyKEP.orbit_plots import plot_planet, plot_lambert
 
     mpl.rcParams['legend.fontsize'] = 10
@@ -17,12 +18,12 @@ def run_example2():
 
     axis.scatter([0], [0], [0], color='y')
 
-    pl = planet_ss('earth')
+    pl = jpl_lp('earth')
     plot_planet(
         pl, t0=t1, color=(0.8, 0.8, 1), legend=True, units = AU, ax = axis)
     rE, vE = pl.eph(t1)
 
-    pl = planet_ss('mars')
+    pl = jpl_lp('mars')
     plot_planet(
         pl, t0=t2, color=(0.8, 0.8, 1), legend=True, units = AU, ax = axis)
     rM, vM = pl.eph(t2)

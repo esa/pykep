@@ -18,10 +18,11 @@ try:
 
             # We then define some data members (we use the double underscore to
             # indicate they are private)
-            from PyKEP import planet_ss, MU_SUN, AU, planet_gtoc5
+            from PyKEP import MU_SUN, AU, planet_gtoc5
+            from PyKEP.planets import jpl_lp
             from PyKEP.sims_flanagan import spacecraft, leg_s
-            self.__earth = planet_ss('earth')
-            self.__mars = planet_ss('jupiter')
+            self.__earth = jpl_lp('earth')
+            self.__mars = jpl_lp('jupiter')
             self.__sc = spacecraft(mass, Tmax, Isp)
             self.__Vinf = Vinf * 1000
             # here we construct the trajectory leg in Sundman's variable t =

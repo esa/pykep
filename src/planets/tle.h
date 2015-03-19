@@ -61,6 +61,8 @@ public:
 	planet_ptr clone() const;
 	std::string human_readable_extra() const;
 
+	double get_ref_mjd2000() const;
+
 private:
 	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 

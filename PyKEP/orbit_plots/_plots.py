@@ -38,11 +38,8 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     if t0 == 'PyKEP.epoch(0)':
         t0 = epoch(0)
 
-    # orbit semi-major axis
-    a = plnt.orbital_elements[0]
-
-    # orbital period in days
-    T = 2 * pi * sqrt(a ** 3 / plnt.mu_central_body) * SEC2DAY
+    # orbit period at epoch
+    T = plnt.compute_period(t0) * SEC2DAY
 
     # points where the orbit will be plotted
     when = np.linspace(0, T, N)
@@ -335,8 +332,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
 
     # We compute the number of segments for forward and backward propagation
     n_seg = len(leg.get_throttles())
-    fwd_seg = (n_seg + 1) / 2
-    back_seg = n_seg / 2
+    fwd_seg = (n_seg + 1) // 2
+    back_seg = n_seg // 2
 
     # We extract information on the spacecraft
     sc = leg.get_spacecraft()

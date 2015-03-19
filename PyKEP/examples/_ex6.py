@@ -7,13 +7,13 @@ def run_example6(n_seg=5):
     """
     from PyGMO import algorithm, population
     from PyKEP.trajopt import mr_lt_nep
-    from PyKEP import planet_gtoc7
+    from PyKEP.planets import gtoc7
 
     algo = algorithm.scipy_slsqp(max_iter=500, acc=1e-5, screen_output=True)
 
     prob = mr_lt_nep(
         t0=[9600., 9700.],
-        seq=[planet_gtoc7(5318), planet_gtoc7(14254), planet_gtoc7(7422), planet_gtoc7(5028)],
+        seq=[gtoc7(5318), gtoc7(14254), gtoc7(7422), gtoc7(5028)],
         n_seg=n_seg,
         mass=[800., 2000.],
         leg_tof=[100., 365.25],
