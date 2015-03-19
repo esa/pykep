@@ -18,7 +18,9 @@ except ImportError:
 
 # 2 - PyGMO
 try:
-    from PyGMO import __version__ as pygmo_ver
+    # Here we cannot try to import __version__ as PyGMO also imports PyKEP and would then always fail
+    # to import anything from PyGMO __init__.py
+    from PyGMO.problem._base import base
     __extensions__['pygmo'] = True
 except ImportError:
     pass
