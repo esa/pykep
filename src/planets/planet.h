@@ -157,7 +157,7 @@ public:
 	 */
 	void set_safe_radius(double sr) {
 		if (sr <=1) {
-			throw_value_error("Trying to set a safe_radius that is smaller than the planetary radius");
+			throw_value_error("Trying to  set a safe_radius that is smaller than the planetary radius");
 		}
 		safe_radius = sr * get_radius();
 	}
