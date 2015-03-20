@@ -22,9 +22,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "asteroid_gtoc7.h"
+#include "gtoc7.h"
 #include "../exceptions.h"
 #include "../astro_constants.h"
+
+namespace kep_toolbox{ namespace planets {
 
 double gtoc7_asteroids_data[16257][7] = {
 {54000,0.999988049532578,0.0167168116316,0.0008854353079654,287.61577546182,175.40647696473,257.60683707535},
@@ -16285,28 +16287,38 @@ double gtoc7_asteroids_data[16257][7] = {
 {56800, 2.9991127, 0.0425025, 10.0871400, 90.2329100, 91.4851600, 311.0018336},
 {56800, 2.9995128, 0.1041154, 9.5223400, 320.7798800, 310.4615400, 6.4792818}};
 
-namespace kep_toolbox{
 
-asteroid_gtoc7::asteroid_gtoc7(int astid)
+
+/// Constructor
+/**
+ * Construct from a consecutive id from 0 (Earth) to 16256 . The order is
+ * that of the original data file from Turin
+ * Earth: 0
+ * Asteroid: 1 - 16256
+
+ * \param[in] ast_id asteroid id
+ */
+gtoc7::gtoc7(int astid)
 {
 	if (astid < 0  || astid > 16256) {
 		throw_value_error("Wrong asteroid id ... check your code");
 	}
 	array6D elem = {{gtoc7_asteroids_data[astid][1] * ASTRO_AU, gtoc7_asteroids_data[astid][2], gtoc7_asteroids_data[astid][3] * ASTRO_DEG2RAD, gtoc7_asteroids_data[astid][5] * ASTRO_DEG2RAD, gtoc7_asteroids_data[astid][4] * ASTRO_DEG2RAD, gtoc7_asteroids_data[astid][6] * ASTRO_DEG2RAD}};
-	build_planet(epoch(gtoc7_asteroids_data[astid][0],epoch::MJD), elem, ASTRO_MU_SUN,
-		0, // the body gravitational parameter, undefined
-		0, // the body radius, undefined
-		0, // the body safe radius, undefined
-		std::string("GTOC7 asteroid id: ") + boost::lexical_cast<std::string>(astid));
+	set_mu_central_body(ASTRO_MU_SUN);
+	set_mu_self(0);		// the body gravitational parameter, undefined
+	set_radius(0);		// the body radius, undefined
+	set_safe_radius(1);	// the body safe radius, undefined
+	set_name(std::string("GTOC7 asteroid id: ") + boost::lexical_cast<std::string>(astid));
+	set_elements(elem);
+	set_ref_epoch(epoch(gtoc7_asteroids_data[astid][0],epoch::MJD));
 }
 
-planet_ptr asteroid_gtoc7::clone() const
+planet_ptr gtoc7::clone() const
 {
-	return planet_ptr(new asteroid_gtoc7(*this));
+	return planet_ptr(new gtoc7(*this));
 }
 
-} //namespace
+}} //namespace
 
-// Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::asteroid_gtoc7);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc7);
+

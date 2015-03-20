@@ -22,12 +22,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "planet_js.h"
+#include "gtoc6.h"
 #include "../exceptions.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
-planet_js::planet_js(const std::string& name)
+/**
+ * Construct a Jupiter moon from its common name
+ * \param[in] name a string describing a planet
+ */
+gtoc6::gtoc6(const std::string& name)
 {
 	std::map<std::string, int> mapped_planets;
 	mapped_planets["io"] = 1; mapped_planets["europa"] = 2; mapped_planets["ganymede"] = 3;
@@ -83,16 +87,22 @@ planet_js::planet_js(const std::string& name)
 		throw_value_error(std::string("unknown planet name") + name);
 		}
 	}
-	build_planet(epoch(mjd,epoch::MJD),keplerian_elements_,mu_central_body_,mu_self_,radius_,safe_radius_,lower_case_name);
+	set_mu_central_body(mu_central_body_);
+	set_mu_self(mu_self_);
+	set_radius(radius_);
+	set_safe_radius(safe_radius_ / radius_);
+	set_name(lower_case_name);
+	set_elements(keplerian_elements_);
+	set_ref_epoch(epoch(mjd,epoch::MJD));
 }
 
-planet_ptr planet_js::clone() const
+planet_ptr gtoc6::clone() const
 {
-	return planet_ptr(new planet_js(*this));
+	return planet_ptr(new gtoc6(*this));
 }
 
-} //namespace
+}} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_js)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc6)
 // Serialization code (END)

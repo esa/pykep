@@ -22,9 +22,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "asteroid_gtoc2.h"
+#include "gtoc2.h"
 #include "../exceptions.h"
 #include "../astro_constants.h"
+
+namespace kep_toolbox{ namespace planets {
 
 double gtoc2_asteroids_data[911][9] = {
 {2011542,3.9501468,0.2391642,6.87574,16.88982,48.9603,229.49648,54000,1},
@@ -939,35 +941,51 @@ double gtoc2_asteroids_data[911][9] = {
 {3350633,0.85107872,0.46865622,2.9133876,92.154235,68.436379,235.83518,54000,4},
 {1,0.999988049532578,0.01671681163160,0.0008854353079654,175.40647696473,287.61577546182,257.60683707535,54000,5}};
 
-
-
-namespace kep_toolbox{
-
-asteroid_gtoc2::asteroid_gtoc2(const int & astid)
+/// Constructor
+/**
+ * Construct from a consecutive id from 0 to 910 (Earth). The order is that of the original
+ * data file from JPL
+ * Group 1:   0 - 95
+ * Group 2:  96 - 271
+ * Group 3: 272 - 571
+ * Group 4: 572 - 909
+ * Earth:   910
+ * \param[in] name a string describing a planet
+ */
+gtoc2::gtoc2(int astid)
 {
 	if (astid < 0  || astid >910) {
 		throw_value_error("Wrong asteroid id ... check your code");
 	}
 	array6D elem = {{gtoc2_asteroids_data[astid][1] * ASTRO_AU, gtoc2_asteroids_data[astid][2], gtoc2_asteroids_data[astid][3] * ASTRO_DEG2RAD, gtoc2_asteroids_data[astid][4] * ASTRO_DEG2RAD, gtoc2_asteroids_data[astid][5] * ASTRO_DEG2RAD, gtoc2_asteroids_data[astid][6] * ASTRO_DEG2RAD}};
-	build_planet(epoch(gtoc2_asteroids_data[astid][7],epoch::MJD), elem, ASTRO_MU_SUN,
-		0, // the body gravitational parameter, undefined
-		0, // the body radius, undefined
-		0, // the body safe radius, undefined
-		boost::lexical_cast<std::string>(gtoc2_asteroids_data[astid][0]));
+
+	set_mu_central_body(ASTRO_MU_SUN);
+	set_mu_self(0);     // undefined
+	set_radius(0);      // undefined
+	set_safe_radius(1); // undefined
+	set_name(std::string("GTOC2 asteroid id: ") + boost::lexical_cast<std::string>(gtoc2_asteroids_data[astid][0]));
+	set_elements(elem);
+	set_ref_epoch(epoch(gtoc2_asteroids_data[astid][7],epoch::MJD));
 	m_group = gtoc2_asteroids_data[astid][8];
 }
 
-int asteroid_gtoc2::get_group() const {
+/// Polimorphic copy consruction
+planet_ptr gtoc2::clone() const
+{
+	return planet_ptr(new gtoc2(*this));
+}
+
+/// Gets the group id
+/**
+ * Gets the group id of the asteroid as defined in the original JPL data file
+ *
+ */
+int gtoc2::get_group() const {
 	return m_group;
 }
 
-planet_ptr asteroid_gtoc2::clone() const
-{
-	return planet_ptr(new asteroid_gtoc2(*this));
-}
-
-} //namespace
+}} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::asteroid_gtoc2);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc2);
 // Serialization code (END)

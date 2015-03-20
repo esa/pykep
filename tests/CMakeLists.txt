@@ -28,8 +28,11 @@ ADD_TEST(Testing_SGP4_propagation sgp4_test)
 
 IF(BUILD_SPICE)
 ADD_EXECUTABLE(load_spice_kernel_test load_spice_kernel_test.cpp)
+ADD_EXECUTABLE(spice_planet_test spice_planet_test.cpp)
 
 TARGET_LINK_LIBRARIES(load_spice_kernel_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
+TARGET_LINK_LIBRARIES(spice_planet_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 
 ADD_TEST(Testing_Loading_of_SPICE_kernels load_spice_kernel_test)
+ADD_TEST(Testing_the_SPICE_planet spice_planet_test)
 ENDIF(BUILD_SPICE)

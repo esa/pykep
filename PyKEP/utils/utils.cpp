@@ -26,7 +26,9 @@
 #include <boost/python/def.hpp>
 #include <boost/python/docstring_options.hpp>
 
-#include "../../src/utils/spice_utils.h"
+#ifdef PYKEP_USING_SPICE
+	#include "../../src/utils/spice_utils.h"
+#endif
 
 using namespace boost::python;
 
@@ -39,10 +41,13 @@ BOOST_PYTHON_MODULE(_utils) {
 	// Spice utilities
 	def("load_spice_kernel",&kep_toolbox::utils::load_spice_kernel,
 			  "PyKEP.utils.load_spice_kernel(file_name)\n\n"
-			  "- file_name: kernel file to load\n"
-			  "Loads the SPICE kernel specified by the filename. \n"
+			  "- file_name: string containing the kernel file to load\n\n"
+			  "Loads the SPICE kernel specified by the filename into memory. \n\n"
+			  ".. note::\n\n"
+			  "   The kernel must be in memory before its used, for example, when computing a planets.spice ephemerides\n\n"
 			  "Example:: \n\n"
-			  "  t = utils.load_spice_kernel('de432s.bsp')"
+			  "  utils.load_spice_kernel('de432s.bsp')"
 	);
 #endif
 }
+

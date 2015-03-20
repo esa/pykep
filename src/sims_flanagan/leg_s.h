@@ -38,9 +38,7 @@
 #include "throttle.h"
 #include "../exceptions.h"
 
-// Serialization code
 #include "../serialization.h"
-// Serialization code (END)
 #include "../config.h"
 
 namespace kep_toolbox {

@@ -29,7 +29,7 @@
 #include <vector>
 
 #include "leg.h"
-#include "../planets/planet.h"
+#include "../planets/base.h"
 #include "sc_state.h"
 #include "../exceptions.h"
 #include "spacecraft.h"

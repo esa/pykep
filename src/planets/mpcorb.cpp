@@ -25,7 +25,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
-#include "planet_mpcorb.h"
+#include "mpcorb.h"
 #include "../exceptions.h"
 
 static const int mpcorb_format[12][2] =
@@ -44,9 +44,14 @@ static const int mpcorb_format[12][2] =
 	{127,4},	// Year of First Observation (only if the number of oppositions is larger than 1)
 };
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
-planet_mpcorb::planet_mpcorb(const std::string& line)
+/**
+ * Construct a minor planet from a line of the MPCORB.DAT file. Default value is the MPCORB.DAT line
+ * for the dwarf planet Ceres.
+ * \param[in] name a string containing one line of MPCORB.DAT
+ */
+mpcorb::mpcorb(const std::string& line)
 {
 	std::string linecopy(line);
 	boost::algorithm::to_lower(linecopy);
@@ -107,11 +112,17 @@ planet_mpcorb::planet_mpcorb(const std::string& line)
 	tmp.append(&linecopy[mpcorb_format[7][0]],mpcorb_format[7][1]);
 	boost::algorithm::trim(tmp);
 
-	build_planet(epoch,elem,ASTRO_MU_SUN,mu_planet,radius,radius*1.1,tmp);
+	set_mu_central_body(ASTRO_MU_SUN);
+	set_mu_self(mu_planet);
+	set_radius(radius);
+	set_safe_radius(1.1);
+	set_name(tmp);
+	set_elements(elem);
+	set_ref_epoch(epoch);
 }
 
 
-epoch planet_mpcorb::packed_date2epoch(std::string in) {
+epoch mpcorb::packed_date2epoch(std::string in) {
 	if (in.size()!=5) {
 		throw_value_error("mpcorb data format requires 5 characters.");
 	}
@@ -123,18 +134,17 @@ epoch planet_mpcorb::packed_date2epoch(std::string in) {
 }
 // Convert mpcorb packed dates convention into number. (lower case assumed)
 // TODO: check locale ASCII.
-int planet_mpcorb::packed_date2number(char c)
+int mpcorb::packed_date2number(char c)
 {
 	return static_cast<int>(c) - (boost::algorithm::is_alpha()(c) ? 87 : 48);
 }
 
-planet_ptr planet_mpcorb::clone() const
+planet_ptr mpcorb::clone() const
 {
-	return planet_ptr(new planet_mpcorb(*this));
+	return planet_ptr(new mpcorb(*this));
 }
 
-} //namespace
+}} //namespaces
 
-// Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_mpcorb);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::mpcorb);
+

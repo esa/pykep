@@ -22,60 +22,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_SS_H
-#define KEP_TOOLBOX_PLANET_SS_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC_6_H
+#define KEP_TOOLBOX_PLANET_GTOC_6_H
 
-#include "planet.h"
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
-/// Solar System Planet (jpl simplified ephemerides)
+/// A Jupiter moon from GTOC6 (keplerian)
 /**
- * This class derives from the planet class and allow to instantiate planets of
- * the solar system by referring to their common names. The ephemeris used
- * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
- * valid in the timeframe 1800AD - 2050 AD
+ * This class allows to instantiate moons of
+ * the Jupiter system by referring to their common names. Ephemerides are Keplerian 
+ * and elements are those defined for the GTOC6 competition
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_ss : public planet
+class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
 {
 public:
-	/**
-	 * Construct a planet from its common name (e.g. VENUS)
-	 * \param[in] name a string describing a planet
-	 */
-	planet_ss(const std::string & = "earth");
+	gtoc6(const std::string & = "io");
 	planet_ptr clone() const;
-	/// Computes the planet/system position and velocity w.r.t the Sun
-	/**
-		* \param[in] when Epoch in which ephemerides are required
-		* \param[out] r Planet position at epoch (SI units)
-		* \param[out] v Planet velocity at epoch (SI units)
-		*/
-private:
-	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
 
+private:
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
-		ar & jpl_elements;
-		ar & jpl_elements_dot;
+		ar & boost::serialization::base_object<keplerian>(*this);
 	}
-
-
-	array6D jpl_elements;
-	array6D jpl_elements_dot;
 };
 
 
-} /// End of namespace kep_toolbox
+}} /// End of namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_ss)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc6);
 
-#endif // KEP_TOOLBOX_PLANET_SS_H
+#endif // KEP_TOOLBOX_PLANET_GTOC_6_H

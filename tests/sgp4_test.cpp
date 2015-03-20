@@ -26,7 +26,7 @@
 #include <fstream>
 #include <numeric>
 #include <algorithm>
-#include "../src/planets/planet_tle.h"
+#include "../src/planets/tle.h"
 #include "../src/core_functions/array3D_operations.h"
 
 using namespace kep_toolbox;
@@ -55,10 +55,10 @@ int main() {
     {
     	getline (txtfile,line21);
     	getline (txtfile,line22);
-	   	planet_tle sat1(line1.substr(0,69),line2.substr(0,69));
-	   	planet_tle sat2(line21.substr(0,69),line22.substr(0,69));
-		sat1.get_eph(sat2.get_ref_epoch() ,r1,v1);
-		sat2.get_eph(sat2.get_ref_epoch() ,r2,v2);
+	   	planets::tle sat1(line1.substr(0,69),line2.substr(0,69));
+	   	planets::tle sat2(line21.substr(0,69),line22.substr(0,69));
+		sat1.eph(sat2.get_ref_mjd2000() ,r1,v1);
+		sat2.eph(sat2.get_ref_mjd2000() ,r2,v2);
 		diff(err_r,r1,r2);
 		diff(err_v,v1,v2);		
 		errors_r.push_back(norm(err_r));

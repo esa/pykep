@@ -25,22 +25,22 @@
 #ifndef KEP_TOOLBOX_PLANET_TLE_H
 #define KEP_TOOLBOX_PLANET_TLE_H
 
-#include "planet.h"
+#include "base.h"
 #include "../serialization.h"
 #include "../config.h"
 #include "../third_party/libsgp4/SGP4.h"
 #include "../third_party/libsgp4/Tle.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets{
 
 /// A planet from TLE format
 /**
- * This class derives from the planet class and allows to instantiate Earth-orbiting
+ * This class allows to instantiate Earth-orbiting
  * satellites from their Two Line Element format. The ephemerides will then be computed
  * using SGP4/SDP4 orbital model. The third party C++ library SGP4 Satellite Library is
  * used (source code in tp/libsgp4)
  *
- * NOTE: the constant used in the satellite data memebr initialization are not the pykep ones, rather the 
+ * NOTE: the constant used to initialize the data_members are not the pykep ones, rather the 
  * constants defined in the sgp4lib are used (tp/libsgp4/Globals.h)
  *
  * @see http://celestrak.com/columns/v04n03/#FAQ01
@@ -49,7 +49,7 @@ namespace kep_toolbox{
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE planet_tle : public planet
+class __KEP_TOOL_VISIBLE tle : public base
 {
 public:
 	/**
@@ -57,22 +57,20 @@ public:
 	 * \param[in] line1 first line
 	 * \param[in] line2 second line
 	 */
-	planet_tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95", const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
+	tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95", const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
 	planet_ptr clone() const;
-	/// Computes the planet/system position and velocity w.r.t the Sun
-	/**
-		* \param[in] when Epoch in which ephemerides are required
-		* \param[out] r Planet position at epoch (SI units)
-		* \param[out] v Planet velocity at epoch (SI units)
-		*/
+	std::string human_readable_extra() const;
+
+	double get_ref_mjd2000() const;
+
 private:
-	void eph_impl(const double mjd2000, array3D &r, array3D &v) const;
+	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
+		ar & boost::serialization::base_object<base>(*this);
 		ar & const_cast<std::string& >(m_line1);
 		ar & const_cast<std::string& >(m_line2);
 		boost::serialization::split_member(ar, *this, version);
@@ -96,11 +94,12 @@ private:
 		const std::string m_line2;
 		Tle m_tle;
 		SGP4 m_sgp4_propagator;
+		double m_ref_mjd2000;
 	};
 
 
-} /// End of namespace kep_toolbox
+}} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet_tle)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::tle)
 
 #endif // KEP_TOOLBOX_PLANET_TLE_H

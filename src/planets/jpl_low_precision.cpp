@@ -22,12 +22,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "planet_ss.h"
+#include "jpl_low_precision.h"
+#include "../epoch.h"
 #include "../exceptions.h"
 #include "../core_functions/par2ic.h"
 #include "../core_functions/convert_anomalies.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
 // Data from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
 
@@ -50,118 +51,127 @@ static const double neptune_el_dot[6] = {0.00026291, 0.00005105, 0.00035372, 218
 static const double pluto_el[6] = {39.48211675, 0.24882730, 17.14001206, 238.92903833, 224.06891629, 110.30393684};
 static const double pluto_el_dot[6] = {-0.00031596, 0.00005170, 0.00004818, 145.20780515, -0.04062942, -0.01183482};
 
-planet_ss::planet_ss(const std::string& name)
+/**
+ * Construct a planet from its common name (e.g. VENUS)
+ *
+ * \param[in] name a string describing a planet
+ */
+jpl_lp::jpl_lp(const std::string& name) : ref_mjd2000(epoch(2451545.0,epoch::JD).mjd2000())
 {
 	std::map<std::string, int> mapped_planets;
 	mapped_planets["mercury"] = 1; mapped_planets["venus"] = 2; mapped_planets["earth"] = 3;
 	mapped_planets["mars"] = 4; mapped_planets["jupiter"] = 5; mapped_planets["saturn"] = 6;
 	mapped_planets["uranus"] = 7; mapped_planets["neptune"] = 8; mapped_planets["pluto"] = 9;
 
-	array6D keplerian_elements_;
-	double mu_central_body_;
-	double mu_self_;
-	double radius_;
-	double safe_radius_;
+	double mu_central_body;
+	double mu_self;
+	double radius;
+	double safe_radius;
 	std::string lower_case_name = name;
 	boost::algorithm::to_lower(lower_case_name);
 	switch ( mapped_planets[lower_case_name] ) {
 	case (1): {
 			std::copy(mercury_el,mercury_el+6,&jpl_elements[0]);
 			std::copy(mercury_el_dot,mercury_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 2440000;
-			safe_radius_ = radius_ * 1.1;
-			mu_self_ = 22032e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 2440000.;
+			safe_radius = 1.1;
+			mu_self = 22032e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (2): {
 			std::copy(venus_el,venus_el+6,&jpl_elements[0]);
 			std::copy(venus_el_dot,venus_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 6052000;
-			safe_radius_ = radius_ * 1.1;
-			mu_self_ = 324859e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 6052000.;
+			safe_radius = 1.1;
+			mu_self = 324859e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (3): {
 			std::copy(earth_moon_el,earth_moon_el+6,&jpl_elements[0]);
 			std::copy(earth_moon_el_dot,earth_moon_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 6378000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 398600.4418e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 6378000.;
+			safe_radius = 1.1;
+			mu_self = 398600.4418e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (4): {
 			std::copy(mars_el,mars_el+6,&jpl_elements[0]);
 			std::copy(mars_el_dot,mars_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 3397000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 42828e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 3397000.;
+			safe_radius = 1.1;
+			mu_self = 42828e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (5): {
 			std::copy(jupiter_el,jupiter_el+6,&jpl_elements[0]);
 			std::copy(jupiter_el_dot,jupiter_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 71492000;
-			safe_radius_ = radius_ * 9;
-			mu_self_ = 126686534e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 71492000.;
+			safe_radius = 9.;
+			mu_self = 126686534e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (6): {
 			std::copy(saturn_el,saturn_el+6,&jpl_elements[0]);
 			std::copy(saturn_el_dot,saturn_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 60330000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 37931187e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 60330000.;
+			safe_radius = 1.1;
+			mu_self = 37931187e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (7): {
 			std::copy(uranus_el,uranus_el+6,&jpl_elements[0]);
 			std::copy(uranus_el_dot,uranus_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 25362000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 5793939e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 25362000.;
+			safe_radius = 1.1;
+			mu_self = 5793939e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (8): {
 			std::copy(neptune_el,neptune_el+6,&jpl_elements[0]);
 			std::copy(neptune_el_dot,neptune_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 24622000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 6836529e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 24622000.;
+			safe_radius = 1.1;
+			mu_self = 6836529e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	case (9): {
 			std::copy(pluto_el,pluto_el+6,&jpl_elements[0]);
 			std::copy(pluto_el_dot,pluto_el_dot+6,&jpl_elements_dot[0]);
-			radius_ = 1153000;
-			safe_radius_ = radius_*1.1;
-			mu_self_ = 871e9;
-			mu_central_body_ = ASTRO_MU_SUN;
+			radius = 1153000.;
+			safe_radius = 1.1;
+			mu_self = 871e9;
+			mu_central_body = ASTRO_MU_SUN;
 		}
 		break;
 	default : {
-		throw_value_error(std::string("unknown planet name") + name);
+		throw_value_error(std::string("unknown planet name: ") + name);
 		}
 	}
-	keplerian_elements_[0] = jpl_elements[0] * ASTRO_AU;
-	keplerian_elements_[1] = jpl_elements[1];
-	keplerian_elements_[2] = jpl_elements[2] * ASTRO_DEG2RAD;
-	keplerian_elements_[3] = jpl_elements[5] * ASTRO_DEG2RAD;
-	keplerian_elements_[4] = (jpl_elements[4] - jpl_elements[5]) * ASTRO_DEG2RAD;
-	keplerian_elements_[5] = (jpl_elements[3] - jpl_elements[4]) * ASTRO_DEG2RAD;
-	build_planet(epoch(2451545.0,epoch::JD),keplerian_elements_,mu_central_body_,mu_self_,radius_,safe_radius_,lower_case_name);
+	set_mu_central_body(mu_central_body);
+	set_mu_self(mu_self);
+	set_radius(radius);
+	set_safe_radius(safe_radius);
+	set_name(lower_case_name);
 }
 
-void planet_ss::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
+/// Polymorphic copy constructor.
+planet_ptr jpl_lp::clone() const
+{
+	return planet_ptr(new jpl_lp(*this));
+}
+
+/// Computes the low-precision ephemerides
+void jpl_lp::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	if (mjd2000 <=-73048.0 || mjd2000>=18263.0) {
-		throw_value_error("Ephemeris of planet_ss are out of range [1800-2050]");
+		throw_value_error("Ephemeris are out of range [1800-2050]");
 	}
 	// algorithm from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt downloded 2013
 	array6D elements, elements2;
@@ -176,16 +186,18 @@ void planet_ss::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
 	elements2[4] = (elements[4] - elements[5]) * ASTRO_DEG2RAD;
 	elements2[5] = (elements[3] - elements[4]) * ASTRO_DEG2RAD;
 	elements2[5] = m2e(elements2[5],elements2[1]);
-	par2ic(elements2, mu_central_body, r, v);
+	par2ic(elements2, get_mu_central_body(), r, v);
 }
 
-planet_ptr planet_ss::clone() const
-{
-	return planet_ptr(new planet_ss(*this));
+/// Extra informations streamed in human readable format
+std::string jpl_lp::human_readable_extra() const {
+	std::ostringstream s;
+	s << "Ephemerides type: JPL low-precision" << std::endl;
+	return s.str();
 }
 
-} //namespace
+}} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_ss)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::jpl_lp)
 // Serialization code (END)

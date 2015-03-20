@@ -37,11 +37,11 @@ int main() {
     sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
 	phase1.set_mu(mu);
 	phase1.set_sc(sc);
-	planet_ss earth("earth");
+	planets::jpl_lp earth("earth");
 	array3D r,v;
-	earth.get_eph(epoch(0),r,v);
+	earth.eph(epoch(0),r,v);
 	sims_flanagan::sc_state x0(r,v,sc.get_mass());
-	earth.get_eph(epoch(100),r,v);
+	earth.eph(epoch(100),r,v);
 	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
 	std::vector<double> throttles(n_seg*3,0.1423);
 	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);

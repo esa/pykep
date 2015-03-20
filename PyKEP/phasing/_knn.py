@@ -1,7 +1,5 @@
-from PyKEP.core import AU, EARTH_VELOCITY
-
-
 class knn():
+    from PyKEP.core import AU, EARTH_VELOCITY
 
     """
     The class helps finding the k-nearest neighbours to a given planet from a list of planets.

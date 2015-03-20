@@ -1,5 +1,6 @@
 from PyGMO.problem import base as base_problem
-from PyKEP.core import planet_ss, epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
+from PyKEP.core import epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
+from PyKEP.planets import jpl_lp
 from PyKEP.sims_flanagan import leg, spacecraft, sc_state
 
 
@@ -21,7 +22,7 @@ class mga_lt_nep(base_problem):
     """
 
     def __init__(self,
-                 seq=[planet_ss('earth'), planet_ss('venus'), planet_ss('earth')],
+                 seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
                  n_seg=[10] * 2,
                  t0=[epoch(0), epoch(1000)],
                  tof=[[200, 500], [200, 500]],
@@ -34,7 +35,7 @@ class mga_lt_nep(base_problem):
                  multi_objective=False,
                  high_fidelity=False):
         """
-        prob = mga_lt_nep(seq = [planet_ss('earth'),planet_ss('venus'),planet_ss('earth')], n_seg = [10]*2,
+        prob = mga_lt_nep(seq = [jpl_lp('earth'),jpl_lp('venus'),jpl_lp('earth')], n_seg = [10]*2,
         t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
         multi_objective = False, fb_rel_vel = 6, high_fidelity=False)
 

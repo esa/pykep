@@ -1,5 +1,5 @@
 from PyGMO.problem._base import base as base_problem
-from PyKEP.core import planet_gtoc7
+from PyKEP.planets import gtoc7
 
 
 class mr_lt_nep(base_problem):
@@ -25,7 +25,7 @@ class mr_lt_nep(base_problem):
 
     def __init__(
             self,
-            seq=[planet_gtoc7(3413), planet_gtoc7(234), planet_gtoc7(11432)],
+            seq=[gtoc7(3413), gtoc7(234), gtoc7(11432)],
             n_seg=5,
             t0=[13000, 13200],
             leg_tof=[1, 365.25 * 3],
@@ -38,7 +38,7 @@ class mr_lt_nep(base_problem):
             c_tol=1e-05
     ):
         """
-        prob = mr_lt_nep(seq=[PyKEP.planet_gtoc7(3413),PyKEP.planet_gtoc7(234), PyKEP.planet_gtoc7(11432)], n_seg=5, t0=[13000, 13200],
+        prob = mr_lt_nep(seq=[PyKEP.gtoc7(3413),PyKEP.gtoc7(234), PyKEP.gtoc7(11432)], n_seg=5, t0=[13000, 13200],
                     leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
                     Isp=3000., traj_tof=365.25 * 6, objective='mass', c_tol=1e-05)
 

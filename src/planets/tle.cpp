@@ -25,7 +25,7 @@
 #include <cmath>
 #include <string>
 
-#include "planet_tle.h"
+#include "tle.h"
 #include "../exceptions.h"
 #include "../core_functions/par2ic.h"
 #include "../core_functions/convert_anomalies.h"
@@ -36,10 +36,15 @@
 #include "../third_party/libsgp4/SatelliteException.h"
 #include "../third_party/libsgp4/Eci.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets{
 
-planet_tle::planet_tle(const std::string& line1, const std::string& line2)
-try : planet(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1, line2)), m_sgp4_propagator(SGP4(m_tle))
+/**
+ * Construct a planet_tle from two strings containing the two line elements
+ * \param[in] line1 first line
+ * \param[in] line2 second line
+ */
+tle::tle(const std::string& line1, const std::string& line2)
+try : base(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1, line2)), m_sgp4_propagator(SGP4(m_tle))
 {
 	// We read the osculating elements of the satellite
 	array6D keplerian_elements;
@@ -58,7 +63,10 @@ try : planet(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1
     int prefix = (year_int > 50)?(19):(20); 
 
     std::string object_name(std::to_string(prefix)+year_str+std::string("-")+rest);
-	build_planet(epoch(m_tle.Epoch().ToJulian(),epoch::JD),keplerian_elements,mu_central_body,mu_self,radius,safe_radius,object_name);
+	set_mu_central_body(mu_central_body);
+	set_name(object_name);
+	m_ref_mjd2000 = epoch(m_tle.Epoch().ToJulian(),epoch::JD).mjd2000();
+
 }
 catch (TleException& e)
 {
@@ -71,10 +79,16 @@ catch (SatelliteException& e)
 		throw_value_error(e.what());
 }
 
-void planet_tle::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
+/// Polymorphic copy constructor.le::clone() const
+planet_ptr tle::clone() const
+{
+	return planet_ptr(new tle(*this));
+}
+
+void tle::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	Vector position;
 	Vector velocity;
-	double minutes_since = (mjd2000-ref_mjd2000)*24*60;
+	double minutes_since = (mjd2000-m_ref_mjd2000)*24*60;
 
 	try 
 	{
@@ -96,12 +110,18 @@ void planet_tle::eph_impl(const double mjd2000, array3D &r, array3D &v) const{
 	}
 }
 
-
-planet_ptr planet_tle::clone() const
-{
-	return planet_ptr(new planet_tle(*this));
+/// Getter for the reference mjd2000
+double tle::get_ref_mjd2000() const {
+	return m_ref_mjd2000;
 }
 
-} //namespace
+/// Extra informations streamed in human readable format
+std::string tle::human_readable_extra() const {
+	std::ostringstream s;
+	s << "Ephemerides type: SGP4 propagator" << std::endl;
+	return s.str();
+}
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet_tle)
+}} //namespace
+
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::tle)

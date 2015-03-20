@@ -22,55 +22,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_ASTEROID_GTOC7_H
-#define KEP_TOOLBOX_ASTEROID_GTOC7_H
+#include <string>
+#include <iostream>
+#include <iomanip>
 
-#include "planet.h"
-#include "../serialization.h"
-#include "../config.h"
+#include "../src/planets/spice.h"
 
-namespace kep_toolbox{
+// In this test we test the functionality of the SPICE planet
+using namespace kep_toolbox;
 
-/// A GTOC7 asteroid
-/**
- * This class derives from the planet class and allow to instantiate asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 7th edition
- *
- * @see http://sophia.estec.esa.int/gtoc_portal/
- * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
- */
+int main() {
+	// We start loading the kernel containing the 67P comet (by default its in planet::spice)
+	utils::load_spice_kernel("C_G_1000012_2012_2017.bsp");
 
-class __KEP_TOOL_VISIBLE asteroid_gtoc7 : public planet
-{
-public:
-	/// Constructor
-	/**
-	 * Construct from a consecutive id from 0 (Earth) to 16256 . The order is
-	 * that of the original data file from Turin
-	 * Earth: 0
-	 * Asteroid: 1 - 16256
+	// We instantiate the object
+	planets::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
 
-	 * \param[in] ast_id asteroid id
-	 */
-	asteroid_gtoc7(int = 0);
+	// We stream to screen the newly created planet
+	std::cout << pl1 << std::endl;
 
-	planet_ptr clone() const;
-private:
-// Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<planet>(*this);
-	}
-// Serialization code (END)
-};
+	// We define the epoch to compute ephemeridess
+	kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
+	array3D r,v;
+ 	pl1.eph(when, r, v);
 
+    std::cout << "67P eph at: "<< when << std::endl;
+    std::cout << r << v << std::endl;
+	return failed_c();
+}
 
-} /// End of namespace kep_toolbox
-
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc7);
-// Serialization code (END)
-
-#endif // KEP_TOOLBOX_ASTEROID_GTOC7_H

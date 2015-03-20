@@ -22,64 +22,46 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_ASTEROID_GTOC2_H
-#define KEP_TOOLBOX_ASTEROID_GTOC2_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC5_H
+#define KEP_TOOLBOX_PLANET_GTOC5_H
 
-#include "planet.h"
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{
+namespace kep_toolbox{ namespace planets {
 
-/// A GTOC2 asteroid
+/// A GTOC5 asteroid
 /**
- * This class derives from the planet class and allow to instantiate asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 2nd edition
+ * This class allows to instantiate asteroids
+ * from the Global Trajectory Optimization Competition (GTOC) 5th edition
  *
  * @see http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class __KEP_TOOL_VISIBLE asteroid_gtoc2 : public planet
+class __KEP_TOOL_VISIBLE gtoc5 : public keplerian
 {
 public:
-	/// Constructor
-	/**
-	 * Construct from a consecutive id from 0 to 910 (Earth). The order is that of the original
-	 * data file from JPL
-	 * Group 1:   0 - 95
-	 * Group 2:  96 - 271
-	 * Group 3: 272 - 571
-	 * Group 4: 572 - 909
-	 * Earth:   910
-	 * \param[in] name a string describing a planet
-	 */
-	asteroid_gtoc2(const int & = 0);
-
-	/// Getter
-	/**
-	 * Gets the group id of the asteroid as defined in the original JPL data file
-	 *
-	 */
-	int get_group() const;
+	gtoc5(int = 7076);
 	planet_ptr clone() const;
+
 private:
-// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
-		ar & m_group;
+		ar & boost::serialization::base_object<keplerian>(*this);
 	}
-// Serialization code (END)
-	int m_group;
+
 };
-} // Namespaces
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc2);
-// Serialization code (END)
 
-#endif // KEP_TOOLBOX_ASTEROID_GTOC2_H
+}} /// End of namespace kep_toolbox
+
+
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc5);
+
+
+#endif // KEP_TOOLBOX_PLANET_GTOC5_H

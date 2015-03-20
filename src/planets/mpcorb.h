@@ -22,55 +22,63 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_ASTEROID_GTOC5_H
-#define KEP_TOOLBOX_ASTEROID_GTOC5_H
+#ifndef KEP_TOOLBOX_PLANET_MPCORB_H
+#define KEP_TOOLBOX_PLANET_MPCORB_H
 
-#include "planet.h"
+#include <string>
+
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{
 
-/// A GTOC5 asteroid
+namespace kep_toolbox { namespace planets {
+
+/// Minor Planet (keplerian)
 /**
- * This class derives from the planet class and allow to instantiate asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 5th edition
+ * This class allows to instantiate keplerian planets from the MPCORB database.
  *
- * @see http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
- * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class __KEP_TOOL_VISIBLE asteroid_gtoc5 : public planet
+class __KEP_TOOL_VISIBLE mpcorb : public keplerian
 {
 public:
-	/// Constructor
-	/**
-	 * Construct from a consecutive id from 1 to 7076 (Earth). The order is that of the original
-	 * data file from Russio
-	 * Asteroid: 1 - 7075
-	 * Earth: 7076
-	 * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
-	 */
-	asteroid_gtoc5(const int & = 7076);
-
+	mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
 	planet_ptr clone() const;
+
+	static epoch packed_date2epoch(std::string);
+	double get_H() const {return m_H;};
+	unsigned int get_n_observations() const {return m_n_observations;};
+	unsigned int get_n_oppositions() const {return m_n_oppositions;};
+	unsigned int get_year_of_discovery() const {return m_year_of_discovery;};
+
 private:
-// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<planet>(*this);
+		ar & boost::serialization::base_object<keplerian>(*this);
+		ar & m_H;
+		ar & m_n_observations;
+		ar & m_n_oppositions;
+		ar & m_year_of_discovery;
 	}
-// Serialization code (END)
+
+	static int packed_date2number(char c);
+	// Absolute Magnitude
+	double m_H;
+	// Number of observations
+	unsigned int m_n_observations;
+	// Number of oppositions
+	unsigned int m_n_oppositions;
+	// Year the asteroid was first discovered
+	unsigned int m_year_of_discovery;
 };
 
 
-} /// End of namespace kep_toolbox
+}} /// End of namespace kep_toolbox
 
-// Serialization code
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::asteroid_gtoc5);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::mpcorb);
 
-#endif // KEP_TOOLBOX_ASTEROID_GTOC5_H
+#endif // KEP_TOOLBOX_PLANET_MPCORB_H

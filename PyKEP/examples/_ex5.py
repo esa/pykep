@@ -2,11 +2,12 @@ def run_example5():
     from PyGMO import archipelago, problem
     from PyGMO.algorithm import jde
     from PyGMO.topology import ring
-    from PyKEP import planet_ss, epoch
+    from PyKEP import epoch
+    from PyKEP.planets import jpl_lp
     from PyKEP.trajopt import mga_1dsm
 
     # We define an Earth-Venus-Earth problem (single-objective)
-    seq = [planet_ss('earth'), planet_ss('venus'), planet_ss('earth')]
+    seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')]
     prob = mga_1dsm(seq=seq)
 
     prob.set_tof(0.7, 3)

@@ -22,9 +22,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "asteroid_gtoc5.h"
+#include "gtoc5.h"
 #include "../exceptions.h"
 #include "../astro_constants.h"
+
+ namespace kep_toolbox{ namespace planets {
 
 double gtoc5_asteroids_data[7076][7] = {
 {55400,2.6932634,0.3160515,6.27657,321.51547,31.06329,350.70647},
@@ -7104,29 +7106,40 @@ double gtoc5_asteroids_data[7076][7] = {
 {55400,2.80275936,0.667657898,4.729269,183.6393454,234.0155593,205.4132048},
 {54000,0.999988049532578,0.0167168116316,0.0009954353079654,175.40647696473,287.61577546182,257.60683707535}};
 
-namespace kep_toolbox{
 
-asteroid_gtoc5::asteroid_gtoc5(const int &astid_)
+
+
+/// Constructor
+/**
+ * Construct from a consecutive id from 1 to 7076 (Earth). The order is that of the original
+ * data file from Russio
+ * Asteroid: 1 - 7075
+ * Earth: 7076
+ * \param[in] ast_id an integer corrsponding to the asteroid row in the original russian file
+ */
+gtoc5::gtoc5(int astid_)
 {
 	int astid = astid_ - 1;
 	if (astid_ < 1  || astid_ > 7076) {
 		throw_value_error("Wrong asteroid id ... check your code");
 	}
 	array6D elem = {{gtoc5_asteroids_data[astid][1] * ASTRO_AU, gtoc5_asteroids_data[astid][2], gtoc5_asteroids_data[astid][3] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][4] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][5] * ASTRO_DEG2RAD, gtoc5_asteroids_data[astid][6] * ASTRO_DEG2RAD}};
-	build_planet(epoch(gtoc5_asteroids_data[astid][0],epoch::MJD), elem, ASTRO_MU_SUN,
-		0, // the body gravitational parameter, undefined
-		0, // the body radius, undefined
-		0, // the body safe radius, undefined
-		std::string("GTOC5 asteroid row: ") + boost::lexical_cast<std::string>(astid_));
+	
+	set_mu_central_body(ASTRO_MU_SUN);
+	set_mu_self(0); 	// the body gravitational parameter, undefined
+	set_radius(0);		// the body radius, undefined
+	set_safe_radius(1);	// the body safe radius, undefined
+	set_name(std::string("GTOC5 asteroid id: ") + boost::lexical_cast<std::string>(astid_));
+	set_elements(elem);
+	set_ref_epoch(epoch(gtoc5_asteroids_data[astid][0],epoch::MJD));
 }
 
-planet_ptr asteroid_gtoc5::clone() const
+planet_ptr gtoc5::clone() const
 {
-	return planet_ptr(new asteroid_gtoc5(*this));
+	return planet_ptr(new gtoc5(*this));
 }
 
-} //namespace
+}} //namespace
 
-// Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::asteroid_gtoc5);
-// Serialization code (END)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc5);
+
