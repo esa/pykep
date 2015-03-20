@@ -374,6 +374,6 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" states = l.states()\n"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg_s::human_readable)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());
+		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());
 		
 }

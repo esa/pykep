@@ -410,7 +410,6 @@ protected:
 
 
 private:
-	// Serialization code
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
@@ -431,7 +430,7 @@ private:
 		ar & m_cineq;
 		ar & m_dv;
 	}
-	// Serialization code (END)
+
 	epoch m_ti;
 	sc_state m_xi;
 	std::vector<throttle> m_throttles;
@@ -453,4 +452,4 @@ private:
 std::ostream &operator<<(std::ostream &s, const leg_s &in );
 
 }} //namespaces
-#endif // KEP_TOOLBOX_LEG_H
+#endif // KEP_TOOLBOX_LEG_S_H
