@@ -197,7 +197,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  jd = e.mjd2000"
 		)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::epoch>());
+		.def_pickle(python_class_pickle_suite<kep_toolbox::epoch>());
 
 	// Epoch constructors helpers
 	def("epoch_from_string",&kep_toolbox::epoch_from_string,
@@ -287,7 +287,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  n_sol = Nmax*2+1"
 		)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problem>());
+		.def_pickle(python_class_pickle_suite<kep_toolbox::lambert_problem>());
 
 	// Lambert problem OLD.
 	/*class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a multiple revolution Lambert's problem",
@@ -355,7 +355,7 @@ BOOST_PYTHON_MODULE(_core) {
 			"  n_sol = Nmax*2+1"
 		)
 		.def(repr(self))
-		.def_pickle(generic_pickle_suite<kep_toolbox::lambert_problemOLD>())
+		.def_pickle(python_class_pickle_suite<kep_toolbox::lambert_problemOLD>())
 		.def(init<>());
 	*/
 

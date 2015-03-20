@@ -69,7 +69,7 @@ static inline class_<Planet, bases<planets::base> > planet_wrapper(const char *n
 	retval.def(init<>());
 	retval.def("__copy__", &Py_copy_from_ctor<Planet>);
 	retval.def("__deepcopy__", &Py_deepcopy_from_ctor<Planet>);
-	retval.def_pickle(generic_pickle_suite<Planet>());
+	retval.def_pickle(python_class_pickle_suite<Planet>());
 	return retval;
 }
 
@@ -81,7 +81,7 @@ static inline class_<Planet, bases<planets::base>, bases<planets::keplerian> > p
 	retval.def(init<>());
 	retval.def("__copy__", &Py_copy_from_ctor<Planet>);
 	retval.def("__deepcopy__", &Py_deepcopy_from_ctor<Planet>);
-	retval.def_pickle(generic_pickle_suite<Planet>());
+	retval.def_pickle(python_class_pickle_suite<Planet>());
 	return retval;
 }
 

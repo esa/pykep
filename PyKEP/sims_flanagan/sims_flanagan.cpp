@@ -93,7 +93,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"  T = sc.isp"
 			"  sc.isp = 2000"
 			)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::spacecraft>())
+		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::spacecraft>())
 		.def(init<>());
 
 	// Spacecraft state class
@@ -135,7 +135,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" state = x0.get()"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::sc_state::human_readable)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::sc_state>())
+		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::sc_state>())
 		.def(init<>());
 
 	//Spacecraft throttle class
@@ -174,7 +174,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" c = t1.norm()"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::throttle::human_readable)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::throttle>())
+		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::throttle>())
 		.def(init<>());
 
 	//Leg class
@@ -276,7 +276,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" c = l.throttles_constraints()\n"
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg::human_readable)
-		.def_pickle(generic_pickle_suite<kep_toolbox::sims_flanagan::leg>());
+		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::leg>());
     
     
     typedef void (kep_toolbox::sims_flanagan::leg_s::*leg_s_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const double&);
