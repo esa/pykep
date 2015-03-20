@@ -27,86 +27,72 @@
 
 #include <cmath>
 
+#include "array3D_operations.h"
 
 namespace kep_toolbox {
 template<class vettore3D, class vettore6D>
 void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6D& E)
 {
-    double k[3];
-    double h[3];
-    double Dum_Vec[3];
-    double n[3];
-    double evett[3];
+    vettore3D k = { 0.0, 0.0, 1.0 };
+    // build generic arrays to size - init values don't matter:
+    vettore3D h = { 0.0, 0.0, 0.0 };
+    vettore3D Dum_Vec = { 0.0, 0.0, 0.0 };
+    vettore3D n = { 0.0, 0.0, 0.0 };
+    vettore3D evett = { 0.0, 0.0, 0.0 };
 
     double p = 0.0;
-    double temp =0.0;
+    double temp = 0.0;
     double R0, ni;
     int i;
 
     ///1 - We compute h: the orbital angular momentum vector
-    h[0] = r0[1]*v0[2] - r0[2]*v0[1];
-    h[1] = r0[2]*v0[0] - r0[0]*v0[2];
-    h[2] = r0[0]*v0[1] - r0[1]*v0[0];
+	cross( h, r0, v0 );
 
     ///2 - We compute p: the orbital parameter
-    p = h[0]*h[0] + h[1]*h[1] + h[2]*h[2];
-    p /= mu;
+	p = dot( h, h ) / mu; // h^2 / mu
 
-    //3 - We compute n: the vector of the node line
-    //This operation is singular when inclination is zero, in which case the orbital parameters
-    //are not defined
-    k[0] = 0; k[1] = 0; k[2] = 1;
-    n[0] = k[1]*h[2] - k[2]*h[1];
-    n[1] = k[2]*h[0] - k[0]*h[2];
-    n[2] = k[0]*h[1] - k[1]*h[0];
-    temp = sqrt(n[0]*n[0] + n[1]*n[1] +n[2]*n[2]);
-    for (i=0; i<3; i++)
-        n[i] /= temp;
+    ///3 - We compute n: the vector of the node line
+    ///This operation is singular when inclination is zero, in which case the orbital parameters
+    ///are not defined
+	cross( n, k, h );
+	vers( n, n ); // vers(x, y) = unit vector of y -> x
 
-    //4 - We compute evett: the eccentricity vector
-    //This operation is singular when eccentricity is zero, in which case the orbital parameters
-    //are not defined
-    R0 = sqrt(r0[0]*r0[0] + r0[1]*r0[1] +r0[2]*r0[2]);
-    Dum_Vec[0] = v0[1]*h[2] - v0[2]*h[1];
-    Dum_Vec[1] = v0[2]*h[0] - v0[0]*h[2];
-    Dum_Vec[2] = v0[0]*h[1] - v0[1]*h[0];
+    ///4 - We compute evett: the eccentricity vector
+    ///This operation is singular when eccentricity is zero, in which case the orbital parameters
+    ///are not defined
+	R0 = norm( r0 );
+	cross( Dum_Vec, v0, h );
     for (i=0; i<3; i++)
         evett[i] = Dum_Vec[i]/mu - r0[i]/R0;
 
-    //The eccentricity is calculated and stored as the second orbital element
-    E[1]  = sqrt(evett[0]*evett[0] + evett[1]*evett[1] +evett[2]*evett[2]);
+    ///The eccentricity is calculated and stored as the second orbital element
+	E[1] = norm( evett );
 
-    //The semi-major axis is calculated and stored as the first orbital element
+    ///The semi-major axis is calculated and stored as the first orbital element
     E[0] = p/(1-E[1]*E[1]);
 
-    //Inclination is calculated and stored as the third orbital element
-    E[2] = acos( h[2]/sqrt(h[0]*h[0] + h[1]*h[1] +h[2]*h[2]) );
+    ///Inclination is calculated and stored as the third orbital element
+    E[2] = acos( h[2]/norm(h) );
 
-    //Argument of pericentrum is calculated and stored as the fifth orbital element
-    temp = 0.0;
-    for (i=0; i<3; i++)
-        temp+=n[i]*evett[i];
+    ///Argument of pericentrum is calculated and stored as the fifth orbital element
+	temp = dot( n, evett );
     E[4] = acos(temp/E[1]);
     if (evett[2] < 0) E[4] = 2*M_PI - E[4];
 
-    //Argument of longitude is calculated and stored as the fourth orbital element
+    ///Argument of longitude is calculated and stored as the fourth orbital element
     E[3] = acos(n[0]);
     if (n[1] < 0) E[3] = 2*M_PI-E[3];
 
-    temp = 0.0;
-    for (i=0; i<3; i++)
-        temp+=evett[i]*r0[i];
-
-    //4 - We compute ni: the true anomaly (in 0, 2*PI)
+	temp = dot( evett, r0 );
+	
+    ///4 - We compute ni: the true anomaly (in 0, 2*PI)
     ni = acos(temp/E[1]/R0);
 
-    temp = 0.0;
-    for (i=0; i<3; i++)
-        temp+=r0[i]*v0[i];
+	temp = dot( r0, v0 );
 
     if (temp<0.0) ni = 2*M_PI - ni;
 
-    //Eccentric anomaly or the gudermannian is calculated and stored as the sixth orbital element
+    ///Eccentric anomaly or the gudermannian is calculated and stored as the sixth orbital element
     if (E[1]<1.0)
         E[5] = 2.0*atan(sqrt((1-E[1])/(1+E[1]))*tan(ni/2.0));  // algebraic kepler's equation
     else
