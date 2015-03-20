@@ -56,13 +56,10 @@ try:
 
             r, v = self.__mars.eph(end)
             xe = sc_state(r, v, x[3])
-            self.__leg.set(
-                start, x0, x[-3 * self.__nseg:], end, xe, x[2] * DAY2SEC)
-            v_inf_con = (x[4] * x[4] + x[5] * x[5] + x[6] * x[6] -
-                         self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
+            self.__leg.set(start, x0, x[-3 * self.__nseg:], end, xe, x[2] * DAY2SEC)
+            v_inf_con = (x[4] * x[4] + x[5] * x[5] + x[6] * x[6] - self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
             try:
-                retval = list(self.__leg.mismatch_constraints() +
-                              self.__leg.throttles_constraints()) + [v_inf_con]
+                retval = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
             except:
                 print(
                     "warning: CANNOT EVALUATE constraints .... possible problem in the Taylor integration in the Sundmann variable")
@@ -117,7 +114,7 @@ try:
         N = 20
         prob = mga_lt_earth_mars_sundmann(nseg=N)
         algo = algorithm.scipy_slsqp(max_iter=500, acc=1e-5)
-        #algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
+        # algo = algorithm.snopt(major_iter=1000, opt_tol=1e-6, feas_tol=1e-11)
         algo2 = algorithm.mbh(algo, 5, 0.05)
         algo2.screen_output = True
         isl = island(algo2, prob, 1)

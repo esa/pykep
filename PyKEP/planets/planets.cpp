@@ -69,19 +69,19 @@ static inline class_<Planet, bases<planets::base> > planet_wrapper(const char *n
 	retval.def(init<>());
 	retval.def("__copy__", &Py_copy_from_ctor<Planet>);
 	retval.def("__deepcopy__", &Py_deepcopy_from_ctor<Planet>);
-	retval.def_pickle(generic_pickle_suite<Planet>());
+	retval.def_pickle(python_class_pickle_suite<Planet>());
 	return retval;
 }
 
 // Wrapper to expose planets deriving from keplerian
 template <class Planet>
-static inline class_<Planet, bases<planets::keplerian> > planet_kep_wrapper(const char *name, const char *descr)
+static inline class_<Planet, bases<planets::base>, bases<planets::keplerian> > planet_kep_wrapper(const char *name, const char *descr)
 {
-	class_<Planet, bases<planets::keplerian> > retval(name,descr,init<const Planet &>());
+	class_<Planet, bases<planets::base>, bases<planets::keplerian> > retval(name,descr,init<const Planet &>());
 	retval.def(init<>());
 	retval.def("__copy__", &Py_copy_from_ctor<Planet>);
 	retval.def("__deepcopy__", &Py_deepcopy_from_ctor<Planet>);
-	retval.def_pickle(generic_pickle_suite<Planet>());
+	retval.def_pickle(python_class_pickle_suite<Planet>());
 	return retval;
 }
 

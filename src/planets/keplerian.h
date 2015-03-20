@@ -89,7 +89,6 @@ protected:
 
 }} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::keplerian)
-// BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
 
 #endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H

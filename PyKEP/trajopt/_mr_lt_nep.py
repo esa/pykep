@@ -53,6 +53,7 @@ class mr_lt_nep(base_problem):
         * traj_tof maximum total mission duration (days)
         * c_tol: tolerance on the constraints
         """
+        import PyKEP
         # Number of legs
         n = len(seq) - 1
         # Problem dimension
