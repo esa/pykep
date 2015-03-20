@@ -42,13 +42,10 @@ OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 OPTION(BUILD_PYKEP "Build PyKEP." OFF)
 
 # Build Option: when active the examples in the folder example are compiled into executables
-OPTION(BUILD_TESTS "Build tests." ON)
+OPTION(BUILD_TESTS "Build tests'." ON)
 
 # Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
-OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox." OFF)
-
-# Build Option: when active the GTOC-related datastructures are built
-OPTION(BUILD_GTOC "Build GTOC-related datastructures." ON)
+OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
 
 # Finding the boost libraries needed for the keplerian_toolbox
 SET(REQUIRED_BOOST_LIBS serialization date_time)
@@ -112,4 +109,3 @@ IF(BUILD_TESTS)
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")	
 ENDIF(BUILD_TESTS)
-
