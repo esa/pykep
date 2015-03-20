@@ -68,30 +68,12 @@ class mga_1dsm(base_problem):
         # And we set them
         self.set_bounds(lb, ub)
 
-    def _decode_times(self, x):
+    def _decode_times_and_vinf(self, x):
         T = list([0] * (self.__n_legs))
         for i in range(len(T)):
             T[i] = -log(x[6 + 4 * i])
         alpha_sum = sum(T)
-        return [x[1] * time / alpha_sum for time in T]
 
-    # Objective function
-    def _objfun_impl(self, x):
-        # 1 -  we 'decode' the chromosome recording the various times of flight
-        # (days) in the list T
-        T = self._decode_times(x)
-
-        # 2 - We compute the epochs and ephemerides of the planetary encounters
-        t_P = list([None] * (self.__n_legs + 1))
-        r_P = list([None] * (self.__n_legs + 1))
-        v_P = list([None] * (self.__n_legs + 1))
-        DV = list([0.0] * (self.__n_legs + 1))
-
-        for i, planet in enumerate(self.seq):
-            t_P[i] = epoch(x[0] + sum(T[0:i]))
-            r_P[i], v_P[i] = self.seq[i].eph(t_P[i])
-
-        # 3 - We start with the first leg
         theta = 2 * pi * x[2]
         phi = acos(2 * x[3] - 1) - pi / 2
 
@@ -99,6 +81,24 @@ class mga_1dsm(base_problem):
         Vinfy = x[4] * cos(phi) * sin(theta)
         Vinfz = x[4] * sin(phi)
 
+        return ([x[1] * time / alpha_sum for time in T], Vinfx, Vinfy, Vinfz)
+
+    # Objective function
+    def _objfun_impl(self, x):
+        # 1 -  we 'decode' the chromosome recording the various times of flight
+        # (days) in the list T and the cartesian components of vinf
+        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
+
+        # 2 - We compute the epochs and ephemerides of the planetary encounters
+        t_P = list([None] * (self.__n_legs + 1))
+        r_P = list([None] * (self.__n_legs + 1))
+        v_P = list([None] * (self.__n_legs + 1))
+        DV = list([0.0] * (self.__n_legs + 1))
+        for i, planet in enumerate(self.seq):
+            t_P[i] = epoch(x[0] + sum(T[0:i]))
+            r_P[i], v_P[i] = self.seq[i].eph(t_P[i])
+
+        # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
         r, v = propagate_lagrangian(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
 
@@ -116,12 +116,10 @@ class mga_1dsm(base_problem):
             # Fly-by
             v_out = fb_prop(v_end_l, v_P[i], x[8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
             # s/c propagation before the DSM
-            r, v = propagate_lagrangian(
-                r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
+            r, v = propagate_lagrangian(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[9 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(
-                r, r_P[i + 1], dt, self.common_mu, False, False)
+            l = lambert_problem(r, r_P[i + 1], dt, self.common_mu, False, False)
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
@@ -152,8 +150,8 @@ class mga_1dsm(base_problem):
           print(prob.pretty(x))
         """
         # 1 -  we 'decode' the chromosome recording the various times of flight
-        # (days) in the list T
-        T = self._decode_times(x)
+        # (days) in the list T and the cartesian components of vinf
+        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
 
         # 2 - We compute the epochs and ephemerides of the planetary encounters
         t_P = list([None] * (self.__n_legs + 1))
@@ -167,16 +165,7 @@ class mga_1dsm(base_problem):
 
         # 3 - We start with the first leg
         print("First Leg: " + self.seq[0].name + " to " + self.seq[1].name)
-
-        theta = 2 * pi * x[2]
-        phi = acos(2 * x[3] - 1) - pi / 2
-
-        Vinfx = x[4] * cos(phi) * cos(theta)
-        Vinfy = x[4] * cos(phi) * sin(theta)
-        Vinfz = x[4] * sin(phi)
-
-        print("Departure: " + str(t_P[0]) +
-              " (" + str(t_P[0].mjd2000) + " mjd2000) ")
+        print("Departure: " + str(t_P[0]) + " (" + str(t_P[0].mjd2000) + " mjd2000) ")
         print("Duration: " + str(T[0]) + "days")
         print("VINF: " + str(x[4] / 1000) + " km/sec")
 
@@ -256,8 +245,8 @@ class mga_1dsm(base_problem):
         axis.scatter(0, 0, 0, color='y')
 
         # 1 -  we 'decode' the chromosome recording the various times of flight
-        # (days) in the list T
-        T = self._decode_times(x)
+        # (days) in the list T and the cartesian components of vinf
+        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
 
         # 2 - We compute the epochs and ephemerides of the planetary encounters
         t_P = list([None] * (self.__n_legs + 1))
@@ -271,13 +260,6 @@ class mga_1dsm(base_problem):
             plot_planet(planet, t0=t_P[i], color=(0.8, 0.6, 0.8), legend=True, units = AU, ax=axis)
 
         # 3 - We start with the first leg
-        theta = 2 * pi * x[2]
-        phi = acos(2 * x[3] - 1) - pi / 2
-
-        Vinfx = x[4] * cos(phi) * cos(theta)
-        Vinfy = x[4] * cos(phi) * sin(theta)
-        Vinfz = x[4] * sin(phi)
-
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
         r, v = propagate_lagrangian(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
 
