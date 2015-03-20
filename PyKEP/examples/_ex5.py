@@ -15,8 +15,6 @@ def run_example5():
     prob.set_launch_window(epoch(5844), epoch(6209))
     prob.set_tof(0.7, 3)
 
-    print(prob)
-
     # We solve it!!
     algo = jde(100)
     topo = ring()
