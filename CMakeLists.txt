@@ -47,6 +47,9 @@ OPTION(BUILD_TESTS "Build tests'." ON)
 # Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
 OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
 
+# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory 
+OPTION(INSTALL_HEADERS "Installs the header files" OFF)
+
 # Finding the boost libraries needed for the keplerian_toolbox
 SET(REQUIRED_BOOST_LIBS serialization date_time)
 IF(BUILD_PYKEP)
