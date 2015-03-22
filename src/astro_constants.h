@@ -28,6 +28,8 @@
 //#include<boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
 #include <boost/lexical_cast.hpp>
+#include <vector>
+#include <string>
 
 #define ASTRO_AU 149597870691.0
 #define ASTRO_JR 71492000.0 
