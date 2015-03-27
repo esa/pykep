@@ -71,7 +71,7 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     return axis
 
 
-def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None):
+def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, alpha=1.):
     """
     ax = plot_lambert(ax,l, N=60, sol=0, units = 'PyKEP.AU', legend = 'False')
 
@@ -153,7 +153,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None):
         label = 'Lambert solution (' + str((sol + 1) / 2) + ' revs.)'
     else:
         label = None
-    axis.plot(x, y, z, c=color, label=label)
+    axis.plot(x, y, z, c=color, label=label, alpha=alpha)
 
     if legend:
         axis.legend()
