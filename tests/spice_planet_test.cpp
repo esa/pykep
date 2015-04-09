@@ -33,7 +33,7 @@ using namespace kep_toolbox;
 
 int main() {
 	// We start loading the kernel containing the 67P comet (by default its in planet::spice)
-	utils::load_spice_kernel("C_G_1000012_2012_2017.bsp");
+	util::load_spice_kernel("C_G_1000012_2012_2017.bsp");
 
 	// We instantiate the object
 	planets::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");

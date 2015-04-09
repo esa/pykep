@@ -27,7 +27,7 @@
 
 #include "spice_utils.h"
 
-namespace kep_toolbox { namespace utils {
+namespace kep_toolbox { namespace util {
 
 /// Load SPICE kernel
 /**

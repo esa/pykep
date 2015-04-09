@@ -66,7 +66,7 @@
 #include "sims_flanagan/sc_state.h"
 #include "sims_flanagan/spacecraft.h"
 #include "sims_flanagan/throttle.h"
-#include "utils/spice_utils.h"
+#include "util/spice_utils.h"
 #include "astro_constants.h"
 
  

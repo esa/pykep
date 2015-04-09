@@ -59,7 +59,7 @@ planet_ptr spice::clone() const
 }
 
 void spice::eph_impl(double mjd2000, array3D &r, array3D &v) const{
-	SpiceDouble spice_epoch = kep_toolbox::utils::epoch_to_spice(mjd2000);
+	SpiceDouble spice_epoch = kep_toolbox::util::epoch_to_spice(mjd2000);
 	spkezr_c ( m_target.c_str(), spice_epoch, m_reference_frame.c_str(), m_aberrations.c_str(), m_observer.c_str(), m_state, &m_lt );
 	r[0] = m_state[0] * 1000; 	r[1] = m_state[1] * 1000; 	r[2] = m_state[2] * 1000;
 	v[0] = m_state[3] * 1000; 	v[1] = m_state[4] * 1000; 	v[2] = m_state[5] * 1000;

@@ -35,7 +35,7 @@
 #include "../astro_constants.h"
 #include "../exceptions.h"
 
-namespace kep_toolbox { namespace utils {
+namespace kep_toolbox { namespace util {
 
 void load_spice_kernel(std::string file_name);
 SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);

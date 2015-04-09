@@ -28,7 +28,7 @@
 #include <string>
 
 #include "base.h"
-#include "../utils/spice_utils.h"
+#include "../util/spice_utils.h"
 #include "../serialization.h"
 #include "../config.h"
 
