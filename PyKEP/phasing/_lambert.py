@@ -1,6 +1,8 @@
 from PyGMO.problem._base import base
+from PyGMO.util import hypervolume
 from PyKEP.planets import gtoc7
-from PyKEP.core import lambert_problem, DAY2SEC
+from PyKEP.orbit_plots import plot_planet, plot_lambert
+from PyKEP.core import lambert_problem, DAY2SEC, epoch
 
 
 class lambert_metric(base):
@@ -10,25 +12,25 @@ class lambert_metric(base):
     The result is a PyGMO problem that can be solved efficiently by optimization algorithms
     """
 
-    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), multi_objective=False, max_acc=5e-4):
+    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, max_acc=1e-4):
         """
-PyKEP.phasing.lambert_metric(epoch_bounds,A1, A2)
+PyKEP.phasing.lambert_metric(epoch_bounds,A1, A2, max_acc, multi_objective)
 
 - epoch_bounds: a list containing the lower and upper bounds in mjd2000 for the launch and arrival epochs
 - A1: a planet
 - A2: a planet
 - max_acc: maximum acceleration from the thrust [m/s^2]
-- multi_objective: if True creates a multi-objective problem
+- single_objective: if True defines a single objectiove problem (only DV)
 
 Example::
 
-  lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2))
+  lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, max_acc=1e-4)
         """
 
         # First we call the constructor of the base class telling
         # essentially to PyGMO what kind of problem to expect (1 objective, 0
         # contraints etc.)
-        super(lambert_metric, self).__init__(2, 0, 1 + multi_objective, 0, 0, 0)
+        super(lambert_metric, self).__init__(2, 0, 1 + (not single_objective), 0, 0, 0)
 
         # then we set the problem bounds (in this case equal for all
         # components)
@@ -36,6 +38,7 @@ Example::
         self._ast1 = A1
         self._ast2 = A2
         self._max_acc = max_acc
+        self._UNFEASIBLE = 1e+20
 
     # We reimplement the virtual method that defines the objective function.
     def _objfun_impl(self, x):
@@ -43,9 +46,9 @@ Example::
         # 1 - We check that the transfer time is positive
         if x[0] >= x[1]:
             if self.f_dimension == 1:
-                return (1e20, )
+                return (self._UNFEASIBLE, )
             else:
-                return (1e20, 1e20)
+                return (self._UNFEASIBLE, self._UNFEASIBLE)
 
         # 2 - We compute the asteroid positions
         r1, v1 = self._ast1.eph(x[0])
@@ -66,14 +69,71 @@ Example::
 
         if totDV >= self._max_acc * totDT * DAY2SEC:
             if self.f_dimension == 1:
-                return (1e20, )
+                return (self._UNFEASIBLE, )
             else:
-                return (1e20, 1e20)
+                return (self._UNFEASIBLE, self._UNFEASIBLE)
 
         if self.f_dimension == 1:
             return (totDV, )
         else:
-            return (totDV, totDT)
+            return (totDV, x[1])
+
+    def plot_orbits(self, pop, ax=None):
+        import matplotlib.pylab as plt
+        from mpl_toolkits.mplot3d import Axes3D
+
+        A1, A2 = self._ast1, self._ast2
+
+        if ax is None:
+            fig = plt.figure()
+            axis = fig.add_subplot(111, projection='3d')
+        else:
+            axis = ax
+
+        plot_planet(A1, ax=axis, s=10, t0=epoch(self.lb[0]))
+        plot_planet(A2, ax=axis, s=10, t0=epoch(self.ub[0]))
+        for ind in pop:
+            if ind.cur_f[0] == self._UNFEASIBLE:
+                continue
+            dep, arr = ind.cur_x
+            rdep, vdep = A1.eph(epoch(dep))
+            rarr, varr = A2.eph(epoch(arr))
+            l = lambert_problem(rdep, rarr, (arr - dep) * DAY2SEC, A1.mu_central_body, False, 1)
+            axis = plot_lambert(l, ax=axis, alpha=0.8, color='k')
+
+        if ax is None:
+            plt.show()
+
+        return axis
+
+    def plot_pareto_front(self, pop, ax=None):
+        import matplotlib.pylab as plt
+        from mpl_toolkits.mplot3d import Axes3D
+
+        if pop.champion.f[0] == self._UNFEASIBLE:
+            raise Exception('Input population contains only unfeasible individuals')
+
+        rx, ry = self._compute_ref_point()
+        axis = pop.plot_pareto_fronts()
+        axis.set_xlim([0, rx])
+        axis.set_ylim([self.lb[0], ry])
+        plt.xlabel("[m/s]")
+        plt.ylabel("[MJD2000]")
+        plt.draw()
+
+        return ax
+
+    def compute_hypervolume(self, pop):
+        if pop.champion.f[0] == self._UNFEASIBLE:
+            raise Exception('Input population contains only unfeasible individuals')
+        hv = hypervolume(pop)
+
+        return hv.compute(self._compute_ref_point())
+
+    def _compute_ref_point(self):
+        rx = self._max_acc * DAY2SEC * (self.ub[0] - self.lb[0])
+        ry = self.ub[0]
+        return (rx, ry)
 
     def human_readable_extra(self):
         retval = "\n\tAsetroid 1: " + self._ast1.name
