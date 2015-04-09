@@ -22,29 +22,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_GTOC7_H
-#define KEP_TOOLBOX_PLANET_GTOC7_H
+#ifndef KEP_TOOLBOX_PLANET_MPCORB_H
+#define KEP_TOOLBOX_PLANET_MPCORB_H
+
+#include <string>
 
 #include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{ namespace planets {
 
-/// A GTOC7 asteroid
+namespace kep_toolbox { namespace planet {
+
+/// Minor Planet (keplerian)
 /**
- * This class allows to instantiate main belt asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 7th edition
+ * This class allows to instantiate keplerian planets from the MPCORB database.
  *
- * @see http://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
+class __KEP_TOOL_VISIBLE mpcorb : public keplerian
 {
 public:
-	gtoc7(int = 0);
+	mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
 	planet_ptr clone() const;
+
+	static epoch packed_date2epoch(std::string);
+	double get_H() const {return m_H;};
+	unsigned int get_n_observations() const {return m_n_observations;};
+	unsigned int get_n_oppositions() const {return m_n_oppositions;};
+	unsigned int get_year_of_discovery() const {return m_year_of_discovery;};
 
 private:
 	friend class boost::serialization::access;
@@ -52,13 +59,26 @@ private:
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<keplerian>(*this);
+		ar & m_H;
+		ar & m_n_observations;
+		ar & m_n_oppositions;
+		ar & m_year_of_discovery;
 	}
+
+	static int packed_date2number(char c);
+	// Absolute Magnitude
+	double m_H;
+	// Number of observations
+	unsigned int m_n_observations;
+	// Number of oppositions
+	unsigned int m_n_oppositions;
+	// Year the asteroid was first discovered
+	unsigned int m_year_of_discovery;
 };
 
 
-}} /// namespaces
+}} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc7);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::mpcorb);
 
-
-#endif // KEP_TOOLBOX_PLANET_GTOC7_H
+#endif // KEP_TOOLBOX_PLANET_MPCORB_H

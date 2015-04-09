@@ -32,7 +32,7 @@
 #include "../core_functions/convert_anomalies.h"
 #include "../exceptions.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 const array6D keplerian::default_elements = {{1.0,0.1,0.1,0.1,0.1,0.1}};
 
@@ -145,4 +145,4 @@ std::string keplerian::human_readable_extra() const {
 }
 }}
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::keplerian);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::keplerian);

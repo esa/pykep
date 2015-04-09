@@ -29,7 +29,7 @@
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 /// Solar System Planet (jpl simplified ephemerides)
 /**
@@ -70,6 +70,6 @@ private:
 
 }} /// End of namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::jpl_lp)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::jpl_lp)
 
 #endif // KEP_TOOLBOX_PLANET_JPL_LP_H

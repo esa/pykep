@@ -26,7 +26,7 @@
 #include "../exceptions.h"
 #include "../astro_constants.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 double gtoc2_asteroids_data[911][9] = {
 {2011542,3.9501468,0.2391642,6.87574,16.88982,48.9603,229.49648,54000,1},
@@ -987,5 +987,5 @@ int gtoc2::get_group() const {
 }} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc2);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc2);
 // Serialization code (END)

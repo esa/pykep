@@ -34,14 +34,14 @@
 #include "../config.h"
 #include "../astro_constants.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 // Forward declaration.
 class base;
 typedef boost::shared_ptr<base> planet_ptr;
 
 
-/// Base class for planets
+/// Base class for planet
 /**
  * A base planet in PyKEP is defined by its name, its radius, its safe radius (i.e. how close to it its considered to be safe)
  * its gravity parameter and the gravitational parameter of the attracting body. All classes deriving from planet::base

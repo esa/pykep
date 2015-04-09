@@ -4,7 +4,7 @@ def run_example2():
 
     import matplotlib.pyplot as plt
     from PyKEP import epoch, DAY2SEC, AU, MU_SUN, lambert_problem
-    from PyKEP.planets import jpl_lp
+    from PyKEP.planet import jpl_lp
     from PyKEP.orbit_plots import plot_planet, plot_lambert
 
     mpl.rcParams['legend.fontsize'] = 10

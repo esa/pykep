@@ -44,7 +44,7 @@ static const int mpcorb_format[12][2] =
 	{127,4},	// Year of First Observation (only if the number of oppositions is larger than 1)
 };
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 /**
  * Construct a minor planet from a line of the MPCORB.DAT file. Default value is the MPCORB.DAT line
@@ -146,5 +146,5 @@ planet_ptr mpcorb::clone() const
 
 }} //namespaces
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::mpcorb);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::mpcorb);
 

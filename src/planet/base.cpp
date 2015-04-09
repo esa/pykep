@@ -30,7 +30,7 @@
 #include "../core_functions/convert_anomalies.h"
 #include "../exceptions.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 /// Constructor
 /** \param[in] mu_central_body gravitational parameter of the central attracting body [m^3/sec^2]

@@ -26,7 +26,7 @@
 #include "../exceptions.h"
 
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 /// Constructor
 /** \param[in] mu_central_body gravitational parameter of the central attracting body [m^3/sec^2]
  * \param[in] mu_self gravitational parameter of the body [m^3/sec^2]
@@ -85,4 +85,4 @@ std::string spice::human_readable_extra() const {
 
 }} //namespace
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::spice)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::spice)

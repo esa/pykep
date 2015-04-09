@@ -22,28 +22,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_GTOC_6_H
-#define KEP_TOOLBOX_PLANET_GTOC_6_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC7_H
+#define KEP_TOOLBOX_PLANET_GTOC7_H
 
 #include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
-/// A Jupiter moon from GTOC6 (keplerian)
+/// A GTOC7 asteroid
 /**
- * This class allows to instantiate moons of
- * the Jupiter system by referring to their common names. Ephemerides are Keplerian 
- * and elements are those defined for the GTOC6 competition
+ * This class allows to instantiate main belt asteroids
+ * from the Global Trajectory Optimization Competition (GTOC) 7th edition
  *
+ * @see http://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
+class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
 {
 public:
-	gtoc6(const std::string & = "io");
+	gtoc7(int = 0);
 	planet_ptr clone() const;
 
 private:
@@ -56,8 +56,9 @@ private:
 };
 
 
-}} /// End of namespaces
+}} /// namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc6);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc7);
 
-#endif // KEP_TOOLBOX_PLANET_GTOC_6_H
+
+#endif // KEP_TOOLBOX_PLANET_GTOC7_H

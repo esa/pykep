@@ -26,7 +26,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../src/planets/spice.h"
+#include "../src/planet/spice.h"
 
 // In this test we test the functionality of the SPICE planet
 using namespace kep_toolbox;
@@ -36,7 +36,7 @@ int main() {
 	util::load_spice_kernel("C_G_1000012_2012_2017.bsp");
 
 	// We instantiate the object
-	planets::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
+	planet::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
 
 	// We stream to screen the newly created planet
 	std::cout << pl1 << std::endl;
@@ -44,7 +44,7 @@ int main() {
 	// We define the epoch to compute ephemeridess
 	kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
 	array3D r,v;
- 	pl1.eph(when, r, v);
+	pl1.eph(when, r, v);
 
     std::cout << "67P eph at: "<< when << std::endl;
     std::cout << r << v << std::endl;

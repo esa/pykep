@@ -36,7 +36,7 @@
 #include "../third_party/libsgp4/SatelliteException.h"
 #include "../third_party/libsgp4/Eci.h"
 
-namespace kep_toolbox{ namespace planets{
+namespace kep_toolbox{ namespace planet{
 
 /**
  * Construct a planet_tle from two strings containing the two line elements
@@ -124,4 +124,4 @@ std::string tle::human_readable_extra() const {
 
 }} //namespace
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::tle)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::tle)

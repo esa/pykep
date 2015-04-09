@@ -26,7 +26,7 @@
 #include <fstream>
 #include <numeric>
 #include <algorithm>
-#include "../src/planets/tle.h"
+#include "../src/planet/tle.h"
 #include "../src/core_functions/array3D_operations.h"
 
 using namespace kep_toolbox;
@@ -44,30 +44,30 @@ int main() {
 	std::string line1, line2,line21,line22;
 	array3D r1,v1,r2,v2,err_r,err_v;
 	std::vector<double> errors_r, errors_v;
-	if (!txtfile.good()) 
+	if (!txtfile.good())
 	{
 		std::cout << "File sgp4_test.txt not found" <<std::endl;
-    	return 1; // exit if file not found
-    }
-    getline (txtfile,line1);
-    getline (txtfile,line2);
-    while(!txtfile.eof())
-    {
-    	getline (txtfile,line21);
-    	getline (txtfile,line22);
-	   	planets::tle sat1(line1.substr(0,69),line2.substr(0,69));
-	   	planets::tle sat2(line21.substr(0,69),line22.substr(0,69));
+		return 1; // exit if file not found
+	}
+	getline (txtfile,line1);
+	getline (txtfile,line2);
+	while(!txtfile.eof())
+	{
+		getline (txtfile,line21);
+		getline (txtfile,line22);
+		planet::tle sat1(line1.substr(0,69),line2.substr(0,69));
+		planet::tle sat2(line21.substr(0,69),line22.substr(0,69));
 		sat1.eph(sat2.get_ref_mjd2000() ,r1,v1);
 		sat2.eph(sat2.get_ref_mjd2000() ,r2,v2);
 		diff(err_r,r1,r2);
-		diff(err_v,v1,v2);		
+		diff(err_v,v1,v2);
 		errors_r.push_back(norm(err_r));
 		errors_v.push_back(norm(err_v));
-	 	if (norm(err_r) > 10000)
-	 	{
-	 		std::cout << line1 << std::endl;
-	 		std::cout << line2 << std::endl;
-	 	}
+		if (norm(err_r) > 10000)
+		{
+			std::cout << line1 << std::endl;
+			std::cout << line2 << std::endl;
+		}
 		line1 = line21;
 		line2 = line22;
 	}
@@ -91,6 +91,5 @@ int main() {
 		std::cout << "FAIL" << std::endl;
 		return 1;
 	}
-	
 }
 

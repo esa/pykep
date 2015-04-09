@@ -22,63 +22,75 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_MPCORB_H
-#define KEP_TOOLBOX_PLANET_MPCORB_H
+#ifndef KEP_TOOLBOX_PLANET_SPICE_H
+#define KEP_TOOLBOX_PLANET_SPICE_H
 
 #include <string>
 
-#include "keplerian.h"
+#include "base.h"
+#include "../util/spice_utils.h"
 #include "../serialization.h"
 #include "../config.h"
 
+namespace kep_toolbox{ namespace planet {
 
-namespace kep_toolbox { namespace planets {
-
-/// Minor Planet (keplerian)
+/// A planet using the SPICE Toolbox
 /**
- * This class allows to instantiate keplerian planets from the MPCORB database.
+ * This class allows to instantiate a planet that uses SPICE toolbox
+ * to compute the ephemerides.
+ *
+ * NOTE: The class does not check upon construction that the required kernels are loaded 
+ * in memory. Its only when the ephemerides are actually called that an exception is thrown
+ * in case the required kernels are not loaded
+ *
+ * @see http://naif.jpl.nasa.gov/naif/toolkit.html
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE mpcorb : public keplerian
+class __KEP_TOOL_VISIBLE spice : public base
 {
 public:
-	mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000      (1) Ceres              20061025");
+	spice(const std::string & = "CHURYUMOV-GERASIMENKO", 
+		const std::string & = "SUN", 
+		const std::string & = "ECLIPJ2000", 
+		const std::string & = "NONE",
+		double = 0, // mu_central_body
+		double = 0, // mu_self
+		double = 0, // radius
+		double = 0  // safe_radius
+	);
 	planet_ptr clone() const;
-
-	static epoch packed_date2epoch(std::string);
-	double get_H() const {return m_H;};
-	unsigned int get_n_observations() const {return m_n_observations;};
-	unsigned int get_n_oppositions() const {return m_n_oppositions;};
-	unsigned int get_year_of_discovery() const {return m_year_of_discovery;};
+	std::string human_readable_extra() const;
 
 private:
+	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<keplerian>(*this);
-		ar & m_H;
-		ar & m_n_observations;
-		ar & m_n_oppositions;
-		ar & m_year_of_discovery;
+		ar & boost::serialization::base_object<base>(*this);
+		ar & const_cast<std::string& >(m_target);
+		ar & const_cast<std::string& >(m_observer);
+		ar & const_cast<std::string& >(m_reference_frame);
+		ar & const_cast<std::string& >(m_aberrations);
 	}
 
-	static int packed_date2number(char c);
-	// Absolute Magnitude
-	double m_H;
-	// Number of observations
-	unsigned int m_n_observations;
-	// Number of oppositions
-	unsigned int m_n_oppositions;
-	// Year the asteroid was first discovered
-	unsigned int m_year_of_discovery;
+	const std::string m_target;
+	const std::string m_observer;
+	const std::string m_reference_frame;
+	const std::string m_aberrations;
+
+	// Dummy variables that store intermidiate values to transfer to and from SPICE 
+	mutable SpiceDouble m_state[6];
+	mutable SpiceDouble m_lt;
+
 };
 
 
 }} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::mpcorb);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::spice)
 
-#endif // KEP_TOOLBOX_PLANET_MPCORB_H
+#endif // KEP_TOOLBOX_PLANET_SPICE_H

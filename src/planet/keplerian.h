@@ -22,84 +22,73 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_TLE_H
-#define KEP_TOOLBOX_PLANET_TLE_H
+#ifndef KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#define KEP_TOOLBOX_PLANET_KEPLERIAN_H
+
+#include <string>
+#include <vector>
 
 #include "base.h"
 #include "../serialization.h"
 #include "../config.h"
-#include "../third_party/libsgp4/SGP4.h"
-#include "../third_party/libsgp4/Tle.h"
+#include "../exceptions.h"
+#include "../epoch.h"
 
-namespace kep_toolbox{ namespace planets{
+namespace kep_toolbox{ namespace planet {
 
-/// A planet from TLE format
+/// A Keplerian Planet
 /**
- * This class allows to instantiate Earth-orbiting
- * satellites from their Two Line Element format. The ephemerides will then be computed
- * using SGP4/SDP4 orbital model. The third party C++ library SGP4 Satellite Library is
- * used (source code in tp/libsgp4)
- *
- * NOTE: the constant used to initialize the data_members are not the pykep ones, rather the 
- * constants defined in the sgp4lib are used (tp/libsgp4/Globals.h)
- *
- * @see http://celestrak.com/columns/v04n03/#FAQ01
- * @see http://www.danrw.com/sgp4/
+ * This class allows to instantiate a planet having keplerian ephemerides
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE tle : public base
+class __KEP_TOOL_VISIBLE keplerian : public base
 {
+
+static const array6D default_elements;
 public:
-	/**
-	 * Construct a planet_tle from two strings containing the two line elements
-	 * \param[in] line1 first line
-	 * \param[in] line2 second line
-	 */
-	tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95", const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
-	planet_ptr clone() const;
+
+	keplerian(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
+	keplerian(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, const std::string &name = "Unknown");
+
+	virtual planet_ptr clone() const;
 	std::string human_readable_extra() const;
 
-	double get_ref_mjd2000() const;
+	/** @name Getters */
+	//@{
+	array6D get_elements() const;
+	kep_toolbox::epoch get_ref_epoch() const;
+	double get_mean_motion() const;
+	//@}
+
+	/** @name Setters */
+	//@{
+	void set_elements(const array6D&);
+	void set_ref_epoch(const kep_toolbox::epoch&);
+	//@}
 
 private:
 	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 
 	friend class boost::serialization::access;
 	template <class Archive>
-	void serialize(Archive &ar, const unsigned int version)
+	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<base>(*this);
-		ar & const_cast<std::string& >(m_line1);
-		ar & const_cast<std::string& >(m_line2);
-		boost::serialization::split_member(ar, *this, version);
+		ar & m_keplerian_elements;
+		ar & m_mean_motion;
+		ar & m_ref_mjd2000;
 	}
 
-	template <class Archive>
-		void save(Archive &, const unsigned int) const
-		{}
-
-	template <class Archive>
-		void load(Archive &, const unsigned int)
-		{
-			// NOTE: the Tle and SGP4 data members are not saved during serialization. Hence, upon loading,
-			// we are going to build them again from data. This set up was chosen to avoid implementing
-			// serialization of the third-party library libsgp4 objects
-			m_tle = Tle("TLE satellite", m_line1, m_line2);
-			m_sgp4_propagator = SGP4(m_tle);
-		}
-
-		const std::string m_line1;
-		const std::string m_line2;
-		Tle m_tle;
-		SGP4 m_sgp4_propagator;
-		double m_ref_mjd2000;
-	};
-
+protected:
+	array6D m_keplerian_elements;
+	double m_mean_motion;
+	double m_ref_mjd2000;
+};
 
 }} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::tle)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
 
-#endif // KEP_TOOLBOX_PLANET_TLE_H
+#endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H

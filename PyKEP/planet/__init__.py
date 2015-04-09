@@ -5,15 +5,15 @@ low-thrust tajectories using our own flavour of the Sims-Flanagan model: a traje
 transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
-from PyKEP.planets._planets import *
-from PyKEP.planets._planets import _base
+from PyKEP.planet._planet import *
+from PyKEP.planet._planet import _base
 
 
 def _keplerian_ctor(self, *args):
     """
-PyKEP.planets.keplerian(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
+PyKEP.planet.keplerian(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
 
-PyKEP.planets.keplerian(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
+PyKEP.planet.keplerian(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = 'unknown'])
 
 - when: a :py:class:`PyKEP.epoch` indicating the orbital elements epoch
 - orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)
@@ -26,7 +26,7 @@ PyKEP.planets.keplerian(when,r,v, mu_central_body, mu_self,radius, safe_radius [
 
 .. note::
 
-   All classes having Keplerian ephemerides as :py:class:`PyKEP.planets.mpcorb` inherit from this (c++) class
+   All classes having Keplerian ephemerides as :py:class:`PyKEP.planet.mpcorb` inherit from this (c++) class
 
 Example::
 

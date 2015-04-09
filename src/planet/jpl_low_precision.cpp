@@ -28,7 +28,7 @@
 #include "../core_functions/par2ic.h"
 #include "../core_functions/convert_anomalies.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 // Data from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
 
@@ -199,5 +199,5 @@ std::string jpl_lp::human_readable_extra() const {
 }} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::jpl_lp)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::jpl_lp)
 // Serialization code (END)

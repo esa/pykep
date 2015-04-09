@@ -61,7 +61,7 @@ def read_tle(tle_file, verbose=False, with_name=False):
       satcat = PyKEP.read_satcat("my_dir/satcat.txt")
       cross_sections = [satcat[pl.name()].radarA for pl in  planet_list]
     """
-    from PyKEP.planets import tle
+    from PyKEP.planet import tle
     planet_list = []
 
     with open(tle_file, 'r') as f:

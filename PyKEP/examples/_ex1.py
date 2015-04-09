@@ -23,7 +23,7 @@ try:
             # We then define some data members (we use the double underscore to
             # indicate they are private)
             from PyKEP import MU_SUN
-            from PyKEP.planets import jpl_lp
+            from PyKEP.planet import jpl_lp
             from PyKEP.sims_flanagan import spacecraft, leg
             self.__earth = jpl_lp('earth')
             self.__mars = jpl_lp('mars')

@@ -22,73 +22,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_KEPLERIAN_H
-#define KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC_6_H
+#define KEP_TOOLBOX_PLANET_GTOC_6_H
 
-#include <string>
-#include <vector>
-
-#include "base.h"
+#include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
-#include "../exceptions.h"
-#include "../epoch.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
-/// A Keplerian Planet
+/// A Jupiter moon from GTOC6 (keplerian)
 /**
- * This class allows to instantiate a planet having keplerian ephemerides
+ * This class allows to instantiate moons of
+ * the Jupiter system by referring to their common names. Ephemerides are Keplerian 
+ * and elements are those defined for the GTOC6 competition
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE keplerian : public base
+class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
 {
-
-static const array6D default_elements;
 public:
-
-	keplerian(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
-	keplerian(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, const std::string &name = "Unknown");
-
-	virtual planet_ptr clone() const;
-	std::string human_readable_extra() const;
-
-	/** @name Getters */
-	//@{
-	array6D get_elements() const;
-	kep_toolbox::epoch get_ref_epoch() const;
-	double get_mean_motion() const;
-	//@}
-
-	/** @name Setters */
-	//@{
-	void set_elements(const array6D&);
-	void set_ref_epoch(const kep_toolbox::epoch&);
-	//@}
+	gtoc6(const std::string & = "io");
+	planet_ptr clone() const;
 
 private:
-	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
-
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive &ar, const unsigned int)
 	{
-		ar & boost::serialization::base_object<base>(*this);
-		ar & m_keplerian_elements;
-		ar & m_mean_motion;
-		ar & m_ref_mjd2000;
+		ar & boost::serialization::base_object<keplerian>(*this);
 	}
-
-protected:
-	array6D m_keplerian_elements;
-	double m_mean_motion;
-	double m_ref_mjd2000;
 };
 
-}} /// End of namespace kep_toolbox
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
+}} /// End of namespaces
 
-#endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc6);
+
+#endif // KEP_TOOLBOX_PLANET_GTOC_6_H

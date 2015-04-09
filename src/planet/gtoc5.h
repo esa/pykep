@@ -22,32 +22,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_GTOC2_H
-#define KEP_TOOLBOX_PLANET_GTOC2_H
+#ifndef KEP_TOOLBOX_PLANET_GTOC5_H
+#define KEP_TOOLBOX_PLANET_GTOC5_H
 
 #include "keplerian.h"
 #include "../serialization.h"
 #include "../config.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
-/// A GTOC2 asteroid
+/// A GTOC5 asteroid
 /**
  * This class allows to instantiate asteroids
- * from the Global Trajectory Optimization Competition (GTOC) 2nd edition
+ * from the Global Trajectory Optimization Competition (GTOC) 5th edition
  *
  * @see http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class __KEP_TOOL_VISIBLE gtoc2 : public keplerian
+class __KEP_TOOL_VISIBLE gtoc5 : public keplerian
 {
 public:
-
-	gtoc2(int = 0);
-
-	int get_group() const;
+	gtoc5(int = 7076);
 	planet_ptr clone() const;
 
 private:
@@ -56,13 +53,15 @@ private:
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<keplerian>(*this);
-		ar & m_group;
 	}
-	int m_group;
+
 };
 
-}} // Namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planets::gtoc2);
+}} /// End of namespace kep_toolbox
 
-#endif // KEP_TOOLBOX_ASTEROID_GTOC2_H
+
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc5);
+
+
+#endif // KEP_TOOLBOX_PLANET_GTOC5_H

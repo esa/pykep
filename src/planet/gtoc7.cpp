@@ -26,7 +26,7 @@
 #include "../exceptions.h"
 #include "../astro_constants.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 double gtoc7_asteroids_data[16257][7] = {
 {54000,0.999988049532578,0.0167168116316,0.0008854353079654,287.61577546182,175.40647696473,257.60683707535},
@@ -16320,5 +16320,5 @@ planet_ptr gtoc7::clone() const
 
 }} //namespace
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc7);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc7);
 

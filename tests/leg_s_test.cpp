@@ -37,7 +37,7 @@ int main() {
     sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
 	phase1.set_mu(mu);
 	phase1.set_sc(sc);
-	planets::jpl_lp earth("earth");
+	planet::jpl_lp earth("earth");
 	array3D r,v;
 	earth.eph(epoch(0),r,v);
 	sims_flanagan::sc_state x0(r,v,sc.get_mass());

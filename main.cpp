@@ -5,7 +5,7 @@
 using namespace std;
 using namespace kep_toolbox;
 int main() {
-	planets::gtoc5 pl2(33);
+	planet::gtoc5 pl2(33);
 	array3D r1, v1;
 
 	pl2.eph(kep_toolbox::epoch(1.23), r1, v1);

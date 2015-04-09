@@ -25,7 +25,7 @@
 #include "gtoc6.h"
 #include "../exceptions.h"
 
-namespace kep_toolbox{ namespace planets {
+namespace kep_toolbox{ namespace planet {
 
 /**
  * Construct a Jupiter moon from its common name
@@ -104,5 +104,5 @@ planet_ptr gtoc6::clone() const
 }} //namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planets::gtoc6)
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc6)
 // Serialization code (END)

@@ -28,14 +28,14 @@
 #include <boost/python/wrapper.hpp>
 #include <string>
 
-#include "../../src/planets/base.h"
+#include "../../src/planet/base.h"
 #include "../../src/config.h"
 #include "../../src/exceptions.h"
 #include "../../src/serialization.h"
 
-namespace kep_toolbox { namespace planets {
+namespace kep_toolbox { namespace planet {
 
-// Wrapper for exporting the planets::base into python
+// Wrapper for exporting the planet::base into python
 class __KEP_TOOL_VISIBLE python_base : public base, public boost::python::wrapper<base>
 {
 	public:
@@ -101,6 +101,6 @@ class __KEP_TOOL_VISIBLE python_base : public base, public boost::python::wrappe
 
 }} //namespaces
 
-BOOST_CLASS_EXPORT(kep_toolbox::planets::python_base)
+BOOST_CLASS_EXPORT(kep_toolbox::planet::python_base)
 
 #endif
