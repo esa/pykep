@@ -22,37 +22,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <iostream>
-#include <iomanip>
-#include <boost/lexical_cast.hpp>
+#ifndef KEP_TOOLBOX_PLANET_GTOC_6_H
+#define KEP_TOOLBOX_PLANET_GTOC_6_H
 
-#include "../src/keplerian_toolbox.h"
+#include "keplerian.h"
+#include "../serialization.h"
+#include "../config.h"
 
-using namespace std;
-using namespace kep_toolbox;
-int main() {
-    int n_seg=15;
-	double mu = ASTRO_MU_SUN;
-	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
-    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
-	phase1.set_mu(mu);
-	phase1.set_sc(sc);
-	planet::jpl_lp earth("earth");
-	array3D r,v;
-	earth.eph(epoch(0),r,v);
-	sims_flanagan::sc_state x0(r,v,sc.get_mass());
-	earth.eph(epoch(100),r,v);
-	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
-	std::vector<double> throttles(n_seg*3,0.1423);
-	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
-    for (int i=0; i< 8;++i){
-        std::cout << phase1.compute_mismatch_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-    for (int i=0; i< n_seg;++i){
-        std::cout << phase1.compute_throttles_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-	return 0;
-}
+namespace kep_toolbox{ namespace planet {
 
+/// A Jupiter moon from GTOC6 (keplerian)
+/**
+ * This class allows to instantiate moons of
+ * the Jupiter system by referring to their common names. Ephemerides are Keplerian 
+ * and elements are those defined for the GTOC6 competition
+ *
+ * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
+ */
+
+class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
+{
+public:
+	gtoc6(const std::string & = "io");
+	planet_ptr clone() const;
+
+private:
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<keplerian>(*this);
+	}
+};
+
+
+}} /// End of namespaces
+
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc6);
+
+#endif // KEP_TOOLBOX_PLANET_GTOC_6_H

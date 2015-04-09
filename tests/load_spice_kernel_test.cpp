@@ -26,7 +26,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../src/utils/spice_utils.h"
+#include "../src/util/spice_utils.h"
 #include "../src/epoch.h"
 
 // In this test we test the functionality of loading spice kernels
@@ -37,7 +37,7 @@
 //      -----------------------------       -----------------------------
 //      2012 JAN 01 00:00:00.000            2017 JAN 01 00:00:00.000
 
-using namespace kep_toolbox::utils;
+using namespace kep_toolbox::util;
 
 std::string stream(double input[6]) 
 {

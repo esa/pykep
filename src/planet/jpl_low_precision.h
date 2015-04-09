@@ -22,37 +22,54 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <iostream>
-#include <iomanip>
-#include <boost/lexical_cast.hpp>
+#ifndef KEP_TOOLBOX_PLANET_JPL_LP_H
+#define KEP_TOOLBOX_PLANET_JPL_LP_H
 
-#include "../src/keplerian_toolbox.h"
+#include "base.h"
+#include "../serialization.h"
+#include "../config.h"
 
-using namespace std;
-using namespace kep_toolbox;
-int main() {
-    int n_seg=15;
-	double mu = ASTRO_MU_SUN;
-	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
-    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
-	phase1.set_mu(mu);
-	phase1.set_sc(sc);
-	planet::jpl_lp earth("earth");
-	array3D r,v;
-	earth.eph(epoch(0),r,v);
-	sims_flanagan::sc_state x0(r,v,sc.get_mass());
-	earth.eph(epoch(100),r,v);
-	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
-	std::vector<double> throttles(n_seg*3,0.1423);
-	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
-    for (int i=0; i< 8;++i){
-        std::cout << phase1.compute_mismatch_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-    for (int i=0; i< n_seg;++i){
-        std::cout << phase1.compute_throttles_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-	return 0;
-}
+namespace kep_toolbox{ namespace planet {
 
+/// Solar System Planet (jpl simplified ephemerides)
+/**
+ * This class allows to instantiate planets of
+ * the solar system by referring to their common names. The ephemeris used
+ * are low_precision ephemeris taken from http://ssd.jpl.nasa.gov/txt/p_elem_t1.txt
+ * valid in the timeframe 1800AD - 2050 AD
+ *
+ * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
+ */
+
+class __KEP_TOOL_VISIBLE jpl_lp : public base
+{
+public:
+
+	jpl_lp(const std::string & = "earth");
+	planet_ptr clone() const;
+	std::string human_readable_extra() const;
+
+private:
+	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<base>(*this);
+		ar & jpl_elements;
+		ar & jpl_elements_dot;
+		ar & const_cast<double&>(ref_mjd2000);
+	}
+
+	array6D jpl_elements;
+	array6D jpl_elements_dot;
+	const double ref_mjd2000;
+};
+
+
+}} /// End of namespaces
+
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::jpl_lp)
+
+#endif // KEP_TOOLBOX_PLANET_JPL_LP_H

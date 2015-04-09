@@ -21,46 +21,74 @@
  *   Free Software Foundation, Inc.,                                         *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
-#ifndef KEP_TOOLBOX_FB_VEL_H
-#define KEP_TOOLBOX_FB_VEL_H
 
-#include <cmath>
+#ifndef KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#define KEP_TOOLBOX_PLANET_KEPLERIAN_H
 
-#include "../planet/base.h"
+#include <string>
+#include <vector>
 
-/// Compute fly-by constraints
+#include "base.h"
+#include "../serialization.h"
+#include "../config.h"
+#include "../exceptions.h"
+#include "../epoch.h"
+
+namespace kep_toolbox{ namespace planet {
+
+/// A Keplerian Planet
 /**
- * This template function can be used to evaluate the feasibility of a fly-by described by relative planetary velocities
- * before and after.
- *
- * \param[out] dV is the delta-V thrust magnitude needed to make a fly-by possible. For a ballistic fly-by dV must be zero.
- * \param[in] v_rel_in  initial position vector. On output contains the propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] v_rel_out initial velocity vector. On output contains the propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] pl a planet object
+ * This class allows to instantiate a planet having keplerian ephemerides
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
- * @author Johannes Simon (johannessimon81_AT_gmail.com)
  */
 
-namespace kep_toolbox {
-
-template<class vettore3D>
-inline void fb_vel(double& dV, const vettore3D& v_rel_in, const vettore3D& v_rel_out, const planet::base &pl)
+class __KEP_TOOL_VISIBLE keplerian : public base
 {
-    double Vin2  = v_rel_in[0]*v_rel_in[0]+v_rel_in[1]*v_rel_in[1]+v_rel_in[2]*v_rel_in[2];
-    double Vout2 = v_rel_out[0]*v_rel_out[0]+v_rel_out[1]*v_rel_out[1]+v_rel_out[2]*v_rel_out[2];
-    //eq_V2 = Vin2 - Vout2;
 
-    double e_min = 1 + pl.get_safe_radius() / pl.get_mu_self() * Vin2;
-    double alpha = acos( (v_rel_in[0]*v_rel_out[0] + v_rel_in[1]*v_rel_out[1] + v_rel_in[2]*v_rel_out[2]) / sqrt(Vin2 * Vout2) );
-    double ineq_delta = alpha - 2 * asin(1/e_min);
-    
-    if(ineq_delta > 0.0) dV = sqrt( Vout2 + Vin2 - 2.0*sqrt(Vout2*Vin2)*cos(ineq_delta) );
-    else dV = fabs(sqrt(Vout2) - sqrt(Vin2));
-    
-    return;
-}
-} // namespace end
+static const array6D default_elements;
+public:
 
-#endif // KEP_TOOLBOX_FB_VEL_H
+	keplerian(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
+	keplerian(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, const std::string &name = "Unknown");
 
+	virtual planet_ptr clone() const;
+	std::string human_readable_extra() const;
+
+	/** @name Getters */
+	//@{
+	array6D get_elements() const;
+	kep_toolbox::epoch get_ref_epoch() const;
+	double get_mean_motion() const;
+	//@}
+
+	/** @name Setters */
+	//@{
+	void set_elements(const array6D&);
+	void set_ref_epoch(const kep_toolbox::epoch&);
+	//@}
+
+private:
+	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<base>(*this);
+		ar & m_keplerian_elements;
+		ar & m_mean_motion;
+		ar & m_ref_mjd2000;
+	}
+
+protected:
+	array6D m_keplerian_elements;
+	double m_mean_motion;
+	double m_ref_mjd2000;
+};
+
+}} /// End of namespace kep_toolbox
+
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::keplerian)
+
+#endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H

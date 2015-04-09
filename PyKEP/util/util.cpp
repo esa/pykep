@@ -1,14 +1,14 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2015 The PaGMO development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://keptoolbox.sourceforge.net/index.html                            *
- *   http://keptoolbox.sourceforge.net/credits.html                          *
- *                                                                           *
+ *   http://apps.sourceforge.net/mediawiki/pagmo                             *
+ *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
+ *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
- *   the Free Software Foundation; either version 2 of the License, or       *
+ *   the Free Software Foundation; either version 3 of the License, or       *
  *   (at your option) any later version.                                     *
  *                                                                           *
  *   This program is distributed in the hope that it will be useful,         *
@@ -22,37 +22,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <iostream>
-#include <iomanip>
-#include <boost/lexical_cast.hpp>
+#include <boost/python/module.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/docstring_options.hpp>
 
-#include "../src/keplerian_toolbox.h"
+#ifdef PYKEP_USING_SPICE
+	#include "../../src/util/spice_utils.h"
+#endif
 
-using namespace std;
-using namespace kep_toolbox;
-int main() {
-    int n_seg=15;
-	double mu = ASTRO_MU_SUN;
-	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
-    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
-	phase1.set_mu(mu);
-	phase1.set_sc(sc);
-	planet::jpl_lp earth("earth");
-	array3D r,v;
-	earth.eph(epoch(0),r,v);
-	sims_flanagan::sc_state x0(r,v,sc.get_mass());
-	earth.eph(epoch(100),r,v);
-	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
-	std::vector<double> throttles(n_seg*3,0.1423);
-	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
-    for (int i=0; i< 8;++i){
-        std::cout << phase1.compute_mismatch_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-    for (int i=0; i< n_seg;++i){
-        std::cout << phase1.compute_throttles_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-	return 0;
+using namespace boost::python;
+
+BOOST_PYTHON_MODULE(_util) {
+	// Disable docstring c++ signature to allow sphinx autodoc to work properly
+	docstring_options doc_options;
+	doc_options.disable_signatures();
+	
+#ifdef PYKEP_USING_SPICE
+	// Spice utilities
+	def("load_spice_kernel",&kep_toolbox::util::load_spice_kernel,
+			  "PyKEP.util.load_spice_kernel(file_name)\n\n"
+			  "- file_name: string containing the kernel file to load\n\n"
+			  "Loads the SPICE kernel specified by the filename into memory. \n\n"
+			  ".. note::\n\n"
+			  "   The kernel must be in memory before its used, for example, when computing a planets.spice ephemerides\n\n"
+			  "Example:: \n\n"
+			  "  util.load_spice_kernel('de432s.bsp')"
+	);
+#endif
 }
 

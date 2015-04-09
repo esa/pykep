@@ -26,7 +26,7 @@
 
 #include <cmath>
 
-#include "../planets/base.h"
+#include "../planet/base.h"
 
 /// Compute fly-by constraints
 /**
@@ -46,7 +46,7 @@
 namespace kep_toolbox {
 
 template<class vettore3D>
-inline void fb_con(double& eq_V2, double& ineq_delta, const vettore3D& v_rel_in, const vettore3D& v_rel_out, const planets::base &pl)
+inline void fb_con(double& eq_V2, double& ineq_delta, const vettore3D& v_rel_in, const vettore3D& v_rel_out, const planet::base &pl)
 {
     double Vin2  = v_rel_in[0]*v_rel_in[0]+v_rel_in[1]*v_rel_in[1]+v_rel_in[2]*v_rel_in[2];
     double Vout2 = v_rel_out[0]*v_rel_out[0]+v_rel_out[1]*v_rel_out[1]+v_rel_out[2]*v_rel_out[2];

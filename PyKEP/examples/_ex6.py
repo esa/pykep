@@ -7,7 +7,7 @@ def run_example6(n_seg=5):
     """
     from PyGMO import algorithm, population
     from PyKEP.trajopt import mr_lt_nep
-    from PyKEP.planets import gtoc7
+    from PyKEP.planet import gtoc7
 
     algo = algorithm.scipy_slsqp(max_iter=500, acc=1e-5, screen_output=True)
 

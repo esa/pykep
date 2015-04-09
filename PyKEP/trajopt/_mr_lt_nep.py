@@ -1,5 +1,5 @@
 from PyGMO.problem._base import base as base_problem
-from PyKEP.planets import gtoc7
+from PyKEP.planet import gtoc7
 
 
 class mr_lt_nep(base_problem):
@@ -203,7 +203,7 @@ class mr_lt_nep(base_problem):
         for leg in self.__legs:
             plot_sf_leg(leg, units=AU, N=10, ax=axis)
 
-        # Plotting the PyKEP.planets both at departure and arrival dates
+        # Plotting the PyKEP.planet both at departure and arrival dates
         for i in range(self.__num_legs):
             idx = i * self.__dim_leg
             plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(0.7, 0.7, 1), s=30, ax=axis)

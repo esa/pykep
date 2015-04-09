@@ -22,37 +22,43 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <iostream>
-#include <iomanip>
-#include <boost/lexical_cast.hpp>
+#ifndef KEP_TOOLBOX_PLANET_GTOC7_H
+#define KEP_TOOLBOX_PLANET_GTOC7_H
 
-#include "../src/keplerian_toolbox.h"
+#include "keplerian.h"
+#include "../serialization.h"
+#include "../config.h"
 
-using namespace std;
-using namespace kep_toolbox;
-int main() {
-    int n_seg=15;
-	double mu = ASTRO_MU_SUN;
-	sims_flanagan::spacecraft sc = sims_flanagan::spacecraft(1000,0.1,2000);
-    sims_flanagan::leg_s phase1(n_seg,pow(ASTRO_AU,-1.5), 1.5);
-	phase1.set_mu(mu);
-	phase1.set_sc(sc);
-	planet::jpl_lp earth("earth");
-	array3D r,v;
-	earth.eph(epoch(0),r,v);
-	sims_flanagan::sc_state x0(r,v,sc.get_mass());
-	earth.eph(epoch(100),r,v);
-	sims_flanagan::sc_state xf(r,v,sc.get_mass()/2);
-	std::vector<double> throttles(n_seg*3,0.1423);
-	phase1.set_leg(epoch(0),x0,throttles,epoch(100),xf,1.5*365.25*ASTRO_DAY2SEC,sc,mu);
-    for (int i=0; i< 8;++i){
-        std::cout << phase1.compute_mismatch_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-    for (int i=0; i< n_seg;++i){
-        std::cout << phase1.compute_throttles_con()[i] << ", ";
-    }
-    std::cout<< std::endl;
-	return 0;
-}
+namespace kep_toolbox{ namespace planet {
 
+/// A GTOC7 asteroid
+/**
+ * This class allows to instantiate main belt asteroids
+ * from the Global Trajectory Optimization Competition (GTOC) 7th edition
+ *
+ * @see http://sophia.estec.esa.int/gtoc_portal/
+ * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
+ */
+
+class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
+{
+public:
+	gtoc7(int = 0);
+	planet_ptr clone() const;
+
+private:
+	friend class boost::serialization::access;
+	template <class Archive>
+	void serialize(Archive &ar, const unsigned int)
+	{
+		ar & boost::serialization::base_object<keplerian>(*this);
+	}
+};
+
+
+}} /// namespaces
+
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc7);
+
+
+#endif // KEP_TOOLBOX_PLANET_GTOC7_H

@@ -7,15 +7,15 @@ SET(PYKEP_LIB_SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan/spacecraft.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/core_functions/jorba.c
 
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/base.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/keplerian.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/jpl_low_precision.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/mpcorb.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/tle.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc2.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc5.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc6.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/planets/gtoc7.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/base.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/keplerian.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/jpl_low_precision.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/mpcorb.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/tle.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/gtoc2.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/gtoc5.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/gtoc6.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/gtoc7.cpp
 
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/Util.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/third_party/libsgp4/Tle.cpp
@@ -28,8 +28,8 @@ SET(PYKEP_LIB_SRC_LIST
 
 IF(BUILD_SPICE)
 	SET(PYKEP_LIB_SRC_LIST ${PYKEP_LIB_SRC_LIST}
-		${CMAKE_CURRENT_SOURCE_DIR}/planets/spice.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/utils/spice_utils.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/planet/spice.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/util/spice_utils.cpp
 	)
 ENDIF(BUILD_SPICE)
 
@@ -55,8 +55,8 @@ IF(INSTALL_HEADERS)
 	INSTALL(FILES ${HEADERS_IN_SRC} DESTINATION "include/keplerian_toolbox")
 	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/core_functions" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
 	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/numerics" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
-	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/planets" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
+	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/planet" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
 	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/sims_flanagan" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
 	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/third_party" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
-	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/utils" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
+	INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/util" DESTINATION "include/keplerian_toolbox" FILES_MATCHING PATTERN "*.h")
 ENDIF(INSTALL_HEADERS)

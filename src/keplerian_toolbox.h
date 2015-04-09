@@ -29,16 +29,16 @@
 #include "lambert_problem.h"
 #include "lambert_problemOLD.h"
 
-#include "planets/base.h"
-#include "planets/keplerian.h"
-#include "planets/jpl_low_precision.h"
-#include "planets/mpcorb.h"
-#include "planets/tle.h"
-#include "planets/spice.h"
-#include "planets/gtoc2.h"
-#include "planets/gtoc5.h"
-#include "planets/gtoc6.h"
-#include "planets/gtoc7.h"
+#include "planet/base.h"
+#include "planet/keplerian.h"
+#include "planet/jpl_low_precision.h"
+#include "planet/mpcorb.h"
+#include "planet/tle.h"
+#include "planet/spice.h"
+#include "planet/gtoc2.h"
+#include "planet/gtoc5.h"
+#include "planet/gtoc6.h"
+#include "planet/gtoc7.h"
 
 #include "core_functions/array3D_operations.h"
 #include "core_functions/convert_anomalies.h"
@@ -66,8 +66,7 @@
 #include "sims_flanagan/sc_state.h"
 #include "sims_flanagan/spacecraft.h"
 #include "sims_flanagan/throttle.h"
-#include "utils/spice_utils.h"
+#include "util/spice_utils.h"
 #include "astro_constants.h"
 
- 
 #endif // KEP_TOOLBOX_H

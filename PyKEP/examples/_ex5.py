@@ -3,7 +3,7 @@ def run_example5():
     from PyGMO.algorithm import jde
     from PyGMO.topology import ring
     from PyKEP import epoch
-    from PyKEP.planets import jpl_lp
+    from PyKEP.planet import jpl_lp
     from PyKEP.trajopt import mga_1dsm
 
     # We define an Earth-Venus-Earth problem (single-objective)

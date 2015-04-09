@@ -78,7 +78,7 @@ static inline tuple propagate_taylor_s_wrapper(const kep_toolbox::array3D &r0, c
 	return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m),double(dt));
 }
 
-static inline tuple fb_con_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planets::base &pl)
+static inline tuple fb_con_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet::base &pl)
 {
 	double eq(0), ineq(0);
 	kep_toolbox::fb_con(eq, ineq, vin_rel, vout_rel, pl);
@@ -92,7 +92,7 @@ static inline kep_toolbox::array3D fb_prop_wrapper(const kep_toolbox::array3D& v
 	return retval;
 }
 
-static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planets::base &pl)
+static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const kep_toolbox::array3D &vout_rel, const kep_toolbox::planet::base &pl)
 {
 	double dV(0);
 	kep_toolbox::fb_vel(dV, vin_rel, vout_rel, pl);
@@ -479,8 +479,8 @@ BOOST_PYTHON_MODULE(_core) {
 
     // For the three_impulses_approximation we need to distinguish the overloaded cases. We thus introduce new function pointers
 	double (*three_imp)(double, double, double, double, double, double, double, double, double) = &kep_toolbox::three_impulses_approx;
-	double (*three_imp_2_pl)(const kep_toolbox::planets::base&, const kep_toolbox::planets::base&) = &kep_toolbox::three_impulses_approx;
-    double (*three_imp_2_pl_2_ep)(const kep_toolbox::planets::base&, const kep_toolbox::planets::base&, const kep_toolbox::epoch&, const kep_toolbox::epoch&) = &kep_toolbox::three_impulses_approx;
+	double (*three_imp_2_pl)(const kep_toolbox::planet::base&, const kep_toolbox::planet::base&) = &kep_toolbox::three_impulses_approx;
+    double (*three_imp_2_pl_2_ep)(const kep_toolbox::planet::base&, const kep_toolbox::planet::base&, const kep_toolbox::epoch&, const kep_toolbox::epoch&) = &kep_toolbox::three_impulses_approx;
 
     def("_three_impulses_approx", three_imp);
     def("_three_impulses_approx", three_imp_2_pl);
