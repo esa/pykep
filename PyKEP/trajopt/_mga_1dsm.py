@@ -1,6 +1,6 @@
 from PyGMO.problem import base as base_problem
 from PyKEP.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU
-from PyKEP.planets import jpl_lp
+from PyKEP.planet import jpl_lp
 from math import pi, cos, sin, acos, log
 from scipy.linalg import norm
 
