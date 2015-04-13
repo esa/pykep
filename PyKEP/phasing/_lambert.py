@@ -1,6 +1,6 @@
 from PyGMO.problem._base import base
 from PyGMO.util import hypervolume
-from PyKEP.planets import gtoc7
+from PyKEP.planet import gtoc7
 from PyKEP.orbit_plots import plot_planet, plot_lambert
 from PyKEP.core import lambert_problem, DAY2SEC, epoch, AU
 
