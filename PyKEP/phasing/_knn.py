@@ -7,9 +7,13 @@ class knn():
     Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can then be queried efficiently
     for all asteroid within a given distance ('ball' query) or for all k closest asteroids ('knn' query).
 
-    The notion of distance used (metric) can either be 'euclidean', in which case the simple Euclidean distance over the asteroid's (r,v) is used,
-    or 'orbital', in which case the distance is computed with respect to (r/T + v, r/T), coresponding to the DV computed
-    over a linear model of the orbital transfer.
+    The notion of distance used (metric) can be:
+
+    - 'euclidean': the simple Euclidean distance over the asteroid's (r,v). The position an velocity vectors are scaled w.r.t. some
+    reference values.
+
+    - 'orbital', the distance is computed with respect to (r/T + v, r/T), coresponding to the DV computed over a linear model of the orbital transfer.
+    The distance returned will thus be in m/s.
     """
 
     def _eph_normalize(self, eph):
@@ -96,6 +100,14 @@ class knn():
         - ref_r         reference radius   (used as a scaling factor for r if the metric is 'euclidean')
         - ref_v         reference velocity (used as a scaling factor for v if the metric is 'euclidean')
         - T             average transfer time (used in the definition of the 'orbital' metric)
+
+        Example::
+
+            from PyKEP import *
+            pl_list = [planet.gtoc7(i) for i in range(16257)]
+            knn = phasing.knn(pl_list, epoch(t0), metric='orbital', T=180)
+            neighb, ids, dists = knn.find_neighbours(pl_list[ast_0], query_type='knn', k=10000)
+            neighb, ids, _ = knn.find_neighbours(pl_list[ast_0], query_type='ball', r=5000)
         """
         import numpy as np
         import PyKEP as pk
