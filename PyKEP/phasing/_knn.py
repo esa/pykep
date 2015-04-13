@@ -2,10 +2,14 @@ class knn():
     from PyKEP.core import AU, EARTH_VELOCITY
 
     """
-    The class helps finding the k-nearest neighbours to a given planet from a list of planets.
+    The class finds the k-nearest neighbours to a given planet from a list of planets.
     The problem of finding who is "close-by" can be efficiently solved using appropriate data structures.
-    Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can also be queried efficiently
-    for all asteroid within a given distance ('ball' query)
+    Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can then be queried efficiently
+    for all asteroid within a given distance ('ball' query) or for all k closest asteroids ('knn' query).
+
+    The notion of distance used (metric) can either be 'euclidean', in which case the simple Euclidean distance over the asteroid's (r,v) is used,
+    or 'orbital', in which case the distance is computed with respect to (r/T + v, r/T), coresponding to the DV computed
+    over a linear model of the orbital transfer.
     """
 
     def _eph_normalize(self, eph):
@@ -35,6 +39,12 @@ class knn():
 
         return e.reshape(eph.shape)
 
+    def _orbital_metric(self, r, v):
+        from PyKEP.core import DAY2SEC
+        DV2 = [a / (self._T * DAY2SEC) for a in r]
+        DV1 = [a + b for a, b in zip(DV2, v)]
+        return (DV1, DV2)
+
     def _make_kdtree(self, t):
         """
         Returns a kd-tree data structure indexing the normalized ephemerides
@@ -60,7 +70,10 @@ class knn():
         from scipy.spatial import cKDTree
         import numpy as np
 
-        e = np.array([a.eph(t) for a in self._asteroids])
+        if self._metric == 'euclidean':
+            e = np.array([a.eph(t) for a in self._asteroids])
+        else:
+            e = np.array([self._orbital_metric(*a.eph(t)) for a in self._asteroids])
 
         # reshape memory area, so each asteroid's ephemeride gets represented by
         # a single 6 dimensional vector
@@ -68,18 +81,21 @@ class knn():
 
         # normalize the full matrix
         # (if the `normalize_f` is set to None, no normalization takes place)
-        self._eph_normalize(e)
+        if self._metric == 'euclidean':
+            self._eph_normalize(e)
 
         return cKDTree(e)
 
-    def __init__(self, planet_list, t, ref_r=AU, ref_v=EARTH_VELOCITY):
+    def __init__(self, planet_list, t, metric='orbital', ref_r=AU, ref_v=EARTH_VELOCITY, T=180.0):
         """
-        USAGE: knn = knn(planet_list, t, ref_r=AU, ref_v=EARTH_VELOCITY):
+        USAGE: knn = knn(planet_list, t, metric='orbital', ref_r=AU, ref_v=EARTH_VELOCITY, T=365.25):
 
         - planet_list   list of PyKEP planets (typically thousands)
         - t             epoch
-        - ref_r         reference radius
-        - ref_v         reference velocity
+        - metric        one of ['euclidean', 'orbital']
+        - ref_r         reference radius   (used as a scaling factor for r if the metric is 'euclidean')
+        - ref_v         reference velocity (used as a scaling factor for v if the metric is 'euclidean')
+        - T             average transfer time (used in the definition of the 'orbital' metric)
         """
         import numpy as np
         import PyKEP as pk
@@ -87,6 +103,8 @@ class knn():
         self._ref_r = ref_r
         self._ref_v = ref_v
         self._t = t
+        self._metric = metric
+        self._T = T
         self._kdtree = self._make_kdtree(self._t)
 
     def find_neighbours(self, query_planet, query_type='knn', *args, **kwargs):
@@ -105,12 +123,12 @@ class knn():
         The following kinds of spatial queries are currently implemented:
 
         query_type = 'knn':
-            Obtain the `k` nearest asteroids
+            The kwarg 'k' determines how many k-nearest neighbours are returned
             For arguments, see:
             http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html
 
         query_type = 'ball':
-            Obtain all asteroids within a radius `r` of the given query asteroid
+            The kwarg 'r' determines the distance within which all asteroids are returned.
             For arguments, see:
             http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html
         """
@@ -119,7 +137,11 @@ class knn():
 
         # generate the query vector
         x = query_planet.eph(self._t)
-        x = self._eph_normalize(x)
+        if self._metric == 'euclidean':
+            x = self._eph_normalize(x)
+        else:
+            DV1, DV2 = self._orbital_metric(x[0], x[1])
+            x = DV1 + DV2
 
         if query_type == 'knn':
             # Query for the k nearest neighbors

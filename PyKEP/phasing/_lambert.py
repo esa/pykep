@@ -2,14 +2,14 @@ from PyGMO.problem._base import base
 from PyGMO.util import hypervolume
 from PyKEP.planets import gtoc7
 from PyKEP.orbit_plots import plot_planet, plot_lambert
-from PyKEP.core import lambert_problem, DAY2SEC, epoch
+from PyKEP.core import lambert_problem, DAY2SEC, epoch, AU
 
 
 class lambert_metric(base):
 
     """
     This class defines the Lambert phasing metric as introduced by the ESA/ACT team during GTOC7.
-    The result is a PyGMO problem that can be solved efficiently by optimization algorithms
+    The result is a PyGMO multi-objective problem that can be solved efficiently by optimization algorithms
     """
 
     def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, max_acc=1e-4):
@@ -106,7 +106,7 @@ Example::
 
         return axis
 
-    def plot_pareto_front(self, pop, ax=None):
+    def plot_pareto_front(self, pop):
         import matplotlib.pylab as plt
         from mpl_toolkits.mplot3d import Axes3D
 
@@ -121,14 +121,14 @@ Example::
         plt.ylabel("[MJD2000]")
         plt.draw()
 
-        return ax
+        return axis
 
     def compute_hypervolume(self, pop):
         if pop.champion.f[0] == self._UNFEASIBLE:
             raise Exception('Input population contains only unfeasible individuals')
         hv = hypervolume(pop)
 
-        return hv.compute(self._compute_ref_point())
+        return (hv.compute(self._compute_ref_point()) * DAY2SEC / AU)
 
     def _compute_ref_point(self):
         rx = self._max_acc * DAY2SEC * (self.ub[0] - self.lb[0])
