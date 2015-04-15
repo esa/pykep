@@ -1,6 +1,6 @@
 def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=False, ax=None):
     """
-    ax = plot_planet(plnt, ax = None, t0='PyKEP.epoch(0)', N=60, units = 1.0, color = 'k', s=40, legend = False)
+    ax = plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, ax=None)
 
     - ax:        3D axis object created using fig.gca(projection='3d')
     - plnt:      PyKEP.planet object we want to plot
@@ -20,7 +20,7 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
       fig = plt.figure()
       ax = fig.gca(projection='3d')
       pl = planet_ss('earth')
-      plot_planet(pl, ax = ax)
+      plot_planet(pl, ax=ax)
       plt.show()
     """
     from PyKEP import MU_SUN, SEC2DAY, epoch, AU
@@ -73,7 +73,7 @@ def plot_planet(plnt, t0='PyKEP.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
 
 def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, alpha=1.):
     """
-    ax = plot_lambert(ax,l, N=60, sol=0, units = 'PyKEP.AU', legend = 'False')
+    ax = plot_lambert(l, N=60, sol=0, units='PyKEP.AU', legend='False', ax=None, alpha=1.)
 
     - ax:       3D axis object created using fig.gca(projection='3d')
     - l:        PyKEP.lambert_problem object
@@ -99,17 +99,17 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
       dt = (t2.mjd2000 - t1.mjd2000) * DAY2SEC
 
       pl = planet_ss('earth')
-      plot_planet(ax,pl, t0=t1, color='k')
+      plot_planet(pl, t0=t1, ax=ax, color='k')
       rE,vE = pl.eph(t1)
 
       pl = planet_ss('mars')
-      plot_planet(ax,pl, t0=t2, color='r')
+      plot_planet(pl, t0=t2, ax=ax, color='r')
       rM, vM = pl.eph(t2)
 
       l = lambert_problem(rE,rM,dt,MU_SUN)
-      plot_lambert(ax,l, color='b')
-      plot_lambert(ax,l,sol=1, color='g')
-      plot_lambert(ax,l,sol=2, color='g')
+      plot_lambert(l, ax=ax, color='b')
+      plot_lambert(l, sol=1, ax=ax, color='g')
+      plot_lambert(l, sol=2, ax=ax, color='g')
 
       plt.show()
     """
@@ -165,7 +165,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
 
 def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
     """
-    ax = plot_kepler(ax,r,v,t,mu, N=60, units = 1, color = 'b', legend = False):
+    ax = plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
 
     - ax:		3D axis object created using fig.gca(projection='3d')
     - r:		initial position (cartesian coordinates)
@@ -222,7 +222,7 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
 
 def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
     """
-    ax = plot_taylor(ax,r,v,m,u,t,mu, veff, N=60, units = 1, color = 'b', legend = False):
+    ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
 
     - ax:		3D axis object created using fig.gca(projection='3d')
     - r:		initial position (cartesian coordinates)
@@ -281,7 +281,7 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
 
 def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=None):
     """
-    ax = plot_sf_leg(ax, leg, N=5, units=1, color='b', legend=False, no_trajectory = False):
+    ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, ax=None):
 
     - ax:		3D axis object created using fig.gca(projection='3d')
     - leg:	a PyKEP.sims_flanagan.leg
@@ -303,19 +303,19 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
         t1 = epoch(0)
         pl = planet_ss('earth')
         rE,vE = pl.eph(t1)
-        plot_planet(ax, pl,t0=t1, units=AU)
+        plot_planet(pl,t0=t1, units=AU, ax=ax)
 
         t2 = epoch(440)
         pl = planet_ss('mars')
         rM, vM = pl.eph(t2)
-        plot_planet(ax, pl,t0=t2, units=AU)
+        plot_planet(pl,t0=t2, units=AU, ax=ax)
 
         sc = sims_flanagan.spacecraft(4500,0.5,2500)
         x0 = sims_flanagan.sc_state(rE,vE,sc.mass)
         xe = sims_flanagan.sc_state(rM,vM,sc.mass)
         l = sims_flanagan.leg(t1,x0,[1,0,0]*5,t2,xe,sc,MU_SUN)
 
-        plot_sf_leg(ax,l,units=AU)
+        plot_sf_leg(l, units=AU, ax=ax)
     """
     from PyKEP import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
     import numpy as np
