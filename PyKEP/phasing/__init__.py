@@ -10,8 +10,8 @@ if (__extensions__['scipy']):
 if (__extensions__['scikit-learn']):
     from ._dbscan import *
 
-if (__extensions__['pygmo']):
-    from _lambert import lambert_metric
+if (__extensions__['pygmo'] and __extensions__['mplot3d']):
+    from ._lambert import lambert_metric
 
 
 def three_impulses_approx(pl1, pl2, ep1=None, ep2=None):
