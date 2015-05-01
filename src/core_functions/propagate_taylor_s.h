@@ -26,11 +26,12 @@
 #ifndef KEP_TOOLBOX_PROPAGATE_TAYLOR_S_H
 #define KEP_TOOLBOX_PROPAGATE_TAYLOR_S_H
 
-#include<algorithm>
-#include<cmath>
-#include<boost/array.hpp>
+#include <algorithm>
+#include <cmath>
+#include <boost/array.hpp>
 
-#include"../exceptions.h"
+#include "../exceptions.h"
+#include "../astro_constants.h"
 
 namespace kep_toolbox {
 

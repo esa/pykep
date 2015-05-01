@@ -22,6 +22,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
+// Workaround for http://mail.python.org/pipermail/new-bugs-announce/2011-March/010395.html
+#ifdef _WIN32
+#include <cmath>
+#endif
+
 #include <boost/python/class.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/copy_const_reference.hpp>

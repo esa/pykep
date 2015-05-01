@@ -31,6 +31,7 @@
 #include <boost/array.hpp>
 
 #include "../exceptions.h"
+#include "../astro_constants.h"
 
 namespace kep_toolbox {
 

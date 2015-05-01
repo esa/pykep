@@ -25,18 +25,29 @@
 #ifndef KEP_TOOLBOX_ASTRO_CONSTANTS_H
 #define KEP_TOOLBOX_ASTRO_CONSTANTS_H
 
-//#include<boost/math/constants/constants.hpp>
-#include <boost/array.hpp>
-#include <boost/lexical_cast.hpp>
 #include <vector>
 #include <string>
+#include <boost/math/constants/constants.hpp>
+#include <boost/array.hpp>
+#include <boost/lexical_cast.hpp>
+
+// Redefining M_PI end M_E to avoid problems in windows
+#ifndef M_PI
+#define M_PI boost::math::constants::pi<double>()
+#endif
+#ifndef M_PI_4
+#define M_PI_4 boost::math::constants::pi<double>()/4
+#endif
+#ifndef M_E
+#define M_E boost::math::constants::e<double>()
+#endif
 
 #define ASTRO_AU 149597870691.0
 #define ASTRO_JR 71492000.0 
 #define ASTRO_MU_SUN 1.32712440018e20
 #define ASTRO_EARTH_VELOCITY 29784.6905
-#define ASTRO_DEG2RAD (M_PI/*boost::math::constants::pi<double>()*//180.0)
-#define ASTRO_RAD2DEG (180.0/*boost::math::constants::pi<double>()*/ /M_PI)
+#define ASTRO_DEG2RAD (M_PI/180.0)
+#define ASTRO_RAD2DEG (180.0/M_PI)
 #define ASTRO_DAY2SEC 86400.0 //needs to be a double
 #define ASTRO_SEC2DAY (1. / 86400.0)
 #define ASTRO_DAY2YEAR (1. / 365.25)
