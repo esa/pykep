@@ -37,9 +37,9 @@
 
 namespace kep_toolbox { namespace util {
 
-void load_spice_kernel(std::string file_name);
-SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);
-SpiceDouble epoch_to_spice(double mjd2000);
+__KEP_TOOL_VISIBLE void load_spice_kernel(std::string file_name);
+__KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);
+__KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(double mjd2000);
 
 
 }} // namespaces

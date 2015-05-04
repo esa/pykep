@@ -23,6 +23,7 @@
 #include "Eci.h"
 #include "SatelliteException.h"
 #include "DecayedException.h"
+#include "../../config.h"
 
 /**
  * @mainpage
@@ -33,8 +34,7 @@
 /**
  * @brief The simplified perturbations model 4 propagater.
  */
-class SGP4
-{
+class __KEP_TOOL_VISIBLE SGP4 {
 public:
     SGP4(const Tle& tle)
         : elements_(tle)

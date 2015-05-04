@@ -20,11 +20,12 @@
 
 #include "DateTime.h"
 #include "Eci.h"
+#include "../../config.h"
 
 /**
  * @brief Find the position of the sun
  */
-class SolarPosition
+class __KEP_TOOL_VISIBLE SolarPosition
 {
 public:
     SolarPosition()

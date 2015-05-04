@@ -21,11 +21,12 @@
 #include "CoordGeodetic.h"
 #include "Vector.h"
 #include "DateTime.h"
+#include "../../config.h"
 
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.
  */
-class Eci
+class __KEP_TOOL_VISIBLE Eci
 {
 public:
 

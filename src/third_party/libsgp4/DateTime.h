@@ -46,7 +46,7 @@ namespace
 /**
  * @brief Represents an instance in time.
  */
-class DateTime
+class __KEP_TOOL_VISIBLE DateTime
 {
 public:
     /**

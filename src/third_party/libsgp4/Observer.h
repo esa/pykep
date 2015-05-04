@@ -20,6 +20,7 @@
 
 #include "CoordGeodetic.h"
 #include "Eci.h"
+#include "../../config.h"
 
 class DateTime;
 class CoordTopocentric;
@@ -27,7 +28,7 @@ class CoordTopocentric;
 /**
  * @brief Stores an observers location in Eci coordinates.
  */
-class Observer
+class __KEP_TOOL_VISIBLE Observer
 {
 public:
     /**

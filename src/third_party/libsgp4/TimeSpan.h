@@ -23,6 +23,8 @@
 #include <iomanip>
 #include <cmath>
 
+#include "../../config.h"
+
 namespace
 {
     static const long long TicksPerDay =  86400000000LL;
@@ -47,7 +49,7 @@ namespace
  * or negative number of days, hours, minutes, seconds, and fractions
  * of a second.
  */
-class TimeSpan
+class __KEP_TOOL_VISIBLE TimeSpan
 {
 public:
     TimeSpan(long long ticks)

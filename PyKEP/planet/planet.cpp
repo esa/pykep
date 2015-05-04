@@ -27,6 +27,7 @@
 #include <cmath>
 #endif
  
+#include <Python.h>
 #include <boost/python/module.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/def.hpp>
@@ -35,7 +36,6 @@
 #include <boost/python/operators.hpp>
 #include <boost/python/register_ptr_to_python.hpp>
 
-#include "python_base.h"
 #include "../../src/planet/base.h"
 #include "../../src/planet/keplerian.h"
 #include "../../src/planet/jpl_low_precision.h"
@@ -47,6 +47,7 @@
 #include "../../src/planet/gtoc6.h"
 #include "../../src/planet/gtoc7.h"
 #include "../utils.h"
+#include "python_base.h"
 
 using namespace boost::python;
 using namespace kep_toolbox;

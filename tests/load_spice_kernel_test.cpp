@@ -72,8 +72,8 @@ int main() {
 
 	// We check if the kernels have been loaded correctly by extracting a few 
 	// properties of mars
-	bodvrd_c ( "MARS", "RADII", 3, &dim, radii );
-	std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl ;
+	//bodvrd_c ( "MARS", "RADII", 3, &dim, radii );
+	//std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl ;
 
 	bodvrd_c ( "MARS", "GM", 1, &dim, mu_mars );
 	std::cout << "Mars gravity parameter in km: " << std::setprecision(16) << mu_mars[0] << std::endl << std::endl;

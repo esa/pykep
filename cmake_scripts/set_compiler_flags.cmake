@@ -78,17 +78,17 @@ ENDIF(NOT ALL_C11)
 
 
 # This flag appeared to be important when compiling in Travis VMs 
-CHECK_CXX_COMPILER_FLAG(-fPIC CXX_FPIC_FLAG)
-IF(CXX_FPIC_FLAG)
-	MESSAGE(STATUS "Enabling '-fPIC' compiler flag")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-ENDIF(CXX_FPIC_FLAG)
+#CHECK_CXX_COMPILER_FLAG(-fPIC CXX_FPIC_FLAG)
+#IF(CXX_FPIC_FLAG)
+#	MESSAGE(STATUS "Enabling '-fPIC' compiler flag")
+#	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+#ENDIF(CXX_FPIC_FLAG)
 
 #CHECK_C_COMPILER_FLAG(-fPIC C_FPIC_FLAG)
-IF(CXX_FPIC_FLAG)
-	MESSAGE(STATUS "Enabling '-fPIC' compiler flag")
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-ENDIF(CXX_FPIC_FLAG)
+#IF(CXX_FPIC_FLAG)
+#	MESSAGE(STATUS "Enabling '-fPIC' compiler flag")
+#	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+#ENDIF(CXX_FPIC_FLAG)
 
 # We finally log the compiler flags
 MESSAGE(STATUS "CXX compilation flags: ${CMAKE_CXX_FLAGS}")

@@ -37,7 +37,7 @@
 namespace kep_toolbox{ namespace planet {
 
 // Forward declaration.
-class base;
+class __KEP_TOOL_VISIBLE base;
 typedef boost::shared_ptr<base> planet_ptr;
 
 

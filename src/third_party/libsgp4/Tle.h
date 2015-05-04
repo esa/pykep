@@ -21,13 +21,14 @@
 #include "Util.h"
 #include "DateTime.h"
 #include "TleException.h"
+#include "../../config.h"
 
 /**
  * @brief Processes a two-line element set used to convey OrbitalElements.
  *
  * Used to extract the various raw fields from a two-line element set.
  */
-class Tle
+class __KEP_TOOL_VISIBLE Tle
 {
 public:
     /**

@@ -20,13 +20,14 @@
 
 #include "Util.h"
 #include "DateTime.h"
+#include "../../config.h"
 
 class Tle;
 
 /**
  * @brief The extracted orbital elements used by the SGP4 propagator.
  */
-class OrbitalElements
+class __KEP_TOOL_VISIBLE OrbitalElements
 {
 public:
     OrbitalElements(const Tle& tle);

@@ -1,7 +1,7 @@
 SET(PYKEP_INSTALL_PATH ${PYTHON_MODULES_DIR}/PyKEP)
 
 # Definitions needed for windows ... (using dlls)
-ADD_DEFINITIONS(-DKEP_TOOL_DLL_IMPORT_API)
+ADD_DEFINITIONS(-DKEP_TOOL_DLL_EXPORT_API)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DYNAMIC_LIB_KEP_TOOL_USE_FLAGS}")
 
 # Macro used for each module to select the correct extension according to the OS
