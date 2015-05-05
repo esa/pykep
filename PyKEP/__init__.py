@@ -9,7 +9,7 @@ try:
 
     # We detect the version and if more than 1.1.0 mplot3d is there
     mver = matplotlib_ver.split('.')
-    mver = int(mver[0]) * 100 + int(mver[1]) * 10 + int(mver[2])
+    mver = int(mver[0]) * 100 + int(mver[1]) * 10
     if mver >= 110:
         __extensions__['mplot3d'] = True
     del mver
