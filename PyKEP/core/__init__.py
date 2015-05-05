@@ -1,6 +1,10 @@
 # -*- coding: iso-8859-1 -*-
+# We import the proteced symbols we use in this file
 from PyKEP.core._core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get_DEG2RAD, _get_EARTH_VELOCITY, _get_G0, _get_MU_SUN, _get_RAD2DEG, _get_SEC2DAY
 from PyKEP.core._core import _epoch_type
+# We import symbols we use in this file
+from PyKEP.core._core import epoch
+# We import all symbols in the core namespace (also the ones we do not use in this file, but we still want in the namespace core)
 from PyKEP.core._core import *
 
 """Defining astronomical constants defined in the keplerian_toolbox file astro_constants.h"""
@@ -14,8 +18,6 @@ G0 = _get_G0()
 MU_SUN = _get_MU_SUN()
 RAD2DEG = _get_RAD2DEG()
 SEC2DAY = _get_SEC2DAY()
-
-from PyKEP.core._core import _epoch_type
 
 EPOCH_TYPE = {
     "jd": _epoch_type.JD,
