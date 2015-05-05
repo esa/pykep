@@ -1,17 +1,19 @@
 # -*- coding: iso-8859-1 -*-
+from PyKEP.core._core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get_DEG2RAD, _get_EARTH_VELOCITY, _get_G0, _get_MU_SUN, _get_RAD2DEG, _get_SEC2DAY
+from PyKEP.core._core import _epoch_type
 from PyKEP.core._core import *
 
 """Defining astronomical constants defined in the keplerian_toolbox file astro_constants.h"""
-AU = _core._get_AU()
-JR = _core._get_JR()
-DAY2SEC = _core._get_DAY2SEC()
-DAY2YEAR = _core._get_DAY2YEAR()
-DEG2RAD = _core._get_DEG2RAD()
-EARTH_VELOCITY = _core._get_EARTH_VELOCITY()
-G0 = _core._get_G0()
-MU_SUN = _core._get_MU_SUN()
-RAD2DEG = _core._get_RAD2DEG()
-SEC2DAY = _core._get_SEC2DAY()
+AU = _get_AU()
+JR = _get_JR()
+DAY2SEC = _get_DAY2SEC()
+DAY2YEAR = _get_DAY2YEAR()
+DEG2RAD = _get_DEG2RAD()
+EARTH_VELOCITY = _get_EARTH_VELOCITY()
+G0 = _get_G0()
+MU_SUN = _get_MU_SUN()
+RAD2DEG = _get_RAD2DEG()
+SEC2DAY = _get_SEC2DAY()
 
 from PyKEP.core._core import _epoch_type
 
