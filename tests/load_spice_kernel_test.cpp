@@ -52,7 +52,6 @@ std::string stream(double input[6])
 
 int main() {
 	// We start loading the four kernels shipped with the kep_toolbox
-	load_spice_kernel("C_G_1000012_2012_2017.bsp");
 	load_spice_kernel("pck00010.tpc");
 	load_spice_kernel("gm_de431.tpc");
 	int dim = 0;
@@ -72,19 +71,11 @@ int main() {
 
 	// We check if the kernels have been loaded correctly by extracting a few 
 	// properties of mars
-	//bodvrd_c ( "MARS", "RADII", 3, &dim, radii );
-	//std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl ;
+	bodvrd_c ( "MARS", "RADII", 3, &dim, radii );
+	std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl ;
 
 	bodvrd_c ( "MARS", "GM", 1, &dim, mu_mars );
 	std::cout << "Mars gravity parameter in km: " << std::setprecision(16) << mu_mars[0] << std::endl << std::endl;
-
-	std::cout << "Computing ephemerides at: " << when;
-	std::cout << ", on the ecliptic J2000 reference frame as seen from the Sun" << std::endl << std::endl;
-
-	spkezr_c ( "CHURYUMOV-GERASIMENKO", spice_epoch, "ECLIPJ2000", "NONE", "SUN", state, &lt );
-	std::cout << "CHURYUMOV-GERASIMENKO: " << stream(state)  << std::endl << std::endl;
-
-    std::cout << "You can check results manually on-line at http://ssd.jpl.nasa.gov/horizons.cgi" << std::endl;
 
 	return failed_c();
 }
