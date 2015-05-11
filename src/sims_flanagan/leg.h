@@ -605,7 +605,7 @@ private:
 		int m_tol;
 	};
 
-std::ostream &operator<<(std::ostream &s, const leg &in );
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const leg &in );
 
 }} //namespaces
 #endif // KEP_TOOLBOX_LEG_H

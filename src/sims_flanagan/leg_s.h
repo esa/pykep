@@ -449,7 +449,7 @@ private:
 	mutable std::vector<double> m_dv;
 };
 
-std::ostream &operator<<(std::ostream &s, const leg_s &in );
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const leg_s &in );
 
 }} //namespaces
 #endif // KEP_TOOLBOX_LEG_S_H
