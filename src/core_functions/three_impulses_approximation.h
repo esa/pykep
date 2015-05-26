@@ -21,8 +21,8 @@
  *   Free Software Foundation, Inc.,                                         *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
-#ifndef KEP_TOOLBOX_THREE_IMPULSES_APPROX_H
-#define KEP_TOOLBOX_THREE_IMPULSES_APPROX_H
+#ifndef KEP_TOOLBOX_DAMON_H
+#define KEP_TOOLBOX_DAMON_H
 
 #include <cmath>
 
