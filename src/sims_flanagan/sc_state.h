@@ -47,6 +47,9 @@ namespace sims_flanagan{
  */
 class __KEP_TOOL_VISIBLE sc_state
 {
+
+	friend std::ostream &operator<<(std::ostream &s, const sc_state &in );
+
 public:
 	/** @name Constructors*/
 	//@{
@@ -142,12 +145,14 @@ private:
 	array3D velocity;
 	double mass;
 };
-inline std::ostream &operator<<(std::ostream &s, const sc_state &in ){
+
+__KEP_TOOL_VISIBLE inline std::ostream &operator<<(std::ostream &s, const sc_state &in ){
 	for (int i=0;i<3;i++) s << boost::lexical_cast<std::string>(in.get_position()[i]) << " ";
 	for (int i=0;i<3;i++) s << boost::lexical_cast<std::string>(in.get_velocity()[i]) << " ";
 	s << boost::lexical_cast<std::string>(in.get_mass());
 	return s;
 }
+
 }} //Namespaces
 
 #endif // KEP_TOOLBOX_SC_STATE_H

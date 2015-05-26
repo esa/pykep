@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2015 The PaGMO development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *   http://apps.sourceforge.net/mediawiki/pagmo                             *
  *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
@@ -43,7 +43,7 @@
 #endif
 
 #define ASTRO_AU 149597870691.0
-#define ASTRO_JR 71492000.0 
+#define ASTRO_JR 71492000.0
 #define ASTRO_MU_SUN 1.32712440018e20
 #define ASTRO_EARTH_VELOCITY 29784.6905
 #define ASTRO_DEG2RAD (M_PI/180.0)

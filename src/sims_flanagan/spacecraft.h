@@ -72,7 +72,7 @@ private:
 	double m_isp;
 };
 
-std::ostream &operator<<(std::ostream &s, const spacecraft &in );
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const spacecraft &in );
 
 
 }} //Namespaces

@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2009 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2015 The PaGMO development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *   http://apps.sourceforge.net/mediawiki/pagmo                             *
  *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
@@ -64,7 +64,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 	// Disable docstring c++ signature to allow sphinx autodoc to work properly
 	docstring_options doc_options;
 	doc_options.disable_signatures();
-	
+
 	// Exposing vectors of throttles into python lists of throttles
 	to_tuple_mapping<std::vector<kep_toolbox::sims_flanagan::throttle> >();
 	from_python_sequence<std::vector<kep_toolbox::sims_flanagan::throttle>, variable_capacity_policy>();
@@ -239,12 +239,12 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			" l = PyKEP.sims_flanagan.leg()"
 			" l.set_spacecraft(sc)"
 			" sc2 = l.get_spacecraft()"
-		)		
+		)
 		.def("get_throttles", throttles_getter(&kep_toolbox::sims_flanagan::leg::get_throttles),return_value_policy<copy_const_reference>(),
 			"Gets the leg central body gravitational parameter\n\n"
 			"Example::\n\n"
 			" t = l.get_throttles()"
-		)		
+		)
 		.def("get_xi", &kep_toolbox::sims_flanagan::leg::get_x_i ,return_value_policy<copy_const_reference>(),
 			"Gets the initial spacecraft state\n\n"
 			"Example::\n\n"
@@ -282,8 +282,8 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg::human_readable)
 		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::leg>());
-    
-    
+
+
     typedef void (kep_toolbox::sims_flanagan::leg_s::*leg_s_setter)(const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&,const std::vector<double>&,const kep_toolbox::epoch&, const kep_toolbox::sims_flanagan::sc_state&, const double&);
 	class_<kep_toolbox::sims_flanagan::leg_s>("leg_s", "Represents an interplanetary leg (using the Sundmann variable)",
 		init<const unsigned int&, const double& , const double &, optional<const double&> >(
@@ -337,7 +337,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Gets the leg spacecraft\n\n"
 			"Example::\n\n"
 			" sc = l.get_spacecraft()"
-		)		
+		)
 		.def("get_xi", &kep_toolbox::sims_flanagan::leg_s::get_xi ,return_value_policy<copy_const_reference>(),
 			"Gets the initial spacecraft state\n\n"
 			"Example::\n\n"
@@ -362,7 +362,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 			"Reurns a tuple containing the leg's throttles\n\n"
 			"Example::\n\n"
 			" th = l.get_throttles()"
-		)	
+		)
 		.def("mismatch_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_mismatch_con, return_value_policy<copy_const_reference>(),
 			"Returns an 8-dim tuple containing the state mismatch of the leg (x,y,z,vx,vy,vz,m,t) (needs to be all zeros for the leg to be feasible)\n\n"
 			"Example::\n\n"
@@ -380,5 +380,5 @@ BOOST_PYTHON_MODULE(_sims_flanagan) {
 		)
 		.def("__repr__", &kep_toolbox::sims_flanagan::leg_s::human_readable)
 		.def_pickle(python_class_pickle_suite<kep_toolbox::sims_flanagan::leg_s>());
-		
+
 }
