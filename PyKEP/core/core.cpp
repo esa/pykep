@@ -512,9 +512,10 @@ BOOST_PYTHON_MODULE(_core) {
 
     def("max_start_mass", &kep_toolbox::max_start_mass,
 		"PyKEP.max_start_mass(a, dv, T_max, Isp)\n\n"
-		"- v1: initial position (cartesian)\n"
-		"- v2: final position (cartesian)\n"
-		"- tof: gravity parameter\n\n"
+		"- a: acceleration magnitude as computed from Damon's model\n"
+		"- dv: dv magnitude as computed from Damon's model\n"
+		"- T_max: maximum thrust of the spacecarft NEP propulsion system\n"
+		"- Isp: specific impulse of the spacecarft NEP propulsion system\n\n"
 		"Returns the estimated maximum mass at leg beginning\n"
 		"This function estimates the maximum\n"
         "mass a NEP spacececraft can have in order for a given\n"
