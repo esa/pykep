@@ -55,7 +55,7 @@ namespace kep_toolbox {
 	 */
 	inline void damon_approx(const array3D &v1, const array3D &v2, double tof, array3D &a1, array3D &a2, double &tau, double &dv)
 	{
-		array3D v1_nd, v2_nd, U,V, a1_nd, a2_nd;
+		array3D v1_nd, v2_nd, U,V;
 		double alpha;
 
 		// We compute preliminary quantities
@@ -66,12 +66,12 @@ namespace kep_toolbox {
 		alpha = (U[0]*U[0] + U[1]*U[1] + U[2]*U[2]) / (U[0]*V[0] + U[1]*V[1] + U[2]*V[2]);
 		
 		// We then compute a1, a2, tau and dv
-		tau = (alpha + 1 - boost::math::sign(alpha) * sqrt(1 + alpha * alpha)) / 2.;
+		tau = (alpha + 1. - boost::math::sign(alpha) * sqrt(1. + alpha * alpha)) / 2.;
 		for (int i = 0; i<3; ++i) a1[i] = V[i] - U[i] / tau;
-		for (int i = 0; i<3; ++i) a2[i] = V[i] - U[i] / (tau - 1);
+		for (int i = 0; i<3; ++i) a2[i] = V[i] - U[i] / (tau - 1.);
 		dv = (V[0]*V[0] + V[1]*V[1] + V[2]*V[2]);
 		dv += (U[0]*U[0] + U[1]*U[1] + U[2]*U[2]) / tau / tau;
-		dv -= 2 * (U[0]*V[0] + U[1]*V[1] + U[2]*V[2]) / tau;
+		dv -= 2. * (U[0]*V[0] + U[1]*V[1] + U[2]*V[2]) / tau;
 		dv = sqrt(dv);
 
 		// We put units back
