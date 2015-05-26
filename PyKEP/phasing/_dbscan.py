@@ -33,7 +33,7 @@ class dbscan():
         from PyKEP.core import DAY2SEC
         DV2 = [a / (self._T * DAY2SEC) for a in r]
         DV1 = [a + b for a, b in zip(DV2, v)]
-        return (DV1 + DV2)
+        return DV1 + DV2
 
     def cluster(self, t, eps=0.125, min_samples=10, metric='orbital', T=180, ref_r=AU, ref_v=EARTH_VELOCITY):
         """
@@ -49,7 +49,6 @@ class dbscan():
         """
         import PyKEP
         import numpy
-        from sklearn.preprocessing import StandardScaler
         from sklearn.cluster import DBSCAN
 
         self._epoch = PyKEP.epoch(t)
@@ -57,11 +56,11 @@ class dbscan():
         if metric == 'euclidean':
             self._X = [
                 [elem for tupl in p.eph(self._epoch) for elem in tupl] for p in self._asteroids]
-            scaling_vector = [PyKEP.AU] * 3
-            scaling_vector += [PyKEP.EARTH_VELOCITY] * 3
+            scaling_vector = [ref_r] * 3
+            scaling_vector += [ref_v] * 3
         elif metric == 'euclidean_r':
             self._X = [list(p.eph(self._epoch)[0]) for p in self._asteroids]
-            scaling_vector = [PyKEP.AU] * 3
+            scaling_vector = [ref_r] * 3
         elif metric == 'orbital':
             self._T = T
             self._X = [self._orbital_metric(*p.eph(self._epoch)) for p in self._asteroids]
