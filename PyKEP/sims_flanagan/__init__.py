@@ -218,6 +218,6 @@ def _leg_eph(self, t):
 
     dt_int = (T - t[idx]) * DAY2SEC
     th = self.get_throttles()[idx_thrust].value
-    return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp. * G0, -12, -12)
+    return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
 
 leg.eph = _leg_eph
