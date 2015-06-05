@@ -8,7 +8,7 @@ for preliminary interplanetary trajectory design.
 from PyKEP.sims_flanagan._sims_flanagan import *
 
 
-def _get_states(self):
+def _leg_get_states(self):
     """
     Returns the spacecraft states (t,r,v,m) at the leg grid points
 
@@ -124,7 +124,7 @@ def _get_states(self):
 
     for i, t in enumerate(throttles[-1:-back_seg - 1:-1]):
         t_grid[-2 * i - 2] = t.end.mjd2000 - \
-            (t.end.mjd2000 - t.start.mjd2000) / 2.
+            (t.end  .mjd2000 - t.start.mjd2000) / 2.
         t_grid[-2 * i - 1] = t.end.mjd2000
         dt = (t.end.mjd - t.start.mjd) * DAY2SEC
         alpha = min(norm(t.value), 1.0)
@@ -168,4 +168,56 @@ def _get_states(self):
 
     return t_grid, list(zip(x, y, z)), list(zip(vx, vy, vz)), mass
 
-leg.get_states = _get_states
+leg.get_states = _leg_get_states
+
+
+def _leg_eph(self, t):
+    """
+    Computes the ephemerides (r, v) along the leg.  Should only be called on high_fidelity legs having
+    no state mismatch. Otherwise the values returned will not correspond to physical quantities.
+
+     - t: epoch (either a pykep epoch, or assumes mjd2000). This value must be between self.get_ti() and self.get_tf()
+    """
+    from PyKEP import epoch, propagate_taylor, G0, DAY2SEC
+    from bisect import bisect
+
+    if isinstance(t, epoch):
+        t0 = t.mjd2000
+    else:
+        t0 = t
+
+    # We check that requested epoch is valid
+    if (t0 < self.get_ti().mjd2000) or (t0 > self.get_tf().mjd2000):
+        raise ValueError("The requested epoch is out of bounds")
+
+    mu = self.get_mu()
+    sc = self.get_spacecraft()
+    isp = sc.isp
+    max_thrust = sc.thrust
+    t, r, v, m = self.get_states()
+
+    # T is the time from the leg beginning at which we wish to compute the eph [days]
+    T = t0 - self.get_ti().mjd2000
+
+    # If by chance its in the grid node, we are done
+    if T in t:
+        idx = t.index(T)
+        return r[idx], v[idx], m[idx]
+
+    # Otherwise we repropagate
+    idx = bisect(t, T) - 1
+    r0 = r[idx]
+    v0 = v[idx]
+    m0 = m[idx]
+    midt = t[len(t) / 2]
+
+    if T < midt:
+        idx_thrust = idx / 2
+    else:
+        idx_thrust = idx / 2 - 1
+
+    dt_int = (T - t[idx]) * DAY2SEC
+    th = self.get_throttles()[idx_thrust].value
+    return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
+
+leg.eph = _leg_eph

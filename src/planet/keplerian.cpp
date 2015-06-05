@@ -91,6 +91,14 @@ keplerian::keplerian(
 	const std::string &name) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r), m_v(v), m_ref_mjd2000(ref_epoch.mjd2000())
 {
 	ic2par(r0,v0, get_mu_central_body(), m_keplerian_elements);
+	if (m_keplerian_elements[1] < 1e-8)
+	{
+		throw_value_error("Eccentricity is too small, cannot define the absidal line: use the constructor with orbital elements");
+	}
+	if (m_keplerian_elements[2] < 1e-8)
+	{
+		throw_value_error("Inclination is too small, cannot define the line of the nodes: use the constructor with orbital elements");
+	}
 	m_keplerian_elements[5] = e2m(m_keplerian_elements[5],m_keplerian_elements[1]);
 	m_mean_motion = sqrt(get_mu_central_body() / pow(m_keplerian_elements[0],3));
 }
