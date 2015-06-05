@@ -29,6 +29,7 @@
 #include "keplerian.h"
 #include "../core_functions/ic2par.h"
 #include "../core_functions/par2ic.h"
+#include "../core_functions/propagate_lagrangian.h"
 #include "../core_functions/convert_anomalies.h"
 #include "../exceptions.h"
 
@@ -88,17 +89,10 @@ keplerian::keplerian(
 	double mu_self, 
 	double radius, 
 	double safe_radius, 
-	const std::string &name) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r), m_v(v), m_ref_mjd2000(ref_epoch.mjd2000())
+	const std::string &name) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r0), m_v(v0), m_ref_mjd2000(ref_epoch.mjd2000())
 {
+	// This line is  singular (small e and small i) in which case the orbital elements are (simply) not defined
 	ic2par(r0,v0, get_mu_central_body(), m_keplerian_elements);
-	if (m_keplerian_elements[1] < 1e-8)
-	{
-		throw_value_error("Eccentricity is too small, cannot define the absidal line: use the constructor with orbital elements");
-	}
-	if (m_keplerian_elements[2] < 1e-8)
-	{
-		throw_value_error("Inclination is too small, cannot define the line of the nodes: use the constructor with orbital elements");
-	}
 	m_keplerian_elements[5] = e2m(m_keplerian_elements[5],m_keplerian_elements[1]);
 	m_mean_motion = sqrt(get_mu_central_body() / pow(m_keplerian_elements[0],3));
 }
@@ -110,12 +104,19 @@ planet_ptr keplerian::clone() const
 }
 
 void keplerian::eph_impl(double mjd2000, array3D &r, array3D &v) const {
-	double elements[6];
-	std::copy(m_keplerian_elements.begin(), m_keplerian_elements.end(), elements);
 	double dt = (mjd2000 - m_ref_mjd2000) * ASTRO_DAY2SEC;
-	elements[5] += m_mean_motion * dt;
-	elements[5] = m2e(elements[5],elements[1]);
-	par2ic(elements, get_mu_central_body(), r, v);
+	if (m_keplerian_elements[1] > 1e-3 && m_keplerian_elements[2] > 1e-3)
+	{
+		double elements[6];
+		std::copy(m_keplerian_elements.begin(), m_keplerian_elements.end(), elements);
+		elements[5] += m_mean_motion * dt;
+		elements[5] = m2e(elements[5],elements[1]);
+		par2ic(elements, get_mu_central_body(), r, v);
+	} else { // Small inclinations and eccentricities (including nans), we use lagrangian propagation
+		r = m_r;
+		v = m_v;
+		propagate_lagrangian(r, v, dt, get_mu_central_body());
+	}
 }
 
 /// Returns the keplerian elements defining the planet
