@@ -83,6 +83,7 @@ private:
 
 protected:
 	array6D m_keplerian_elements;
+	array3D m_r, m_v;
 	double m_mean_motion;
 	double m_ref_mjd2000;
 };

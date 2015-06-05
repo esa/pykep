@@ -64,6 +64,7 @@ keplerian::keplerian(
 		throw_value_error("The planet eccentricity needs to be in [0,1)");
 	}
 	m_mean_motion = sqrt(mu_central_body / pow(keplerian_elements[0],3));
+	par2ic(m_keplerian_elements, get_mu_central_body(), m_r, m_v);
 }
 
 /// Constructor
@@ -87,7 +88,7 @@ keplerian::keplerian(
 	double mu_self, 
 	double radius, 
 	double safe_radius, 
-	const std::string &name) : base(mu_central_body, mu_self, radius, safe_radius, name), m_ref_mjd2000(ref_epoch.mjd2000())
+	const std::string &name) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r), m_v(v), m_ref_mjd2000(ref_epoch.mjd2000())
 {
 	ic2par(r0,v0, get_mu_central_body(), m_keplerian_elements);
 	m_keplerian_elements[5] = e2m(m_keplerian_elements[5],m_keplerian_elements[1]);
