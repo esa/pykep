@@ -26,11 +26,11 @@ EPOCH_TYPE = {
 }
 
 
-def _epoch_ctor(self, julian_date, julian_date_type=None):
+def _epoch_ctor(self, julian_date=0, julian_date_type='mjd2000'):
     """
-PyKEP.epoch(julian_date, julian_date_type="mjd2000")
+PyKEP.epoch(julian_date=0, julian_date_type="mjd2000")
 
-- julian_date: a julian date
+- julian_date: a julian date, defaults to 0
 - julian_date_type: julian date type, one of "jd", "mjd" and "mjd2000", defaults to "mjd2000"
 
 Examples::
@@ -39,9 +39,7 @@ Examples::
   e1 = epoch(0,"mjd2000")
   e2 = epoch(54333, "mjd")
     """
-    if julian_date_type is None:
-        self._orig_init(julian_date)
-    else:
-        self._orig_init(julian_date, EPOCH_TYPE[julian_date_type])
+    self._orig_init(julian_date, EPOCH_TYPE[julian_date_type])
+
 epoch._orig_init = epoch.__init__
 epoch.__init__ = _epoch_ctor
