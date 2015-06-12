@@ -194,29 +194,30 @@ def _leg_eph(self, t):
     sc = self.get_spacecraft()
     isp = sc.isp
     max_thrust = sc.thrust
-    t, r, v, m = self.get_states()
+    t_grid, r, v, m = self.get_states()
 
-    # T is the time from the leg beginning at which we wish to compute the eph [days]
+    # We move the starting epoch to 0 for convenience
     T = t0 - self.get_ti().mjd2000
+    t_grid = [it - self.get_ti().mjd2000 for it in t_grid]
 
     # If by chance its in the grid node, we are done
-    if T in t:
-        idx = t.index(T)
+    if T in t_grid:
+        idx = t_grid.index(T)
         return r[idx], v[idx], m[idx]
 
     # Otherwise we repropagate
-    idx = bisect(t, T) - 1
+    idx = bisect(t_grid, T) - 1
     r0 = r[idx]
     v0 = v[idx]
     m0 = m[idx]
-    midt = t[len(t) / 2]
+    midt = t_grid[len(t_grid) / 2]
 
     if T < midt:
         idx_thrust = idx / 2
     else:
         idx_thrust = idx / 2 - 1
 
-    dt_int = (T - t[idx]) * DAY2SEC
+    dt_int = (T - t_grid[idx]) * DAY2SEC
     th = self.get_throttles()[idx_thrust].value
     return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
 
