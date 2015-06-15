@@ -193,7 +193,7 @@ BOOST_PYTHON_MODULE(_planet) {
 		));
 
 		planet_wrapper<planet::tle>("tle","An Earth satellite defined from the TLE format, derives from :py:class:`PyKEP.planet._base`")
-		.def(init<optional<const std::string &> >(
+                  .def(init<optional<const std::string &, const std::string> >(
 			"PyKEP.planet.tle(line1, line2)\n\n"
 			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
 			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
