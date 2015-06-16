@@ -100,6 +100,7 @@ private:
 		ar & m_radius;
 		ar & m_safe_radius;
 		ar & m_name;
+		std::cout << "I am base planet" << std::endl;
 	}
 
 	double m_mu_central_body;
