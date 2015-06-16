@@ -81,6 +81,8 @@ private:
 		ar & m_keplerian_elements;
 		ar & m_mean_motion;
 		ar & m_ref_mjd2000;
+		std::cout << "mr" << m_r << std::endl;
+		std::cout << "mv" << m_v << std::endl;
 	}
 
 protected:
