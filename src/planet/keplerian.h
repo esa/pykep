@@ -76,9 +76,9 @@ private:
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<base>(*this);
-		ar & m_keplerian_elements;
 		ar & m_r;
 		ar & m_v;
+		ar & m_keplerian_elements;
 		ar & m_mean_motion;
 		ar & m_ref_mjd2000;
 	}
