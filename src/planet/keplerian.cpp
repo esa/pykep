@@ -151,6 +151,8 @@ std::string keplerian::human_readable_extra() const {
 	s << "Mean anomaly (deg.): " << boost::lexical_cast<std::string>(m_keplerian_elements[5] * ASTRO_RAD2DEG) << std::endl;
 	s << "Elements reference epoch: " << epoch(m_ref_mjd2000) << std::endl;
 	s << "Ephemerides type: Keplerian" << std::endl;
+	s << "m_r" << m_r << std::endl;
+	s << "m_v" << m_v << std::endl;
 	return s.str();
 }
 }}
