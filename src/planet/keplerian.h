@@ -79,6 +79,8 @@ private:
 		ar & m_keplerian_elements;
 		ar & m_mean_motion;
 		ar & m_ref_mjd2000;
+		ar & m_r;
+		ar & m_v;
 	}
 
 protected:
