@@ -197,8 +197,9 @@ def _leg_eph(self, t):
     t_grid, r, v, m = self.get_states()
 
     # We move the starting epoch to 0 for convenience
-    T = t0 - self.get_ti().mjd2000
+    T = max(0, t0 - self.get_ti().mjd2000)
     t_grid = [it - self.get_ti().mjd2000 for it in t_grid]
+    t_grid[0] = 0.
 
     # If by chance its in the grid node, we are done
     if T in t_grid:
@@ -219,6 +220,7 @@ def _leg_eph(self, t):
 
     dt_int = (T - t_grid[idx]) * DAY2SEC
     th = self.get_throttles()[idx_thrust].value
+    dd
     return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
 
 leg.eph = _leg_eph
