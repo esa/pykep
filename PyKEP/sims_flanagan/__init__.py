@@ -23,8 +23,8 @@ def _leg_get_states(self):
 
     # We compute the number of segments for forward and backward propagation
     n_seg = len(self.get_throttles())
-    fwd_seg = (n_seg + 1) / 2
-    back_seg = n_seg / 2
+    fwd_seg = (n_seg + 1) // 2
+    back_seg = n_seg // 2
 
     # We extract information on the spacecraft
     sc = self.get_spacecraft()
@@ -88,13 +88,13 @@ def _leg_get_states(self):
             u = [max_thrust * dumb for dumb in t.value]
 
             r, v, m = propagate_taylor(
-                r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+                r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 1], y[2 * i + 1], z[2 * i + 1] = r
             vx[2 * i + 1], vy[2 * i + 1], vz[2 * i + 1] = v
             mass[2 * i + 1] = m
 
             r, v, m = propagate_taylor(
-                r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+                r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 2], y[2 * i + 2], z[2 * i + 2] = r
             vx[2 * i + 2], vy[2 * i + 2], vz[2 * i + 2] = v
             mass[2 * i + 2] = m
@@ -146,13 +146,13 @@ def _leg_get_states(self):
         else:
             u = [max_thrust * dumb for dumb in t.value]
             r, v, m = propagate_taylor(
-                r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+                r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x_back[-2 * i - 2], y_back[-2 * i - 2], z_back[-2 * i - 2] = r
             vx_back[-2 * i - 2], vy_back[-2 * i - 2], vz_back[-2 * i - 2] = v
             mass_back[-2 * i - 2] = m
 
             r, v, m = propagate_taylor(
-                r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+                r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x_back[-2 * i - 3], y_back[-2 * i - 3], z_back[-2 * i - 3] = r
             vx_back[-2 * i - 3], vy_back[-2 * i - 3], vz_back[-2 * i - 3] = v
             mass_back[-2 * i - 3] = m
@@ -186,39 +186,53 @@ def _leg_eph(self, t):
     else:
         t0 = t
 
+    # We extract the leg states
+    t_grid, r, v, m = self.get_states()
+
     # We check that requested epoch is valid
-    if (t0 < self.get_ti().mjd2000) or (t0 > self.get_tf().mjd2000):
+    if (t0 < t_grid[0]) or (t0 > t_grid[-1]):
         raise ValueError("The requested epoch is out of bounds")
 
+    # We check that the leg is high fidelity, otherwise this makes little sense
+    if not self.high_fidelity:
+        raise ValueError("The eph method works only for high fidelity legs at the moment")
+
+    # Extract some information from the leg
     mu = self.get_mu()
     sc = self.get_spacecraft()
     isp = sc.isp
     max_thrust = sc.thrust
     t_grid, r, v, m = self.get_states()
 
-    # We move the starting epoch to 0 for convenience
-    T = max(0, t0 - self.get_ti().mjd2000)
-    t_grid = [it - self.get_ti().mjd2000 for it in t_grid]
-    t_grid[0] = 0.
-
     # If by chance its in the grid node, we are done
-    if T in t_grid:
-        idx = t_grid.index(T)
+    if t0 in t_grid:
+        idx = t_grid.index(t0)
         return r[idx], v[idx], m[idx]
 
-    # Otherwise we repropagate
-    idx = bisect(t_grid, T) - 1
+    # Find the index to start from (need to account for the midpoint repetition)
+    idx = bisect(t_grid, t0) - 1
+
+    # We compute the number of segments of forward propagation
+    n_seg = len(self.get_throttles())
+    fwd_seg = (n_seg + 1) // 2
+
+    # We start with the backward propagation cases
+    if idx > 2 * fwd_seg:
+        r0 = r[idx + 1]
+        v0 = v[idx + 1]
+        m0 = m[idx + 1]
+        idx_thrust = idx / 2 - 1
+        dt_int = (t_grid[idx + 1] - t0) * DAY2SEC
+        th = self.get_throttles()[idx_thrust].value
+        return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], -dt_int, mu, isp * G0, -12, -12)
+
+    # Find the index to start from
+    idx = bisect(t_grid, t0) - 1
     r0 = r[idx]
     v0 = v[idx]
     m0 = m[idx]
-    midt = t_grid[len(t_grid) / 2]
-
-    if T < midt:
-        idx_thrust = idx / 2
-    else:
-        idx_thrust = idx / 2 - 1
-
-    dt_int = (T - t_grid[idx]) * DAY2SEC
+    idx_thrust = idx / 2
+    dt_int = (t0 - t_grid[idx]) * DAY2SEC
     th = self.get_throttles()[idx_thrust].value
     return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
 

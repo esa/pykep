@@ -388,13 +388,13 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 1] = r[0] / units
             y[2 * i + 1] = r[1] / units
             z[2 * i + 1] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 2] = r[0] / units
             y[2 * i + 2] = r[1] / units
             z[2 * i + 2] = r[2] / units
@@ -450,13 +450,13 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 2] = r[0] / units
             y[-2 * i - 2] = r[1] / units
             z[-2 * i - 2] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 3] = r[0] / units
             y[-2 * i - 3] = r[1] / units
             z[-2 * i - 3] = r[2] / units
