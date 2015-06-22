@@ -171,7 +171,7 @@ def _leg_get_states(self):
 leg.get_states = _leg_get_states
 
 
-def _leg_eph(self, t):
+def _leg_eph(self, t, debug=False):
     """
     Computes the ephemerides (r, v) along the leg.  Should only be called on high_fidelity legs having
     no state mismatch. Otherwise the values returned will not correspond to physical quantities.
@@ -207,6 +207,8 @@ def _leg_eph(self, t):
     # If by chance its in the grid node, we are done
     if t0 in t_grid:
         idx = t_grid.index(t0)
+        if debug:
+            raise ValueError("DEBUG!!!!")
         return r[idx], v[idx], m[idx]
 
     # Find the index to start from (need to account for the midpoint repetition)
@@ -221,9 +223,11 @@ def _leg_eph(self, t):
         r0 = r[idx + 1]
         v0 = v[idx + 1]
         m0 = m[idx + 1]
-        idx_thrust = idx / 2 - 1
+        idx_thrust = (idx - 1) / 2
         dt_int = (t_grid[idx + 1] - t0) * DAY2SEC
         th = self.get_throttles()[idx_thrust].value
+        if debug:
+            raise ValueError("DEBUG!!!!")
         return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], -dt_int, mu, isp * G0, -12, -12)
 
     # Find the index to start from
@@ -234,6 +238,8 @@ def _leg_eph(self, t):
     idx_thrust = idx / 2
     dt_int = (t0 - t_grid[idx]) * DAY2SEC
     th = self.get_throttles()[idx_thrust].value
+    if debug:
+        raise ValueError("DEBUG!!!!")
     return propagate_taylor(r0, v0, m0, [d * max_thrust for d in th], dt_int, mu, isp * G0, -12, -12)
 
 leg.eph = _leg_eph
