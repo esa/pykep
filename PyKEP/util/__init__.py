@@ -36,9 +36,9 @@ def read_satcat(satcatfilename=None):
     return satcat
 
 
-def read_tle(tle_file, verbose=False, with_name=False):
+def read_tle(tle_file, verbose=False, with_name=True):
     """
-    planet_list = PyKEP.read_tle(tle_file, verbose=False, with_name=False)
+    planet_list = PyKEP.read_tle(tle_file, verbose=False, with_name=True)
 
     - tle_file: A string containin the file name (assumed to be in the working directory)
     - verbose: Activates some screen output to show the progress.
