@@ -279,7 +279,7 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     return axis
 
 
-def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=None):
+def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=True, ax=None):
     """
     ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, ax=None):
 
@@ -388,13 +388,13 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 1] = r[0] / units
             y[2 * i + 1] = r[1] / units
             z[2 * i + 1] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 2] = r[0] / units
             y[2 * i + 2] = r[1] / units
             z[2 * i + 2] = r[2] / units
@@ -405,9 +405,10 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
     x_midpoint = x[1::2]
     y_midpoint = y[1::2]
     z_midpoint = z[1::2]
-    axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1], label='nodes', marker='o')
-    axis.scatter(x_midpoint, y_midpoint, z_midpoint, label='mid-points', marker='x')
-    axis.scatter(x_grid[-1], y_grid[-1], z_grid[-1], marker='^', c='y', label='mismatch point')
+    if plot_segments:
+        axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1], label='nodes', marker='o')
+        axis.scatter(x_midpoint, y_midpoint, z_midpoint, label='mid-points', marker='x')
+        axis.scatter(x_grid[-1], y_grid[-1], z_grid[-1], marker='^', c='y', label='mismatch point')
 
     # Backward propagation
 
@@ -450,13 +451,13 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 2] = r[0] / units
             y[-2 * i - 2] = r[1] / units
             z[-2 * i - 2] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -10, -10)
+            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 3] = r[0] / units
             y[-2 * i - 3] = r[1] / units
             z[-2 * i - 3] = r[2] / units
@@ -468,9 +469,10 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, ax=N
     y_midpoint = y[1::2]
     z_midpoint = z[1::2]
 
-    axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker='o')
-    axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker='x')
-    axis.scatter(x_grid[0], y_grid[0], z_grid[0], marker='^', c='y')
+    if plot_segments:
+        axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker='o')
+        axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker='x')
+        axis.scatter(x_grid[0], y_grid[0], z_grid[0], marker='^', c='y')
 
     if legend:
         axis.legend()

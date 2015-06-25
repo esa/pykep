@@ -59,6 +59,7 @@ public:
 	//@{
 	array6D get_elements() const;
 	kep_toolbox::epoch get_ref_epoch() const;
+	double get_ref_mjd2000() const;
 	double get_mean_motion() const;
 	//@}
 
@@ -66,6 +67,7 @@ public:
 	//@{
 	void set_elements(const array6D&);
 	void set_ref_epoch(const kep_toolbox::epoch&);
+	void set_ref_mjd2000(const double &);
 	//@}
 
 private:
@@ -76,6 +78,8 @@ private:
 	void serialize(Archive &ar, const unsigned int)
 	{
 		ar & boost::serialization::base_object<base>(*this);
+		ar & m_r;
+		ar & m_v;
 		ar & m_keplerian_elements;
 		ar & m_mean_motion;
 		ar & m_ref_mjd2000;
@@ -83,6 +87,7 @@ private:
 
 protected:
 	array6D m_keplerian_elements;
+	array3D m_r, m_v;
 	double m_mean_motion;
 	double m_ref_mjd2000;
 };

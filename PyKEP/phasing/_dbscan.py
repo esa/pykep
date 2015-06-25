@@ -1,14 +1,10 @@
-import PyKEP
-import numpy
-
-
 class dbscan():
-
     """
     This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
     Essentially, it locates planet clusters
     """
-
+    from PyKEP.core import AU, EARTH_VELOCITY
+    
     def _axis_equal_3d(self, ax):
         """Rescales 3D axis limits using equal scale."""
         import numpy
@@ -33,44 +29,46 @@ class dbscan():
         self.members = None
         self.core_members = None
 
-    def cluster(self, t, with_velocity=True, scaling='astro', eps=0.125, min_samples=10):
+    def _orbital_metric(self, r, v):
+        from PyKEP.core import DAY2SEC
+        DV2 = [a / (self._T * DAY2SEC) for a in r]
+        DV1 = [a + b for a, b in zip(DV2, v)]
+        return DV1 + DV2
+
+    def cluster(self, t, eps=0.125, min_samples=10, metric='orbital', T=180, ref_r=AU, ref_v=EARTH_VELOCITY):
         """
-        USAGE: cl.cluster(self, t, with_velocity=True, scaling='astro', eps=0.125, min_samples=10)
+        USAGE: cl.cluster(t, eps=0.125, min_samples=10, metric='orbital', T=180, ref_r=AU, ref_v=EARTH_VELOCITY):
 
         - t: epoch (in MJD2000)
-        - with_velocity: when True clusters by position and velocity, otherwise only position is used
-        - scaling: one of
-          - None, or
-          - 'standard' (removing mean and scale to standard variance), or
-          - 'astro' (scaling by PyKEP.AU and PyKEP.EARTH_VELOCITY)
         - eps: max distance between points in a cluster
         - min_samples: minimum number of samples per cluster
+        - metric: one of 'euclidean', 'euclidean_r', orbital'
+        - T: average transfer time (used in the definition of the 'orbital' metric)
+        - ref_r         reference radius   (used as a scaling factor for r if the metric is 'euclidean' or 'euclidean_r')
+        - ref_v         reference velocity (used as a scaling factor for v if the metric is 'euclidean')
         """
         import PyKEP
         import numpy
-        from sklearn.preprocessing import StandardScaler
         from sklearn.cluster import DBSCAN
 
-        self._scaling = scaling
         self._epoch = PyKEP.epoch(t)
 
-        if with_velocity:
+        if metric == 'euclidean':
             self._X = [
                 [elem for tupl in p.eph(self._epoch) for elem in tupl] for p in self._asteroids]
-        else:
+            scaling_vector = [ref_r] * 3
+            scaling_vector += [ref_v] * 3
+        elif metric == 'euclidean_r':
             self._X = [list(p.eph(self._epoch)[0]) for p in self._asteroids]
+            scaling_vector = [ref_r] * 3
+        elif metric == 'orbital':
+            self._T = T
+            self._X = [self._orbital_metric(*p.eph(self._epoch)) for p in self._asteroids]
+            scaling_vector = [1.] * 6  # no scaling
         self._X = numpy.array(self._X)
 
-        self._scaler = None
-        if self._scaling == 'standard':
-            self._scaler = StandardScaler().fit(self._X)
-            self._X = self._scaler.transform(self._X)
-        elif self._scaling == 'astro':
-            scaling_vector = [PyKEP.AU] * 3
-            if with_velocity:
-                scaling_vector += [PyKEP.EARTH_VELOCITY] * 3
-            scaling_vector = numpy.array(scaling_vector)
-            self._X = self._X / scaling_vector[None, :]
+        scaling_vector = numpy.array(scaling_vector)
+        self._X = self._X / scaling_vector[None, :]
 
         self._db = DBSCAN(eps=eps, min_samples=min_samples).fit(self._X)
         self._core_samples = self._db.core_sample_indices_
@@ -89,10 +87,7 @@ class dbscan():
             self.core_members[int(label)] = [
                 index for index in self._core_samples if self.labels[index] == label]
 
-        if self._scaling == 'standard':
-            self._X = self._scaler.inverse_transform(self._X)
-        elif self._scaling == 'astro':
-            self._X = self._X * scaling_vector[None, :]
+        self._X = self._X * scaling_vector[None, :]
 
     def pretty(self):
         """Prints the cluster lists."""
@@ -183,5 +178,3 @@ class dbscan():
         plt.draw()
         plt.show()
         return fig
-
-del PyKEP, numpy

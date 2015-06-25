@@ -104,6 +104,14 @@ static inline double fb_vel_wrapper(const kep_toolbox::array3D &vin_rel, const k
 	return dV;
 }
 
+static inline tuple damon_wrapper(const kep_toolbox::array3D &v1, const kep_toolbox::array3D &v2, double tof)
+{
+	kep_toolbox::array3D a1, a2;
+	double tau, dv;
+	kep_toolbox::damon_approx(v1, v2, tof, a1, a2, tau, dv);
+	return boost::python::make_tuple(kep_toolbox::array3D(a1),kep_toolbox::array3D(a2),double(tau),double(dv));
+}
+
 #define get_constant(arg) \
 static inline double get_##arg() \
 { \
@@ -480,6 +488,41 @@ BOOST_PYTHON_MODULE(_core) {
 		"NOTE: routine gets singular for zero inclination\n"
 		"Example:: \n\n"
 		"  el = ic2par([1,0,0],[0,1,0],1.0)"
+	);
+
+	def("damon", &damon_wrapper,
+		"PyKEP.damon(v1,v2,tof)\n\n"
+		"- v1: starting velocity relative to the departure body. This is\n"
+        "      computed from the Lambert solution linking initial and\n"
+		"      final position in tof\n"
+		"- v2: ending velocity relative to the arrival body. This is\n"
+        "      computed from the Lambert solution linking initial and\n"
+		"      final position in tof\n"
+		"- tof: time of flight\n\n"
+		"Returns:\n\n"
+		"- a1: acceleration vector in the first part of the transfer\n"
+		"- a2: acceleration vector in the second part of the transfer\n"
+		"- tau: duration of the first part of the transfer\n"
+		"- dv: total estimated DV\n\n"
+		"This function uses the model developed by Damon Landau (JPL)\n"
+		"during GTOC7 to compute an approximation to the low-thrust transfer\n\n"
+		"Example:: \n\n"
+		" a1, a2, tau, dv = PyKEP.damon(v1,v2,tof)"
+	);
+
+    def("max_start_mass", &kep_toolbox::max_start_mass,
+		"PyKEP.max_start_mass(a, dv, T_max, Isp)\n\n"
+		"- a: acceleration magnitude as computed from Damon's model\n"
+		"- dv: dv magnitude as computed from Damon's model\n"
+		"- T_max: maximum thrust of the spacecarft NEP propulsion system\n"
+		"- Isp: specific impulse of the spacecarft NEP propulsion system\n\n"
+		"Returns the estimated maximum mass at leg beginning\n"
+		"This function estimates the maximum\n"
+        "mass a NEP spacececraft can have in order for a given\n"
+        "arc to be convertable into a valid low-thrust transfer\n\n"
+		"Example:: \n\n"
+		" a,_,_,dv = PyKEP.damon(v1,v2,tof)\n"
+		" m = PyKEP.max_start_mass(norm(a), dv, T_max, Isp)"
 	);
 
     // For the three_impulses_approximation we need to distinguish the overloaded cases. We thus introduce new function pointers

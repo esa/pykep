@@ -1,7 +1,7 @@
 from PyGMO.problem import base as base_problem
 from PyKEP.core import epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from PyKEP.planet import jpl_lp
-from PyKEP.sims_flanagan import leg, spacecraft, sc_state
+from PyKEP.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
 
 
 class mga_lt_nep(base_problem):
