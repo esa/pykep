@@ -1,6 +1,4 @@
 class knn():
-    from PyKEP.core import AU, EARTH_VELOCITY
-
     """
     The class finds the k-nearest neighbours to a given planet from a list of planets.
     The problem of finding who is "close-by" can be efficiently solved using appropriate data structures.
@@ -15,6 +13,8 @@ class knn():
     - 'orbital', the distance is computed with respect to (r/T + v, r/T), coresponding to the DV computed over a linear model of the orbital transfer.
     The distance returned will thus be in m/s.
     """
+
+    from PyKEP.core import AU, EARTH_VELOCITY
 
     def _eph_normalize(self, eph):
         """
