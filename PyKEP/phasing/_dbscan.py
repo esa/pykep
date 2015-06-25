@@ -1,10 +1,10 @@
 class dbscan():
-    from PyKEP.core import AU, EARTH_VELOCITY
     """
     This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
     Essentially, it locates planet clusters
     """
-
+    from PyKEP.core import AU, EARTH_VELOCITY
+    
     def _axis_equal_3d(self, ax):
         """Rescales 3D axis limits using equal scale."""
         import numpy
