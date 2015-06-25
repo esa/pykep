@@ -125,6 +125,9 @@ array6D keplerian::get_elements() const {return m_keplerian_elements;}
 /// Returns the reference epoch
 kep_toolbox::epoch keplerian::get_ref_epoch() const {return kep_toolbox::epoch(m_ref_mjd2000);}
 
+/// Returns the reference epoch in mjd2000
+double keplerian::get_ref_mjd2000() const {return m_ref_mjd2000;}
+
 /// Returns the mean motion
 double keplerian::get_mean_motion() const {return m_mean_motion;}
 
@@ -137,6 +140,11 @@ void keplerian::set_elements(const array6D& el) {
 /// Sets the reference epoch
 void keplerian::set_ref_epoch(const kep_toolbox::epoch& when) {
 	m_ref_mjd2000 = when.mjd2000();
+}
+
+/// Sets the reference mjd2000
+void keplerian::set_ref_mjd2000(const double &when) {
+	m_ref_mjd2000 = when;
 }
 
 /// Extra informations streamed in humar readable format

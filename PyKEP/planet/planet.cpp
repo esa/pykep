@@ -178,7 +178,12 @@ BOOST_PYTHON_MODULE(_planet) {
 			"Example::\n\n"
 			"  el = earth.orbital_elements"
 		)
-		.add_property("ref_mjd2000", &planet::keplerian::get_ref_epoch, &planet::keplerian::set_ref_epoch,
+		.add_property("ref_epoch", &planet::keplerian::get_ref_epoch, &planet::keplerian::set_ref_epoch,
+			"The reference epoch at which the elements are given\n\n"
+			"Example::\n\n"
+			"  el = earth.ref_epoch"
+		)
+		.add_property("ref_mjd2000", &planet::keplerian::get_ref_mjd2000, &planet::keplerian::set_ref_mjd2000,
 			"The reference epoch at which the elements are given\n\n"
 			"Example::\n\n"
 			"  el = earth.ref_mjd2000"
