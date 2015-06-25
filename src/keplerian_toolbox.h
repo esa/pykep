@@ -1,9 +1,10 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2015 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
- *   http://apps.sourceforge.net/mediawiki/pagmo                             *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
- *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Credits     *
+ *                                                                           *
+ *   https://gitter.im/esa/pykep                                             *
+ *   https://github.com/esa/pykep                                            *
+ *                                                                           *
  *   act@esa.int                                                             *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
