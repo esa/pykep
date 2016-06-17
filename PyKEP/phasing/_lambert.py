@@ -2,33 +2,40 @@ from PyGMO.problem._base import base
 from PyGMO.util import hypervolume
 from PyKEP.planet import gtoc7
 from PyKEP.orbit_plots import plot_planet, plot_lambert
-from PyKEP.core import lambert_problem, DAY2SEC, epoch, AU
+from PyKEP.core import lambert_problem, DAY2SEC, epoch, AU, damon
+from numpy.linalg import norm
+from math import exp
 
 
 class lambert_metric(base):
 
     """
-    This class defines the Lambert phasing metric as introduced by the ESA/ACT team during GTOC7.
-    The result is a PyGMO multi-objective problem that can be solved efficiently by optimization algorithms
+    This class defines the Lambert phasing metric as published in the paper:
+
+    Hennes, Izzo, Landau: "Fast approximators for optimal low-thrust hops between main belt asteroids" - IEEE SSCI 2016
+
+    The result is a PyGMO multi-objective problem that can be solved efficiently by MO optimization algorithms
     """
 
-    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, max_acc=1e-4):
+    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500):
         """
 PyKEP.phasing.lambert_metric(epoch_bounds,A1, A2, max_acc, multi_objective)
 
 - epoch_bounds: a list containing the lower and upper bounds in mjd2000 for the launch and arrival epochs
 - A1: a planet
 - A2: a planet
-- max_acc: maximum acceleration from the thrust [m/s^2]
+- Tmax: maximum spacecraft thrust [N]
+- Isp: specific impulse of the spacecarft propulsion system [s]
+- ms: spacecraft mass at dparture [kg]
 - single_objective: if True defines a single objectiove problem (only DV)
 
 Example::
 
-  lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, max_acc=1e-4)
+  lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500)
         """
 
         # First we call the constructor of the base class telling
-        # essentially to PyGMO what kind of problem to expect (1 objective, 0
+        # essentially to PyGMO what kind of problem to expect (2 objective, 0
         # contraints etc.)
         super(lambert_metric, self).__init__(2, 0, 1 + (not single_objective), 0, 0, 0)
 
@@ -37,7 +44,9 @@ Example::
         self.set_bounds(epoch_bounds[0], epoch_bounds[1])
         self._ast1 = A1
         self._ast2 = A2
-        self._max_acc = max_acc
+        self._Tmax = Tmax
+        self._Isp = Isp
+        self._ms = ms
         self._UNFEASIBLE = 1e+20
 
     # We reimplement the virtual method that defines the objective function.
@@ -62,12 +71,21 @@ Example::
         v2l = l.get_v2()[0]
         DV1 = [a - b for a, b in zip(v1, v1l)]
         DV2 = [a - b for a, b in zip(v2, v2l)]
+
+        a1, a2, tau, dv = damon(DV1, DV2, (x[1] - x[0]) * DAY2SEC)
+
+        Isp = self._Isp
+        g0 = 9.80665
+        Tmax = self._Tmax
+        ms = self._ms
+        MIMA = 2 * Tmax / norm(a1) / (1. + exp(-norm(a1) * (x[1] - x[0]) * DAY2SEC / Isp / g0) )
+
         DV1 = sum([l * l for l in DV1])
         DV2 = sum([l * l for l in DV2])
         totDV = sqrt(DV1) + sqrt(DV2)
         totDT = x[1] - x[0]
 
-        if totDV >= self._max_acc * totDT * DAY2SEC:
+        if ms > MIMA:
             if self.f_dimension == 1:
                 return (self._UNFEASIBLE, )
             else:
@@ -127,11 +145,10 @@ Example::
         if pop.champion.f[0] == self._UNFEASIBLE:
             raise Exception('Input population contains only unfeasible individuals')
         hv = hypervolume(pop)
-
         return (hv.compute(self._compute_ref_point()) * DAY2SEC / AU)
 
     def _compute_ref_point(self):
-        rx = self._max_acc * DAY2SEC * (self.ub[0] - self.lb[0])
+        rx = self._Tmax/self._ms * DAY2SEC * (self.ub[0] - self.lb[0])
         ry = self.ub[0]
         return (rx, ry)
 
