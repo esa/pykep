@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyKEP Documentation &mdash; PyKEP 1.2.2dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.2dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          PyKEP</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="#">Docs</a></li>
+                <li><a href="../examples/index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">PyKEP Documentation</a><ul>
+<li><a class="reference internal" href="#documentation-of-the-main-modules">Documentation of the main modules</a></li>
+<li><a class="reference internal" href="#constants-defined-within-pykep-namespace">Constants defined within PyKEP namespace</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="pykep-documentation">
+<h1>PyKEP Documentation<a class="headerlink" href="#pykep-documentation" title="Permalink to this headline">¶</a></h1>
+<p>PyKEP is made of main modules called <a class="reference internal" href="core.html#core"><em>The core module</em></a>, <a class="reference internal" href="planets.html#planet"><em>The planet module</em></a>, <a class="reference internal" href="simsflanagan.html#simsflanagan"><em>The simsflanagan module</em></a>, <a class="reference internal" href="phasing.html#phasing"><em>The phasing module</em></a>, <a class="reference internal" href="trajopt.html#trajopt"><em>The trajopt module (requires PyGMO)</em></a>, <a class="reference internal" href="orbitplots.html#orbitplots"><em>The orbit plotting module</em></a>, <a class="reference internal" href="util.html#util"><em>The utility module</em></a>. When we import PyKEP via:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">PyKEP</span> <span class="kn">as</span> <span class="nn">pkp</span>
+</pre></div>
+</div>
+<p>the core module gets imported in the PyKEP namespace, while all other modules will appear in dedicated namespaces, e.g.
+PyKEP.trajopt, PyKEP.phasing etc.</p>
+<p>In addition, two important dictionaries will be imported:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pkp</span><span class="o">.</span><span class="n">__version__</span>
+<span class="n">pkp</span><span class="o">.</span><span class="n">__extensions__</span>
+</pre></div>
+</div>
+<p>The first one, pkp.__version__, is the PyKEP version dictionary that can be queried for major, minor or bugfix number. PyKEP 1.2.0
+means that the major version is 1, the minor is 2 and the bugfix version is 0.</p>
+<p>The second one, pkp.__extensions__, is the PyKEP extension dictionary containing the extension installed in the system as detected by PyKEP.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre> {&#39;matplotlib&#39;: True,
+&#39;mplot3d&#39;: True,
+&#39;pygmo&#39;: True,
+&#39;scikit-learn&#39;: True,
+&#39;scipy&#39;: True}
+</pre></div>
+</div>
+<div class="section" id="documentation-of-the-main-modules">
+<h2>Documentation of the main modules<a class="headerlink" href="#documentation-of-the-main-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">The core module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simsflanagan.html">The simsflanagan module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phasing.html">The phasing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html">The trajopt module (requires PyGMO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbitplots.html">The orbit plotting module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">The utility module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="constants-defined-within-pykep-namespace">
+<h2>Constants defined within PyKEP namespace<a class="headerlink" href="#constants-defined-within-pykep-namespace" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>PyKEP.AU</td>
+<td>One astronomical unit in meters</td>
+</tr>
+<tr class="row-odd"><td>PyKEP.DAY2SEC</td>
+<td>Conversion factor from days to seconds</td>
+</tr>
+<tr class="row-even"><td>PyKEP.DAY2YEAR</td>
+<td>Conversion factor from days to years</td>
+</tr>
+<tr class="row-odd"><td>PyKEP.DEG2RAD</td>
+<td>Conversion factor from degrees to radians</td>
+</tr>
+<tr class="row-even"><td>PyKEP.RAD2DEG</td>
+<td>Conversion factor from radians to degree</td>
+</tr>
+<tr class="row-odd"><td>PyKEP.SEC2DAY</td>
+<td>Conversion factor from seconds to days</td>
+</tr>
+<tr class="row-even"><td>PyKEP.MU_SUN</td>
+<td>Sun gravitational constant in m^3/s^2</td>
+</tr>
+<tr class="row-odd"><td>PyKEP.EARTH_VELOCITY</td>
+<td>Square root of MU_SUN/AU. Average earth velocity in meters per seconds.</td>
+</tr>
+<tr class="row-even"><td>PyKEP.G0</td>
+<td>The standard gravity acceleration at ground level in m/s^2</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>PyKEP follows two conventions that are to be kept in mind.</p>
+<ul class="last simple">
+<li><em>Units</em>: The S.I. system is used to perform all computations in PyKEP and it is the default choice for everything. In some cases, to help the user instantiate objects and define problems, classes and functions may accept inputs in different units or return results in different units, but this is only exceptional and documented in the class or function help.</li>
+<li><em>Orbital parameters</em>: In PyKEP, the osculating Keplerian elements are always in the following order: a,e,i,W,w,M (E or H), where a is the semi-major axis, e the eccentriciy, i the inclination, W the Right Axcension of the Acending Node, w the argument of perigee and M the mean anomaly (E and H being the eccentric and hyperbolic anomalies).</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, PyKEP Development Team.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

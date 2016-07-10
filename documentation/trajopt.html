@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The trajopt module (requires PyGMO) &mdash; PyKEP 1.2.2dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.2dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          PyKEP</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="index.html">Docs</a></li>
+                <li><a href="../examples/index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The trajopt module (requires PyGMO)</a><ul>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="the-trajopt-module-requires-pygmo">
+<span id="trajopt"></span><h1>The trajopt module (requires PyGMO)<a class="headerlink" href="#the-trajopt-module-requires-pygmo" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="8%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.trajopt.mga_1dsm" title="PyKEP.trajopt.mga_1dsm"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.trajopt.mga_1dsm</span></tt></a></td>
+<td>class</td>
+<td>A multiple Gravity Assist Trajectory with one deep space manouvre</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.trajopt.pl2pl_N_impulses" title="PyKEP.trajopt.pl2pl_N_impulses"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.trajopt.pl2pl_N_impulses</span></tt></a></td>
+<td>class</td>
+<td>A direct transfer between planets allowing for many DSMs</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.trajopt.mga_lt_nep" title="PyKEP.trajopt.mga_lt_nep"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.trajopt.mga_lt_nep</span></tt></a></td>
+<td>class</td>
+<td>A multiple Gravity Assist Trajectory low-thrust optimization problem</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.trajopt.mr_lt_nep" title="PyKEP.trajopt.mr_lt_nep"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.trajopt.mr_lt_nep</span></tt></a></td>
+<td>class</td>
+<td>A multiple randezvous low-thrust optimization problem</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="detailed-documentation">
+<h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyKEP.trajopt.mga_1dsm">
+<em class="property">class </em><tt class="descclassname">PyKEP.trajopt.</tt><tt class="descname">mga_1dsm</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is a PyGMO (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) problem representing a Multiple Gravity Assist
+trajectory allowing one only impulsive Deep Space Manouvre between each leg.</p>
+<ul class="simple">
+<li>Izzo, Dario. &#8220;Global optimization and space pruning for spacecraft trajectory design.&#8221; Spacecraft Trajectory Optimization 1 (2010): 178-200.</li>
+</ul>
+<p>The decision vector is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">Vinf</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">a1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">rp</span><span class="o">/</span><span class="n">rV</span><span class="p">,</span> <span class="n">eta2</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>... in the units: [mjd2000, days] + [nd,nd,km/s,nd,years,nd] + [rad,nd,nd,nd] + ....</p>
+<p>Each leg time-of-flight can be decoded as follows, T_n = T log(alpha_n) / sum_i(log(alpha_i)).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.</p>
+</div>
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.trajopt.mga_1dsm(seq = [jpl_lp(&#8216;earth&#8217;), jpl_lp(&#8216;venus&#8217;), jpl_lp(&#8216;earth&#8217;)], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)</p>
+<ul class="simple">
+<li>seq: list of PyKEP planets defining the encounter sequence (including the starting launch)</li>
+<li>t0: list of two epochs defining the launch window</li>
+<li>tof: list of two floats defining the minimum and maximum allowed mission lenght (years)</li>
+<li>vinf: list of two floats defining the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec</li>
+<li>multi_objective: when True constructs a multiobjective problem (dv, T)</li>
+<li>add_vinf_dep: when True the computed Dv includes the initial hyperbolic velocity (at launch)</li>
+<li>add_vinf_arr: when True the computed Dv includes the final hyperbolic velocity (at the last planet)</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.set_tof">
+<tt class="descname">set_tof</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.set_tof" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob.set_tof(minimum, maximum)</p>
+<ul class="simple">
+<li>minimum: minimum tof (in years)</li>
+<li>maximum: maximum tof (in years)</li>
+</ul>
+<p>Sets the minimum and maximum time of flight allowed (in years)</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">m</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_tof</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.set_launch_window">
+<tt class="descname">set_launch_window</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.set_launch_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob.set_launch_window(start, end)</p>
+<ul class="simple">
+<li>start: starting epoch</li>
+<li>end: ending epoch</li>
+</ul>
+<p>Sets the launch window allowed in terms of starting and ending epochs</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">start</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_launch_window</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.set_vinf">
+<tt class="descname">set_vinf</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.set_vinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob.set_vinf(vinf)</p>
+<ul class="simple">
+<li>vinf: allowed launch vinf (in km/s)</li>
+</ul>
+<p>Sets the allowed launch vinf (in km/s)</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">M</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_vinf</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.pretty">
+<tt class="descname">pretty</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.pretty" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob.plot(x)</p>
+<ul class="simple">
+<li>x: encoded trajectory</li>
+</ul>
+<p>Prints human readable information on the trajectory represented by the decision vector x</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_1dsm.plot">
+<tt class="descname">plot</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_1dsm.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>ax = prob.plot(x, ax=None)</p>
+<ul class="simple">
+<li>x: encoded trajectory</li>
+<li>ax: matplotlib axis where to plot. If None figure and axis will be created</li>
+<li>[out] ax: matplotlib axis where to plot</li>
+</ul>
+<p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="PyKEP.trajopt.mga_lt_nep">
+<em class="property">class </em><tt class="descclassname">PyKEP.trajopt.</tt><tt class="descname">mga_lt_nep</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_lt_nep" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is a PyGMO (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) problem representing a low-thrust
+interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with sims_flanagan legs</p>
+<ul class="simple">
+<li>Yam, C.H., di Lorenzo, D., and Izzo, D.,   Low-Thrust Trajectory Design as a Constrained Global Optimization Problem,  Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.</li>
+</ul>
+<p>The decision vector (chromosome) is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">t0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">T1</span><span class="p">,</span> <span class="n">mf1</span><span class="p">,</span> <span class="n">Vxi1</span><span class="p">,</span> <span class="n">Vyi1</span><span class="p">,</span> <span class="n">Vzi1</span><span class="p">,</span> <span class="n">Vxf1</span><span class="p">,</span> <span class="n">Vyf1</span><span class="p">,</span> <span class="n">Vzf1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">T2</span><span class="p">,</span> <span class="n">mf2</span><span class="p">,</span> <span class="n">Vxi2</span><span class="p">,</span> <span class="n">Vyi2</span><span class="p">,</span> <span class="n">Vzi2</span><span class="p">,</span> <span class="n">Vxf2</span><span class="p">,</span> <span class="n">Vyf2</span><span class="p">,</span> <span class="n">Vzf2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.</p>
+</div>
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_lt_nep.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_lt_nep.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob = mga_lt_nep(seq = [jpl_lp(&#8216;earth&#8217;),jpl_lp(&#8216;venus&#8217;),jpl_lp(&#8216;earth&#8217;)], n_seg = [10]*2,
+t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
+multi_objective = False, fb_rel_vel = 6, high_fidelity=False)</p>
+<ul class="simple">
+<li>seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)</li>
+<li>n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)</li>
+<li>t0: list of PyKEP epochs defining the launch window</li>
+<li>tof: minimum and maximum time of each leg (days)</li>
+<li>vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)</li>
+<li>vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)</li>
+<li>mass: spacecraft starting mass</li>
+<li>Tmax: maximum thrust</li>
+<li>Isp: engine specific impulse</li>
+<li>fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)</li>
+<li>multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight</li>
+<li>high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_lt_nep.high_fidelity">
+<tt class="descname">high_fidelity</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_lt_nep.high_fidelity" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob.high_fidelity(status)</p>
+<ul class="simple">
+<li>status: either True or False (True sets high fidelity on)</li>
+</ul>
+<p>Sets the trajectory high fidelity mode</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prob</span><span class="o">.</span><span class="n">high_fidelity</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_lt_nep.ic_from_mga_1dsm">
+<tt class="descname">ic_from_mga_1dsm</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_lt_nep.ic_from_mga_1dsm" title="Permalink to this definition">¶</a></dt>
+<dd><p>x_lt = prob.ic_from_mga_1dsm(x_mga)</p>
+<ul class="simple">
+<li>x_mga: compatible trajectory as encoded by an mga_1dsm problem</li>
+</ul>
+<p>Returns an initial guess for the low-thrust trajectory, converting the mga_1dsm solution x_dsm. The user
+is responsible that x_mga makes sense (i.e. it is a viable mga_1dsm representation). The conversion is done by importing in the
+low-thrust encoding a) the launch date b) all the legs durations, c) the in and out relative velocities at each planet.
+All throttles are put to zero.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x_lt</span><span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">ic_from_mga_1dsm</span><span class="p">(</span><span class="n">x_mga</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mga_lt_nep.plot">
+<tt class="descname">plot</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mga_lt_nep.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>ax = prob.plot(x, ax=None)</p>
+<ul class="simple">
+<li>x: encoded trajectory</li>
+<li>ax: matplotlib axis where to plot. If None figure and axis will be created</li>
+<li>[out] ax: matplotlib axis where to plot</li>
+</ul>
+<p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="PyKEP.trajopt.mr_lt_nep">
+<em class="property">class </em><tt class="descclassname">PyKEP.trajopt.</tt><tt class="descname">mr_lt_nep</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mr_lt_nep" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents, as a global optimization problem (linearly constrained,
+high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
+with a nuclear electric propulsion engine.</p>
+<ul class="simple">
+<li>Izzo, D. et al., GTOC7 - Solution Returned by the ACT/ISAS team</li>
+</ul>
+<p>The decision vector (chromosome) is:
+[t1, tof1, rest1, m_f1] + [throttles1] +
+[t2, tof2, rest2, m_f2] + [throttles2] + ....
+.... + [total_tof]</p>
+<p>where the units are [mjd2000, days, days, kg] + [n/a] + .... + [days]</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.</p>
+</div>
+<dl class="method">
+<dt id="PyKEP.trajopt.mr_lt_nep.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mr_lt_nep.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>prob = mr_lt_nep(seq=[PyKEP.gtoc7(3413),PyKEP.gtoc7(234), PyKEP.gtoc7(11432)], n_seg=5, t0=[13000, 13200],</dt>
+<dd>leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
+Isp=3000., traj_tof=365.25 * 6, objective=&#8217;mass&#8217;, c_tol=1e-05)</dd>
+</dl>
+<ul class="simple">
+<li>seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)</li>
+<li>n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)</li>
+<li>t0: list of two PyKEP epochs defining the launch window</li>
+<li>leg_tof: list of two floats defining the minimum and maximum time of each leg (days)</li>
+<li>rest: list of two floats defining the minimum and maximum time the spacecraft can rest at one planet (days)</li>
+<li>mass: list of two floats defining the minimum final spacecraft mass and the starting spacecraft mass (kg)</li>
+<li>Tmax: maximum thrust (N)</li>
+<li>Isp: engine specific impulse (sec)</li>
+<li>traj_tof maximum total mission duration (days)</li>
+<li>c_tol: tolerance on the constraints</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.trajopt.mr_lt_nep.plot">
+<tt class="descname">plot</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.mr_lt_nep.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>ax = prob.plot(x, ax=None)</p>
+<ul class="simple">
+<li>x: encoded trajectory</li>
+<li>ax: matplotlib axis where to plot. If None figure and axis will be created</li>
+<li>[out] ax: matplotlib axis where to plot</li>
+</ul>
+<p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="PyKEP.trajopt.pl2pl_N_impulses">
+<em class="property">class </em><tt class="descclassname">PyKEP.trajopt.</tt><tt class="descname">pl2pl_N_impulses</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.pl2pl_N_impulses" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is a PyGMO (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) problem representing a single leg transfer
+between two planets allowing up to a maximum number of impulsive Deep Space Manouvres.</p>
+<p>The decision vector is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">t0</span><span class="p">,</span><span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">V_inf</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span><span class="p">[</span><span class="n">alpha</span><span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="n">tf</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>... in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]</p>
+<p>Each leg time-of-flight can be decoded as follows, T_n = T log(alpha_n) / sum_i(log(alpha_i))</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.</p>
+</div>
+<dl class="method">
+<dt id="PyKEP.trajopt.pl2pl_N_impulses.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.trajopt.pl2pl_N_impulses.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>prob = PyKEP.trajopt.pl2pl_N_impulses(start=jpl_lp(&#8216;earth&#8217;), target=jpl_lp(&#8216;venus&#8217;), N_max=3, tof=[20., 400.], vinf=[0., 4.], phase_free=True, multi_objective=False, t0=None)</p>
+<ul class="simple">
+<li>start:            a PyKEP planet defining the starting orbit</li>
+<li>target:           a PyKEP planet defining the target orbit</li>
+<li>N_max:            maximum number of impulses</li>
+<li>tof:              a list containing the box bounds [lower,upper] for the time of flight (days)</li>
+<li>vinf:             a list containing the box bounds [lower,upper] for each DV magnitude (km/sec)</li>
+<li>phase_free:       when True, no randezvous condition is enforced and the final orbit will be reached at an optimal true anomaly</li>
+<li>multi_objective:  when True, a multi-objective problem is constructed with DV and time of flight as objectives</li>
+<li>t0:               launch window defined as a list of two epochs [epoch,epoch]</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, PyKEP Development Team.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

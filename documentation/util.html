@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The utility module &mdash; PyKEP 1.2.2dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.2dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          PyKEP</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="index.html">Docs</a></li>
+                <li><a href="../examples/index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The utility module</a><ul>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="the-utility-module">
+<span id="util"></span><h1>The utility module<a class="headerlink" href="#the-utility-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="detailed-documentation">
+<h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="PyKEP.util.read_satcat">
+<tt class="descclassname">PyKEP.util.</tt><tt class="descname">read_satcat</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.util.read_satcat" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.read_satcat(&#8220;my_dir/satcat.txt&#8221;)</p>
+<p>This function reads the satcat catalogue, as can be downloaded from <a class="reference external" href="http://www.celestrak.com/NORAD/elements/">http://www.celestrak.com/NORAD/elements/</a>
+and returns a dictionary keyed with the satellite international designator (e.g. &#8220;1958-002B&#8221;). Each entry
+is a named tuple with the following fields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">noradn</span><span class="p">,</span> <span class="n">multnameflag</span><span class="p">,</span> <span class="n">payloadflag</span><span class="p">,</span> <span class="n">operationstatus</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ownership</span><span class="p">,</span> <span class="n">launchdate</span><span class="p">,</span> <span class="n">launchsite</span><span class="p">,</span> <span class="n">decay</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">incl</span><span class="p">,</span> <span class="n">apogee</span><span class="p">,</span> <span class="n">perigee</span><span class="p">,</span> <span class="n">radarA</span><span class="p">,</span> <span class="n">orbitstatus</span>
+</pre></div>
+</div>
+<p>see <a class="reference external" href="http://celestrak.com/satcat/satcat-format.asp">http://celestrak.com/satcat/satcat-format.asp</a> for the meaning of all entries.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">satcat</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">read_satcat</span><span class="p">(</span><span class="s">&quot;my_dir/satcat.txt&quot;</span><span class="p">)</span>
+<span class="n">cross_section</span> <span class="o">=</span> <span class="n">satcat</span><span class="p">[</span><span class="s">&quot;1958-002B&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">radarA</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.util.read_tle">
+<tt class="descclassname">PyKEP.util.</tt><tt class="descname">read_tle</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.util.read_tle" title="Permalink to this definition">¶</a></dt>
+<dd><p>planet_list = PyKEP.read_tle(tle_file, verbose=False, with_name=True)</p>
+<ul class="simple">
+<li>tle_file: A string containin the file name (assumed to be in the working directory)</li>
+<li>verbose: Activates some screen output to show the progress.</li>
+<li>with_name: When True the TLE files contain three lines, the first one containing the satellite common name</li>
+<li>[out] planet_list: a list of PyKEP tle_planets having as name their international designator (e.g. &#8220;1958-002B&#8221;).</li>
+</ul>
+<p>This function reads a Two-Line-Element file as taken from the NORAD database
+<a class="reference external" href="http://www.celestrak.com/NORAD/elements/">http://www.celestrak.com/NORAD/elements/</a> or equivalent and returns a list of PyKEP planet_tle
+objects</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The name of each of the instantiated planets will be its international designator and
+thus a valid key to the satcat dictionary</p>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">planet_list</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">read_tle</span><span class="p">(</span><span class="s">&quot;my_dir/cosmos.tle&quot;</span><span class="p">)</span>
+<span class="n">satcat</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">read_satcat</span><span class="p">(</span><span class="s">&quot;my_dir/satcat.txt&quot;</span><span class="p">)</span>
+<span class="n">cross_sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">satcat</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">name</span><span class="p">()]</span><span class="o">.</span><span class="n">radarA</span> <span class="k">for</span> <span class="n">pl</span> <span class="ow">in</span>  <span class="n">planet_list</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, PyKEP Development Team.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

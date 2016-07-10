@@ -1,0 +1,508 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The core module &mdash; PyKEP 1.2.2dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.2dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          PyKEP</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="index.html">Docs</a></li>
+                <li><a href="../examples/index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The core module</a><ul>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="the-core-module">
+<span id="core"></span><h1>The core module<a class="headerlink" href="#the-core-module" title="Permalink to this headline">¶</a></h1>
+<p>The core module, imported in the main PyKEP namespace, contains the classes and helper functions to perform basic space-flight mechanics computations. You can browse the list of classes and functions below. Find the detailed documentation later on this page.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="5%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.epoch" title="PyKEP.epoch"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.epoch</span></tt></a></td>
+<td>class</td>
+<td>represents an epoch (i.e. a fixed point in time)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.epoch_from_string" title="PyKEP.epoch_from_string"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.epoch_from_string()</span></tt></a></td>
+<td>function</td>
+<td>helper function to construct an epoch from a string containing a date in the format YYYY-MM-DD HH:MM:SS</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.epoch_from_iso_string" title="PyKEP.epoch_from_iso_string"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.epoch_from_iso_string()</span></tt></a></td>
+<td>function</td>
+<td>helper function to construct an epoch from a string containing a date in the ISO format YYYYMMDDTHHMMSS</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.lambert_problem" title="PyKEP.lambert_problem"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.lambert_problem</span></tt></a></td>
+<td>class</td>
+<td>solves the multirevolution lambert problem</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.propagate_lagrangian" title="PyKEP.propagate_lagrangian"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.propagate_lagrangian()</span></tt></a></td>
+<td>function</td>
+<td>propagates pure keplerian motion using Lagrange coefficients and universal variables</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.propagate_taylor" title="PyKEP.propagate_taylor"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.propagate_taylor()</span></tt></a></td>
+<td>function</td>
+<td>propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.fb_con" title="PyKEP.fb_con"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.fb_con()</span></tt></a></td>
+<td>function</td>
+<td>returns violation of velocity and angular constraint during a fly-by</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.fb_vel" title="PyKEP.fb_vel"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.fb_vel()</span></tt></a></td>
+<td>function</td>
+<td>returns the violation of the velocity and angular constraint during a fly-by in terms of one single DV</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.fb_prop" title="PyKEP.fb_prop"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.fb_prop()</span></tt></a></td>
+<td>function</td>
+<td>propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.barker" title="PyKEP.barker"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.barker()</span></tt></a></td>
+<td>function</td>
+<td>computes the (parabolic) time-of-flight from the Barker equation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PyKEP.ic2par" title="PyKEP.ic2par"><tt class="xref py py-func docutils literal"><span class="pre">PyKEP.ic2par()</span></tt></a></td>
+<td>function</td>
+<td>Transforms r and v into the osculating orbital elements</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="detailed-documentation">
+<h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyKEP.lambert_problem">
+<em class="property">class </em><tt class="descclassname">PyKEP.</tt><tt class="descname">lambert_problem</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a multiple revolution Lambert&#8217;s problem</p>
+<dl class="method">
+<dt id="PyKEP.lambert_problem.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])</p>
+<ul class="simple">
+<li>r1: starting position (x1,y1,z1)</li>
+<li>r2: 3D final position (x2,y2,z2)</li>
+<li>t: time of flight</li>
+<li>mu: gravitational parameter (default is 1)</li>
+<li>cw: True for retrograde motion (clockwise), False if counter-clock wise (default is False)</li>
+<li>multi_revs: Maximum number of multirevs to be computed (default is 5)</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Units need to be consistent.
+The multirev Lambert&#8217;s problem will be solved upon construction and its solution stored in data members.</p>
+</div>
+<p>Example (non-dimensional units used):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">l</span> <span class="o">=</span> <span class="n">lambert_problem</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span> <span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.lambert_problem.get_v1">
+<tt class="descname">get_v1</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.get_v1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sequence of vectors containing the velocities at r1 of all computed solutions to the Lambert&#8217;s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<p>Example (extracts v1 for the 0 revs solution):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">v10</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_v1</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.lambert_problem.get_v2">
+<tt class="descname">get_v2</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.get_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sequence of vectors containing the velocities at r2 of all computed solutions to the Lambert&#8217;s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<p>Example (extracts v2 for the 0 revs solution):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">v20</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_v2</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.lambert_problem.get_x">
+<tt class="descname">get_x</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.get_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sequence containing the x values of all computed solutions to the Lambert&#8217;s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<p>Example (extracts x for the 0 revs solution):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_x</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.lambert_problem.get_Nmax">
+<tt class="descname">get_Nmax</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.get_Nmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the maximum number of revolutions allowed. The total number of solution to the Lambert&#8217;s problem will thus be n_sol = Nmax*2 + 1</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Nmax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_Nmax</span><span class="p">()</span>
+<span class="n">n_sol</span> <span class="o">=</span> <span class="n">Nmax</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyKEP.lambert_problem.get_iters">
+<tt class="descname">get_iters</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.lambert_problem.get_iters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sequence containing the number of iterations employed to compute each solution to the Lambert&#8217;s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<p>Example (extracts the number of iterations employed for the 0 revs solution):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p0</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_iters</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
+<dt id="PyKEP.epoch">
+<em class="property">class </em><tt class="descclassname">PyKEP.</tt><tt class="descname">epoch</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.epoch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a precise point in time. The boost::posix_time_ptime classes are used to handle the conversion to and from string</p>
+<dl class="method">
+<dt id="PyKEP.epoch.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.epoch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.epoch(julian_date=0, julian_date_type=&#8221;mjd2000&#8221;)</p>
+<ul class="simple">
+<li>julian_date: a julian date, defaults to 0</li>
+<li>julian_date_type: julian date type, one of &#8220;jd&#8221;, &#8220;mjd&#8221; and &#8220;mjd2000&#8221;, defaults to &#8220;mjd2000&#8221;</li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e1</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">&quot;mjd2000&quot;</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">54333</span><span class="p">,</span> <span class="s">&quot;mjd&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyKEP.epoch.jd">
+<tt class="descname">jd</tt><a class="headerlink" href="#PyKEP.epoch.jd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Julian Date</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">jd</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">jd</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyKEP.epoch.mjd">
+<tt class="descname">mjd</tt><a class="headerlink" href="#PyKEP.epoch.mjd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Modified Julian Date</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">jd</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mjd</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyKEP.epoch.mjd2000">
+<tt class="descname">mjd2000</tt><a class="headerlink" href="#PyKEP.epoch.mjd2000" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Modifeid Julian Date 2000</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">jd</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mjd2000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.epoch_from_string">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">epoch_from_string</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#PyKEP.epoch_from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.epoch_from_string(s)</p>
+<ul class="simple">
+<li>s: string containing a date in the format &#8216;YYYY-MM-DD HH:MM:SS&#8217;Returns a <a class="reference internal" href="#PyKEP.epoch" title="PyKEP.epoch"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.epoch</span></tt></a> object constructed from a from a delimited string containing a date.Excess digits in fractional seconds will be dropped. Ex: &#8216;1:02:03.123456999&#8217; =&gt; &#8216;1:02:03.123456&#8217;.This behavior depends on the precision defined in astro_constant.h used to compile.</li>
+</ul>
+<p>NOTE: The function is based on the corresponding <a class="reference external" href="http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/posix_time.html#ptime_from_string">boost date_time library function</a></p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch_from_string</span><span class="p">(</span><span class="s">&#39;2002-01-20 23:59:54.003&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.epoch_from_iso_string">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">epoch_from_iso_string</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#PyKEP.epoch_from_iso_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.epoch_from_iso_string(s)</p>
+<ul class="simple">
+<li>s: string containing a date in the iso format &#8216;YYYYMMDDTHHMMSS&#8217;Returns a <a class="reference internal" href="#PyKEP.epoch" title="PyKEP.epoch"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.epoch</span></tt></a> object constructed from a from a non delimited iso form string containing a date.</li>
+</ul>
+<p>NOTE: The function is based on the corresponding <a class="reference external" href="http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/posix_time.html#ptime_from_string">boost date_time library function</a></p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch_from_iso_string</span><span class="p">(</span><span class="s">&#39;20020120T235954&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.propagate_lagrangian">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">propagate_lagrangian</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.propagate_lagrangian" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.propagate_lagrangian(r,v,t,mu)</p>
+<ul class="simple">
+<li>r: start position, x,y,z</li>
+<li>v: start velocity, vx,vy,vz</li>
+<li>t: propagation time</li>
+<li>mu: central body gravity constant</li>
+</ul>
+<p>Returns a tuple containing r and v, the final position and velocity after the propagation.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">propagate_lagrangian</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.propagate_taylor">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">propagate_taylor</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.propagate_taylor" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.propagate_taylor(r,v,m,u,t,mu,veff,log10tol,log10rtol)</p>
+<ul class="simple">
+<li>r: start position, x,y,z</li>
+<li>v: start velocity, vx,vy,vz</li>
+<li>m: starting mass</li>
+<li>u: fixed inertial thrust, ux,uy,uz</li>
+<li>t: propagation time</li>
+<li>mu: central body gravity constant</li>
+<li>veff: the product (Isp g0) defining the engine efficiency</li>
+<li>log10tol: the logarithm of the absolute tolerance passed to taylor propagator</li>
+<li>log10rtol: the logarithm of the relative tolerance passed to taylor propagator</li>
+</ul>
+<p>Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">propagate_taylor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">100</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="o">-</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.fb_con">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">fb_con</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.fb_con" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.fb_con(vin,vout,pl)</p>
+<ul class="simple">
+<li>vin: cartesian coordinates of the relative hyperbolic velocity before the fly-by</li>
+<li>vout: vout, cartesian coordinates of the relative hyperbolic velocity after the fly-by</li>
+<li>pl: fly-by planet</li>
+</ul>
+<dl class="docutils">
+<dt>Returns a tuple containing (eq, ineq). </dt>
+<dd>eq represents the violation of the equality constraint norm(vin)**2 = norm(vout)**2.
+ineq represents the violation of the inequality constraint on the hyperbola asymptote maximum deflection</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">v2_eq</span><span class="p">,</span> <span class="n">delta_ineq</span> <span class="o">=</span> <span class="n">fb_con</span><span class="p">(</span><span class="n">vin</span><span class="p">,</span> <span class="n">vout</span><span class="p">,</span> <span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;earth&#39;</span><span class="p">))</span>
+<span class="n">v2_eq</span> <span class="o">=</span> <span class="n">v2_eq</span> <span class="o">/</span> <span class="n">EARTH_VELOCITY</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.fb_prop">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">fb_prop</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.fb_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.fb_prop(v,v_pla,rp,beta,mu)</p>
+<ul class="simple">
+<li>v: spacecarft velocity before the encounter (cartesian, absolute)</li>
+<li>v-pla: planet inertial velocity at encounter (cartesian, absolute)</li>
+<li>rp: fly-by radius</li>
+<li>beta: fly-by plane orientation</li>
+<li>mu: planet gravitational constant</li>
+</ul>
+<p>Returns the cartesian components of the spacecarft velocity after the encounter. 
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vout</span> <span class="o">=</span> <span class="n">fb_prop</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.1415</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.fb_vel">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">fb_vel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.fb_vel" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.fb_vel(vin,vout,pl)</p>
+<ul class="simple">
+<li>vin: cartesian coordinates of the relative hyperbolic velocity before the fly-by</li>
+<li>vout: vout, cartesian coordinates of the relative hyperbolic velocity after the fly-by</li>
+<li>pl: fly-by planet</li>
+</ul>
+<dl class="docutils">
+<dt>Returns a number dV. </dt>
+<dd>dV represents the norm of the delta-V needed to make a given fly-by possible. dV is necessary to fix the magnitude and the direction of vout.</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dV</span> <span class="o">=</span> <span class="n">fb_vel</span><span class="p">(</span><span class="n">vin</span><span class="p">,</span> <span class="n">vout</span><span class="p">,</span> <span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;earth&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.barker">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">barker</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.barker" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.barker(r1,r2,mu)</p>
+<ul class="simple">
+<li>r1: initial position (cartesian)</li>
+<li>r2: final position (cartesian)</li>
+<li>mu: gravity parameter</li>
+</ul>
+<p>Returns the time of flight as evaluated by the Barker equation. 
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">barker</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="function">
+<dt id="PyKEP.ic2par">
+<tt class="descclassname">PyKEP.</tt><tt class="descname">ic2par</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.ic2par" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyKEP.ic2par(r1,v2,mu)</p>
+<ul class="simple">
+<li>r1: initial position (cartesian)</li>
+<li>r2: final position (cartesian)</li>
+<li>mu: gravity parameter</li>
+</ul>
+<p>Returns the osculating keplerian elements a,e,i,W,w,E
+E is the eccentric anomaly for e&lt;1, the Gudermannian for e&gt;1
+NOTE: routine gets singular for zero inclination
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">el</span> <span class="o">=</span> <span class="n">ic2par</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, PyKEP Development Team.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
