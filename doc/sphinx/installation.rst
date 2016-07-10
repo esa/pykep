@@ -22,7 +22,7 @@ Compiling and Installing under Unix
 Assuming you have prepared your system for compiling PyKEP (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have 
 created a directory keptoolbox in your current directory, move there::
 
-  cd keptoolbox
+  cd pykep
 
 You will now need to create a build directory where to build the source code, so::
 
