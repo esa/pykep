@@ -37,7 +37,7 @@
 namespace kep_toolbox {
 
 template<class T>
-double propagate_taylor_J2_step(T& r0, T& v0, double &m0, const double &h, const int &order, const T &thrust, const double &mu, const double &veff, const double& J2RG2, const double &xm, const double &eps_a, const double &eps_r, std::vector< boost::array<double,7> > &x, std::vector< boost::array<double,37> > &u){
+double propagate_taylor_J2_step(T& r0, T& v0, double &m0, const double &h, const int &order, const T &thrust, const double &mu, const double &veff, const double& J2RG2, const double &xm, const double &eps_a, const double &eps_r, std::vector< boost::array<double,7> > &x, std::vector< boost::array<double,34> > &u){
 
     //We initialize the initial conditions
     x[0][0] = r0[0];
@@ -81,50 +81,49 @@ double propagate_taylor_J2_step(T& r0, T& v0, double &m0, const double &h, const
         for (int j=0;j<=n;j++) u[n][16] += u[j][2]*u[n-j][13]; //-mu z /r^3
 
         if (n==0){
-            u[n][17] = 1 / u[0][6];
+            u[n][17] = 1. / u[0][6];
         } else {
-            for (int j=0;j<n;++j) u[n][17] += (beta*n - j*(beta+1))*u[n-j][6]*u[j][17];
+            for (int j=0;j<n;++j) {
+                u[n][17] += (beta * n - j * (beta + 1.)) * u[n-j][6]*u[j][17];
+            }
             u[n][17] /= n * u[0][6];
         } //1/m
 
         // We compute the terms needed for the J2 case
-        (n==0) ? u[n][18] = 1. : u[n][18] = 0.; // the constant 1.
+        (n==0) ? u[n][18] = 1. : u[n][18] = 0.;                         // the constant 1.
 
         if (n==0){
-            u[n][19] = 1 / u[0][11];
+            u[n][19] = 1. / u[0][11];
         } else {
             for (int j=0;j<n;++j) {
-                u[n][19] += (beta * n - j * (beta+1)) * u[n-j][11]*u[j][19];
+                u[n][19] += (beta * n - j * (beta + 1.)) * u[n-j][11]*u[j][19];
             }
             u[n][19] /= n * u[0][11];
-        } // 1/r^2
-        u[n][20] = 3./2. * J2RG2 * u[n][19]; // 3/2 J2 RE^2 / r^2
-        for (int j=0;j<=n;j++) u[n][21] += u[j][9]*u[n-j][19]; // z^2 / r^2
-        u[n][22] = u[n][18] - 5*u[n][21];    // 1 - 5 z^2/r^2
-        for (int j=0;j<=n;j++) u[n][23] += u[j][20]*u[n-j][22]; // 3/2 J2 RE^2 / r^2 * (1 - 5 z^2/r^2)
-        u[n][24] = 3 * u[n][18] - 5 * u[n][21]; // 3 - 5 z^2/r^2
-        for (int j=0;j<=n;j++) u[n][25] += u[j][20]*u[n-j][24]; // 3/2 J2 RE^2 / r^2 * (3 - 5 z^2/r^2)
-        for (int j=0;j<=n;j++) u[n][26] += u[j][0]*u[n-j][13]; // -mu/r^3 * x
-        for (int j=0;j<=n;j++) u[n][27] += u[j][1]*u[n-j][13]; // -mu/r^3 * y
-        for (int j=0;j<=n;j++) u[n][28] += u[j][2]*u[n-j][13]; // -mu/r^3 * z
-        u[n][29] = u[n][18] + u[n][23];                        // 1 + 3/2 J2 RE^2 / r^2 * (1 - 5 z^2/r^2)
-        u[n][30] = u[n][18] + u[n][25];                        // 1 + 3/2 J2 RE^2 / r^2 * (3 - 5 z^2/r^2)
-        for (int j=0;j<=n;j++) u[n][31] += u[j][26]*u[n-j][29]; // -mu/r^3 * x * (1 + 3/2 J2 RE^2 / r^2 * (1 - 5 z^2/r^2))
-        for (int j=0;j<=n;j++) u[n][32] += u[j][27]*u[n-j][29]; // -mu/r^3 * y * (1 + 3/2 J2 RE^2 / r^2 * (1 - 5 z^2/r^2))
-        for (int j=0;j<=n;j++) u[n][33] += u[j][28]*u[n-j][30]; // -mu/r^3 * z * (1 + 3/2 J2 RE^2 / r^2 * (3 - 5 z^2/r^2))
+        }                                                               // 1/r^2
+        u[n][20] = 3./2. * J2RG2 * u[n][19];                            // 3/2 J2 RG^2 / r^2
+        for (int j=0;j<=n;j++) u[n][21] += u[j][9]*u[n-j][19];          // z^2 / r^2
+        u[n][22] = u[n][18] - 5 * u[n][21];                             // 1 - 5 z^2/r^2
+        for (int j=0;j<=n;j++) u[n][23] += u[j][20]*u[n-j][22];         // 3/2 J2 RG^2 / r^2 * (1 - 5 z^2/r^2)
+        u[n][24] = 3 * u[n][18] - 5 * u[n][21];                         // 3 - 5 z^2/r^2
+        for (int j=0;j<=n;j++) u[n][25] += u[j][20]*u[n-j][24];         // 3/2 J2 RG^2 / r^2 * (3 - 5 z^2/r^2)
+        u[n][26] = u[n][18] + u[n][23];                                 // 1 + 3/2 J2 RG^2 / r^2 * (1 - 5 z^2/r^2)
+        u[n][27] = u[n][18] + u[n][25];                                 // 1 + 3/2 J2 RG^2 / r^2 * (3 - 5 z^2/r^2)
+        for (int j=0;j<=n;j++) u[n][28] += u[j][14]*u[n-j][26];         // -mu/r^3 * x * (1 + 3/2 J2 RG^2 / r^2 * (1 - 5 z^2/r^2))
+        for (int j=0;j<=n;j++) u[n][29] += u[j][15]*u[n-j][26];         // -mu/r^3 * y * (1 + 3/2 J2 RG^2 / r^2 * (1 - 5 z^2/r^2))
+        for (int j=0;j<=n;j++) u[n][30] += u[j][16]*u[n-j][27];         // -mu/r^3 * z * (1 + 3/2 J2 RG^2 / r^2 * (3 - 5 z^2/r^2))
 
         // The final equations are:
-        u[n][34] = u[n][31] + u[n][17] * thrust[0];  // eq1
-        u[n][35] = u[n][32] + u[n][17] * thrust[1];  // eq2
-        u[n][36] = u[n][33] + u[n][17] * thrust[2];  // eq3
+        u[n][31] = u[n][28] + u[n][17] * thrust[0];  // eq1
+        u[n][32] = u[n][29] + u[n][17] * thrust[1];  // eq2
+        u[n][33] = u[n][30] + u[n][17] * thrust[2];  // eq3
 
         // And we may then update the variables
         x[n+1][0] = 1./(n+1) * u[n][3];
         x[n+1][1] = 1./(n+1) * u[n][4];
         x[n+1][2] = 1./(n+1) * u[n][5];
-        x[n+1][3] = 1./(n+1) * u[n][34];
-        x[n+1][4] = 1./(n+1) * u[n][35];
-        x[n+1][5] = 1./(n+1) * u[n][36];
+        x[n+1][3] = 1./(n+1) * u[n][31];
+        x[n+1][4] = 1./(n+1) * u[n][32];
+        x[n+1][5] = 1./(n+1) * u[n][33];
         (n==0)? x[n+1][6] = - sqrtT / veff : x[n+1][6] = 0;
         n++;
     }
@@ -202,12 +201,12 @@ template<class T>
 void propagate_taylor_J2(T& r0, T& v0, double &m0, const T& u, const double &t0, const double &mu = 1, const double &veff = 1, const double& J2RG2 = 0., const int &log10tolerance=-10, const int &log10rtolerance=-10, const int &max_iter = 100000, const int &max_order = 3000){
 
     boost::array<double,7> dumb;
-    boost::array<double,37> dumb2;
-    for (int i=0;i<7;++i) dumb[i]=0;
-    for (int i=0;i<37;++i) dumb2[i]=0;
+    boost::array<double,34> dumb2;
+    for (int i=0;i<dumb.size();++i) dumb[i]=0;
+    for (int i=0;i<dumb2.size();++i) dumb2[i]=0;
 
     std::vector< boost::array<double,7> > _x;   // x[order][var]
-    std::vector< boost::array<double,37> > _u;   // u[order][var]
+    std::vector< boost::array<double,34> > _u;   // u[order][var]
 
     double step = t0;
     double eps_a = pow(10.,log10tolerance);
