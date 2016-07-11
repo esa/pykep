@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # We import the proteced symbols we use in this file
-from PyKEP.core._core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get_DEG2RAD, _get_EARTH_VELOCITY, _get_G0, _get_MU_SUN, _get_RAD2DEG, _get_SEC2DAY
+from PyKEP.core._core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get_DEG2RAD, _get_EARTH_VELOCITY, _get_EARTH_J2, _get_EARTH_RADIUS, _get_MU_EARTH, _get_G0, _get_MU_SUN, _get_RAD2DEG, _get_SEC2DAY
 from PyKEP.core._core import _epoch_type
 # We import symbols we use in this file
 from PyKEP.core._core import epoch
@@ -14,8 +14,11 @@ DAY2SEC = _get_DAY2SEC()
 DAY2YEAR = _get_DAY2YEAR()
 DEG2RAD = _get_DEG2RAD()
 EARTH_VELOCITY = _get_EARTH_VELOCITY()
+EARTH_J2 = _get_EARTH_J2()
+EARTH_RADIUS = _get_EARTH_RADIUS()
 G0 = _get_G0()
 MU_SUN = _get_MU_SUN()
+MU_EARTH = _get_MU_EARTH()
 RAD2DEG = _get_RAD2DEG()
 SEC2DAY = _get_SEC2DAY()
 

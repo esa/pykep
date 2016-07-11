@@ -57,8 +57,9 @@ j2::j2(
 	double mu_self,
 	double radius,
 	double safe_radius,
+    double J2RG2,
 	const std::string &name
-	double J2RG2)
+	)
 	: base(mu_central_body, mu_self, radius, safe_radius, name), m_keplerian_elements(keplerian_elements), m_ref_mjd2000(ref_epoch.mjd2000()), m_J2RG2(J2RG2)
 {
 	if (keplerian_elements[0] <=0) {
@@ -92,8 +93,9 @@ j2::j2(
 	double mu_self,
 	double radius,
 	double safe_radius,
+    double J2RG2,
 	const std::string &name
-    double J2RG2) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r0), m_v(v0), m_ref_mjd2000(ref_epoch.mjd2000()), m_J2RG2(J2RG2)
+    ) : base(mu_central_body, mu_self, radius, safe_radius, name), m_r(r0), m_v(v0), m_ref_mjd2000(ref_epoch.mjd2000()), m_J2RG2(J2RG2)
 {
 	// This line is  singular (small e and small i) in which case the orbital elements are (simply) not defined
 	ic2par(r0,v0, get_mu_central_body(), m_keplerian_elements);

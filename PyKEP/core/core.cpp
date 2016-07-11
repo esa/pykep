@@ -129,6 +129,7 @@ static inline double get_##arg() \
 get_constant(AU);
 get_constant(JR);
 get_constant(MU_SUN);
+get_constant(MU_EARTH);
 get_constant(EARTH_VELOCITY);
 get_constant(EARTH_J2);
 get_constant(EARTH_RADIUS);
@@ -181,6 +182,7 @@ BOOST_PYTHON_MODULE(_core) {
 	EXPOSE_CONSTANT(AU);
 	EXPOSE_CONSTANT(JR);
 	EXPOSE_CONSTANT(MU_SUN);
+	EXPOSE_CONSTANT(MU_EARTH);
 	EXPOSE_CONSTANT(EARTH_VELOCITY);
 	EXPOSE_CONSTANT(EARTH_J2);
 	EXPOSE_CONSTANT(EARTH_RADIUS);

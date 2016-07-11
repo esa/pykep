@@ -9,6 +9,7 @@ SET(PYKEP_LIB_SRC_LIST
 
 	${CMAKE_CURRENT_SOURCE_DIR}/planet/base.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planet/keplerian.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/planet/j2.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planet/jpl_low_precision.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planet/mpcorb.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/planet/tle.cpp
