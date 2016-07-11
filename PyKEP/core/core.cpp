@@ -130,6 +130,8 @@ get_constant(AU);
 get_constant(JR);
 get_constant(MU_SUN);
 get_constant(EARTH_VELOCITY);
+get_constant(EARTH_J2);
+get_constant(EARTH_RADIUS);
 get_constant(DEG2RAD);
 get_constant(RAD2DEG);
 get_constant(DAY2SEC);
@@ -180,6 +182,8 @@ BOOST_PYTHON_MODULE(_core) {
 	EXPOSE_CONSTANT(JR);
 	EXPOSE_CONSTANT(MU_SUN);
 	EXPOSE_CONSTANT(EARTH_VELOCITY);
+	EXPOSE_CONSTANT(EARTH_J2);
+	EXPOSE_CONSTANT(EARTH_RADIUS);
 	EXPOSE_CONSTANT(DEG2RAD);
 	EXPOSE_CONSTANT(RAD2DEG);
 	EXPOSE_CONSTANT(DAY2SEC);
@@ -424,7 +428,7 @@ BOOST_PYTHON_MODULE(_core) {
 		"- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
 		"Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
 		"Example::\n\n"
-		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
+		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,1e-3,-15,-15)"
 	);
 
 	//Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)
