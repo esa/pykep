@@ -161,16 +161,16 @@ void j2::set_ref_mjd2000(const double &when) {
 /// Extra informations streamed in humar readable format
 std::string j2::human_readable_extra() const {
 	std::ostringstream s;
-	s << "J2 planet elements: "<<std::endl;
+    s << "Ephemerides type: J2" << "\n\n";
+	s << "Orbital elements at epoch: "<<std::endl;
 	s << "Semi major axis (AU): " << boost::lexical_cast<std::string>(m_keplerian_elements[0] / ASTRO_AU) << std::endl;
 	s << "Eccentricity: " << boost::lexical_cast<std::string>(m_keplerian_elements[1]) << std::endl;
 	s << "Inclination (deg.): " << boost::lexical_cast<std::string>(m_keplerian_elements[2] * ASTRO_RAD2DEG) << std::endl;
 	s << "Big Omega (deg.): " << boost::lexical_cast<std::string>(m_keplerian_elements[3] * ASTRO_RAD2DEG) << std::endl;
 	s << "Small omega (deg.): " << boost::lexical_cast<std::string>(m_keplerian_elements[4] * ASTRO_RAD2DEG) << std::endl;
 	s << "Mean anomaly (deg.): " << boost::lexical_cast<std::string>(m_keplerian_elements[5] * ASTRO_RAD2DEG) << std::endl;
-	s << "Elements reference epoch: " << epoch(m_ref_mjd2000) << std::endl;
+	s << "Elements reference epoch: " << epoch(m_ref_mjd2000) << "\n\n";
 	s << "J2 RG^2: " << boost::lexical_cast<std::string>(m_J2RG2) << std::endl;
-	s << "Ephemerides type: J2" << std::endl;
 	s << "m_r" << m_r << std::endl;
 	s << "m_v" << m_v << std::endl;
 	return s.str();

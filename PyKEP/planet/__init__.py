@@ -49,12 +49,12 @@ PyKEP.planet.j2(when,r,v, mu_central_body, mu_self,radius, safe_radius, J2RG2 [,
 - mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)
 - radius: body radius (SI units, i.e. meters)
 - safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)
-- J2RG2: the product of J2 and the mean radius of the oblate primary
+- J2RG2: the product of J2 and the mean radius of the oblate primary squared (SI units, i.e. m^2)
 - name: body name
 
 Example::
 
-  deb1 = planet.j2(epoch(54000,"mjd"),(7000000, 1.67e-02, 78.23 * DEG2RAD, 175. * DEG2RAD, 287. * DEG2RAD, 257 * DEG2RAD), MU_EARTH, 1, 1, 1, J2*EARTH_RADIUS**2 'deb1')"
+    deb1 = planet.j2(epoch(54000,"mjd"),(7000000, 1.67e-02, 78.23 * DEG2RAD, 175. * DEG2RAD, 287. * DEG2RAD, 257 * DEG2RAD), MU_EARTH, 1, 1, 1, EARTH_J2*EARTH_RADIUS**2, 'deb1')
     """
     self._orig_init(*args)
 j2._orig_init = j2.__init__

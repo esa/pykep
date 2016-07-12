@@ -193,17 +193,17 @@ BOOST_PYTHON_MODULE(_planet) {
         planet_wrapper<planet::j2>("j2","An object with an orbit perturbed by J2, derives from :py:class:`PyKEP.planet._base`")
         .def(init<optional<const epoch&, const array6D&, double, double, double , double, double, const std::string &> >())
         .def(init<const epoch&, const array3D&, const array3D&, double, double, double, double, double, optional<const std::string &> >())
-        .add_property("orbital_elements", &planet::keplerian::get_elements, &planet::keplerian::set_elements,
+        .add_property("orbital_elements", &planet::j2::get_elements, &planet::j2::set_elements,
             "The keplerian, osculating, elements of the orbit at the reference epoch\n\n"
             "Example::\n\n"
             "  el = deb1.orbital_elements"
         )
-        .add_property("ref_epoch", &planet::keplerian::get_ref_epoch, &planet::keplerian::set_ref_epoch,
+        .add_property("ref_epoch", &planet::j2::get_ref_epoch, &planet::j2::set_ref_epoch,
             "The reference epoch at which the elements are given\n\n"
             "Example::\n\n"
             "  el = deb1.ref_epoch"
         )
-        .add_property("ref_mjd2000", &planet::keplerian::get_ref_mjd2000, &planet::keplerian::set_ref_mjd2000,
+        .add_property("ref_mjd2000", &planet::j2::get_ref_mjd2000, &planet::j2::set_ref_mjd2000,
             "The reference epoch at which the elements are given\n\n"
             "Example::\n\n"
             "  el = deb1.ref_mjd2000"
