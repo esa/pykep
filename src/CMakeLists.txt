@@ -48,7 +48,6 @@ INSTALL(TARGETS keplerian_toolbox
 #Build Dynamic Library (only if needed by PyKEP)
 IF(BUILD_PYKEP)
 	#INCLUDE(FindPythonLibs)
-	ADD_LIBRARY(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
 	TARGET_LINK_LIBRARIES(keplerian_toolbox ${LIBRARIES_4_DYNAMIC})
 	SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
 ENDIF(BUILD_PYKEP)
