@@ -1,6 +1,7 @@
 language: cpp
 
-install: true
+install:
+    sudo apt-get install libboost-all-dev
 
 script:
   - mkdir build && cd build
