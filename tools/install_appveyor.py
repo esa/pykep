@@ -104,7 +104,7 @@ if is_python_build:
 os.makedirs('build')
 os.chdir('build')
 
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DBUILD_SPICE=yes'
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DBUILD_SPICE=no' #REMEMBER TO PUT THIS TO YES WHEN FINISHED
 
 # Configuration step.
 if is_python_build:
@@ -142,7 +142,7 @@ if is_python_build:
         run_command(twine + r' upload -u bluescarni dist\\' +
                     os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':
-    run_command(r'ctest -VV -E "gastineau|pearce2_unpacked"')
+    run_command(r'ctest -VV')
 elif BUILD_TYPE == 'Debug':
     run_command(r'ctest -VV')
 else:
