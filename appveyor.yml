@@ -1,0 +1,27 @@
+version: '{build}'
+
+environment:
+  matrix:
+    - BUILD_TYPE: "Release"
+    - BUILD_TYPE: "Python27"
+    - BUILD_TYPE: "Python34"
+    - BUILD_TYPE: "Python35"
+
+install:
+
+# Rename sh.exe as sh.exe in PATH interferes with MinGW.
+- rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+# Get a Python version to run the script.
+- call tools\appveyor-download.cmd "https://github.com/bluescarni/binary_deps/raw/master/python35_mingw_64.7z" -FileName python.7z
+- 7z x -aoa -oC:\python4appveyor\ python.7z > NUL
+
+build_script:
+
+- cd C:\projects\keplerian_toolbox
+- C:\python4appveyor\Python35\python.exe tools\install_appveyor.py
+
+# Enable this to be able to login to the build worker. You can use the
+# `remmina` program in Ubuntu, use the login information that the line below
+# prints into the log.
+# on_finish:
+# - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
