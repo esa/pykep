@@ -42,7 +42,7 @@ const array6D j2::default_elements = {{1.0,0.1,0.1,0.1,0.1,0.1}};
 /**
 * Constructs a planet from its elements and its phyisical parameters
 * \param[in] ref_epoch epoch to which the elements are referred to
-* \param[in] elem A STL vector containing the keplerian parameters (a,e,i,Om,om,M). (SI units)
+* \param[in] elem A STL vector containing the keplerian elements (a,e,i,Om,om,M). (SI units)
 * \param[in] mu_central_body The gravitational parameter of the attracting body (SI units)
 * \param[in] mu_self The gravitational parameter of the planet (SI units)
 * \param[in] radius radius of the planet (SI units)
