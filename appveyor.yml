@@ -17,7 +17,7 @@ install:
 
 build_script:
 
-- cd C:\projects\keplerian_toolbox
+- cd C:\projects\pykep
 - C:\python4appveyor\Python35\python.exe tools\install_appveyor.py
 
 # Enable this to be able to login to the build worker. You can use the
