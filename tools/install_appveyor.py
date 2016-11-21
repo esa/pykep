@@ -93,29 +93,25 @@ if is_python_build:
          boost_python_package, 'boost_python.7z')
     run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
     # Install pip and deps.
-    wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
-    run_command(pinterp + ' get-pip.py')
-    run_command(pip + ' install numpy')
-    run_command(pip + ' install mpmath')
-    if is_release_build:
-        run_command(pip + ' install twine')
+    #wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
+    #run_command(pinterp + ' get-pip.py')
+    #run_command(pip + ' install numpy')
+    #run_command(pip + ' install mpmath')
+    #if is_release_build:
+    #    run_command(pip + ' install twine')
 
 # Proceed to the build.
 os.makedirs('build')
 os.chdir('build')
 
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DPIRANHA_WITH_BZIP2=yes -DBZIP2_INCLUDE_DIR=c:\\local\\include -DBZIP2_LIBRARY_RELEASE=c:\\local\\lib\\libboost_bzip2-mgw62-mt-1_62.dll -DPIRANHA_WITH_MSGPACK=yes -DPIRANHA_WITH_ZLIB=yes -DZLIB_INCLUDE_DIR=c:\\local\\include -DZLIB_LIBRARY_RELEASE=c:\\local\\lib\\libboost_zlib-mgw62-mt-1_62.dll'
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DBUILD_SPICE=yes'
 
 # Configuration step.
 if is_python_build:
-    run_command(r'cmake -G "MinGW Makefiles" ..  -DBUILD_PYRANHA=yes -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-s ' + common_cmake_opts + r' -DBoost_PYTHON_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
+    run_command(r'cmake -G "MinGW Makefiles" ..  -DBUILD_PYKEP=yes -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBoost_PYTHON_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
                 (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_62.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
-    TEST_NSPLIT = os.environ['TEST_NSPLIT']
-    SPLIT_TEST_NUM = os.environ['SPLIT_TEST_NUM']
-    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + r' -DBUILD_TESTS=yes -DPIRANHA_TEST_NSPLIT=' + \
-        TEST_NSPLIT + r' -DPIRANHA_TEST_SPLIT_NUM=' + \
-        SPLIT_TEST_NUM + r' ' + common_cmake_opts
+    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + r' -DBUILD_TESTS=yes ' + common_cmake_opts
     run_command(r'cmake -G "MinGW Makefiles" .. ' + cmake_opts)
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
