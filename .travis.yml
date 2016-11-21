@@ -7,7 +7,6 @@ compiler:
 os:
   - linux
 
-
 before_install:
   # Get GCC 4.9.2 (too memory intensive so currently deactivated)
   - if [ "$CXX" == "g++" ]; then wget https://github.com/Viq111/travis-container-packets/releases/download/gcc-4.9.2/gcc.tar.bz2; fi

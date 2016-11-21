@@ -92,10 +92,6 @@ ENDIF(BUILD_SPICE)
 # Here we define the file list and make the static and dynamic library
 ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src")
 
-if(BUILD_MAIN OR BUILD_TEST)
-        ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
-endif(BUILD_MAIN OR BUILD_TEST)
-
 # Build main and link it to static library.
 IF(BUILD_MAIN)
 	ADD_EXECUTABLE(main main.cpp)
