@@ -1,7 +1,17 @@
 language: cpp
 
-install:
-    sudo apt-get install libboost-all-dev
+addons:
+    apt:
+        sources:
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
+        packages:
+            - clang-3.7
+            - g++-5
+            - gcc-5
+            - cmake
+            - cmake-data
 
 script:
   - mkdir build && cd build
