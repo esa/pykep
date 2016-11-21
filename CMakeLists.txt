@@ -47,7 +47,7 @@ OPTION(BUILD_TESTS "Build tests'." ON)
 # Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
 OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
 
-# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory 
+# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
 
 # Finding the boost libraries needed for the keplerian_toolbox
@@ -94,6 +94,7 @@ ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src")
 
 # Build main and link it to static library.
 IF(BUILD_MAIN)
+    ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
 	ADD_EXECUTABLE(main main.cpp)
 	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 ENDIF(BUILD_MAIN)
@@ -110,6 +111,5 @@ IF(BUILD_TESTS)
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")	
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 ENDIF(BUILD_TESTS)
-

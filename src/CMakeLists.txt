@@ -33,9 +33,8 @@ IF(BUILD_SPICE)
 	)
 ENDIF(BUILD_SPICE)
 
-#Build Static Library
+#Build Dynamic Library
 SET(LIB_INSTALL_PATH "lib")
-ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
 ADD_LIBRARY(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
 INSTALL(TARGETS keplerian_toolbox
     RUNTIME DESTINATION ${LIB_INSTALL_PATH}
