@@ -3,6 +3,8 @@ version: '{build}'
 environment:
   matrix:
     - BUILD_TYPE: "Release"
+      TEST_NSPLIT: "3"
+      SPLIT_TEST_NUM: "0"
     - BUILD_TYPE: "Python27"
     - BUILD_TYPE: "Python34"
     - BUILD_TYPE: "Python35"
