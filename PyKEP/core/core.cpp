@@ -22,10 +22,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-// Workaround for http://mail.python.org/pipermail/new-bugs-announce/2011-March/010395.html
-#ifdef _WIN32
-#include <cmath>
-#endif
+ // NOTE: the order of inclusion in the first two items here is forced by these two issues:
+ // http://mail.python.org/pipermail/python-list/2004-March/907592.html
+ // http://mail.python.org/pipermail/new-bugs-announce/2011-March/010395.html
+ #if defined(_WIN32)
+ #include <cmath>
+ #include <Python.h>
+ #else
+ #include <Python.h>
+ #include <cmath>
+ #endif
+
+ #if PY_MAJOR_VERSION < 2 || (PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION < 6)
+ #error Minimum supported Python version is 2.6.
+ #endif
 
 #include <boost/python.hpp>
 #include <boost/python/class.hpp>
