@@ -121,7 +121,7 @@ else:
 run_command(r'mingw32-make install VERBOSE=1')
 
 # Move the shared library in the correct python DESTINATION
-run_command(r'move "C:\\Program Files (x86)\\Keplerian_Toolbox\\lib\\libkeplerian_toolbox.dll" c:\\local\\lib\\libkeplerian_toolbox.dll')
+run_command(r'move "C:/Program Files (x86)/Keplerian_Toolbox/lib/libkeplerian_toolbox.dll" c:\\local\\lib\\libkeplerian_toolbox.dll')
 
 # Testing, packaging.
 if is_python_build:
