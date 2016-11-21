@@ -56,10 +56,13 @@ inline double x2tof(const double &x,const double &s,const double &c,const int &l
     am = s/2;
     a = am/(1-x*x);
     if (x < 1)	//ellipse
-	{
+    {
         beta = 2 * asin (sqrt((s - c)/(2*a)));
-        if (lw) beta = -beta;
-		alfa = 2 * acos(x);
+        if (lw)
+        {
+            beta = -beta;
+        }
+        alfa = 2 * acos(x);
     }
     else
     {

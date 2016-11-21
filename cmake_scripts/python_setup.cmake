@@ -67,11 +67,11 @@ IF(UNIX)
 	SET(PYDEXTENSION TRUE)
 ENDIF(UNIX)
 
-# We make the variables cached so that we can change them in GUIs editors like ccmake 
+# We make the variables cached so that we can change them in GUIs editors like ccmake
 MARK_AS_ADVANCED(CLEAR PYTHON_EXECUTABLE)
 SET(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE} CACHE PATH "The Python executable")
 SET(PYTHON_VERSION ${PYTHON_VERSION} CACHE PATH "The Python executable Version")
 SET(PYTHON_INCLUDE_DIR ${PYTHON_INCLUDE_DIR} CACHE PATH "Path to the python include files, where pyconfig.h can be found")
 SET(PYTHON_MODULES_DIR ${PYTHON_MODULES_DIR} CACHE PATH "Path of site-packages, PyKEP will be installed in .../PyKEP")
-SET(PYTHON_LIBRARIES ${PYTHON_LIBRARIES} CACHE PATH "Name of the python library")
+SET(PYTHON_LIBRARIES ${PYTHON_LIBRARY} CACHE PATH "Name of the python library")
 EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print(get_python_version()[0])" OUTPUT_VARIABLE PYTHON_VERSION_MAJOR OUTPUT_STRIP_TRAILING_WHITESPACE)

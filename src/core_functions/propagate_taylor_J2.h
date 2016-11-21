@@ -202,8 +202,8 @@ void propagate_taylor_J2(T& r0, T& v0, double &m0, const T& u, const double &t0,
 
     boost::array<double,7> dumb;
     boost::array<double,34> dumb2;
-    for (int i=0;i<dumb.size();++i) dumb[i]=0;
-    for (int i=0;i<dumb2.size();++i) dumb2[i]=0;
+    for (decltype(dumb.size()) i=0u;i<dumb.size();++i) dumb[i]=0;
+    for (decltype(dumb.size()) i=0u;i<dumb2.size();++i) dumb2[i]=0;
 
     std::vector< boost::array<double,7> > _x;   // x[order][var]
     std::vector< boost::array<double,34> > _u;   // u[order][var]
