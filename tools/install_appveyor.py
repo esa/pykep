@@ -124,23 +124,23 @@ run_command(r'mingw32-make install VERBOSE=1')
 if is_python_build:
     # Run the Python tests.
     run_command(
-        pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"')
+        pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     # Build the wheel.
-    import shutil
-    os.chdir('wheel')
-    shutil.move(pyranha_install_path, r'.')
-    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
-    DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
-    for _ in DLL_LIST:
-        shutil.copy(_, 'pyranha')
-    run_command(pinterp + r' setup.py bdist_wheel')
-    os.environ['PATH'] = ORIGINAL_PATH
-    run_command(pip + r' install dist\\' + os.listdir('dist')[0])
-    run_command(
-        pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"')
-    if is_release_build:
-        run_command(twine + r' upload -u bluescarni dist\\' +
-                    os.listdir('dist')[0])
+    #import shutil
+    #os.chdir('wheel')
+    #shutil.move(pyranha_install_path, r'.')
+    #wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
+    #DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
+    #for _ in DLL_LIST:
+    #    shutil.copy(_, 'pyranha')
+    #run_command(pinterp + r' setup.py bdist_wheel')
+    #os.environ['PATH'] = ORIGINAL_PATH
+    #run_command(pip + r' install dist\\' + os.listdir('dist')[0])
+    #run_command(
+    #    pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"')
+    #if is_release_build:
+    #    run_command(twine + r' upload -u bluescarni dist\\' +
+    #                os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':
     run_command(r'ctest -VV')
 elif BUILD_TYPE == 'Debug':
