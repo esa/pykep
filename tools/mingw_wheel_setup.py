@@ -33,7 +33,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3'
 ]
 KEYWORDS = 'space keplerian math physics interplanetary'
-INSTALL_REQUIRES = ['numpy','scipy']
+INSTALL_REQUIRES = ['numpy']
 PLATFORMS = ['Unix','Windows','OSX']
 
 class BinaryDistribution(Distribution):
