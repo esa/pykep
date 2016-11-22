@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-PROJECT(Keplerian_Toolbox VERSION 1.3.0)
+PROJECT(pykep VERSION 1.3.0)
 # We enable cmake test capability
 ENABLE_TESTING()
 

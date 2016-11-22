@@ -58,7 +58,7 @@ setup(name=NAME,
     keywords=KEYWORDS,
     platforms=PLATFORMS,
     install_requires=INSTALL_REQUIRES,
-    packages=['pykep'],
+    packages=['pykep', 'pykep/core'],
     package_dir = {
             'pykep': 'pykep',
             'pykep/core': 'pykep/core',
