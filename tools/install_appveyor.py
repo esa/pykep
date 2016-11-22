@@ -137,10 +137,10 @@ if is_python_build:
     for _ in DLL_LIST:
         shutil.copy(_, 'pykep/core')
     run_command(pinterp + r' setup.py bdist_wheel')
-    #os.environ['PATH'] = ORIGINAL_PATH
-    #run_command(pip + r' install dist\\' + os.listdir('dist')[0])
-    #run_command(
-    #    pinterp + r' -c "import pyranha.test; pyranha.test.run_test_suite()"')
+    os.environ['PATH'] = ORIGINAL_PATH
+    run_command(pip + r' install dist\\' + os.listdir('dist')[0])
+    run_command(
+        pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     #if is_release_build:
     #    run_command(twine + r' upload -u bluescarni dist\\' +
     #                os.listdir('dist')[0])
