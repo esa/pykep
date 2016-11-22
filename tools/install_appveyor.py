@@ -82,8 +82,8 @@ if is_python_build:
     pinterp = r'c:\\Python' + python_version + r'\\python.exe'
     pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
     twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
-    pyranha_install_path = r'C:\\Python' + \
-        python_version + r'\\Lib\\site-packages\\pyranha'
+    pykep_install_path = r'C:\\Python' + \
+        python_version + r'\\Lib\\site-packages\\PyKEP'
     # Get Python.
     wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
          python_package, 'python.7z')
@@ -129,11 +129,12 @@ if is_python_build:
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     # Build the wheel.
-    #import shutil
-    #os.chdir('wheel')
-    #shutil.move(pyranha_install_path, r'.')
-    #wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
-    #DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
+    import shutil
+    os.chdir('wheel')
+    shutil.move(pykep_install_path, r'.')
+    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
+    DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
+    print(DLL_LIST)
     #for _ in DLL_LIST:
     #    shutil.copy(_, 'pyranha')
     #run_command(pinterp + r' setup.py bdist_wheel')
