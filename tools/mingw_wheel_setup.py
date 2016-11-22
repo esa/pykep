@@ -44,7 +44,7 @@ class BinaryDistribution(Distribution):
 import os.path
 mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(sys.version_info[0])
 l = open(mingw_wheel_libs,'r').readlines()
-DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
+DLL_LIST = ["core/" + os.path.basename(_[:-1]) for _ in l]
 
 setup(name=NAME,
     version=VERSION,
