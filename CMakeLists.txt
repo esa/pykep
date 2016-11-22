@@ -1,5 +1,4 @@
-PROJECT(Keplerian_Toolbox)
-
+PROJECT(Keplerian_Toolbox VERSION 1.3.0)
 # We enable cmake test capability
 ENABLE_TESTING()
 
