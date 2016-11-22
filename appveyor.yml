@@ -4,8 +4,8 @@ environment:
   matrix:
     #- BUILD_TYPE: "Release"
     - BUILD_TYPE: "Python27"
-#    - BUILD_TYPE: "Python34"
-#    - BUILD_TYPE: "Python35"
+    - BUILD_TYPE: "Python34"
+    - BUILD_TYPE: "Python35"
 
 install:
 
