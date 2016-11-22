@@ -93,12 +93,12 @@ if is_python_build:
          boost_python_package, 'boost_python.7z')
     run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
     # Install pip and deps.
-    #wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
-    #run_command(pinterp + ' get-pip.py')
+    wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
+    run_command(pinterp + ' get-pip.py')
     #run_command(pip + ' install numpy')
     #run_command(pip + ' install mpmath')
-    #if is_release_build:
-    #    run_command(pip + ' install twine')
+    if is_release_build:
+        run_command(pip + ' install twine')
 
 # Proceed to the build.
 os.makedirs('build')
@@ -134,10 +134,9 @@ if is_python_build:
     shutil.move(pykep_install_path, r'.')
     wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
-    print(DLL_LIST)
-    #for _ in DLL_LIST:
-    #    shutil.copy(_, 'pyranha')
-    #run_command(pinterp + r' setup.py bdist_wheel')
+    for _ in DLL_LIST:
+        shutil.copy(_, 'pykep/core')
+    run_command(pinterp + r' setup.py bdist_wheel')
     #os.environ['PATH'] = ORIGINAL_PATH
     #run_command(pip + r' install dist\\' + os.listdir('dist')[0])
     #run_command(
