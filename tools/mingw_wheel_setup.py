@@ -63,5 +63,5 @@ setup(name=NAME,
             'pykep': 'pykep',
             },
     # Include pre-compiled extension
-    package_data={'pykep': ['_core.pyd'] + DLL_LIST},
+    package_data={'pykep': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
     distclass=BinaryDistribution)
