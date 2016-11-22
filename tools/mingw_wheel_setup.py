@@ -6,7 +6,7 @@ import sys
 NAME = 'pykep'
 VERSION = '@pykep_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
-LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic tools for space-flight-mechanics research. Algoritmic efficiency is a main focus of the library, which uses a modern algorithm backend developed by the Advanced Concepts Team at ESA. At the library core is the implementation of an efficient solver for the multiple revolutions Lambert’s problem, objects representing the Sims-Flanagan low-thrust model, efficient keplerian propagators, Taylor-integrators, a SGP4 propagator, TLE and SATCAT support and more, ....'
+LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
 URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
