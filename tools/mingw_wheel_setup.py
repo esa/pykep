@@ -61,14 +61,14 @@ setup(name=NAME,
     packages=['pykep'],
     package_dir = {
             'pykep': 'pykep',
-            'core': 'core',
-            'examples': 'examples',
-            'orbit_plots': 'orbit_plots',
-            'phasing': 'phasing',
-            'planet': 'planet',
-            'sims_flanagan': 'sims_flanagan',
-            'trajopt': 'trajopt',
-            'util': 'util'
+            'pykep/core': 'pykep/core',
+            'pykep/examples': 'pykep/examples',
+            'pykep/orbit_plots': 'pykep/orbit_plots',
+            'pykep/phasing': 'pykep/phasing',
+            'pykep/planet': 'pykep/planet',
+            'pykep/sims_flanagan': 'pykep/sims_flanagan',
+            'pykep/trajopt': 'pykep/trajopt',
+            'pykep/util': 'pykep/util'
             },
     # Include pre-compiled extension
     package_data={'pykep': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
