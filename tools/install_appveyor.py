@@ -140,11 +140,11 @@ if is_python_build:
     os.environ['PATH'] = ORIGINAL_PATH
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
 
-    run_command(r'cd C:\\') # changes directory to make sure to tes the PyKEP installed via wheels
+    os.chdir('../../')
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     if is_release_build:
-        run_command(r'cd C:\\projects\\pykep\\build\\wheel')
+        os.chdir('build/wheel')
         run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':
