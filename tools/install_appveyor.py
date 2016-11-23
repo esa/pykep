@@ -97,14 +97,14 @@ if is_python_build:
     run_command(pinterp + ' get-pip.py')
     #run_command(pip + ' install numpy')
     #run_command(pip + ' install mpmath')
-    #if is_release_build:
-    run_command(pip + ' install twine')
+    if is_release_build:
+        run_command(pip + ' install twine')
 
 # Proceed to the build.
 os.makedirs('build')
 os.chdir('build')
 
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=no' #REMEMBER TO PUT THIS TO YES WHEN FINISHED
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes' #REMEMBER TO PUT THIS TO YES WHEN FINISHED
 
 # Configuration step.
 if is_python_build:
@@ -143,9 +143,9 @@ if is_python_build:
     os.chdir('/')
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
-    #if is_release_build:
-    os.chdir('C:/projects/pykep/build/wheel')
-    run_command(twine + r' upload -u darioizzo dist\\' +
+    if is_release_build:
+        os.chdir('C:/projects/pykep/build/wheel')
+        run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':
     run_command(r'ctest -VV')
