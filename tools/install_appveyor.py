@@ -143,9 +143,9 @@ if is_python_build:
     os.chdir('/')
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
-    #if is_release_build:
-    os.chdir('projects/pykep/build/wheel')
-    run_command(twine + r' upload -u darioizzo dist\\' +
+    if is_release_build:
+        os.chdir('/projects/pykep/build/wheel')
+        run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':
     run_command(r'ctest -VV')
