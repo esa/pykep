@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-PROJECT(pykep VERSION 1.3.1)
+PROJECT(pykep VERSION 1.3.3)
 # We enable cmake test capability
 ENABLE_TESTING()
 
