@@ -1,8 +1,8 @@
 version: '{build}'
 
 environment:
-    TWINE_PASSWORD:
-      secure: UGpLM1eTRobLbka7TwQ3LA==
+  TWINE_PASSWORD:
+    secure: UGpLM1eTRobLbka7TwQ3LA==
   matrix:
     #- BUILD_TYPE: "Release"
     - BUILD_TYPE: "Python27"
