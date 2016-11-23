@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-PROJECT(pykep VERSION 1.3.0)
+PROJECT(keplerian_toolbox)
 # We enable cmake test capability
 ENABLE_TESTING()
-
-# We set the minimum required cmake version
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 # Set default build type to "Release", change it in the GUI if you need to build with debug.
 IF(NOT CMAKE_BUILD_TYPE)
