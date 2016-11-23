@@ -44,7 +44,7 @@ class BinaryDistribution(Distribution):
 import os.path
 mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(sys.version_info[0])
 l = open(mingw_wheel_libs,'r').readlines()
-DLL_LIST = ["core/" + os.path.basename(_[:-1]) for _ in l]
+DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
 
 setup(name=NAME,
     version=VERSION,
@@ -60,5 +60,10 @@ setup(name=NAME,
     install_requires=INSTALL_REQUIRES,
     packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.trajopt', 'PyKEP.util'],
     # Include pre-compiled extension
-    package_data={'PyKEP': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
+    package_data={
+                'PyKEP.core': ['_core.pyd'] + DLL_LIST,
+                'PyKEP.planet': ['_planet.pyd'],
+                'PyKEP.sims_flanagan': ['_sims_flanagan.pyd'],
+                'PyKEP.util': ['_util.pyd']
+                },
     distclass=BinaryDistribution)
