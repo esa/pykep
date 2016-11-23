@@ -135,13 +135,16 @@ if is_python_build:
     wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
     for _ in DLL_LIST:
-        shutil.copy(_, 'pykep/core')
+        shutil.copy(_, 'PyKEP/core')
     run_command(pinterp + r' setup.py bdist_wheel')
     os.environ['PATH'] = ORIGINAL_PATH
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
+
+    run_command(r'cd C:\\') # changes directory to make sure to tes the PyKEP installed via wheels
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     if is_release_build:
+        run_command(r'cd C:\\projects\\pykep\\build\\wheel')
         run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 elif BUILD_TYPE == 'Release':

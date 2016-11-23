@@ -3,8 +3,8 @@ from setuptools.dist import Distribution
 from distutils import util
 import sys
 
-NAME = 'pykep'
-VERSION = '@pykep_VERSION@'
+NAME = 'PyKEP'
+VERSION = '@PyKEP_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
 LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
 URL = 'https://github.com/esa/pykep'
@@ -58,18 +58,18 @@ setup(name=NAME,
     keywords=KEYWORDS,
     platforms=PLATFORMS,
     install_requires=INSTALL_REQUIRES,
-    packages=['pykep', 'core', 'examples', 'orbit_plots', 'phasing', 'planet', 'sims_flanagan', 'trajopt', 'util'],
+    packages=['PyKEP', 'core', 'examples', 'orbit_plots', 'phasing', 'planet', 'sims_flanagan', 'trajopt', 'util'],
     package_dir = {
-            'pykep': 'pykep',
-            'core': 'pykep/core',
-            'examples': 'pykep/examples',
-            'orbit_plots': 'pykep/orbit_plots',
-            'phasing': 'pykep/phasing',
-            'planet': 'pykep/planet',
-            'sims_flanagan': 'pykep/sims_flanagan',
-            'trajopt': 'pykep/trajopt',
-            'util': 'pykep/util'
+            'PyKEP': 'PyKEP',
+            'core': 'PyKEP/core',
+            'examples': 'PyKEP/examples',
+            'orbit_plots': 'PyKEP/orbit_plots',
+            'phasing': 'PyKEP/phasing',
+            'planet': 'PyKEP/planet',
+            'sims_flanagan': 'PyKEP/sims_flanagan',
+            'trajopt': 'PyKEP/trajopt',
+            'util': 'PyKEP/util'
             },
     # Include pre-compiled extension
-    package_data={'pykep': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
+    package_data={'PyKEP': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
     distclass=BinaryDistribution)
