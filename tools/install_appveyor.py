@@ -140,7 +140,7 @@ if is_python_build:
     os.environ['PATH'] = ORIGINAL_PATH
     run_command(pip + r' install dist\\' + os.listdir('dist')[0])
 
-    os.chdir('../../')
+    os.chdir('/')
     run_command(
         pinterp + r' -c "import PyKEP; print(PyKEP.epoch(0))"')
     if is_release_build:
