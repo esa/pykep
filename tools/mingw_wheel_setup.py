@@ -59,17 +59,6 @@ setup(name=NAME,
     platforms=PLATFORMS,
     install_requires=INSTALL_REQUIRES,
     packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.trajopt', 'PyKEP.util'],
-    package_dir = {
-            'PyKEP': 'PyKEP',
-            'PyKEP.core': 'PyKEP/core',
-            'PyKEP.examples': 'PyKEP/examples',
-            'PyKEP.orbit_plots': 'PyKEP/orbit_plots',
-            'PyKEP.phasing': 'PyKEP/phasing',
-            'PyKEP.planet': 'PyKEP/planet',
-            'PyKEP.sims_flanagan': 'PyKEP/sims_flanagan',
-            'PyKEP.trajopt': 'PyKEP/trajopt',
-            'PyKEP.util': 'PyKEP/util'
-            },
     # Include pre-compiled extension
     package_data={'PyKEP': ['core/_core.pyd', 'planet/_planet.pyd', 'sims_flanagan/_sims_flanagan.pyd', 'util/_util.pyd'] + DLL_LIST},
     distclass=BinaryDistribution)
