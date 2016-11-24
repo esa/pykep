@@ -22,10 +22,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-// Workaround for http://mail.python.org/pipermail/new-bugs-announce/2011-March/010395.html
-#ifdef _WIN32
-#include <cmath>
-#endif
+ // NOTE: the order of inclusion in the first two items here is forced by these two issues:
+ // http://mail.python.org/pipermail/python-list/2004-March/907592.html
+ // http://mail.python.org/pipermail/new-bugs-announce/2011-March/010395.html
+ #if defined(_WIN32)
+ #include <cmath>
+ #include <Python.h>
+ #else
+ #include <Python.h>
+ #include <cmath>
+ #endif
+
+ #if PY_MAJOR_VERSION < 2 || (PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION < 6)
+ #error Minimum supported Python version is 2.6.
+ #endif
 
 #include <boost/python.hpp>
 #include <boost/python/class.hpp>
@@ -129,7 +139,10 @@ static inline double get_##arg() \
 get_constant(AU);
 get_constant(JR);
 get_constant(MU_SUN);
+get_constant(MU_EARTH);
 get_constant(EARTH_VELOCITY);
+get_constant(EARTH_J2);
+get_constant(EARTH_RADIUS);
 get_constant(DEG2RAD);
 get_constant(RAD2DEG);
 get_constant(DAY2SEC);
@@ -179,7 +192,10 @@ BOOST_PYTHON_MODULE(_core) {
 	EXPOSE_CONSTANT(AU);
 	EXPOSE_CONSTANT(JR);
 	EXPOSE_CONSTANT(MU_SUN);
+	EXPOSE_CONSTANT(MU_EARTH);
 	EXPOSE_CONSTANT(EARTH_VELOCITY);
+	EXPOSE_CONSTANT(EARTH_J2);
+	EXPOSE_CONSTANT(EARTH_RADIUS);
 	EXPOSE_CONSTANT(DEG2RAD);
 	EXPOSE_CONSTANT(RAD2DEG);
 	EXPOSE_CONSTANT(DAY2SEC);
@@ -424,7 +440,7 @@ BOOST_PYTHON_MODULE(_core) {
 		"- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
 		"Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
 		"Example::\n\n"
-		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)"
+		"  r,v,m = propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,1e-3,-15,-15)"
 	);
 
 	//Taylor propagation of inertially constant thrust arcs (using the generalized sundmann variable)

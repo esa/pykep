@@ -23,8 +23,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_PLANET_KEPLERIAN_H
-#define KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#ifndef KEP_TOOLBOX_PLANET_J2_H
+#define KEP_TOOLBOX_PLANET_J2_H
 
 #include <string>
 #include <vector>
@@ -44,14 +44,14 @@ namespace kep_toolbox{ namespace planet {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE keplerian : public base
+class __KEP_TOOL_VISIBLE j2 : public base
 {
 
 static const array6D default_elements;
 public:
 
-	keplerian(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1, const std::string &name = "Unknown");
-	keplerian(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, const std::string &name = "Unknown");
+	j2(const epoch& ref_epoch  = kep_toolbox::epoch(0), const array6D& elem = default_elements, double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1,  double J2RG2 = 0., const std::string &name = "Unknown");
+	j2(const epoch& ref_epoch, const array3D& r0, const array3D& v0, double mu_central_body, double mu_self, double radius, double safe_radius, double J2RG2 = 0., const std::string &name = "Unknown");
 
 	virtual planet_ptr clone() const;
 	std::string human_readable_extra() const;
@@ -84,17 +84,19 @@ private:
 		ar & m_keplerian_elements;
 		ar & m_mean_motion;
 		ar & m_ref_mjd2000;
+        ar & m_J2RG2;
 	}
 
 protected:
-	array6D m_keplerian_elements;
+    array6D m_keplerian_elements;
 	array3D m_r, m_v;
 	double m_mean_motion;
 	double m_ref_mjd2000;
+    double m_J2RG2;
 };
 
 }} /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::keplerian)
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::j2)
 
-#endif // KEP_TOOLBOX_PLANET_KEPLERIAN_H
+#endif // KEP_TOOLBOX_PLANET_J2_H
