@@ -3,23 +3,21 @@
 Install PyKEP
 ======================
 
-PyKEP supports 32 and 64 bits architectures and both python 2.7 and python 3.4. We are unfortunately not in the position to provide
+PyKEP supports 32 and 64 bits architectures and both python 2.7 and python 3.4-3.5 We are unfortunately not in the position to provide
 binaries for everybody, so you will most likely need to compile the source code youself. This process, under unix architectures is
-painless, while under windows architectures it can be troublesome. For this reason we tend to provide at least the win32-python2.7 version
-of PyKEP at each release.
+painless, while under windows architectures it can be troublesome. For this reason we provide the 64 bits binaries of each release.
 
 Using Windows Binaries
 ----------------------
 
-Some of the releases have also binaries provided. This largely depends on whether one of the main developers 
-has access to a working Windows machine at the time of the release. Download the `binaries <https://github.com/esa/pykep/releases>`_
-and extract the whole folder as it is in your python site-packages directory. 
-(e.g. extract to C:/Python27/Lib/site-packages/)
+If you have a windows 64-bits based python (27, 34 or 35) you can install PyKEP via pip typing:
+
+  pip install pykep
 
 Compiling and Installing under Unix
 -----------------------------------
 
-Assuming you have prepared your system for compiling PyKEP (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have 
+Assuming you have prepared your system for compiling PyKEP (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have
 created a directory keptoolbox in your current directory, move there::
 
   cd pykep
@@ -48,7 +46,7 @@ and::
 
   sudo make install
 
-Watch carefully the message in the terminal where the installation path is given to check 
+Watch carefully the message in the terminal where the installation path is given to check
 that the correct python dist-packages or site-packages directory has been located
 
 Here is a typical example of the output obtained::
@@ -70,7 +68,7 @@ Compiling and Installing under Windows
 
 Unsing minGW things will be the same as under Unix, just make sure that
 
-* You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared). 
+* You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).
 * Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)
 * Check, when running CMake, that all libraries are found correctly
 * When running a make install, Windows will probably put your PyKEP directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
@@ -82,7 +80,7 @@ Systems with both Python 2 and Python 3 installed
 
 If your system has several versions of python installed check the PYTHON_EXECUTABLE variable in cmake. The libraries, includes and site-packages directory are determined accordingly. If you want to change python version, just define explicitly such a variable. For example (assuming you are in a directory pykep/build)::
 
-  cmake ../ -DBUILD_PYKEP="ON"  -DPYTHON_EXECUTABLE="/usr/bin/python3.3m"   
+  cmake ../ -DBUILD_PYKEP="ON"  -DPYTHON_EXECUTABLE="/usr/bin/python3.3m"
 
 It is always good practice to check what cmake has actually located by typing::
 
@@ -113,5 +111,3 @@ which could look something like::
   -- Configuring done
   -- Generating done
   -- Build files have been written to: /Users/darioizzo/Documents/pykep/build
-                                        
-

@@ -1,10 +1,8 @@
-PROJECT(Keplerian_Toolbox)
+cmake_minimum_required(VERSION 3.0.0)
 
+PROJECT(PyKEP VERSION 1.3.7)
 # We enable cmake test capability
 ENABLE_TESTING()
-
-# We set the minimum required cmake version
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 # Set default build type to "Release", change it in the GUI if you need to build with debug.
 IF(NOT CMAKE_BUILD_TYPE)
@@ -47,7 +45,7 @@ OPTION(BUILD_TESTS "Build tests'." ON)
 # Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
 OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
 
-# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory 
+# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
 
 # Finding the boost libraries needed for the keplerian_toolbox
@@ -102,6 +100,11 @@ ENDIF(BUILD_MAIN)
 IF(BUILD_PYKEP)
 	SET(LIBRARIES_4_PYTHON_MODULES keplerian_toolbox ${LIBRARIES_4_PYTHON_MODULES})
 	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
+	if(MINGW)
+		message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
+		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt")
+	endif()
 ENDIF(BUILD_PYKEP)
 
 # Build Tests and link them to static library.
@@ -110,6 +113,5 @@ IF(BUILD_TESTS)
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")	
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
 ENDIF(BUILD_TESTS)
-
