@@ -35,7 +35,7 @@ matrix:
 install:
 - docker pull $DOCKER_IMAGE
 script:
-- docker run --rm -e BUILD_TYPE -e PYTHON_VERSION -e PATH_TO_PYTHON -e TRAVIS_TAG
+- docker run --rm -e TWINE_PASSWORD -e BUILD_TYPE -e PYTHON_VERSION -e PATH_TO_PYTHON -e TRAVIS_TAG
   -v `pwd`:/pykep $DOCKER_IMAGE $PRE_CMD /pykep/tools/install_travis.sh
 env:
   global:
