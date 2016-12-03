@@ -54,16 +54,16 @@ cd build
 # The include directory for py3 is X.Xm, while for py2 is X.X.
 # In pykep Boost_PYTHON3_LIBRARY_RELEASE and Boost_PYTHON_LIBRARY_RELEASE are used
 if [[ "${PYTHON_VERSION}" != "2.7" ]]; then
-    cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMAKE_INSTALL_PREFIX=/pykep/local -DCMAKE_BUILD_TYPE=Release -DBoost_PYTHON3_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIB_NAME} -DPYTHON_INCLUDE_DIR=${PATH_TO_PYTHON}/include/python${PYTHON_VERSION}m/ -DPYTHON_EXECUTABLE=${PATH_TO_PYTHON}/bin/python  ../
+    cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMAKE_BUILD_TYPE=Release -DBoost_PYTHON3_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIB_NAME} -DPYTHON_INCLUDE_DIR=${PATH_TO_PYTHON}/include/python${PYTHON_VERSION}m/ -DPYTHON_EXECUTABLE=${PATH_TO_PYTHON}/bin/python  ../
 else
-    cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMAKE_INSTALL_PREFIX=/pykep/local -DCMAKE_BUILD_TYPE=Release -DBoost_PYTHON_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIB_NAME} -DPYTHON_INCLUDE_DIR=${PATH_TO_PYTHON}/include/python${PYTHON_VERSION}/ -DPYTHON_EXECUTABLE=${PATH_TO_PYTHON}/bin/python  ../
+    cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMAKE_BUILD_TYPE=Release -DBoost_PYTHON_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIB_NAME} -DPYTHON_INCLUDE_DIR=${PATH_TO_PYTHON}/include/python${PYTHON_VERSION}/ -DPYTHON_EXECUTABLE=${PATH_TO_PYTHON}/bin/python  ../
 fi
 make
 make install
 
 # Compile wheels
 cd /pykep/build/wheel
-cp -R /pykep/local/lib/python${PYTHON_VERSION}/site-packages/PyKEP ./
+mv ${PATH_TO_PYTHON}/lib/python${PYTHON_VERSION}/site-packages/PyKEP ./
 # The following line is needed as a workaround to the auditwheel problem KeyError = .lib
 # Using and compiling a null extension module (see manylinux_wheel_setup.py)
 # fixes the issue (TODO: probably better ways?)
