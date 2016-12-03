@@ -6,10 +6,11 @@ echo "Environment variables passed to docker from travis VM:"
 echo ${BUILD_TYPE}
 echo ${PATH_TO_PYTHON}
 echo ${PYTHON_VERSION}
+echo ${TRAVIS_TAG}
 
 # Compile and install boost
 wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.62.0/boost_1_62_0.tar.bz2 > /dev/null 2>&1
-tar --bzip2 -xf /audi/boost_1_62_0.tar.bz2 > /dev/null 2>&1
+tar --bzip2 -xf /pykep/boost_1_62_0.tar.bz2 > /dev/null 2>&1
 cd boost_1_62_0
 ./bootstrap.sh > /dev/null 2>&1
 # removing the wrongly detected python 2.4 (deletes 5 lines after the comment "# Python configuration" )
@@ -40,7 +41,7 @@ cd ..
 
 # Install cmake
 wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.0.tar.gz > /dev/null 2>&1
-tar xvf /audi/cmake-3.7.0.tar.gz > /dev/null 2>&1
+tar xvf /pykep/cmake-3.7.0.tar.gz > /dev/null 2>&1
 cd cmake-3.7.0
 ./bootstrap > /dev/null 2>&1
 make > /dev/null 2>&1
