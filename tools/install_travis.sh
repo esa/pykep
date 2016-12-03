@@ -77,7 +77,7 @@ ${PATH_TO_PYTHON}/bin/pip wheel ./ -w wheelhouse/
 # Install packages (not sure what --no-index -f does, should also work without, but just in case)
 ${PATH_TO_PYTHON}/bin/pip install pykep --no-index -f wheelhouse2
 # Test
-${PATH_TO_PYTHON}/bin/python -c "import pykep; print(pykep.epoch(0))"
+${PATH_TO_PYTHON}/bin/python -c "import PyKEP; print(PyKEP.epoch(0))"
 
 # Upload in PyPi
 # This variable will contain something if this is a tagged build (vx.y.z), otherwise it will be empty.
