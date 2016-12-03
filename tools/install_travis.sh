@@ -85,5 +85,5 @@ export PYKEP_RELEASE_VERSION=`echo "${TRAVIS_TAG}"|grep -E 'v[0-9]+\.[0-9]+.*'|c
 #if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
     echo "Release build detected, uploading to PyPi."
     ${PATH_TO_PYTHON}/bin/pip install twine
-    ${PATH_TO_PYTHON}/bin/twine upload -u darioizzo wheelhouse2/pykep*.whl
+    ${PATH_TO_PYTHON}/bin/twine upload -u darioizzo wheelhouse2/PyKEP*.whl
 #fi
