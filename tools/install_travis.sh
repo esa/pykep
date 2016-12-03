@@ -70,6 +70,7 @@ mv ${PATH_TO_PYTHON}/lib/python${PYTHON_VERSION}/site-packages/PyKEP ./
 touch dummy.cpp
 
 # We install required dependncies (do it here, do not let pip install do it)
+${PATH_TO_PYTHON}/bin/pip install numpy
 ${PATH_TO_PYTHON}/bin/pip wheel ./ -w wheelhouse/
 # Bundle external shared libraries into the wheels (only py35 has auditwheel)
 /opt/python/cp35-cp35m/bin/auditwheel repair wheelhouse/PyKEP*.whl -w ./wheelhouse2/
