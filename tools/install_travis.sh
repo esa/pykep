@@ -63,7 +63,7 @@ make install
 
 # Compile wheels
 cd /pykep/build/wheel
-cp -R /pykep/local/lib/python${PYTHON_VERSION}/site-packages/pykep ./
+cp -R /pykep/local/lib/python${PYTHON_VERSION}/site-packages/PyKEP ./
 # The following line is needed as a workaround to the auditwheel problem KeyError = .lib
 # Using and compiling a null extension module (see manylinux_wheel_setup.py)
 # fixes the issue (TODO: probably better ways?)
@@ -72,7 +72,7 @@ touch dummy.cpp
 # We install required dependncies (do it here, do not let pip install do it)
 ${PATH_TO_PYTHON}/bin/pip wheel ./ -w wheelhouse/
 # Bundle external shared libraries into the wheels (only py35 has auditwheel)
-/opt/python/cp35-cp35m/bin/auditwheel repair wheelhouse/pykep*.whl -w ./wheelhouse2/
+/opt/python/cp35-cp35m/bin/auditwheel repair wheelhouse/PyKEP*.whl -w ./wheelhouse2/
 # Install packages (not sure what --no-index -f does, should also work without, but just in case)
 ${PATH_TO_PYTHON}/bin/pip install pykep --no-index -f wheelhouse2
 # Test
