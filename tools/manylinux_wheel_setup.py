@@ -53,9 +53,9 @@ setup(name=NAME,
     packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.trajopt', 'PyKEP.util'],
     # Include pre-compiled extension
     package_data={
-                'PyKEP.core': ['_core.pyd'] + DLL_LIST,
-                'PyKEP.planet': ['_planet.pyd'],
-                'PyKEP.sims_flanagan': ['_sims_flanagan.pyd'],
-                'PyKEP.util': ['_util.pyd']
+                'PyKEP.core': ['_core.so'],
+                'PyKEP.planet': ['_planet.so'],
+                'PyKEP.sims_flanagan': ['_sims_flanagan.so'],
+                'PyKEP.util': ['_util.so']
                 },
 )
