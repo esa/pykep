@@ -1,56 +1,43 @@
-language: cpp
-
-compiler:
-  - gcc
-  - clang
-
-os:
-  - linux
-
-before_install:
-  # Get GCC 4.9.2 (too memory intensive so currently deactivated)
-  - if [ "$CXX" == "g++" ]; then wget https://github.com/Viq111/travis-container-packets/releases/download/gcc-4.9.2/gcc.tar.bz2; fi
-  - if [ "$CXX" == "g++" ]; then tar -xjf gcc.tar.bz2; fi
-  - if [ "$CXX" == "g++" ]; then rm gcc.tar.bz2; fi
-  - if [ "$CXX" == "g++" ]; then export PATH=$(pwd)/gcc/bin:$PATH; fi
-  - if [ "$CXX" == "g++" ]; then export LIBRARY_PATH=$(pwd)/gcc/lib64:$LIBRARY_PATH; fi
-  - if [ "$CXX" == "g++" ]; then export LD_LIBRARY_PATH=$(pwd)/gcc/lib64:$LD_LIBRARY_PATH; fi
-  - if [ "$CXX" == "g++" ]; then export CPLUS_INCLUDE_PATH=$(pwd)/gcc/include/c++/4.9.2:$CPLUS_INCLUDE_PATH; fi
-
-  # Get clang 3.4 (http://gotoanswer.stanford.edu/?q=Travis+CI+with+Clang+3.4+and+C%2B%2B11)
-  # necessary as the VM clang links tp old libstdc++
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; fi
-  - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository --yes ppa:h-rayflood/llvm; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get -qq update; fi
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get -qq install libstdc++-4.8-dev clang-3.4; fi
-  - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
-  - if [ "$CXX" == "clang++" ]; then export CC= "clang++-3.4"; fi
-
-  # Get CMake 3.1
-  - wget https://github.com/Viq111/travis-container-packets/releases/download/cmake-3.1.2/cmake.tar.bz2
-  - tar -xjf cmake.tar.bz2
-  - rm cmake.tar.bz2
-  - export PATH=$(pwd)/cmake/bin:$PATH
+notifications:
+  email: false
+matrix:
+  include:
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
+      PATH_TO_PYTHON="/opt/python/cp35-cp35m"
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
+      PATH_TO_PYTHON="/opt/python/cp34-cp34m"
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
+      PATH_TO_PYTHON="/opt/python/cp27-cp27m"
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
+      PATH_TO_PYTHON="/opt/python/cp35-cp35m"
+      PRE_CMD=linux32
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
+      PATH_TO_PYTHON="/opt/python/cp34-cp34m"
+      PRE_CMD=linux32
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
+      PATH_TO_PYTHON="/opt/python/cp27-cp27m"
+      PRE_CMD=linux32
 
 install:
-  # Get boost
-  - wget https://github.com/Viq111/travis-container-packets/releases/download/boost-1.57.0/boost.tar.bz2
-  - tar -xjf boost.tar.bz2
-  - rm boost.tar.bz2
-  - export BOOST_ROOT=$(pwd)/boost
-
+- docker pull $DOCKER_IMAGE
 script:
-  - mkdir build && cd build
-  - cmake ../ -DBUILD_SPICE="ON" -DBUILD_PYKEP="ON" -DBUILD_MAIN="ON" -DBUILD_TEST="ON" -DPYTHON_MODULES_DIR="~/local/lib/python/site-packages" -DCMAKE_INSTALL_PREFIX="~/local"
-  - make -j4
-  - make test
-  - make install
-
-after_success:
-  - export PYTHONPATH=~/local/lib/python/site-packages
-  - export LD_LIBRARY_PATH=~/local/lib
-  - python -c "import PyKEP; print(PyKEP.__version__); print(PyKEP.__extensions__)"
-
-branches:
-  only:
-    - master
+- docker run --rm -e TWINE_PASSWORD -e BUILD_TYPE -e PYTHON_VERSION -e PATH_TO_PYTHON -e TRAVIS_TAG -v `pwd`:/pykep
+  $DOCKER_IMAGE $PRE_CMD /pykep/tools/install_travis.sh
