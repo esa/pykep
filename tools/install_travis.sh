@@ -73,7 +73,7 @@ touch dummy.cpp
 ${PATH_TO_PYTHON}/bin/pip install numpy
 ${PATH_TO_PYTHON}/bin/pip wheel ./ -w wheelhouse/
 # Bundle external shared libraries into the wheels (only py35 has auditwheel)
-/opt/python/cp35-cp35m/bin/auditwheel repair wheelhouse/PyKEP*.whl -w ./wheelhouse2/
+auditwheel repair wheelhouse/PyKEP*.whl -w ./wheelhouse2/
 # Install packages (not sure what --no-index -f does, should also work without, but just in case)
 ${PATH_TO_PYTHON}/bin/pip install pykep --no-index -f wheelhouse2
 # Test
