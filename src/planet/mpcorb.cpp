@@ -86,7 +86,7 @@ mpcorb::mpcorb(const std::string& line)
 	if (!tmp.empty()) {
 		m_H = boost::lexical_cast<double>(tmp);
 	} else {
-		m_H = std::nan("");
+		m_H = 0.;
 	}
 
 	// Extract number of observations
