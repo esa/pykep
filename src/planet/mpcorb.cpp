@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include <boost/algorithm/string.hpp>
+#include <cmath>
 
 #include "mpcorb.h"
 #include "../exceptions.h"
@@ -81,14 +82,23 @@ mpcorb::mpcorb(const std::string& line)
 	tmp.clear();
 	tmp.append(&linecopy[mpcorb_format[8][0]],mpcorb_format[8][1]);
 	boost::algorithm::trim(tmp);
-	m_H = boost::lexical_cast<double>(tmp);
+
+	if (!tmp.empty()) {
+		m_H = boost::lexical_cast<double>(tmp);
+	} else {
+		m_H = 0.;
+	}
 
 	// Extract number of observations
 	tmp.clear();
-	tmp.append(&linecopy[mpcorb_format[9][0]],mpcorb_format[9][1]);
+	tmp.append(&linecopy[mpcorb_format[9][0]], mpcorb_format[9][1]);
 	boost::algorithm::trim(tmp);
 
-	m_n_observations = boost::lexical_cast<unsigned int>(tmp);
+	if (!tmp.empty()) {
+		m_n_observations = boost::lexical_cast<unsigned int>(tmp);
+	} else {
+		m_n_observations = 0u;
+	}
 
 	// Extract number of oppositions
 	tmp.clear();
@@ -148,4 +158,3 @@ planet_ptr mpcorb::clone() const
 }} //namespaces
 
 BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::mpcorb);
-

@@ -22,8 +22,8 @@
  *   Free Software Foundation, Inc.,                                         *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
-#ifndef KEP_TOOLBOX_DAMON_H
-#define KEP_TOOLBOX_DAMON_H
+#ifndef KEP_TOOLBOX_THREE_IMPULSES_APPROX_H
+#define KEP_TOOLBOX_THREE_IMPULSES_APPROX_H
 
 #include <cmath>
 
@@ -41,7 +41,7 @@
  * \param[in] e1  departure eccentricity
  * \param[in] i1  departure inclination [rad]
  * \param[in] W1 departure Right Ascension of the Ascending Node (RAAN) [rad]
- * \param[in] a2  target semi-major axis 
+ * \param[in] a2  target semi-major axis
  * \param[in] e2  target eccentricity
  * \param[in] i3  target inclination [rad]
  * \param[in] W2 target Right Ascension of the Ascending Node (RAAN) [rad]
@@ -63,25 +63,25 @@ inline double three_impulses_approx(double a1, double e1, double i1, double W1, 
     double rp2 = a2 * (1 - e2);
 
     // Computes the relative inclination between orbits
-    double cosiREL = cos(i1) * cos(i2) + sin(i1) * sin(i2) * cos(W1-W2);
+    double cosiREL = std::cos(i1) * std::cos(i2) + std::sin(i1) * std::sin(i2) * std::cos(W1-W2);
 
     if (ra1 > ra2) // Strategy is Apocenter-Pericenter
-    {  
+    {
     	// Change Inclination + Change Pericenter with a single burn at a2
-        double Vi = sqrt(mu * (2.0 / ra1 - 1.0 / a1));
-        double Vf = sqrt(mu * (2.0 / ra1 - 2.0 / (rp2 + ra1)));
-        double DV1 = sqrt(Vi * Vi + Vf * Vf - 2.0 * Vi * Vf * cosiREL);
+        double Vi = std::sqrt(mu * (2.0 / ra1 - 1.0 / a1));
+        double Vf = std::sqrt(mu * (2.0 / ra1 - 2.0 / (rp2 + ra1)));
+        double DV1 = std::sqrt(Vi * Vi + Vf * Vf - 2.0 * Vi * Vf * cosiREL);
         // We change the apocenter with a single burn at p2
-        double DV2 = sqrt(mu) * std::abs(sqrt(2.0 / rp2 - 2.0 / (rp2 + ra1)) - sqrt(2.0 / rp2 - 1.0 / a2));
+        double DV2 = std::sqrt(mu) * std::abs(std::sqrt(2.0 / rp2 - 2.0 / (rp2 + ra1)) - std::sqrt(2.0 / rp2 - 1.0 / a2));
         return DV1+DV2;
     }
     else // (ra1<ra2) Strategy is Pericenter-Apocenter
-    {  
+    {
     	// We reverse the manouvres (could as well reverse the parameters)
-        double DV1 = sqrt(mu) * std::abs(sqrt(2.0 / rp1 - 2.0 / (rp1 + ra1)) - sqrt(2.0 / rp1 - 2.0 / (rp1 + ra2)));
-        double Vi = sqrt(mu * (2.0 / ra2 - 2.0 / (rp1 + ra2)));
-        double Vf = sqrt(mu * (2.0 / ra2 - 1.0 / a2));
-        double DV2 = sqrt(abs(Vi * Vi + Vf * Vf - 2.0 * Vi * Vf * cosiREL));
+        double DV1 = std::sqrt(mu) * std::abs(std::sqrt(2.0 / rp1 - 2.0 / (rp1 + ra1)) - std::sqrt(2.0 / rp1 - 2.0 / (rp1 + ra2)));
+        double Vi = std::sqrt(mu * (2.0 / ra2 - 2.0 / (rp1 + ra2)));
+        double Vf = std::sqrt(mu * (2.0 / ra2 - 1.0 / a2));
+        double DV2 = std::sqrt(std::abs(Vi * Vi + Vf * Vf - 2.0 * Vi * Vf * cosiREL));
         return DV1 + DV2;
     }
 }

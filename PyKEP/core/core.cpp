@@ -521,9 +521,9 @@ BOOST_PYTHON_MODULE(_core) {
 	);
 
 	def("ic2par", &ic2par_wrapper,
-		"PyKEP.ic2par(r1,v2,mu)\n\n"
-		"- r1: initial position (cartesian)\n"
-		"- r2: final position (cartesian)\n"
+		"PyKEP.ic2par(r,v,mu)\n\n"
+		"- r: position (cartesian)\n"
+		"- v: velocity (cartesian)\n"
 		"- mu: gravity parameter\n\n"
 		"Returns the osculating keplerian elements a,e,i,W,w,E\n"
 		"E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
