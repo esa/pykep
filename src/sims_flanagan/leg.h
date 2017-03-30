@@ -374,8 +374,8 @@ public:
 	* the same mid-point. The difference between the obtained values is then recorded at the memory location pointed by the iterators
 	* If not all zero the leg is unfeasible. The values stored are \f$\mathbf r, \mathbf v, m\f$
 	*
-	* @param[in] begin iterator pointing to the beginning of the memory where the mismatches will be stored
-	* @param[in] begin iterator pointing to the end of the memory where the mismatches will be stored
+	* @param begin iterator pointing to the beginning of the memory where the mismatches will be stored
+	* @param begin iterator pointing to the end of the memory where the mismatches will be stored
 	*/
 
 	template<typename it_type>
@@ -527,7 +527,7 @@ public:
 	* This method overloads the same method using iterators but the mismatch values are stored
 	* in a sc_state object
 	*
-	* @param[in] retval the state mismatch structured as a spacecraft state
+	* @param retval the state mismatch structured as a spacecraft state
 	*/
 	void get_mismatch_con(sc_state& retval) const
 	{

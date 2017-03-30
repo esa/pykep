@@ -36,7 +36,7 @@ class mga_lt_nep(base_problem):
                  high_fidelity=False):
         """
         prob = mga_lt_nep(seq = [jpl_lp('earth'),jpl_lp('venus'),jpl_lp('earth')], n_seg = [10]*2,
-        t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], Vinf_dep=2.5, Vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
+        t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], vinf_dep=2.5, vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
         multi_objective = False, fb_rel_vel = 6, high_fidelity=False)
 
         - seq: list of PyKEP.planet defining the encounter sequence for the trajectoty (including the initial planet)

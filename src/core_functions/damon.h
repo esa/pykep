@@ -1,4 +1,4 @@
-/*****************************************************************************
+ /*****************************************************************************
  *   Copyright (C) 2004-2015 The PyKEP development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
@@ -36,8 +36,8 @@ namespace kep_toolbox {
 
 	/// Computes Damon's linear approximation
 	/**
-	 * This function uses the model developed by Damon Landau (JPL) during GTOC7 to 
-	 * compute an approximation to the low-thrust transfer 
+	 * This function uses the model developed by Damon Landau (JPL) during GTOC7 to
+	 * compute an approximation to the low-thrust transfer
 	 *
 	 * \param[in] v1 starting velocity relative to the departure body. This is
 	 *               computed from the Lambert solution linking initial and
@@ -65,7 +65,7 @@ namespace kep_toolbox {
 		for (int i = 0; i<3; ++i) U[i] = v2_nd[i] + v1_nd[i];
 		for (int i = 0; i<3; ++i) V[i] = v2_nd[i] - v1_nd[i];
 		alpha = (U[0]*U[0] + U[1]*U[1] + U[2]*U[2]) / (U[0]*V[0] + U[1]*V[1] + U[2]*V[2]);
-		
+
 		// We then compute a1, a2, tau and dv
 		tau = (alpha + 1. - boost::math::sign(alpha) * sqrt(1. + alpha * alpha)) / 2.;
 		for (int i = 0; i<3; ++i) a1[i] = V[i] - U[i] / tau;
@@ -86,7 +86,7 @@ namespace kep_toolbox {
 	/// Computes maximum starting mass to convert a Lambert arc to low-thrust
 	/**
 	 * This function uses Damon's model to estimate the maximum
-	 * mass a NEP spacececraft can have in order for a given Lambert arc to be 
+	 * mass a NEP spacececraft can have in order for a given Lambert arc to be
 	 * convertable into a valid low-thrust transfer
 	 *
 	 * \param[in] a acceleration magnitude as computed from Damon's model
