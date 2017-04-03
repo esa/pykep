@@ -24,6 +24,7 @@
  *****************************************************************************/
 
 #include "gtoc5.h"
+#include "../core_functions/par2ic.h"
 #include "../exceptions.h"
 #include "../astro_constants.h"
 
