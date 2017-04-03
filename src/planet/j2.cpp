@@ -120,9 +120,8 @@ void j2::eph_impl(double mjd2000, array3D &r, array3D &v) const {
         double n = std::sqrt(get_mu_central_body() / std::pow(elements[0],3)); // sqrt(mu/a^3)
         double p = elements[0] * (1 - elements[1] * elements[1]); // a(1-e^2)
         double cosi = std::cos(elements[2]);
-		double sini = std::sin(elements[2]);
         double dW = - 3./2. * m_J2RG2 / p / p * n * cosi;
-        double dw = - 3./4. * m_J2RG2 / p / p * n * (5*sini*sini - 4.);
+        double dw = 3./4. * m_J2RG2 / p / p * n * (5*cosi*cosi - 1.);
 		elements[3] += dW * dt;
 		elements[4] += dw * dt;
 		par2ic(elements, get_mu_central_body(), r, v);
