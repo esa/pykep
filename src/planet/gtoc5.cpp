@@ -7133,6 +7133,7 @@ gtoc5::gtoc5(int astid_)
 	set_name(std::string("GTOC5 asteroid id: ") + boost::lexical_cast<std::string>(astid_));
 	set_elements(elem);
 	set_ref_epoch(epoch(gtoc5_asteroids_data[astid][0],epoch::MJD));
+	par2ic(m_keplerian_elements, get_mu_central_body(), m_r, m_v);
 }
 
 planet_ptr gtoc5::clone() const
