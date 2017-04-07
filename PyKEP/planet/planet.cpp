@@ -232,9 +232,7 @@ BOOST_PYTHON_MODULE(_planet) {
 		    "- year: unsigned integer specifying the full 4 digit year\n"
 		    "- day:  double representing the fractional day as in TLE format.\n\n"
 		    "Set the epoch of the TLE to the given date without changing any other elements.\n"
-		    "Used to work around the Y2056 bug in TLE definition\n\n"
-		    ".. note::\n\n"
-		    "   This currently does not serialize (and hence probably pickle?)!");
+		    "Used to work around the Y2056 bug in TLE definition\n\n");
 
 #ifdef PYKEP_USING_SPICE
 		planet_wrapper<planet::spice>("spice","A planet using the eph from the SPICE Toolbox, derives from :py:class:`PyKEP.planet._base`")

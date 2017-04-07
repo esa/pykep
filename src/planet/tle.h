@@ -33,6 +33,7 @@
 #include "../third_party/libsgp4/Tle.h"
 
 namespace kep_toolbox{ namespace planet{
+//using namespace boost::posix_time;
 
 /// A planet from TLE format
 /**
@@ -75,6 +76,7 @@ private:
 		ar & boost::serialization::base_object<base>(*this);
 		ar & const_cast<std::string& >(m_line1);
 		ar & const_cast<std::string& >(m_line2);
+		ar & m_ref_mjd2000;
 		boost::serialization::split_member(ar, *this, version);
 	}
 
@@ -89,6 +91,9 @@ private:
 			// we are going to build them again from data. This set up was chosen to avoid implementing
 			// serialization of the third-party library libsgp4 objects
 			m_tle = Tle("TLE satellite", m_line1, m_line2);
+			tm ep = to_tm(epoch(m_ref_mjd2000).get_posix_time());
+			double day = ep.tm_yday+ep.tm_hour/24.0+ep.tm_min/(24.0*60.0)+ep.tm_sec/(24.0*60.0*60.0);
+            m_tle.setEpoch(1900+ep.tm_year,day);
 			m_sgp4_propagator = SGP4(m_tle);
 		}
 

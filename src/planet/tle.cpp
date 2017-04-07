@@ -127,7 +127,7 @@ void tle::set_epoch(const unsigned int year, const double day) {
 std::string tle::human_readable_extra() const {
 	std::ostringstream s;
 	s << "Ephemerides type: SGP4 propagator" << std::endl;
-	s << "TLE epoch: " << m_ref_mjd2000 << std::endl;
+	s << "TLE epoch: " << epoch(m_ref_mjd2000,epoch::MJD2000) << std::endl;
 	s << "TLE 1: " << m_line1 << std::endl;
 	s << "TLE 2: " << m_line2 << std::endl;
 	return s.str();
