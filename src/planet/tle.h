@@ -63,6 +63,7 @@ public:
 	std::string human_readable_extra() const;
 
 	double get_ref_mjd2000() const;
+	void set_epoch(const unsigned int year, const double day);
 
 private:
 	void eph_impl(double mjd2000, array3D &r, array3D &v) const;

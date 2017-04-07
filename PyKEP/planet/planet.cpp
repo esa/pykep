@@ -226,7 +226,15 @@ BOOST_PYTHON_MODULE(_planet) {
 			"  line1 = '1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95'\n"
 			"  line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
 			"  arianne = planet.tle(line1, line2)"
-		));
+		))
+		.def("set_epoch",&planet::tle::set_epoch,
+		    "PyKep.planet.tle.set_epoch(year, day)\n\n"
+		    "- year: unsigned integer specifying the full 4 digit year\n"
+		    "- day:  double representing the fractional day as in TLE format.\n\n"
+		    "Set the epoch of the TLE to the given date without changing any other elements.\n"
+		    "Used to work around the Y2056 bug in TLE definition\n\n"
+		    ".. note::\n\n"
+		    "   This currently does not serialize (and hence probably pickle?)!");
 
 #ifdef PYKEP_USING_SPICE
 		planet_wrapper<planet::spice>("spice","A planet using the eph from the SPICE Toolbox, derives from :py:class:`PyKEP.planet._base`")
