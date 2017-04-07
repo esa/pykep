@@ -147,6 +147,14 @@ public:
     }
 
     /**
+     * Set the tle epoch (hack added by Alex Wittig to work around 2056/2057 bug in TLE format)
+     */
+    void setEpoch(const unsigned int year, const double day)
+    {
+       epoch_ = DateTime(year, day);
+    }
+
+    /**
      * Get the first time derivative of the mean motion divided by two
      * @returns the first time derivative of the mean motion divided by two
      */

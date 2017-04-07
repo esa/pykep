@@ -61,7 +61,7 @@ try : base(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1, 
     std::string year_str = m_tle.IntDesignator().substr(0,2);
     int year_int = std::stoi(year_str);
     std::string rest = m_tle.IntDesignator().substr(2);
-    int prefix = (year_int > 50)?(19):(20); 
+    int prefix = (year_int > 56)?(19):(20); 
 
     std::string object_name(std::to_string(prefix)+year_str+std::string("-")+rest);
 	set_mu_central_body(mu_central_body);
@@ -116,10 +116,20 @@ double tle::get_ref_mjd2000() const {
 	return m_ref_mjd2000;
 }
 
+/// Setter for the epoch of the TLE (workaround for 2056/2057 bug)
+void tle::set_epoch(const unsigned int year, const double day) {
+    m_tle.setEpoch(year,day);
+    m_sgp4_propagator.SetTle(m_tle);
+	m_ref_mjd2000 = epoch(m_tle.Epoch().ToJulian(),epoch::JD).mjd2000();
+}
+
 /// Extra informations streamed in human readable format
 std::string tle::human_readable_extra() const {
 	std::ostringstream s;
 	s << "Ephemerides type: SGP4 propagator" << std::endl;
+	s << "TLE epoch: " << epoch(m_ref_mjd2000,epoch::MJD2000) << std::endl;
+	s << "TLE 1: " << m_line1 << std::endl;
+	s << "TLE 2: " << m_line2 << std::endl;
 	return s.str();
 }
 
