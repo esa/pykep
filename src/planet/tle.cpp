@@ -116,6 +116,16 @@ double tle::get_ref_mjd2000() const {
 	return m_ref_mjd2000;
 }
 
+/// Getter for TLE line1
+double tle::get_line1() const {
+	return m_line1;
+}
+
+/// Getter for TLE line2
+double tle::get_line2() const {
+	return m_line2;
+}
+
 /// Setter for the epoch of the TLE (workaround for 2056/2057 bug)
 void tle::set_epoch(const unsigned int year, const double day) {
     m_tle.setEpoch(year,day);

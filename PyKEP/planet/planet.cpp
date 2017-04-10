@@ -218,7 +218,7 @@ BOOST_PYTHON_MODULE(_planet) {
 		));
 
 		planet_wrapper<planet::tle>("tle","An Earth satellite defined from the TLE format, derives from :py:class:`PyKEP.planet._base`")
-                  .def(init<optional<const std::string &, const std::string> >(
+        .def(init<optional<const std::string &, const std::string> >(
 			"PyKEP.planet.tle(line1, line2)\n\n"
 			"- line1: string containing the first line of a TLE (69 well formatted chars)\n"
 			"- line2: string containing the second line of a TLE (69 well formatted chars)\n\n"
@@ -227,7 +227,10 @@ BOOST_PYTHON_MODULE(_planet) {
 			"  line2 = '2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438'\n"
 			"  arianne = planet.tle(line1, line2)"
 		))
-		.def("set_epoch",&planet::tle::set_epoch,
+        .add_property("line1", &planet::tle::get_line1, "Get 1st line of original TLE")
+        .add_property("line2", &planet::tle::get_line2, "Get 2nd line of original TLE")
+        .add_property("ref_mjd2000", &planet::tle::get_ref_mjd2000, "Get reference epoch (possibly modified from what is in line 1 of TLE)");
+        .def("set_epoch",&planet::tle::set_epoch,
 		    "PyKep.planet.tle.set_epoch(year, day)\n\n"
 		    "- year: unsigned integer specifying the full 4 digit year\n"
 		    "- day:  double representing the fractional day as in TLE format.\n\n"
