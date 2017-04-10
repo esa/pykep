@@ -71,12 +71,12 @@ try : base(), m_line1(line1), m_line2(line2), m_tle(Tle("TLE satellite", line1, 
 }
 catch (TleException& e)
 {
-		std::cout << "TleException cought in planet_tle constructor" << std::endl;
+		//std::cout << "TleException cought in planet_tle constructor" << std::endl;
 		throw_value_error(e.what());
 }	
 catch (SatelliteException& e)
 {
-		std::cout << "SatelliteException cought in planet_tle constructor" << std::endl;
+		//std::cout << "SatelliteException cought in planet_tle constructor" << std::endl;
 		throw_value_error(e.what());
 }
 
@@ -101,12 +101,12 @@ void tle::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 	}
 	catch (SatelliteException& e)
 	{
-		std::cout << "SatelliteException caught while computing ephemerides" << std::endl;
+		//std::cout << "SatelliteException caught while computing ephemerides" << std::endl;
 		throw_value_error(e.what());
 	}
 	catch (DecayedException& e)
 	{
-		std::cout << "DecayedException caught while computing ephemerides" << std::endl;
+		//std::cout << "DecayedException caught while computing ephemerides" << std::endl;
 		throw_value_error(e.what());
 	}
 }
@@ -114,6 +114,16 @@ void tle::eph_impl(double mjd2000, array3D &r, array3D &v) const {
 /// Getter for the reference mjd2000
 double tle::get_ref_mjd2000() const {
 	return m_ref_mjd2000;
+}
+
+/// Getter for TLE line1
+std::string tle::get_line1() const {
+	return m_line1;
+}
+
+/// Getter for TLE line2
+std::string tle::get_line2() const {
+	return m_line2;
 }
 
 /// Setter for the epoch of the TLE (workaround for 2056/2057 bug)

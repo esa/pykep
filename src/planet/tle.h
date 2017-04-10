@@ -33,7 +33,6 @@
 #include "../third_party/libsgp4/Tle.h"
 
 namespace kep_toolbox{ namespace planet{
-//using namespace boost::posix_time;
 
 /// A planet from TLE format
 /**
@@ -64,6 +63,9 @@ public:
 	std::string human_readable_extra() const;
 
 	double get_ref_mjd2000() const;
+	std::string get_line1() const;
+	std::string get_line2() const;
+
 	void set_epoch(const unsigned int year, const double day);
 
 private:
