@@ -117,12 +117,12 @@ double tle::get_ref_mjd2000() const {
 }
 
 /// Getter for TLE line1
-double tle::get_line1() const {
+std::string tle::get_line1() const {
 	return m_line1;
 }
 
 /// Getter for TLE line2
-double tle::get_line2() const {
+std::string tle::get_line2() const {
 	return m_line2;
 }
 

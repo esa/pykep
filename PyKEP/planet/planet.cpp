@@ -229,7 +229,7 @@ BOOST_PYTHON_MODULE(_planet) {
 		))
         .add_property("line1", &planet::tle::get_line1, "Get 1st line of original TLE")
         .add_property("line2", &planet::tle::get_line2, "Get 2nd line of original TLE")
-        .add_property("ref_mjd2000", &planet::tle::get_ref_mjd2000, "Get reference epoch (possibly modified from what is in line 1 of TLE)");
+        .add_property("ref_mjd2000", &planet::tle::get_ref_mjd2000, "Get reference epoch (possibly modified from what is in line 1 of TLE)")
         .def("set_epoch",&planet::tle::set_epoch,
 		    "PyKep.planet.tle.set_epoch(year, day)\n\n"
 		    "- year: unsigned integer specifying the full 4 digit year\n"
