@@ -253,7 +253,7 @@ BOOST_PYTHON_MODULE(_planet) {
 			"   The presence of the corresponding kernel files are only checked upon call to the ephemerides method. As a consequence this object can still be constructed with invalid names\n"
 			"   or spelling mistakes. Only later the ephemerides call will fail throwing an excpetion\n\n"
 			".. note::\n\n"
-            "   mu_central_body must be set if the period or the orbital elements need to be computed"
+			"   mu_central_body must be set if the period or the orbital elements need to be computed"
 			"Example::\n\n"
 			"  planet = planet.spice('EARTH', 'SUN', 'ECLIPJ2000', 'NONE', MU_SUN, MU_EARTH, ERATH_R, EARTH_R * 1.05)"
 		));
