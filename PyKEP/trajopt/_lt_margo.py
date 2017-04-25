@@ -444,10 +444,6 @@ class lt_margo(base_problem):
         - x: encoded trajectory
 
         Prints human readable information on the trajectory represented by the decision vector x
-
-        Example::
-
-          print(prob.pretty(x))
         """
         n_seg = self.__n_seg
         m_i = self.__sc.mass
