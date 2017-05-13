@@ -156,9 +156,11 @@ double propagate_taylor_step(T& r0, T& v0, double &m0, const double &h, const in
  *
  * \param[in,out] r0 initial position vector. On output contains the propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested template type is boost::array<double,3))
  * \param[in,out] v0 initial velocity vector. On output contains the propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] T thrust vector (cartesian components)
+ * \param[in,out] m0 initial mass
+ * \param[in] u thrust vector (cartesian components)
  * \param[in,out] t propagation time (can be negative). If the maximum number of iterations is reached, the time is returned where the state is calculated for the last time
  * \param[in] mu central body gravitational parameter
+ * \param[in] veff 
  * \param[in] log10tolerance logarithm of the desired absolute tolerance
  * \param[in] log10rtolerance logarithm of the desired relative tolerance
  * \param[in] max_iter maximum number of iteration allowed
