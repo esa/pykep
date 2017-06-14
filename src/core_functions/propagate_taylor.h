@@ -160,7 +160,7 @@ double propagate_taylor_step(T& r0, T& v0, double &m0, const double &h, const in
  * \param[in] u thrust vector (cartesian components)
  * \param[in,out] t propagation time (can be negative). If the maximum number of iterations is reached, the time is returned where the state is calculated for the last time
  * \param[in] mu central body gravitational parameter
- * \param[in] veff 
+ * \param[in] veff
  * \param[in] log10tolerance logarithm of the desired absolute tolerance
  * \param[in] log10rtolerance logarithm of the desired relative tolerance
  * \param[in] max_iter maximum number of iteration allowed

@@ -422,7 +422,7 @@ class lt_margo(base_problem):
         for i in range(self.__n_seg):
             new_x.extend(x[3 + 3 * i : 6 + 3 * i] * 2)
 
-        new_prob = earth_gravity(
+        new_prob = lt_margo(
              target = self.target,
              n_seg = 2 * self.__n_seg,
              grid_type = self.__grid_type,
