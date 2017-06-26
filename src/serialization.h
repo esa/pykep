@@ -44,6 +44,9 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
 
+// Serialization of boost::array was moved in this header since 1.64
+#include <boost/serialization/boost_array.hpp>
+
 // Serialization of circular buffer, unordered map.
 // TODO: serialize the functors.. allocator, Hash, Pred, etc.
 #include <boost/circular_buffer.hpp>
