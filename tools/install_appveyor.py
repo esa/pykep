@@ -61,12 +61,16 @@ os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Build type setup.
 BUILD_TYPE = os.environ['BUILD_TYPE']
-is_release_build = (os.environ['APPVEYOR_REPO_TAG'] == 'true') and bool(re.match(r'v[0-9]+\.[0-9]+.*',os.environ['APPVEYOR_REPO_TAG_NAME']))
+is_release_build = (os.environ['APPVEYOR_REPO_TAG'] == 'true') and bool(
+    re.match(r'v[0-9]+\.[0-9]+.*', os.environ['APPVEYOR_REPO_TAG_NAME']))
 if is_release_build:
-    print("Release build detected, tag is '" + os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
+    print("Release build detected, tag is '" +
+          os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
 is_python_build = 'Python' in BUILD_TYPE
 if is_python_build:
-    if BUILD_TYPE == 'Python35':
+    if BUILD_TYPE == 'Python36':
+        python_version = '36'
+    elif BUILD_TYPE == 'Python35':
         python_version = '35'
     elif BUILD_TYPE == 'Python34':
         python_version = '34'
@@ -104,14 +108,16 @@ if is_python_build:
 os.makedirs('build')
 os.chdir('build')
 
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes' #REMEMBER TO PUT THIS TO YES WHEN FINISHED
+# REMEMBER TO PUT THIS TO YES WHEN FINISHED
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes'
 
 # Configuration step.
 if is_python_build:
     run_command(r'cmake -G "MinGW Makefiles" ..  -DBUILD_PYKEP=yes -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBoost_PYTHON' + (python_version[0] if python_version[0] == '3' else r'') + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
                 (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_62.dll  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
-    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + r' -DBUILD_TESTS=yes ' + common_cmake_opts
+    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
+        r' -DBUILD_TESTS=yes ' + common_cmake_opts
     run_command(r'cmake -G "MinGW Makefiles" .. ' + cmake_opts)
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
