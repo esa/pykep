@@ -5,7 +5,7 @@ matrix:
   - sudo: required
     services:
     - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python35" PYTHON_VERSION="3.6"
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python36" PYTHON_VERSION="3.6"
       PATH_TO_PYTHON="/opt/python/cp36-cp36m"
   - sudo: required
     services:
