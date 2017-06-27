@@ -31,12 +31,18 @@
 
 /// Compute fly-by constraints
 /**
- * This template function can be used to evaluate the feasibility of a fly-by described by relative planetary velocities
+ * This template function can be used to evaluate the feasibility of a fly-by
+ * described by relative planetary velocities
  * before and after.
  *
- * \param[out] dV is the delta-V thrust magnitude needed to make a fly-by possible. For a ballistic fly-by dV must be zero.
- * \param[in] v_rel_in  initial position vector. On output contains the propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested template type is boost::array<double,3))
- * \param[in] v_rel_out initial velocity vector. On output contains the propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested template type is boost::array<double,3))
+ * \param[out] dV is the delta-V thrust magnitude needed to make a fly-by
+ * possible. For a ballistic fly-by dV must be zero.
+ * \param[in] v_rel_in  initial position vector. On output contains the
+ * propagated position. (r0[1],r0[2],r0[3] need to be preallocated, suggested
+ * template type is std::array<double,3))
+ * \param[in] v_rel_out initial velocity vector. On output contains the
+ * propagated velocity. (v0[1],v0[2],v0[3] need to be preallocated, suggested
+ * template type is std::array<double,3))
  * \param[in] pl a planet object
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
@@ -45,23 +51,28 @@
 
 namespace kep_toolbox {
 
-template<class vettore3D>
-inline void fb_vel(double& dV, const vettore3D& v_rel_in, const vettore3D& v_rel_out, const planet::base &pl)
-{
-    double Vin2  = v_rel_in[0]*v_rel_in[0]+v_rel_in[1]*v_rel_in[1]+v_rel_in[2]*v_rel_in[2];
-    double Vout2 = v_rel_out[0]*v_rel_out[0]+v_rel_out[1]*v_rel_out[1]+v_rel_out[2]*v_rel_out[2];
-    //eq_V2 = Vin2 - Vout2;
+template <class vettore3D>
+inline void fb_vel(double &dV, const vettore3D &v_rel_in,
+                   const vettore3D &v_rel_out, const planet::base &pl) {
+  double Vin2 = v_rel_in[0] * v_rel_in[0] + v_rel_in[1] * v_rel_in[1] +
+                v_rel_in[2] * v_rel_in[2];
+  double Vout2 = v_rel_out[0] * v_rel_out[0] + v_rel_out[1] * v_rel_out[1] +
+                 v_rel_out[2] * v_rel_out[2];
+  // eq_V2 = Vin2 - Vout2;
 
-    double e_min = 1 + pl.get_safe_radius() / pl.get_mu_self() * Vin2;
-    double alpha = acos( (v_rel_in[0]*v_rel_out[0] + v_rel_in[1]*v_rel_out[1] + v_rel_in[2]*v_rel_out[2]) / sqrt(Vin2 * Vout2) );
-    double ineq_delta = alpha - 2 * asin(1/e_min);
-    
-    if(ineq_delta > 0.0) dV = sqrt( Vout2 + Vin2 - 2.0*sqrt(Vout2*Vin2)*cos(ineq_delta) );
-    else dV = fabs(sqrt(Vout2) - sqrt(Vin2));
-    
-    return;
+  double e_min = 1 + pl.get_safe_radius() / pl.get_mu_self() * Vin2;
+  double alpha = acos((v_rel_in[0] * v_rel_out[0] + v_rel_in[1] * v_rel_out[1] +
+                       v_rel_in[2] * v_rel_out[2]) /
+                      sqrt(Vin2 * Vout2));
+  double ineq_delta = alpha - 2 * asin(1 / e_min);
+
+  if (ineq_delta > 0.0)
+    dV = sqrt(Vout2 + Vin2 - 2.0 * sqrt(Vout2 * Vin2) * cos(ineq_delta));
+  else
+    dV = fabs(sqrt(Vout2) - sqrt(Vin2));
+
+  return;
 }
 } // namespace end
 
 #endif // KEP_TOOLBOX_FB_VEL_H
-
