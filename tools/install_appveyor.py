@@ -45,13 +45,13 @@ def run_command(raw_command, directory=None, verbose=True):
     return output
 
 # Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/51e041370fc289c35d64af41018e90d0883bffcc/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
 run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
 # Download common deps.
-wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/boost_mingw_64.7z', 'boost.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/51e041370fc289c35d64af41018e90d0883bffcc/boost_mingw_64.7z', 'boost.7z')
 
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
@@ -89,11 +89,11 @@ if is_python_build:
     pykep_install_path = r'C:\\Python' + \
         python_version + r'\\Lib\\site-packages\\PyKEP'
     # Get Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/' +
+    wget(r'https://github.com/bluescarni/binary_deps/raw/51e041370fc289c35d64af41018e90d0883bffcc/' +
          python_package, 'python.7z')
     run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
     # Get Boost Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/' +
+    wget(r'https://github.com/bluescarni/binary_deps/raw/51e041370fc289c35d64af41018e90d0883bffcc/' +
          boost_python_package, 'boost_python.7z')
     run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
     # Install pip and deps.
