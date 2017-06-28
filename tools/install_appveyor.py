@@ -106,8 +106,6 @@ os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 # Proceed to the build.
 os.makedirs('build')
 os.chdir('build')
-
-# REMEMBER TO PUT THIS TO YES WHEN FINISHED
 common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes'
 
 # Configuration step.
