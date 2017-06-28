@@ -72,6 +72,8 @@ if is_python_build:
         python_version = '36'
     elif 'Python35' in BUILD_TYPE:
         python_version = '35'
+    elif 'Python34' in BUILD_TYPE:
+        python_version = '34'
     elif 'Python27' in BUILD_TYPE:
         python_version = '27'
     else:
