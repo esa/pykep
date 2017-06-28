@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 
 def wget(url, out):
@@ -44,33 +45,36 @@ def run_command(raw_command, directory=None, verbose=True):
         raise RuntimeError(output)
     return output
 
+
+# Build type setup.
+BUILD_TYPE = os.environ['BUILD_TYPE']
+is_release_build = (os.environ['APPVEYOR_REPO_TAG'] == 'true') and bool(
+    re.match(r'v[0-9]+\.[0-9]+.*', os.environ['APPVEYOR_REPO_TAG_NAME']))
+if is_release_build:
+    print("Release build detected, tag is '" +
+          os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
+is_python_build = 'Python' in BUILD_TYPE
+
 # Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
 run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
 # Download common deps.
-wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/boost_mingw_64.7z', 'boost.7z')
-
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw_64.7z', 'boost.7z')
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 
-# Set the path so that the precompiled libs can be found.
-os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
-
-# Build type setup.
-BUILD_TYPE = os.environ['BUILD_TYPE']
-is_release_build = (os.environ['APPVEYOR_REPO_TAG'] == 'true') and bool(re.match(r'v[0-9]+\.[0-9]+.*',os.environ['APPVEYOR_REPO_TAG_NAME']))
-if is_release_build:
-    print("Release build detected, tag is '" + os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
-is_python_build = 'Python' in BUILD_TYPE
+# Setup of the dependencies for a Python build.
 if is_python_build:
-    if BUILD_TYPE == 'Python35':
+    if 'Python36' in BUILD_TYPE:
+        python_version = '36'
+    elif 'Python35' in BUILD_TYPE:
         python_version = '35'
-    elif BUILD_TYPE == 'Python34':
+    elif 'Python34' in BUILD_TYPE:
         python_version = '34'
-    elif BUILD_TYPE == 'Python27':
+    elif 'Python27' in BUILD_TYPE:
         python_version = '27'
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
@@ -85,33 +89,34 @@ if is_python_build:
     pykep_install_path = r'C:\\Python' + \
         python_version + r'\\Lib\\site-packages\\PyKEP'
     # Get Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/' +
+    wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
          python_package, 'python.7z')
     run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
     # Get Boost Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/31ac2a5beeec9a72babfbd6f7c73b11fd7043c20/' +
+    wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
          boost_python_package, 'boost_python.7z')
     run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
     # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
-    run_command(pinterp + ' get-pip.py')
-    #run_command(pip + ' install numpy')
-    #run_command(pip + ' install mpmath')
+    run_command(pinterp + ' get-pip.py --force-reinstall')
     if is_release_build:
         run_command(pip + ' install twine')
+
+# Set the path so that the precompiled libs can be found.
+os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Proceed to the build.
 os.makedirs('build')
 os.chdir('build')
-
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes' #REMEMBER TO PUT THIS TO YES WHEN FINISHED
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes'
 
 # Configuration step.
 if is_python_build:
     run_command(r'cmake -G "MinGW Makefiles" ..  -DBUILD_PYKEP=yes -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBoost_PYTHON' + (python_version[0] if python_version[0] == '3' else r'') + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
-                (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_62.dll  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
+                (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_63.dll  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
-    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + r' -DBUILD_TESTS=yes ' + common_cmake_opts
+    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
+        r' -DBUILD_TESTS=yes ' + common_cmake_opts
     run_command(r'cmake -G "MinGW Makefiles" .. ' + cmake_opts)
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)

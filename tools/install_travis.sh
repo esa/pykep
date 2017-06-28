@@ -9,9 +9,9 @@ echo ${PYTHON_VERSION}
 echo ${TRAVIS_TAG}
 
 # Compile and install boost
-wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.62.0/boost_1_62_0.tar.bz2 > /dev/null 2>&1
-tar --bzip2 -xf /pykep/boost_1_62_0.tar.bz2 > /dev/null 2>&1
-cd boost_1_62_0
+wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.64.0/boost_1_64_0.tar.bz2 > /dev/null 2>&1
+tar --bzip2 -xf /pykep/boost_1_64_0.tar.bz2 > /dev/null 2>&1
+cd boost_1_64_0
 ./bootstrap.sh > /dev/null 2>&1
 # removing the wrongly detected python 2.4 (deletes 5 lines after the comment "# Python configuration" )
 sed -i.bak -e '/# Python configuration/,+5d' ./project-config.jam
