@@ -32,6 +32,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/graph/adj_list_serialize.hpp>
+#include <boost/serialization/array.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -50,6 +51,4 @@
 #include <boost/unordered_map.hpp>
 #include <utility>
 
-
-
-#endif //KEP_TOOLBOX_SERIALIZATION_H
+#endif // KEP_TOOLBOX_SERIALIZATION_H
