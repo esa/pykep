@@ -279,6 +279,66 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     return axis
 
 
+def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+    """
+    ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+
+    - ax:			3D axis object created using fig.gca(projection='3d')
+    - r:			initial position (cartesian coordinates)
+    - v:			initial velocity (cartesian coordinates)
+    - m: 			initial mass
+    - thrust:		cartesian components for the constant thrust
+    - disturbance:	cartesian components for the constant disturbance
+    - t:			propagation time
+    - mu:			gravitational parameter
+    - veff:			the product Isp * g0
+    - N:			number of points to be plotted along one arc
+    - units:		the length unit to be used in the plot
+    - color:		matplotlib color to use to plot the line
+    - legend:		when True it plots also the legend
+
+    Plots the result of a taylor propagation of constant thrust
+    """
+
+    from PyKEP import propagate_taylor_disturbance
+    import matplotlib.pyplot as plt
+
+    if ax is None:
+        fig = plt.figure()
+        axis = fig.gca(projection='3d')
+    else:
+        axis = ax
+
+    # We define the integration time ...
+    dt = t / (N - 1)
+
+    # ... and calcuate the cartesian components for r
+    x = [0.0] * N
+    y = [0.0] * N
+    z = [0.0] * N
+
+    # We calculate the spacecraft position at each dt
+    for i in range(N):
+        x[i] = r[0] / units
+        y[i] = r[1] / units
+        z[i] = r[2] / units
+        r, v, m = propagate_taylor_disturbance(r, v, m, thrust, disturbance, dt, mu, veff, -10, -10)
+
+    # And we plot
+    if legend:
+        label = 'constant thrust arc'
+    else:
+        label = None
+    axis.plot(x, y, z, c=color, label=label)
+
+    if legend:
+        axis.legend()
+
+    if ax is None:  # show only if axis is not set
+        plt.show()
+    return axis
+
+
 def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=True, ax=None):
     """
     ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, ax=None):

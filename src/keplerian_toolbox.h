@@ -58,6 +58,7 @@
 #include "core_functions/propagate_lagrangian.h"
 #include "core_functions/propagate_lagrangian_u.h"
 #include "core_functions/propagate_taylor.h"
+#include "core_functions/propagate_taylor_disturbance.h"
 #include "core_functions/propagate_taylor_J2.h"
 #include "core_functions/propagate_taylor_s.h"
 #include "core_functions/propagate_taylor_jorba.h"
