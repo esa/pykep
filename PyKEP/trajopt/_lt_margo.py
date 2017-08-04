@@ -102,7 +102,6 @@ class lt_margo:
         ceq = list()
         cineq = list()
         throttles_constraints = []
-        flyby_constraints = []
         mismatch_constraints = []
 
         throttles = [x[3 + 3 * i : 6 + 3 * i] for i in range(self.__n_seg)]
@@ -113,6 +112,7 @@ class lt_margo:
         rfwd, rbwd, vfwd, vbwd, mfwd, mbwd, _, _, _, _, dfwd, dbwd = self._propagate(x)
 
         if self.__earth_gravity:
+            flyby_constraints = []
             for d in dfwd + dbwd:
                 d2 = d[0]**2 + d[1]**2 + d[2]**2
                 l22 = (0.01*pk.AU)**2
@@ -300,7 +300,7 @@ class lt_margo:
         """
 
         if not len(x) == len(self.get_bounds()[0]):
-            raise ValueError("Invalid length of the decision vector ``x``")
+            raise ValueError("Invalid length of the decision vector x")
 
         import matplotlib as mpl
         import matplotlib.pyplot as plt
@@ -423,7 +423,7 @@ class lt_margo:
         """
 
         if not len(x) == len(self.get_bounds()[0]):
-            raise ValueError("Invalid length of the decision vector ``x``")
+            raise ValueError("Invalid length of the decision vector x")
 
         import matplotlib as mpl
         import matplotlib.pyplot as plt
@@ -540,7 +540,7 @@ class lt_margo:
         """
 
         if not len(x) == len(self.get_bounds()[0]):
-            raise ValueError("Invalid length of the decision vector ``x``")
+            raise ValueError("Invalid length of the decision vector x")
 
         new_x = np.append(x[:3],np.repeat(x[3:].reshape((-1,3)),2,axis=0))
 
@@ -570,7 +570,7 @@ class lt_margo:
         """
 
         if not len(x) == len(self.get_bounds()[0]):
-            raise ValueError("Invalid length of the decision vector ``x``")
+            raise ValueError("Invalid length of the decision vector x")
 
         n_seg = self.__n_seg
         m_i = self.__sc.mass
