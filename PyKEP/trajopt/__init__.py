@@ -7,6 +7,7 @@ are implemented in c++)
 from PyKEP import __extensions__
 
 if (__extensions__['pygmo']):
+    from PyKEP.trajopt._lt_margo import lt_margo
     from PyKEP.trajopt._mga_1dsm import mga_1dsm
     from PyKEP.trajopt._mga_lt_nep import mga_lt_nep
     from PyKEP.trajopt._mr_lt_nep import mr_lt_nep

@@ -97,6 +97,14 @@ static inline tuple propagate_taylor_wrapper(
                                    kep_toolbox::array3D(v), double(m));
 }
 
+static inline tuple propagate_taylor_disturbance_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0, const double &m0, const kep_toolbox::array3D &thrust, const kep_toolbox::array3D &disturbance, const double &t, const double &mu, const double &veff, const int &log10tolerance, const int &log10rtolerance)
+{
+	kep_toolbox::array3D r(r0), v(v0);
+	double m(m0);
+	kep_toolbox::propagate_taylor_disturbance(r,v,m,thrust,disturbance,t,mu,veff,log10tolerance,log10rtolerance);
+	return boost::python::make_tuple(kep_toolbox::array3D(r),kep_toolbox::array3D(v),double(m));
+}
+
 static inline tuple propagate_taylor_J2_wrapper(
     const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
     const double &m0, const kep_toolbox::array3D &u, const double &t,
@@ -499,6 +507,23 @@ BOOST_PYTHON_MODULE(_core) {
       "Example::\n\n"
       "  r,v,m = "
       "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)");
+
+      //Taylor propagation of inertially constant thrust arcs with an inertially constant disturbance
+  def("propagate_taylor_disturbance",&propagate_taylor_disturbance_wrapper,
+      "PyKEP.propagate_taylor(r,v,m,thrust,disturbance,t,mu,veff,log10tol,log10rtol)\n\n"
+      "- r: start position, x,y,z\n"
+      "- v: start velocity, vx,vy,vz\n"
+      "- m: starting mass\n"
+      "- thrust: fixed inertial thrust, cartesian components\n"
+      "- disturbance: fixed inertial disturbance force, cartesian components\n"
+      "- t: propagation time\n"
+      "- mu: central body gravity constant\n\n"
+      "- veff: the product (Isp g0) defining the engine efficiency \n\n"
+      "- log10tol: the logarithm of the absolute tolerance passed to taylor propagator \n\n"
+      "- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
+      "Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
+      "Example::\n\n"
+      "  r,v,m = propagate_taylor_disturbance([1,0,0],[0,1,0],100,[0,0,0],[1e-2,1e-3,1e-4],pi/2,1,1,-15,-15)");
 
   // Taylor propagation of inertially constant thrust arcs under the J2
   // influence
