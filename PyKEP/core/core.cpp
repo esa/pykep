@@ -58,6 +58,13 @@
 
 using namespace boost::python;
 
+static inline tuple par2ic_wrapper(const kep_toolbox::array6D & kep, const double & mu) {
+  kep_toolbox::array3D r0, v0;
+  kep_toolbox::par2ic(kep, mu, r0, v0);
+  return boost::python::make_tuple(r0, v0);
+}
+
+
 static inline kep_toolbox::array6D
 ic2par_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
                const double &mu) {
@@ -647,6 +654,13 @@ BOOST_PYTHON_MODULE(_core) {
       "NOTE: routine gets singular for zero inclination\n"
       "Example:: \n\n"
       "  el = ic2par([1,0,0],[0,1,0],1.0)");
+
+  def("par2ic", &par2ic_wrapper,
+      "PyKEP.par2ic(E,mu)\n\n"
+      "- kep: six Keplerian elements\n"
+      "- mu: gravity parameter\n\n"
+      "Returns cartesian elements from Keplerian elements"
+  );
 
   def("damon", &damon_wrapper,
       "PyKEP.damon(v1,v2,tof)\n\n"
