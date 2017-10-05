@@ -86,8 +86,6 @@ class leg(object):
         Examples:
 
             >>> l = PyKEP.pontryagin.leg()
-            >>> l.mismatch_constraints()
-
             >>> l = PyKEP.pontryagin.leg(t0, x0, l0, tf, xf)
 
         Note:
@@ -112,6 +110,9 @@ class leg(object):
         else:
             self.mu = float(mu)
 
+        # dynamics
+        self._dynamics = _dynamics(sc=self.spacecraft, mu=mu)
+
         # check freetime, freemass, and bound
         if not all([isinstance(param, bool) for param in [freemass, freetime, bound]]):
             raise TypeError(
@@ -120,7 +121,6 @@ class leg(object):
             self.freemass = bool(freemass)
             self.freetime = bool(freetime)
             self.bound    = bool(bound)
-            print(self.freetime)
 
         # equality constraint dimensionality
         if self.freemass and self.freetime:
@@ -183,9 +183,6 @@ class leg(object):
             else:
                 self.l0 = np.asarray(l0, np.float64)
 
-        # dynamics
-        self._dynamics = _dynamics(sc=self.spacecraft, mu=mu)
-
         # integrator
         self._integrator = ode(
             lambda t, fs: self._dynamics._eom_fullstate(fs),
@@ -231,6 +228,8 @@ class leg(object):
         # check inputs
         if not all([isinstance(t, pk.epoch) for t in [t0, tf]]):
             raise TypeError("t0 and tf must be instances of PyKEP.epoch.")
+        elif not t0.mjd2000 < tf.mjd2000:
+            raise ValueError("t0 must be less than tf.")
         elif not all([isinstance(state, pk.sims_flanagan.sc_state) for state in [x0, xf]]):
             raise TypeError(
                 "x0 and xf must be instances of PyKEP.sims_flanagan.sc_state.")
@@ -296,14 +295,14 @@ class leg(object):
         arrival boundary conditions.
 
         Args:
-            atol (`float`): Absolute integration solution tolerance.
-            rtol (`float`): Relative integration solution tolerance.
+            atol (`float`, `int`): Absolute integration solution tolerance.
+            rtol (`float`, `int`): Relative integration solution tolerance.
 
         Returns:
             `numpy.ndarray`: Equality constraints vector composed of the
-            arrival mismatch in position & velocity, arrival mass costate if
-            `freemass == True`, arrival mismatch in mass if `freemass == False`,
-            and arrival Hamiltonian if `freetime == True`.::
+                arrival mismatch in position & velocity, arrival mass costate if
+                `freemass == True`, arrival mismatch in mass if `freemass == False`,
+                and arrival Hamiltonian if `freetime == True`.::
 
             ceq = [drf, dvf, dmf]    # freemass == False; freetime == False
             ceq = [drf, dvf, lmf]    # freemass == True; freetime == False
@@ -383,11 +382,19 @@ class leg(object):
             rtol = float(atol)
 
         # propagate trajectory
-        self._propagate(atol=atol, rtol=rtol)
+        self._propagate(atol, rtol)
+
+        # desired nondimensional arrival states
+        brf = self.xf[0:3] / self._dynamics.L
+        bvf = self.xf[3:6] / self._dynamics.V
+
+        # propagated nondimensional arrival states
+        rf = self._trajectory[-1, 0:3]
+        vf = self._trajectory[-1, 3:6]
 
         # nondimensional position and velocity arrival mismatch
-        drf = self._trajectory[-1, 0:3] - (self.xf[0:3] / self._dynamics.L)
-        dvf = self._trajectory[-1, 3:6] - (self.xf[3:6] / self._dynamics.V)
+        drf = rf - brf
+        dvf = vf - bvf
 
         # free arrival mass
         if self.freemass:
@@ -398,18 +405,18 @@ class leg(object):
 
         # free arrival time
         if self.freetime:
-            H = self._dynamics._hamiltonian(self._trajectory[-1])
+            Hf = self._dynamics._hamiltonian(self._trajectory[-1])
         # fixed arrival time
         else:
             pass
 
         # create equality constraints
         if (self.freemass and self.freetime):
-            ceq = np.hstack((drf, dvf, [lmf], [H]))
+            ceq = np.hstack((drf, dvf, [lmf], [Hf]))
         elif (self.freemass and not self.freetime):
             ceq = np.hstack((drf, dvf, [lmf]))
         elif (self.freetime and not self.freemass):
-            ceq = np.hstack((drf, dvf, [dmf], [H]))
+            ceq = np.hstack((drf, dvf, [dmf], [Hf]))
         elif (not self.freemass and not self.freetime):
             ceq = np.hstack((drf, dvf, [dmf]))
         else:
@@ -418,21 +425,79 @@ class leg(object):
         return ceq
 
     def get_states(self, atol=1e-12, rtol=1e-12):
-        """
+        """Returns the trajectory data of time, states, costates, and controls.
+
+        This method propagates the spacecrafts dynamics with a chosen `atol`
+        `rtol` from `t0`, `x0`, `l0` to `t0`, then returns a `numpy.ndarray`
+        with the number of rows corresponding to the number of data points
+        along the trajectory (as determinded by `atol` and `rtol`), and 19
+        columns corresponding to::
+
+            [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
+            ...
+             [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
+
+        Args:
+            atol (`float`, `int`): Absolute integration solution tolerance.
+            rtol (`float`, `int`): Relative integration solution tolerance.
+
+        Returns:
+            `numpy.ndarray`: Trajectory data array of shape `(npts, 20)`, where
+                `npts` is the number of data points along the trajectory, as
+                determind by the integration error tolerances `atol` and `rtol`.
+                The returned array is characterised by::
+
+                    [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
+                    ...
+                     [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
+
+        Raises:
+            TypeError: If either `atol` or `rtol` is supplied as neither an instance of `float` or `int`.
+            AttributeError: If boundary conditions `t0`, `x0`, `l0`, `tf`, and `x0` have not been set through either `__init__` or `set`.
+
+        Note:
+            - The returned array has the units of
+            `[mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND]`
+            - Setting either `atol` or `rtol` smaller than `1e-12` may result in numerical integration difficulties.
+
+        Examples:
+
+            >>> l = leg(t0, x0, l0, tf, xf)
+            >>> traj = l.get_states(atol=1e-12, rtol=1e-12)
+            >>> t = traj[:, 0] # times
+            >>> r = traj[:, 1:4] # positions
+            >>> v = traj[:, 4:7] # velocities
+            >>> m = traj[:, 7] # masses
+            >>> lm = traj[:, 14] # mass costates
+            >>> u = traj[:, 15] # control throttles
+            >>> H = traj[:, 19] # Hamiltonians
+            >>> plt.plot(t, u) # plot the control throttle history
+            >>> plt.show()
+
+
         """
 
-        # traj = [t, x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm, u, ux, uy, uz]
-        # traj.shape = (npts, 19)
+        if not all([(isinstance(tol, float) or isinstance(tol, int)) for tol in [atol, rtol]]):
+            raise TypeError("Both atol and rtol must be supplied as instances of either float or int.")
+        if any([hasattr(self, atr) == False for atr in ["t0", "x0", "l0", "tf", "xf"]]):
+            raise AttributeError("Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.")
+        else:
+            atol = float(atol)
+            rtol = float(atol)
 
         # propagate trajectory
-        self._propagate(atol=atol, rtol=rtol)
+        self._propagate(atol, rtol)
 
-        # get times
-        t = self._times.reshape(self._times.size, 1)
-        # redimensionalise times
+        # nondimensional times
+        t = self._times
+        # mjs2000 times
         t *= self._dynamics.T
+        # mjd2000 times
+        t /= 24*60*60
+        # reshape
+        t = self._times.reshape(t.size, 1)
 
-        # get controls
+        # controls
         u = np.asarray([self._dynamics._pontryagin(fs)
                         for fs in self._trajectory])
 
@@ -461,7 +526,7 @@ if __name__ == "__main__":
 
     # create boundaries
     t0 = pk.epoch(0)
-    tf = pk.epoch(2000)
+    tf = pk.epoch(1000)
 
     # create planets
     p0 = pk.planet.jpl_lp("earth")
@@ -479,7 +544,8 @@ if __name__ == "__main__":
     l0 = np.random.randn(7)
 
     # case 1: default constructor
-    l = leg()
-    l.set(t0, x0, l0, tf, xf)
-    l.mismatch_constraints()
-    print(l.get_states())
+    #l = leg()
+    l = leg(t0, x0, l0, tf, xf)
+    #l._propagate(1e-10, 1e-10)
+    #l.mismatch_constraints()
+    l.get_states(atol=1e-8, rtol=1e-8)
