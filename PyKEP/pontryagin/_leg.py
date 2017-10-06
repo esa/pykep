@@ -1,5 +1,6 @@
-from _dynamics import _dynamics
-import PyKEP as pk
+from PyKEP.pontryagin._dynamics import _dynamics
+from PyKEP.core import MU_SUN, epoch
+from PyKEP.sims_flanagan import spacecraft, sc_state
 from scipy.integrate import ode
 import numpy as np
 
@@ -17,7 +18,7 @@ class leg(object):
         l0 (`numpy.ndarray`): Costate variables [ND, ND, ND, ND, ND, ND, ND].
         tf (`float`): Arrival time [mjd2000].
         xf (`numpy.ndarray`): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
-        sc (`pk.sims_flanagan.spacecraft`): Generic spacecraft with propulsive properties.
+        sc (`PyKEP.sims_flanagan.spacecraft`): Generic spacecraft with propulsive properties.
         mu (`float`): Gravitational parametre of primary body [m^3/s^2]
         freemass (`bool`): Activates final mass transversality condition.
             Allows final mass to vary.
@@ -39,7 +40,7 @@ class leg(object):
 
     def __init__(
         self, t0=None, x0=None, l0=None, tf=None, xf=None,
-        sc=pk.sims_flanagan.spacecraft(1000, 0.3, 2500), mu=pk.MU_SUN,
+        sc=spacecraft(1000, 0.3, 2500), mu=MU_SUN,
         freemass=True, freetime=True, alpha=1, bound=True
     ):
         """Initialises an indirect optimal control transcription trajectory leg.
@@ -95,7 +96,7 @@ class leg(object):
         """
 
         # check spacecraft
-        if isinstance(sc, pk.sims_flanagan.spacecraft):
+        if isinstance(sc, spacecraft):
             self.spacecraft = sc
         else:
             raise TypeError(
@@ -155,7 +156,7 @@ class leg(object):
         else:
 
             # check departure and arrival times
-            if not all([isinstance(t, pk.epoch) for t in [t0, tf]]):
+            if not all([isinstance(t, epoch) for t in [t0, tf]]):
                 raise TypeError(
                     "Departure and arrival times, t0 & tf, must be supplied as PyKEP.epoch.")
             elif not t0.mjd2000 < tf.mjd2000:
@@ -167,7 +168,7 @@ class leg(object):
 
             # check departure and arrival states
             states = [x0, xf]
-            if not all([isinstance(state, pk.sims_flanagan.sc_state) for state in states]):
+            if not all([isinstance(state, sc_state) for state in states]):
                 raise TypeError(
                     "x0 and xf must be instances of PyKEP.sims_flanagan.sc_state.")
             else:
@@ -226,11 +227,11 @@ class leg(object):
         """
 
         # check inputs
-        if not all([isinstance(t, pk.epoch) for t in [t0, tf]]):
+        if not all([isinstance(t, epoch) for t in [t0, tf]]):
             raise TypeError("t0 and tf must be instances of PyKEP.epoch.")
         elif not t0.mjd2000 < tf.mjd2000:
             raise ValueError("t0 must be less than tf.")
-        elif not all([isinstance(state, pk.sims_flanagan.sc_state) for state in [x0, xf]]):
+        elif not all([isinstance(state, sc_state) for state in [x0, xf]]):
             raise TypeError(
                 "x0 and xf must be instances of PyKEP.sims_flanagan.sc_state.")
         elif not (isinstance(l0, tuple) or isinstance(l0, list) or isinstance(l0, np.ndarray)):
@@ -517,35 +518,3 @@ class leg(object):
         traj = np.hstack((t, traj, u, H))
 
         return traj
-
-
-if __name__ == "__main__":
-
-    # create spacecraft
-    sc = pk.sims_flanagan.spacecraft(1000, 0.3, 2500)
-
-    # create boundaries
-    t0 = pk.epoch(0)
-    tf = pk.epoch(1000)
-
-    # create planets
-    p0 = pk.planet.jpl_lp("earth")
-    pf = pk.planet.jpl_lp("mars")
-
-    # get states
-    x0, v0 = p0.eph(t0)
-    xf, vf = pf.eph(tf)
-
-    # create spacecraft state
-    x0 = pk.sims_flanagan.sc_state(x0, v0, sc.mass)
-    xf = pk.sims_flanagan.sc_state(xf, vf, sc.mass / 10)
-
-    # departure costate
-    l0 = np.random.randn(7)
-
-    # case 1: default constructor
-    #l = leg()
-    l = leg(t0, x0, l0, tf, xf)
-    #l._propagate(1e-10, 1e-10)
-    #l.mismatch_constraints()
-    l.get_states(atol=1e-8, rtol=1e-8)

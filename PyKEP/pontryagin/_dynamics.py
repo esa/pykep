@@ -1,13 +1,14 @@
-import PyKEP as pk
+from PyKEP.sims_flanagan import spacecraft
+from PyKEP.core import MU_SUN, EARTH_VELOCITY, G0, AU
 import numpy as np
 
 
 class _dynamics(object):
 
-    def __init__(self, sc=pk.sims_flanagan.spacecraft(1000, 0.3, 2500), mu=pk.MU_SUN, alpha=1, bound=True):
+    def __init__(self, sc=spacecraft(1000, 0.3, 2500), mu=MU_SUN, alpha=1, bound=True):
 
         # check spacecraft
-        if isinstance(sc, pk.sims_flanagan.spacecraft):
+        if isinstance(sc, spacecraft):
             self.spacecraft = sc
         else:
             raise TypeError(
@@ -49,11 +50,11 @@ class _dynamics(object):
 
         # spacecraft parametres
         self.c1 = self.spacecraft.thrust
-        self.c2 = self.spacecraft.thrust / (self.spacecraft.isp * pk.G0)
+        self.c2 = self.spacecraft.thrust / (self.spacecraft.isp * G0)
 
         # define nondimenional units
-        self.L = pk.AU
-        self.V = pk.EARTH_VELOCITY
+        self.L = AU
+        self.V = EARTH_VELOCITY
         self.M = self.spacecraft.mass
         self.A = (self.V * self.V) / self.L
         self.F = self.M * self.A
@@ -63,7 +64,7 @@ class _dynamics(object):
         # nondimensionalise parametres
         self.c1 /= self.F
         self.c2 /= self.Q
-        self.mu /= pk.MU_SUN
+        self.mu /= MU_SUN
 
     def _eom_fullstate(self, fullstate):
 
