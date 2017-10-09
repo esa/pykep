@@ -9,90 +9,83 @@ class leg(object):
     """Indirect optimal control transcription trajectory leg.
 
     This class represents an indirect optimal control transcription
-    (alla moda di Pontryagin's maximum principle) of a generic two-point
-    boundary trajectory.
+    (alla moda di `Pontryagin's maximum principle <https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle>`_) of a generic
+    two-point boundary trajectory.
 
     Attributes:
-        t0 (`float`): Departure time [mjd2000].
-        x0 (`numpy.ndarray`): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
-        l0 (`numpy.ndarray`): Costate variables [ND, ND, ND, ND, ND, ND, ND].
-        tf (`float`): Arrival time [mjd2000].
-        xf (`numpy.ndarray`): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
-        sc (`PyKEP.sims_flanagan.spacecraft`): Generic spacecraft with propulsive properties.
-        mu (`float`): Gravitational parametre of primary body [m^3/s^2]
-        freemass (`bool`): Activates final mass transversality condition.
-            Allows final mass to vary.
-        freetime (`bool`): Activates final time transversality condition.
-            Allows final time to vary.
-        alpha (`float`): Homotopy parametre, governing the degree
-            to which the theoretical control law is intended to reduce
-            propellant expenditure or energy.
-            Setting the parametre to 1 enforces a mass-optimal control law,
-            with a characteristic bang-bang control profile (either full throttle or off).
-            Setting the parametre to 0 enforces a pure quadratic control law.
-        bound (`bool`): Activates bounded control, in which the control
-            throttle is bounded between 0 and 1, otherwise the control
-            throttle is allowed to unbounded.
-        nec (`int`): Number of equality constraints as determined by
-            `freemass` and `freetime`.
-
+        - t0 (``float``): Departure time [mjd2000].
+        - x0 (``numpy.ndarray``): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
+        - l0 (``numpy.ndarray``): Costate variables [ND, ND, ND, ND, ND, ND, ND].
+        - tf (``float``): Arrival time [mjd2000].
+        - xf (``numpy.ndarray``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
+        - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
+        - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+        - freemass (``bool``): Activates final mass transversality condition.
+        - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
+        - alpha (``float``): Homotopy parametre.
+        - bound (``bool``): Activates bounded control.
+        - nec (``int``): Number of equality constraints.
     """
 
-    def __init__(
-        self, t0=None, x0=None, l0=None, tf=None, xf=None,
-        sc=spacecraft(1000, 0.3, 2500), mu=MU_SUN,
-        freemass=True, freetime=True, alpha=1, bound=True
-    ):
+    def __init__(self, t0=None, x0=None, l0=None, tf=None, xf=None, sc=spacecraft(1000, 0.3, 2500), mu=MU_SUN, freemass=True, freetime=True, alpha=1, bound=True):
         """Initialises an indirect optimal control transcription trajectory leg.
 
         Args:
-            t0 (`PyKEP.epoch`, `None`): Departure time [mjd2000].
-            x0 (`PyKEP.sims_flanagan.sc_state`, `None`): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
-            l0 (`numpy.ndarray`, `list`, `tuple`, `None`): Costate variables [ND, ND, ND, ND, ND, ND, ND].
-            tf (`PyKEP.epoch`, `None`): Arrival time [mjd2000].
-            xf (`PyKEP.epoch`, `None`): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
-            sc (`PyKEP.sims_flanagan.spacecraft`): Generic spacecraft with propulsive properties.
-            mu (`float`, `int`): Gravitational parametre of primary body [m^3/s^2].
-            freemass (`bool`): Activates final mass transversality condition.
-                Allows final mass to vary.
-            freetime (`bool`): Activates final time transversality condition.
-                Allows final time to vary.
-            alpha (`float`, `int`): Homotopy parametre, governing the degree
-                to which the theoretical control law is intended to reduce
-                propellant expenditure or energy.
-                Setting the parametre to 1 enforces a mass-optimal control law,
-                with a characteristic bang-bang control profile (either full throttle or off).
-                Setting the parametre to 0 enforces a pure quadratic control law.
-            bound (`bool`): Activates bounded control, in which the control
-                throttle is bounded between 0 and 1, otherwise the control
-                throttle is allowed to unbounded.
+            - t0 (``PyKEP.epoch``, ``None``): Departure time [mjd2000].
+            - x0 (``PyKEP.sims_flanagan.sc_state``, ``None``): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
+            - l0 (``numpy.ndarray``, ``list``, ``tuple``, ``None``): Costate variables [ND, ND, ND, ND, ND, ND, ND].
+            - tf (``PyKEP.epoch``, ``None``): Arrival time [mjd2000].
+            - xf (``PyKEP.epoch``, ``None``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
+            - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
+            - mu (``float``, ``int``): Gravitational parametre of primary body [m^3/s^2].
+            - freemass (``bool``): Activates final mass transversality condition.
+            - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parametre to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parametre to 0 enforces a pure quadratic control law.
+            - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
 
         Raises:
-            TypeError: If `sc` is not supplied as an instance of `PyKEP.sims_flanagan.spacecraft`.
-            TypeError: If `mu` is neither supplied as an instance of `float` or `int`.
-            ValueError: If `mu` is not supplied as a positive number.
-            TypeError: If either `freemass`, `freetime`, or `bound` is not supplied as an instance of `bool`.
-            AttributeError: If equality constraint dimension cannot be determined form `freemass` and `freetime`.
-            TypeError: If `alpha` is neither supplied as an instance of `float` or `int`.
-            ValueError: If `alpha` is not in between 0 and 1.
-            ValueError: If `alpha == 1` and `bound == False`.
-                Control cannot be unbounded with mass-optimal control.
-            TypeError: If either `t0` or `tf` is not supplied as an instance of `PyKEP.epoch`.
-            ValueError: If departure time, `t0.mjd2000` does not occur before arrival time, `tf.mjd2000`.
-            TypeError: If either `x0` or xf` is not supplied as an instance of `PyKEP.sims_flanagan.sc_state`.
-            TypeError: If costate, `l0`, is neither supplied as an instance of `numpy.ndarray`, `list`, or `tuple`.
-            TypeError: If costate, `l0`, is does not have 7 elements.
-                Each element of `l0` corresponds to the respective elements of `x0`.
+            - TypeError: If ``sc`` is not supplied as an instance of `PyKEP.sims_flanagan.spacecraft`.
+            - TypeError: If ``mu`` is neither supplied as an instance of ``float`` or ``int``.
+            - ValueError: If ``mu`` is not supplied as a positive number.
+            - TypeError: If either ``freemass``, ``freetime``, or ``bound`` is not supplied as an instance of ``bool``.
+            - AttributeError: If equality constraint dimension cannot be determined form ``freemass`` and ``freetime``.
+            - TypeError: If ``alpha`` is neither supplied as an instance of ``float`` or ``int``.
+            - ValueError: If ``alpha`` is not in between 0 and 1.
+            - ValueError: If ``alpha == 1`` and ``bound == False``. Control cannot be unbounded with mass-optimal control.
+            - TypeError: If either ``t0`` or ``tf`` is not supplied as an instance of ``PyKEP.epoch``.
+            - ValueError: If departure time, ``t0.mjd2000`` does not occur before arrival time, `t`f.mjd2000``.
+            - TypeError: If either ``x0`` or ``xf`` is not supplied as an instance of ``PyKEP.sims_flanagan.sc_state``.
+            - TypeError: If costate, ``l0``, is neither supplied as an instance of ``numpy.ndarray``, ``list``, or ``tuple``.
+            - TypeError: If costate, ``l0``, is does not have 7 elements. Each element of ``l0`` corresponds to the respective elements of ``x0``.
 
         Examples:
-
             >>> l = PyKEP.pontryagin.leg()
             >>> l = PyKEP.pontryagin.leg(t0, x0, l0, tf, xf)
 
-        Note:
-            - Typically spacecraft trajectories are optimised to reduce final mass, which theoretically results in a bang-bang control profile. However, a bang-bang control profile (either 0 or 1) is problematic to an optimiser due to its discontinous nature. The trajectory optimisation problem becomes easier when one first optimises with unbounded quadratic control (`alpha == 0 and bound == False`), stores the solution, then uses the solution to optimise with bounded quadratic control (`alpha == 0 and bound == True`). Then using the solution from bounded quadratic control, one can incrementally optimise for increasing homotopy parametres (e.g. `alphas = numpy.linspace(0, 1, 200)`) until a mass-optimal control solution converges.
-            - Boundary conditions `t0`, `x0`, `l0`, `tf`, and `xf` are optional in the constructor. If some, but not all, boundary conditions are supplied, they are not set and disregarded. If the boundary conditions are not set upon construction (`__init__`), they must be set with `set(t0, x0, l0, tf, xf)`.
-            - `propagate` will not work unless the boundary conditions have been set either through `__init__` or `set`.
+        .. note::
+            Typically spacecraft trajectories are optimised to reduce final
+            mass, which theoretically results in a bang-bang control profile.
+            However, a bang-bang control profile (either 0 or 1) is problematic
+            to an optimiser due to its discontinous nature. The trajectory
+            optimisation problem becomes easier when one first optimises with
+            unbounded quadratic control (``alpha == 0 and bound == False``),
+            stores the solution, then uses the solution to optimise with
+            bounded quadratic control (``alpha == 0 and bound == True``). Then
+            using the solution from bounded quadratic control, one can
+            incrementally optimise for increasing homotopy parametres
+            (e.g. ``alphas = numpy.linspace(0, 1, 200)``) until a mass-optimal
+            control solution converges.
+
+        .. note::
+            Boundary conditions ``t0``, ``x0``, ``l0``, ``tf``, and ``xf``
+            are optional in the constructor. If some, but not all, boundary
+            conditions are supplied, they are not set and disregarded. If the
+            boundary conditions are not set upon construction (``__init__``),
+            they must be set with ``set(t0, x0, l0, tf, xf)``.
+
+        .. note::
+            ``mismatch_constraints`` will not work unless the boundary
+            conditions have been set either through ``__init__`` or ``set``.
         """
 
         # check spacecraft
@@ -121,7 +114,7 @@ class leg(object):
         else:
             self.freemass = bool(freemass)
             self.freetime = bool(freetime)
-            self.bound    = bool(bound)
+            self.bound = bool(bound)
 
         # equality constraint dimensionality
         if self.freemass and self.freetime:
@@ -133,7 +126,8 @@ class leg(object):
         elif not self.freemass and not self.freetime:
             self.nec = 7
         else:
-            raise AttributeError("Could not determine equality constraint dimensionality.")
+            raise AttributeError(
+                "Could not determine equality constraint dimensionality.")
 
         # check alpha
         if not (isinstance(alpha, float) or isinstance(alpha, int)):
@@ -205,25 +199,23 @@ class leg(object):
         departure costate `l0`, arrival time `tf`, arrival state `xf`.
 
         Args:
-            t0 (`PyKEP.epoch`): Departure time [mjd2000].
-            x0 (`PyKEP.sims_flanagan.sc_state`): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
-            l0 (`numpy.ndarray`, `list`, `tuple`): Costate variables [ND, ND, ND, ND, ND, ND, ND].
-            tf (`PyKEP.epoch`): Arrival time [mjd2000].
-            xf (`PyKEP.epoch`): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
+            - t0 (``PyKEP.epoch``): Departure time [mjd2000].
+            - x0 (``PyKEP.sims_flanagan.sc_state``): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
+            - l0 (``numpy.ndarray``, ``list``, ``tuple``): Costate variables [ND, ND, ND, ND, ND, ND, ND].
+            - tf (``PyKEP.epoch``): Arrival time [mjd2000].
+            - xf (``PyKEP.epoch``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
 
         Raises:
-            TypeError: If either `t0` or `tf` is not supplied as an instance of `PyKEP.epoch`.
-            TypeError: If either `x0` or `xf` is not supllied as an instance of `PyKEP.sims_flanagan.sc_state`.
-            TypeError: If `l0` is neither supllied as a `numpy.ndarray`, `list`, or `tuple`.
+            - TypeError: If either ``t0`` or ``tf`` is not supplied as an instance of ``PyKEP.epoch``.
+            - TypeError: If either ``x0`` or ``xf`` is not supllied as an instance of ``PyKEP.sims_flanagan.sc_state``.
+            - TypeError: If ``l0`` is neither supllied as a ``numpy.ndarray``, ``list``, or ``tuple``.
 
-        Note:
-            If ``Args`` were not supplied in `__init__`, `set` must be called before calling `mismatch_constraints`.
+        .. note::
+            If ``args`` were not supplied in ``__init__``, ``set`` must be called before calling ``mismatch_constraints``.
 
         Examples:
-
             >>> l = leg() # t0, x0, l0, tf, xf not set yet
             >>> l.set(t0, x0, l0, tf, xf) # now they're set
-
         """
 
         # check inputs
@@ -253,17 +245,17 @@ class leg(object):
     def _propagate(self, atol, rtol):
 
         # nondimensionalise departure state
-        x0       = self.x0
+        x0 = self.x0
         x0[0:3] /= self._dynamics.L
         x0[3:6] /= self._dynamics.V
-        x0[6]   /= self._dynamics.M
+        x0[6] /= self._dynamics.M
 
         # nondimensional fullstate
         fs0 = np.hstack((x0, self.l0))
 
         # convert mjd2000 to mjs2000
-        t0 = self.t0*24*60*60
-        tf = self.tf*24*60*60
+        t0 = self.t0 * 24 * 60 * 60
+        tf = self.tf * 24 * 60 * 60
 
         # nondimensionalise times
         t0 /= self._dynamics.T
@@ -296,47 +288,46 @@ class leg(object):
         arrival boundary conditions.
 
         Args:
-            atol (`float`, `int`): Absolute integration solution tolerance.
-            rtol (`float`, `int`): Relative integration solution tolerance.
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
 
         Returns:
-            `numpy.ndarray`: Equality constraints vector composed of the
-                arrival mismatch in position & velocity, arrival mass costate if
-                `freemass == True`, arrival mismatch in mass if `freemass == False`,
-                and arrival Hamiltonian if `freetime == True`.::
+            - ``numpy.ndarray``: Equality constraints vector ``ceq`` composed of the arrival mismatch in position & velocity, arrival mass costate if ``freemass == True``, arrival mismatch in mass if ``freemass == False``, and arrival Hamiltonian if ``freetime == True``.
+            ::
 
-            ceq = [drf, dvf, dmf]    # freemass == False; freetime == False
-            ceq = [drf, dvf, lmf]    # freemass == True; freetime == False
-            ceq = [drf, dvf, lmf, H] # freemass == True; freetime == True
+                ceq = [drf, dvf, dmf]    # freemass == False; freetime == False
+                ceq = [drf, dvf, lmf]    # freemass == True; freetime == False
+                ceq = [drf, dvf, lmf, H] # freemass == True; freetime == True
 
         Raises:
-            TypeError: If either `atol` or `rtol` is supplied as neither an instance of `float` or `int`.
-            AttributeError: If boundary conditions `t0`, `x0`, `l0`, `tf`, and `x0` have not been set through either `__init__` or `set`.
+            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` or ``int``.
+            - AttributeError: If boundary conditions ``t0``, ``x0``, ``l0``, ``tf``, and ``x0`` have not been set through either ``__init__`` or ``set``.
 
-        Note:
-            - This method uses an explicit Runge-Kutta method of order (4)5
+        .. note::
+            This method uses an explicit Runge-Kutta method of order (4)5
             due to Dormand & Prince with adaptive stepsize control.
-            Smaller values of `atol` and `rtol` will increase the accuracy of
+            Smaller values of ``atol`` and ``rtol`` will increase the accuracy of
             a converged trajectory optimisation solution. However, smaller
             values result in slower integration executions and thus slower
             optimiser iterations. It is preferable to first solve a trajectory
-            optimisation problem with higher values of `atol` and `rtol` to
+            optimisation problem with higher values of ``atol`` and ``rtol`` to
             quickly converge to an approximate solution, subsequently resolving
             the problem with smaller tolerance values using the previous solution.
             This method is akin to mesh refinement in direct trajectory optimisation.
-            - State arrival boundary conditions in position and velocity are
+
+        .. note::
+            State arrival boundary conditions in position and velocity are
             always returned. If the final mass transversality condition is
-            activated (`freemass == True`), than the final mass costate is
+            activated (``freemass == True``), than the final mass costate is
             returned as part of the equality constraint vector. Otherwise
-            (`freemass == False`), the final mass mismatch is returned as part
+            (``freemass == False``), the final mass mismatch is returned as part
             of the equality constraint vector. If the final time transversality
-            condition is activated `freetime == True`, then than the final
+            condition is activated ``freetime == True``, then than the final
             Hamiltonian will be returned as part of the equality constraint
-            vector. Otherwise (`freetime == False`), the Hamiltonian will not
+            vector. Otherwise (``freetime == False``), the Hamiltonian will not
             be supplied as part of the equality constraint vector.
 
         Examples:
-
             >>> l = PyKEP.pontryagin.leg(freemass=True, freetime=True)
             >>> l.set(t0, x0, l0, tf, xf)
             >>> l.mismatch_constraints(atol=1e-10, rtol=1e-10)
@@ -375,9 +366,11 @@ class leg(object):
         """
 
         if not all([(isinstance(tol, float) or isinstance(tol, int)) for tol in [atol, rtol]]):
-            raise TypeError("Both atol and rtol must be supplied as instances of either float or int.")
+            raise TypeError(
+                "Both atol and rtol must be supplied as instances of either float or int.")
         if any([hasattr(self, atr) == False for atr in ["t0", "x0", "l0", "tf", "xf"]]):
-            raise AttributeError("Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.")
+            raise AttributeError(
+                "Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.")
         else:
             atol = float(atol)
             rtol = float(atol)
@@ -421,48 +414,48 @@ class leg(object):
         elif (not self.freemass and not self.freetime):
             ceq = np.hstack((drf, dvf, [dmf]))
         else:
-            raise AttributeError("Could not determine equality constraint vector.")
+            raise AttributeError(
+                "Could not determine equality constraint vector.")
 
         return ceq
 
     def get_states(self, atol=1e-12, rtol=1e-12):
         """Returns the trajectory data of time, states, costates, and controls.
 
-        This method propagates the spacecrafts dynamics with a chosen `atol`
-        `rtol` from `t0`, `x0`, `l0` to `t0`, then returns a `numpy.ndarray`
+        This method propagates the spacecrafts dynamics with a chosen ``atol``
+        ``rtol`` from ``t0``, ``x0``, ``l0`` to ``t0``, then returns a `numpy.ndarray`
         with the number of rows corresponding to the number of data points
-        along the trajectory (as determinded by `atol` and `rtol`), and 19
-        columns corresponding to::
-
-            [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
-            ...
-             [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
+        along the trajectory (as determinded by ``atol`` and ``rtol``), and 19
+        columns.
 
         Args:
-            atol (`float`, `int`): Absolute integration solution tolerance.
-            rtol (`float`, `int`): Relative integration solution tolerance.
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
 
         Returns:
-            `numpy.ndarray`: Trajectory data array of shape `(npts, 20)`, where
-                `npts` is the number of data points along the trajectory, as
-                determind by the integration error tolerances `atol` and `rtol`.
-                The returned array is characterised by::
+            - ``numpy.ndarray``: Trajectory data array of shape ``(npts, 20)``, where
+            ``npts`` is the number of data points along the trajectory, as
+            determind by the integration error tolerances ``atol`` and ``rtol``.
 
-                    [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
-                    ...
-                     [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
+            The returned array is characterised by:
+            ::
+
+                [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
+                ...
+                 [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
 
         Raises:
-            TypeError: If either `atol` or `rtol` is supplied as neither an instance of `float` or `int`.
-            AttributeError: If boundary conditions `t0`, `x0`, `l0`, `tf`, and `x0` have not been set through either `__init__` or `set`.
+            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` or ``int``.
+            - AttributeError: If boundary conditions ``t0``, ``x0``, ``l0``, ``tf``, and ``x0`` have not been set through either ``__init__`` or ``set``.
 
-        Note:
-            - The returned array has the units of
-            `[mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND]`
-            - Setting either `atol` or `rtol` smaller than `1e-12` may result in numerical integration difficulties.
+        .. note::
+            The returned array has the units of
+            [mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND].
+
+        .. note::
+            Setting either ``atol`` or ``rtol`` smaller than ``1e-12`` may result in numerical integration difficulties.
 
         Examples:
-
             >>> l = leg(t0, x0, l0, tf, xf)
             >>> traj = l.get_states(atol=1e-12, rtol=1e-12)
             >>> t = traj[:, 0] # times
@@ -474,14 +467,14 @@ class leg(object):
             >>> H = traj[:, 19] # Hamiltonians
             >>> plt.plot(t, u) # plot the control throttle history
             >>> plt.show()
-
-
         """
 
         if not all([(isinstance(tol, float) or isinstance(tol, int)) for tol in [atol, rtol]]):
-            raise TypeError("Both atol and rtol must be supplied as instances of either float or int.")
+            raise TypeError(
+                "Both atol and rtol must be supplied as instances of either float or int.")
         if any([hasattr(self, atr) == False for atr in ["t0", "x0", "l0", "tf", "xf"]]):
-            raise AttributeError("Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.")
+            raise AttributeError(
+                "Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.")
         else:
             atol = float(atol)
             rtol = float(atol)
@@ -494,7 +487,7 @@ class leg(object):
         # mjs2000 times
         t *= self._dynamics.T
         # mjd2000 times
-        t /= 24*60*60
+        t /= 24 * 60 * 60
         # reshape
         t = self._times.reshape(t.size, 1)
 
@@ -512,7 +505,7 @@ class leg(object):
         # redimensionalise trajectory
         traj[:, 0:3] *= self._dynamics.L
         traj[:, 3:6] *= self._dynamics.V
-        traj[:, 6]   *= self._dynamics.M
+        traj[:, 6] *= self._dynamics.M
 
         # assemble full trajectory history
         traj = np.hstack((t, traj, u, H))
