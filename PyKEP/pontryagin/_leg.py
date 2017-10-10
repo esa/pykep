@@ -3,6 +3,8 @@ from PyKEP.core import MU_SUN, epoch
 from PyKEP.sims_flanagan import spacecraft, sc_state
 from scipy.integrate import ode
 import numpy as np
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
 
 
 class leg(object):
@@ -511,3 +513,74 @@ class leg(object):
         traj = np.hstack((t, traj, u, H))
 
         return traj
+
+    def plot(self, axis, mark="k.-", atol=1e-12, rtol=1e-12):
+        """Plots trajectory onto a 3D axis.
+
+        Args:
+            - axis (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axis onto which to plot the trajectory.
+            - mark (``str``): Marker style.
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
+
+        Raises:
+            - TypeError: If ``axis`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
+            - TypeError: If ``mark`` is not an instance of ``str``.
+            - TypeError: if ``atol`` is neither an instance of ``float`` or ``int``.
+            - TypeError: if ``rtol`` is neither an instance of ``float`` or ``int``.
+
+        Examples:
+            >>> sc = pk.sims_flanagan.spacecraft(1000, 0.3, 2500) # spacecraft
+            >>> p0 = pk.planet.jpl_lp("earth")
+            >>> pf = pk.planet.jpl_lp("mars")
+            >>> t0 = pk.epoch(0)
+            >>> tf = pk.epoch(1000)
+            >>> r0, v0 = p0.eph(t0)
+            >>> rf, vf = pf.eph(tf)
+            >>> x0 = pk.sims_flanagan.sc_state(r0, v0, sc.mass)
+            >>> xf = pk.sims_flanagan.sc_state(rf, vf, sc.mass/10)
+            >>> l0 = np.random.randn(7)
+            >>> l = leg(t0, x0, l0, tf, xf)
+            >>> fig = plt.figure()
+            >>> axis = fig.gca(projection='3d')
+            >>> l.plot(axis)
+            >>> plt.show()
+        """
+
+        if not isinstance(axis, Axes3D):
+            raise TypeError("Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
+        elif not isinstance(mark, str):
+            raise TypeError("Mark must be instance of string.")
+        elif not all((isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol]):
+            raise TypeError("Both atol and rtol must be either instances of float or int.")
+        else:
+            pass
+
+        # get trajectory
+        traj = self.get_states(atol=atol, rtol=rtol)
+
+        # plot trajectory
+        axis.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
+
+if __name__ == "__main__":
+    import PyKEP as pk
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+
+    sc = pk.sims_flanagan.spacecraft(1000, 0.3, 2500)
+    p0 = pk.planet.jpl_lp("earth")
+    pf = pk.planet.jpl_lp("mars")
+    t0 = pk.epoch(0)
+    tf = pk.epoch(1000)
+    r0, v0 = p0.eph(t0)
+    rf, vf = pf.eph(tf)
+    x0 = pk.sims_flanagan.sc_state(r0, v0, sc.mass)
+    xf = pk.sims_flanagan.sc_state(rf, vf, sc.mass/10)
+    l0 = np.random.randn(7)
+    l = leg(t0, x0, l0, tf, xf)
+
+    fig = plt.figure()
+    axis = fig.gca(projection='3d')
+    l.plot(axis)
+    plt.show()

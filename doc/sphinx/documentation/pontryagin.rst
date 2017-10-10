@@ -44,3 +44,5 @@ Detailed Documentation
   .. automethod:: PyKEP.pontryagin.leg.mismatch_constraints(atol=1e-5, rtol=1e-5)
 
   .. automethod:: PyKEP.pontryagin.leg.get_states(atol=1e-12, rtol=1e-12)
+
+  .. automethod:: PyKEP.pontryagin.leg.plot(axis, mark="k.-", atol=1e-12, rtol=1e-12)
