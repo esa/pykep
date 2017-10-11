@@ -1,5 +1,5 @@
 from PyKEP.pontryagin._dynamics import _dynamics
-from PyKEP.core import MU_SUN, epoch
+from PyKEP.core import MU_SUN, epoch, AU
 from PyKEP.sims_flanagan import spacecraft, sc_state
 from scipy.integrate import ode
 import numpy as np
@@ -27,6 +27,8 @@ class leg(object):
         - alpha (``float``): Homotopy parametre.
         - bound (``bool``): Activates bounded control.
         - nec (``int``): Number of equality constraints.
+        - trajectory (``numpy.ndarray``): Array of nondimensional fullstates.
+        - times (``numpy.ndarray``): Vector of nondimensional integration times.
     """
 
     def __init__(self, t0=None, x0=None, l0=None, tf=None, xf=None, sc=spacecraft(1000, 0.3, 2500), mu=MU_SUN, freemass=True, freetime=True, alpha=1, bound=True):
@@ -47,17 +49,17 @@ class leg(object):
 
         Raises:
             - TypeError: If ``sc`` is not supplied as an instance of `PyKEP.sims_flanagan.spacecraft`.
-            - TypeError: If ``mu`` is neither supplied as an instance of ``float`` or ``int``.
+            - TypeError: If ``mu`` is neither supplied as an instance of ``float`` nor ``int``.
             - ValueError: If ``mu`` is not supplied as a positive number.
             - TypeError: If either ``freemass``, ``freetime``, or ``bound`` is not supplied as an instance of ``bool``.
             - AttributeError: If equality constraint dimension cannot be determined form ``freemass`` and ``freetime``.
-            - TypeError: If ``alpha`` is neither supplied as an instance of ``float`` or ``int``.
+            - TypeError: If ``alpha`` is neither supplied as an instance of ``float`` nor ``int``.
             - ValueError: If ``alpha`` is not in between 0 and 1.
             - ValueError: If ``alpha == 1`` and ``bound == False``. Control cannot be unbounded with mass-optimal control.
             - TypeError: If either ``t0`` or ``tf`` is not supplied as an instance of ``PyKEP.epoch``.
             - ValueError: If departure time, ``t0.mjd2000`` does not occur before arrival time, `t`f.mjd2000``.
             - TypeError: If either ``x0`` or ``xf`` is not supplied as an instance of ``PyKEP.sims_flanagan.sc_state``.
-            - TypeError: If costate, ``l0``, is neither supplied as an instance of ``numpy.ndarray``, ``list``, or ``tuple``.
+            - TypeError: If costate, ``l0``, is neither supplied as an instance of ``numpy.ndarray``, ``list``, nor ``tuple``.
             - TypeError: If costate, ``l0``, is does not have 7 elements. Each element of ``l0`` corresponds to the respective elements of ``x0``.
 
         Examples:
@@ -189,10 +191,10 @@ class leg(object):
     def _recorder(self, t, fs):
 
         # append time
-        self._times = np.append(self._times, t)
+        self.times = np.append(self.times, t)
 
         # append fullstate
-        self._trajectory = np.vstack((self._trajectory, fs))
+        self.trajectory = np.vstack((self.trajectory, fs))
 
     def set(self, t0, x0, l0, tf, xf):
         """Sets the departure and arrival boundary conditions of the trajectory.
@@ -210,7 +212,7 @@ class leg(object):
         Raises:
             - TypeError: If either ``t0`` or ``tf`` is not supplied as an instance of ``PyKEP.epoch``.
             - TypeError: If either ``x0`` or ``xf`` is not supllied as an instance of ``PyKEP.sims_flanagan.sc_state``.
-            - TypeError: If ``l0`` is neither supllied as a ``numpy.ndarray``, ``list``, or ``tuple``.
+            - TypeError: If ``l0`` is neither supllied as a ``numpy.ndarray``, ``list``, nor ``tuple``.
 
         .. note::
             If ``args`` were not supplied in ``__init__``, ``set`` must be called before calling ``mismatch_constraints``.
@@ -264,8 +266,8 @@ class leg(object):
         tf /= self._dynamics.T
 
         # clear trajectory history
-        self._times = np.empty((1, 0), dtype=np.float64)
-        self._trajectory = np.empty((0, 14), dtype=np.float64)
+        self.times = np.empty((1, 0), dtype=np.float64)
+        self.trajectory = np.empty((0, 14), dtype=np.float64)
 
         # set integration method
         self._integrator.set_integrator("dopri5", atol=atol, rtol=rtol)
@@ -302,7 +304,7 @@ class leg(object):
                 ceq = [drf, dvf, lmf, H] # freemass == True; freetime == True
 
         Raises:
-            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` or ``int``.
+            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` nor ``int``.
             - AttributeError: If boundary conditions ``t0``, ``x0``, ``l0``, ``tf``, and ``x0`` have not been set through either ``__init__`` or ``set``.
 
         .. note::
@@ -385,8 +387,8 @@ class leg(object):
         bvf = self.xf[3:6] / self._dynamics.V
 
         # propagated nondimensional arrival states
-        rf = self._trajectory[-1, 0:3]
-        vf = self._trajectory[-1, 3:6]
+        rf = self.trajectory[-1, 0:3]
+        vf = self.trajectory[-1, 3:6]
 
         # nondimensional position and velocity arrival mismatch
         drf = rf - brf
@@ -394,14 +396,14 @@ class leg(object):
 
         # free arrival mass
         if self.freemass:
-            lmf = self._trajectory[-1, 13]
+            lmf = self.trajectory[-1, 13]
         # fixed arrival mass
         else:
-            dmf = self._trajectory[-1, 6] - self.xf[6] / self._dynamics.M
+            dmf = self.trajectory[-1, 6] - self.xf[6] / self._dynamics.M
 
         # free arrival time
         if self.freetime:
-            Hf = self._dynamics._hamiltonian(self._trajectory[-1])
+            Hf = self._dynamics._hamiltonian(self.trajectory[-1])
         # fixed arrival time
         else:
             pass
@@ -447,7 +449,7 @@ class leg(object):
                  [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
 
         Raises:
-            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` or ``int``.
+            - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` nor ``int``.
             - AttributeError: If boundary conditions ``t0``, ``x0``, ``l0``, ``tf``, and ``x0`` have not been set through either ``__init__`` or ``set``.
 
         .. note::
@@ -485,25 +487,25 @@ class leg(object):
         self._propagate(atol, rtol)
 
         # nondimensional times
-        t = self._times
+        t = self.times
         # mjs2000 times
         t *= self._dynamics.T
         # mjd2000 times
         t /= 24 * 60 * 60
         # reshape
-        t = self._times.reshape(t.size, 1)
+        t = self.times.reshape(t.size, 1)
 
         # controls
         u = np.asarray([self._dynamics._pontryagin(fs)
-                        for fs in self._trajectory])
+                        for fs in self.trajectory])
 
         # get Hamiltonian
         H = np.asarray([self._dynamics._hamiltonian(fs)
-                        for fs in self._trajectory])
+                        for fs in self.trajectory])
         H = H.reshape(H.size, 1)
 
         # get trajectory
-        traj = self._trajectory
+        traj = self.trajectory
         # redimensionalise trajectory
         traj[:, 0:3] *= self._dynamics.L
         traj[:, 3:6] *= self._dynamics.V
@@ -514,7 +516,7 @@ class leg(object):
 
         return traj
 
-    def plot(self, axis, mark="k.-", atol=1e-12, rtol=1e-12):
+    def plot(self, axis, mark="k.-", atol=1e-12, rtol=1e-12, units=AU):
         """Plots trajectory onto a 3D axis.
 
         Args:
@@ -522,12 +524,12 @@ class leg(object):
             - mark (``str``): Marker style.
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - units (``float``, ``int``): Length unit by which to normalise data.
 
         Raises:
             - TypeError: If ``axis`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
             - TypeError: If ``mark`` is not an instance of ``str``.
-            - TypeError: if ``atol`` is neither an instance of ``float`` or ``int``.
-            - TypeError: if ``rtol`` is neither an instance of ``float`` or ``int``.
+            - TypeError: If either ``atol``, ``rtol``, or ``units`` is neither an instance of ``float`` nor ``int``.
 
         Examples:
             >>> sc = pk.sims_flanagan.spacecraft(1000, 0.3, 2500) # spacecraft
@@ -551,16 +553,19 @@ class leg(object):
             raise TypeError("Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
         elif not isinstance(mark, str):
             raise TypeError("Mark must be instance of string.")
-        elif not all((isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol]):
-            raise TypeError("Both atol and rtol must be either instances of float or int.")
+        elif not all((isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol, units]):
+            raise TypeError("atol, rtol, and units must be either instances of float or int.")
         else:
             pass
 
         # get trajectory
-        traj = self.get_states(atol=atol, rtol=rtol)
+        traj = self.get_states(atol=atol, rtol=rtol)[:, 1:4]
+
+        # normalise
+        traj /= units
 
         # plot trajectory
-        axis.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
+        axis.plot(traj[:,0], traj[:,1], traj[:,2], mark)
 
 if __name__ == "__main__":
     import PyKEP as pk

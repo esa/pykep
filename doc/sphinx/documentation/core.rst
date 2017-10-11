@@ -9,7 +9,7 @@ The core module, imported in the main PyKEP namespace, contains the classes and 
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
-:class:`PyKEP.epoch`                            class           represents an epoch (i.e. a fixed point in time) 
+:class:`PyKEP.epoch`                            class           represents an epoch (i.e. a fixed point in time)
 :func:`PyKEP.epoch_from_string`                 function        helper function to construct an epoch from a string containing a date in the format YYYY-MM-DD HH:MM:SS
 :func:`PyKEP.epoch_from_iso_string`             function        helper function to construct an epoch from a string containing a date in the ISO format YYYYMMDDTHHMMSS
 :class:`PyKEP.lambert_problem`                  class           solves the multirevolution lambert problem
@@ -20,6 +20,7 @@ Name                                            Type            Description
 :func:`PyKEP.fb_prop`                           function        propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
 :func:`PyKEP.barker`                            function        computes the (parabolic) time-of-flight from the Barker equation
 :func:`PyKEP.ic2par`                            function        Transforms r and v into the osculating orbital elements
+:func:`PyKEP.par2ic`                            function        Transforms osculating orbital elements into r and v
 =========================================       =========       ================================================
 
 
@@ -87,3 +88,7 @@ Detailed Documentation
 ------------
 
 .. autofunction:: PyKEP.ic2par(*args)
+
+------------
+
+.. autofunction:: PyKEP.par2ic(*args)

@@ -12,3 +12,8 @@ if (__extensions__['pygmo']):
     from PyKEP.trajopt._mga_lt_nep import mga_lt_nep
     from PyKEP.trajopt._mr_lt_nep import mr_lt_nep
     from PyKEP.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
+
+if (__extensions__['pygmo'] and __extensions__['mplot3d'] and __extensions__['scipy']):
+    from PyKEP.trajopt._indirect import *
+else:
+    pass
