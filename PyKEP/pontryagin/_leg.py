@@ -3,6 +3,7 @@ from PyKEP.core import MU_SUN, epoch, AU
 from PyKEP.sims_flanagan import spacecraft, sc_state
 from scipy.integrate import ode
 import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -39,7 +40,7 @@ class leg(object):
             - x0 (``PyKEP.sims_flanagan.sc_state``, ``None``): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].
             - l0 (``numpy.ndarray``, ``list``, ``tuple``, ``None``): Costate variables [ND, ND, ND, ND, ND, ND, ND].
             - tf (``PyKEP.epoch``, ``None``): Arrival time [mjd2000].
-            - xf (``PyKEP.epoch``, ``None``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
+            - xf (``PyKEP.sims_flanagan.sc_state``, ``None``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
             - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
             - mu (``float``, ``int``): Gravitational parametre of primary body [m^3/s^2].
             - freemass (``bool``): Activates final mass transversality condition.
@@ -249,10 +250,10 @@ class leg(object):
     def _propagate(self, atol, rtol):
 
         # nondimensionalise departure state
-        x0 = self.x0
+        x0       = np.copy(self.x0) #NOTE: very important
         x0[0:3] /= self._dynamics.L
         x0[3:6] /= self._dynamics.V
-        x0[6] /= self._dynamics.M
+        x0[6]   /= self._dynamics.M
 
         # nondimensional fullstate
         fs0 = np.hstack((x0, self.l0))
@@ -509,14 +510,14 @@ class leg(object):
         # redimensionalise trajectory
         traj[:, 0:3] *= self._dynamics.L
         traj[:, 3:6] *= self._dynamics.V
-        traj[:, 6] *= self._dynamics.M
+        traj[:,   6] *= self._dynamics.M
 
         # assemble full trajectory history
         traj = np.hstack((t, traj, u, H))
 
         return traj
 
-    def plot(self, axis, mark="k.-", atol=1e-12, rtol=1e-12, units=AU):
+    def plot_traj(self, axis, mark="k.-", atol=1e-11, rtol=1e-11, units=AU):
         """Plots trajectory onto a 3D axis.
 
         Args:
@@ -550,11 +551,13 @@ class leg(object):
         """
 
         if not isinstance(axis, Axes3D):
-            raise TypeError("Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
+            raise TypeError(
+                "Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
         elif not isinstance(mark, str):
             raise TypeError("Mark must be instance of string.")
         elif not all((isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol, units]):
-            raise TypeError("atol, rtol, and units must be either instances of float or int.")
+            raise TypeError(
+                "atol, rtol, and units must be either instances of float or int.")
         else:
             pass
 
@@ -565,7 +568,49 @@ class leg(object):
         traj /= units
 
         # plot trajectory
-        axis.plot(traj[:,0], traj[:,1], traj[:,2], mark)
+        axis.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
+
+    def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False):
+
+        keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'u', 'ux', 'uy', 'uz', 'H']
+
+        if not all([isinstance(dim, str) for dim in [x, y, mark]]):
+            raise TypeError("x, y, and mark must be supplied as instances of str.")
+        elif not all([dim in keys for dim in [x, y]]):
+            raise ValueError("Both x and y must be in " + str(keys) + ".")
+        elif not all([(isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol, unitsx, unitsy]]):
+            raise TypeError("atol, rtol, unitsx, and unitsy must be supplied as an instance of either int or float.")
+        elif not all([(isinstance(label, str) or isinstance(label, bool)) for label in [xlabel, ylabel]]):
+            raise TypeError("xlabel and ylabel must be supplied an instance of either str or bool.")
+        else:
+
+            # get trajectory
+            traj = self.get_states(atol=atol, rtol=rtol)
+
+            # get components and normalise
+            xi, yi = keys.index(x), keys.index(y)
+
+            # create figure
+            plt.figure()
+
+            # plot
+            plt.plot(traj[:, xi]/unitsx, traj[:, yi]/unitsy, mark)
+
+            # labels
+            if isinstance(xlabel, str):
+                plt.xlabel(xlabel)
+            elif xlabel is True:
+                plt.xlabel(x)
+
+            if isinstance(ylabel, str):
+                plt.ylabel(ylabel)
+            elif ylabel is True:
+                plt.ylabel(y)
+
+            plt.show()
+
+
+
 
 if __name__ == "__main__":
     import PyKEP as pk
@@ -581,7 +626,7 @@ if __name__ == "__main__":
     r0, v0 = p0.eph(t0)
     rf, vf = pf.eph(tf)
     x0 = pk.sims_flanagan.sc_state(r0, v0, sc.mass)
-    xf = pk.sims_flanagan.sc_state(rf, vf, sc.mass/10)
+    xf = pk.sims_flanagan.sc_state(rf, vf, sc.mass / 10)
     l0 = np.random.randn(7)
     l = leg(t0, x0, l0, tf, xf)
 
