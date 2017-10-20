@@ -19,7 +19,7 @@ class _indirect_base(object):
 
         # indirect leg
         self.leg = pk.pontryagin.leg(
-            sc=self.sc, mu=mu, freetime=freetime, alpha=alpha, bound=bound
+            sc=self.sc, mu=mu, freemass=freemass, freetime=freetime, alpha=alpha, bound=bound
         )
 
         # integration parametres
@@ -64,6 +64,16 @@ class _indirect_base(object):
         return self.leg.nec
 
     def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU):
+        """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Solution chromosome.
+            - mark (``string``): matplotlib marker.
+            - atol (``float``, ``int``): absolute integration tolerance.
+            - rtol (``float``, ``int``): relative integration tolerance.
+            - units (``float``, ``int``): units by which to scale the trajectory dimensions.
+
+        """
 
         # set problem
         self.fitness(z)
@@ -198,7 +208,6 @@ class indirect_pt2pt(_indirect_base):
         pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
         pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
 
-
 class indirect_pl2pl(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two planets.
 
@@ -234,7 +243,7 @@ class indirect_pl2pl(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
-            atol, rtol, t0lb, t0ub, Tlb, Tub
+            atol, rtol, t0lb=t0lb, t0ub=t0ub, Tlb=Tlb, Tub=Tub
         )
 
         # planets
@@ -300,7 +309,6 @@ class indirect_pl2pl(_indirect_base):
         pk.orbit_plots.plot_planet(
             self.pf, t0=tf, units=units, ax=axis, color=(0.8, 0.8, 0.8))
 
-
 class indirect_or2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two orbits.
 
@@ -332,19 +340,11 @@ class indirect_or2or(_indirect_base):
 
         """
 
-
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, atol, rtol, freemass, freetime, alpha, bound, mu
+            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            atol, rtol, Tlb=Tlb, Tub=Tub, M0lb=M0lb, M0ub=M0ub, Mflb=Mflb, Mfub=Mfub
         )
-
-        # bounds
-        self.Tlb = float(Tlb)
-        self.Tub = float(Tub)
-        self.M0lb = M0lb
-        self.M0ub = M0ub
-        self.Mflb = Mflb
-        self.Mfub = Mfub
 
         # Keplerian elements
         self.elem0 = np.asarray(elem0)
@@ -387,12 +387,11 @@ class indirect_or2or(_indirect_base):
         return np.hstack(([-mf], ceq))
 
     def get_bounds(self):
-        pi = 3.14159265359
         lb = [self.Tlb, self.M0lb, self.Mflb, *[-1e2] * 7]
         ub = [self.Tub, self.M0ub, self.Mfub, *[1e2] * 7]
         return (lb, ub)
 
-    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU):
+    def _plot_traj(self, z, axis, units):
         """Plots spacecraft trajectory.
 
         Args:
@@ -405,19 +404,6 @@ class indirect_or2or(_indirect_base):
             >>> prob.extract(PyKEP.trajopt.indirect_or2or).plot_traj(pop.champion_x)
         """
 
-        # set up figure
-        fig = plt.figure()
-        axis = fig.gca(projection='3d')
-
-        # set problem
-        self.fitness(z)
-
-        # sun
-        axis.scatter([0], [0], [0], color='y')
-
-        # leg
-        self.leg.plot(axis, mark, atol, rtol, units)
-
         # times
         t0 = pk.epoch(0)
         tf = pk.epoch(z[0])
@@ -426,16 +412,11 @@ class indirect_or2or(_indirect_base):
         kep0 = pk.planet.keplerian(t0, self.elem0)
         kepf = pk.planet.keplerian(tf, self.elemf)
 
-
         # planets
         pk.orbit_plots.plot_planet(
             kep0, t0=t0, units=units, ax=axis, color=(0.8, 0.8, 0.8))
         pk.orbit_plots.plot_planet(
             kepf, t0=tf, units=units, ax=axis, color=(0.8, 0.8, 0.8))
-
-        # show plot
-        plt.show()
-
 
 class indirect_pt2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between a Cartesian state and an orbit.
@@ -447,7 +428,7 @@ class indirect_pt2or(_indirect_base):
 
     """
 
-    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_pt2or`` problem.
 
         Args:
@@ -470,16 +451,14 @@ class indirect_pt2or(_indirect_base):
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, atol, rtol, freemass, freetime, alpha, bound, mu
+            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            atol, rtol, Tlb=Tlb, Tub=Tub, Mflb=Mflb, Mfub=Mfub
         )
 
-        # bounds
-        self.Tlb = float(Tlb)
-        self.Tub = float(Tub)
 
         # departure state and arrival Keplerian elements
-        self.x0 = np.asarray(x0)
-        self.elemf = np.asarray(elemf)
+        self.x0 = np.asarray(x0, np.float64)
+        self.elemf = np.asarray(elemf, np.float64)
 
     def fitness(self, z):
 
@@ -516,11 +495,11 @@ class indirect_pt2or(_indirect_base):
 
     def get_bounds(self):
         pi = 3.14159265359
-        lb = [self.Tlb, -4 * pi, *[-1e2] * 7]
-        ub = [self.Tub, 4 * pi, *[1e2] * 7]
+        lb = [self.Tlb, self.Mflb, *[-1e2] * 7]
+        ub = [self.Tub, self.Mfub, *[1e2] * 7]
         return (lb, ub)
 
-    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU):
+    def _plot_traj(self, z, axis, units=pk.AU):
         """Plots spacecraft trajectory.
 
         Args:
@@ -533,28 +512,17 @@ class indirect_pt2or(_indirect_base):
             >>> prob.extract(PyKEP.trajopt.indirect_pt2or).plot_traj(pop.champion_x)
         """
 
-        # set up figure
-        fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        # times
+        t0 = pk.epoch(0)
+        tf = pk.epoch(z[1])
 
-        # set problem
-        self.fitness(z)
+        # Keplerian elements
+        elem0 = pk.ic2par(self.x0[0:3], self.x0[3:6], self.leg.mu)
 
-        # sun
-        axis.scatter([0], [0], [0], color='y')
-
-        # leg
-        self.leg.plot(axis, mark, atol, rtol, units)
-
-        # Keplerian points
-        kep0 = pk.planet.keplerian(t0, pk.ic2par(
-            self.x0[0:3], self.x0[3:6], mu=self.mu))
+        # Keplerian elements
+        kep0 = pk.planet.keplerian(t0, elem0)
         kepf = pk.planet.keplerian(tf, self.elemf)
 
-        # plot planets
-        pk.orbit_plots.plot_planet(
-            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
-        pk.orbit_plots.plot_planet(
-            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
-
-        plt.show()
+        # plot departure and arrival
+        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
