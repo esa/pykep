@@ -50,7 +50,7 @@ setup(name=NAME,
     platforms=PLATFORMS,
     install_requires=INSTALL_REQUIRES,
     ext_modules = [extension_module],
-    packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.trajopt', 'PyKEP.util'],
+    packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.pontryagin', 'PyKEP.trajopt', 'PyKEP.util'],
     # Include pre-compiled extension
     package_data={
                 'PyKEP.core': ['_core.so'],
