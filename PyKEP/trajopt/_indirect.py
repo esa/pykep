@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 class _indirect_base(object):
+    """Base class for indirect trajectory optimisation problems.
+
+    All inheriting classes will adopt ``plot_traj`` and ``plot_control``.
+    """
 
     def __init__(
         self, mass, thrust, isp,
@@ -67,7 +71,7 @@ class _indirect_base(object):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
-            - z (``list``, ``tuple``, ``numpy.ndarray``): Solution chromosome.
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
             - mark (``string``): matplotlib marker.
             - atol (``float``, ``int``): absolute integration tolerance.
             - rtol (``float``, ``int``): relative integration tolerance.
@@ -95,6 +99,15 @@ class _indirect_base(object):
         plt.show()
 
     def plot_control(self, z, mark="k.-", atol=1e-12, rtol=1e-12):
+        """Plots the control profile of the trajectory, as a function of time.
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+            - mark (``string``): matplotlib marker.
+            - atol (``float``, ``int``): absolute integration tolerance.
+            - rtol (``float``, ``int``): relative integration tolerance.
+
+        """
 
         # set problem
         self.fitness(z)
@@ -119,10 +132,7 @@ class indirect_pt2pt(_indirect_base):
         z = [t0, T, l0]
     """
 
-    def __init__(
-        self, x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub,
-        freemass=True, freetime=True, alpha=1, bound=True, atol=1e-10, rtol=1e-10
-    ):
+    def __init__(self, x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, atol=1e-10, rtol=1e-10):
         """Initialises ``PyKEP.trajopt.indirect_pt2pt`` problem.
 
         Args:
@@ -332,6 +342,10 @@ class indirect_or2or(_indirect_base):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
+            - M0lb (``float``, ``int``): Minimum departure mean anomoly [rad].
+            - M0ub (``float``, ``int``): Maximum departure mean anomoly [rad].
+            - Mflb (``float``, ``int``): Minimum arrival mean anomoly [rad].
+            - M0fb (``float``, ``int``): Maximum arrival mean anomoly [rad].
             - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.

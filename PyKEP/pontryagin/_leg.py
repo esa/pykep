@@ -488,7 +488,7 @@ class leg(object):
         self._propagate(atol, rtol)
 
         # nondimensional times
-        t = self.times
+        t = np.copy(self.times)
         # mjs2000 times
         t *= self._dynamics.T
         # mjd2000 times
@@ -506,7 +506,7 @@ class leg(object):
         H = H.reshape(H.size, 1)
 
         # get trajectory
-        traj = self.trajectory
+        traj = np.copy(self.trajectory)
         # redimensionalise trajectory
         traj[:, 0:3] *= self._dynamics.L
         traj[:, 3:6] *= self._dynamics.V
@@ -571,6 +571,23 @@ class leg(object):
         axis.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
 
     def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False):
+        """Plots in two dimensions of the leg's trajectory data.
+        ::
+
+            keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'u', 'ux', 'uy', 'uz', 'H']
+
+        Args:
+            - x (``str``): x-axis dimension in ``keys``.
+            - y (``str``): y-axis dimension in ``keys``.
+            - mark (``str``): Marker style.
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - unitsx (``float``, ``int``): Unit by which to normalise x-axis data.
+            - unitsy (``float``, ``int``): Unit by which to normalise y-axis data.
+            - xlabel (``str``, ``bool``): x-axis label. If label is ``False``, no label is placed; if ``True``, dimension name is placed.
+            - ylabel (``str``, ``bool``): y-axis label. If label is ``False``, no label is placed; if ``True``, dimension name is placed.
+
+        """
 
         keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'u', 'ux', 'uy', 'uz', 'H']
 
@@ -608,29 +625,3 @@ class leg(object):
                 plt.ylabel(y)
 
             plt.show()
-
-
-
-
-if __name__ == "__main__":
-    import PyKEP as pk
-    import matplotlib as mpl
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-
-    sc = pk.sims_flanagan.spacecraft(1000, 0.3, 2500)
-    p0 = pk.planet.jpl_lp("earth")
-    pf = pk.planet.jpl_lp("mars")
-    t0 = pk.epoch(0)
-    tf = pk.epoch(1000)
-    r0, v0 = p0.eph(t0)
-    rf, vf = pf.eph(tf)
-    x0 = pk.sims_flanagan.sc_state(r0, v0, sc.mass)
-    xf = pk.sims_flanagan.sc_state(rf, vf, sc.mass / 10)
-    l0 = np.random.randn(7)
-    l = leg(t0, x0, l0, tf, xf)
-
-    fig = plt.figure()
-    axis = fig.gca(projection='3d')
-    l.plot(axis)
-    plt.show()

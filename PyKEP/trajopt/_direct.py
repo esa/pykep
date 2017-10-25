@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 class _direct_base(object):
+    """Base class for direct trajectory optimisation problems.
+
+    All inheriting classes will adopt, ``plot_traj``, ``plot_control``, and ``get_traj``.
+    """
 
     def __init__(self, mass, thrust, isp, nseg, mu=pk.MU_SUN, hf=True):
 
@@ -33,6 +37,13 @@ class _direct_base(object):
         return self.nseg
 
     def plot_traj(self, z, units=pk.AU, N=20):
+        """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+            - units (``float``, ``int``): units by which to scale the trajectory dimensions.
+            - N (``int``): Number of points to be plotted along one arc.
+        """
 
         # set problem
         self.fitness(z)
@@ -54,6 +65,14 @@ class _direct_base(object):
         plt.show()
 
     def plot_control(self, z, mark="k.-", time=True):
+        """Plots the control profile of the trajectory, as a function of time.
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+            - mark (``string``): matplotlib marker.
+            - time (``bool``): If ``True``, x-axis is time in ``mjd2000``. If ``False``, x-axis is node index.
+
+        """
 
         # data
         traj = self.get_traj(z)
@@ -88,6 +107,16 @@ class _direct_base(object):
         plt.show()
 
     def get_traj(self, z):
+        """Retrieves the trajectory information.
+        ::
+
+            traj = [[t0, x0, y0, z0, vx0, vy0, vz0, m0, u0, ux0, uy0, uz0]
+                    ...
+                    [tf, xf, yf, zf, vxf, vyf, vzf, mf, uf, uxf, uyf, uzf]]
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+        """
 
         # set leg
         self.fitness(z)
@@ -124,15 +153,33 @@ class _direct_base(object):
         return np.hstack((t.reshape((self.nseg, 1)), r, v, m.reshape((self.nseg, 1)), umag, u))
 
 class direct_or2or(_direct_base):
-    """This class represents a direct transfer problem between two orbits.
+    """Represents a direct transcription transfer between orbits.
 
-    The decision is
+    This problem works by manipulating the time of flight ``T``, and mean anomolies ``M0, Mf``.
     ::
 
-        z = [T, M0, Mf, u]
+        z = [T, M0, Mf, controls]
     """
 
     def __init__(self, elem0, elemf, mass, thrust, isp, nseg, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, mu=pk.MU_SUN, hf=True):
+        """Initialises a direct transcription orbit to orbit problem.
+
+        Args:
+            - elem0 (``list``, ``tuple``, ``numpy.ndarray``): Departure Keplerian elements. Mean will be manipulated.
+            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements. Mean will be manipulated.
+            - mass (``float``, ``int``): Spacecraft wet mass [kg].
+            - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
+            - isp (``float``, ``int``): Spacecraft specific impulse [s].
+            - nseg (``int``): Number of colocation nodes.
+            - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
+            - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
+            - M0lb (``float``, ``int``): Minimum departure mean anomoly [rad].
+            - M0ub (``float``, ``int``): Maximum departure mean anomoly [rad].
+            - Mflb (``float``, ``int``): Minimum arrival mean anomoly [rad].
+            - M0fb (``float``, ``int``): Maximum arrival mean anomoly [rad].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - hf (``bool``): ``True`` for continous thrust, ``False`` for impulsive thrust.
+        """
 
         if all([(isinstance(elem, list) or isinstance(elem, tuple) or isinstance(elem, np.ndarray)) for elem in [elem0, elemf]]):
             elem0 = np.asarray(elem0, np.float64)

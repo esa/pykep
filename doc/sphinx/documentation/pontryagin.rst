@@ -35,7 +35,7 @@ Name                                            Type            Description
 Detailed Documentation
 ======================
 
-.. autoclass:: PyKEP.pontryagin.leg(*args)
+.. autoclass:: PyKEP.pontryagin.leg(object)
 
   .. automethod:: PyKEP.pontryagin.leg.__init__(t0=None, x0=None, l0=None, tf=None, xf=None, sc=PyKEP.sims_flanagan.spacecraft(1000, 0.3, 2500), mu=PyKEP.MU_SUN, freemass=True, freetime=True, alpha=1, bound=True)
 
@@ -45,4 +45,6 @@ Detailed Documentation
 
   .. automethod:: PyKEP.pontryagin.leg.get_states(atol=1e-12, rtol=1e-12)
 
-  .. automethod:: PyKEP.pontryagin.leg.plot(axis, mark="k.-", atol=1e-12, rtol=1e-12)
+  .. automethod:: PyKEP.pontryagin.leg.plot_traj(axis, mark="k.-", atol=1e-11, rtol=1e-11, units=PyKEP.AU)
+
+  .. automethod:: PyKEP.pontryagin.leg.plot(x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False)

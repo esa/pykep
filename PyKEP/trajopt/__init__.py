@@ -14,7 +14,7 @@ if (__extensions__['pygmo']):
     from PyKEP.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
 
 if (__extensions__['pygmo'] and __extensions__['mplot3d'] and __extensions__['scipy']):
-    from PyKEP.trajopt._indirect import indirect_pt2pt, indirect_pl2pl, indirect_or2or, indirect_pt2or
+    from PyKEP.trajopt._indirect import _indirect_base, indirect_pt2pt, indirect_pl2pl, indirect_or2or, indirect_pt2or
 
 if (__extensions__['pygmo'] and __extensions__['mplot3d']):
-    from PyKEP.trajopt._direct import direct_or2or
+    from PyKEP.trajopt._direct import _direct_base, direct_or2or
