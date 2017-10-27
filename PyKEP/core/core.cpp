@@ -657,7 +657,7 @@ BOOST_PYTHON_MODULE(_core) {
 
   def("par2ic", &par2ic_wrapper,
       "PyKEP.par2ic(E,mu)\n\n"
-      "- kep: six Keplerian elements\n"
+      "- kep: osculating keplerian elements a,e,i,W,w,E\n"
       "- mu: gravity parameter\n\n"
       "Returns cartesian elements from Keplerian elements"
   );

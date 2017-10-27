@@ -110,7 +110,7 @@ class leg(object):
             self.mu = float(mu)
 
         # dynamics
-        self._dynamics = _dynamics(sc=self.spacecraft, mu=mu)
+        self._dynamics = _dynamics(sc=self.spacecraft, mu=mu, alpha=alpha, bound=bound)
 
         # check freetime, freemass, and bound
         if not all([isinstance(param, bool) for param in [freemass, freetime, bound]]):
@@ -271,7 +271,7 @@ class leg(object):
         self.trajectory = np.empty((0, 14), dtype=np.float64)
 
         # set integration method
-        self._integrator.set_integrator("dopri5", atol=atol, rtol=rtol)
+        self._integrator.set_integrator("dop853", atol=atol, rtol=rtol)
 
         # set recorder
         self._integrator.set_solout(self._recorder)

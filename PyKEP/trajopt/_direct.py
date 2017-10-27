@@ -139,7 +139,7 @@ class _direct_base(object):
             elif i in [1, 2]:
                 x[i].reshape((self.nseg, 3))
             else:
-                raise RuntimeError("Något är fel!")
+                raise RuntimeError("Something is worng!")
 
         # unpack states
         t, r, v, m = x
@@ -155,28 +155,28 @@ class _direct_base(object):
 class direct_or2or(_direct_base):
     """Represents a direct transcription transfer between orbits.
 
-    This problem works by manipulating the time of flight ``T``, and mean anomolies ``M0, Mf``.
+    This problem works by manipulating the time of flight ``T``, final mass ``mf`` and mean anomolies ``M0, Mf``.
     ::
 
-        z = [T, M0, Mf, controls]
+        z = [T, mf, M0, Mf, controls]
     """
 
-    def __init__(self, elem0, elemf, mass, thrust, isp, nseg, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, mu=pk.MU_SUN, hf=True):
+    def __init__(self, elem0, elemf, mass, thrust, isp, nseg, Tlb, Tub, E0lb, E0ub, Eflb, Efub, mu=pk.MU_SUN, hf=True):
         """Initialises a direct transcription orbit to orbit problem.
 
         Args:
-            - elem0 (``list``, ``tuple``, ``numpy.ndarray``): Departure Keplerian elements. Mean will be manipulated.
-            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements. Mean will be manipulated.
+            - elem0 (``list``, ``tuple``, ``numpy.ndarray``): Departure Keplerian elements. The eccentric anomlay will be manipulated.
+            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements. The eccentric anomlay will be manipulated.
             - mass (``float``, ``int``): Spacecraft wet mass [kg].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
             - nseg (``int``): Number of colocation nodes.
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - M0lb (``float``, ``int``): Minimum departure mean anomoly [rad].
-            - M0ub (``float``, ``int``): Maximum departure mean anomoly [rad].
-            - Mflb (``float``, ``int``): Minimum arrival mean anomoly [rad].
-            - M0fb (``float``, ``int``): Maximum arrival mean anomoly [rad].
+            - E0lb (``float``, ``int``): Minimum departure eccentric anomoly [rad].
+            - E0ub (``float``, ``int``): Maximum departure eccentric anomoly [rad].
+            - Eflb (``float``, ``int``): Minimum arrival eccentric anomoly [rad].
+            - E0fb (``float``, ``int``): Maximum arrival eccentric anomoly [rad].
             - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
             - hf (``bool``): ``True`` for continous thrust, ``False`` for impulsive thrust.
         """
@@ -205,30 +205,30 @@ class direct_or2or(_direct_base):
         _direct_base.__init__(self, mass, thrust, isp, nseg, mu, hf)
 
         self.mu = mu
-        self.M0lb = M0lb
-        self.M0ub = M0ub
-        self.Mflb = Mflb
-        self.Mfub = Mfub
+        self.E0lb = E0lb
+        self.E0ub = E0ub
+        self.Eflb = Eflb
+        self.Efub = Efub
 
     def fitness(self, z):
 
-        # times
+        # epochs (mjd2000)
         t0 = pk.epoch(0)
         tf = pk.epoch(z[0])
 
         # final mass
         mf = z[1]
 
-        # mean anomolies
-        M0 = z[2]
-        Mf = z[3]
+        # eccentric anomolies
+        E0 = z[2]
+        Ef = z[3]
 
         # controls
         u = z[4:]
 
         # set Keplerian elements
-        self.elem0[5] = M0
-        self.elemf[5] = Mf
+        self.elem0[5] = E0
+        self.elemf[5] = Ef
 
         # compute Cartesian states
         r0, v0 = pk.par2ic(self.elem0, self.mu)
@@ -256,8 +256,8 @@ class direct_or2or(_direct_base):
 
     def get_bounds(self):
         pi = 3.14159265359
-        lb = [self.Tlb, self.sc.mass/10, self.M0lb, self.Mflb, *(-1, -1, -1)*self.nseg]
-        ub = [self.Tub, self.sc.mass, self.M0ub, self.Mfub, *(1, 1, 1)*self.nseg]
+        lb = [self.Tlb, self.sc.mass/10, self.E0lb, self.Eflb, *(-1, -1, -1)*self.nseg]
+        ub = [self.Tub, self.sc.mass, self.E0ub, self.Efub, *(1, 1, 1)*self.nseg]
         return (lb, ub)
 
     def _plot_traj(self, z, axis, units):

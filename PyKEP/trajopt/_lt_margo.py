@@ -4,10 +4,10 @@ import math
 
 class lt_margo:
     """
-    This class is a PyGMO2 problem representing a low-thrust interplanetary trajectory from the Earth (or from the
-    Sun-Earth L1 or L2 Lagrangian point) to a target NEO.
-    The trajectory is modeled using the Sims-Flanagan model, extended to include the Earth's gravity (which is
-    assumed constant along each segment).
+    This class can be used as a User Defined Problem (UDP) in the pygmo2 software and if succesfully solved,
+    represents a low-thrust interplanetary trajectory from the Earth (or from the
+    Sun-Earth L1 or L2 Lagrangian point) to a target NEO. The trajectory is modeled using the Sims-Flanagan model, 
+    extended to include the Earth's gravity (assumed constant along each segment).
     The propulsion model can be both nuclear (NEP) or solar (SEP).
 
     This problem was developed during the M-ARGO CDF study.

@@ -8,10 +8,10 @@ from PyKEP import __extensions__
 
 if (__extensions__['pygmo']):
     from PyKEP.trajopt._lt_margo import lt_margo
-    from PyKEP.trajopt._mga_1dsm import mga_1dsm
-    from PyKEP.trajopt._mga_lt_nep import mga_lt_nep
-    from PyKEP.trajopt._mr_lt_nep import mr_lt_nep
-    from PyKEP.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
+    #from PyKEP.trajopt._mga_1dsm import mga_1dsm
+    #from PyKEP.trajopt._mga_lt_nep import mga_lt_nep
+    #from PyKEP.trajopt._mr_lt_nep import mr_lt_nep
+    #from PyKEP.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
 
 if (__extensions__['pygmo'] and __extensions__['mplot3d'] and __extensions__['scipy']):
     from PyKEP.trajopt._indirect import _indirect_base, indirect_pt2pt, indirect_pl2pl, indirect_or2or, indirect_pt2or

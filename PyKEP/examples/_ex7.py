@@ -1,18 +1,8 @@
-import PyKEP as pk
-import pygmo as pg
-import pygmo_plugins_nonfree as pg7
-import numpy as np
-
-# algorithm
-uda = pg7.snopt7(True, "/usr/lib/libsnopt7_c.so")
-uda.set_integer_option("Major iterations limit", 4000)
-uda.set_integer_option("Iterations limit", 40000)
-uda.set_numeric_option("Major optimality tolerance", 1e-2)
-uda.set_numeric_option("Major feasibility tolerance", 1e-8)
-algo = pg.algorithm(uda)
-
-
 def run_example7():
+    import PyKEP as pk
+    import pygmo as pg
+    import pygmo_plugins_nonfree as pg7
+    import numpy as np
 
     # planets [names]
     p0_name, pf_name = "earth", "mars"
@@ -23,14 +13,14 @@ def run_example7():
 
     # time of flight bounds [days]
     Tlb = 200
-    Tub = 1000
+    Tub = 500
 
-    # mean anomoly bounds
+    # eccentric anomoly bounds
     pi = 3.14159265359
-    M0lb = 0
-    M0ub = 4*pi
-    Mflb = 0
-    Mfub = 4*pi
+    E0lb = -4*pi
+    E0ub = 4*pi
+    Eflb = -4*pi
+    Efub = 4*pi
 
     # planets
     p0 = pk.planet.jpl_lp(p0_name)
@@ -59,56 +49,49 @@ def run_example7():
     thrust = 0.3
     isp = 2500
 
-    # number of segements
-    nseg = 50
-
-    # gravitational parametre
+    # gravitational parameter
     mu = pk.MU_SUN
 
     # high_fidelity transcription
-    hf = True
-
-    # direct orbit to orbit problem
-    print("First solving direct transcription orbit to orbit problem.")
-    udp = pk.trajopt.direct_or2or(
-        elem0, elemf, mass, thrust, isp, nseg, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, mu, hf)
-    prob = pg.problem(udp)
-
-    # popoulation
-    pop = pg.population(prob, 1)
-
-    # optimise
-    algo = pg.algorithm(uda)
-    pop = algo.evolve(pop)
-    print(pop.champion_x)
-
-    # plot trajectory
-    udp.plot_traj(pop.champion_x)
-
-    # plot control
-    udp.plot_control(pop.champion_x)
-
-    # get useful information
-    T = pop.champion_x[0]
-    mf = pop.champion_x[1]
-    M0 = pop.champion_x[2]
-    Mf = pop.champion_x[3]
-
-    # indirect orbit to orbit problem
-    print("Secondly solving indirect transcription orbit to orbit problem with quadratic control.")
-    udp = pk.trajopt.indirect_or2or(elem0, elemf, mass, thrust, isp, 1e-10, 1e-10, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, True, True, 1, True, mu)
-    prob = pg.problem(udp)
+    hf = False
 
     # guess
-    z = np.hstack(([T, M0, Mf, np.random.randn(7)]))
+    z = np.array(
+        [  3.53926540e+02  , 3.06963808e-01  , 1.00956769e+00  , 8.24089827e+00,
+  -1.36968187e+01 , -3.32237224e+00 ,  1.36158790e+01,   7.94030531e+00,
+  -2.51714050e+00 ,  3.42226543e+00]
+)
+
+    #z = z + z * np.random.randn(len(z)) * 0.1
+
+    # indirect orbit to orbit problem
+    print("Solving indirect transcription orbit to orbit problem with quadratic control.")
+    udp = pk.trajopt.indirect_or2or(elem0, elemf, mass, thrust, isp, 1e-12, 1e-12, Tlb, Tub, E0lb, E0ub, Eflb, Efub,  freemass=True, freetime=True, alpha=1, bound=True, mu = mu)
+    prob = pg.problem(udp)
+    prob.c_tol = [1e-6] * 8
 
     # population
     pop = pg.population(prob)
     pop.push_back(z)
 
-    # evolve
+    # algorithm
+    #uda = pg.nlopt("auglag")
+    #algo = pg.algorithm(uda)
+    #algo.extract(pg.nlopt).local_optimizer = pg.nlopt('var2')
+    uda = pg7.snopt7(True, "/usr/local/lib/libsnopt7_c.so")
+    uda.set_integer_option("Major iterations limit", 4000)
+    uda.set_integer_option("Iterations limit", 40000)
+    uda.set_numeric_option("Major optimality tolerance", 1e-1)
+    uda.set_numeric_option("Major feasibility tolerance", 1e-7)
     algo = pg.algorithm(uda)
+    # algo.set_verbosity(1)
+
+    # evolve
+    #uda.set_numeric_option("Major feasibility tolerance", 1e-8)
+
     pop = algo.evolve(pop)
+
+    print(pop.champion_x)
 
     # plot trajectory
     udp.plot_traj(pop.champion_x)

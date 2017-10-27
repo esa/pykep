@@ -78,7 +78,7 @@ class _indirect_base(object):
             - units (``float``, ``int``): units by which to scale the trajectory dimensions.
 
         """
-
+        
         # set problem
         self.fitness(z)
 
@@ -113,7 +113,7 @@ class _indirect_base(object):
         self.fitness(z)
 
         # leg
-        self.leg.plot('t', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]")
+        self.leg.plot('t', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", unitsx = pk.EARTH_VELOCITY  / pk.AU / pk.SEC2DAY)
 
 class indirect_pt2pt(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
