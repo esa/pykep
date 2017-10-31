@@ -177,7 +177,7 @@ class direct_or2or(_direct_base):
             - E0ub (``float``, ``int``): Maximum departure eccentric anomoly [rad].
             - Eflb (``float``, ``int``): Minimum arrival eccentric anomoly [rad].
             - E0fb (``float``, ``int``): Maximum arrival eccentric anomoly [rad].
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
             - hf (``bool``): ``True`` for continous thrust, ``False`` for impulsive thrust.
         """
 

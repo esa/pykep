@@ -22,10 +22,10 @@ class leg(object):
         - tf (``float``): Arrival time [mjd2000].
         - xf (``numpy.ndarray``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
         - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
-        - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+        - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
         - freemass (``bool``): Activates final mass transversality condition.
         - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-        - alpha (``float``): Homotopy parametre.
+        - alpha (``float``): Homotopy parameter.
         - bound (``bool``): Activates bounded control.
         - nec (``int``): Number of equality constraints.
         - trajectory (``numpy.ndarray``): Array of nondimensional fullstates.
@@ -42,10 +42,10 @@ class leg(object):
             - tf (``PyKEP.epoch``, ``None``): Arrival time [mjd2000].
             - xf (``PyKEP.sims_flanagan.sc_state``, ``None``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
             - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
-            - mu (``float``, ``int``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``, ``int``): Gravitational parameter of primary body [m^3/s^2].
             - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parametre to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parametre to 0 enforces a pure quadratic control law.
+            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parameter to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parameter to 0 enforces a pure quadratic control law.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
 
         Raises:
@@ -77,7 +77,7 @@ class leg(object):
             stores the solution, then uses the solution to optimise with
             bounded quadratic control (``alpha == 0 and bound == True``). Then
             using the solution from bounded quadratic control, one can
-            incrementally optimise for increasing homotopy parametres
+            incrementally optimise for increasing homotopy parameters
             (e.g. ``alphas = numpy.linspace(0, 1, 200)``) until a mass-optimal
             control solution converges.
 
@@ -100,12 +100,12 @@ class leg(object):
             raise TypeError(
                 "Spacecraft, sc, must be of pontryagin.spacecraft type.")
 
-        # check gravitational parametre
+        # check gravitational parameter
         if not (isinstance(mu, float) or not isinstance(mu, int)):
             raise TypeError(
-                "Gravitational parametre, mu, must be supplied as float or int.")
+                "Gravitational parameter, mu, must be supplied as float or int.")
         elif not mu > 0:
-            raise ValueError("Gravitational parametre, mu, must be positive.")
+            raise ValueError("Gravitational parameter, mu, must be positive.")
         else:
             self.mu = float(mu)
 
@@ -115,7 +115,7 @@ class leg(object):
         # check freetime, freemass, and bound
         if not all([isinstance(param, bool) for param in [freemass, freetime, bound]]):
             raise TypeError(
-                "Freemass, freetime, bound parametres must supplied as booleans.")
+                "Freemass, freetime, bound parameters must supplied as booleans.")
         else:
             self.freemass = bool(freemass)
             self.freetime = bool(freetime)
@@ -137,13 +137,13 @@ class leg(object):
         # check alpha
         if not (isinstance(alpha, float) or isinstance(alpha, int)):
             raise TypeError(
-                "Homotopy parametre, alpha, must be supplied as float or int.")
+                "Homotopy parameter, alpha, must be supplied as float or int.")
         elif not (alpha >= 0 and alpha <= 1):
             raise ValueError(
-                "Homotopy parametre, alpha, must be between 0 and 1.")
+                "Homotopy parameter, alpha, must be between 0 and 1.")
         elif (alpha == 1 and self.bound == False):
             raise ValueError(
-                "If homotopy parametre, alpha, is 1, control must be bounded.")
+                "If homotopy parameter, alpha, is 1, control must be bounded.")
         else:
             self.alpha = float(alpha)
 
@@ -272,7 +272,6 @@ class leg(object):
 
         # set integration method
         self._integrator.set_integrator("dop853", atol=atol, rtol=rtol)
-
         # set recorder
         self._integrator.set_solout(self._recorder)
 

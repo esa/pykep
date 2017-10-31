@@ -14,30 +14,30 @@ class _dynamics(object):
             raise TypeError(
                 "Spacecraft should be instance of pontryagin.spacecraft class.")
 
-        # check gravitational parametre
+        # check gravitational parameter
         if not (isinstance(mu, float) or isinstance(mu, int)):
             raise TypeError(
-                "Gravitational parametre, mu, must be supplied as either int or float.")
+                "Gravitational parameter, mu, must be supplied as either int or float.")
         elif not mu > 0:
             raise TypeError(
-                "Gravitational parametre, mu, must be a positive number.")
+                "Gravitational parameter, mu, must be a positive number.")
         else:
             self.mu = float(mu)
 
         # check homotopy
         if not (isinstance(alpha, float) or isinstance(alpha, int)):
             raise TypeError(
-                "Homotopy parametre, alpha, must be supplied as float or int.")
+                "Homotopy parameter, alpha, must be supplied as float or int.")
         elif not (alpha >= 0 and alpha <= 1):
             raise ValueError(
-                "Homotopy parametre, alpha, must be between 0 and 1.")
+                "Homotopy parameter, alpha, must be between 0 and 1.")
         else:
             self.alpha = float(alpha)
 
         # check bound
         if not isinstance(bound, bool):
             raise TypeError(
-                "Control bounding parametre, bound, supplied as boolean.")
+                "Control bounding parameter, bound, supplied as boolean.")
         else:
             self.bound = bool(bound)
 
@@ -48,7 +48,7 @@ class _dynamics(object):
         else:
             pass
 
-        # spacecraft parametres
+        # spacecraft parameters
         self.c1 = self.spacecraft.thrust
         self.c2 = self.spacecraft.thrust / (self.spacecraft.isp * G0)
 
@@ -61,7 +61,7 @@ class _dynamics(object):
         self.T = self.L / self.V
         self.Q = self.F / self.V
 
-        # nondimensionalise parametres
+        # nondimensionalise parameters
         self.c1 /= self.F
         self.c2 /= self.Q
         self.mu /= MU_SUN

@@ -13,7 +13,7 @@ choose (via and optimiser, e.g. `SNOPT <https://esa.github.io/pagmo_plugins_nonf
 variables (nondimensional variables each corresponding to the respective
 components of the state) to lead the dynamical system (i.e. spacecraft dynamics)
 to chosen boundary conditions (within some tolerance). The user can choose
-the parametres ``type(freemass) == bool`` and ``type(freetime) == bool``
+the parameters ``type(freemass) == bool`` and ``type(freetime) == bool``
 to enforce transversality conditions on the arrival mass and time.
 If ``freemass == True`` than the final mass may vary; if ``freetime == True``
 than the final time may vary.
