@@ -121,7 +121,7 @@ class _indirect_base(object):
             axes = fig.gca()
 
         # leg
-        self.leg.plot('t', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", unitsx = pk.EARTH_VELOCITY  / pk.AU / pk.SEC2DAY, axes = axes)
+        self.leg.plot('tof', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", axes = axes)
 
         return axes
 
@@ -301,7 +301,7 @@ class indirect_pl2pl(_indirect_base):
         # final mass
         mf = self.leg.trajectory[-1, 6]
 
-        return np.hstack(([-mf, ceq]))
+        return np.hstack(([1, ceq]))
 
     def get_bounds(self):
         lb = [self.t0lb, self.Tlb] + [-1e2] * 7

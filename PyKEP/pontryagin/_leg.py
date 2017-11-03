@@ -494,7 +494,7 @@ class leg(object):
         # mjd2000 times
         t /= 24 * 60 * 60
         # reshape
-        t = self.times.reshape(t.size, 1)
+        t = t.reshape(t.size, 1)
 
         # controls
         u = np.asarray([self._dynamics._pontryagin(fs)
@@ -591,7 +591,7 @@ class leg(object):
 
         """
 
-        keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'obj', 'u', 'ux', 'uy', 'uz', 'H']
+        keys = ['tof', 't', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'obj', 'u', 'ux', 'uy', 'uz', 'H']
 
         if not all([isinstance(dim, str) for dim in [x, y, mark]]):
             raise TypeError("x, y, and mark must be supplied as instances of str.")
@@ -606,6 +606,10 @@ class leg(object):
             # get trajectory
             traj = self.get_states(atol=atol, rtol=rtol)
 
+            # append tof
+            tof = traj[:,0]
+            tof = tof - tof[0]
+            traj = np.hstack((tof.reshape(tof.size,1), traj))
             # get components and normalise
             xi, yi = keys.index(x), keys.index(y)
 

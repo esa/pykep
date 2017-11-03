@@ -56,6 +56,7 @@ def run_example7():
             uda = pg.ipopt()
             uda.set_integer_option("print_level", 5)
             uda.set_integer_option("acceptable_iter", 4)
+            uda.set_integer_option("max_iter", 70)
 
             uda.set_numeric_option("tol", 1e-8)
             uda.set_numeric_option("dual_inf_tol", 1e-8)
@@ -123,7 +124,7 @@ def run_example7():
     z_quadratic_control = [381.32031472240106, 1.0102363292172423, 1.8134352964367946, 19.522442569527868, -6.7894353762521105, -3.3749783899165928, 7.0438655057343054, 19.923912672512174, 0.93896446800741751, 3.5483645070393743]
     z_quadratic_control2 = [459.51623108767666, -1.616057488705803, 0.33049652475302532, -17.735981532357027, -3.2374905349904912, 2.2249621531880934, 2.9550456430212937, -20.226761256676323, -2.9684113654904061, 3.1471248891703905]
     z_quadratic_control3 = [519.45371103815569, 0.39617485433378341, 2.7008977766929818, 7.9136210333255468, -11.03747486077437, -3.0776988186969136, 9.1796869310249747, 6.5013311040515687, -0.2054349910826633, 3.0084671211666865]
-    # A random initial guess
+    # A random initial solution
     z_random = np.hstack([[np.random.uniform(Tub, Tlb)], 2 * np.random.randn(9)])
 
     # We use an initial guess within 10% of a known optima, you can experiment what happens with a differet choice
@@ -146,19 +147,21 @@ def run_example7():
     # evolve
     pop = algo.evolve(pop)
 
-    print(list(pop.champion_x))
-
+    if prob.feasibility_x(pop.champion_x):
+        print("Optimal Found!!")
+        # We call the fitness to set the leg
+        udp.udp_inner.fitness(pop.champion_x)
+        arr = udp.udp_inner.leg.get_states(1e-12, 1e-12)
+        print("Final mass is: ", arr[-1, 7])
+    else:
+        print("No solution found, try again :)")
     # plot trajectory
-    udp.udp_inner.plot_traj(pop.champion_x)
+    axis = udp.udp_inner.plot_traj(pop.champion_x)
+    plt.title("The trajectory in the heliocentric frame")
 
     # plot control
     udp.udp_inner.plot_control(pop.champion_x)
-
-    #
-    udp.fitness(pop.champion_x)
-    arr = udp.udp_inner.leg.get_states(1e-12, 1e-12)
-    print("Final mass is: ", arr[-1, 7])
-
+    plt.title("The control profile (throttle)")   
     plt.ion()
     plt.show()
 
