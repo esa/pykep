@@ -22,10 +22,10 @@ class leg(object):
         - tf (``float``): Arrival time [mjd2000].
         - xf (``numpy.ndarray``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
         - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
-        - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
+        - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
         - freemass (``bool``): Activates final mass transversality condition.
         - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-        - alpha (``float``): Homotopy parameter.
+        - alpha (``float``): Homotopy parametre.
         - bound (``bool``): Activates bounded control.
         - nec (``int``): Number of equality constraints.
         - trajectory (``numpy.ndarray``): Array of nondimensional fullstates.
@@ -42,10 +42,10 @@ class leg(object):
             - tf (``PyKEP.epoch``, ``None``): Arrival time [mjd2000].
             - xf (``PyKEP.sims_flanagan.sc_state``, ``None``): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].
             - sc (``PyKEP.sims_flanagan.spacecraft``): Generic spacecraft with propulsive properties.
-            - mu (``float``, ``int``): Gravitational parameter of primary body [m^3/s^2].
+            - mu (``float``, ``int``): Gravitational parametre of primary body [m^3/s^2].
             - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parameter to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parameter to 0 enforces a pure quadratic control law.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parametre to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parametre to 0 enforces a pure quadratic control law.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
 
         Raises:
@@ -77,7 +77,7 @@ class leg(object):
             stores the solution, then uses the solution to optimise with
             bounded quadratic control (``alpha == 0 and bound == True``). Then
             using the solution from bounded quadratic control, one can
-            incrementally optimise for increasing homotopy parameters
+            incrementally optimise for increasing homotopy parametres
             (e.g. ``alphas = numpy.linspace(0, 1, 200)``) until a mass-optimal
             control solution converges.
 
@@ -100,12 +100,12 @@ class leg(object):
             raise TypeError(
                 "Spacecraft, sc, must be of pontryagin.spacecraft type.")
 
-        # check gravitational parameter
+        # check gravitational parametre
         if not (isinstance(mu, float) or not isinstance(mu, int)):
             raise TypeError(
-                "Gravitational parameter, mu, must be supplied as float or int.")
+                "Gravitational parametre, mu, must be supplied as float or int.")
         elif not mu > 0:
-            raise ValueError("Gravitational parameter, mu, must be positive.")
+            raise ValueError("Gravitational parametre, mu, must be positive.")
         else:
             self.mu = float(mu)
 
@@ -115,7 +115,7 @@ class leg(object):
         # check freetime, freemass, and bound
         if not all([isinstance(param, bool) for param in [freemass, freetime, bound]]):
             raise TypeError(
-                "Freemass, freetime, bound parameters must supplied as booleans.")
+                "Freemass, freetime, bound parametres must supplied as booleans.")
         else:
             self.freemass = bool(freemass)
             self.freetime = bool(freetime)
@@ -137,13 +137,13 @@ class leg(object):
         # check alpha
         if not (isinstance(alpha, float) or isinstance(alpha, int)):
             raise TypeError(
-                "Homotopy parameter, alpha, must be supplied as float or int.")
+                "Homotopy parametre, alpha, must be supplied as float or int.")
         elif not (alpha >= 0 and alpha <= 1):
             raise ValueError(
-                "Homotopy parameter, alpha, must be between 0 and 1.")
+                "Homotopy parametre, alpha, must be between 0 and 1.")
         elif (alpha == 1 and self.bound == False):
             raise ValueError(
-                "If homotopy parameter, alpha, is 1, control must be bounded.")
+                "If homotopy parametre, alpha, is 1, control must be bounded.")
         else:
             self.alpha = float(alpha)
 
@@ -186,7 +186,7 @@ class leg(object):
         # integrator
         self._integrator = ode(
             lambda t, fs: self._dynamics._eom_fullstate(fs),
-            lambda t, fs: self._dynamics._eom_fullstate_jac(fs)
+            #lambda t, fs: self._dynamics._eom_fullstate_jac(fs)
         )
 
     def _recorder(self, t, fs):
@@ -256,7 +256,7 @@ class leg(object):
         x0[6]   /= self._dynamics.M
 
         # nondimensional fullstate
-        fs0 = np.hstack((x0, self.l0))
+        fs0 = np.hstack((x0, self.l0, [0]))
 
         # convert mjd2000 to mjs2000
         t0 = self.t0 * 24 * 60 * 60
@@ -267,11 +267,12 @@ class leg(object):
         tf /= self._dynamics.T
 
         # clear trajectory history
-        self.times = np.empty((1, 0), dtype=np.float64)
-        self.trajectory = np.empty((0, 14), dtype=np.float64)
+        self.times      = np.empty((1, 0), dtype=np.float64)
+        self.trajectory = np.empty((0, 15), dtype=np.float64)
 
         # set integration method
         self._integrator.set_integrator("dop853", atol=atol, rtol=rtol)
+
         # set recorder
         self._integrator.set_solout(self._recorder)
 
@@ -516,18 +517,18 @@ class leg(object):
 
         return traj
 
-    def plot_traj(self, axis, mark="k.-", atol=1e-11, rtol=1e-11, units=AU):
+    def plot_traj(self, axes, mark="k.-", atol=1e-11, rtol=1e-11, units=AU):
         """Plots trajectory onto a 3D axis.
 
         Args:
-            - axis (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axis onto which to plot the trajectory.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axis onto which to plot the trajectory.
             - mark (``str``): Marker style.
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - units (``float``, ``int``): Length unit by which to normalise data.
 
         Raises:
-            - TypeError: If ``axis`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
+            - TypeError: If ``axes`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
             - TypeError: If ``mark`` is not an instance of ``str``.
             - TypeError: If either ``atol``, ``rtol``, or ``units`` is neither an instance of ``float`` nor ``int``.
 
@@ -544,12 +545,12 @@ class leg(object):
             >>> l0 = np.random.randn(7)
             >>> l = leg(t0, x0, l0, tf, xf)
             >>> fig = plt.figure()
-            >>> axis = fig.gca(projection='3d')
-            >>> l.plot(axis)
+            >>> axes = fig.gca(projection='3d')
+            >>> l.plot(axes)
             >>> plt.show()
         """
 
-        if not isinstance(axis, Axes3D):
+        if not isinstance(axes, Axes3D):
             raise TypeError(
                 "Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
         elif not isinstance(mark, str):
@@ -567,9 +568,11 @@ class leg(object):
         traj /= units
 
         # plot trajectory
-        axis.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
+        axes.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
 
-    def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False):
+        return axes
+
+    def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False, axes = None):
         """Plots in two dimensions of the leg's trajectory data.
         ::
 
@@ -588,7 +591,7 @@ class leg(object):
 
         """
 
-        keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'u', 'ux', 'uy', 'uz', 'H']
+        keys = ['t', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'obj', 'u', 'ux', 'uy', 'uz', 'H']
 
         if not all([isinstance(dim, str) for dim in [x, y, mark]]):
             raise TypeError("x, y, and mark must be supplied as instances of str.")
@@ -607,10 +610,12 @@ class leg(object):
             xi, yi = keys.index(x), keys.index(y)
 
             # create figure
-            plt.figure()
+            if axes is None:
+                fig = plt.figure()
+                axes = fig.gca()
 
             # plot
-            plt.plot(traj[:, xi]/unitsx, traj[:, yi]/unitsy, mark)
+            axes.plot(traj[:, xi]/unitsx, traj[:, yi]/unitsy, mark)
 
             # labels
             if isinstance(xlabel, str):
@@ -623,4 +628,4 @@ class leg(object):
             elif ylabel is True:
                 plt.ylabel(y)
 
-            plt.show()
+            return axes

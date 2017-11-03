@@ -14,30 +14,30 @@ class _dynamics(object):
             raise TypeError(
                 "Spacecraft should be instance of pontryagin.spacecraft class.")
 
-        # check gravitational parameter
+        # check gravitational parametre
         if not (isinstance(mu, float) or isinstance(mu, int)):
             raise TypeError(
-                "Gravitational parameter, mu, must be supplied as either int or float.")
+                "Gravitational parametre, mu, must be supplied as either int or float.")
         elif not mu > 0:
             raise TypeError(
-                "Gravitational parameter, mu, must be a positive number.")
+                "Gravitational parametre, mu, must be a positive number.")
         else:
             self.mu = float(mu)
 
         # check homotopy
         if not (isinstance(alpha, float) or isinstance(alpha, int)):
             raise TypeError(
-                "Homotopy parameter, alpha, must be supplied as float or int.")
+                "Homotopy parametre, alpha, must be supplied as float or int.")
         elif not (alpha >= 0 and alpha <= 1):
             raise ValueError(
-                "Homotopy parameter, alpha, must be between 0 and 1.")
+                "Homotopy parametre, alpha, must be between 0 and 1.")
         else:
             self.alpha = float(alpha)
 
         # check bound
         if not isinstance(bound, bool):
             raise TypeError(
-                "Control bounding parameter, bound, supplied as boolean.")
+                "Control bounding parametre, bound, supplied as boolean.")
         else:
             self.bound = bool(bound)
 
@@ -48,7 +48,7 @@ class _dynamics(object):
         else:
             pass
 
-        # spacecraft parameters
+        # spacecraft parametres
         self.c1 = self.spacecraft.thrust
         self.c2 = self.spacecraft.thrust / (self.spacecraft.isp * G0)
 
@@ -61,7 +61,7 @@ class _dynamics(object):
         self.T = self.L / self.V
         self.Q = self.F / self.V
 
-        # nondimensionalise parameters
+        # nondimensionalise parametres
         self.c1 /= self.F
         self.c2 /= self.Q
         self.mu /= MU_SUN
@@ -69,7 +69,7 @@ class _dynamics(object):
     def _eom_fullstate(self, fullstate):
 
         # extract state and control
-        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lvm = fullstate
+        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lvm, obj = fullstate
         u, ix, iy, iz = self._pontryagin(fullstate)
 
         # common subexpression elimination
@@ -102,7 +102,8 @@ class _dynamics(object):
             -lx,
             -ly,
             -lz,
-            ix * lvx * x12 + iy * lvy * x12 + iz * lvz * x12
+            ix * lvx * x12 + iy * lvy * x12 + iz * lvz * x12,
+            self.alpha*u + (1 - self.alpha)*u**2
         ])
 
         return dfs
@@ -187,7 +188,7 @@ class _dynamics(object):
     def _hamiltonian(self, fullstate):
 
         # extract fullstate and control
-        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm = fullstate
+        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm, obj = fullstate
         u, ix, iy, iz = self._pontryagin(fullstate)
 
         # common subexpression elimination
@@ -203,7 +204,7 @@ class _dynamics(object):
     def _pontryagin(self, fullstate):
 
         # extract fullstate
-        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm = fullstate
+        x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm, obj = fullstate
 
         # magnitude of lv
         lv = (lvx**2 + lvy**2 + lvz**2)**0.5
@@ -243,15 +244,3 @@ class _dynamics(object):
         control = np.array([u, ix, iy, iz])
 
         return control
-
-
-if __name__ == "__main__":
-
-    # case 1: default constructor
-    dyn = _dynamics()
-
-    # case 2: contradictory booleans
-    try:
-        dyn = _dynamics(alpha=1, bound=False)
-    except Exception as e:
-        print(e)

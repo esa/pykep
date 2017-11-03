@@ -26,7 +26,7 @@ class _indirect_base(object):
             sc=self.sc, mu=mu, freemass=freemass, freetime=freetime, alpha=alpha, bound=bound
         )
 
-        # integration parameters
+        # integration parametres
         if all([(isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol]]):
             self.atol = float(atol)
             self.rtol = float(rtol)
@@ -67,7 +67,7 @@ class _indirect_base(object):
     def get_nec(self):
         return self.leg.nec
 
-    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU):
+    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
@@ -78,27 +78,30 @@ class _indirect_base(object):
             - units (``float``, ``int``): units by which to scale the trajectory dimensions.
 
         """
-        
+
         # set problem
         self.fitness(z)
 
         # figure
-        fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        if axes is None:
+            fig = plt.figure()
+            axes = fig.gca(projection='3d')
+        elif not isinstance(axes, Axes3D):
+            raise TypeError(
+                "Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
 
         # sun
-        axis.scatter([0], [0], [0], color='y')
+        axes.scatter([0], [0], [0], color='y')
 
         # leg
-        self.leg.plot_traj(axis, mark, atol, rtol, units)
+        self.leg.plot_traj(axes, mark, atol, rtol, units)
 
         # problem specifics
-        self._plot_traj(z, axis, units)
+        self._plot_traj(z, axes, units)
 
-        # show
-        plt.show()
+        return axes
 
-    def plot_control(self, z, mark="k.-", atol=1e-12, rtol=1e-12):
+    def plot_control(self, z, mark="k.-", atol=1e-12, rtol=1e-12, axes = None):
         """Plots the control profile of the trajectory, as a function of time.
 
         Args:
@@ -112,8 +115,15 @@ class _indirect_base(object):
         # set problem
         self.fitness(z)
 
+        # create figure
+        if axes is None:
+            fig = plt.figure()
+            axes = fig.gca()
+
         # leg
-        self.leg.plot('t', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", unitsx = pk.EARTH_VELOCITY  / pk.AU / pk.SEC2DAY)
+        self.leg.plot('t', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", unitsx = pk.EARTH_VELOCITY  / pk.AU / pk.SEC2DAY, axes = axes)
+
+        return axes
 
 class indirect_pt2pt(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
@@ -132,7 +142,7 @@ class indirect_pt2pt(_indirect_base):
         z = [t0, T, l0]
     """
 
-    def __init__(self, x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, atol=1e-10, rtol=1e-10):
+    def __init__(self, x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freetime=True, alpha=0, bound=True, atol=1e-12, rtol=1e-12):
         """Initialises ``PyKEP.trajopt.indirect_pt2pt`` problem.
 
         Args:
@@ -147,16 +157,15 @@ class indirect_pt2pt(_indirect_base):
             - t0ub (``float``, ``int``): Maximum departure time [mjd2000].
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
         """
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
             atol, rtol, t0lb=t0lb, t0ub=t0ub, Tlb=Tlb, Tub=Tub
         )
 
@@ -196,7 +205,7 @@ class indirect_pt2pt(_indirect_base):
         ub = [self.t0ub, self.Tub, *[1e2] * 7]
         return (lb, ub)
 
-    def _plot_traj(self, z, axis, units):
+    def _plot_traj(self, z, axes, units):
 
         # states
         x0 = self.leg.x0
@@ -206,17 +215,21 @@ class indirect_pt2pt(_indirect_base):
         t0 = pk.epoch(self.leg.t0)
         tf = pk.epoch(self.leg.tf)
 
-        # Keplerian elements
+        # Computes the osculating Keplerian elements at start and arrival
         elem0 = pk.ic2par(x0[0:3], x0[3:6], self.leg.mu)
         elemf = pk.ic2par(xf[0:3], xf[3:6], self.leg.mu)
 
-        # Keplerian elements
+        # Converts the eccentric anomaly into mean anomaly
+        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
+        elemf[5]  = elemf[5] - elemf[1] * np.sin(elemf[5])
+
+        # Creates two virtual keplerian planets with the said elements
         kep0 = pk.planet.keplerian(t0, elem0)
         kepf = pk.planet.keplerian(tf, elemf)
 
-        # plot departure and arrival
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
-        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        # Plots the departure and arrival osculating orbits
+        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
 class indirect_pl2pl(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two planets.
@@ -228,7 +241,7 @@ class indirect_pl2pl(_indirect_base):
 
     """
 
-    def __init__(self, p0, pf, mass, thrust, isp, atol, rtol, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, p0, pf, mass, thrust, isp, atol, rtol, t0lb, t0ub, Tlb, Tub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_pl2pl`` problem.
 
         Args:
@@ -243,16 +256,15 @@ class indirect_pl2pl(_indirect_base):
             - t0ub (``float``, ``int``): Maximum departure time [mjd2000].
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
         """
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
             atol, rtol, t0lb=t0lb, t0ub=t0ub, Tlb=Tlb, Tub=Tub
         )
 
@@ -296,7 +308,7 @@ class indirect_pl2pl(_indirect_base):
         ub = [self.t0ub, self.Tub, *[1e2] * 7]
         return (lb, ub)
 
-    def _plot_traj(self, z, axis, units):
+    def _plot_traj(self, z, axes, units):
         """Plots spacecraft trajectory.
 
         Args:
@@ -315,9 +327,9 @@ class indirect_pl2pl(_indirect_base):
 
         # planets
         pk.orbit_plots.plot_planet(
-            self.p0, t0=t0, units=units, ax=axis, color=(0.8, 0.8, 0.8))
+            self.p0, t0=t0, units=units, ax=axes, color=(0.8, 0.8, 0.8))
         pk.orbit_plots.plot_planet(
-            self.pf, t0=tf, units=units, ax=axis, color=(0.8, 0.8, 0.8))
+            self.pf, t0=tf, units=units, ax=axes, color=(0.8, 0.8, 0.8))
 
 class indirect_or2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two orbits.
@@ -329,7 +341,7 @@ class indirect_or2or(_indirect_base):
 
     """
 
-    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_or2or`` problem.
 
         Args:
@@ -346,17 +358,16 @@ class indirect_or2or(_indirect_base):
             - M0ub (``float``, ``int``): Maximum departure mean anomoly [rad].
             - Mflb (``float``, ``int``): Minimum arrival mean anomoly [rad].
             - M0fb (``float``, ``int``): Maximum arrival mean anomoly [rad].
-            - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
 
         """
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
             atol, rtol, Tlb=Tlb, Tub=Tub, M0lb=M0lb, M0ub=M0ub, Mflb=Mflb, Mfub=Mfub
         )
 
@@ -378,12 +389,12 @@ class indirect_or2or(_indirect_base):
         l0 = np.asarray(z[3:])
 
         # set Keplerian elements
-        self.elem0[5] = M0
-        self.elemf[5] = Mf
+        elem0 = np.hstack([self.elem0[:5], [M0]])
+        elemf = np.hstack([self.elemf[:5], [Mf]])
 
         # compute Cartesian states
-        r0, v0 = pk.par2ic(self.elem0, self.leg.mu)
-        rf, vf = pk.par2ic(self.elemf, self.leg.mu)
+        r0, v0 = pk.par2ic(elem0, self.leg.mu)
+        rf, vf = pk.par2ic(elemf, self.leg.mu)
 
         # departure and arrival states (xf[6] is unused)
         x0 = pk.sims_flanagan.sc_state(r0, v0, self.sc.mass)
@@ -396,16 +407,38 @@ class indirect_or2or(_indirect_base):
         ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
 
         # final mass
-        mf = self.leg.trajectory[-1, 6]
+        obj = self.leg.trajectory[-1, -1]
 
-        return np.hstack(([-mf], ceq))
+        # Transversality conditions
+        # At start
+        lambdas0 = np.array(self.leg.trajectory[0, 7:13])
+        r0norm = np.sqrt(r0[0]*r0[0]+r0[1]*r0[1]+r0[2]*r0[2])
+        tmp = - pk.MU_SUN / r0norm**3
+        tangent = np.array([v0[0],v0[1],v0[2], tmp * r0[0], tmp * r0[1], tmp * r0[2]])
+        tangent_norm = np.linalg.norm(tangent)
+        tangent = tangent / tangent_norm
+        T0 = np.dot(lambdas0,tangent)
+
+        # At end
+        lambdasf = np.array(self.leg.trajectory[-1, 7:13])
+        rfnorm = np.sqrt(rf[0]*rf[0]+rf[1]*rf[1]+rf[2]*rf[2])
+        tmp = - pk.MU_SUN / rfnorm**3
+        tangent = np.array([vf[0],vf[1],vf[2], tmp * rf[0], tmp * rf[1], tmp * rf[2]])
+        tangent_norm = np.linalg.norm(tangent)
+        tangent = tangent / tangent_norm
+        Tf = np.dot(lambdasf,tangent)
+
+        return np.hstack(([1], ceq, [T0,Tf]))
+
+    def get_nec(self):
+        return self.leg.nec + 2
 
     def get_bounds(self):
         lb = [self.Tlb, self.M0lb, self.Mflb, *[-1e2] * 7]
         ub = [self.Tub, self.M0ub, self.Mfub, *[1e2] * 7]
         return (lb, ub)
 
-    def _plot_traj(self, z, axis, units):
+    def _plot_traj(self, z, axes, units):
         """Plots spacecraft trajectory.
 
         Args:
@@ -422,15 +455,22 @@ class indirect_or2or(_indirect_base):
         t0 = pk.epoch(0)
         tf = pk.epoch(z[0])
 
-        # Keplerian points
-        kep0 = pk.planet.keplerian(t0, self.elem0)
-        kepf = pk.planet.keplerian(tf, self.elemf)
+        # Mean Anomalies
+        M0 = z[1] - self.elem0[1] * np.sin(z[1])
+        Mf = z[2] - self.elemf[1] * np.sin(z[2])
+
+        elem0 = np.hstack([self.elem0[:5], [M0]])
+        elemf = np.hstack([self.elemf[:5], [Mf]])
+
+        # Keplerian points 
+        kep0 = pk.planet.keplerian(t0, elem0)
+        kepf = pk.planet.keplerian(tf, elemf)
 
         # planets
         pk.orbit_plots.plot_planet(
-            kep0, t0=t0, units=units, ax=axis, color=(0.8, 0.8, 0.8))
+            kep0, t0=t0, units=units, ax=axes, color=(0.8, 0.8, 0.8))
         pk.orbit_plots.plot_planet(
-            kepf, t0=tf, units=units, ax=axis, color=(0.8, 0.8, 0.8))
+            kepf, t0=tf, units=units, ax=axes, color=(0.8, 0.8, 0.8))
 
 class indirect_pt2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between a Cartesian state and an orbit.
@@ -442,7 +482,7 @@ class indirect_pt2or(_indirect_base):
 
     """
 
-    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_pt2or`` problem.
 
         Args:
@@ -455,17 +495,16 @@ class indirect_pt2or(_indirect_base):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - freemass (``bool``): Activates final mass transversality condition.
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
 
         """
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, mu, freemass, freetime, alpha, bound,
+            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
             atol, rtol, Tlb=Tlb, Tub=Tub, Mflb=Mflb, Mfub=Mfub
         )
 
@@ -503,9 +542,21 @@ class indirect_pt2or(_indirect_base):
         ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
 
         # final mass
-        mf = self.leg.trajectory[-1, 6]
+        # mf = self.leg.trajectory[-1, 6]
 
-        return np.hstack(([-mf], ceq))
+        # Transversailty condition at the end
+        lambdasf = np.array(self.leg.trajectory[-1, 7:13])
+        rfnorm = np.sqrt(rf[0]*rf[0]+rf[1]*rf[1]+rf[2]*rf[2])
+        tmp = - pk.MU_SUN / rfnorm**3
+        tangent = np.array([vf[0],vf[1],vf[2], tmp * rf[0], tmp * rf[1], tmp * rf[2]])
+        tangent_norm = np.linalg.norm(tangent)
+        tangent = tangent / tangent_norm
+        Tf = np.dot(lambdasf,tangent)
+
+        return np.hstack(([1], ceq, [Tf]))
+
+    def get_nec(self):
+        return self.leg.nec + 1
 
     def get_bounds(self):
         pi = 3.14159265359
@@ -513,7 +564,7 @@ class indirect_pt2or(_indirect_base):
         ub = [self.Tub, self.Mfub, *[1e2] * 7]
         return (lb, ub)
 
-    def _plot_traj(self, z, axis, units=pk.AU):
+    def _plot_traj(self, z, axes, units=pk.AU):
         """Plots spacecraft trajectory.
 
         Args:
@@ -530,13 +581,20 @@ class indirect_pt2or(_indirect_base):
         t0 = pk.epoch(0)
         tf = pk.epoch(z[1])
 
-        # Keplerian elements
+        # Keplerian elements of the osculating orbit at start
         elem0 = pk.ic2par(self.x0[0:3], self.x0[3:6], self.leg.mu)
+        # Eccentric to Mean Anomaly
+        elemf[5]  = elemf[5] - elemf[1] * np.sin(elemf[5])
+
+        # Mean Anomaly at the target orbit
+        Mf = z[1] - self.elemf[1] * np.sin(z[1])
+
+        elemf = np.hstack([self.elemf[:5], [Mf]])
 
         # Keplerian elements
         kep0 = pk.planet.keplerian(t0, elem0)
         kepf = pk.planet.keplerian(tf, self.elemf)
 
         # plot departure and arrival
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
-        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)

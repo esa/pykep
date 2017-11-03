@@ -59,14 +59,17 @@ keplerian::keplerian(
 	const std::string &name)
 	: base(mu_central_body, mu_self, radius, safe_radius, name), m_keplerian_elements(keplerian_elements), m_ref_mjd2000(ref_epoch.mjd2000())
 {
-	if (keplerian_elements[0] <=0) {
+	if (m_keplerian_elements[0] <=0) {
 		throw_value_error("The planet semi-major axis needs to a positive number");
 	}
-	if (keplerian_elements[1] < 0 || keplerian_elements[1] >=1) {
+	if (m_keplerian_elements[1] < 0 || m_keplerian_elements[1] >=1) {
 		throw_value_error("The planet eccentricity needs to be in [0,1)");
 	}
-	m_mean_motion = sqrt(mu_central_body / pow(keplerian_elements[0],3));
-	par2ic(m_keplerian_elements, get_mu_central_body(), m_r, m_v);
+	m_mean_motion = sqrt(mu_central_body / pow(m_keplerian_elements[0],3));
+	// Switching temporarily to eccentric anomaly to define m_r and m_v
+	array6D tmp(m_keplerian_elements);
+	tmp[5] = m2e(tmp[5],tmp[1]);
+	par2ic(tmp, get_mu_central_body(), m_r, m_v);
 }
 
 /// Constructor
