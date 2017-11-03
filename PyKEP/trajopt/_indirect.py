@@ -202,7 +202,7 @@ class indirect_pt2pt(_indirect_base):
 
     def get_bounds(self):
         lb = [self.t0lb, self.Tlb] + [-1e2] * 7
-        ub = [self.t0ub, self.Tub + [1e2] * 7
+        ub = [self.t0ub, self.Tub] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
