@@ -15,7 +15,7 @@ class _indirect_base(object):
         mu, freemass, freetime, alpha, bound,
         atol, rtol,
         t0lb=None, t0ub=None, Tlb=None, Tub=None,
-        M0lb=None, M0ub=None, Mflb=None, Mfub=None
+        E0lb=None, E0ub=None, Eflb=None, Efub=None
     ):
 
         # spacecraft
@@ -35,8 +35,8 @@ class _indirect_base(object):
                 "Both atol and rtol must be an instance of either float or int.")
 
         # bounds
-        lbs = ["t0lb", "Tlb", "M0lb", "Mflb"]
-        ubs = ["t0ub", "Tub", "M0ub", "Mfub"]
+        lbs = ["t0lb", "Tlb", "E0lb", "Eflb"]
+        ubs = ["t0ub", "Tub", "E0ub", "Efub"]
 
         for lb, ub in zip(lbs, ubs):
 
@@ -219,7 +219,7 @@ class indirect_pt2pt(_indirect_base):
         elem0 = pk.ic2par(x0[0:3], x0[3:6], self.leg.mu)
         elemf = pk.ic2par(xf[0:3], xf[3:6], self.leg.mu)
 
-        # Converts the eccentric anomaly into mean anomaly
+        # Converts the eccentric anomaly into eccentric anomaly
         elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
         elemf[5]  = elemf[5] - elemf[1] * np.sin(elemf[5])
 
@@ -304,8 +304,8 @@ class indirect_pl2pl(_indirect_base):
         return np.hstack(([-mf, ceq]))
 
     def get_bounds(self):
-        lb = [self.t0lb, self.Tlb, *[-1e2] * 7]
-        ub = [self.t0ub, self.Tub, *[1e2] * 7]
+        lb = [self.t0lb, self.Tlb] + [-1e2] * 7
+        ub = [self.t0ub, self.Tub] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -341,12 +341,12 @@ class indirect_or2or(_indirect_base):
 
     """
 
-    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, E0lb, E0ub, Eflb, Efub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_or2or`` problem.
 
         Args:
-            - elem0 (``list``, ``tuple``, ``numpy.ndarray``): Departure Keplerian elements (mutable mean anomoly).
-            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements (mutable mean anomoly).
+            - elem0 (``list``, ``tuple``, ``numpy.ndarray``): Departure Keplerian elements (mutable eccentric anomaly).
+            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements (mutable eccentric anomaly).
             - mass (``float``, ``int``): Spacecraft wet mass [kg].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
@@ -354,10 +354,10 @@ class indirect_or2or(_indirect_base):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
             - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - M0lb (``float``, ``int``): Minimum departure mean anomoly [rad].
-            - M0ub (``float``, ``int``): Maximum departure mean anomoly [rad].
-            - Mflb (``float``, ``int``): Minimum arrival mean anomoly [rad].
-            - M0fb (``float``, ``int``): Maximum arrival mean anomoly [rad].
+            - E0lb (``float``, ``int``): Minimum departure eccentric anomaly [rad].
+            - E0ub (``float``, ``int``): Maximum departure eccentric anomaly [rad].
+            - Eflb (``float``, ``int``): Minimum arrival eccentric anomaly [rad].
+            - M0fb (``float``, ``int``): Maximum arrival eccentric anomaly [rad].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
@@ -368,7 +368,7 @@ class indirect_or2or(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, Tlb=Tlb, Tub=Tub, M0lb=M0lb, M0ub=M0ub, Mflb=Mflb, Mfub=Mfub
+            atol, rtol, Tlb=Tlb, Tub=Tub, E0lb=E0lb, E0ub=E0ub, Eflb=Eflb, Efub=Efub
         )
 
         # Keplerian elements
@@ -381,7 +381,7 @@ class indirect_or2or(_indirect_base):
         t0 = pk.epoch(0)
         tf = pk.epoch(z[0])
 
-        # departure and arrival mean anomolies
+        # departure and arrival eccentric anomolies
         M0 = z[1]
         Mf = z[2]
 
@@ -434,8 +434,8 @@ class indirect_or2or(_indirect_base):
         return self.leg.nec + 2
 
     def get_bounds(self):
-        lb = [self.Tlb, self.M0lb, self.Mflb, *[-1e2] * 7]
-        ub = [self.Tub, self.M0ub, self.Mfub, *[1e2] * 7]
+        lb = [self.Tlb, self.E0lb, self.Eflb] + [-1e2] * 7
+        ub = [self.Tub, self.E0ub, self.Efub] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -482,12 +482,12 @@ class indirect_pt2or(_indirect_base):
 
     """
 
-    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Eflb, Efub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_pt2or`` problem.
 
         Args:
             - x0 (``list``, ``tuple``, ``numpy.ndarray``): Departure state [m, m, m, m/s, m/s, m/s, kg].
-            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements (mutable mean anomoly).
+            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements (mutable eccentric anomaly).
             - mass (``float``, ``int``): Spacecraft wet mass [kg].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
@@ -505,7 +505,7 @@ class indirect_pt2or(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, Tlb=Tlb, Tub=Tub, Mflb=Mflb, Mfub=Mfub
+            atol, rtol, Tlb=Tlb, Tub=Tub, Eflb=Eflb, Efub=Efub
         )
 
 
@@ -519,7 +519,7 @@ class indirect_pt2or(_indirect_base):
         t0 = pk.epoch(0)
         tf = pk.epoch(z[0])
 
-        # final mean anomoly
+        # final eccentric anomaly
         Mf = z[1]
 
         # intial costates
@@ -560,8 +560,8 @@ class indirect_pt2or(_indirect_base):
 
     def get_bounds(self):
         pi = 3.14159265359
-        lb = [self.Tlb, self.Mflb, *[-1e2] * 7]
-        ub = [self.Tub, self.Mfub, *[1e2] * 7]
+        lb = [self.Tlb, self.Eflb] + [-1e2] * 7
+        ub = [self.Tub, self.Efub] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units=pk.AU):
