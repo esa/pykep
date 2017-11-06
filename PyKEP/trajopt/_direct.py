@@ -155,6 +155,19 @@ class _direct_base(object):
         # full dataset [t, x, y, z, vx, vy, vz, m, u, ux, uy, uz]
         return np.hstack((t.reshape((self.nseg, 1)), r, v, m.reshape((self.nseg, 1)), umag, u))
 
+    def pretty(self, z):
+        data = self.get_traj(z) 
+        self._pretty(z)
+
+        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(data[0,1], data[0,2], data[0,3]))
+        print("Spacecraft Initial Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
+        print("Spacecraft Initial Mass  (kg)    : {!r}".format(data[0,7]))
+
+        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(data[-1,1], data[-1,2], data[-1,3]))
+        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[-1,4], data[-1,5], data[-1,6]))
+        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
+           
+
 
 class direct_pl2pl(_direct_base):
     """Represents a direct transcription transfer between solar system planets.
@@ -286,6 +299,14 @@ class direct_pl2pl(_direct_base):
             self.p0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
         pk.orbit_plots.plot_planet(
             self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+
+    def _pretty(self, z):
+        print("\nLow-thrust NEP transfer from " + self.p0.name + " to " + self.pf.name)
+        print("\nLaunch epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0], pk.epoch(z[0])))
+        print("Arrival epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0]+z[1], pk.epoch(z[0]+z[1])))
+        print("Time of flight (days): {!r} ".format(z[1]))
+        print("\nLaunch DV (km/s) {!r}".format(np.sqrt(z[3]**2+z[4]**2+z[5]**2) / 1000))
+        print("Arrival DV (km/s) {!r}".format(np.sqrt(z[6]**2+z[7]**2+z[8]**2) / 1000))
 
     @staticmethod
     def _get_controls(z):
