@@ -4,13 +4,14 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+
 class _direct_base(object):
-    """Base class for direct trajectory optimisation problems.
+    """Base class for direct trajectory optimisation problems with one only leg.
 
     All inheriting classes will adopt, ``plot_traj``, ``plot_control``, and ``get_traj``.
     """
 
-    def __init__(self, mass, thrust, isp, nseg, mu=pk.MU_SUN, hf=True):
+    def __init__(self, mass=1000., thrust=0.3, isp=3000., nseg=10, mu=pk.MU_SUN, hf=False):
 
         # segements
         if isinstance(nseg, int):
@@ -36,7 +37,7 @@ class _direct_base(object):
     def get_nic(self):
         return self.nseg
 
-    def plot_traj(self, z, units=pk.AU, N=20):
+    def plot_traj(self, z, units=pk.AU, N=20, axes=None):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
@@ -45,26 +46,27 @@ class _direct_base(object):
             - N (``int``): Number of points to be plotted along one arc.
         """
 
-        # set problem
+        # a call to the fitness on the chromosome z will change the class data member leg and set it
+        # to represent the data in the chromosome z
         self.fitness(z)
 
-        # figure
-        fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        # creates a figure if needed
+        if axes is None:
+            fig = plt.figure()
+            axes = fig.gca(projection='3d')
 
-        # sun
-        axis.scatter([0], [0], [0], color='y')
+        # plots a small Sun
+        axes.scatter([0], [0], [0], color='y')
 
-        # leg
-        pk.orbit_plots.plot_sf_leg(self.leg, units=units, N=20, ax=axis)
+        # plots the leg
+        pk.orbit_plots.plot_sf_leg(self.leg, units=units, N=20, ax=axes)
 
-        # plot problem specifics
-        self._plot_traj(z, axis, units)
+        # plots problem specifics
+        self._plot_traj(z, axes, units)
 
-        # show plot
-        plt.show()
+        return axes
 
-    def plot_control(self, z, mark="k.-", time=True):
+    def plot_control(self, z, mark="k.-", time=True, axes=None):
         """Plots the control profile of the trajectory, as a function of time.
 
         Args:
@@ -83,28 +85,28 @@ class _direct_base(object):
         # throttle
         u = traj[:, 8]
 
-        # fiure
-        plt.figure()
+        # figure
+        if axes is None:
+            plt.figure()
+            axes = plt.gca()
 
         # with time
         if time:
-            plt.plot(t, u, mark)
+            axes.plot(t, u, mark)
             plt.xlabel("Time [days]")
 
         # without time
         elif not time:
-            plt.plot(u, mark)
-            plt.xlabel("Segement number")
-
+            axes.plot(u, mark)
+            plt.xlabel("Segment number")
         # no se
         else:
-            raise RuntimeError("Något är fel!")
+            raise RuntimeError("Something is wrong!")
 
         # label
         plt.ylabel("Throttle [ND]")
 
-        # show
-        plt.show()
+        return axes
 
     def get_traj(self, z):
         """Retrieves the trajectory information.
@@ -129,7 +131,7 @@ class _direct_base(object):
             # remove matchpoint duplicate
             x[i].pop(self.nseg)
             # keep only midpoints
-            x[i] = x[i][1:self.nseg*2:2]
+            x[i] = x[i][1:self.nseg * 2:2]
             # convert to numpy.ndarray
             x[i] = np.asarray(x[i], np.float64)
             # time and mass
@@ -145,12 +147,150 @@ class _direct_base(object):
         t, r, v, m = x
 
         # control
-        u = np.asarray(self._get_controls(z), np.float64).reshape((self.nseg, 3))
+        u = np.asarray(self._get_controls(
+            z), np.float64).reshape((self.nseg, 3))
         # throttle
         umag = np.linalg.norm(u, axis=1).reshape((self.nseg, 1))
 
         # full dataset [t, x, y, z, vx, vy, vz, m, u, ux, uy, uz]
         return np.hstack((t.reshape((self.nseg, 1)), r, v, m.reshape((self.nseg, 1)), umag, u))
+
+
+class direct_pl2pl(_direct_base):
+    """Represents a direct transcription transfer between solar system planets.
+
+    This problem works by manipulating the starting epoch t0, the transfer time T the final mass mf and the controls 
+    ::
+
+        z = [t0, T, mf, Vxi, Vyi, Vzi, Vxf, Vyf, Vzf, controls]
+    """
+
+    def __init__(self,
+                 p0="earth",
+                 pf="mars",
+                 mass=1000,
+                 thrust=0.3,
+                 isp=3000,
+                 nseg=20,
+                 t0=[500, 1000],
+                 tof=[200, 500],
+                 vinf_dep=1e-3,
+                 vinf_arr=1e-3,
+                 hf=False):
+        """Initialises a direct transcription orbit to orbit problem.
+
+        Args:
+            - p0 (``str``): Departure planet name. (will be used to construct a planet.jpl_lp object)
+            - pf (``str``): Arrival planet name. (will be used to construct a planet.jpl_lp object)
+            - mass (``float``, ``int``): Spacecraft wet mass [kg].
+            - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
+            - isp (``float``, ``int``): Spacecraft specific impulse [s].
+            - nseg (``int``): Number of colocation nodes.
+            - t0 (``list``): Launch epochs bounds [mjd2000].
+            - tof (``list``): Transfer time bounds [days].
+            - vinf_dep (``float``): allowed launch DV [km/s] 
+            - vinf_arr (``float``): allowed arrival DV [km/s]
+            - hf (``bool``): High-fidelity. Activates a continuous representation for the thrust.
+        """
+
+        # initialise base
+        _direct_base.__init__(self, mass, thrust, isp, nseg, pk.MU_SUN, hf)
+
+        # planets
+        if all([isinstance(pl, str) for pl in [p0, pf]]):
+            self.p0 = pk.planet.jpl_lp(p0)
+            self.pf = pk.planet.jpl_lp(pf)
+        else:
+            raise TypeError("Planet names must be supplied as str.")
+
+        # bounds TODO check
+        self.t0 = t0
+        self.tof = tof
+
+        # boundary conditions on velocity
+        self.vinf_dep = vinf_dep * 1000  # (in m)
+        self.vinf_arr = vinf_arr * 1000  # (in m)
+
+        # The class is built around solar system plaents hence mu is always the
+        # SUN
+        self.mu = pk.MU_SUN
+
+    def fitness(self, z):
+
+        # epochs (mjd2000)
+        t0 = pk.epoch(z[0])
+        tf = pk.epoch(z[0] + z[1])
+
+        # final mass
+        mf = z[2]
+
+        # controls
+        u = z[9:]
+
+        # compute Cartesian states of planets
+        r0, v0 = self.p0.eph(t0)
+        rf, vf = self.pf.eph(tf)
+
+        # add the vinfs from the chromosome
+        v0 = [a - b for a, b in zip(v0, z[3:6])]
+        vf = [a - b for a, b in zip(vf, z[6:9])]
+
+        # spacecraft states
+        x0 = pk.sims_flanagan.sc_state(r0, v0, self.sc.mass)
+        xf = pk.sims_flanagan.sc_state(rf, vf, mf)
+
+        # set leg
+        self.leg.set(t0, x0, u, tf, xf)
+
+        # compute equality constraints
+        ceq = np.asarray(self.leg.mismatch_constraints(), np.float64)
+
+        # nondimensionalise equality constraints
+        ceq[0:3] /= pk.AU
+        ceq[3:6] /= pk.EARTH_VELOCITY
+        ceq[6] /= self.sc.mass
+
+        # compute inequality constraints
+        cineq = np.asarray(self.leg.throttles_constraints(), np.float64)
+
+        # compute inequality constraints on departure and arrival velocities
+        v_dep_con = (z[3] ** 2 + z[4] ** 2 + z[5] ** 2 - self.vinf_dep ** 2)
+        v_arr_con = (z[6] ** 2 + z[7] ** 2 + z[8] ** 2 - self.vinf_arr ** 2)
+
+        # nondimensionalise inequality constraints
+        v_dep_con /= pk.EARTH_VELOCITY
+        v_arr_con /= pk.EARTH_VELOCITY
+
+        return np.hstack(([-mf], ceq, cineq, [v_dep_con, v_arr_con]))
+
+    def get_nic(self):
+        return super(direct_pl2pl, self).get_nic() + 2
+
+    def get_bounds(self):
+        lb = [self.t0[0], self.tof[0], self.sc.mass * 0.1] + \
+            [-self.vinf_dep] * 3 + [-self.vinf_arr] * 3 + \
+            [-1, -1, -1] * self.nseg
+        ub = [self.t0[1], self.tof[1], self.sc.mass] + \
+            [self.vinf_dep] * 3 + [self.vinf_arr] * 3 + \
+            [1, 1, 1] * self.nseg
+        return (lb, ub)
+
+    def _plot_traj(self, z, axis, units):
+
+        # times
+        t0 = pk.epoch(z[0])
+        tf = pk.epoch(z[0] + z[1])
+
+        # plot Keplerian
+        pk.orbit_plots.plot_planet(
+            self.p0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        pk.orbit_plots.plot_planet(
+            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+
+    @staticmethod
+    def _get_controls(z):
+        return z[9:]
+
 
 class direct_or2or(_direct_base):
     """Represents a direct transcription transfer between orbits.
@@ -185,7 +325,8 @@ class direct_or2or(_direct_base):
             elem0 = np.asarray(elem0, np.float64)
             elemf = np.asarray(elemf, np.float64)
         else:
-            raise ValueError("Both elem0 and elemf must be supplied as instances of list, tuple, or numpy.ndarray.")
+            raise ValueError(
+                "Both elem0 and elemf must be supplied as instances of list, tuple, or numpy.ndarray.")
 
         if all([elem.size == 6 for elem in [elem0, elemf]]):
             self.elem0 = elem0
@@ -194,7 +335,8 @@ class direct_or2or(_direct_base):
             raise TypeError("Both elem0 and elemf must be 6-dimensional.")
 
         if not all([(isinstance(T, float) or isinstance(T, int)) for T in [Tlb, Tub]]):
-            raise TypeError("Both Tlb and Tub must be supplied as instances of either float or int.")
+            raise TypeError(
+                "Both Tlb and Tub must be supplied as instances of either float or int.")
         elif not Tlb < Tub:
             raise ValueError("Tlb must be less than Tub.")
         else:
@@ -256,8 +398,10 @@ class direct_or2or(_direct_base):
 
     def get_bounds(self):
         pi = 3.14159265359
-        lb = [self.Tlb, self.sc.mass/10, self.E0lb, self.Eflb, *(-1, -1, -1)*self.nseg]
-        ub = [self.Tub, self.sc.mass, self.E0ub, self.Efub, *(1, 1, 1)*self.nseg]
+        lb = [self.Tlb, self.sc.mass / 10, self.E0lb,
+              self.Eflb, *(-1, -1, -1) * self.nseg]
+        ub = [self.Tub, self.sc.mass, self.E0ub,
+              self.Efub, *(1, 1, 1) * self.nseg]
         return (lb, ub)
 
     def _plot_traj(self, z, axis, units):
@@ -271,8 +415,10 @@ class direct_or2or(_direct_base):
         kepf = pk.planet.keplerian(tf, self.elemf)
 
         # plot Keplerian
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
-        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        pk.orbit_plots.plot_planet(
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+        pk.orbit_plots.plot_planet(
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
 
     @staticmethod
     def _get_controls(z):
