@@ -132,8 +132,8 @@ def run_example7():
     #z = z_random
 
     # Problem. We start defining a minimum quadratic control problem (alpha=0) with free time (hamiltonian will be foced to be 0)
-    udp = add_gradient(pk.trajopt.indirect_or2or(elem0, elemf, mass, thrust, isp, 1e-12, 1e-12, Tlb, Tub,
-                                                 E0lb, E0ub, Eflb, Efub, freetime=True, alpha=0, bound=True, mu=mu), with_grad=True)
+    udp = add_gradient(pk.trajopt.indirect_or2or(elem0, elemf, mass, thrust, isp, 1e-12, 1e-12, [Tlb, Tub],
+                                                  freetime=True, alpha=0, bound=True, mu=mu), with_grad=True)
     prob = pg.problem(udp)
     prob.c_tol = [1e-7] * 10
 

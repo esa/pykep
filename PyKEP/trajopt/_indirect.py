@@ -7,15 +7,14 @@ from mpl_toolkits.mplot3d import Axes3D
 class _indirect_base(object):
     """Base class for indirect trajectory optimisation problems.
 
-    All inheriting classes will adopt ``plot_traj`` and ``plot_control``.
+    All inheriting classes will adopt ``plot_traj`` and ``plot_control`` and ``pretty`` and ``get_traj`` and have
+    to implement the methods ``_plot_traj`` and ``_pretty``: 
     """
 
     def __init__(
         self, mass, thrust, isp,
         mu, freemass, freetime, alpha, bound,
-        atol, rtol,
-        t0lb=None, t0ub=None, Tlb=None, Tub=None,
-        E0lb=None, E0ub=None, Eflb=None, Efub=None
+        atol, rtol
     ):
 
         # spacecraft
@@ -34,32 +33,6 @@ class _indirect_base(object):
             raise TypeError(
                 "Both atol and rtol must be an instance of either float or int.")
 
-        # bounds
-        lbs = ["t0lb", "Tlb", "E0lb", "Eflb"]
-        ubs = ["t0ub", "Tub", "E0ub", "Efub"]
-
-        for lb, ub in zip(lbs, ubs):
-
-            # values
-            lbval = eval(lb)
-            ubval = eval(ub)
-            bvals = [lbval, ubval]
-
-            # if the pair isn't supplied, ignore
-            if any([b is None for b in bvals]):
-                continue
-
-            # check types
-            elif not all([(isinstance(b, float) or isinstance(b, int)) for b in bvals]):
-                raise TypeError("Lower and uper bounds must be supplied as an instance of float or int.")
-
-            # check validity
-            elif not lbval <= ubval:
-                raise TypeError("Lower bound must be less than upper bound.")
-
-            # set attribute
-            else:
-                [setattr(self, b, bval) for b, bval in zip([lb, ub], bvals)]
 
     def get_nobj(self):
         return 1
@@ -90,7 +63,7 @@ class _indirect_base(object):
             raise TypeError(
                 "Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
 
-        # sun
+        # Sun
         axes.scatter([0], [0], [0], color='y')
 
         # leg
@@ -162,26 +135,21 @@ class _indirect_base(object):
         print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
 
 class indirect_pt2pt(_indirect_base):
-    """Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
+    """
+    Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
+    The class can be used as UDP in pagmo. It creates a constraint satisfaction problem (TPBVP) whose solution satisfies 
+    the Maximum principle from Pontryagin
 
-    This class represents the
-    `NLP <https://esa.github.io/pagmo2/docs/python/tutorials/coding_udp_constrained.html>`_
-    transcription of the indirect optimal control problem of optimising a
-    spacecraft trajectory (alla moda di `Pontryagin's maximum principle <https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle>`_)
-    with respect to its fuel consumption between two Cartesian states, subject
-    to heliocentric dynamics (gravitational influence of the sun) and propulsive
-    control (firing of thrusters).
-
-    The decision chromosome is
+        The decision chromosome is
     ::
 
         z = [T, l0]
     """
 
     def __init__(self, 
-        x0 = [18263654224.863091, -151775790146.74872, 211973772.92230475, 32040.031909887355, 2036.2866676347574, 379.72989007719838, 1000.],
-        xf = [36411505852.18924, 228596671527.32248, 3894371395.5317154, -23007.773185176051, 5868.3825917347767, 688.18809684465612, 907.85064773901092],
-        tof=[255.94710433523446, 255.94710433523446],
+        x0 = [-31870515844.499527, -148420915911.91995, -232032831.15150324, 31422.536803556501, -7233.4361630081712, -415.32767881137943, 1000],
+        xf = [69865919029.435547, 217248258866.53787, 2834587855.9536147, -22145.563252920241, 9476.4925663980739, 742.7125434140745, 910.95094097436925],
+        tof=[230, 280],
         thrust = 0.3,
         isp = 3000,
         mu = pk.MU_SUN,
@@ -190,20 +158,21 @@ class indirect_pt2pt(_indirect_base):
         bound=True, 
         atol=1e-12, 
         rtol=1e-12):
-        """Initialises ``PyKEP.trajopt.indirect_pt2pt`` problem.
+        """
+        Constructs an instance of the ``PyKEP.trajopt.indirect_pt2pt`` problem.
 
         Args:
             - x0 (``list``, ``tuple``, ``numpy.ndarray``): Departure state [m, m, m, m/s, m/s, m/s, kg].
             - xf (``list``, ``tuple``, ``numpy.ndarray``): Arrival state [m, m, m, m/s, m/s, m/s, kg].
+            - tof (``list``): Transfer time bounds [days].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
+            - alpha (``float``, ``int``): Homotopy parameter (0 -quadratic control, 1 - mass optimal)
+            - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - tof (``list``): Transfer time bounds [days].
-            - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
-            - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
         """
 
         # Cartesian states
@@ -217,10 +186,12 @@ class indirect_pt2pt(_indirect_base):
             self.xf = pk.sims_flanagan.sc_state()
             self.xf.set(xf)
 
+        self.tof = tof
+
         # initialise base
         _indirect_base.__init__(
             self, x0[-1], thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, t0lb=0, t0ub=0, Tlb=tof[0], Tub=tof[1]
+            atol, rtol
         )
 
     def fitness(self, z):
@@ -241,8 +212,8 @@ class indirect_pt2pt(_indirect_base):
         return np.hstack(([1, ceq]))
 
     def get_bounds(self):
-        lb = [self.Tlb] + [-100] * 7
-        ub = [self.Tub] + [100] * 7
+        lb = [self.tof[0]] + [-100] * 7
+        ub = [self.tof[1]] + [100] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -287,8 +258,9 @@ class indirect_pl2pl(_indirect_base):
 
     """
 
-    def __init__(self, p0, pf, mass, thrust, isp, atol, rtol, t0lb, t0ub, Tlb, Tub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
-        """Initialises ``PyKEP.trajopt.indirect_pl2pl`` problem.
+    def __init__(self, p0, pf, mass, thrust, isp, atol, rtol, t0, tof, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+        """
+        Initialises ``PyKEP.trajopt.indirect_pl2pl`` problem.
 
         Args:
             - p0 (``str``): Departure planet name.
@@ -298,10 +270,8 @@ class indirect_pl2pl(_indirect_base):
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - t0lb (``float``, ``int``): Minimimum departure time [mjd2000].
-            - t0ub (``float``, ``int``): Maximum departure time [mjd2000].
-            - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
-            - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
+            - t0 (``list``): Launch epoch bounds [MJD2000].
+            - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
@@ -311,7 +281,7 @@ class indirect_pl2pl(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, t0lb=t0lb, t0ub=t0ub, Tlb=Tlb, Tub=Tub
+            atol, rtol
         )
 
         # planets
@@ -320,6 +290,9 @@ class indirect_pl2pl(_indirect_base):
             self.pf = pk.planet.jpl_lp(pf)
         else:
             raise TypeError("Planet names must be supplied as str.")
+
+        self.t0 = t0
+        self.tof = tof
 
     def fitness(self, z):
 
@@ -350,8 +323,8 @@ class indirect_pl2pl(_indirect_base):
         return np.hstack(([1, ceq]))
 
     def get_bounds(self):
-        lb = [self.t0lb, self.Tlb] + [-1e2] * 7
-        ub = [self.t0ub, self.Tub] + [1e2] * 7
+        lb = [self.t0[0], self.tof[0]] + [-1e2] * 7
+        ub = [self.t0[1], self.tof[1]] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -387,7 +360,7 @@ class indirect_or2or(_indirect_base):
 
     """
 
-    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, E0lb, E0ub, Eflb, Efub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, tof, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_or2or`` problem.
 
         Args:
@@ -398,12 +371,7 @@ class indirect_or2or(_indirect_base):
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
-            - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
-            - E0lb (``float``, ``int``): Minimum departure eccentric anomaly [rad].
-            - E0ub (``float``, ``int``): Maximum departure eccentric anomaly [rad].
-            - Eflb (``float``, ``int``): Minimum arrival eccentric anomaly [rad].
-            - M0fb (``float``, ``int``): Maximum arrival eccentric anomaly [rad].
+            - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
@@ -414,12 +382,15 @@ class indirect_or2or(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, Tlb=Tlb, Tub=Tub, E0lb=E0lb, E0ub=E0ub, Eflb=Eflb, Efub=Efub
+            atol, rtol
         )
 
         # Keplerian elements
         self.elem0 = np.asarray(elem0)
         self.elemf = np.asarray(elemf)
+
+        # Time of flight bounds
+        self.tof = tof
 
     def fitness(self, z):
 
@@ -480,8 +451,8 @@ class indirect_or2or(_indirect_base):
         return self.leg.nec + 2
 
     def get_bounds(self):
-        lb = [self.Tlb, self.E0lb, self.Eflb] + [-1e2] * 7
-        ub = [self.Tub, self.E0ub, self.Efub] + [1e2] * 7
+        lb = [self.tof[0], -4*np.pi, -4*np.pi] + [-1e2] * 7
+        ub = [self.tof[1], 4*np.pi, 4*np.pi] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -528,7 +499,7 @@ class indirect_pt2or(_indirect_base):
 
     """
 
-    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Eflb, Efub, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, x0, elemf, mass, thrust, isp, atol, rtol, tof, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_pt2or`` problem.
 
         Args:
@@ -539,8 +510,7 @@ class indirect_pt2or(_indirect_base):
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
-            - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
+            - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
@@ -551,13 +521,14 @@ class indirect_pt2or(_indirect_base):
         # initialise base
         _indirect_base.__init__(
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, Tlb=Tlb, Tub=Tub, Eflb=Eflb, Efub=Efub
+            atol, rtol
         )
 
 
         # departure state and arrival Keplerian elements
         self.x0 = np.asarray(x0, np.float64)
         self.elemf = np.asarray(elemf, np.float64)
+        self.tof = tof
 
     def fitness(self, z):
 
@@ -605,9 +576,8 @@ class indirect_pt2or(_indirect_base):
         return self.leg.nec + 1
 
     def get_bounds(self):
-        pi = 3.14159265359
-        lb = [self.Tlb, self.Eflb] + [-1e2] * 7
-        ub = [self.Tub, self.Efub] + [1e2] * 7
+        lb = [self.tof[0], -4*np.pi] + [-1e2] * 7
+        ub = [self.tof[1], 4*np.pi] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units=pk.AU):
