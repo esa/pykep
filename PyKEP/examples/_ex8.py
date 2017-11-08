@@ -89,7 +89,11 @@ def run_example8():
     # Problem. We start defining a minimum quadratic control problem (alpha=0)
     # with free time (hamiltonian will be foced to be 0)
     udp = add_gradient(pk.trajopt.direct_pl2pl(
+        p0="earth",
+        pf="mars",
+        mass=1000,
         thrust=0.3,
+        isp=3000,
         vinf_arr=1e-4,
         vinf_dep=3.5,
         hf=False,

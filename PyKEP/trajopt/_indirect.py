@@ -594,10 +594,10 @@ class indirect_pt2pl(_indirect_base):
         tf = pk.epoch(t0.mjd2000 + z[0])
 
         # intial costates
-        l0 = np.asarray(z[2:])
+        l0 = np.asarray(z[1:])
 
         # arrival conditions
-        rf,vf = self.p0.eph(tf)
+        rf,vf = self.pf.eph(tf)
 
         # departure state
         x0 = pk.sims_flanagan.sc_state(self.x0[0:3], self.x0[3:6], self.x0[6])
@@ -614,8 +614,8 @@ class indirect_pt2pl(_indirect_base):
         return np.hstack(([1], ceq))
 
     def get_bounds(self):
-        lb = [self.tof[0], -4*np.pi] + [-1e2] * 7
-        ub = [self.tof[1], 4*np.pi] + [1e2] * 7
+        lb = [self.tof[0]] + [-1e2] * 7
+        ub = [self.tof[1]] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units=pk.AU):
@@ -651,3 +651,10 @@ class indirect_pt2pl(_indirect_base):
         # Plots the departure and arrival osculating orbits
         pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
         pk.orbit_plots.plot_planet(self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+
+    def _pretty(self, z):
+        print("\nPlanet to orbit transfer: ")
+        print("\nFrom (cartesian): " + str(list(self.x0)))
+        print("Launch epoch: {!r} MJD2000, a.k.a. {!r}".format(self.t0.mjd2000, self.t0))
+        print("\nTo: " + self.pf.name)
+        print("Time of flight (days): {!r} ".format(z[0]))

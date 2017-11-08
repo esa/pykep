@@ -125,21 +125,18 @@ class _direct_base(object):
 
         # get states
         x = list(self.leg.get_states())
-
         # clean states
         for i in range(len(x)):
             # remove matchpoint duplicate
             x[i].pop(self.nseg)
-            # keep only midpoints
-            x[i] = x[i][1:self.nseg * 2:2]
             # convert to numpy.ndarray
             x[i] = np.asarray(x[i], np.float64)
             # time and mass
             if i in [0, 3]:
-                x[i].reshape((self.nseg, 1))
+                x[i].reshape((self.nseg * 2 + 1, 1))
             # position and velocity
             elif i in [1, 2]:
-                x[i].reshape((self.nseg, 3))
+                x[i].reshape((self.nseg * 2 + 1, 3))
             else:
                 raise RuntimeError("Something is wrong!")
 
@@ -147,12 +144,25 @@ class _direct_base(object):
         t, r, v, m = x
 
         # control
-        u = np.asarray(self._get_controls(z), np.float64).reshape((self.nseg, 3))
+        u = self._get_controls(z)
+        # since controls are only defined at midpoints we need to add the values at the non midpoint nodes
+        tmp = [0] * len(u)*2
+        for i in range(self.nseg):
+            tmp[i*6] = u[i*3]
+            tmp[i*6+1] = u[i*3+1]
+            tmp[i*6+2] = u[i*3+2]
+            tmp[i*6+3] = u[i*3]
+            tmp[i*6+4] = u[i*3+1]
+            tmp[i*6+5] = u[i*3+2]
+        tmp.append(u[-3])
+        tmp.append(u[-2])
+        tmp.append(u[-1])
+        u = np.asarray(tmp, np.float64).reshape((self.nseg*2+1, 3))
         # throttle
-        umag = np.linalg.norm(u, axis=1).reshape((self.nseg, 1))
+        umag = np.linalg.norm(u, axis=1).reshape((self.nseg*2+1, 1))
 
         # full dataset [t, x, y, z, vx, vy, vz, m, u, ux, uy, uz]
-        return np.hstack((t.reshape((self.nseg, 1)), r, v, m.reshape((self.nseg, 1)), umag, u))
+        return np.hstack((t.reshape((self.nseg*2+1, 1)), r, v, m.reshape((self.nseg*2+1, 1)), umag, u))
 
     def pretty(self, z):
         data = self.get_traj(z) 
@@ -269,9 +279,9 @@ class direct_pl2pl(_direct_base):
         v_dep_con = (z[3] ** 2 + z[4] ** 2 + z[5] ** 2 - self.vinf_dep ** 2)
         v_arr_con = (z[6] ** 2 + z[7] ** 2 + z[8] ** 2 - self.vinf_arr ** 2)
 
-        # nondimensionalise inequality constraints
-        v_dep_con /= pk.EARTH_VELOCITY
-        v_arr_con /= pk.EARTH_VELOCITY
+        # nondimensionalize inequality constraints
+        v_dep_con /= pk.EARTH_VELOCITY ** 2
+        v_arr_con /= pk.EARTH_VELOCITY ** 2
 
         return np.hstack(([-mf], ceq, cineq, [v_dep_con, v_arr_con]))
 

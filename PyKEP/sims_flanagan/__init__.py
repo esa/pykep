@@ -35,7 +35,7 @@ def _leg_get_states(self):
     throttles = self.get_throttles()
     mu = self.get_mu()
 
-    # time grid
+    # time grid (the mismatch is repeated twice)
     t_grid = [0.0] * (n_seg * 2 + 2)
 
     # Forward propagation
