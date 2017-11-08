@@ -248,107 +248,6 @@ class indirect_pt2pt(_indirect_base):
         print("To: " + str(self.xf))
         print("Time of flight (days): {!r} ".format(z[0]))
 
-class indirect_pl2pl(_indirect_base):
-    """Represents an indirect trajectory optimisation problem between two planets.
-
-    Decision chromosome is
-    ::
-
-        z = [t0, T, l0]
-
-    """
-
-    def __init__(self, p0, pf, mass, thrust, isp, atol, rtol, t0, tof, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
-        """
-        Initialises ``PyKEP.trajopt.indirect_pl2pl`` problem.
-
-        Args:
-            - p0 (``str``): Departure planet name.
-            - pf (``str``): Arrival planet name.
-            - mass (``float``, ``int``): Spacecraft wet mass [kg].
-            - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
-            - isp (``float``, ``int``): Spacecraft specific impulse [s].
-            - atol (``float``, ``int``): Absolute integration solution tolerance.
-            - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - t0 (``list``): Launch epoch bounds [MJD2000].
-            - tof (``list``): Transfer time bounds [days].
-            - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
-            - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
-        """
-
-        # initialise base
-        _indirect_base.__init__(
-            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol
-        )
-
-        # planets
-        if all([isinstance(pl, str) for pl in [p0, pf]]):
-            self.p0 = pk.planet.jpl_lp(p0)
-            self.pf = pk.planet.jpl_lp(pf)
-        else:
-            raise TypeError("Planet names must be supplied as str.")
-
-        self.t0 = t0
-        self.tof = tof
-
-    def fitness(self, z):
-
-        # times
-        t0 = pk.epoch(z[0])
-        tf = pk.epoch(z[0] + z[1])
-
-        # initial costates
-        l0 = np.asarray(z[2:])
-
-        # Cartesian states
-        r0, v0 = self.p0.eph(t0)
-        rf, vf = self.pf.eph(tf)
-
-        # states
-        x0 = pk.sims_flanagan.sc_state(r0, v0, self.sc.mass)
-        xf = pk.sims_flanagan.sc_state(rf, vf, self.sc.mass / 10)
-
-        # set leg
-        self.leg.set(t0, x0, l0, tf, xf)
-
-        # propagate leg
-        ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
-
-        # final mass
-        mf = self.leg.trajectory[-1, 6]
-
-        return np.hstack(([1, ceq]))
-
-    def get_bounds(self):
-        lb = [self.t0[0], self.tof[0]] + [-1e2] * 7
-        ub = [self.t0[1], self.tof[1]] + [1e2] * 7
-        return (lb, ub)
-
-    def _plot_traj(self, z, axes, units):
-        """Plots spacecraft trajectory.
-
-        Args:
-            - z (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
-            - atol (``float``, ``int``): Absolute integration solution tolerance.
-            - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - units (``float``, ``int``): Length unit by which to normalise data.
-
-        Examples:
-            >>> prob.extract(PyKEP.trajopt.indirect_pl2pl).plot_traj(pop.champion_x)
-        """
-
-        # departure and arrival times
-        t0 = pk.epoch(z[0])
-        tf = pk.epoch(z[0] + z[1])
-
-        # planets
-        pk.orbit_plots.plot_planet(
-            self.p0, t0=t0, units=units, ax=axes, color=(0.8, 0.8, 0.8))
-        pk.orbit_plots.plot_planet(
-            self.pf, t0=tf, units=units, ax=axes, color=(0.8, 0.8, 0.8))
 
 class indirect_or2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two orbits.
@@ -489,6 +388,14 @@ class indirect_or2or(_indirect_base):
         pk.orbit_plots.plot_planet(
             kepf, t0=tf, units=units, ax=axes, color=(0.8, 0.8, 0.8))
 
+    def _pretty(self, z):
+        print("\nOrbit to orbit transfer: ")
+        print("\nFrom: " + str(self.elem0))
+        print("To: " + str(self.elemf))
+        print("Time of flight (days): {!r} ".format(z[0]))
+        print("Starting mean anomaly (rad): {!r} ".format(z[1]))
+        print("Arrival mean anomaly (rad): {!r} ".format(z[2]))
+
 class indirect_pt2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between a Cartesian state and an orbit.
 
@@ -504,7 +411,7 @@ class indirect_pt2or(_indirect_base):
 
         Args:
             - x0 (``list``, ``tuple``, ``numpy.ndarray``): Departure state [m, m, m, m/s, m/s, m/s, kg].
-            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements (mutable eccentric anomaly).
+            - elemf (``list``, ``tuple``, ``numpy.ndarray``): Arrival Keplerian elements SI units. (mean anomaly will be changed).
             - mass (``float``, ``int``): Spacecraft wet mass [kg].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
@@ -614,3 +521,133 @@ class indirect_pt2or(_indirect_base):
         # plot departure and arrival
         pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
         pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+
+    def _pretty(self, z):
+        print("\nPoint to orbit transfer: ")
+        print("\nFrom (cartesian): " + str(self.x0))
+        print("To (osculating elements): " + str(self.elemf))
+        print("Time of flight (days): {!r} ".format(z[0]))
+        print("Arrival mean anomaly (rad): {!r} ".format(z[1]))
+
+class indirect_pt2pl(_indirect_base):
+    """Represents an indirect trajectory optimisation problem between a Cartesian state and a planet.
+
+    Decision chromosome is
+    ::
+
+        z = [T, l0]
+
+    """
+
+    def __init__(self, 
+            x0 = [-24482087316.947845, -150000284705.77328, -196089391.29376224,31677.87649549203, -5859.747563624047, -351.75278222719828, 1000], 
+            pf = "mars",
+            mass = 1000, 
+            thrust = 0.3, 
+            isp = 3000, 
+            tof = [230,280],
+            t0 =1251.0286746844447,
+            mu=pk.MU_SUN,
+            alpha=0, 
+            freetime=False, 
+            bound=True, 
+            atol = 1e-12, 
+            rtol= 1e-12
+            ):
+        """Initialises ``PyKEP.trajopt.indirect_pt2or`` problem.
+
+        Args:
+            - x0 (``list``, ``tuple``, ``numpy.ndarray``): Departure state [m, m, m, m/s, m/s, m/s, kg].
+            - pf (``str``): Arrival planet name. (will be used to construct a planet.jpl_lp object)            - mass (``float``, ``int``): Spacecraft wet mass [kg].
+            - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
+            - isp (``float``, ``int``): Spacecraft specific impulse [s].
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - tof (``list``): Transfer time bounds [days].
+            - t0 (``float``): launch epoch [MJD2000].
+            - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
+            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
+            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+
+        """
+
+        # initialise base
+        _indirect_base.__init__(
+            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
+            atol, rtol
+        )
+
+        # departure epoch
+        self.t0 = pk.epoch(t0)
+        # departure state
+        self.x0 = np.asarray(x0, np.float64)
+        #arrival planet
+        self.pf =  pk.planet.jpl_lp(pf)
+        # bounds on the time of flight
+        self.tof = tof
+
+    def fitness(self, z):
+
+        # times
+        t0 = self.t0
+        tf = pk.epoch(t0.mjd2000 + z[0])
+
+        # intial costates
+        l0 = np.asarray(z[2:])
+
+        # arrival conditions
+        rf,vf = self.p0.eph(tf)
+
+        # departure state
+        x0 = pk.sims_flanagan.sc_state(self.x0[0:3], self.x0[3:6], self.x0[6])
+
+        # arrival state (mass will be ignored)
+        xf = pk.sims_flanagan.sc_state(rf, vf, self.sc.mass / 10)
+
+        # set leg
+        self.leg.set(t0, x0, l0, tf, xf)
+
+        # equality constraints
+        ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
+
+        return np.hstack(([1], ceq))
+
+    def get_bounds(self):
+        lb = [self.tof[0], -4*np.pi] + [-1e2] * 7
+        ub = [self.tof[1], 4*np.pi] + [1e2] * 7
+        return (lb, ub)
+
+    def _plot_traj(self, z, axes, units=pk.AU):
+        """Plots spacecraft trajectory.
+
+        Args:
+            - z (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
+            - atol (``float``, ``int``): Absolute integration solution tolerance.
+            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - units (``float``, ``int``): Length unit by which to normalise data.
+
+        Examples:
+            >>> prob.extract(PyKEP.trajopt.indirect_pt2or).plot_traj(pop.champion_x)
+        """
+
+        # states
+        x0 = self.x0
+
+        # times
+        t0 = self.t0
+        tf = pk.epoch(t0.mjd2000 + z[0])
+
+        # Computes the osculating Keplerian elements at start
+        elem0 = list(pk.ic2par(x0[0:3], x0[3:6], self.leg.mu))
+
+        # Converts the eccentric anomaly into eccentric anomaly
+        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
+
+
+        # Creates a virtual keplerian planet with the said elements
+        kep0 = pk.planet.keplerian(t0, elem0)
+
+        # Plots the departure and arrival osculating orbits
+        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
