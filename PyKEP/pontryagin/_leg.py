@@ -110,7 +110,8 @@ class leg(object):
             self.mu = float(mu)
 
         # dynamics
-        self._dynamics = _dynamics(sc=self.spacecraft, mu=mu, alpha=alpha, bound=bound)
+        self._dynamics = _dynamics(
+            sc=self.spacecraft, mu=mu, alpha=alpha, bound=bound)
 
         # check freetime, freemass, and bound
         if not all([isinstance(param, bool) for param in [freemass, freetime, bound]]):
@@ -250,10 +251,10 @@ class leg(object):
     def _propagate(self, atol, rtol):
 
         # nondimensionalise departure state
-        x0       = np.copy(self.x0) #NOTE: very important
+        x0 = np.copy(self.x0)  # NOTE: very important
         x0[0:3] /= self._dynamics.L
         x0[3:6] /= self._dynamics.V
-        x0[6]   /= self._dynamics.M
+        x0[6] /= self._dynamics.M
 
         # nondimensional fullstate
         fs0 = np.hstack((x0, self.l0, [0]))
@@ -267,7 +268,7 @@ class leg(object):
         tf /= self._dynamics.T
 
         # clear trajectory history
-        self.times      = np.empty((1, 0), dtype=np.float64)
+        self.times = np.empty((1, 0), dtype=np.float64)
         self.trajectory = np.empty((0, 15), dtype=np.float64)
 
         # set integration method
@@ -499,6 +500,7 @@ class leg(object):
         # controls
         u = np.asarray([self._dynamics._pontryagin(fs)
                         for fs in self.trajectory])
+        
 
         # get Hamiltonian
         H = np.asarray([self._dynamics._hamiltonian(fs)
@@ -572,7 +574,7 @@ class leg(object):
 
         return axes
 
-    def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False, axes = None):
+    def plot(self, x, y, mark="k.-", atol=1e-12, rtol=1e-12, unitsx=1, unitsy=1, xlabel=False, ylabel=False, axes=None):
         """Plots in two dimensions of the leg's trajectory data.
         ::
 
@@ -591,25 +593,29 @@ class leg(object):
 
         """
 
-        keys = ['tof', 't', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly', 'lz', 'lvx', 'lvy', 'lvz', 'lm', 'obj', 'u', 'ux', 'uy', 'uz', 'H']
+        keys = ['tof', 't', 'x', 'y', 'z', 'vx', 'vy', 'vz', 'm', 'lx', 'ly',
+                'lz', 'lvx', 'lvy', 'lvz', 'lm', 'obj', 'u', 'ux', 'uy', 'uz', 'H']
 
         if not all([isinstance(dim, str) for dim in [x, y, mark]]):
-            raise TypeError("x, y, and mark must be supplied as instances of str.")
+            raise TypeError(
+                "x, y, and mark must be supplied as instances of str.")
         elif not all([dim in keys for dim in [x, y]]):
             raise ValueError("Both x and y must be in " + str(keys) + ".")
         elif not all([(isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol, unitsx, unitsy]]):
-            raise TypeError("atol, rtol, unitsx, and unitsy must be supplied as an instance of either int or float.")
+            raise TypeError(
+                "atol, rtol, unitsx, and unitsy must be supplied as an instance of either int or float.")
         elif not all([(isinstance(label, str) or isinstance(label, bool)) for label in [xlabel, ylabel]]):
-            raise TypeError("xlabel and ylabel must be supplied an instance of either str or bool.")
+            raise TypeError(
+                "xlabel and ylabel must be supplied an instance of either str or bool.")
         else:
 
             # get trajectory
             traj = self.get_states(atol=atol, rtol=rtol)
 
             # append tof
-            tof = traj[:,0]
+            tof = traj[:, 0]
             tof = tof - tof[0]
-            traj = np.hstack((tof.reshape(tof.size,1), traj))
+            traj = np.hstack((tof.reshape(tof.size, 1), traj))
             # get components and normalise
             xi, yi = keys.index(x), keys.index(y)
 
@@ -619,7 +625,7 @@ class leg(object):
                 axes = fig.gca()
 
             # plot
-            axes.plot(traj[:, xi]/unitsx, traj[:, yi]/unitsy, mark)
+            axes.plot(traj[:, xi] / unitsx, traj[:, yi] / unitsy, mark)
 
             # labels
             if isinstance(xlabel, str):

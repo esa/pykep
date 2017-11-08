@@ -14,8 +14,10 @@ def run_example8():
 
     # We define a meta-problem augmenting a generic UDP with a numercial gradient so that algorithms
     # needing the gradient can be used. Note that algorithm such as snopt7 have an internal system to compute gradients
-    # in case the problem is fed to it without. Hence the kwarg with_grad is provided to deactivate the gradient.
+    # in case the problem is fed to it without. Hence the kwarg with_grad is
+    # provided to deactivate the gradient.
     class add_gradient:
+
         def __init__(self, udp, with_grad=False):
             self.udp_inner = udp
             self.prob = pg.problem(udp)
@@ -43,7 +45,8 @@ def run_example8():
         def has_gradient(self):
             return self.with_grad
 
-    # We define a utility class that sets the algorithm to be used (in pagmo's terminology the UDA or user defined algorithm).
+    # We define a utility class that sets the algorithm to be used (in pagmo's
+    # terminology the UDA or user defined algorithm).
     def algo_factory(name):
         if name is "slsqp":
             uda = pg.nlopt('slsqp')
@@ -81,14 +84,23 @@ def run_example8():
             algo = pg.algorithm(uda)
             return algo
 
-    # ------------------------------------ EXPERIMENT SET-UP -----------------------------------
- 
+    # ------------------------------------ EXPERIMENT SET-UP -----------------
 
-    # Problem. We start defining a minimum quadratic control problem (alpha=0) with free time (hamiltonian will be foced to be 0)
-    udp = add_gradient(pk.trajopt.direct_pl2pl(thrust = 0.3, vinf_arr = 1e-4, vinf_dep = 3.5, hf = False, nseg = 30, t0 = [3500,3700], tof = [200, 500]), with_grad=True)
-      
+    # Problem. We start defining a minimum quadratic control problem (alpha=0)
+    # with free time (hamiltonian will be foced to be 0)
+    udp = add_gradient(pk.trajopt.direct_pl2pl(
+        thrust=0.3,
+        vinf_arr=1e-4,
+        vinf_dep=3.5,
+        hf=False,
+        nseg=20,
+        t0=[1100, 1400],
+        tof=[200, 290]),
+        with_grad=False
+    )
+
     prob = pg.problem(udp)
-    prob.c_tol = [1e-6] * prob.get_nc()
+    prob.c_tol = [1e-5] * prob.get_nc()
 
     # population
     pop = pg.population(prob, 1)
@@ -110,10 +122,9 @@ def run_example8():
     plt.title("The trajectory in the heliocentric frame")
 
     axis = udp.udp_inner.plot_control(pop.champion_x)
-    
+
     plt.ion()
     plt.show()
-
 
 
 if __name__ == "__main__":

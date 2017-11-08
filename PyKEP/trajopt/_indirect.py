@@ -125,6 +125,42 @@ class _indirect_base(object):
 
         return axes
 
+    def get_traj(self, z):
+        """Retrieves the trajectory information.
+        ::
+
+            traj = [[t0, x0, y0, z0, vx0, vy0, vz0, m0, u0, ux0, uy0, uz0]
+                    ...
+                    [tf, xf, yf, zf, vxf, vyf, vzf, mf, uf, uxf, uyf, uzf]]
+
+        Args:
+            - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+        """
+
+        # set leg
+        self.fitness(z)
+
+        # get states [t, x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm, umag, ux, uy, uz, H]
+        x = self.leg.get_states()
+        # we make sure the throttles have the correct magnitude (get_states returns a direction as defined by the primer)
+        for t in x:
+            t[-4] *= t[-5]
+            t[-3] *= t[-5]
+            t[-2] *= t[-5]
+        return x
+
+    def pretty(self, z):
+        data = self.get_traj(z) 
+        self._pretty(z)
+
+        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(data[0,1], data[0,2], data[0,3]))
+        print("Spacecraft Initial Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
+        print("Spacecraft Initial Mass  (kg)    : {!r}".format(data[0,7]))
+
+        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(data[-1,1], data[-1,2], data[-1,3]))
+        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[-1,4], data[-1,5], data[-1,6]))
+        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
+
 class indirect_pt2pt(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
 
@@ -139,35 +175,36 @@ class indirect_pt2pt(_indirect_base):
     The decision chromosome is
     ::
 
-        z = [t0, T, l0]
+        z = [T, l0]
     """
 
-    def __init__(self, x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freetime=True, alpha=0, bound=True, atol=1e-12, rtol=1e-12):
+    def __init__(self, 
+        x0 = [18263654224.863091, -151775790146.74872, 211973772.92230475, 32040.031909887355, 2036.2866676347574, 379.72989007719838, 1000.],
+        xf = [36411505852.18924, 228596671527.32248, 3894371395.5317154, -23007.773185176051, 5868.3825917347767, 688.18809684465612, 907.85064773901092],
+        tof=[255.94710433523446, 255.94710433523446],
+        thrust = 0.3,
+        isp = 3000,
+        mu = pk.MU_SUN,
+        freetime=True, 
+        alpha=0, 
+        bound=True, 
+        atol=1e-12, 
+        rtol=1e-12):
         """Initialises ``PyKEP.trajopt.indirect_pt2pt`` problem.
 
         Args:
             - x0 (``list``, ``tuple``, ``numpy.ndarray``): Departure state [m, m, m, m/s, m/s, m/s, kg].
             - xf (``list``, ``tuple``, ``numpy.ndarray``): Arrival state [m, m, m, m/s, m/s, m/s, kg].
-            - mass (``float``, ``int``): Spacecraft wet mass [kg].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
-            - t0lb (``float``, ``int``): Minimimum departure time [mjd2000].
-            - t0ub (``float``, ``int``): Maximum departure time [mjd2000].
-            - Tlb (``float``, ``int``): Minimimum time of flight [mjd2000].
-            - Tub (``float``, ``int``): Maximum time of flight [mjd2000].
+            - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
             - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
         """
-
-        # initialise base
-        _indirect_base.__init__(
-            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
-            atol, rtol, t0lb=t0lb, t0ub=t0ub, Tlb=Tlb, Tub=Tub
-        )
 
         # Cartesian states
         if not all([(isinstance(x, list) or isinstance(x, tuple) or isinstance(x, np.ndarray)) for x in [x0, xf]]):
@@ -180,14 +217,20 @@ class indirect_pt2pt(_indirect_base):
             self.xf = pk.sims_flanagan.sc_state()
             self.xf.set(xf)
 
+        # initialise base
+        _indirect_base.__init__(
+            self, x0[-1], thrust, isp, mu, True, freetime, alpha, bound,
+            atol, rtol, t0lb=0, t0ub=0, Tlb=tof[0], Tub=tof[1]
+        )
+
     def fitness(self, z):
 
         # times
-        t0 = pk.epoch(z[0])
-        tf = pk.epoch(z[0] + z[1])
+        t0 = pk.epoch(0)
+        tf = pk.epoch(z[0])
 
         # costates
-        l0 = np.asarray(z[2:])
+        l0 = np.asarray(z[1:])
 
         # set leg
         self.leg.set(t0, self.x0, l0, tf, self.xf)
@@ -195,14 +238,11 @@ class indirect_pt2pt(_indirect_base):
         # equality constraints
         ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
 
-        # final mass
-        mf = self.leg.trajectory[-1, 6]
-
-        return np.hstack(([-mf, ceq]))
+        return np.hstack(([1, ceq]))
 
     def get_bounds(self):
-        lb = [self.t0lb, self.Tlb] + [-1e2] * 7
-        ub = [self.t0ub, self.Tub] + [1e2] * 7
+        lb = [self.Tlb] + [-100] * 7
+        ub = [self.Tub] + [100] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -216,8 +256,8 @@ class indirect_pt2pt(_indirect_base):
         tf = pk.epoch(self.leg.tf)
 
         # Computes the osculating Keplerian elements at start and arrival
-        elem0 = pk.ic2par(x0[0:3], x0[3:6], self.leg.mu)
-        elemf = pk.ic2par(xf[0:3], xf[3:6], self.leg.mu)
+        elem0 = list(pk.ic2par(x0[0:3], x0[3:6], self.leg.mu))
+        elemf = list(pk.ic2par(xf[0:3], xf[3:6], self.leg.mu))
 
         # Converts the eccentric anomaly into eccentric anomaly
         elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
@@ -230,6 +270,12 @@ class indirect_pt2pt(_indirect_base):
         # Plots the departure and arrival osculating orbits
         pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
         pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+
+    def _pretty(self, z):
+        print("\nPoint to point transfer: ")
+        print("\nFrom: " + str(self.x0))
+        print("To: " + str(self.xf))
+        print("Time of flight (days): {!r} ".format(z[0]))
 
 class indirect_pl2pl(_indirect_base):
     """Represents an indirect trajectory optimisation problem between two planets.

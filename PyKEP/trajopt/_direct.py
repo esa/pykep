@@ -80,7 +80,7 @@ class _direct_base(object):
         traj = self.get_traj(z)
 
         # time
-        t = traj[:, 0]
+        t = traj[:, 0] - traj[0,0]
 
         # throttle
         u = traj[:, 8]
@@ -141,14 +141,13 @@ class _direct_base(object):
             elif i in [1, 2]:
                 x[i].reshape((self.nseg, 3))
             else:
-                raise RuntimeError("Something is worng!")
+                raise RuntimeError("Something is wrong!")
 
         # unpack states
         t, r, v, m = x
 
         # control
-        u = np.asarray(self._get_controls(
-            z), np.float64).reshape((self.nseg, 3))
+        u = np.asarray(self._get_controls(z), np.float64).reshape((self.nseg, 3))
         # throttle
         umag = np.linalg.norm(u, axis=1).reshape((self.nseg, 1))
 
