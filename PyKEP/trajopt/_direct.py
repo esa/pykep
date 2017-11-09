@@ -254,8 +254,8 @@ class direct_pl2pl(_direct_base):
         rf, vf = self.pf.eph(tf)
 
         # add the vinfs from the chromosome
-        v0 = [a - b for a, b in zip(v0, z[3:6])]
-        vf = [a - b for a, b in zip(vf, z[6:9])]
+        v0 = [a + b for a, b in zip(v0, z[3:6])]
+        vf = [a + b for a, b in zip(vf, z[6:9])]
 
         # spacecraft states
         x0 = pk.sims_flanagan.sc_state(r0, v0, self.sc.mass)
@@ -314,8 +314,8 @@ class direct_pl2pl(_direct_base):
         print("\nLaunch epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0], pk.epoch(z[0])))
         print("Arrival epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0]+z[1], pk.epoch(z[0]+z[1])))
         print("Time of flight (days): {!r} ".format(z[1]))
-        print("\nLaunch DV (km/s) {!r}".format(np.sqrt(z[3]**2+z[4]**2+z[5]**2) / 1000))
-        print("Arrival DV (km/s) {!r}".format(np.sqrt(z[6]**2+z[7]**2+z[8]**2) / 1000))
+        print("\nLaunch DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(z[3]**2+z[4]**2+z[5]**2) / 1000, z[3] / 1000, z[4] / 1000, z[5] / 1000))
+        print("Arrival DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(z[6]**2+z[7]**2+z[8]**2) / 1000, z[6] / 1000, z[7] / 1000, z[8] / 1000))
 
     @staticmethod
     def _get_controls(z):
