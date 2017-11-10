@@ -394,7 +394,7 @@ class leg(object):
 
         # nondimensional position and velocity arrival mismatch
         drf = rf - brf
-        dvf = vf - bvf
+        dvf = (vf - bvf)
 
         # free arrival mass
         if self.freemass:

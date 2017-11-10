@@ -127,12 +127,13 @@ class _indirect_base(object):
         self._pretty(z)
 
         print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(data[0,1], data[0,2], data[0,3]))
-        print("Spacecraft Initial Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
-        print("Spacecraft Initial Mass  (kg)    : {!r}".format(data[0,7]))
+        print("Spacecraft Initial Velocity (m/s)  : [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
+        print("Spacecraft Initial Mass  (kg)      : {!r}".format(data[0,7]))
 
         print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(data[-1,1], data[-1,2], data[-1,3]))
         print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[-1,4], data[-1,5], data[-1,6]))
         print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
+        print("Used propellant  (kg)          : {!r}".format(data[0,7] - data[-1,7]))
 
 class indirect_pt2pt(_indirect_base):
     """
@@ -259,7 +260,19 @@ class indirect_or2or(_indirect_base):
 
     """
 
-    def __init__(self, elem0, elemf, mass, thrust, isp, atol, rtol, tof, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN):
+    def __init__(self, 
+        elem0  = [149598261129.93335,0.016711230601231957,2.640492490927786e-07,3.141592653589793,4.938194050401601,0], 
+        elemf = [227943822376.03537,0.09339409892101332,0.032283207367640024,0.8649771996521327,5.000312830124232,0], 
+        mass = 1000, 
+        thrust = 0.3, 
+        isp = 2500, 
+        atol = 1e-12, 
+        rtol = 1e-12, 
+        tof = [100, 700], 
+        freetime=True, 
+        alpha=1, 
+        bound=True, 
+        mu=pk.MU_SUN):
         """Initialises ``PyKEP.trajopt.indirect_or2or`` problem.
 
         Args:
@@ -390,8 +403,8 @@ class indirect_or2or(_indirect_base):
 
     def _pretty(self, z):
         print("\nOrbit to orbit transfer: ")
-        print("\nFrom: " + str(self.elem0))
-        print("To: " + str(self.elemf))
+        print("\nFrom: " + str(list(self.elem0)))
+        print("To: " + str(list(self.elemf)))
         print("Time of flight (days): {!r} ".format(z[0]))
         print("Starting mean anomaly (rad): {!r} ".format(z[1]))
         print("Arrival mean anomaly (rad): {!r} ".format(z[2]))
@@ -507,7 +520,7 @@ class indirect_pt2or(_indirect_base):
         # Keplerian elements of the osculating orbit at start
         elem0 = pk.ic2par(self.x0[0:3], self.x0[3:6], self.leg.mu)
         # Eccentric to Mean Anomaly
-        elemf[5]  = elemf[5] - elemf[1] * np.sin(elemf[5])
+        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
 
         # Mean Anomaly at the target orbit
         Mf = z[1] - self.elemf[1] * np.sin(z[1])
@@ -530,7 +543,10 @@ class indirect_pt2or(_indirect_base):
         print("Arrival mean anomaly (rad): {!r} ".format(z[1]))
 
 class indirect_pt2pl(_indirect_base):
-    """Represents an indirect trajectory optimisation problem between a Cartesian state and a planet.
+    """
+    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet.
+    Since the terminal conditions on the planet are not fixed, the transversality condition H=0 is deactivated
+    and optimization of T happens via an explicit minimization of the objective (hybrid direct-indirect method)
 
     Decision chromosome is
     ::
@@ -549,7 +565,6 @@ class indirect_pt2pl(_indirect_base):
             t0 =1251.0286746844447,
             mu=pk.MU_SUN,
             alpha=0, 
-            freetime=False, 
             bound=True, 
             atol = 1e-12, 
             rtol= 1e-12
@@ -574,7 +589,7 @@ class indirect_pt2pl(_indirect_base):
 
         # initialise base
         _indirect_base.__init__(
-            self, mass, thrust, isp, mu, True, freetime, alpha, bound,
+            self, mass, thrust, isp, mu, True, False, alpha, bound,
             atol, rtol
         )
 
@@ -611,7 +626,9 @@ class indirect_pt2pl(_indirect_base):
         # equality constraints
         ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
 
-        return np.hstack(([1], ceq))
+        obj = self.leg.trajectory[-1,-1] * self.leg._dynamics.c2 * 1000
+
+        return np.hstack(([obj], ceq))
 
     def get_bounds(self):
         lb = [self.tof[0]] + [-1e2] * 7
