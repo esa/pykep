@@ -62,9 +62,9 @@ def algo_factory(name):
         import pygmo_plugins_nonfree as pg7
         uda = pg7.snopt7(True, "/usr/local/lib/libsnopt7_c.so")
         uda.set_integer_option("Major iterations limit", 2000)
-        uda.set_integer_option("Iterations limit", 2000)
-        uda.set_numeric_option("Major optimality tolerance", 1e-4)
-        uda.set_numeric_option("Major feasibility tolerance", 1e-6)
+        uda.set_integer_option("Iterations limit", 200000)
+        uda.set_numeric_option("Major optimality tolerance", 1e-2)
+        uda.set_numeric_option("Major feasibility tolerance", 1e-9)
 
         algo = pg.algorithm(uda)
         return algo

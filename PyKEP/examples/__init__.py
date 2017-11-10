@@ -15,3 +15,5 @@ if __extensions__['pygmo']:
     from ._ex7 import run_example7
     from ._ex8 import run_example8
     from ._ex9 import run_example9
+    from ._ex10 import run_example10
+    from ._ex_utilities import add_gradient, algo_factory

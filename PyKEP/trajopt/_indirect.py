@@ -138,25 +138,23 @@ class _indirect_base(object):
 class indirect_pt2pt(_indirect_base):
     """
     Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
-    The class can be used as UDP in pagmo. It creates a constraint satisfaction problem (TPBVP) whose solution satisfies 
-    the Maximum principle from Pontryagin
+    The class can be used as UDP in pagmo.
 
         The decision chromosome is
     ::
 
         z = [T, l0]
     """
-
     def __init__(self, 
-        x0 = [-31870515844.499527, -148420915911.91995, -232032831.15150324, 31422.536803556501, -7233.4361630081712, -415.32767881137943, 1000],
-        xf = [69865919029.435547, 217248258866.53787, 2834587855.9536147, -22145.563252920241, 9476.4925663980739, 742.7125434140745, 910.95094097436925],
-        tof=[230, 280],
+        x0 = [-51051524893.335152, -142842795180.97464, 1139935.2553601924, 30488.847061907356, -10612.482697050367, -204.23284335657095, 1000],
+        xf = [24753885674.871033, 231247560000.17883, 4236305010.4256544, -23171.900670190855, 4635.6817290400222, 666.44019588506023, 910.48383959441833],
         thrust = 0.3,
         isp = 3000,
         mu = pk.MU_SUN,
-        freetime=True, 
-        alpha=0, 
-        bound=True, 
+        tof=[276.15166075931495, 276.15166075931495],
+        freetime=False, 
+        alpha=1,    # quadratic control
+        bound = True, 
         atol=1e-12, 
         rtol=1e-12):
         """
@@ -544,7 +542,7 @@ class indirect_pt2or(_indirect_base):
 
 class indirect_pt2pl(_indirect_base):
     """
-    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet.
+    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet (randevouz).
     Since the terminal conditions on the planet are not fixed, the transversality condition H=0 is deactivated
     and optimization of T happens via an explicit minimization of the objective (hybrid direct-indirect method)
 
@@ -601,6 +599,8 @@ class indirect_pt2pl(_indirect_base):
         self.pf =  pk.planet.jpl_lp(pf)
         # bounds on the time of flight
         self.tof = tof
+        # store the alfa value (immutable)
+        self._alpha = alpha
 
     def fitness(self, z):
 
@@ -661,7 +661,6 @@ class indirect_pt2pl(_indirect_base):
         # Converts the eccentric anomaly into eccentric anomaly
         elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
 
-
         # Creates a virtual keplerian planet with the said elements
         kep0 = pk.planet.keplerian(t0, elem0)
 
@@ -670,8 +669,9 @@ class indirect_pt2pl(_indirect_base):
         pk.orbit_plots.plot_planet(self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
     def _pretty(self, z):
-        print("\nPlanet to orbit transfer: ")
+        print("\nPlanet to orbit transfer, alpha is: ",  self._alpha)
         print("\nFrom (cartesian): " + str(list(self.x0)))
         print("Launch epoch: {!r} MJD2000, a.k.a. {!r}".format(self.t0.mjd2000, self.t0))
-        print("\nTo: " + self.pf.name)
+        print("\nTo (planet): " + self.pf.name)
         print("Time of flight (days): {!r} ".format(z[0]))
+

@@ -1,17 +1,13 @@
 def run_example7():
     """
-    This example demonstrates the optimization of a transfer from Earth to Mars orbit (no randezvous). It makes
-    use of an indirect method based on the class trajopt.indirect_or2or which defines an optimization problem
-    in the pagmo formalism a user defined problem (UDP) and solves it calling some pagmo algorithm (UDA).
-
-    An algorithm factory is provided to experiment with, for example, ipopt or slsqp (scipy) or, if available
-    snopt7
+    This example demonstrates the indirect method (cartesian) on a orbit to orbit scenario.
+    The orbits are those of Earth and Mars.
     """
     import PyKEP as pk
     import pygmo as pg
     import numpy as np
     from matplotlib import pyplot as plt
-    from ._ex_utilities import add_gradient, algo_factory
+    from PyKEP.examples import add_gradient, algo_factory
 
     # Some pre-computed solutions (obtaining spending some iterations and restarts from random initial guesses)
     z_mass_optimal = [397.88267909228767, 2.0719343674552215, 2.7313941033119407, 11.882803539732214, 10.567639551625298, 0.50803671389927796, -11.056641527923768, 12.176151455434058, 4.1269457596809245, 3.4434953247725324]
@@ -29,7 +25,7 @@ def run_example7():
     # 1 - Algorithm
     algo = algo_factory("snopt7")
 
-    # 2 - Problem. We start defining a minimum quadratic control problem (alpha=0) with free time
+    # 2 - Problem. We define a minimum quadratic control problem (alpha=0) with free time
     # (hamiltonian will be forced to be 0). We provide the option for estimating the gradient numerically for
     # algorithms that require it.
     udp = add_gradient(pk.trajopt.indirect_or2or(
