@@ -1,4 +1,4 @@
-Asteroid hopping in the main belt (requires pygmo)
+Asteroid hopping in the main belt
 ==========================================================
 
 .. figure:: ../images/gallery6.gif

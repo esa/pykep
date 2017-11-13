@@ -3,14 +3,14 @@
 Install pykep
 ======================
 
-pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.4-3.5 We are unfortunately not in the position to provide
-binaries for everybody, so you will most likely need to compile the source code youself. This process, under unix architectures is
-painless, while under windows architectures it can be troublesome. For this reason we provide the 64 bits binaries of each release.
+pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X We are unfortunately not in the position to provide
+binaries for everybody, so it is likely you willneed to compile the source code youself. This process, under unix architectures is
+painless, while under windows architectures it can be troublesome, but we do provide windows 64 bits binaries via PyPi
 
 Using Windows Binaries
 ----------------------
 
-If you have a windows 64-bits based python (27, 34 or 35) you can install pykep via pip typing:
+If you have a windows 64-bits based python (27, 34, 35 or 36) you can install pykep via pip typing:
 
   pip install pykep
 
