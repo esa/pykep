@@ -535,8 +535,8 @@ class indirect_pt2or(_indirect_base):
 
     def _pretty(self, z):
         print("\nPoint to orbit transfer: ")
-        print("\nFrom (cartesian): " + str(list(self.x0))
-        print("To (osculating elements): " + str(list(self.elemf)))
+        print("\nFrom (cartesian): ", list(self.x0))
+        print("To (osculating elements): ", list(self.elemf))
         print("Time of flight (days): {!r} ".format(z[0]))
         print("Arrival mean anomaly (rad): {!r} ".format(z[1]))
 

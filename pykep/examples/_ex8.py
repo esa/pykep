@@ -1,6 +1,6 @@
 def run_example8():
     """
-    This example demonstrates the direct method (cartesian) on a planet to planet.
+    This example demonstrates the direct method (sims-flanagan) on a planet to planet scenario.
     """
     import pykep as pk
     import pygmo as pg

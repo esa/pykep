@@ -5,35 +5,46 @@ def run_example6(n_seg=5):
 
     The spacecraft performances, as well as the three asteroids visited, are taken from the GTOC7 problem description.
     """
-    from PyGMO import algorithm, population
+    import pygmo as pg
     from pykep.trajopt import mr_lt_nep
     from pykep.planet import gtoc7
+    from pykep.examples import add_gradient, algo_factory
 
-    algo = algorithm.scipy_slsqp(max_iter=500, acc=1e-5, screen_output=True)
 
-    prob = mr_lt_nep(
-        t0=[9600., 9700.],
-        seq=[gtoc7(5318), gtoc7(14254), gtoc7(7422), gtoc7(5028)],
-        n_seg=n_seg,
-        mass=[800., 2000.],
-        leg_tof=[100., 365.25],
-        rest=[30., 365.25],
-        Tmax=0.3,
-        Isp=3000.,
-        traj_tof=365.25 * 3.,
-        objective='mass',
-        c_tol=1e-05
-    )
+    # If you have no access to snopt7, try slsqp (multiple starts may be necessary)
+    algo = algo_factory("snopt7")
 
-    pop = population(prob, 1)
+    udp = add_gradient(
+            mr_lt_nep(
+                t0=[9600., 9700.],
+                seq=[gtoc7(5318), gtoc7(14254), gtoc7(7422), gtoc7(5028)],
+                n_seg=n_seg,
+                mass=[800., 2000.],
+                leg_tof=[100., 365.25],
+                rest=[30., 365.25],
+                Tmax=0.3,
+                Isp=3000.,
+                traj_tof=365.25 * 3.,
+                objective='mass',
+                c_tol=1e-05
+            ),
+        with_grad = False)
+
+    prob = pg.problem(udp)
+    prob.c_tol = [1e-5] * prob.get_nc()
+
+    pop = pg.population(prob, 1)
     pop = algo.evolve(pop)
 
-    solution = pop.champion.x
+    solution = pop.champion_x
     if prob.feasibility_x(solution):
         print("FEASIBILE!!!")
-        ax = prob.plot(solution)
+        ax = udp.udp_inner.plot(solution)
     else:
         print("INFEASIBLE :(")
         ax = None
 
     return prob, solution, ax
+
+if __name__ == "__main__":
+    run_example6()

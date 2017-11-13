@@ -32,17 +32,21 @@ class add_gradient:
         return self.with_grad
 
 # We define a utility class that sets the algorithm to be used (in pagmo's terminology the UDA or user defined algorithm).
-def algo_factory(name):
+def algo_factory(name, original_screen_output = True):
     if name is "slsqp":
         uda = pg.nlopt('slsqp')
-        uda.xtol_rel = 1e-6
-        uda.ftol_rel = 1e-10
+        uda.xtol_rel = 1e-5
+        uda.ftol_rel = 0
         algo = pg.algorithm(uda)
         algo.set_verbosity(1)
         return algo
     elif name is "ipopt":
+        if original_screen_output:
+            pl = 5
+        else:
+            pl = 0
         uda = pg.ipopt()
-        uda.set_integer_option("print_level", 5)
+        uda.set_integer_option("print_level", pl)
         uda.set_integer_option("acceptable_iter", 4)
         uda.set_integer_option("max_iter", 150)
 
@@ -60,7 +64,7 @@ def algo_factory(name):
         return algo
     elif name is "snopt7":
         import pygmo_plugins_nonfree as pg7
-        uda = pg7.snopt7(True, "/usr/local/lib/libsnopt7_c.so")
+        uda = pg7.snopt7(original_screen_output, "/usr/local/lib/libsnopt7_c.so")
         uda.set_integer_option("Major iterations limit", 2000)
         uda.set_integer_option("Iterations limit", 200000)
         uda.set_numeric_option("Major optimality tolerance", 1e-2)

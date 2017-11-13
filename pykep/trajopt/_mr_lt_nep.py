@@ -1,8 +1,7 @@
-from PyGMO.problem._base import base as base_problem
-from pykep.planet import gtoc7
+import pykep as pk
 
 
-class mr_lt_nep(base_problem):
+class mr_lt_nep(object):
 
     """
     This class represents, as a global optimization problem (linearly constrained,
@@ -25,7 +24,7 @@ class mr_lt_nep(base_problem):
 
     def __init__(
             self,
-            seq=[gtoc7(3413), gtoc7(234), gtoc7(11432)],
+            seq=[pk.planet.gtoc7(3413), pk.planet.gtoc7(234), pk.planet.gtoc7(11432)],
             n_seg=5,
             t0=[13000, 13200],
             leg_tof=[1, 365.25 * 3],
@@ -53,21 +52,15 @@ class mr_lt_nep(base_problem):
         * traj_tof maximum total mission duration (days)
         * c_tol: tolerance on the constraints
         """
-        import pykep
+
         # Number of legs
         n = len(seq) - 1
         # Problem dimension
         dim = (4 + n_seg * 3) * n + 1
         # Number of equality constraints
-        dim_eq = 7 * n
+        self.__dim_eq = 7 * n
         # Number of Inequality constraints
-        dim_ineq = n * n_seg + n
-
-        # We call the base problem constaructor
-        super(mr_lt_nep, self).__init__(dim, 0, 1,
-                                        dim_eq + dim_ineq,  # constraint dimension
-                                        dim_ineq,  # inequality constraints
-                                        1e-5)  # constrain tolerance
+        self.__dim_ineq = n * n_seg + n
 
         # We define data members
         self.__seq = seq
@@ -76,76 +69,64 @@ class mr_lt_nep(base_problem):
         self.__dim_leg = 4 + n_seg * 3
         self.__start_mass = mass[1]
         self.__max_total_time = traj_tof
+        self.__t0 = t0
+        self.__leg_tof = leg_tof
+        self.__rest = rest
+        self.__mass = mass
 
         # We create n distinct legs objects
         self.__legs = []
         for i in range(n):
-            self.__legs.append(pykep.sims_flanagan.leg())
+            self.__legs.append(pk.sims_flanagan.leg())
         for leg in self.__legs:
             leg.high_fidelity = True
-            leg.set_mu(pykep.MU_SUN)
+            leg.set_mu(pk.MU_SUN)
 
         if objective not in ['mass', 'time']:
             raise ValueError("Error in defining the objective. Was it one of mass or time?")
         self.__objective = objective
 
-        # We set the ptoblem box-bounds
-        # set leg bounds
-        lb_leg = [t0[0], leg_tof[0], rest[0], mass[0]] + [-1] * n_seg * 3
-        ub_leg = [t0[1] + traj_tof * n, leg_tof[1], rest[1], mass[1]] + [1] * n_seg * 3
-
-        # set n leg bounds
-        lb = lb_leg * n
-        ub = [t0[1], leg_tof[1], rest[1], mass[1]] + [1] * n_seg * 3 + ub_leg * (n - 1)
-
-        # set total time bounds
-        lb += [1.]
-        ub += [self.__max_total_time]
-
-        self.set_bounds(lb, ub)
-
-    def _objfun_impl(self, x):
+    def fitness(self, x_full):
+        retval = []
+        # 1 - obj fun
         if self.__objective == 'mass':
-            final_mass = x[-1 - self.__dim_leg + 3]
-            return (-final_mass, )
+            retval.append(x_full[-1 - self.__dim_leg + 3])
         elif self.__objective == 'time':
-            tof = x[-1 - self.__dim_leg] - x[0]
-        return (tof, )
+            retval.append(x_full[-1 - self.__dim_leg] - x_full[0])
 
-    def _compute_constraints_impl(self, x_full):
-        import pykep
         sc_mass = self.__start_mass
         eqs = []
         ineqs = []
 
+        # 2 - constraints
         for i in range(self.__num_legs):
             x = x_full[i * self.__dim_leg:(i + 1) * self.__dim_leg]
 
-            start = pykep.epoch(x[0])
-            end = pykep.epoch(x[0] + x[1])
+            start = pk.epoch(x[0])
+            end = pk.epoch(x[0] + x[1])
 
             # Computing starting spaceraft state
             r, v = self.__seq[i].eph(start)
-            x0 = pykep.sims_flanagan.sc_state(r, v, sc_mass)
+            x0 = pk.sims_flanagan.sc_state(r, v, sc_mass)
 
             # Computing ending spaceraft state
             r, v = self.__seq[i + 1].eph(end)
-            xe = pykep.sims_flanagan.sc_state(r, v, x[3])
+            xe = pk.sims_flanagan.sc_state(r, v, x[3])
 
             # Building the SF leg
-            self.__legs[i].set_spacecraft(pykep.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
+            self.__legs[i].set_spacecraft(pk.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
             self.__legs[i].set(start, x0, x[-3 * self.__nseg:], end, xe)
 
             # Setting all constraints
             eqs.extend(self.__legs[i].mismatch_constraints())
             ineqs.extend(self.__legs[i].throttles_constraints())
 
-            eqs[-7] /= pykep.AU
-            eqs[-6] /= pykep.AU
-            eqs[-5] /= pykep.AU
-            eqs[-4] /= pykep.EARTH_VELOCITY
-            eqs[-3] /= pykep.EARTH_VELOCITY
-            eqs[-2] /= pykep.EARTH_VELOCITY
+            eqs[-7] /= pk.AU
+            eqs[-6] /= pk.AU
+            eqs[-5] /= pk.AU
+            eqs[-4] /= pk.EARTH_VELOCITY
+            eqs[-3] /= pk.EARTH_VELOCITY
+            eqs[-2] /= pk.EARTH_VELOCITY
             eqs[-1] /= self.__start_mass
 
             sc_mass = x[3]  # update mass to final mass of leg
@@ -158,8 +139,37 @@ class mr_lt_nep(base_problem):
                 final_time_ineq = x[0] + x[1] + x[2] - x_full[0] - x_full[-1]  # <- total time
                 ineqs.append(final_time_ineq / 365.25)
 
-        retval = eqs + ineqs
+        retval = retval + eqs + ineqs
         return retval
+
+    def get_bounds(self):
+        t0 = self.__t0
+        leg_tof = self.__leg_tof
+        rest = self.__rest
+        mass = self.__mass
+        nseg = self.__nseg
+        traj_tof = self.__max_total_time
+        n = self.__num_legs
+        # We set the ptoblem box-bounds
+        # set leg bounds
+        lb_leg = [t0[0], leg_tof[0], rest[0], mass[0]] + [-1] * nseg * 3
+        ub_leg = [t0[1] + traj_tof * n, leg_tof[1], rest[1], mass[1]] + [1] * nseg * 3
+
+        # set n leg bounds
+        lb = lb_leg * n
+        ub = [t0[1], leg_tof[1], rest[1], mass[1]] + [1] * nseg * 3 + ub_leg * (n - 1)
+
+        # set total time bounds
+        lb += [1.]
+        ub += [self.__max_total_time]
+
+        return (lb, ub)
+
+    def get_nic(self):
+        return self.__dim_ineq
+
+    def get_nec(self):
+        return self.__dim_eq
 
     def resting_times(self, x):
         return list(x[2::self.__dim_leg])
@@ -197,7 +207,7 @@ class mr_lt_nep(base_problem):
         axis.scatter([0], [0], [0], color='y')
 
         # Computing the legs
-        self._compute_constraints_impl(x)
+        self.fitness(x)
 
         # Plotting the legs
         for leg in self.__legs:

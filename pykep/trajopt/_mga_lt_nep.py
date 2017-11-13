@@ -5,7 +5,6 @@ from pykep.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
 
 
 class mga_lt_nep(base_problem):
-
     """
     This class is a PyGMO (http://esa.github.io/pygmo/) problem representing a low-thrust
     interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with sims_flanagan legs
