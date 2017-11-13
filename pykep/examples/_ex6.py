@@ -9,6 +9,7 @@ def run_example6(n_seg=5):
     from pykep.trajopt import mr_lt_nep
     from pykep.planet import gtoc7
     from pykep.examples import add_gradient, algo_factory
+    from matplotlib import pyplot as plt
 
 
     # If you have no access to snopt7, try slsqp (multiple starts may be necessary)
@@ -44,7 +45,8 @@ def run_example6(n_seg=5):
         print("INFEASIBLE :(")
         ax = None
 
-    return prob, solution, ax
+    plt.ion()
+    plt.show()
 
 if __name__ == "__main__":
     run_example6()

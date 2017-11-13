@@ -446,9 +446,9 @@ class leg(object):
             The returned array is characterised by:
             ::
 
-                [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, u0, ux0, uy0, uz0, H0],
+                [[t0, x0, y0, z0, vx0, vy0, vz0, m0, lx0, ly0, lz0, lvx0, lvy0, lvz0, lm0, obj, u0, ux0, uy0, uz0, H0],
                 ...
-                 [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, uf, uxf, uyf, uzf, Hf]]
+                 [tf, xf, yf, zf, vxf, vyf, vzf, mf, lxf, lyf, lzf, lvxf, lvyf, lvzf, lmf, obj, uf, uxf, uyf, uzf, Hf]]
 
         Raises:
             - TypeError: If either ``atol`` or ``rtol`` is supplied as neither an instance of ``float`` nor ``int``.
@@ -456,7 +456,7 @@ class leg(object):
 
         .. note::
             The returned array has the units of
-            [mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND, ND].
+            [mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, s, ND, ND, ND, ND, ND].
 
         .. note::
             Setting either ``atol`` or ``rtol`` smaller than ``1e-12`` may result in numerical integration difficulties.
@@ -519,7 +519,7 @@ class leg(object):
 
         return traj
 
-    def plot_traj(self, axes, mark="k.-", atol=1e-11, rtol=1e-11, units=AU):
+    def plot_traj(self, axes, mark="k", atol=1e-11, rtol=1e-11, units=AU, quiver = False):
         """Plots trajectory onto a 3D axis.
 
         Args:
@@ -528,6 +528,7 @@ class leg(object):
             - atol (``float``, ``int``): Absolute integration solution tolerance.
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - units (``float``, ``int``): Length unit by which to normalise data.
+            - quiver (``bool``): Activates the visualization of the throttle arrows
 
         Raises:
             - TypeError: If ``axes`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
@@ -564,13 +565,30 @@ class leg(object):
             pass
 
         # get trajectory
-        traj = self.get_states(atol=atol, rtol=rtol)[:, 1:4]
+        full_data = self.get_states(atol=atol, rtol=rtol)
+        traj = full_data[:, 1:4]
 
         # normalise
         traj /= units
 
         # plot trajectory
         axes.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
+        
+
+        if quiver:
+            thrusts = full_data[:, 17:20]
+            magnitudes = full_data[:, 16]
+            thrusts[:,0] = thrusts[:,0] * magnitudes
+            thrusts[:,1] = thrusts[:,1] * magnitudes
+            thrusts[:,2] = thrusts[:,2] * magnitudes
+
+            axes.set_aspect("equal")
+            xlim = axes.get_xlim()
+            zlim = axes.get_zlim()
+            ratio = (xlim[1] - xlim[0])/(zlim[1] - zlim[0])
+            thrusts[:,2] = thrusts[:,2] / ratio # to compensate for non equal z axes
+
+            axes.quiver(traj[:, 0], traj[:, 1], traj[:, 2], thrusts[:, 0], thrusts[:, 1], thrusts[:, 2], color= 'r', length=0.2, normalize=False, arrow_length_ratio=0.01)
 
         return axes
 

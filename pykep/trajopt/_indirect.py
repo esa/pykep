@@ -40,7 +40,7 @@ class _indirect_base(object):
     def get_nec(self):
         return self.leg.nec
 
-    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None):
+    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None, quiver = False):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
@@ -63,14 +63,14 @@ class _indirect_base(object):
             raise TypeError(
                 "Axis must be instance of matplotlib.axes._subplots.Axes3DSubplot.")
 
+        # problem specifics
+        self._plot_traj(z, axes, units)
+
         # Sun
         axes.scatter([0], [0], [0], color='y')
 
         # leg
-        self.leg.plot_traj(axes, mark, atol, rtol, units)
-
-        # problem specifics
-        self._plot_traj(z, axes, units)
+        self.leg.plot_traj(axes, mark, atol, rtol, units, quiver=quiver)
 
         return axes
 
@@ -140,10 +140,11 @@ class indirect_pt2pt(_indirect_base):
     Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
     The class can be used as UDP in pagmo.
 
-        The decision chromosome is
+    The decision chromosome is
     ::
 
         z = [T, l0]
+
     """
     def __init__(self, 
         x0 = [-51051524893.335152, -142842795180.97464, 1139935.2553601924, 30488.847061907356, -10612.482697050367, -204.23284335657095, 1000],

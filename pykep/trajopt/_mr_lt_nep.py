@@ -206,17 +206,18 @@ class mr_lt_nep(object):
         # Plotting the Sun ........
         axis.scatter([0], [0], [0], color='y')
 
+        # Plotting the pykep.planet both at departure and arrival dates
+        for i in range(self.__num_legs):
+            idx = i * self.__dim_leg
+            plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(0.7, 0.7, 0.7), s=30, ax=axis)
+            plot_planet(self.__seq[i + 1], epoch(x[idx] + x[idx + 1]), units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, ax=axis)
+
         # Computing the legs
         self.fitness(x)
 
         # Plotting the legs
         for leg in self.__legs:
-            plot_sf_leg(leg, units=AU, N=10, ax=axis)
+            plot_sf_leg(leg, units=AU, N=10, ax=axis, legend = False)
 
-        # Plotting the pykep.planet both at departure and arrival dates
-        for i in range(self.__num_legs):
-            idx = i * self.__dim_leg
-            plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(0.7, 0.7, 1), s=30, ax=axis)
-            plot_planet(self.__seq[i + 1], epoch(x[idx] + x[idx + 1]), units=AU, legend=False, color=(0.7, 0.7, 1), s=30, ax=axis)
-        plt.show()
+
         return axis

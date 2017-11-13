@@ -339,7 +339,7 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
     return axis
 
 
-def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=True, ax=None):
+def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=False, ax=None):
     """
     ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, ax=None):
 
@@ -530,9 +530,9 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     z_midpoint = z[1::2]
 
     if plot_segments:
-        axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker='o')
-        axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker='x')
-        axis.scatter(x_grid[0], y_grid[0], z_grid[0], marker='^', c='y')
+        axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker='o', label='nodes')
+        axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker='x', label='mid-points')
+        axis.scatter(x_grid[0], y_grid[0], z_grid[0], marker='^', c='y', label='mismatch point')
 
     if legend:
         axis.legend()

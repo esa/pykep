@@ -64,7 +64,7 @@ def run_example9():
     print("Feasible?:", prob.feasibility_x(pop.champion_x) )
 
     # plot trajectory
-    axis = udp.udp_inner.plot_traj(pop.champion_x)
+    axis = udp.udp_inner.plot_traj(pop.champion_x, quiver=True, mark='k')
     plt.title("The trajectory in the heliocentric frame")
 
     # plot control

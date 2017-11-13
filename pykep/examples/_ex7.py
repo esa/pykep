@@ -63,9 +63,9 @@ def run_example7():
     else:
         print("No solution found, try again :)")
     # plot trajectory
-    axis = udp.udp_inner.plot_traj(pop.champion_x)
+    axis = udp.udp_inner.plot_traj(pop.champion_x, quiver=True)
     plt.title("The trajectory in the heliocentric frame")
-
+  
     # plot control
     udp.udp_inner.plot_control(pop.champion_x)
     plt.title("The control profile (throttle)")   
@@ -77,3 +77,4 @@ def run_example7():
 
 if __name__ == "__main__":
     run_example7()
+
