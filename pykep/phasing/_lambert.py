@@ -1,5 +1,5 @@
-from PyGMO.problem._base import base
-from PyGMO.util import hypervolume
+from pygmo.problem._base import base
+from pygmo.util import hypervolume
 from pykep.planet import gtoc7
 from pykep.orbit_plots import plot_planet, plot_lambert
 from pykep.core import lambert_problem, DAY2SEC, epoch, AU, damon
@@ -14,7 +14,7 @@ class lambert_metric(base):
 
     Hennes, Izzo, Landau: "Fast approximators for optimal low-thrust hops between main belt asteroids" - IEEE SSCI 2016
 
-    The result is a PyGMO multi-objective problem that can be solved efficiently by MO optimization algorithms
+    The result is a pygmo multi-objective problem that can be solved efficiently by MO optimization algorithms
     """
 
     def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500):
@@ -35,7 +35,7 @@ Example::
         """
 
         # First we call the constructor of the base class telling
-        # essentially to PyGMO what kind of problem to expect (2 objective, 0
+        # essentially to pygmo what kind of problem to expect (2 objective, 0
         # contraints etc.)
         super(lambert_metric, self).__init__(2, 0, 1 + (not single_objective), 0, 0, 0)
 

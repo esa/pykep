@@ -3,7 +3,7 @@ import pykep as pk
 class mga_lt_earth_mars_sundmann(object):
 
     """
-    This constructs a PaGMO.problem object that represents a low-thrust transfer between Earth and Jupiter.
+    This constructs a pagmo.problem object that represents a low-thrust transfer between Earth and Jupiter.
     The interplantary leg uses Sundman's variable. The decision vector
     contains [t0,T,sf,mf,Vx,Vy,Vz,[throttles]] in the following units: [mjd2000, days, days, kg, m/s,m/s,m/s, [non-dimensional]]
     """

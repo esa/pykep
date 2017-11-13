@@ -1,4 +1,4 @@
-from PyGMO.problem import base as base_problem
+from pygmo.problem import base as base_problem
 from pykep.core import epoch, DAY2SEC, lambert_problem, propagate_lagrangian, SEC2DAY, AU, ic2par
 from pykep.planet import jpl_lp
 from math import pi, cos, sin, log, acos
@@ -7,7 +7,7 @@ from scipy.linalg import norm
 
 class pl2pl_N_impulses(base_problem):
     """
-    This class is a PyGMO (http://esa.github.io/pygmo/) problem representing a single leg transfer
+    This class is a pygmo (http://esa.github.io/pygmo/) problem representing a single leg transfer
     between two planets allowing up to a maximum number of impulsive Deep Space Manouvres.
 
     The decision vector is::
@@ -59,10 +59,10 @@ class pl2pl_N_impulses(base_problem):
         if (t0 is not None and phase_free):
             raise ValueError('When phase_free is True no t0 can be specified')
 
-        # We compute the PyGMO problem dimensions
+        # We compute the pygmo problem dimensions
         dim = 2 + 4 * (N_max - 2) + 1 + phase_free
         obj_dim = multi_objective + 1
-        # First we call the constructor for the base PyGMO problem
+        # First we call the constructor for the base pygmo problem
         # As our problem is n dimensional, box-bounded (may be multi-objective), we write
         # (dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
         super(pl2pl_N_impulses, self).__init__(dim, 0, obj_dim, 0, 0, 0)

@@ -17,7 +17,7 @@ the algorithm is non-deterministic.
 
 This example demonstrates the use of the Sims-Flanagan module of pykep to perform global optimization of a single leg interplanetary
 trajectory over large launch windows. In particular, it defines a
-transfer between the Earth and Mars as an NLP global optimization problem (using the open source `PyGMO project <http://pagmo.sourceforge.net/pygmo/index.html>`_)
+transfer between the Earth and Mars as an NLP global optimization problem (using the open source `pygmo project <http://pagmo.sourceforge.net/pygmo/index.html>`_)
 and it then attempts to find one solution using the Monotonic Basin Hopping meta-algorithm connected to an SQP local optimization technique (from SciPy). In case
 the user has a license for SNOPT, the use of this typically result in a performance gain
 

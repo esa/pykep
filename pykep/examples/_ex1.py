@@ -1,21 +1,21 @@
 try:
-    from PyGMO.problem import base as PyGMO_problem
+    from pygmo.problem import base as pygmo_problem
 
     """
-    This example on the use of pykep constructs, using the PyGMO syntax, is an interplanetary low-thrust optimization
+    This example on the use of pykep constructs, using the pygmo syntax, is an interplanetary low-thrust optimization
     problem that can then be solved using one of the available PagMO solvers. The problem is a non-linear constrained
     problem that uses the Sims-Flanagan transcription to model the low-thrust trajectory. pykep plotting capabilities
     are also demonstrated.
     """
-    class mga_lt_earth_mars(PyGMO_problem):
+    class mga_lt_earth_mars(pygmo_problem):
 
         """
-        This constructs a PaGMO.problem object that represents a low-thrust transfer between Earth and Mars. The decision vector
+        This constructs a pagmo.problem object that represents a low-thrust transfer between Earth and Mars. The decision vector
         contains [t0,T,mf,Vx,Vy,Vz,[throttles]] in the following units: [mjd2000, days, kg, m/s,m/s,m/s, [non-dimensional]]
         """
 
         def __init__(self, mass=1000, Tmax=0.05, Isp=2500, Vinf=3.0, nseg=20):
-            # First we call the constructor for the base PyGMO problem
+            # First we call the constructor for the base pygmo problem
             # (dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
             super(mga_lt_earth_mars, self).__init__(
                 6 + nseg * 3, 0, 1, 8 + nseg, nseg + 1, 1e-4)
@@ -104,7 +104,7 @@ try:
             plt.show()
 
     def run_example1(n_restarts=5):
-        from PyGMO import algorithm, island
+        from pygmo import algorithm, island
         prob = mga_lt_earth_mars(nseg=15)
         prob.high_fidelity(True)
         algo = algorithm.scipy_slsqp(max_iter=500, acc=1e-5)
@@ -120,4 +120,4 @@ try:
         prob.plot(isl.population.champion.x)
 
 except:
-    print("Could not import PyGMO. PyGMO is required for some pykep examples.")
+    print("Could not import pygmo. pygmo is required for some pykep examples.")

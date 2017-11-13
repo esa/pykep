@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The pykep development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -66,7 +66,7 @@ mpcorb::mpcorb(const std::string& line)
 		boost::algorithm::trim(tmp);
 		elem[i] = boost::lexical_cast<double>(tmp);
 	}
-	// Converting orbital elements to the dictatorial PaGMO units.
+	// Converting orbital elements to the dictatorial pagmo units.
 	elem[0] *= ASTRO_AU;
 	for (int i = 2; i < 6; ++i) {
 		elem[i] *= ASTRO_DEG2RAD;

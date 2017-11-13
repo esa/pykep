@@ -10,7 +10,7 @@ and easy mesh refinement by the pykep development team. The key papers containin
 
 - Sims, Jon A., and Steve N. Flanagan. "Preliminary design of low-thrust interplanetary missions." (1997).
 
-- Izzo, Dario. "PyGMO and pykep: open source tools for massively parallel optimization in astrodynamics (the case of interplanetary trajectory optimization)." Proceed. Fifth International Conf. Astrodynam. Tools and Techniques, ICATT. 2012.
+- Izzo, Dario. "pygmo and pykep: open source tools for massively parallel optimization in astrodynamics (the case of interplanetary trajectory optimization)." Proceed. Fifth International Conf. Astrodynam. Tools and Techniques, ICATT. 2012.
 
 The list of classes and the detailed documentation follows.
 

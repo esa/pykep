@@ -33,7 +33,7 @@ MESSAGE(STATUS "CMake additional search path for libraries: ${CMAKE_LIBRARY_PATH
 INCLUDE(cmake_scripts/set_compiler_flags.cmake)
 
 # Provides build options to CMake
-# Build Option: when active the file main.cpp is built and linked to the PaGMO static library
+# Build Option: when active the file main.cpp is built and linked to the pagmo static library
 OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 
 # Build Option: when active builds Python bindings called pykep

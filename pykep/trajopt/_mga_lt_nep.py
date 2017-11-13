@@ -1,4 +1,4 @@
-from PyGMO.problem import base as base_problem
+from pygmo.problem import base as base_problem
 from pykep.core import epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from pykep.planet import jpl_lp
 from pykep.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
@@ -6,7 +6,7 @@ from pykep.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
 
 class mga_lt_nep(base_problem):
     """
-    This class is a PyGMO (http://esa.github.io/pygmo/) problem representing a low-thrust
+    This class is a pygmo (http://esa.github.io/pygmo/) problem representing a low-thrust
     interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with sims_flanagan legs
 
     - Yam, C.H., di Lorenzo, D., and Izzo, D.,	 Low-Thrust Trajectory Design as a Constrained Global Optimization Problem,  Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
@@ -63,7 +63,7 @@ class mga_lt_nep(base_problem):
         c_ineq_dim = 2 + n_fb + sum(n_seg)
         # 1d) the number of objectives
         f_dim = multi_objective + 1
-        # First we call the constructor for the base PyGMO problem
+        # First we call the constructor for the base pygmo problem
         # As our problem is n dimensional, box-bounded (may be multi-objective), we write
         # (dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
         super(mga_lt_nep, self).__init__(dim, 0, f_dim, c_dim, c_ineq_dim, 1e-4)

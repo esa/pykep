@@ -161,8 +161,8 @@ class mga_lt_EVMe(object):
         plt.show()
 
 """
-This example constructs, using PyGMO for optimization, an interplanetary low-thrust optimization
-problem that can then be solved using one of the available PyGMO solvers. The problem is a non-linear constrained
+This example constructs, using pygmo for optimization, an interplanetary low-thrust optimization
+problem that can then be solved using one of the available pygmo solvers. The problem is a non-linear constrained
 problem that uses the Sims-Flanagan transcription to model the low-thrust trajectory. pykep plotting capabilities
 are also demonstrated via the plot method. The interplanetary mission modelled is an LT-MGA Earth-Venus-Mercury mission.
 

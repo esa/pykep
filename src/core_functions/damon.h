@@ -1,5 +1,5 @@
  /*****************************************************************************
- *   Copyright (C) 2004-2015 The pykep development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
