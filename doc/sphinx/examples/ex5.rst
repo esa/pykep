@@ -12,7 +12,7 @@ These plots are produced by the following code:
 
 .. code-block:: python
 
-   from PyKEP import *
+   from pykep import *
    examples.run_example5()
 
 after the self-adaptive differential evolution algorithm concludes its computations. 
@@ -31,4 +31,4 @@ To solve such a global optimization problem, we use jDE, a self-adaptive version
 operator, thus computing the solution in eight paralel threads.
 
 The code for this example can be studied `here. 
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex5.py>`_ Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/pykep/examples/_ex5.py>`_ Feel free to leave comments.

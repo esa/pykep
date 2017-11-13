@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-PROJECT(PyKEP VERSION 1.3.9)
+PROJECT(pykep VERSION 2.0)
 # We enable cmake test capability
 ENABLE_TESTING()
 
@@ -36,14 +36,14 @@ INCLUDE(cmake_scripts/set_compiler_flags.cmake)
 # Build Option: when active the file main.cpp is built and linked to the PaGMO static library
 OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 
-# Build Option: when active builds Python bindings called PyKEP
-OPTION(BUILD_PYKEP "Build PyKEP." OFF)
+# Build Option: when active builds Python bindings called pykep
+OPTION(BUILD_PYKEP "Build pykep." OFF)
 
 # Build Option: when active the examples in the folder example are compiled into executables
 OPTION(BUILD_TESTS "Build tests'." ON)
 
-# Build Option: when active the JPL SPICE toolbox is used to extend PyKEP
-OPTION(BUILD_SPICE "Interface PyKEP to JPL SPICE toolbox'." OFF)
+# Build Option: when active the JPL SPICE toolbox is used to extend pykep
+OPTION(BUILD_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
 
 # Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
@@ -80,7 +80,7 @@ ELSE(PYTHON_VERSION_MAJOR LESS 3)
 	SET(LIBRARIES_4_PYTHON_MODULES ${LIBRARIES_4_PYTHON_MODULES} ${Boost_PYTHON3_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
 ENDIF(PYTHON_VERSION_MAJOR LESS 3)
 
-# We build cspice static library and link it in PyKEP libraries
+# We build cspice static library and link it in pykep libraries
 IF(BUILD_SPICE)
 	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
 	SET(LIBRARIES_4_STATIC ${LIBRARIES_4_STATIC} cspice)
@@ -97,10 +97,10 @@ IF(BUILD_MAIN)
 	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 ENDIF(BUILD_MAIN)
 
-# Build PyKEP and link it to dynamic library.
+# Build pykep and link it to dynamic library.
 IF(BUILD_PYKEP)
 	SET(LIBRARIES_4_PYTHON_MODULES keplerian_toolbox ${LIBRARIES_4_PYTHON_MODULES})
-	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/PyKEP")
+	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/pykep")
 	if(MINGW)
 		message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")

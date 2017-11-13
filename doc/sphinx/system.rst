@@ -1,13 +1,13 @@
 .. _prepareyoursystem:
 
-Preparing your system to compile PyKEP
+Preparing your system to compile pykep
 ======================================
 
 Compiling under a Unix System
 -----------------------------
 
-We assume you have root access to your unix machine and a working python installation. As PyKEP has some dependencies, you will need to install
-a few packages before being able to install PyKEP on your machine. All are supported by most package managers,
+We assume you have root access to your unix machine and a working python installation. As pykep has some dependencies, you will need to install
+a few packages before being able to install pykep on your machine. All are supported by most package managers,
 so that a simple apt-get or emerge should suffice to prepare your system.
 
 

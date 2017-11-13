@@ -9,7 +9,7 @@ THis plot is produced by the following code:
 
 .. code-block:: python
 
-   from PyKEP import *
+   from pykep import *
    examples.run_example6()
 
 if a feasible solution is reached. Repeat several times in case unfeasible solutions are returned.
@@ -24,4 +24,4 @@ of the `global trajectory optimisation competition <http://sophia.estec.esa.int/
 
 
 The code for this example can be studied `here. 
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex6.py>`_ Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/pykep/examples/_ex6.py>`_ Feel free to leave comments.

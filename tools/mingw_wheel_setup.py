@@ -3,10 +3,10 @@ from setuptools.dist import Distribution
 from distutils import util
 import sys
 
-NAME = 'PyKEP'
-VERSION = '@PyKEP_VERSION@'
+NAME = 'pykep'
+VERSION = '@pykep_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
-LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
+LONG_DESCRIPTION = 'pykep is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
 URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
@@ -58,12 +58,12 @@ setup(name=NAME,
     keywords=KEYWORDS,
     platforms=PLATFORMS,
     install_requires=INSTALL_REQUIRES,
-    packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.pontryagin', 'PyKEP.trajopt', 'PyKEP.util'],
+    packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing', 'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
     # Include pre-compiled extension
     package_data={
-                'PyKEP.core': ['_core.pyd'] + DLL_LIST,
-                'PyKEP.planet': ['_planet.pyd'],
-                'PyKEP.sims_flanagan': ['_sims_flanagan.pyd'],
-                'PyKEP.util': ['_util.pyd']
+                'pykep.core': ['_core.pyd'] + DLL_LIST,
+                'pykep.planet': ['_planet.pyd'],
+                'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
+                'pykep.util': ['_util.pyd']
                 },
     distclass=BinaryDistribution)

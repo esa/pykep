@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2015 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -44,7 +44,7 @@ typedef boost::shared_ptr<base> planet_ptr;
 
 /// Base class for planet
 /**
- * A base planet in PyKEP is defined by its name, its radius, its safe radius (i.e. how close to it its considered to be safe)
+ * A base planet in pykep is defined by its name, its radius, its safe radius (i.e. how close to it its considered to be safe)
  * its gravity parameter and the gravitational parameter of the attracting body. All classes deriving from planet::base
  * will have to implement the planet ephemerides planet::base::eph_impl which is the core method of this class.
  *
