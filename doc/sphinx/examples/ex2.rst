@@ -1,5 +1,5 @@
-Multi-revs Lambert Problem
-==========================
+Multi revolutions Lambert Problem
+=================================
 
 .. figure:: ../images/gallery2.png
    :alt: multi-rev Lambert Problem

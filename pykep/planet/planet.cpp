@@ -277,7 +277,7 @@ BOOST_PYTHON_MODULE(_planet) {
 			"  R = apophis.n_observations"
 		)
 		.add_property("n_oppositions",&kep_toolbox::planet::mpcorb::get_n_oppositions,
-			"The planet radius\n"
+			"Numper of oppositions the asteroid has been observed in.\n"
 			"Example::\n\n"
 			"  R = apophis.n_oppositions"
 		)

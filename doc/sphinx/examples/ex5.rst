@@ -1,5 +1,5 @@
-MGA 1DSM global optimization
-==========================================================
+Global optimization of a multiple gravity assist trajectory with one deep space manouvre per leg
+================================================================================================
 
 .. figure:: ../images/gallery5.png
    :align: left

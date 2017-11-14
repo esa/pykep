@@ -115,6 +115,7 @@ def run_example4():
 
     N = 20
 
+    # problem
     udp = add_gradient(mga_lt_earth_mars_sundmann(nseg=N), with_grad=False)
     prob = pg.problem(udp)
     prob.c_tol = [1e-5] * prob.get_nc()

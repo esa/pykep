@@ -8,8 +8,8 @@ Generic
 
   ex2
 
-Requiring pygmo
-^^^^^^^^^^^^^^^
+Advanced Research Topics (requires pygmo)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
   :maxdepth: 2
 

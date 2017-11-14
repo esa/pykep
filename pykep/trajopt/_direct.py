@@ -110,7 +110,7 @@ class _direct_base(object):
 
     def get_traj(self, z):
         """Retrieves the trajectory information.
-        ::
+        The returned np.array contains::
 
             traj = [[t0, x0, y0, z0, vx0, vy0, vz0, m0, u0, ux0, uy0, uz0]
                     ...
@@ -118,6 +118,9 @@ class _direct_base(object):
 
         Args:
             - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+ 
+        Returns:
+            np.array full information on states and controls along the trajectory nodes
         """
 
         # set leg
@@ -165,6 +168,14 @@ class _direct_base(object):
         return np.hstack((t.reshape((self.nseg*2+1, 1)), r, v, m.reshape((self.nseg*2+1, 1)), umag, u))
 
     def pretty(self, z):
+        """
+        pretty(x)
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Prints human readable information on the trajectory represented by the decision vector x
+        """
         data = self.get_traj(z) 
         self._pretty(z)
 
@@ -182,7 +193,7 @@ class direct_pl2pl(_direct_base):
     """Represents a direct transcription transfer between solar system planets.
 
     This problem works by manipulating the starting epoch t0, the transfer time T the final mass mf and the controls 
-    ::
+    The dicision vector is::
 
         z = [t0, T, mf, Vxi, Vyi, Vzi, Vxf, Vyf, Vzf, controls]
     """
