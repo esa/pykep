@@ -1,4 +1,4 @@
-def run_example8():
+def run_example8(nseg=40):
     """
     This example demonstrates the direct method (sims-flanagan) on a planet to planet scenario.
     """
@@ -17,14 +17,14 @@ def run_example8():
         p0="earth",
         pf="mars",
         mass=1000,
-        thrust=0.3,
+        thrust=0.1,
         isp=3000,
         vinf_arr=1e-6,
         vinf_dep=3.5,
-        hf=True,
-        nseg=20,
+        hf=False,
+        nseg=nseg,
         t0=[1100, 1400],
-        tof=[200, 290]),
+        tof=[200, 750]),
         with_grad=False
     )
 

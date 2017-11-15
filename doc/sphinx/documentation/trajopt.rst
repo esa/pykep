@@ -67,17 +67,17 @@ Detailed Documentation
 
 .. autoclass:: pykep.trajopt.indirect_pt2pt(_indirect_base)
 
-  .. automethod:: pykep.trajopt.indirect_pt2pt.__init__(x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, atol=1e-10, rtol=1e-10)
+  .. automethod:: pykep.trajopt.indirect_pt2pt.__init__(*args)
 
 ------------
 
 .. autoclass:: pykep.trajopt.indirect_or2or(_indirect_base)
 
-  .. automethod:: pykep.trajopt.indirect_or2or.__init__(elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN)
+  .. automethod:: pykep.trajopt.indirect_or2or.__init__(*args)
 
 
 ------------
 
 .. autoclass:: pykep.trajopt.indirect_pt2or(_indirect_base)
 
-  .. automethod:: pykep.trajopt.indirect_pt2or.__init__(x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN)
+  .. automethod:: pykep.trajopt.indirect_pt2or.__init__(*args)

@@ -6,7 +6,7 @@ Global optimization of a multiple gravity assist trajectory with one deep space 
    
 .. figure:: ../images/gallery5b.png
    :alt: "Earth-Venus-Earth transfer via impulsive maneuvers"
-   :align: right
+   :align: left
 
 These plots are produced by the following code:
 

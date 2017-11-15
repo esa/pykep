@@ -21,7 +21,11 @@ The initial guess is taken from one of the trajectory submitted by the ACT/ISAS 
 of the `global trajectory optimisation competition <http://sophia.estec.esa.int/gtoc_portal/>`_. In essence it tries to hop between four different asteroids of the main belt.
 
 
-
-
 The code for this example can be studied `here. 
 <https://github.com/esa/pykep/blob/master/pykep/examples/_ex6.py>`_ Feel free to leave comments.
+
+
+The study of the ACT GTOC7 trajectories can be found here:
+
+Izzo, Dario, et al. "Designing complex interplanetary trajectories for the global trajectory optimization competitions." Space Engineering. Springer International Publishing, 2016. 151-176.
+APA	

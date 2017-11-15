@@ -379,7 +379,7 @@ class lt_margo:
             yfwd[i+1] = rfwd[i+1][1] / units
             zfwd[i+1] = rfwd[i+1][2] / units
         if plot_segments:
-            axes.scatter(xfwd[:-1], yfwd[:-1], zfwd[:-1], label='nodes', marker='o', s=1, c='b')
+            axes.scatter(xfwd[:-1], yfwd[:-1], zfwd[:-1], label='nodes', marker='o', s=5, c='k')
 
         # Backward propagation
         xbwd = [0.0] * (bwd_seg + 1)
@@ -404,7 +404,7 @@ class lt_margo:
             ybwd[-i-2] = rbwd[-i-2][1] / units
             zbwd[-i-2] = rbwd[-i-2][2] / units
         if plot_segments:
-            axes.scatter(xbwd[1:], ybwd[1:], zbwd[1:], marker='o', s=1, c='b')
+            axes.scatter(xbwd[1:], ybwd[1:], zbwd[1:], marker='o', s=5, c='k')
 
         # Plotting the thrust vectors
         if plot_thrusts:

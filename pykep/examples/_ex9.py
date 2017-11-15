@@ -14,13 +14,13 @@ def run_example9():
 
     # 2 - Problem
     udp = add_gradient(pk.trajopt.indirect_pt2pl(
-        x0 = [-41243271661.730042, -146069872650.01047, 1169367.2384967851, 31030.968708889388, -8841.9478971260651, -309.95724794416344, 1000],
-        t0 = 1251.3387358157067,
+        x0 = [44459220055.461708, -145448367557.6174, 1195278.0377499966, 31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
+        t0 = 1285.6637861007277,
         pf = "mars",
-        thrust = 0.3,
+        thrust = 0.1,
         isp = 3000,
         mu = pk.MU_SUN,
-        tof=[240, 280],
+        tof=[600, 720],
         alpha=0,    # quadratic control
         bound = True),
         with_grad=False
@@ -36,29 +36,30 @@ def run_example9():
     # 4 - Solve the problem (evolve)
     pop = algo.evolve(pop)
 
-    # 5 - Extract the solution (quadratic control)
-    z =  pop.champion_x
+    homotopy_path = [0.2,0.4,0.6,0.8,0.9,0.98, 0.99, 0.995, 1]
+    for alpha in homotopy_path:
+        z =  pop.champion_x
+        print("alpha is: ", alpha)
+        udp = add_gradient(pk.trajopt.indirect_pt2pl(
+            x0 = [44459220055.461708, -145448367557.6174, 1195278.0377499966, 31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
+            t0 = 1285.6637861007277,
+            pf = "mars",
+            thrust = 0.1,
+            isp = 3000,
+            mu = pk.MU_SUN,
+            tof=[600, 720],
+            alpha=alpha,    # quadratic control
+            bound = True),
+            with_grad=False
+        )
+        prob = pg.problem(udp)
+        prob.c_tol = [1e-5] * prob.get_nc()
 
-    # 6 - Define a mass optimal problem
-    udp = add_gradient(pk.trajopt.indirect_pt2pl(
-        x0 = [-41243271661.730042, -146069872650.01047, 1169367.2384967851, 31030.968708889388, -8841.9478971260651, -309.95724794416344, 1000],
-        t0 = 1251.3387358157067,
-        pf = "mars",
-        thrust = 0.3,
-        isp = 3000,
-        mu = pk.MU_SUN,
-        tof=[240, 280],
-        alpha=1,    # mass optimal
-        bound = True),
-        with_grad=False
-    )
-    prob = pg.problem(udp)
-    prob.c_tol = [1e-5] * prob.get_nc()
+        # 7 - Solve it
+        pop = pg.population(prob)
+        pop.push_back(z)
+        pop = algo.evolve(pop)
 
-    # 7 - Solve it
-    pop = pg.population(prob)
-    pop.push_back(z)
-    pop = algo.evolve(pop)
 
     # 8 - Inspect the solution
     print("Feasible?:", prob.feasibility_x(pop.champion_x) )

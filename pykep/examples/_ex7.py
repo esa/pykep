@@ -1,4 +1,4 @@
-def run_example7():
+def run_example7(solver = "snopt7"):
     """
     This example demonstrates the indirect method (cartesian) on a orbit to orbit scenario.
     The orbits are those of Earth and Mars.
@@ -23,7 +23,7 @@ def run_example7():
     #z = z_random
 
     # 1 - Algorithm
-    algo = algo_factory("snopt7")
+    algo = algo_factory(solver)
 
     # 2 - Problem. We define a minimum quadratic control problem (alpha=0) with free time
     # (hamiltonian will be forced to be 0). We provide the option for estimating the gradient numerically for
