@@ -299,6 +299,7 @@ class leg(object):
 
         Returns:
             - ``numpy.ndarray``: Equality constraints vector ``ceq`` composed of the arrival mismatch in position & velocity, arrival mass costate if ``freemass == True``, arrival mismatch in mass if ``freemass == False``, and arrival Hamiltonian if ``freetime == True``.
+
             ::
 
                 ceq = [drf, dvf, dmf]    # freemass == False; freetime == False
@@ -440,8 +441,8 @@ class leg(object):
 
         Returns:
             - ``numpy.ndarray``: Trajectory data array of shape ``(npts, 20)``, where
-            ``npts`` is the number of data points along the trajectory, as
-            determind by the integration error tolerances ``atol`` and ``rtol``.
+              ``npts`` is the number of data points along the trajectory, as determind by the integration
+              error tolerances ``atol`` and ``rtol``.
 
             The returned array is characterised by:
             ::
@@ -519,7 +520,7 @@ class leg(object):
 
         return traj
 
-    def plot_traj(self, axes, mark="k", atol=1e-11, rtol=1e-11, units=AU, quiver = False):
+    def plot_traj(self, axes, mark="k", atol=1e-11, rtol=1e-11, units=AU, quiver = False, length = 1):
         """Plots trajectory onto a 3D axis.
 
         Args:
@@ -529,6 +530,7 @@ class leg(object):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - units (``float``, ``int``): Length unit by which to normalise data.
             - quiver (``bool``): Activates the visualization of the throttle arrows
+            - length (``float``): Length of thrust arrow if quiver is True
 
         Raises:
             - TypeError: If ``axes`` is not an instance of ``mpl_toolkits.mplot3d.Axes3D``.
@@ -588,7 +590,7 @@ class leg(object):
             ratio = (xlim[1] - xlim[0])/(zlim[1] - zlim[0])
             thrusts[:,2] = thrusts[:,2] / ratio # to compensate for non equal z axes
 
-            axes.quiver(traj[:, 0], traj[:, 1], traj[:, 2], thrusts[:, 0], thrusts[:, 1], thrusts[:, 2], color= 'r', length=0.2, normalize=False, arrow_length_ratio=0.01)
+            axes.quiver(traj[:, 0], traj[:, 1], traj[:, 2], thrusts[:, 0], thrusts[:, 1], thrusts[:, 2], color= 'r', length=length, normalize=False, arrow_length_ratio=0.00, alpha=0.6)
 
         return axes
 

@@ -18,3 +18,4 @@ Advanced Research Topics (requires pygmo)
   ex4
   ex5
   ex6
+  ex7

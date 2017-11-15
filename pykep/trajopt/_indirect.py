@@ -40,7 +40,7 @@ class _indirect_base(object):
     def get_nec(self):
         return self.leg.nec
 
-    def plot_traj(self, z, mark="k.-", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None, quiver = False):
+    def plot_traj(self, z, mark="k", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None, quiver = False, length = 1):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
@@ -49,6 +49,7 @@ class _indirect_base(object):
             - atol (``float``, ``int``): absolute integration tolerance.
             - rtol (``float``, ``int``): relative integration tolerance.
             - units (``float``, ``int``): units by which to scale the trajectory dimensions.
+            - length (``float``): Length of thrust arrow if quiver is True
 
         """
 
@@ -70,7 +71,7 @@ class _indirect_base(object):
         axes.scatter([0], [0], [0], color='y')
 
         # leg
-        self.leg.plot_traj(axes, mark, atol, rtol, units, quiver=quiver)
+        self.leg.plot_traj(axes, mark, atol, rtol, units, quiver=quiver, length = length)
 
         return axes
 

@@ -63,7 +63,7 @@ def run_example7():
     else:
         print("No solution found, try again :)")
     # plot trajectory
-    axis = udp.udp_inner.plot_traj(pop.champion_x, quiver=True)
+    axis = udp.udp_inner.plot_traj(pop.champion_x, quiver=True, mark = "k", length = 1)
     plt.title("The trajectory in the heliocentric frame")
   
     # plot control
