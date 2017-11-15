@@ -6,6 +6,7 @@ Generic
 .. toctree::
   :maxdepth: 2
 
+  ex1
   ex2
 
 Advanced Research Topics (requires pygmo)

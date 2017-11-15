@@ -1,4 +1,4 @@
-def run_example1():
+def run_example1(impulses = 4):
     import pykep as pk
     import pygmo as pg
     import numpy as np
@@ -9,7 +9,7 @@ def run_example1():
     udp = add_gradient(pk.trajopt.pl2pl_N_impulses(
         start=pk.planet.jpl_lp('earth'),
         target=pk.planet.jpl_lp('venus'),
-        N_max=4,
+        N_max=impulses,
         tof=[100., 1000.],
         vinf=[0., 4],
         phase_free=False,

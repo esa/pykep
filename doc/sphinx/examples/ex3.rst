@@ -2,15 +2,15 @@ Global optimization of a low-thrust trajectory (Nuclear electric propulsion)
 ============================================================================
 
 .. figure:: ../images/gallery3.png
-   :alt: "Eart-Venus low-thrust transfer with on-line mesh adaptation"
+   :alt: "An optimized two legs transfer to Mercury via Venus"
    :align: left
 
 This plot is produced by the following code:
 
 .. code-block:: python
 
-   from pykep import *
-   examples.run_example3()
+   import pykep as pk
+   pk.examples.run_example3()
 
 after the monotonic basin hopping algorithm concludes its computations. Different images are actually produced each time as
 the algorithm is non-deterministic.

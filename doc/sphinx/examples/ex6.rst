@@ -1,5 +1,5 @@
-Asteroid hopping in the main belt
-==========================================================
+Asteroid hopping in the main belt with a low-thrust spacecraft
+==============================================================
 
 .. figure:: ../images/gallery6.gif
    :align: left
@@ -9,8 +9,8 @@ THis plot is produced by the following code:
 
 .. code-block:: python
 
-   from pykep import *
-   examples.run_example6()
+   import pykep as pk
+   pk.examples.run_example6()
 
 if a feasible solution is reached. Repeat several times in case unfeasible solutions are returned.
 

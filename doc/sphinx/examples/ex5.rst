@@ -12,8 +12,8 @@ These plots are produced by the following code:
 
 .. code-block:: python
 
-   from pykep import *
-   examples.run_example5()
+   import pykep as pk
+   pk.examples.run_example5()
 
 after the self-adaptive differential evolution algorithm concludes its computations. 
 

@@ -154,8 +154,8 @@ class indirect_pt2pt(_indirect_base):
         mu = pk.MU_SUN,
         tof=[276.15166075931495, 276.15166075931495],
         freetime=False, 
-        alpha=1,    # quadratic control
-        bound = True, 
+        alpha=0,    # quadratic control
+        bound = False, 
         atol=1e-12, 
         rtol=1e-12):
         """
@@ -269,8 +269,8 @@ class indirect_or2or(_indirect_base):
         rtol = 1e-12, 
         tof = [100, 700], 
         freetime=True, 
-        alpha=1, 
-        bound=True, 
+        alpha=0, 
+        bound=False, 
         mu=pk.MU_SUN):
         """Initialises ``pykep.trajopt.indirect_or2or`` problem.
 
@@ -564,7 +564,7 @@ class indirect_pt2pl(_indirect_base):
             t0 =1251.0286746844447,
             mu=pk.MU_SUN,
             alpha=0, 
-            bound=True, 
+            bound=False, 
             atol = 1e-12, 
             rtol= 1e-12
             ):

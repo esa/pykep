@@ -9,8 +9,8 @@ This plot is produced by the following code:
 
 .. code-block:: python
 
-   from pykep import *
-   examples.run_example2()
+   import pykep as pk
+   pk.examples.run_example2()
 
 The example demonstrates the basic use of the multiple revolution Lambert solver. In particualar, it defines a fixed geometry of the
 Earth-Mars constellation and plots all possible resulting solution to the Lambert's problem. The chosen geometry is such that one revolution solutions
