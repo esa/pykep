@@ -23,43 +23,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef KEP_TOOLBOX_M2E_H
-#define KEP_TOOLBOX_M2E_H
 
-#include<boost/bind.hpp>
-#include<cmath>
+#ifndef KEP_TOOLBOX_EQ2PAR_H
+#define KEP_TOOLBOX_EQ2PAR_H
 
-#include"../astro_constants.h"
-#include"../core_functions/kepler_equations.h"
-#include"../numerics/newton_raphson.h"
+#include <cmath>
+
+#include "../core_functions/convert_anomalies.h"
+#include <boost/math/constants/constants.hpp>
+
 
 namespace kep_toolbox {
 
-    // mean to eccentric
-    inline double m2e(const double& M, const double & e) {
-        double E = M + e * cos(M);
-        newton_raphson(E,boost::bind(kepE,_1,M, e),boost::bind(d_kepE,_1, e),100,ASTRO_TOLERANCE);
-        return (E);
+/// From modified equinoctial elements to osculating parameters
+/**
+* Transforms modified equinoctial elements (p,h,k,p,q,L) to osculating Keplerian parameters (a,e,i,W,w,E). 
+* Note that we use the eccentric anomaly E (or gudermannian) and the true longitude L (i.e. f + om + Om).
+*
+* Note that nan will be generated if the osculating parameters are not defined (e=0, i=0, etc..)
+*
+* @param[in] EQ the equinoctial elements (p,h,k,p,q,L), anomaly in rad.
+* @param[in] retrogade forces retrograde elements to be used
+* 
+* @param[out] E the osculating Keplerian parameters (a,e,i,W,w,E).
+*
+*/
+template<class vettore6D>
+void eq2par(vettore6D& E, const vettore6D& EQ, const bool retrogade = false)
+{
+    int I = 1;
+    if (retrogade) {
+        I = -1;
     }
-    // eccentric to mean
-    inline double e2m(const double& E, const double & e) {
-        return (E - e * sin (E) );
+    auto ecc = std::sqrt(EQ[1]*EQ[1]+EQ[2]*EQ[2]);
+    auto tmp = std::sqrt(EQ[3]*EQ[3]+EQ[4]*EQ[4]);
+    auto zita = std::atan2(EQ[1] / ecc, EQ[2] / ecc);
+    
+    E[1] = ecc;
+    E[0] = EQ[0] / (1-ecc*ecc);
+    
+    E[2] = boost::math::constants::pi<double>() / 2 * (1-I) + 2 * I * std::atan(tmp);
+    E[3] = std::atan2(EQ[3] / tmp, EQ[4] / tmp);
+    E[4] = zita - I * E[3];
+    E[5] = EQ[5] - zita;
+    if (E[1] < 1) {
+        E[5] = f2e(E[5], E[1]);
+    } else { // E[5] is the Gudermannian
+        E[5] = f2zeta(E[5], E[1]);
     }
-    // eccentric to true
-    inline double e2f(const double& E, const double & e) {
-        return 2 * std::atan(std::sqrt((1+e) / (1-e)) * std::tan(E / 2));
-    }
-    // true to eccentric
-    inline double f2e(const double& f, const double & e) {
-        return 2 * std::atan(std::sqrt((1-e)/(1+e)) * std::tan(f / 2));
-    }
-    // gudermannian to true
-    inline double zeta2f(const double& E, const double & e) {
-        return 2 * std::atan(std::sqrt((1+e)/(e-1)) * std::tan(E / 2));
-    }
-    // true to gudermannian
-    inline double f2zeta(const double& zeta, const double & e) {
-        return 2 * std::atan(std::sqrt((e-1)/(1+e)) * std::tan(zeta / 2));
-    }
+    return;
 }
-#endif // KEP_TOOLBOX_M2E_H
+}
+#endif // KEP_TOOLBOX_PAR2IC_H

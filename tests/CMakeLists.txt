@@ -7,6 +7,8 @@ ADD_EXECUTABLE(propagate_taylor_jorba_test propagate_taylor_jorba_test.cpp)
 ADD_EXECUTABLE(propagate_taylor_s_test propagate_taylor_s_test.cpp)
 ADD_EXECUTABLE(leg_s_test leg_s_test.cpp)
 ADD_EXECUTABLE(sgp4_test sgp4_test.cpp)
+ADD_EXECUTABLE(anomalies_test anomalies_test.cpp)
+
 
 TARGET_LINK_LIBRARIES(lambert_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(propagate_lagrangian_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
@@ -17,6 +19,7 @@ TARGET_LINK_LIBRARIES(propagate_taylor_jorba_test keplerian_toolbox_static ${LIB
 TARGET_LINK_LIBRARIES(propagate_taylor_s_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(leg_s_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 TARGET_LINK_LIBRARIES(sgp4_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
+TARGET_LINK_LIBRARIES(anomalies_test keplerian_toolbox_static ${LIBRARIES_4_STATIC})
 
 ADD_TEST(Testing_Multiple_Revolution_Lambert's_Solver lambert_test)
 ADD_TEST(Testing_Keplerian_propagation_via_Lagrange_Coefficients_and_osculating_elements propagate_lagrangian_test)
@@ -27,6 +30,7 @@ ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_Jorba_implemen
 ADD_TEST(Testing_Taylor_propagation_of_an_inertially_fixed_thrust_in_the_Sundmann_Variable propagate_taylor_s_test)
 ADD_TEST(Testing_Leg_in_The_Sundmann_Variable leg_s_test)
 ADD_TEST(Testing_SGP4_propagation sgp4_test)
+ADD_TEST(Testing_anomalies_conversions anomalies_test)
 
 
 IF(BUILD_SPICE)

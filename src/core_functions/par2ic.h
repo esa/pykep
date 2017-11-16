@@ -30,7 +30,23 @@
 
 #include <cmath>
 
+#include "../io.h"
+
 namespace kep_toolbox {
+
+/// From osculating Keplerian to cartesian
+/**
+* Transforms Keplerian elements (a,e,i,W,w,E) to cartesian.
+* Note that we use the eccentric anomaly (or Gudermannian)
+*
+* @param[in] E the osculating Keplerian elements (a,e,i,W,w,E) in SI
+* @param[in] mu gravitational parameter, (m^3/s^2)
+* 
+* @param[out] r the cartesian position corresponding to the input elements
+* @param[out] v the cartesian velocity corresponding to the input elements
+*
+* Note: both a and e must be positive, otherwise undefined behaviour
+*/
 template<class vettore3D, class vettore6D>
 void par2ic(const vettore6D& E, const double &mu, vettore3D& r0, vettore3D& v0)
 {
@@ -45,6 +61,11 @@ void par2ic(const vettore6D& E, const double &mu, vettore3D& r0, vettore3D& v0)
     double cosomg, cosomp, sinomg, sinomp, cosi, sini;
     double dNdZeta;
 
+    // semi-major axis is assumed to be positive here we apply the convention of having it negative as for 
+    // computations to result in higher elegance
+    if (e > 1) {
+        a = -a;
+    }
 
     //1 - We start by evaluating position and velocity in the perifocal reference system
     if (e<1.0) //EA is the eccentric anomaly

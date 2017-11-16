@@ -69,8 +69,8 @@ void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6
     ///The eccentricity is calculated and stored as the second orbital element
 	E[1] = norm( evett );
 
-    ///The semi-major axis is calculated and stored as the first orbital element
-    E[0] = p/(1-E[1]*E[1]);
+    ///The semi-major axis (positive quantity) is calculated and stored as the first orbital element
+    E[0] = std::abs(p/(1-E[1]*E[1]));
 
     ///Inclination is calculated and stored as the third orbital element
     E[2] = acos( h[2]/norm(h) );
