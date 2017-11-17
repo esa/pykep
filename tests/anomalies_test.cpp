@@ -120,10 +120,10 @@ int main()
             if (std::abs((EQ[j] - EQ2[j]) / std::max(std::abs(EQ[j]), 1.)) > tol) {
                 fail = true;
             }
-            if (std::abs(std::sin(EQ[5])-std::sin(EQ2[5])) > tol) {
+            if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
             }
-            if (std::abs(std::cos(EQ[5])-std::cos(EQ2[5])) > tol) {
+            if (std::abs(std::cos(EQ[5]) - std::cos(EQ2[5])) > tol) {
                 fail = true;
             }
         }

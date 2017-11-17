@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-
 #ifndef OBSERVER_H_
 #define OBSERVER_H_
 
+#include "../../config.h"
 #include "CoordGeodetic.h"
 #include "Eci.h"
-#include "../../config.h"
 
 class DateTime;
 class CoordTopocentric;
@@ -37,11 +36,8 @@ public:
      * @param[in] longitude observers longitude in degrees
      * @param[in] altitude observers altitude in kilometers
      */
-    Observer(const double latitude,
-            const double longitude,
-            const double altitude)
-        : m_geo(latitude, longitude, altitude),
-        m_eci(DateTime(), m_geo)
+    Observer(const double latitude, const double longitude, const double altitude)
+        : m_geo(latitude, longitude, altitude), m_eci(DateTime(), m_geo)
     {
     }
 
@@ -49,9 +45,7 @@ public:
      * Constructor
      * @param[in] geo the observers position
      */
-    Observer(const CoordGeodetic &geo)
-        : m_geo(geo),
-        m_eci(DateTime(), geo)
+    Observer(const CoordGeodetic &geo) : m_geo(geo), m_eci(DateTime(), geo)
     {
     }
 
@@ -66,7 +60,7 @@ public:
      * Set the observers location
      * @param[in] geo the observers position
      */
-    void SetLocation(const CoordGeodetic& geo)
+    void SetLocation(const CoordGeodetic &geo)
     {
         m_geo = geo;
         m_eci.Update(m_eci.GetDateTime(), m_geo);
@@ -94,8 +88,7 @@ private:
      */
     void Update(const DateTime &dt)
     {
-        if (m_eci != dt)
-        {
+        if (m_eci != dt) {
             m_eci.Update(dt, m_geo);
         }
     }
@@ -107,4 +100,3 @@ private:
 };
 
 #endif
-

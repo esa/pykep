@@ -31,8 +31,8 @@
 
 #include "x2tof.h"
 
-
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
 /// Finds multi rev. number in Lambert's problem
 /**
@@ -50,17 +50,19 @@ namespace kep_toolbox {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-inline int lambert_find_N(const double &s,const double &c, const double &tof, const int &lw) {
-    double Tm = M_PI/2 * sqrt(2*s*s*s);		//Minimum energy ellipse period
-    int Ntemp = tof / Tm;				//It is either Nmax=Ntemp or Nmax = Ntemp-1
+inline int lambert_find_N(const double &s, const double &c, const double &tof, const int &lw)
+{
+    double Tm = M_PI / 2 * sqrt(2 * s * s * s); // Minimum energy ellipse period
+    int Ntemp = tof / Tm;                       // It is either Nmax=Ntemp or Nmax = Ntemp-1
     if (Ntemp == 0) return 0;
-    double Tmax = x2tof(0,s,c,lw,Ntemp);
+    double Tmax = x2tof(0, s, c, lw, Ntemp);
     if (tof > Tmax) return Ntemp;
-    std::pair<double,double> res = boost::math::tools::brent_find_minima(boost::bind(x2tof,_1,s,c,lw,Ntemp),0.0,0.5,8);
+    std::pair<double, double> res
+        = boost::math::tools::brent_find_minima(boost::bind(x2tof, _1, s, c, lw, Ntemp), 0.0, 0.5, 8);
     if (res.second < tof) return Ntemp;
     return Ntemp - 1;
 }
 
-} //namespaces
+} // namespaces
 
 #endif // KEP_TOOLBOX_LAMBERT_FIND_N_H

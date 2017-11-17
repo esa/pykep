@@ -23,32 +23,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <string>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+#include <string>
 
 #include "../src/planet/spice.h"
 
 // In this test we test the functionality of the SPICE planet
 using namespace kep_toolbox;
 
-int main() {
-	// We start loading the kernel containing the 67P comet (by default its in planet::spice)
-	util::load_spice_kernel("C_G_1000012_2012_2017.bsp");
+int main()
+{
+    // We start loading the kernel containing the 67P comet (by default its in planet::spice)
+    util::load_spice_kernel("C_G_1000012_2012_2017.bsp");
 
-	// We instantiate the object
-	planet::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
+    // We instantiate the object
+    planet::spice pl1("CHURYUMOV-GERASIMENKO", "SUN", "ECLIPJ2000", "NONE");
 
-	// We stream to screen the newly created planet
-	std::cout << pl1 << std::endl;
+    // We stream to screen the newly created planet
+    std::cout << pl1 << std::endl;
 
-	// We define the epoch to compute ephemeridess
-	kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
-	array3D r,v;
-	pl1.eph(when, r, v);
+    // We define the epoch to compute ephemeridess
+    kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
+    array3D r, v;
+    pl1.eph(when, r, v);
 
-    std::cout << "67P eph at: "<< when << std::endl;
+    std::cout << "67P eph at: " << when << std::endl;
     std::cout << r << v << std::endl;
-	return failed_c();
+    return failed_c();
 }
-

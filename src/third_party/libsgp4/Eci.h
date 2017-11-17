@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-
 #ifndef ECI_H_
 #define ECI_H_
 
-#include "CoordGeodetic.h"
-#include "Vector.h"
-#include "DateTime.h"
 #include "../../config.h"
+#include "CoordGeodetic.h"
+#include "DateTime.h"
+#include "Vector.h"
 
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.
@@ -29,17 +28,13 @@
 class __KEP_TOOL_VISIBLE Eci
 {
 public:
-
     /**
      * @param[in] dt the date to be used for this position
      * @param[in] latitude the latitude in degrees
      * @param[in] longitude the longitude in degrees
      * @param[in] altitude the altitude in kilometers
      */
-    Eci(const DateTime& dt,
-            const double latitude,
-            const double longitude,
-            const double altitude)
+    Eci(const DateTime &dt, const double latitude, const double longitude, const double altitude)
     {
         ToEci(dt, CoordGeodetic(latitude, longitude, altitude));
     }
@@ -48,7 +43,7 @@ public:
      * @param[in] dt the date to be used for this position
      * @param[in] geo the position
      */
-    Eci(const DateTime& dt, const CoordGeodetic& geo)
+    Eci(const DateTime &dt, const CoordGeodetic &geo)
     {
         ToEci(dt, geo);
     }
@@ -57,9 +52,7 @@ public:
      * @param[in] dt the date to be used for this position
      * @param[in] position
      */
-    Eci(const DateTime &dt, const Vector &position)
-        : m_dt(dt),
-        m_position(position)
+    Eci(const DateTime &dt, const Vector &position) : m_dt(dt), m_position(position)
     {
     }
 
@@ -69,9 +62,7 @@ public:
      * @param[in] velocity the velocity
      */
     Eci(const DateTime &dt, const Vector &position, const Vector &velocity)
-        : m_dt(dt),
-        m_position(position),
-        m_velocity(velocity)
+        : m_dt(dt), m_position(position), m_velocity(velocity)
     {
     }
 
@@ -87,7 +78,7 @@ public:
      * @param dt the date to compare
      * @returns true if the object matches
      */
-    bool operator==(const DateTime& dt) const
+    bool operator==(const DateTime &dt) const
     {
         return m_dt == dt;
     }
@@ -97,7 +88,7 @@ public:
      * @param dt the date to compare
      * @returns true if the object doesn't match
      */
-    bool operator!=(const DateTime& dt) const
+    bool operator!=(const DateTime &dt) const
     {
         return m_dt != dt;
     }
@@ -107,7 +98,7 @@ public:
      * @param dt new date
      * @param geo new geodetic position
      */
-    void Update(const DateTime& dt, const CoordGeodetic& geo)
+    void Update(const DateTime &dt, const CoordGeodetic &geo)
     {
         ToEci(dt, geo);
     }
@@ -142,7 +133,7 @@ public:
     CoordGeodetic ToGeodetic() const;
 
 private:
-    void ToEci(const DateTime& dt, const CoordGeodetic& geo);
+    void ToEci(const DateTime &dt, const CoordGeodetic &geo);
 
     DateTime m_dt;
     Vector m_position;

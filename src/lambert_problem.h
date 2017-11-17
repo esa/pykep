@@ -30,13 +30,11 @@
 #include <vector>
 
 #include "astro_constants.h"
-#include "serialization.h"
 #include "config.h"
+#include "serialization.h"
 
-
-
-
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
 /// Lambert Problem
 /**
@@ -55,62 +53,64 @@ namespace kep_toolbox {
 
 class __KEP_TOOL_VISIBLE lambert_problem
 {
-	static const array3D default_r1;
-	static const array3D default_r2;
+    static const array3D default_r1;
+    static const array3D default_r2;
+
 public:
-	friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
-	lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = boost::math::constants::pi<double>()/2, const double& mu = 1., const int &cw = 0, const int &multi_revs=5);
-	const std::vector<array3D>& get_v1() const;
-	const std::vector<array3D>& get_v2() const;
-	const array3D& get_r1() const;
-	const array3D& get_r2() const;
-	const double& get_tof() const;
-	const double& get_mu() const;
-	const std::vector<double>& get_x() const;
-	const std::vector<int>& get_iters() const;
-	int get_Nmax() const;
+    friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
+    lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2,
+                    const double &tof = boost::math::constants::pi<double>() / 2, const double &mu = 1.,
+                    const int &cw = 0, const int &multi_revs = 5);
+    const std::vector<array3D> &get_v1() const;
+    const std::vector<array3D> &get_v2() const;
+    const array3D &get_r1() const;
+    const array3D &get_r2() const;
+    const double &get_tof() const;
+    const double &get_mu() const;
+    const std::vector<double> &get_x() const;
+    const std::vector<int> &get_iters() const;
+    int get_Nmax() const;
+
 private:
-	int householder(const double T, double& x0, const int N, const double eps, const int itermax);
-	void dTdx(double &DT,double &DDT,double &DDDT,const double x0, const double tof);
-	void x2tof(double &tof,const double x0, const int N);
-	void x2tof2(double &tof,const double x0, const int N);
-	double hypergeometricF(double z, double tol);
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & const_cast<array3D&> (m_r1);
-		ar & const_cast<array3D&> (m_r2);
-		ar & const_cast<double&> (m_tof);
-		ar & const_cast<double&> (m_mu);
-		ar & m_v1;
-		ar & m_v2;
-		ar & m_iters;
-		ar & m_x;
-		ar & m_s;
-		ar & m_c;
-		ar & m_lambda;
-		ar & m_iters;
-		ar & m_Nmax;
-		ar & m_has_converged;
-		ar & m_multi_revs;
-	}
+    int householder(const double T, double &x0, const int N, const double eps, const int itermax);
+    void dTdx(double &DT, double &DDT, double &DDDT, const double x0, const double tof);
+    void x2tof(double &tof, const double x0, const int N);
+    void x2tof2(double &tof, const double x0, const int N);
+    double hypergeometricF(double z, double tol);
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &const_cast<array3D &>(m_r1);
+        ar &const_cast<array3D &>(m_r2);
+        ar &const_cast<double &>(m_tof);
+        ar &const_cast<double &>(m_mu);
+        ar &m_v1;
+        ar &m_v2;
+        ar &m_iters;
+        ar &m_x;
+        ar &m_s;
+        ar &m_c;
+        ar &m_lambda;
+        ar &m_iters;
+        ar &m_Nmax;
+        ar &m_has_converged;
+        ar &m_multi_revs;
+    }
 
-
-	const array3D m_r1, m_r2;
-	const double m_tof;
-	const double m_mu;
-	std::vector<array3D> m_v1;
-	std::vector<array3D> m_v2;
-	std::vector<int> m_iters;
-	std::vector<double> m_x;
-	double m_s,m_c,m_lambda;
-	int m_Nmax;
-	bool m_has_converged;
-	int m_multi_revs;
-
+    const array3D m_r1, m_r2;
+    const double m_tof;
+    const double m_mu;
+    std::vector<array3D> m_v1;
+    std::vector<array3D> m_v2;
+    std::vector<int> m_iters;
+    std::vector<double> m_x;
+    double m_s, m_c, m_lambda;
+    int m_Nmax;
+    bool m_has_converged;
+    int m_multi_revs;
 };
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);
-} //namespaces
+} // namespaces
 
 #endif // KEP_TOOLBOX_LAMBERT_PROBLEM_H

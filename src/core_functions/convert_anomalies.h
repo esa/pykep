@@ -26,40 +26,47 @@
 #ifndef KEP_TOOLBOX_M2E_H
 #define KEP_TOOLBOX_M2E_H
 
-#include<boost/bind.hpp>
-#include<cmath>
+#include <boost/bind.hpp>
+#include <cmath>
 
-#include"../astro_constants.h"
-#include"../core_functions/kepler_equations.h"
-#include"../numerics/newton_raphson.h"
+#include "../astro_constants.h"
+#include "../core_functions/kepler_equations.h"
+#include "../numerics/newton_raphson.h"
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
-    // mean to eccentric
-    inline double m2e(const double& M, const double & e) {
-        double E = M + e * cos(M);
-        newton_raphson(E,boost::bind(kepE,_1,M, e),boost::bind(d_kepE,_1, e),100,ASTRO_TOLERANCE);
-        return (E);
-    }
-    // eccentric to mean
-    inline double e2m(const double& E, const double & e) {
-        return (E - e * sin (E) );
-    }
-    // eccentric to true
-    inline double e2f(const double& E, const double & e) {
-        return 2 * std::atan(std::sqrt((1+e) / (1-e)) * std::tan(E / 2));
-    }
-    // true to eccentric
-    inline double f2e(const double& f, const double & e) {
-        return 2 * std::atan(std::sqrt((1-e)/(1+e)) * std::tan(f / 2));
-    }
-    // gudermannian to true
-    inline double zeta2f(const double& E, const double & e) {
-        return 2 * std::atan(std::sqrt((1+e)/(e-1)) * std::tan(E / 2));
-    }
-    // true to gudermannian
-    inline double f2zeta(const double& zeta, const double & e) {
-        return 2 * std::atan(std::sqrt((e-1)/(1+e)) * std::tan(zeta / 2));
-    }
+// mean to eccentric
+inline double m2e(const double &M, const double &e)
+{
+    double E = M + e * cos(M);
+    newton_raphson(E, boost::bind(kepE, _1, M, e), boost::bind(d_kepE, _1, e), 100, ASTRO_TOLERANCE);
+    return (E);
+}
+// eccentric to mean
+inline double e2m(const double &E, const double &e)
+{
+    return (E - e * sin(E));
+}
+// eccentric to true
+inline double e2f(const double &E, const double &e)
+{
+    return 2 * std::atan(std::sqrt((1 + e) / (1 - e)) * std::tan(E / 2));
+}
+// true to eccentric
+inline double f2e(const double &f, const double &e)
+{
+    return 2 * std::atan(std::sqrt((1 - e) / (1 + e)) * std::tan(f / 2));
+}
+// gudermannian to true
+inline double zeta2f(const double &E, const double &e)
+{
+    return 2 * std::atan(std::sqrt((1 + e) / (e - 1)) * std::tan(E / 2));
+}
+// true to gudermannian
+inline double f2zeta(const double &zeta, const double &e)
+{
+    return 2 * std::atan(std::sqrt((e - 1) / (1 + e)) * std::tan(zeta / 2));
+}
 }
 #endif // KEP_TOOLBOX_M2E_H

@@ -23,7 +23,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-
 #ifndef KEP_TOOLBOX_X2TOF_H
 #define KEP_TOOLBOX_X2TOF_H
 
@@ -32,11 +31,14 @@
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 /// Convert the Battin's variable x to time of flight in a non dimensional Lambert's problem
 /**
- * A Lambert problem is defined by \f$ r_1,r_2,t\f$ and \f$ \mu\f$. Assuming as length units \f$ |r_1|\f$ and as velocity
- * units \f$ \sqrt(\mu/|r_1|)\f$ (i.e. \f$ \mu = 1\f$) the Lambert's problem is only defined by \f$ r_2,t\f$. Employing these units
+ * A Lambert problem is defined by \f$ r_1,r_2,t\f$ and \f$ \mu\f$. Assuming as length units \f$ |r_1|\f$ and as
+ * velocity
+ * units \f$ \sqrt(\mu/|r_1|)\f$ (i.e. \f$ \mu = 1\f$) the Lambert's problem is only defined by \f$ r_2,t\f$. Employing
+ * these units
  * this function returns the time-of flight from the Battin's variable \f$ x\f$.
  *
  * \param[in] x Battin's variable
@@ -49,39 +51,32 @@ namespace kep_toolbox {
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-inline double x2tof(const double &x,const double &s,const double &c,const int &lw, const int &N = 0)
+inline double x2tof(const double &x, const double &s, const double &c, const int &lw, const int &N = 0)
 {
-    double am,a,alfa,beta;
+    double am, a, alfa, beta;
 
-    am = s/2;
-    a = am/(1-x*x);
-    if (x < 1)	//ellipse
+    am = s / 2;
+    a = am / (1 - x * x);
+    if (x < 1) // ellipse
     {
-        beta = 2 * asin (sqrt((s - c)/(2*a)));
-        if (lw)
-        {
+        beta = 2 * asin(sqrt((s - c) / (2 * a)));
+        if (lw) {
             beta = -beta;
         }
         alfa = 2 * acos(x);
-    }
-    else
-    {
+    } else {
         alfa = 2 * boost::math::acosh(x);
-        beta = 2 * boost::math::asinh(sqrt ((s - c)/(-2 * a)));
+        beta = 2 * boost::math::asinh(sqrt((s - c) / (-2 * a)));
         if (lw) beta = -beta;
     }
 
-    if (a > 0)
-    {
-        return (a * sqrt (a)* ( (alfa - sin(alfa)) - (beta - sin(beta)) + 2*M_PI*N));
+    if (a > 0) {
+        return (a * sqrt(a) * ((alfa - sin(alfa)) - (beta - sin(beta)) + 2 * M_PI * N));
+    } else {
+        return (-a * sqrt(-a) * ((sinh(alfa) - alfa) - (sinh(beta) - beta)));
     }
-    else
-    {
-        return (-a * sqrt(-a)*( (sinh(alfa) - alfa) - ( sinh(beta) - beta)) );
-    }
-
 }
 
-} //namespace
+} // namespace
 
 #endif // KEP_TOOLBOX_X2TOF_H

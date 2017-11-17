@@ -23,46 +23,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-
 #ifndef KEP_TOOLBOX_STUMPFF_H
 #define KEP_TOOLBOX_STUMPFF_H
 
-#include<cmath>
+#include <cmath>
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
-inline double stumpff_s(const double x) {
-    if (x > 0)
-    {
-        return (sqrt(x) - sin(std::sqrt(x)))/pow(sqrt(x),3);
-    }
-    else if (x < 0)
-    {
-        return (std::sinh(std::sqrt(-x)) - sqrt(-x))/pow(-x,3./2);
-    }
-    else
-    {
-        return (1./6.);
+inline double stumpff_s(const double x)
+{
+    if (x > 0) {
+        return (sqrt(x) - sin(std::sqrt(x))) / pow(sqrt(x), 3);
+    } else if (x < 0) {
+        return (std::sinh(std::sqrt(-x)) - sqrt(-x)) / pow(-x, 3. / 2);
+    } else {
+        return (1. / 6.);
     }
 }
 
-
-inline double stumpff_c(const double x) {
-    if (x > 0)
-    {
-        return (1 - cos(sqrt(x)))/x;
-    }
-    else if (x < 0)
-    {
-        return (std::cosh(sqrt(-x)) - 1)/(-x);
-    }
-    else
-    {
+inline double stumpff_c(const double x)
+{
+    if (x > 0) {
+        return (1 - cos(sqrt(x))) / x;
+    } else if (x < 0) {
+        return (std::cosh(sqrt(-x)) - 1) / (-x);
+    } else {
         return 0.5;
     }
-
 }
-
 }
 
 #endif // KEP_TOOLBOX_STUMPFF_H

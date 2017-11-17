@@ -26,25 +26,32 @@
 #ifndef KEP_TOOLBOX_CONVERT_DATES_H
 #define KEP_TOOLBOX_CONVERT_DATES_H
 
-namespace kep_toolbox {
-    inline double jd2mjd(const double & in){
-        return ( in - 2400000.5 );
-    }
-    inline double jd2mjd2000(const double & in){
-        return ( in - 2451544.5 );
-    }
-    inline double mjd2jd(const double & in){
-        return ( in + 2400000.5 );
-    }
-    inline double mjd2mjd2000(const double & in){
-        return ( in - 51544 );
-    }
-    inline double mjd20002jd(const double & in){
-        return ( in + 2451544.5 );
-    }
-    inline double mjd20002mjd(const double & in){
-        return ( in + 51544 );
-    }
+namespace kep_toolbox
+{
+inline double jd2mjd(const double &in)
+{
+    return (in - 2400000.5);
+}
+inline double jd2mjd2000(const double &in)
+{
+    return (in - 2451544.5);
+}
+inline double mjd2jd(const double &in)
+{
+    return (in + 2400000.5);
+}
+inline double mjd2mjd2000(const double &in)
+{
+    return (in - 51544);
+}
+inline double mjd20002jd(const double &in)
+{
+    return (in + 2451544.5);
+}
+inline double mjd20002mjd(const double &in)
+{
+    return (in + 51544);
+}
 }
 
 #endif // KEP_TOOLBOX_CONVERT_DATES_H

@@ -26,11 +26,14 @@
 #ifndef KEP_TOOLBOX_PLANET_JPL_LP_H
 #define KEP_TOOLBOX_PLANET_JPL_LP_H
 
-#include "base.h"
-#include "../serialization.h"
 #include "../config.h"
+#include "../serialization.h"
+#include "base.h"
 
-namespace kep_toolbox{ namespace planet {
+namespace kep_toolbox
+{
+namespace planet
+{
 
 /// Solar System Planet (jpl simplified ephemerides)
 /**
@@ -45,31 +48,29 @@ namespace kep_toolbox{ namespace planet {
 class __KEP_TOOL_VISIBLE jpl_lp : public base
 {
 public:
-
-	jpl_lp(const std::string & = "earth");
-	planet_ptr clone() const;
-	std::string human_readable_extra() const;
+    jpl_lp(const std::string & = "earth");
+    planet_ptr clone() const;
+    std::string human_readable_extra() const;
 
 private:
-	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<base>(*this);
-		ar & jpl_elements;
-		ar & jpl_elements_dot;
-		ar & const_cast<double&>(ref_mjd2000);
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &boost::serialization::base_object<base>(*this);
+        ar &jpl_elements;
+        ar &jpl_elements_dot;
+        ar &const_cast<double &>(ref_mjd2000);
+    }
 
-	array6D jpl_elements;
-	array6D jpl_elements_dot;
-	const double ref_mjd2000;
+    array6D jpl_elements;
+    array6D jpl_elements_dot;
+    const double ref_mjd2000;
 };
-
-
-}} /// End of namespaces
+}
+} /// End of namespaces
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::jpl_lp)
 

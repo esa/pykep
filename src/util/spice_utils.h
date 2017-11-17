@@ -26,22 +26,24 @@
 #ifndef KEP_TOOLBOX_SPICE_UTILS_H
 #define KEP_TOOLBOX_SPICE_UTILS_H
 
-#include <string>
 #include <sstream>
+#include <string>
 
+#include "../astro_constants.h"
+#include "../epoch.h"
+#include "../exceptions.h"
 #include "../third_party/cspice/SpiceUsr.h"
 #include "../third_party/cspice/SpiceZfc.h"
 #include "../third_party/cspice/SpiceZmc.h"
-#include "../epoch.h"
-#include "../astro_constants.h"
-#include "../exceptions.h"
 
-namespace kep_toolbox { namespace util {
+namespace kep_toolbox
+{
+namespace util
+{
 
 __KEP_TOOL_VISIBLE void load_spice_kernel(std::string file_name);
 __KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);
 __KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(double mjd2000);
-
-
-}} // namespaces
+}
+} // namespaces
 #endif // KEP_TOOLBOX_SPICE_UTILS_H

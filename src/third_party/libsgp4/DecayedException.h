@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #ifndef DECAYEDEXCEPTION_H_
 #define DECAYEDEXCEPTION_H_
 
@@ -35,22 +34,21 @@ public:
      * @param[in] pos position of the satellite at dt
      * @param[in] vel velocity of the satellite at dt
      */
-    DecayedException(const DateTime& dt, const Vector& pos, const Vector& vel)
-        : _dt(dt), _pos(pos), _vel(vel)
+    DecayedException(const DateTime &dt, const Vector &pos, const Vector &vel) : _dt(dt), _pos(pos), _vel(vel)
     {
     }
 
     /**
      * Destructor
      */
-    virtual ~DecayedException(void) throw ()
+    virtual ~DecayedException(void) throw()
     {
     }
 
     /**
      * @returns the error string
      */
-    virtual const char* what() const throw ()
+    virtual const char *what() const throw()
     {
         return "Error: Satellite decayed";
     }

@@ -5,7 +5,7 @@
 -Abstract
 
    Perform CSPICE definitions for the SpiceCell data type.
-            
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,18 +34,18 @@
 -Required_Reading
 
    CELLS
-   
+
 -Particulars
 
    This header defines structures, macros, and enumerated types that
    may be referenced in application code that calls CSPICE cell
    functions.
- 
+
    CSPICE cells are data structures that implement functionality
    parallel to that of the cell abstract data type in SPICELIB.  In
    CSPICE, a cell is a C structure containing bookkeeping information,
    including a pointer to an associated data array.
- 
+
    For numeric data types, the data array is simply a SPICELIB-style
    cell, including a valid control area.  For character cells, the data
    array has the same number of elements as the corresponding
@@ -56,27 +56,27 @@
    CSPICE cells should be declared using the declaration macros
    provided in this header file.  See the table of macros below.
 
-  
+
       Structures
       ==========
-   
+
          Name                  Description
          ----                  ----------
-   
+
          SpiceCell             Structure containing CSPICE cell metadata.
-         
+
                                The members are:
 
                                   dtype:     Data type of cell: character,
                                              integer, or double precision.
 
-                                             dtype has type 
+                                             dtype has type
                                              SpiceCellDataType.
 
-                                  length:    For character cells, the 
-                                             declared length of the 
+                                  length:    For character cells, the
+                                             declared length of the
                                              cell's string array.
- 
+
                                   size:      The maximum number of data
                                              items that can be stored in
                                              the cell's data array.
@@ -86,39 +86,39 @@
                                              present in the cell.
 
                                   isSet:     Boolean flag indicating whether
-                                             the cell is a CSPICE set.  
-                                             Sets have no duplicate data 
+                                             the cell is a CSPICE set.
+                                             Sets have no duplicate data
                                              items, and their data items are
                                              stored in increasing order.
 
                                   adjust:    Boolean flag indicating whether
-                                             the cell's data area has 
+                                             the cell's data area has
                                              adjustable size.  Adjustable
-                                             size cell data areas are not 
+                                             size cell data areas are not
                                              currently implemented.
 
                                   init:      Boolean flag indicating whether
                                              the cell has been initialized.
 
-                                  base:      is a void pointer to the 
+                                  base:      is a void pointer to the
                                              associated data array.  base
                                              points to the start of the
                                              control area of this array.
 
-                                  data:      is a void pointer to the 
-                                             first data slot in the 
+                                  data:      is a void pointer to the
+                                             first data slot in the
                                              associated data array.  This
                                              slot is the element following
                                              the control area.
 
- 
-         ConstSpiceCell        A const SpiceCell.
-         
 
-  
+         ConstSpiceCell        A const SpiceCell.
+
+
+
 
       Declaration Macros
-      ==================      
+      ==================
 
       Name                                            Description
       ----                                            ----------
@@ -138,21 +138,21 @@
                                                       name of the data
                                                       array begins with
                                                       "SPICE_".
- 
-                                                         
+
+
       SPICEDOUBLE_CELL ( name, size )                 Like SPICECHAR_CELL,
-                                                      but declares a 
+                                                      but declares a
                                                       double precision
                                                       cell.
 
-  
+
       SPICEINT_CELL ( name, size )                    Like
                                                       SPICECHAR_CELL,
                                                       but declares an
                                                       integer cell.
 
       Assignment Macros
-      =================      
+      =================
 
       Name                                            Description
       ----                                            ----------
@@ -162,23 +162,23 @@
                                                       Arguments cell
                                                       and item are
                                                       pointers.
- 
+
       SPICE_CELL_SET_D( item, i, cell )               Assign the ith
                                                       element of a
                                                       double precision
                                                       cell. Argument
                                                       cell is a
                                                       pointer.
- 
+
       SPICE_CELL_SET_I( item, i, cell )               Assign the ith
                                                       element of an
                                                       integer cell.
                                                       Argument cell is
                                                       a pointer.
 
- 
+
       Fetch Macros
-      ==============      
+      ==============
 
       Name                                            Description
       ----                                            ----------
@@ -191,7 +191,7 @@
                                                       Argument lenout
                                                       is the available
                                                       space in item.
- 
+
       SPICE_CELL_GET_D( cell, i, item )               Fetch the ith
                                                       element from a
                                                       double precision
@@ -206,7 +206,7 @@
                                                       and item are
                                                       pointers.
       Element Pointer Macros
-      ======================      
+      ======================
 
       Name                                            Description
       ----                                            ----------
@@ -244,198 +244,166 @@
 -Author_and_Institution
 
    N.J. Bachman       (JPL)
-   
+
 -Restrictions
 
    None.
-      
+
 -Version
 
-   -CSPICE Version 1.0.0, 22-AUG-2002 (NJB)  
+   -CSPICE Version 1.0.0, 22-AUG-2002 (NJB)
 
 */
 #ifndef HAVE_SPICE_CELLS_H
 
-   #define HAVE_SPICE_CELLS_H
-      
+#define HAVE_SPICE_CELLS_H
 
-   /*
-   Data type codes:
-   */
-   typedef enum _SpiceDataType  SpiceCellDataType;
+/*
+Data type codes:
+*/
+typedef enum _SpiceDataType SpiceCellDataType;
 
+/*
+Cell structure:
+*/
+struct _SpiceCell
 
-   /*
-   Cell structure:
-   */
-   struct _SpiceCell
-   
-      {  SpiceCellDataType  dtype;
-         SpiceInt           length;
-         SpiceInt           size;
-         SpiceInt           card;
-         SpiceBoolean       isSet;
-         SpiceBoolean       adjust;
-         SpiceBoolean       init;
-         void             * base;
-         void             * data;  };     
-        
-   typedef struct _SpiceCell  SpiceCell;
+{
+    SpiceCellDataType dtype;
+    SpiceInt length;
+    SpiceInt size;
+    SpiceInt card;
+    SpiceBoolean isSet;
+    SpiceBoolean adjust;
+    SpiceBoolean init;
+    void *base;
+    void *data;
+};
 
-   typedef const SpiceCell    ConstSpiceCell;
+typedef struct _SpiceCell SpiceCell;
 
+typedef const SpiceCell ConstSpiceCell;
 
-   /*
-   SpiceCell control area size: 
-   */
-   #define SPICE_CELL_CTRLSZ         6
+/*
+SpiceCell control area size:
+*/
+#define SPICE_CELL_CTRLSZ 6
 
+/*
+Declaration macros:
+*/
 
-   /*
-   Declaration macros: 
-   */                   
-                                           
-   #define SPICECHAR_CELL( name, size, length )                             \
-                                                                            \
-      static SpiceChar SPICE_CELL_##name[SPICE_CELL_CTRLSZ + size][length]; \
-                                                                            \
-      static SpiceCell name =                                               \
-                                                                            \
-        { SPICE_CHR,                                                        \
-          length,                                                           \
-          size,                                                             \
-          0,                                                                \
-          SPICETRUE,                                                        \
-          SPICEFALSE,                                                       \
-          SPICEFALSE,                                                       \
-          (void *) &(SPICE_CELL_##name),                                    \
-          (void *) &(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])  }
-        
+#define SPICECHAR_CELL(name, size, length)                                                                             \
+                                                                                                                       \
+    static SpiceChar SPICE_CELL_##name[SPICE_CELL_CTRLSZ + size][length];                                              \
+                                                                                                                       \
+    static SpiceCell name =                                                                                            \
+                                                                                                                       \
+        {SPICE_CHR,                                                                                                    \
+         length,                                                                                                       \
+         size,                                                                                                         \
+         0,                                                                                                            \
+         SPICETRUE,                                                                                                    \
+         SPICEFALSE,                                                                                                   \
+         SPICEFALSE,                                                                                                   \
+         (void *)&(SPICE_CELL_##name),                                                                                 \
+         (void *)&(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])}
 
-   #define SPICEDOUBLE_CELL( name, size )                                   \
-                                                                            \
-      static SpiceDouble SPICE_CELL_##name [SPICE_CELL_CTRLSZ + size];      \
-                                                                            \
-      static SpiceCell name =                                               \
-                                                                            \
-        { SPICE_DP,                                                         \
-          0,                                                                \
-          size,                                                             \
-          0,                                                                \
-          SPICETRUE,                                                        \
-          SPICEFALSE,                                                       \
-          SPICEFALSE,                                                       \
-          (void *) &(SPICE_CELL_##name),                                    \
-          (void *) &(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])  }
-       
+#define SPICEDOUBLE_CELL(name, size)                                                                                   \
+                                                                                                                       \
+    static SpiceDouble SPICE_CELL_##name[SPICE_CELL_CTRLSZ + size];                                                    \
+                                                                                                                       \
+    static SpiceCell name =                                                                                            \
+                                                                                                                       \
+        {SPICE_DP,                                                                                                     \
+         0,                                                                                                            \
+         size,                                                                                                         \
+         0,                                                                                                            \
+         SPICETRUE,                                                                                                    \
+         SPICEFALSE,                                                                                                   \
+         SPICEFALSE,                                                                                                   \
+         (void *)&(SPICE_CELL_##name),                                                                                 \
+         (void *)&(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])}
 
-   #define SPICEINT_CELL( name, size )                                      \
-                                                                            \
-      static SpiceInt SPICE_CELL_##name [SPICE_CELL_CTRLSZ + size];         \
-                                                                            \
-      static SpiceCell name =                                               \
-                                                                            \
-        { SPICE_INT,                                                        \
-          0,                                                                \
-          size,                                                             \
-          0,                                                                \
-          SPICETRUE,                                                        \
-          SPICEFALSE,                                                       \
-          SPICEFALSE,                                                       \
-          (void *) &(SPICE_CELL_##name),                                    \
-          (void *) &(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])  }
-           
+#define SPICEINT_CELL(name, size)                                                                                      \
+                                                                                                                       \
+    static SpiceInt SPICE_CELL_##name[SPICE_CELL_CTRLSZ + size];                                                       \
+                                                                                                                       \
+    static SpiceCell name =                                                                                            \
+                                                                                                                       \
+        {SPICE_INT,                                                                                                    \
+         0,                                                                                                            \
+         size,                                                                                                         \
+         0,                                                                                                            \
+         SPICETRUE,                                                                                                    \
+         SPICEFALSE,                                                                                                   \
+         SPICEFALSE,                                                                                                   \
+         (void *)&(SPICE_CELL_##name),                                                                                 \
+         (void *)&(SPICE_CELL_##name[SPICE_CELL_CTRLSZ])}
 
-   /*
-   Access macros for individual elements: 
-   */
+/*
+Access macros for individual elements:
+*/
 
-   /*
-   Data element pointer macros: 
-   */
+/*
+Data element pointer macros:
+*/
 
-   #define SPICE_CELL_ELEM_C( cell, i )                                     \
-                                                                            \
-       (  ( (SpiceChar    *) (cell)->data ) + (i)*( (cell)->length )  )      
+#define SPICE_CELL_ELEM_C(cell, i) (((SpiceChar *)(cell)->data) + (i) * ((cell)->length))
 
+#define SPICE_CELL_ELEM_D(cell, i) (((SpiceDouble *)(cell)->data)[(i)])
 
-   #define SPICE_CELL_ELEM_D( cell, i )                                     \
-                                                                            \
-       (  ( (SpiceDouble  *) (cell)->data )[(i)]  )         
+#define SPICE_CELL_ELEM_I(cell, i) (((SpiceInt *)(cell)->data)[(i)])
 
+/*
+"Fetch" macros:
+*/
 
-   #define SPICE_CELL_ELEM_I( cell, i )                                     \
-                                                                            \
-       (  ( (SpiceInt     *) (cell)->data )[(i)]  )         
+#define SPICE_CELL_GET_C(cell, i, lenout, item)                                                                        \
+                                                                                                                       \
+    {                                                                                                                  \
+        SpiceInt nBytes;                                                                                               \
+                                                                                                                       \
+        nBytes = brckti_c((cell)->length, 0, (lenout - 1)) * sizeof(SpiceChar);                                        \
+                                                                                                                       \
+        memmove((item), SPICE_CELL_ELEM_C((cell), (i)), nBytes);                                                       \
+                                                                                                                       \
+        item[nBytes] = NULLCHAR;                                                                                       \
+    }
 
+#define SPICE_CELL_GET_D(cell, i, item) ((*item) = ((SpiceDouble *)(cell)->data)[i])
 
-   /*
-   "Fetch" macros: 
-   */
+#define SPICE_CELL_GET_I(cell, i, item) ((*item) = ((SpiceInt *)(cell)->data)[i])
 
-   #define SPICE_CELL_GET_C( cell, i, lenout, item )                        \
-                                                                            \
-       {                                                                    \
-          SpiceInt    nBytes;                                               \
-                                                                            \
-          nBytes   =    brckti_c ( (cell)->length,  0, (lenout-1)  )        \
-                     *  sizeof   ( SpiceChar );                             \
-                                                                            \
-          memmove ( (item),  SPICE_CELL_ELEM_C((cell), (i)),  nBytes );     \
-                                                                            \
-          item[nBytes] = NULLCHAR;                                          \
-       }  
+/*
+Assignment macros:
+*/
 
+#define SPICE_CELL_SET_C(item, i, cell)                                                                                \
+                                                                                                                       \
+    {                                                                                                                  \
+        SpiceChar *sPtr;                                                                                               \
+        SpiceInt nBytes;                                                                                               \
+                                                                                                                       \
+        nBytes = brckti_c(strlen(item), 0, (cell)->length - 1) * sizeof(SpiceChar);                                    \
+                                                                                                                       \
+        sPtr = SPICE_CELL_ELEM_C((cell), (i));                                                                         \
+                                                                                                                       \
+        memmove(sPtr, (item), nBytes);                                                                                 \
+                                                                                                                       \
+        sPtr[nBytes] = NULLCHAR;                                                                                       \
+    }
 
-   #define SPICE_CELL_GET_D( cell, i, item )                                \
-                                                                            \
-       (  (*item) = ( (SpiceDouble *) (cell)->data)[i]  )    
+#define SPICE_CELL_SET_D(item, i, cell) (((SpiceDouble *)(cell)->data)[i] = (item))
 
+#define SPICE_CELL_SET_I(item, i, cell) (((SpiceInt *)(cell)->data)[i] = (item))
 
-   #define SPICE_CELL_GET_I( cell, i, item )                                \
-                                                                            \
-       (  (*item) = ( (SpiceInt    *) (cell)->data)[i]  )         
+/*
+The enum SpiceTransDir is used to indicate language translation
+direction:  C to Fortran or vice versa.
+*/
+enum _SpiceTransDir { C2F = 0, F2C = 1 };
 
-
-   /*
-   Assignment macros: 
-   */
-
-   #define SPICE_CELL_SET_C( item, i, cell )                                \
-                                                                            \
-       {                                                                    \
-          SpiceChar   * sPtr;                                               \
-          SpiceInt      nBytes;                                             \
-                                                                            \
-          nBytes   =    brckti_c ( strlen(item), 0, (cell)->length - 1 )    \
-                      * sizeof   ( SpiceChar );                             \
-                                                                            \
-          sPtr     =    SPICE_CELL_ELEM_C((cell), (i));                     \
-                                                                            \
-          memmove ( sPtr,  (item),  nBytes );                               \
-                                                                            \
-          sPtr[nBytes] = NULLCHAR;                                          \
-       }  
-
-
-   #define SPICE_CELL_SET_D( item, i, cell )                                \
-                                                                            \
-       (  ( (SpiceDouble *) (cell)->data)[i]  =  (item) )    
-
-
-   #define SPICE_CELL_SET_I( item, i, cell )                                \
-                                                                            \
-       (  ( (SpiceInt    *) (cell)->data)[i]  =  (item) )         
-
-
-   /*
-   The enum SpiceTransDir is used to indicate language translation
-   direction:  C to Fortran or vice versa. 
-   */
-   enum _SpiceTransDir { C2F = 0, F2C = 1 };
-   
-   typedef enum  _SpiceTransDir SpiceTransDir;
-
+typedef enum _SpiceTransDir SpiceTransDir;
 
 #endif
-

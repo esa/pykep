@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-
 #ifndef COORDTOPOCENTRIC_H_
 #define COORDTOPOCENTRIC_H_
 
 #include "Util.h"
 
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <string>
 
 /**
  * @brief Stores a topocentric location (azimuth, elevation, range and range
@@ -31,17 +30,12 @@
  * Azimuth and elevation are stored in radians. Range in kilometres. Range
  * rate in kilometres/second.
  */
-struct CoordTopocentric
-{
+struct CoordTopocentric {
 public:
     /**
      * Default constructor
      */
-    CoordTopocentric()
-        : azimuth(0.0), 
-        elevation(0.0),
-        range(0.0),
-        range_rate(0.0)
+    CoordTopocentric() : azimuth(0.0), elevation(0.0), range(0.0), range_rate(0.0)
     {
     }
 
@@ -52,15 +46,8 @@ public:
      * @param[in] rnge range in kilometers
      * @param[in] rnge_rate range rate in kilometers per second
      */
-    CoordTopocentric(
-            double az,
-            double el,
-            double rnge,
-            double rnge_rate)
-        : azimuth(az),
-        elevation(el),
-        range(rnge),
-        range_rate(rnge_rate)
+    CoordTopocentric(double az, double el, double rnge, double rnge_rate)
+        : azimuth(az), elevation(el), range(rnge), range_rate(rnge_rate)
     {
     }
 
@@ -68,7 +55,7 @@ public:
      * Copy constructor
      * @param[in] topo object to copy from
      */
-    CoordTopocentric(const CoordTopocentric& topo)
+    CoordTopocentric(const CoordTopocentric &topo)
     {
         azimuth = topo.azimuth;
         elevation = topo.elevation;
@@ -87,10 +74,9 @@ public:
      * Assignment operator
      * @param[in] topo object to copy from
      */
-    CoordTopocentric& operator=(const CoordTopocentric& topo)
+    CoordTopocentric &operator=(const CoordTopocentric &topo)
     {
-        if (this != &topo)
-        {
+        if (this != &topo) {
             azimuth = topo.azimuth;
             elevation = topo.elevation;
             range = topo.range;
@@ -104,7 +90,7 @@ public:
      * @param[in] topo value to check
      * @returns whether the object is equal
      */
-    bool operator==(const CoordTopocentric& topo) const
+    bool operator==(const CoordTopocentric &topo) const
     {
         return IsEqual(topo);
     }
@@ -113,8 +99,8 @@ public:
      * Inequality operator
      * @param[in] topo the object to compare with
      * @returns whether the object is not equal
-     */    
-    bool operator !=(const CoordTopocentric& topo) const
+     */
+    bool operator!=(const CoordTopocentric &topo) const
     {
         return !IsEqual(topo);
     }
@@ -144,22 +130,18 @@ public:
     double range_rate;
 
 private:
-    bool IsEqual(const CoordTopocentric& topo) const
+    bool IsEqual(const CoordTopocentric &topo) const
     {
         bool equal = false;
-        if (azimuth == topo.azimuth &&
-                elevation == topo.elevation &&
-                range == topo.range &&
-                range_rate == topo.range_rate)
-        {
+        if (azimuth == topo.azimuth && elevation == topo.elevation && range == topo.range
+            && range_rate == topo.range_rate) {
             equal = true;
         }
         return equal;
     }
 };
 
-
-inline std::ostream& operator<<(std::ostream& strm, const CoordTopocentric& t)
+inline std::ostream &operator<<(std::ostream &strm, const CoordTopocentric &t)
 {
     return strm << t.ToString();
 }

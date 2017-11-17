@@ -26,11 +26,14 @@
 #ifndef KEP_TOOLBOX_PLANET_GTOC2_H
 #define KEP_TOOLBOX_PLANET_GTOC2_H
 
-#include "keplerian.h"
-#include "../serialization.h"
 #include "../config.h"
+#include "../serialization.h"
+#include "keplerian.h"
 
-namespace kep_toolbox{ namespace planet {
+namespace kep_toolbox
+{
+namespace planet
+{
 
 /// A GTOC2 asteroid
 /**
@@ -45,24 +48,23 @@ namespace kep_toolbox{ namespace planet {
 class __KEP_TOOL_VISIBLE gtoc2 : public keplerian
 {
 public:
+    gtoc2(int = 0);
 
-	gtoc2(int = 0);
-
-	int get_group() const;
-	planet_ptr clone() const;
+    int get_group() const;
+    planet_ptr clone() const;
 
 private:
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<keplerian>(*this);
-		ar & m_group;
-	}
-	int m_group;
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &boost::serialization::base_object<keplerian>(*this);
+        ar &m_group;
+    }
+    int m_group;
 };
-
-}} // Namespaces
+}
+} // Namespaces
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc2);
 

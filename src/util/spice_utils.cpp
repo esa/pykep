@@ -23,12 +23,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <string>
 #include <sstream>
+#include <string>
 
 #include "spice_utils.h"
 
-namespace kep_toolbox { namespace util {
+namespace kep_toolbox
+{
+namespace util
+{
 
 /// Load SPICE kernel
 /**
@@ -45,17 +48,18 @@ namespace kep_toolbox { namespace util {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-void load_spice_kernel(std::string file_name) {
-	/// Transferring error handling from spice to kep_toolbox
-	erract_c("SET",0,const_cast<char*>("RETURN") ) ;
-	/// Loading the kernel
-    furnsh_c ( file_name.c_str() );
+void load_spice_kernel(std::string file_name)
+{
+    /// Transferring error handling from spice to kep_toolbox
+    erract_c("SET", 0, const_cast<char *>("RETURN"));
+    /// Loading the kernel
+    furnsh_c(file_name.c_str());
     /// Handling errors
     if (failed_c()) {
-    	std::ostringstream msg;
-    	msg << "Kernel file " << file_name << " could not be loaded by SPICE" << std::endl;
+        std::ostringstream msg;
+        msg << "Kernel file " << file_name << " could not be loaded by SPICE" << std::endl;
         reset_c();
-    	throw_value_error(msg.str());
+        throw_value_error(msg.str());
     }
 }
 
@@ -73,13 +77,14 @@ void load_spice_kernel(std::string file_name) {
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-SpiceDouble epoch_to_spice(kep_toolbox::epoch ep) {
-	return ( (ep.mjd2000() -.5) * ASTRO_DAY2SEC );
+SpiceDouble epoch_to_spice(kep_toolbox::epoch ep)
+{
+    return ((ep.mjd2000() - .5) * ASTRO_DAY2SEC);
 }
 
-SpiceDouble epoch_to_spice(double mjd2000) {
-    return ( (mjd2000 -.5) * ASTRO_DAY2SEC );
+SpiceDouble epoch_to_spice(double mjd2000)
+{
+    return ((mjd2000 - .5) * ASTRO_DAY2SEC);
 }
-
-}} // namespaces
-
+}
+} // namespaces

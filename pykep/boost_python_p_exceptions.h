@@ -27,69 +27,69 @@
 
 inline void ie_translator(const index_error &ie)
 {
-	PyErr_SetString(PyExc_IndexError, ie.what());
+    PyErr_SetString(PyExc_IndexError, ie.what());
 }
 
 inline void ve_translator(const value_error &ve)
 {
-	PyErr_SetString(PyExc_ValueError, ve.what());
+    PyErr_SetString(PyExc_ValueError, ve.what());
 }
 
 inline void te_translator(const type_error &te)
 {
-	PyErr_SetString(PyExc_TypeError, te.what());
+    PyErr_SetString(PyExc_TypeError, te.what());
 }
 
 inline void ae_translator(const assertion_error &ae)
 {
-	PyErr_SetString(PyExc_AssertionError, ae.what());
+    PyErr_SetString(PyExc_AssertionError, ae.what());
 }
 
 inline void nie_translator(const not_implemented_error &nie)
 {
-	PyErr_SetString(PyExc_NotImplementedError, nie.what());
+    PyErr_SetString(PyExc_NotImplementedError, nie.what());
 }
 
 inline void me_translator(const memory_error &me)
 {
-	PyErr_SetString(PyExc_MemoryError, me.what());
+    PyErr_SetString(PyExc_MemoryError, me.what());
 }
 
 inline void zde_translator(const zero_division_error &zde)
 {
-	PyErr_SetString(PyExc_ZeroDivisionError, zde.what());
+    PyErr_SetString(PyExc_ZeroDivisionError, zde.what());
 }
 
 // Translators for some standard and Boost exceptions.
 
 inline void ba_translator(const std::bad_alloc &ba)
 {
-	PyErr_SetString(PyExc_MemoryError, ba.what());
+    PyErr_SetString(PyExc_MemoryError, ba.what());
 }
 
 inline void oe_translator(const std::overflow_error &oe)
 {
-	PyErr_SetString(PyExc_OverflowError, oe.what());
+    PyErr_SetString(PyExc_OverflowError, oe.what());
 }
 
 inline void bnc_translator(const boost::numeric::bad_numeric_cast &bnc)
 {
-	PyErr_SetString(PyExc_OverflowError, bnc.what());
+    PyErr_SetString(PyExc_OverflowError, bnc.what());
 }
 
 // Translate our C++ exceptions into Python exceptions.
 inline void translate_p_exceptions()
 {
-	boost::python::register_exception_translator<index_error>(ie_translator);
-	boost::python::register_exception_translator<value_error>(ve_translator);
-	boost::python::register_exception_translator<type_error>(te_translator);
-	boost::python::register_exception_translator<assertion_error>(ae_translator);
-	boost::python::register_exception_translator<not_implemented_error>(nie_translator);
-	boost::python::register_exception_translator<memory_error>(me_translator);
-	boost::python::register_exception_translator<zero_division_error>(zde_translator);
-	boost::python::register_exception_translator<std::bad_alloc>(ba_translator);
-	boost::python::register_exception_translator<std::overflow_error>(oe_translator);
-	boost::python::register_exception_translator<boost::numeric::bad_numeric_cast>(bnc_translator);
+    boost::python::register_exception_translator<index_error>(ie_translator);
+    boost::python::register_exception_translator<value_error>(ve_translator);
+    boost::python::register_exception_translator<type_error>(te_translator);
+    boost::python::register_exception_translator<assertion_error>(ae_translator);
+    boost::python::register_exception_translator<not_implemented_error>(nie_translator);
+    boost::python::register_exception_translator<memory_error>(me_translator);
+    boost::python::register_exception_translator<zero_division_error>(zde_translator);
+    boost::python::register_exception_translator<std::bad_alloc>(ba_translator);
+    boost::python::register_exception_translator<std::overflow_error>(oe_translator);
+    boost::python::register_exception_translator<boost::numeric::bad_numeric_cast>(bnc_translator);
 }
 
 #endif

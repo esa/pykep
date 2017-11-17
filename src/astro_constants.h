@@ -71,38 +71,42 @@
 // checked in that case)
 #define BOOST_DATE_PRECISION 1e-6
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 // Typedef for fixed size vectors
 typedef std::array<double, 3> array3D;
 typedef std::array<double, 6> array6D;
 typedef std::array<double, 7> array7D;
 }
 
-namespace std {
+namespace std
+{
 /// Overload stream insertion operator for arrayND
 template <size_t N>
-inline ostream &operator<<(ostream &os, const std::array<double, N> &v) {
-  os << '[';
-  for (typename std::array<double, N>::size_type i = 0; i < v.size(); ++i) {
-    os << boost::lexical_cast<std::string>(v[i]);
-    if (i != v.size() - 1) {
-      os << ", ";
+inline ostream &operator<<(ostream &os, const std::array<double, N> &v)
+{
+    os << '[';
+    for (typename std::array<double, N>::size_type i = 0; i < v.size(); ++i) {
+        os << boost::lexical_cast<std::string>(v[i]);
+        if (i != v.size() - 1) {
+            os << ", ";
+        }
     }
-  }
-  os << ']';
-  return os;
+    os << ']';
+    return os;
 }
 
-inline ostream &operator<<(ostream &os, const std::vector<double> &v) {
-  os << '[';
-  for (kep_toolbox::array3D::size_type i = 0; i < v.size(); ++i) {
-    os << boost::lexical_cast<std::string>(v[i]);
-    if (i != v.size() - 1) {
-      os << ", ";
+inline ostream &operator<<(ostream &os, const std::vector<double> &v)
+{
+    os << '[';
+    for (kep_toolbox::array3D::size_type i = 0; i < v.size(); ++i) {
+        os << boost::lexical_cast<std::string>(v[i]);
+        if (i != v.size() - 1) {
+            os << ", ";
+        }
     }
-  }
-  os << ']';
-  return os;
+    os << ']';
+    return os;
 }
 }
 #endif // KEP_TOOLBOX_ASTRO_CONSTANTS_H

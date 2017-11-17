@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-
 #ifndef TLE_H_
 #define TLE_H_
 
-#include "Util.h"
+#include "../../config.h"
 #include "DateTime.h"
 #include "TleException.h"
-#include "../../config.h"
+#include "Util.h"
 
 /**
  * @brief Processes a two-line element set used to convey OrbitalElements.
@@ -36,10 +35,7 @@ public:
      * @param[in] line_one Tle line one
      * @param[in] line_two Tle line two
      */
-    Tle(const std::string& line_one,
-            const std::string& line_two)
-        : line_one_(line_one),
-        line_two_(line_two)
+    Tle(const std::string &line_one, const std::string &line_two) : line_one_(line_one), line_two_(line_two)
     {
         Initialize();
     }
@@ -50,12 +46,8 @@ public:
      * @param[in] line_one Tle line one
      * @param[in] line_two Tle line two
      */
-    Tle(const std::string& name,
-            const std::string& line_one,
-            const std::string& line_two)
-        : name_(name),
-        line_one_(line_one),
-        line_two_(line_two)
+    Tle(const std::string &name, const std::string &line_one, const std::string &line_two)
+        : name_(name), line_one_(line_one), line_two_(line_two)
     {
         Initialize();
     }
@@ -64,7 +56,7 @@ public:
      * Copy constructor
      * @param[in] tle Tle object to copy from
      */
-    Tle(const Tle& tle)
+    Tle(const Tle &tle)
     {
         name_ = tle.name_;
         line_one_ = tle.line_one_;
@@ -151,7 +143,7 @@ public:
      */
     void setEpoch(const unsigned int year, const double day)
     {
-       epoch_ = DateTime(year, day);
+        epoch_ = DateTime(year, day);
     }
 
     /**
@@ -188,12 +180,9 @@ public:
      */
     double Inclination(bool in_degrees) const
     {
-        if (in_degrees)
-        {
+        if (in_degrees) {
             return inclination_;
-        }
-        else
-        {
+        } else {
             return Util::DegreesToRadians(inclination_);
         }
     }
@@ -205,12 +194,9 @@ public:
      */
     double RightAscendingNode(const bool in_degrees) const
     {
-        if (in_degrees)
-        {
+        if (in_degrees) {
             return right_ascending_node_;
-        }
-        else
-        {
+        } else {
             return Util::DegreesToRadians(right_ascending_node_);
         }
     }
@@ -231,12 +217,9 @@ public:
      */
     double ArgumentPerigee(const bool in_degrees) const
     {
-        if (in_degrees)
-        {
+        if (in_degrees) {
             return argument_perigee_;
-        }
-        else
-        {
+        } else {
             return Util::DegreesToRadians(argument_perigee_);
         }
     }
@@ -248,12 +231,9 @@ public:
      */
     double MeanAnomaly(const bool in_degrees) const
     {
-        if (in_degrees)
-        {
+        if (in_degrees) {
             return mean_anomaly_;
-        }
-        else
-        {
+        } else {
             return Util::DegreesToRadians(mean_anomaly_);
         }
     }
@@ -284,7 +264,7 @@ public:
     {
         return TLE_LEN_LINE_DATA;
     }
-    
+
     /**
      * Dump this object to a string
      * @returns string
@@ -321,10 +301,10 @@ public:
 
 private:
     void Initialize();
-    static bool IsValidLineLength(const std::string& str);
-    void ExtractInteger(const std::string& str, unsigned int& val);
-    void ExtractDouble(const std::string& str, int point_pos, double& val);
-    void ExtractExponential(const std::string& str, double& val);
+    static bool IsValidLineLength(const std::string &str);
+    void ExtractInteger(const std::string &str, unsigned int &val);
+    void ExtractDouble(const std::string &str, int point_pos, double &val);
+    void ExtractExponential(const std::string &str, double &val);
 
 private:
     std::string name_;
@@ -349,8 +329,7 @@ private:
     static const unsigned int TLE_LEN_LINE_NAME = 22;
 };
 
-
-inline std::ostream& operator<<(std::ostream& strm, const Tle& t)
+inline std::ostream &operator<<(std::ostream &strm, const Tle &t)
 {
     return strm << t.ToString();
 }

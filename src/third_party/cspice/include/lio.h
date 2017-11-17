@@ -27,30 +27,29 @@
 #define TYQUAD 14
 #endif
 
-#define	LINTW	24
-#define	LINE	80
-#define	LLOGW	2
+#define LINTW 24
+#define LINE 80
+#define LLOGW 2
 #ifdef Old_list_output
-#define	LLOW	1.0
-#define	LHIGH	1.e9
-#define	LEFMT	" %# .8E"
-#define	LFFMT	" %# .9g"
+#define LLOW 1.0
+#define LHIGH 1.e9
+#define LEFMT " %# .8E"
+#define LFFMT " %# .9g"
 #else
-#define	LGFMT	"%.9G"
+#define LGFMT "%.9G"
 #endif
 /* LEFBL 20 should suffice; 24 overcomes a NeXT bug. */
-#define	LEFBL	24
+#define LEFBL 24
 
-typedef union
-{
-	char	flchar;
-	short	flshort;
-	ftnint	flint;
+typedef union {
+    char flchar;
+    short flshort;
+    ftnint flint;
 #ifdef Allow_TYQUAD
-	longint fllongint;
+    longint fllongint;
 #endif
-	real	flreal;
-	doublereal	fldouble;
+    real flreal;
+    doublereal fldouble;
 } flex;
 extern int f__scale;
 #ifdef KR_headers
@@ -60,15 +59,15 @@ extern int l_read(), l_write();
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern int (*f__lioproc)(ftnint*, char*, ftnlen, ftnint);
-extern int l_write(ftnint*, char*, ftnlen, ftnint);
-extern void x_wsne(cilist*);
-extern int c_le(cilist*), (*l_getc)(void), (*l_ungetc)(int,FILE*);
-extern int l_read(ftnint*,char*,ftnlen,ftnint);
-extern integer e_rsle(void), e_wsle(void), s_wsne(cilist*);
+extern int (*f__lioproc)(ftnint *, char *, ftnlen, ftnint);
+extern int l_write(ftnint *, char *, ftnlen, ftnint);
+extern void x_wsne(cilist *);
+extern int c_le(cilist *), (*l_getc)(void), (*l_ungetc)(int, FILE *);
+extern int l_read(ftnint *, char *, ftnlen, ftnint);
+extern integer e_rsle(void), e_wsle(void), s_wsne(cilist *);
 extern int z_rnew(void);
 #ifdef __cplusplus
-	}
+}
 #endif
 #endif
 extern ftnint L_len;

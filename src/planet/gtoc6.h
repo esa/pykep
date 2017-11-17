@@ -26,16 +26,19 @@
 #ifndef KEP_TOOLBOX_PLANET_GTOC_6_H
 #define KEP_TOOLBOX_PLANET_GTOC_6_H
 
-#include "keplerian.h"
-#include "../serialization.h"
 #include "../config.h"
+#include "../serialization.h"
+#include "keplerian.h"
 
-namespace kep_toolbox{ namespace planet {
+namespace kep_toolbox
+{
+namespace planet
+{
 
 /// A Jupiter moon from GTOC6 (keplerian)
 /**
  * This class allows to instantiate moons of
- * the Jupiter system by referring to their common names. Ephemerides are Keplerian 
+ * the Jupiter system by referring to their common names. Ephemerides are Keplerian
  * and elements are those defined for the GTOC6 competition
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
@@ -44,20 +47,19 @@ namespace kep_toolbox{ namespace planet {
 class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
 {
 public:
-	gtoc6(const std::string & = "io");
-	planet_ptr clone() const;
+    gtoc6(const std::string & = "io");
+    planet_ptr clone() const;
 
 private:
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<keplerian>(*this);
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &boost::serialization::base_object<keplerian>(*this);
+    }
 };
-
-
-}} /// End of namespaces
+}
+} /// End of namespaces
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc6);
 

@@ -630,41 +630,36 @@
 
 */
 
-
 /*
 Include Files:
 */
 
-
-#ifndef  HAVE_SPICEDEFS_H
+#ifndef HAVE_SPICEDEFS_H
 #include "SpiceZdf.h"
 #endif
 
-#ifndef  HAVE_SPICE_EK_H
+#ifndef HAVE_SPICE_EK_H
 #include "SpiceEK.h"
 #endif
 
-#ifndef  HAVE_SPICE_PLANES_H
+#ifndef HAVE_SPICE_PLANES_H
 #include "SpicePln.h"
 #endif
 
-#ifndef  HAVE_SPICE_ELLIPSES_H
+#ifndef HAVE_SPICE_ELLIPSES_H
 #include "SpiceEll.h"
 #endif
 
-#ifndef  HAVE_SPICE_CELLS_H
+#ifndef HAVE_SPICE_CELLS_H
 #include "SpiceCel.h"
 #endif
 
-#ifndef  HAVE_SPICE_SPK_H
+#ifndef HAVE_SPICE_SPK_H
 #include "SpiceSPK.h"
 #endif
 
 #ifndef HAVE_SPICEWRAPPERS_H
 #define HAVE_SPICEWRAPPERS_H
-
-
-
 
 /*
    Function prototypes for CSPICE functions are listed below.
@@ -677,3459 +672,1300 @@ Include Files:
    The list below should be maintained in alphabetical order.
 */
 
-   void              appndc_c ( ConstSpiceChar     * item,
-                                SpiceCell          * cell  );
+void appndc_c(ConstSpiceChar *item, SpiceCell *cell);
 
+void appndd_c(SpiceDouble item, SpiceCell *cell);
 
-   void              appndd_c ( SpiceDouble          item,
-                                SpiceCell          * cell  );
+void appndi_c(SpiceInt item, SpiceCell *cell);
 
+void axisar_c(ConstSpiceDouble axis[3], SpiceDouble angle, SpiceDouble r[3][3]);
 
-   void              appndi_c ( SpiceInt             item,
-                                SpiceCell          * cell  );
+SpiceBoolean badkpv_c(ConstSpiceChar *caller, ConstSpiceChar *name, ConstSpiceChar *comp, SpiceInt size, SpiceInt divby,
+                      SpiceChar type);
 
+void bltfrm_c(SpiceInt frmcls, SpiceCell *idset);
 
-   void              axisar_c ( ConstSpiceDouble     axis   [3],
-                                SpiceDouble          angle,
-                                SpiceDouble          r      [3][3]  );
+void bodc2n_c(SpiceInt code, SpiceInt namelen, SpiceChar *name, SpiceBoolean *found);
 
+void bodc2s_c(SpiceInt code, SpiceInt lenout, SpiceChar *name);
 
-   SpiceBoolean      badkpv_c ( ConstSpiceChar      *caller,
-                                ConstSpiceChar      *name,
-                                ConstSpiceChar      *comp,
-                                SpiceInt             size,
-                                SpiceInt             divby,
-                                SpiceChar            type   );
+void boddef_c(ConstSpiceChar *name, SpiceInt code);
 
+SpiceBoolean bodfnd_c(SpiceInt body, ConstSpiceChar *item);
 
-   void              bltfrm_c ( SpiceInt             frmcls,
-                                SpiceCell          * idset  );
+void bodn2c_c(ConstSpiceChar *name, SpiceInt *code, SpiceBoolean *found);
 
+void bods2c_c(ConstSpiceChar *name, SpiceInt *code, SpiceBoolean *found);
 
-   void              bodc2n_c ( SpiceInt             code,
-                                SpiceInt             namelen,
-                                SpiceChar          * name,
-                                SpiceBoolean       * found   );
+void bodvar_c(SpiceInt body, ConstSpiceChar *item, SpiceInt *dim, SpiceDouble *values);
 
+void bodvcd_c(SpiceInt body, ConstSpiceChar *item, SpiceInt maxn, SpiceInt *dim, SpiceDouble *values);
 
-   void              bodc2s_c ( SpiceInt             code,
-                                SpiceInt             lenout,
-                                SpiceChar          * name );
+void bodvrd_c(ConstSpiceChar *body, ConstSpiceChar *item, SpiceInt maxn, SpiceInt *dim, SpiceDouble *values);
 
-   void              boddef_c ( ConstSpiceChar     * name,
-                                SpiceInt             code );
+SpiceDouble brcktd_c(SpiceDouble number, SpiceDouble end1, SpiceDouble end2);
 
+SpiceInt brckti_c(SpiceInt number, SpiceInt end1, SpiceInt end2);
 
-   SpiceBoolean      bodfnd_c ( SpiceInt             body,
-                                ConstSpiceChar     * item );
+SpiceInt bschoc_c(ConstSpiceChar *value, SpiceInt ndim, SpiceInt lenvals, const void *array, ConstSpiceInt *order);
 
+SpiceInt bschoi_c(SpiceInt value, SpiceInt ndim, ConstSpiceInt *array, ConstSpiceInt *order);
 
-   void              bodn2c_c ( ConstSpiceChar     * name,
-                                SpiceInt           * code,
-                                SpiceBoolean       * found );
+SpiceInt bsrchc_c(ConstSpiceChar *value, SpiceInt ndim, SpiceInt lenvals, const void *array);
 
+SpiceInt bsrchd_c(SpiceDouble value, SpiceInt ndim, ConstSpiceDouble *array);
 
-   void              bods2c_c ( ConstSpiceChar     * name,
-                                SpiceInt           * code,
-                                SpiceBoolean       * found );
+SpiceInt bsrchi_c(SpiceInt value, SpiceInt ndim, ConstSpiceInt *array);
 
+SpiceDouble b1900_c(void);
 
-   void              bodvar_c ( SpiceInt             body,
-                                ConstSpiceChar     * item,
-                                SpiceInt           * dim ,
-                                SpiceDouble        * values );
+SpiceDouble b1950_c(void);
 
+SpiceInt card_c(SpiceCell *cell);
 
-   void              bodvcd_c ( SpiceInt             body,
-                                ConstSpiceChar     * item,
-                                SpiceInt             maxn,
-                                SpiceInt           * dim ,
-                                SpiceDouble        * values );
+void ccifrm_c(SpiceInt frclss, SpiceInt clssid, SpiceInt lenout, SpiceInt *frcode, SpiceChar *frname, SpiceInt *center,
+              SpiceBoolean *found);
 
+void cgv2el_c(ConstSpiceDouble center[3], ConstSpiceDouble vec1[3], ConstSpiceDouble vec2[3], SpiceEllipse *ellipse);
 
-   void              bodvrd_c ( ConstSpiceChar     * body,
-                                ConstSpiceChar     * item,
-                                SpiceInt             maxn,
-                                SpiceInt           * dim ,
-                                SpiceDouble        * values );
+void chkin_c(ConstSpiceChar *module);
 
+void chkout_c(ConstSpiceChar *module);
 
-   SpiceDouble       brcktd_c ( SpiceDouble          number,
-                                SpiceDouble          end1,
-                                SpiceDouble          end2    );
+void cidfrm_c(SpiceInt cent, SpiceInt lenout, SpiceInt *frcode, SpiceChar *frname, SpiceBoolean *found);
 
+void ckcls_c(SpiceInt handle);
 
-   SpiceInt          brckti_c ( SpiceInt             number,
-                                SpiceInt             end1,
-                                SpiceInt             end2    );
+void ckcov_c(ConstSpiceChar *ck, SpiceInt idcode, SpiceBoolean needav, ConstSpiceChar *level, SpiceDouble tol,
+             ConstSpiceChar *timsys, SpiceCell *cover);
 
+void ckobj_c(ConstSpiceChar *ck, SpiceCell *ids);
 
-   SpiceInt          bschoc_c ( ConstSpiceChar     * value,
-                                SpiceInt             ndim,
-                                SpiceInt             lenvals,
-                                const void         * array,
-                                ConstSpiceInt      * order  );
+void ckgp_c(SpiceInt inst, SpiceDouble sclkdp, SpiceDouble tol, ConstSpiceChar *ref, SpiceDouble cmat[3][3],
+            SpiceDouble *clkout, SpiceBoolean *found);
 
+void ckgpav_c(SpiceInt inst, SpiceDouble sclkdp, SpiceDouble tol, ConstSpiceChar *ref, SpiceDouble cmat[3][3],
+              SpiceDouble av[3], SpiceDouble *clkout, SpiceBoolean *found);
 
-   SpiceInt          bschoi_c ( SpiceInt             value,
-                                SpiceInt             ndim,
-                                ConstSpiceInt      * array,
-                                ConstSpiceInt      * order  );
+void cklpf_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void ckopn_c(ConstSpiceChar *name, ConstSpiceChar *ifname, SpiceInt ncomch, SpiceInt *handle);
 
-   SpiceInt          bsrchc_c ( ConstSpiceChar     * value,
-                                SpiceInt             ndim,
-                                SpiceInt             lenvals,
-                                const void         * array   );
+void ckupf_c(SpiceInt handle);
 
+void ckw01_c(SpiceInt handle, SpiceDouble begtime, SpiceDouble endtime, SpiceInt inst, ConstSpiceChar *ref,
+             SpiceBoolean avflag, ConstSpiceChar *segid, SpiceInt nrec, ConstSpiceDouble sclkdp[],
+             ConstSpiceDouble quats[][4], ConstSpiceDouble avvs[][3]);
 
-   SpiceInt          bsrchd_c ( SpiceDouble          value,
-                                SpiceInt             ndim,
-                                ConstSpiceDouble   * array );
+void ckw02_c(SpiceInt handle, SpiceDouble begtim, SpiceDouble endtim, SpiceInt inst, ConstSpiceChar *ref,
+             ConstSpiceChar *segid, SpiceInt nrec, ConstSpiceDouble start[], ConstSpiceDouble stop[],
+             ConstSpiceDouble quats[][4], ConstSpiceDouble avvs[][3], ConstSpiceDouble rates[]);
 
+void ckw03_c(SpiceInt handle, SpiceDouble begtim, SpiceDouble endtim, SpiceInt inst, ConstSpiceChar *ref,
+             SpiceBoolean avflag, ConstSpiceChar *segid, SpiceInt nrec, ConstSpiceDouble sclkdp[],
+             ConstSpiceDouble quats[][4], ConstSpiceDouble avvs[][3], SpiceInt nints, ConstSpiceDouble starts[]);
 
-   SpiceInt          bsrchi_c ( SpiceInt             value,
-                                SpiceInt             ndim,
-                                ConstSpiceInt      * array );
+void ckw05_c(SpiceInt handle, SpiceCK05Subtype subtyp, SpiceInt degree, SpiceDouble begtim, SpiceDouble endtim,
+             SpiceInt inst, ConstSpiceChar *ref, SpiceBoolean avflag, ConstSpiceChar *segid, SpiceInt n,
+             ConstSpiceDouble sclkdp[], const void *packets, SpiceDouble rate, SpiceInt nints,
+             ConstSpiceDouble starts[]);
 
+SpiceDouble clight_c(void);
 
-   SpiceDouble       b1900_c  ( void );
+void clpool_c(void);
 
+void cmprss_c(SpiceChar delim, SpiceInt n, ConstSpiceChar *input, SpiceInt lenout, SpiceChar *output);
 
-   SpiceDouble       b1950_c  ( void );
+void cnmfrm_c(ConstSpiceChar *cname, SpiceInt lenout, SpiceInt *frcode, SpiceChar *frname, SpiceBoolean *found);
 
+void conics_c(ConstSpiceDouble elts[8], SpiceDouble et, SpiceDouble state[6]);
 
-   SpiceInt          card_c   ( SpiceCell         * cell );
+void convrt_c(SpiceDouble x, ConstSpiceChar *in, ConstSpiceChar *out, SpiceDouble *y);
 
+void copy_c(SpiceCell *a, SpiceCell *b);
 
-   void              ccifrm_c ( SpiceInt            frclss,
-                                SpiceInt            clssid,
-                                SpiceInt            lenout,
-                                SpiceInt          * frcode,
-                                SpiceChar         * frname,
-                                SpiceInt          * center,
-                                SpiceBoolean      * found   );
+SpiceInt cpos_c(ConstSpiceChar *str, ConstSpiceChar *chars, SpiceInt start);
 
+SpiceInt cposr_c(ConstSpiceChar *str, ConstSpiceChar *chars, SpiceInt start);
 
-   void              cgv2el_c ( ConstSpiceDouble    center[3],
-                                ConstSpiceDouble    vec1  [3],
-                                ConstSpiceDouble    vec2  [3],
-                                SpiceEllipse      * ellipse   );
+void cvpool_c(ConstSpiceChar *agent, SpiceBoolean *update);
 
+void cyllat_c(SpiceDouble r, SpiceDouble lonc, SpiceDouble z, SpiceDouble *radius, SpiceDouble *lon, SpiceDouble *lat);
 
-   void              chkin_c  ( ConstSpiceChar    * module );
+void cylrec_c(SpiceDouble r, SpiceDouble lon, SpiceDouble z, SpiceDouble rectan[3]);
 
+void cylsph_c(SpiceDouble r, SpiceDouble lonc, SpiceDouble z, SpiceDouble *radius, SpiceDouble *colat,
+              SpiceDouble *lon);
 
-   void              chkout_c ( ConstSpiceChar    * module );
+void dafac_c(SpiceInt handle, SpiceInt n, SpiceInt lenvals, const void *buffer);
 
+void dafbbs_c(SpiceInt handle);
 
-   void              cidfrm_c ( SpiceInt            cent,
-                                SpiceInt            lenout,
-                                SpiceInt          * frcode,
-                                SpiceChar         * frname,
-                                SpiceBoolean      * found  );
+void dafbfs_c(SpiceInt handle);
 
+void dafcls_c(SpiceInt handle);
 
-   void              ckcls_c  ( SpiceInt            handle );
+void dafcs_c(SpiceInt handle);
 
+void dafdc_c(SpiceInt handle);
 
-   void              ckcov_c  ( ConstSpiceChar    * ck,
-                                SpiceInt            idcode,
-                                SpiceBoolean        needav,
-                                ConstSpiceChar    * level,
-                                SpiceDouble         tol,
-                                ConstSpiceChar    * timsys,
-                                SpiceCell         * cover   );
+void dafec_c(SpiceInt handle, SpiceInt bufsiz, SpiceInt lenout, SpiceInt *n, void *buffer, SpiceBoolean *done);
 
+void daffna_c(SpiceBoolean *found);
 
-   void              ckobj_c  ( ConstSpiceChar    * ck,
-                                SpiceCell         * ids );
+void daffpa_c(SpiceBoolean *found);
 
+void dafgda_c(SpiceInt handle, SpiceInt begin, SpiceInt end, SpiceDouble *data);
 
-   void              ckgp_c   ( SpiceInt            inst,
-                                SpiceDouble         sclkdp,
-                                SpiceDouble         tol,
-                                ConstSpiceChar    * ref,
-                                SpiceDouble         cmat[3][3],
-                                SpiceDouble       * clkout,
-                                SpiceBoolean      * found      );
+void dafgh_c(SpiceInt *handle);
 
+void dafgn_c(SpiceInt lenout, SpiceChar *name);
 
-   void              ckgpav_c ( SpiceInt            inst,
-                                SpiceDouble         sclkdp,
-                                SpiceDouble         tol,
-                                ConstSpiceChar    * ref,
-                                SpiceDouble         cmat[3][3],
-                                SpiceDouble         av[3],
-                                SpiceDouble       * clkout,
-                                SpiceBoolean      * found      );
+void dafgs_c(SpiceDouble sum[]);
 
+void dafgsr_c(SpiceInt handle, SpiceInt recno, SpiceInt begin, SpiceInt end, SpiceDouble *data, SpiceBoolean *found);
 
-   void              cklpf_c  ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle    );
+void dafopr_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void dafopw_c(ConstSpiceChar *fname, SpiceInt *handle);
 
-   void              ckopn_c  ( ConstSpiceChar    * name,
-                                ConstSpiceChar    * ifname,
-                                SpiceInt            ncomch,
-                                SpiceInt          * handle  );
+void dafps_c(SpiceInt nd, SpiceInt ni, ConstSpiceDouble dc[], ConstSpiceInt ic[], SpiceDouble sum[]);
 
+void dafrda_c(SpiceInt handle, SpiceInt begin, SpiceInt end, SpiceDouble *data);
 
-   void              ckupf_c  ( SpiceInt            handle );
+void dafrfr_c(SpiceInt handle, SpiceInt lenout, SpiceInt *nd, SpiceInt *ni, SpiceChar *ifname, SpiceInt *fward,
+              SpiceInt *bward, SpiceInt *free);
 
+void dafrs_c(ConstSpiceDouble *sum);
 
-   void              ckw01_c  ( SpiceInt            handle,
-                                SpiceDouble         begtime,
-                                SpiceDouble         endtime,
-                                SpiceInt            inst,
-                                ConstSpiceChar    * ref,
-                                SpiceBoolean        avflag,
-                                ConstSpiceChar    * segid,
-                                SpiceInt            nrec,
-                                ConstSpiceDouble    sclkdp [],
-                                ConstSpiceDouble    quats  [][4],
-                                ConstSpiceDouble    avvs   [][3]  );
+void dafus_c(ConstSpiceDouble sum[], SpiceInt nd, SpiceInt ni, SpiceDouble dc[], SpiceInt ic[]);
 
+void dasac_c(SpiceInt handle, SpiceInt n, SpiceInt buflen, const void *buffer);
 
-   void              ckw02_c  ( SpiceInt            handle,
-                                SpiceDouble         begtim,
-                                SpiceDouble         endtim,
-                                SpiceInt            inst,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * segid,
-                                SpiceInt            nrec,
-                                ConstSpiceDouble    start  [],
-                                ConstSpiceDouble    stop   [],
-                                ConstSpiceDouble    quats  [][4],
-                                ConstSpiceDouble    avvs   [][3],
-                                ConstSpiceDouble    rates  []    );
+void dascls_c(SpiceInt handle);
 
+void dasec_c(SpiceInt handle, SpiceInt bufsiz, SpiceInt buflen, SpiceInt *n, void *buffer, SpiceBoolean *done);
 
-   void              ckw03_c  ( SpiceInt            handle,
-                                SpiceDouble         begtim,
-                                SpiceDouble         endtim,
-                                SpiceInt            inst,
-                                ConstSpiceChar    * ref,
-                                SpiceBoolean        avflag,
-                                ConstSpiceChar    * segid,
-                                SpiceInt            nrec,
-                                ConstSpiceDouble    sclkdp [],
-                                ConstSpiceDouble    quats  [][4],
-                                ConstSpiceDouble    avvs   [][3],
-                                SpiceInt            nints,
-                                ConstSpiceDouble    starts []     );
+void dasopr_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void dcyldr_c(SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble jacobi[3][3]);
 
-   void              ckw05_c  ( SpiceInt             handle,
-                                SpiceCK05Subtype     subtyp,
-                                SpiceInt             degree,
-                                SpiceDouble          begtim,
-                                SpiceDouble          endtim,
-                                SpiceInt             inst,
-                                ConstSpiceChar     * ref,
-                                SpiceBoolean         avflag,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             n,
-                                ConstSpiceDouble     sclkdp[],
-                                const void         * packets,
-                                SpiceDouble          rate,
-                                SpiceInt             nints,
-                                ConstSpiceDouble     starts[]     );
+void deltet_c(SpiceDouble epoch, ConstSpiceChar *eptype, SpiceDouble *delta);
 
+SpiceDouble det_c(ConstSpiceDouble m1[3][3]);
 
-   SpiceDouble       clight_c ( void );
+void diags2_c(ConstSpiceDouble symmat[2][2], SpiceDouble diag[2][2], SpiceDouble rotate[2][2]);
 
+void diff_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
-   void              clpool_c ( void );
+void dgeodr_c(SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble re, SpiceDouble f, SpiceDouble jacobi[3][3]);
 
+void dlatdr_c(SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble jacobi[3][3]);
 
-   void              cmprss_c ( SpiceChar           delim,
-                                SpiceInt            n,
-                                ConstSpiceChar    * input,
-                                SpiceInt            lenout,
-                                SpiceChar         * output  );
+void dp2hx_c(SpiceDouble number, SpiceInt lenout, SpiceChar *string, SpiceInt *length);
 
+void dpgrdr_c(ConstSpiceChar *body, SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble re, SpiceDouble f,
+              SpiceDouble jacobi[3][3]);
 
-   void              cnmfrm_c ( ConstSpiceChar    * cname,
-                                SpiceInt            lenout,
-                                SpiceInt          * frcode,
-                                SpiceChar         * frname,
-                                SpiceBoolean      * found   );
+SpiceDouble dpmax_c(void);
 
+SpiceDouble dpmax_(void);
 
-   void              conics_c ( ConstSpiceDouble    elts[8],
-                                SpiceDouble         et,
-                                SpiceDouble         state[6] );
+SpiceDouble dpmin_c(void);
 
+SpiceDouble dpmin_(void);
 
-   void              convrt_c ( SpiceDouble         x,
-                                ConstSpiceChar    * in,
-                                ConstSpiceChar    * out,
-                                SpiceDouble       * y    );
+SpiceDouble dpr_c(void);
 
+void drdcyl_c(SpiceDouble r, SpiceDouble lon, SpiceDouble z, SpiceDouble jacobi[3][3]);
 
-   void              copy_c   ( SpiceCell         * a,
-                                SpiceCell         * b     );
+void drdgeo_c(SpiceDouble lon, SpiceDouble lat, SpiceDouble alt, SpiceDouble re, SpiceDouble f,
+              SpiceDouble jacobi[3][3]);
 
+void drdlat_c(SpiceDouble r, SpiceDouble lon, SpiceDouble lat, SpiceDouble jacobi[3][3]);
 
+void drdpgr_c(ConstSpiceChar *body, SpiceDouble lon, SpiceDouble lat, SpiceDouble alt, SpiceDouble re, SpiceDouble f,
+              SpiceDouble jacobi[3][3]);
 
-   SpiceInt          cpos_c   ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * chars,
-                                SpiceInt            start  );
+void drdsph_c(SpiceDouble r, SpiceDouble colat, SpiceDouble lon, SpiceDouble jacobi[3][3]);
 
+void dsphdr_c(SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble jacobi[3][3]);
 
-   SpiceInt          cposr_c  ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * chars,
-                                SpiceInt            start  );
+void dtpool_c(ConstSpiceChar *name, SpiceBoolean *found, SpiceInt *n, SpiceChar type[1]);
 
+void ducrss_c(ConstSpiceDouble s1[6], ConstSpiceDouble s2[6], SpiceDouble sout[6]);
 
-   void              cvpool_c ( ConstSpiceChar    * agent,
-                                SpiceBoolean      * update );
+void dvcrss_c(ConstSpiceDouble s1[6], ConstSpiceDouble s2[6], SpiceDouble sout[6]);
 
+SpiceDouble dvdot_c(ConstSpiceDouble s1[6], ConstSpiceDouble s2[6]);
 
-   void              cyllat_c ( SpiceDouble         r,
-                                SpiceDouble         lonc,
-                                SpiceDouble         z,
-                                SpiceDouble       * radius,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * lat );
+void dvhat_c(ConstSpiceDouble s1[6], SpiceDouble sout[6]);
 
+SpiceDouble dvnorm_c(ConstSpiceDouble state[6]);
 
-   void              cylrec_c ( SpiceDouble         r,
-                                SpiceDouble         lon,
-                                SpiceDouble         z,
-                                SpiceDouble         rectan[3] );
+void dvpool_c(ConstSpiceChar *name);
 
+SpiceDouble dvsep_c(ConstSpiceDouble *s1, ConstSpiceDouble *s2);
 
-   void              cylsph_c ( SpiceDouble         r,
-                                SpiceDouble         lonc,
-                                SpiceDouble         z,
-                                SpiceDouble       * radius,
-                                SpiceDouble       * colat,
-                                SpiceDouble       * lon );
+void edlimb_c(SpiceDouble a, SpiceDouble b, SpiceDouble c, ConstSpiceDouble viewpt[3], SpiceEllipse *limb);
 
+void edterm_c(ConstSpiceChar *trmtyp, ConstSpiceChar *source, ConstSpiceChar *target, SpiceDouble et,
+              ConstSpiceChar *fixfrm, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceInt npts,
+              SpiceDouble *trgepc, SpiceDouble obspos[3], SpiceDouble termpts[][3]);
 
-   void              dafac_c  ( SpiceInt            handle,
-                                SpiceInt            n,
-                                SpiceInt            lenvals,
-                                const void        * buffer  );
+void ekacec_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals, SpiceInt vallen,
+              const void *cvals, SpiceBoolean isnull);
 
+void ekaced_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals,
+              ConstSpiceDouble *dvals, SpiceBoolean isnull);
 
-   void              dafbbs_c ( SpiceInt            handle );
+void ekacei_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals,
+              ConstSpiceInt *ivals, SpiceBoolean isnull);
 
+void ekaclc_c(SpiceInt handle, SpiceInt segno, ConstSpiceChar *column, SpiceInt vallen, const void *cvals,
+              ConstSpiceInt *entszs, ConstSpiceBoolean *nlflgs, ConstSpiceInt *rcptrs, SpiceInt *wkindx);
 
-   void              dafbfs_c ( SpiceInt            handle );
+void ekacld_c(SpiceInt handle, SpiceInt segno, ConstSpiceChar *column, ConstSpiceDouble *dvals, ConstSpiceInt *entszs,
+              ConstSpiceBoolean *nlflgs, ConstSpiceInt *rcptrs, SpiceInt *wkindx);
 
+void ekacli_c(SpiceInt handle, SpiceInt segno, ConstSpiceChar *column, ConstSpiceInt *ivals, ConstSpiceInt *entszs,
+              ConstSpiceBoolean *nlflgs, ConstSpiceInt *rcptrs, SpiceInt *wkindx);
 
-   void              dafcls_c ( SpiceInt            handle );
+void ekappr_c(SpiceInt handle, SpiceInt segno, SpiceInt *recno);
 
+void ekbseg_c(SpiceInt handle, ConstSpiceChar *tabnam, SpiceInt ncols, SpiceInt cnmlen, const void *cnames,
+              SpiceInt declen, const void *decls, SpiceInt *segno);
 
-   void              dafcs_c  ( SpiceInt            handle );
+void ekccnt_c(ConstSpiceChar *table, SpiceInt *ccount);
 
+void ekcii_c(ConstSpiceChar *table, SpiceInt cindex, SpiceInt lenout, SpiceChar *column, SpiceEKAttDsc *attdsc);
 
-   void              dafdc_c  ( SpiceInt            handle );
+void ekcls_c(SpiceInt handle);
 
+void ekdelr_c(SpiceInt handle, SpiceInt segno, SpiceInt recno);
 
-   void              dafec_c  ( SpiceInt            handle,
-                                SpiceInt            bufsiz,
-                                SpiceInt            lenout,
-                                SpiceInt          * n,
-                                void              * buffer,
-                                SpiceBoolean      * done    );
+void ekffld_c(SpiceInt handle, SpiceInt segno, SpiceInt *rcptrs);
 
+void ekfind_c(ConstSpiceChar *query, SpiceInt lenout, SpiceInt *nmrows, SpiceBoolean *error, SpiceChar *errmsg);
 
-   void              daffna_c ( SpiceBoolean      * found );
+void ekgc_c(SpiceInt selidx, SpiceInt row, SpiceInt elment, SpiceInt lenout, SpiceChar *cdata, SpiceBoolean *null,
+            SpiceBoolean *found);
 
+void ekgd_c(SpiceInt selidx, SpiceInt row, SpiceInt elment, SpiceDouble *ddata, SpiceBoolean *null,
+            SpiceBoolean *found);
 
-   void              daffpa_c ( SpiceBoolean      * found );
+void ekgi_c(SpiceInt selidx, SpiceInt row, SpiceInt elment, SpiceInt *idata, SpiceBoolean *null, SpiceBoolean *found);
 
+void ekifld_c(SpiceInt handle, ConstSpiceChar *tabnam, SpiceInt ncols, SpiceInt nrows, SpiceInt cnmlen,
+              const void *cnames, SpiceInt declen, const void *decls, SpiceInt *segno, SpiceInt *rcptrs);
 
-   void              dafgda_c ( SpiceInt            handle,
-                                SpiceInt            begin,
-                                SpiceInt            end,
-                                SpiceDouble       * data );
+void ekinsr_c(SpiceInt handle, SpiceInt segno, SpiceInt recno);
 
+void eklef_c(ConstSpiceChar *fname, SpiceInt *handle);
 
-   void              dafgh_c  ( SpiceInt          * handle );
+SpiceInt eknelt_c(SpiceInt selidx, SpiceInt row);
 
+SpiceInt eknseg_c(SpiceInt handle);
 
-   void              dafgn_c  ( SpiceInt            lenout,
-                                SpiceChar         * name   );
+void ekntab_c(SpiceInt *n);
 
+void ekopn_c(ConstSpiceChar *fname, ConstSpiceChar *ifname, SpiceInt ncomch, SpiceInt *handle);
 
-   void              dafgs_c  ( SpiceDouble         sum[] );
+void ekopr_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void ekops_c(SpiceInt *handle);
 
-   void              dafgsr_c ( SpiceInt            handle,
-                                SpiceInt            recno,
-                                SpiceInt            begin,
-                                SpiceInt            end,
-                                SpiceDouble       * data,
-                                SpiceBoolean      * found  );
+void ekopw_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void ekpsel_c(ConstSpiceChar *query, SpiceInt msglen, SpiceInt tablen, SpiceInt collen, SpiceInt *n, SpiceInt *xbegs,
+              SpiceInt *xends, SpiceEKDataType *xtypes, SpiceEKExprClass *xclass, void *tabs, void *cols,
+              SpiceBoolean *error, SpiceChar *errmsg);
 
-   void              dafopr_c ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle  );
+void ekrcec_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt lenout, SpiceInt *nvals,
+              void *cvals, SpiceBoolean *isnull);
 
+void ekrced_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt *nvals,
+              SpiceDouble *dvals, SpiceBoolean *isnull);
 
-   void              dafopw_c ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle );
+void ekrcei_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt *nvals, SpiceInt *ivals,
+              SpiceBoolean *isnull);
 
+void ekssum_c(SpiceInt handle, SpiceInt segno, SpiceEKSegSum *segsum);
 
-   void              dafps_c  ( SpiceInt            nd,
-                                SpiceInt            ni,
-                                ConstSpiceDouble    dc  [],
-                                ConstSpiceInt       ic  [],
-                                SpiceDouble         sum []  );
+void ektnam_c(SpiceInt n, SpiceInt lenout, SpiceChar *table);
 
+void ekucec_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals, SpiceInt vallen,
+              const void *cvals, SpiceBoolean isnull);
 
-   void              dafrda_c ( SpiceInt            handle,
-                                SpiceInt            begin,
-                                SpiceInt            end,
-                                SpiceDouble       * data );
+void ekuced_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals,
+              ConstSpiceDouble *dvals, SpiceBoolean isnull);
 
+void ekucei_c(SpiceInt handle, SpiceInt segno, SpiceInt recno, ConstSpiceChar *column, SpiceInt nvals,
+              ConstSpiceInt *ivals, SpiceBoolean isnull);
 
+void ekuef_c(SpiceInt handle);
 
-   void              dafrfr_c ( SpiceInt            handle,
-                                SpiceInt            lenout,
-                                SpiceInt          * nd,
-                                SpiceInt          * ni,
-                                SpiceChar         * ifname,
-                                SpiceInt          * fward,
-                                SpiceInt          * bward,
-                                SpiceInt          * free    );
+SpiceBoolean elemc_c(ConstSpiceChar *item, SpiceCell *set);
 
+SpiceBoolean elemd_c(SpiceDouble item, SpiceCell *set);
 
+SpiceBoolean elemi_c(SpiceInt item, SpiceCell *set);
 
-   void              dafrs_c  ( ConstSpiceDouble  * sum );
+void eqncpv_c(SpiceDouble et, SpiceDouble epoch, ConstSpiceDouble eqel[9], SpiceDouble rapol, SpiceDouble decpol,
+              SpiceDouble state[6]);
 
+SpiceBoolean eqstr_c(ConstSpiceChar *a, ConstSpiceChar *b);
 
-   void              dafus_c  ( ConstSpiceDouble    sum [],
-                                SpiceInt            nd,
-                                SpiceInt            ni,
-                                SpiceDouble         dc  [],
-                                SpiceInt            ic  []  );
+void el2cgv_c(ConstSpiceEllipse *ellipse, SpiceDouble center[3], SpiceDouble smajor[3], SpiceDouble sminor[3]);
 
+void erract_c(ConstSpiceChar *operation, SpiceInt lenout, SpiceChar *action);
 
-   void              dasac_c  ( SpiceInt            handle,
-                                SpiceInt            n,
-                                SpiceInt            buflen,
-                                const void        * buffer  );
+void errch_c(ConstSpiceChar *marker, ConstSpiceChar *string);
 
+void errdev_c(ConstSpiceChar *operation, SpiceInt lenout, SpiceChar *device);
 
-   void              dascls_c ( SpiceInt            handle );
+void errdp_c(ConstSpiceChar *marker, SpiceDouble number);
 
+void errint_c(ConstSpiceChar *marker, SpiceInt number);
 
-   void              dasec_c  ( SpiceInt            handle,
-                                SpiceInt            bufsiz,
-                                SpiceInt            buflen,
-                                SpiceInt          * n,
-                                void              * buffer,
-                                SpiceBoolean      * done   );
+void errprt_c(ConstSpiceChar *operation, SpiceInt lenout, SpiceChar *list);
 
+SpiceInt esrchc_c(ConstSpiceChar *value, SpiceInt ndim, SpiceInt lenvals, const void *array);
 
-   void              dasopr_c ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle  );
+void etcal_c(SpiceDouble et, SpiceInt lenout, SpiceChar *string);
 
+void et2lst_c(SpiceDouble et, SpiceInt body, SpiceDouble lon, ConstSpiceChar *type, SpiceInt timlen, SpiceInt ampmlen,
+              SpiceInt *hr, SpiceInt *mn, SpiceInt *sc, SpiceChar *time, SpiceChar *ampm);
 
-   void              dcyldr_c ( SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         jacobi[3][3] );
+void et2utc_c(SpiceDouble et, ConstSpiceChar *format, SpiceInt prec, SpiceInt lenout, SpiceChar *utcstr);
 
+void eul2m_c(SpiceDouble angle3, SpiceDouble angle2, SpiceDouble angle1, SpiceInt axis3, SpiceInt axis2, SpiceInt axis1,
+             SpiceDouble r[3][3]);
 
-   void              deltet_c ( SpiceDouble         epoch,
-                                ConstSpiceChar    * eptype,
-                                SpiceDouble       * delta   );
+void eul2xf_c(ConstSpiceDouble eulang[6], SpiceInt axisa, SpiceInt axisb, SpiceInt axisc, SpiceDouble xform[6][6]);
 
+SpiceBoolean exists_c(ConstSpiceChar *name);
 
-   SpiceDouble       det_c    ( ConstSpiceDouble    m1[3][3] );
+void expool_c(ConstSpiceChar *name, SpiceBoolean *found);
 
+SpiceBoolean failed_c(void);
 
-   void              diags2_c ( ConstSpiceDouble    symmat [2][2],
-                                SpiceDouble         diag   [2][2],
-                                SpiceDouble         rotate [2][2]  );
+void fovray_c(ConstSpiceChar *inst, ConstSpiceDouble raydir[3], ConstSpiceChar *rframe, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, SpiceDouble *et, SpiceBoolean *visible);
 
+void fovtrg_c(ConstSpiceChar *inst, ConstSpiceChar *target, ConstSpiceChar *tshape, ConstSpiceChar *tframe,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceDouble *et, SpiceBoolean *visible);
 
-   void              diff_c   ( SpiceCell         * a,
-                                SpiceCell         * b,
-                                SpiceCell         * c  );
+void frame_c(SpiceDouble x[3], SpiceDouble y[3], SpiceDouble z[3]);
 
+void frinfo_c(SpiceInt frcode, SpiceInt *cent, SpiceInt *clss, SpiceInt *clssid, SpiceBoolean *found);
 
-   void              dgeodr_c ( SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         jacobi[3][3] );
+void frmnam_c(SpiceInt frcode, SpiceInt lenout, SpiceChar *frname);
 
+void ftncls_c(SpiceInt unit);
 
-   void              dlatdr_c ( SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         jacobi[3][3] );
+void furnsh_c(ConstSpiceChar *file);
 
-   void              dp2hx_c  ( SpiceDouble   number,
-                                SpiceInt      lenout,
-                                SpiceChar   * string,
-                               SpiceInt    * length
-                              );
+void gcpool_c(ConstSpiceChar *name, SpiceInt start, SpiceInt room, SpiceInt lenout, SpiceInt *n, void *cvals,
+              SpiceBoolean *found);
 
-   void              dpgrdr_c ( ConstSpiceChar    * body,
-                                SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         jacobi[3][3] );
+void gdpool_c(ConstSpiceChar *name, SpiceInt start, SpiceInt room, SpiceInt *n, SpiceDouble *values,
+              SpiceBoolean *found);
 
+void georec_c(SpiceDouble lon, SpiceDouble lat, SpiceDouble alt, SpiceDouble re, SpiceDouble f, SpiceDouble rectan[3]);
 
-   SpiceDouble       dpmax_c  ( void );
+void getcml_c(SpiceInt *argc, SpiceChar ***argv);
 
+void getelm_c(SpiceInt frstyr, SpiceInt lineln, const void *lines, SpiceDouble *epoch, SpiceDouble *elems);
 
-   SpiceDouble       dpmax_   ( void );
+void getfat_c(ConstSpiceChar *file, SpiceInt arclen, SpiceInt typlen, SpiceChar *arch, SpiceChar *type);
 
+void getfov_c(SpiceInt instid, SpiceInt room, SpiceInt shapelen, SpiceInt framelen, SpiceChar *shape, SpiceChar *frame,
+              SpiceDouble bsight[3], SpiceInt *n, SpiceDouble bounds[][3]);
 
-   SpiceDouble       dpmin_c  ( void );
+void getmsg_c(ConstSpiceChar *option, SpiceInt lenout, SpiceChar *msg);
 
+SpiceBoolean gfbail_c(void);
 
-   SpiceDouble       dpmin_   ( void );
+void gfclrh_c(void);
 
+void gfdist_c(ConstSpiceChar *target, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceChar *relate,
+              SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls, SpiceCell *cnfine,
+              SpiceCell *result);
 
-   SpiceDouble       dpr_c    ( void );
+void gfevnt_c(void (*udstep)(SpiceDouble et, SpiceDouble *step),
 
+              void (*udrefn)(SpiceDouble t1, SpiceDouble t2, SpiceBoolean s1, SpiceBoolean s2, SpiceDouble *t),
+              ConstSpiceChar *gquant, SpiceInt qnpars, SpiceInt lenvals, const void *qpnams, const void *qcpars,
+              ConstSpiceDouble *qdpars, ConstSpiceInt *qipars, ConstSpiceBoolean *qlpars, ConstSpiceChar *op,
+              SpiceDouble refval, SpiceDouble tol, SpiceDouble adjust, SpiceBoolean rpt,
 
-   void              drdcyl_c ( SpiceDouble         r,
-                                SpiceDouble         lon,
-                                SpiceDouble         z,
-                                SpiceDouble         jacobi[3][3] );
+              void (*udrepi)(SpiceCell *cnfine, ConstSpiceChar *srcpre, ConstSpiceChar *srcsuf),
 
+              void (*udrepu)(SpiceDouble ivbeg, SpiceDouble ivend, SpiceDouble et),
 
-   void              drdgeo_c ( SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         alt,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         jacobi[3][3] );
+              void (*udrepf)(void), SpiceInt nintvls, SpiceBoolean bail, SpiceBoolean (*udbail)(void),
+              SpiceCell *cnfine, SpiceCell *result);
 
+void gffove_c(ConstSpiceChar *inst, ConstSpiceChar *tshape, ConstSpiceDouble raydir[3], ConstSpiceChar *target,
+              ConstSpiceChar *tframe, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceDouble tol,
+              void (*udstep)(SpiceDouble et, SpiceDouble *step),
+              void (*udrefn)(SpiceDouble t1, SpiceDouble t2, SpiceBoolean s1, SpiceBoolean s2, SpiceDouble *t),
+              SpiceBoolean rpt, void (*udrepi)(SpiceCell *cnfine, ConstSpiceChar *srcpre, ConstSpiceChar *srcsuf),
+              void (*udrepu)(SpiceDouble ivbeg, SpiceDouble ivend, SpiceDouble et), void (*udrepf)(void),
+              SpiceBoolean bail, SpiceBoolean (*udbail)(void), SpiceCell *cnfine, SpiceCell *result);
 
-   void              drdlat_c ( SpiceDouble         r,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         jacobi[3][3] );
+void gfilum_c(ConstSpiceChar *method, ConstSpiceChar *angtyp, ConstSpiceChar *target, ConstSpiceChar *illum,
+              ConstSpiceChar *fixref, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceDouble spoint[3],
+              ConstSpiceChar *relate, SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls,
+              SpiceCell *cnfine, SpiceCell *result);
 
+void gfinth_c(int sigcode);
 
-   void              drdpgr_c ( ConstSpiceChar    * body,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         alt,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         jacobi[3][3] );
+void gfocce_c(ConstSpiceChar *occtyp, ConstSpiceChar *front, ConstSpiceChar *fshape, ConstSpiceChar *fframe,
+              ConstSpiceChar *back, ConstSpiceChar *bshape, ConstSpiceChar *bframe, ConstSpiceChar *obsrvr,
+              ConstSpiceChar *abcorr, SpiceDouble tol, void (*udstep)(SpiceDouble et, SpiceDouble *step),
+              void (*udrefn)(SpiceDouble t1, SpiceDouble t2, SpiceBoolean s1, SpiceBoolean s2, SpiceDouble *t),
+              SpiceBoolean rpt, void (*udrepi)(SpiceCell *cnfine, ConstSpiceChar *srcpre, ConstSpiceChar *srcsuf),
+              void (*udrepu)(SpiceDouble ivbeg, SpiceDouble ivend, SpiceDouble et), void (*udrepf)(void),
+              SpiceBoolean bail, SpiceBoolean (*udbail)(void), SpiceCell *cnfine, SpiceCell *result);
 
+void gfoclt_c(ConstSpiceChar *occtyp, ConstSpiceChar *front, ConstSpiceChar *fshape, ConstSpiceChar *fframe,
+              ConstSpiceChar *back, ConstSpiceChar *bshape, ConstSpiceChar *bframe, ConstSpiceChar *obsrvr,
+              ConstSpiceChar *abcorr, SpiceDouble step, SpiceCell *cnfine, SpiceCell *result);
 
-   void              drdsph_c ( SpiceDouble         r,
-                                SpiceDouble         colat,
-                                SpiceDouble         lon,
-                                SpiceDouble         jacobi[3][3] );
+void gfpa_c(ConstSpiceChar *target, ConstSpiceChar *illum, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr,
+            ConstSpiceChar *relate, SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls,
+            SpiceCell *cnfine, SpiceCell *result);
 
+void gfposc_c(ConstSpiceChar *target, ConstSpiceChar *frame, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr,
+              ConstSpiceChar *crdsys, ConstSpiceChar *coord, ConstSpiceChar *relate, SpiceDouble refval,
+              SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls, SpiceCell *cnfine, SpiceCell *result);
 
-   void              dsphdr_c ( SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         jacobi[3][3] );
+void gfrefn_c(SpiceDouble t1, SpiceDouble t2, SpiceBoolean s1, SpiceBoolean s2, SpiceDouble *t);
 
+void gfrepf_c(void);
 
-   void              dtpool_c ( ConstSpiceChar      * name,
-                                SpiceBoolean        * found,
-                                SpiceInt            * n,
-                                SpiceChar             type [1] );
+void gfrepi_c(SpiceCell *window, ConstSpiceChar *begmss, ConstSpiceChar *endmss);
 
+void gfrepu_c(SpiceDouble ivbeg, SpiceDouble ivend, SpiceDouble time);
 
-   void              ducrss_c ( ConstSpiceDouble      s1  [6],
-                                ConstSpiceDouble      s2  [6],
-                                SpiceDouble           sout[6] );
+void gfrfov_c(ConstSpiceChar *inst, ConstSpiceDouble raydir[3], ConstSpiceChar *rframe, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, SpiceDouble step, SpiceCell *cnfine, SpiceCell *result);
 
+void gfrr_c(ConstSpiceChar *target, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceChar *relate,
+            SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls, SpiceCell *cnfine,
+            SpiceCell *result);
 
-   void              dvcrss_c ( ConstSpiceDouble      s1  [6],
-                                ConstSpiceDouble      s2  [6],
-                                SpiceDouble           sout[6] );
+void gfsep_c(ConstSpiceChar *targ1, ConstSpiceChar *shape1, ConstSpiceChar *frame1, ConstSpiceChar *targ2,
+             ConstSpiceChar *shape2, ConstSpiceChar *frame2, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr,
+             ConstSpiceChar *relate, SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls,
+             SpiceCell *cnfine, SpiceCell *result);
 
+void gfsntc_c(ConstSpiceChar *target, ConstSpiceChar *fixref, ConstSpiceChar *method, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, ConstSpiceChar *dref, ConstSpiceDouble dvec[3], ConstSpiceChar *crdsys,
+              ConstSpiceChar *coord, ConstSpiceChar *relate, SpiceDouble refval, SpiceDouble adjust, SpiceDouble step,
+              SpiceInt nintvls, SpiceCell *cnfine, SpiceCell *result);
 
-   SpiceDouble       dvdot_c  ( ConstSpiceDouble      s1 [6],
-                                ConstSpiceDouble      s2 [6] );
+void gfsstp_c(SpiceDouble step);
 
+void gfstep_c(SpiceDouble time, SpiceDouble *step);
 
-   void              dvhat_c  ( ConstSpiceDouble      s1  [6],
-                                SpiceDouble           sout[6] );
+void gfstol_c(SpiceDouble value);
 
-   SpiceDouble       dvnorm_c ( ConstSpiceDouble      state[6] );
+void gfsubc_c(ConstSpiceChar *target, ConstSpiceChar *fixref, ConstSpiceChar *method, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, ConstSpiceChar *crdsys, ConstSpiceChar *coord, ConstSpiceChar *relate,
+              SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls, SpiceCell *cnfine,
+              SpiceCell *result);
 
-   void              dvpool_c ( ConstSpiceChar      * name );
+void gftfov_c(ConstSpiceChar *inst, ConstSpiceChar *target, ConstSpiceChar *tshape, ConstSpiceChar *tframe,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceDouble step, SpiceCell *cnfine, SpiceCell *result);
 
+void gfudb_c(void (*udfuns)(SpiceDouble et, SpiceDouble *value),
 
-   SpiceDouble       dvsep_c  ( ConstSpiceDouble    * s1,
-                                ConstSpiceDouble    * s2 );
+             void (*udfunb)(void (*udfuns)(SpiceDouble et, SpiceDouble *value),
 
+                            SpiceDouble et, SpiceBoolean *xbool),
 
-   void              edlimb_c ( SpiceDouble           a,
-                                SpiceDouble           b,
-                                SpiceDouble           c,
-                                ConstSpiceDouble      viewpt[3],
-                                SpiceEllipse        * limb      );
+             SpiceDouble step, SpiceCell *cnfine, SpiceCell *result);
 
+void gfuds_c(void (*udfuns)(SpiceDouble et, SpiceDouble *value),
 
-   void              edterm_c ( ConstSpiceChar      * trmtyp,
-                                ConstSpiceChar      * source,
-                                ConstSpiceChar      * target,
-                                SpiceDouble           et,
-                                ConstSpiceChar      * fixfrm,
-                                ConstSpiceChar      * abcorr,
-                                ConstSpiceChar      * obsrvr,
-                                SpiceInt              npts,
-                                SpiceDouble         * trgepc,
-                                SpiceDouble           obspos  [3],
-                                SpiceDouble           termpts [ ][3] );
+             void (*udfunb)(void (*udfuns)(SpiceDouble et, SpiceDouble *value),
 
+                            SpiceDouble x, SpiceBoolean *xbool),
 
-   void              ekacec_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                SpiceInt              vallen,
-                                const void          * cvals,
-                                SpiceBoolean          isnull );
+             ConstSpiceChar *relate, SpiceDouble refval, SpiceDouble adjust, SpiceDouble step, SpiceInt nintvls,
+             SpiceCell *cnfine, SpiceCell *result);
 
+void gipool_c(ConstSpiceChar *name, SpiceInt start, SpiceInt room, SpiceInt *n, SpiceInt *ivals, SpiceBoolean *found);
 
-   void              ekaced_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                ConstSpiceDouble    * dvals,
-                                SpiceBoolean          isnull );
+void gnpool_c(ConstSpiceChar *name, SpiceInt start, SpiceInt room, SpiceInt lenout, SpiceInt *n, void *kvars,
+              SpiceBoolean *found);
 
+SpiceDouble halfpi_c(void);
 
-   void              ekacei_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                ConstSpiceInt       * ivals,
-                                SpiceBoolean          isnull );
+void hx2dp_c(ConstSpiceChar *string, SpiceInt lenout, SpiceDouble *number, SpiceBoolean *error, SpiceChar *errmsg);
 
+void ident_c(SpiceDouble matrix[3][3]);
 
-   void              ekaclc_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              vallen,
-                                const void          * cvals,
-                                ConstSpiceInt       * entszs,
-                                ConstSpiceBoolean   * nlflgs,
-                                ConstSpiceInt       * rcptrs,
-                                SpiceInt            * wkindx  );
+void ilumin_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *fixref,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceDouble spoint[3], SpiceDouble *trgepc,
+              SpiceDouble srfvec[3], SpiceDouble *phase, SpiceDouble *solar, SpiceDouble *emissn);
 
+void illum_c(ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr,
+             ConstSpiceDouble spoint[3], SpiceDouble *phase, SpiceDouble *solar, SpiceDouble *emissn);
 
-   void              ekacld_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                ConstSpiceChar      * column,
-                                ConstSpiceDouble    * dvals,
-                                ConstSpiceInt       * entszs,
-                                ConstSpiceBoolean   * nlflgs,
-                                ConstSpiceInt       * rcptrs,
-                                SpiceInt            * wkindx  );
+void illumg_c(ConstSpiceChar *method, ConstSpiceChar *target, ConstSpiceChar *illum, SpiceDouble et,
+              ConstSpiceChar *fixref, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceDouble spoint[3],
+              SpiceDouble *trgepc, SpiceDouble srfvec[3], SpiceDouble *phase, SpiceDouble *solar, SpiceDouble *emissn);
 
+void inedpl_c(SpiceDouble a, SpiceDouble b, SpiceDouble c, ConstSpicePlane *plane, SpiceEllipse *ellipse,
+              SpiceBoolean *found);
 
-   void              ekacli_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                ConstSpiceChar      * column,
-                                ConstSpiceInt       * ivals,
-                                ConstSpiceInt       * entszs,
-                                ConstSpiceBoolean   * nlflgs,
-                                ConstSpiceInt       * rcptrs,
-                                SpiceInt            * wkindx  );
+void inelpl_c(ConstSpiceEllipse *ellips, ConstSpicePlane *plane, SpiceInt *nxpts, SpiceDouble xpt1[3],
+              SpiceDouble xpt2[3]);
 
+void insrtc_c(ConstSpiceChar *item, SpiceCell *set);
 
-   void              ekappr_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt            * recno  );
+void insrtd_c(SpiceDouble item, SpiceCell *set);
 
+void insrti_c(SpiceInt item, SpiceCell *set);
 
-   void              ekbseg_c ( SpiceInt              handle,
-                                ConstSpiceChar      * tabnam,
-                                SpiceInt              ncols,
-                                SpiceInt              cnmlen,
-                                const void          * cnames,
-                                SpiceInt              declen,
-                                const void          * decls,
-                                SpiceInt            * segno  );
+void inter_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
+void inrypl_c(ConstSpiceDouble vertex[3], ConstSpiceDouble dir[3], ConstSpicePlane *plane, SpiceInt *nxpts,
+              SpiceDouble xpt[3]);
 
-   void              ekccnt_c ( ConstSpiceChar      * table,
-                                SpiceInt            * ccount );
+SpiceInt intmax_c(void);
 
+SpiceInt intmax_(void);
 
-   void              ekcii_c  ( ConstSpiceChar      * table,
-                                SpiceInt              cindex,
-                                SpiceInt              lenout,
-                                SpiceChar           * column,
-                                SpiceEKAttDsc       * attdsc  );
+SpiceInt intmin_c(void);
 
+SpiceInt intmin_(void);
 
-   void              ekcls_c  ( SpiceInt              handle );
+void invert_c(ConstSpiceDouble m1[3][3], SpiceDouble m2[3][3]);
 
+void invort_c(ConstSpiceDouble m[3][3], SpiceDouble mit[3][3]);
 
-   void              ekdelr_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno );
+SpiceBoolean isordv_c(ConstSpiceInt *array, SpiceInt n);
 
+SpiceBoolean isrot_c(ConstSpiceDouble m[3][3], SpiceDouble ntol, SpiceDouble dtol);
 
-   void              ekffld_c ( SpiceInt            handle,
-                                SpiceInt            segno,
-                                SpiceInt          * rcptrs );
+SpiceInt isrchc_c(ConstSpiceChar *value, SpiceInt ndim, SpiceInt lenvals, const void *array);
 
+SpiceInt isrchd_c(SpiceDouble value, SpiceInt ndim, ConstSpiceDouble *array);
 
-   void              ekfind_c ( ConstSpiceChar    * query,
-                                SpiceInt            lenout,
-                                SpiceInt          * nmrows,
-                                SpiceBoolean      * error,
-                                SpiceChar         * errmsg );
+SpiceInt isrchi_c(SpiceInt value, SpiceInt ndim, ConstSpiceInt *array);
 
+SpiceBoolean iswhsp_c(ConstSpiceChar *string);
 
-   void              ekgc_c   ( SpiceInt            selidx,
-                                SpiceInt            row,
-                                SpiceInt            elment,
-                                SpiceInt            lenout,
-                                SpiceChar         * cdata,
-                                SpiceBoolean      * null,
-                                SpiceBoolean      * found  );
+SpiceDouble j1900_c(void);
 
+SpiceDouble j1950_c(void);
 
-   void              ekgd_c   ( SpiceInt            selidx,
-                                SpiceInt            row,
-                                SpiceInt            elment,
-                                SpiceDouble       * ddata,
-                                SpiceBoolean      * null,
-                                SpiceBoolean      * found  );
+SpiceDouble j2000_c(void);
 
+SpiceDouble j2100_c(void);
 
-   void              ekgi_c   ( SpiceInt            selidx,
-                                SpiceInt            row,
-                                SpiceInt            elment,
-                                SpiceInt          * idata,
-                                SpiceBoolean      * null,
-                                SpiceBoolean      * found  );
+SpiceDouble jyear_c(void);
 
+void kclear_c(void);
 
-   void              ekifld_c ( SpiceInt            handle,
-                                ConstSpiceChar    * tabnam,
-                                SpiceInt            ncols,
-                                SpiceInt            nrows,
-                                SpiceInt            cnmlen,
-                                const void        * cnames,
-                                SpiceInt            declen,
-                                const void        * decls,
-                                SpiceInt          * segno,
-                                SpiceInt          * rcptrs );
+void kdata_c(SpiceInt which, ConstSpiceChar *kind, SpiceInt fillen, SpiceInt typlen, SpiceInt srclen, SpiceChar *file,
+             SpiceChar *filtyp, SpiceChar *source, SpiceInt *handle, SpiceBoolean *found);
 
+void kinfo_c(ConstSpiceChar *file, SpiceInt typlen, SpiceInt srclen, SpiceChar *filtyp, SpiceChar *source,
+             SpiceInt *handle, SpiceBoolean *found);
 
-   void              ekinsr_c ( SpiceInt            handle,
-                                SpiceInt            segno,
-                                SpiceInt            recno );
+void kplfrm_c(SpiceInt frmcls, SpiceCell *idset);
 
+void ktotal_c(ConstSpiceChar *kind, SpiceInt *count);
 
-   void              eklef_c  ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle );
+void kxtrct_c(ConstSpiceChar *keywd, SpiceInt termlen, const void *terms, SpiceInt nterms, SpiceInt stringlen,
+              SpiceInt substrlen, SpiceChar *string, SpiceBoolean *found, SpiceChar *substr);
 
+SpiceInt lastnb_c(ConstSpiceChar *string);
 
-   SpiceInt          eknelt_c ( SpiceInt            selidx,
-                                SpiceInt            row     );
+void latcyl_c(SpiceDouble radius, SpiceDouble lon, SpiceDouble lat, SpiceDouble *r, SpiceDouble *lonc, SpiceDouble *z);
 
+void latrec_c(SpiceDouble radius, SpiceDouble longitude, SpiceDouble latitude, SpiceDouble rectan[3]);
 
-   SpiceInt          eknseg_c ( SpiceInt            handle );
+void latsph_c(SpiceDouble radius, SpiceDouble lon, SpiceDouble lat, SpiceDouble *rho, SpiceDouble *colat,
+              SpiceDouble *lons);
 
+void lcase_c(SpiceChar *in, SpiceInt lenout, SpiceChar *out);
 
-   void              ekntab_c ( SpiceInt            * n );
+void ldpool_c(ConstSpiceChar *filename);
 
+void lmpool_c(const void *cvals, SpiceInt lenvals, SpiceInt n);
 
-   void              ekopn_c  ( ConstSpiceChar    * fname,
-                                ConstSpiceChar    * ifname,
-                                SpiceInt            ncomch,
-                                SpiceInt          * handle );
+void lparse_c(ConstSpiceChar *list, ConstSpiceChar *delim, SpiceInt nmax, SpiceInt lenout, SpiceInt *n, void *items);
 
+void lparsm_c(ConstSpiceChar *list, ConstSpiceChar *delims, SpiceInt nmax, SpiceInt lenout, SpiceInt *n, void *items);
 
-   void              ekopr_c  ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle );
+void lparss_c(ConstSpiceChar *list, ConstSpiceChar *delims, SpiceCell *set);
 
+SpiceDouble lspcn_c(ConstSpiceChar *body, SpiceDouble et, ConstSpiceChar *abcorr);
 
-   void              ekops_c  ( SpiceInt          * handle );
+SpiceInt lstlec_c(ConstSpiceChar *string, SpiceInt n, SpiceInt lenvals, const void *array);
 
+SpiceInt lstled_c(SpiceDouble x, SpiceInt n, ConstSpiceDouble *array);
 
-   void              ekopw_c  ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle );
+SpiceInt lstlei_c(SpiceInt x, SpiceInt n, ConstSpiceInt *array);
 
+SpiceInt lstltc_c(ConstSpiceChar *string, SpiceInt n, SpiceInt lenvals, const void *array);
 
-   void              ekpsel_c ( ConstSpiceChar    * query,
-                                SpiceInt            msglen,
-                                SpiceInt            tablen,
-                                SpiceInt            collen,
-                                SpiceInt          * n,
-                                SpiceInt          * xbegs,
-                                SpiceInt          * xends,
-                                SpiceEKDataType   * xtypes,
-                                SpiceEKExprClass  * xclass,
-                                void              * tabs,
-                                void              * cols,
-                                SpiceBoolean      * error,
-                                SpiceChar         * errmsg );
+SpiceInt lstltd_c(SpiceDouble x, SpiceInt n, ConstSpiceDouble *array);
 
+SpiceInt lstlti_c(SpiceInt x, SpiceInt n, ConstSpiceInt *array);
 
-   void              ekrcec_c ( SpiceInt           handle,
-                                SpiceInt           segno,
-                                SpiceInt           recno,
-                                ConstSpiceChar   * column,
-                                SpiceInt           lenout,
-                                SpiceInt         * nvals,
-                                void             * cvals,
-                                SpiceBoolean     * isnull );
+void ltime_c(SpiceDouble etobs, SpiceInt obs, ConstSpiceChar *dir, SpiceInt targ, SpiceDouble *ettarg,
+             SpiceDouble *elapsd);
 
+void lx4dec_c(ConstSpiceChar *string, SpiceInt first, SpiceInt *last, SpiceInt *nchar);
 
-   void              ekrced_c ( SpiceInt           handle,
-                                SpiceInt           segno,
-                                SpiceInt           recno,
-                                ConstSpiceChar   * column,
-                                SpiceInt         * nvals,
-                                SpiceDouble      * dvals,
-                                SpiceBoolean     * isnull );
+void lx4num_c(ConstSpiceChar *string, SpiceInt first, SpiceInt *last, SpiceInt *nchar);
 
+void lx4sgn_c(ConstSpiceChar *string, SpiceInt first, SpiceInt *last, SpiceInt *nchar);
 
-   void              ekrcei_c ( SpiceInt           handle,
-                                SpiceInt           segno,
-                                SpiceInt           recno,
-                                ConstSpiceChar   * column,
-                                SpiceInt         * nvals,
-                                SpiceInt         * ivals,
-                                SpiceBoolean     * isnull );
+void lx4uns_c(ConstSpiceChar *string, SpiceInt first, SpiceInt *last, SpiceInt *nchar);
 
+void lxqstr_c(ConstSpiceChar *string, SpiceChar qchar, SpiceInt first, SpiceInt *last, SpiceInt *nchar);
 
-   void              ekssum_c ( SpiceInt            handle,
-                                SpiceInt            segno,
-                                SpiceEKSegSum     * segsum );
+void m2eul_c(ConstSpiceDouble r[3][3], SpiceInt axis3, SpiceInt axis2, SpiceInt axis1, SpiceDouble *angle3,
+             SpiceDouble *angle2, SpiceDouble *angle1);
 
+void m2q_c(ConstSpiceDouble r[3][3], SpiceDouble q[4]);
 
-   void              ektnam_c ( SpiceInt            n,
-                                SpiceInt            lenout,
-                                SpiceChar         * table  );
+SpiceBoolean matchi_c(ConstSpiceChar *string, ConstSpiceChar *templ, SpiceChar wstr, SpiceChar wchr);
 
+SpiceBoolean matchw_c(ConstSpiceChar *string, ConstSpiceChar *templ, SpiceChar wstr, SpiceChar wchr);
 
-   void              ekucec_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                SpiceInt              vallen,
-                                const void          * cvals,
-                                SpiceBoolean          isnull );
+SpiceDouble maxd_c(SpiceInt n, ...);
 
+SpiceInt maxi_c(SpiceInt n, ...);
 
-   void              ekuced_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                ConstSpiceDouble    * dvals,
-                                SpiceBoolean          isnull );
+void mequ_c(ConstSpiceDouble m1[3][3], SpiceDouble mout[3][3]);
 
+void mequg_c(const void *m1, SpiceInt nr, SpiceInt nc, void *mout);
 
-   void              ekucei_c ( SpiceInt              handle,
-                                SpiceInt              segno,
-                                SpiceInt              recno,
-                                ConstSpiceChar      * column,
-                                SpiceInt              nvals,
-                                ConstSpiceInt       * ivals,
-                                SpiceBoolean          isnull );
+SpiceDouble mind_c(SpiceInt n, ...);
 
+SpiceInt mini_c(SpiceInt n, ...);
 
-   void              ekuef_c  ( SpiceInt            handle );
+int moved_(SpiceDouble *arrfrm, SpiceInt *ndim, SpiceDouble *arrto);
 
+void mtxm_c(ConstSpiceDouble m1[3][3], ConstSpiceDouble m2[3][3], SpiceDouble mout[3][3]);
 
-   SpiceBoolean      elemc_c  ( ConstSpiceChar     * item,
-                                SpiceCell          * set   );
+void mtxmg_c(const void *m1, const void *m2, SpiceInt row1, SpiceInt col1, SpiceInt col2, void *mout);
 
+void mtxv_c(ConstSpiceDouble m1[3][3], ConstSpiceDouble vin[3], SpiceDouble vout[3]);
 
-   SpiceBoolean      elemd_c  ( SpiceDouble          item,
-                                SpiceCell          * set   );
+void mtxvg_c(const void *m1, const void *v2, SpiceInt ncol1, SpiceInt nr1r2, void *vout);
 
+void mxm_c(ConstSpiceDouble m1[3][3], ConstSpiceDouble m2[3][3], SpiceDouble mout[3][3]);
 
-   SpiceBoolean      elemi_c  ( SpiceInt             item,
-                                SpiceCell          * set   );
+void mxmg_c(const void *m1, const void *m2, SpiceInt row1, SpiceInt col1, SpiceInt col2, void *mout);
 
+void mxmt_c(ConstSpiceDouble m1[3][3], ConstSpiceDouble m2[3][3], SpiceDouble mout[3][3]);
 
-   void              eqncpv_c ( SpiceDouble          et,
-                                SpiceDouble          epoch,
-                                ConstSpiceDouble     eqel[9],
-                                SpiceDouble          rapol,
-                                SpiceDouble          decpol,
-                                SpiceDouble          state[6] );
+void mxmtg_c(const void *m1, const void *m2, SpiceInt nrow1, SpiceInt nc1c2, SpiceInt nrow2, void *mout);
 
+void mxv_c(ConstSpiceDouble m1[3][3], ConstSpiceDouble vin[3], SpiceDouble vout[3]);
 
-   SpiceBoolean      eqstr_c  ( ConstSpiceChar     * a,
-                                ConstSpiceChar     * b  );
+void mxvg_c(const void *m1, const void *v2, SpiceInt nrow1, SpiceInt nc1r2, void *vout);
 
+void namfrm_c(ConstSpiceChar *frname, SpiceInt *frcode);
 
-   void              el2cgv_c ( ConstSpiceEllipse * ellipse,
-                                SpiceDouble         center[3],
-                                SpiceDouble         smajor[3],
-                                SpiceDouble         sminor[3]  );
+SpiceInt ncpos_c(ConstSpiceChar *str, ConstSpiceChar *chars, SpiceInt start);
 
+SpiceInt ncposr_c(ConstSpiceChar *str, ConstSpiceChar *chars, SpiceInt start);
 
-   void              erract_c ( ConstSpiceChar    * operation,
-                                SpiceInt            lenout,
-                                SpiceChar         * action    );
+void nearpt_c(ConstSpiceDouble positn[3], SpiceDouble a, SpiceDouble b, SpiceDouble c, SpiceDouble npoint[3],
+              SpiceDouble *alt);
 
+void npedln_c(SpiceDouble a, SpiceDouble b, SpiceDouble c, ConstSpiceDouble linept[3], ConstSpiceDouble linedr[3],
+              SpiceDouble pnear[3], SpiceDouble *dist);
 
-   void              errch_c  ( ConstSpiceChar    * marker,
-                                ConstSpiceChar    * string );
+void npelpt_c(ConstSpiceDouble point[3], ConstSpiceEllipse *ellips, SpiceDouble pnear[3], SpiceDouble *dist);
 
+void nplnpt_c(ConstSpiceDouble linpt[3], ConstSpiceDouble lindir[3], ConstSpiceDouble point[3], SpiceDouble pnear[3],
+              SpiceDouble *dist);
 
-   void              errdev_c ( ConstSpiceChar    * operation,
-                                SpiceInt            lenout,
-                                SpiceChar         * device    );
+void nvc2pl_c(ConstSpiceDouble normal[3], SpiceDouble constant, SpicePlane *plane);
 
+void nvp2pl_c(ConstSpiceDouble normal[3], ConstSpiceDouble point[3], SpicePlane *plane);
 
-   void              errdp_c  ( ConstSpiceChar    * marker,
-                                SpiceDouble         number  );
+void occult_c(ConstSpiceChar *target1, ConstSpiceChar *shape1, ConstSpiceChar *frame1, ConstSpiceChar *target2,
+              ConstSpiceChar *shape2, ConstSpiceChar *frame2, ConstSpiceChar *abcorr, ConstSpiceChar *observer,
+              SpiceDouble time, SpiceInt *occult_code);
 
+SpiceInt ordc_c(ConstSpiceChar *item, SpiceCell *set);
 
-   void              errint_c ( ConstSpiceChar    * marker,
-                                SpiceInt            number );
+SpiceInt ordd_c(SpiceDouble item, SpiceCell *set);
 
+SpiceInt ordi_c(SpiceInt item, SpiceCell *set);
 
-   void              errprt_c ( ConstSpiceChar    * operation,
-                                SpiceInt            lenout,
-                                SpiceChar         * list     );
+void orderc_c(SpiceInt lenvals, const void *array, SpiceInt ndim, SpiceInt *iorder);
 
+void orderd_c(ConstSpiceDouble *array, SpiceInt ndim, SpiceInt *iorder);
 
-   SpiceInt          esrchc_c ( ConstSpiceChar  * value,
-                                SpiceInt          ndim,
-                                SpiceInt          lenvals,
-                                const void      * array   );
+void orderi_c(ConstSpiceInt *array, SpiceInt ndim, SpiceInt *iorder);
 
+void oscelt_c(ConstSpiceDouble state[6], SpiceDouble et, SpiceDouble mu, SpiceDouble elts[8]);
 
-   void              etcal_c  ( SpiceDouble         et,
-                                SpiceInt            lenout,
-                                SpiceChar         * string  );
+void pckcov_c(ConstSpiceChar *pck, SpiceInt idcode, SpiceCell *cover);
 
+void pckfrm_c(ConstSpiceChar *pck, SpiceCell *ids);
 
-   void              et2lst_c ( SpiceDouble         et,
-                                SpiceInt            body,
-                                SpiceDouble         lon,
-                                ConstSpiceChar    * type,
-                                SpiceInt            timlen,
-                                SpiceInt            ampmlen,
-                                SpiceInt          * hr,
-                                SpiceInt          * mn,
-                                SpiceInt          * sc,
-                                SpiceChar         * time,
-                                SpiceChar         * ampm    );
+void pcklof_c(ConstSpiceChar *fname, SpiceInt *handle);
 
+void pckuof_c(SpiceInt handle);
 
-   void              et2utc_c ( SpiceDouble         et ,
-                                ConstSpiceChar    * format,
-                                SpiceInt            prec,
-                                SpiceInt            lenout,
-                                SpiceChar         * utcstr );
+void pcpool_c(ConstSpiceChar *name, SpiceInt n, SpiceInt lenvals, const void *cvals);
 
+void pdpool_c(ConstSpiceChar *name, SpiceInt n, ConstSpiceDouble *dvals);
 
-   void              eul2m_c  ( SpiceDouble         angle3,
-                                SpiceDouble         angle2,
-                                SpiceDouble         angle1,
-                                SpiceInt            axis3,
-                                SpiceInt            axis2,
-                                SpiceInt            axis1,
-                                SpiceDouble         r [3][3] );
+void pgrrec_c(ConstSpiceChar *body, SpiceDouble lon, SpiceDouble lat, SpiceDouble alt, SpiceDouble re, SpiceDouble f,
+              SpiceDouble rectan[3]);
 
+SpiceDouble phaseq_c(SpiceDouble et, ConstSpiceChar *target, ConstSpiceChar *illumn, ConstSpiceChar *obsrvr,
+                     ConstSpiceChar *abcorr);
 
-   void              eul2xf_c ( ConstSpiceDouble    eulang[6],
-                                SpiceInt            axisa,
-                                SpiceInt            axisb,
-                                SpiceInt            axisc,
-                                SpiceDouble         xform [6][6] );
+SpiceDouble pi_c(void);
 
+void pipool_c(ConstSpiceChar *name, SpiceInt n, ConstSpiceInt *ivals);
 
-   SpiceBoolean      exists_c ( ConstSpiceChar    * name );
+void pjelpl_c(ConstSpiceEllipse *elin, ConstSpicePlane *plane, SpiceEllipse *elout);
 
+void pl2nvc_c(ConstSpicePlane *plane, SpiceDouble normal[3], SpiceDouble *constant);
 
-   void              expool_c ( ConstSpiceChar    * name,
-                                SpiceBoolean      * found );
+void pl2nvp_c(ConstSpicePlane *plane, SpiceDouble normal[3], SpiceDouble point[3]);
 
+void pl2psv_c(ConstSpicePlane *plane, SpiceDouble point[3], SpiceDouble span1[3], SpiceDouble span2[3]);
 
-   SpiceBoolean      failed_c ( void );
+SpiceInt pos_c(ConstSpiceChar *str, ConstSpiceChar *substr, SpiceInt start);
 
-   void              fovray_c ( ConstSpiceChar   * inst,
-                                ConstSpiceDouble   raydir [3],
-                                ConstSpiceChar   * rframe,
-                                ConstSpiceChar   * abcorr,
-                                ConstSpiceChar   * obsrvr,
-                                SpiceDouble      * et,
-                                SpiceBoolean     * visible  );
+SpiceInt posr_c(ConstSpiceChar *str, ConstSpiceChar *substr, SpiceInt start);
 
-   void              fovtrg_c ( ConstSpiceChar   * inst,
-                                ConstSpiceChar   * target,
-                                ConstSpiceChar   * tshape,
-                                ConstSpiceChar   * tframe,
-                                ConstSpiceChar   * abcorr,
-                                ConstSpiceChar   * obsrvr,
-                                SpiceDouble      * et,
-                                SpiceBoolean     * visible  );
+void prefix_c(ConstSpiceChar *pref, SpiceInt spaces, SpiceInt lenout, SpiceChar *string);
 
+SpiceChar *prompt_c(ConstSpiceChar *prmptStr, SpiceInt lenout, SpiceChar *buffer);
 
-   void              frame_c  ( SpiceDouble         x[3],
-                                SpiceDouble         y[3],
-                                SpiceDouble         z[3] );
+void prop2b_c(SpiceDouble gm, ConstSpiceDouble pvinit[6], SpiceDouble dt, SpiceDouble pvprop[6]);
 
+void prsdp_c(ConstSpiceChar *string, SpiceDouble *dpval);
 
-   void              frinfo_c ( SpiceInt            frcode,
-                                SpiceInt          * cent,
-                                SpiceInt          * clss,
-                                SpiceInt          * clssid,
-                                SpiceBoolean      * found );
+void prsint_c(ConstSpiceChar *string, SpiceInt *intval);
 
+void psv2pl_c(ConstSpiceDouble point[3], ConstSpiceDouble span1[3], ConstSpiceDouble span2[3], SpicePlane *plane);
 
-   void              frmnam_c ( SpiceInt            frcode,
-                                SpiceInt            lenout,
-                                SpiceChar         * frname  );
+void putcml_c(SpiceInt argc, SpiceChar **argv);
 
+void pxform_c(ConstSpiceChar *from, ConstSpiceChar *to, SpiceDouble et, SpiceDouble rotate[3][3]);
 
-   void              ftncls_c ( SpiceInt            unit );
+void pxfrm2_c(ConstSpiceChar *from, ConstSpiceChar *to, SpiceDouble etfrom, SpiceDouble etto, SpiceDouble rotate[3][3]);
 
+void q2m_c(ConstSpiceDouble q[4], SpiceDouble r[3][3]);
 
-   void              furnsh_c ( ConstSpiceChar    * file );
+void qcktrc_c(SpiceInt tracelen, SpiceChar *trace);
 
+void qdq2av_c(ConstSpiceDouble q[4], ConstSpiceDouble dq[4], SpiceDouble av[3]);
 
-   void              gcpool_c ( ConstSpiceChar    * name,
-                                SpiceInt            start,
-                                SpiceInt            room,
-                                SpiceInt            lenout,
-                                SpiceInt          * n,
-                                void              * cvals,
-                                SpiceBoolean      * found );
+void qxq_c(ConstSpiceDouble q1[4], ConstSpiceDouble q2[4], SpiceDouble qout[4]);
 
+void radrec_c(SpiceDouble range, SpiceDouble ra, SpiceDouble dec, SpiceDouble rectan[3]);
 
-   void              gdpool_c ( ConstSpiceChar    * name,
-                                SpiceInt            start,
-                                SpiceInt            room,
-                                SpiceInt          * n,
-                                SpiceDouble       * values,
-                                SpiceBoolean      * found );
+void rav2xf_c(ConstSpiceDouble rot[3][3], ConstSpiceDouble av[3], SpiceDouble xform[6][6]);
 
+void raxisa_c(ConstSpiceDouble matrix[3][3], SpiceDouble axis[3], SpiceDouble *angle);
 
-   void              georec_c ( SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         alt,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         rectan[3] );
+void rdtext_c(ConstSpiceChar *file, SpiceInt lenout, SpiceChar *line, SpiceBoolean *eof);
 
+void reccyl_c(ConstSpiceDouble rectan[3], SpiceDouble *r, SpiceDouble *lon, SpiceDouble *z);
 
-   void              getcml_c ( SpiceInt          * argc,
-                                SpiceChar       *** argv );
+void recgeo_c(ConstSpiceDouble rectan[3], SpiceDouble re, SpiceDouble f, SpiceDouble *lon, SpiceDouble *lat,
+              SpiceDouble *alt);
 
+void reclat_c(ConstSpiceDouble rectan[3], SpiceDouble *radius, SpiceDouble *longitude, SpiceDouble *latitude);
 
-   void              getelm_c ( SpiceInt            frstyr,
-                                SpiceInt            lineln,
-                                const void        * lines,
-                                SpiceDouble       * epoch,
-                                SpiceDouble       * elems   );
+void recpgr_c(ConstSpiceChar *body, SpiceDouble rectan[3], SpiceDouble re, SpiceDouble f, SpiceDouble *lon,
+              SpiceDouble *lat, SpiceDouble *alt);
 
+void recrad_c(ConstSpiceDouble rectan[3], SpiceDouble *radius, SpiceDouble *ra, SpiceDouble *dec);
 
-   void              getfat_c ( ConstSpiceChar    * file,
-                                SpiceInt            arclen,
-                                SpiceInt            typlen,
-                                SpiceChar         * arch,
-                                SpiceChar         * type   );
+void reordc_c(ConstSpiceInt *iorder, SpiceInt ndim, SpiceInt lenvals, void *array);
 
+void reordd_c(ConstSpiceInt *iorder, SpiceInt ndim, SpiceDouble *array);
 
-   void              getfov_c ( SpiceInt            instid,
-                                SpiceInt            room,
-                                SpiceInt            shapelen,
-                                SpiceInt            framelen,
-                                SpiceChar         * shape,
-                                SpiceChar         * frame,
-                                SpiceDouble         bsight [3],
-                                SpiceInt          * n,
-                                SpiceDouble         bounds [][3] );
+void reordi_c(ConstSpiceInt *iorder, SpiceInt ndim, SpiceInt *array);
 
+void reordl_c(ConstSpiceInt *iorder, SpiceInt ndim, SpiceBoolean *array);
 
-   void              getmsg_c ( ConstSpiceChar    * option,
-                                SpiceInt            lenout,
-                                SpiceChar         * msg     );
+void removc_c(ConstSpiceChar *item, SpiceCell *set);
 
+void removd_c(SpiceDouble item, SpiceCell *set);
 
-   SpiceBoolean      gfbail_c ( void );
+void removi_c(SpiceInt item, SpiceCell *set);
 
+void repmc_c(ConstSpiceChar *in, ConstSpiceChar *marker, ConstSpiceChar *value, SpiceInt lenout, SpiceChar *out);
 
-   void              gfclrh_c ( void );
+void repmct_c(ConstSpiceChar *in, ConstSpiceChar *marker, SpiceInt value, SpiceChar strCase, SpiceInt lenout,
+              SpiceChar *out);
 
+void repmd_c(ConstSpiceChar *in, ConstSpiceChar *marker, SpiceDouble value, SpiceInt sigdig, SpiceInt lenout,
+             SpiceChar *out);
 
-   void              gfdist_c ( ConstSpiceChar    * target,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * relate,
-                                SpiceDouble         refval,
-                                SpiceDouble         adjust,
-                                SpiceDouble         step,
-                                SpiceInt            nintvls,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result     );
+void repmf_c(ConstSpiceChar *in, ConstSpiceChar *marker, SpiceDouble value, SpiceInt sigdig, SpiceChar format,
+             SpiceInt lenout, SpiceChar *out);
 
+void repmi_c(ConstSpiceChar *in, ConstSpiceChar *marker, SpiceInt value, SpiceInt lenout, SpiceChar *out);
 
+void repmot_c(ConstSpiceChar *in, ConstSpiceChar *marker, SpiceInt value, SpiceChar strCase, SpiceInt lenout,
+              SpiceChar *out);
 
-   void  gfevnt_c ( void             ( * udstep ) ( SpiceDouble       et,
-                                                    SpiceDouble     * step ),
+void reset_c(void);
 
-                    void             ( * udrefn ) ( SpiceDouble       t1,
-                                                    SpiceDouble       t2,
-                                                    SpiceBoolean      s1,
-                                                    SpiceBoolean      s2,
-                                                    SpiceDouble     * t    ),
-                   ConstSpiceChar     * gquant,
-                   SpiceInt             qnpars,
-                   SpiceInt             lenvals,
-                   const void         * qpnams,
-                   const void         * qcpars,
-                   ConstSpiceDouble   * qdpars,
-                   ConstSpiceInt      * qipars,
-                   ConstSpiceBoolean  * qlpars,
-                   ConstSpiceChar     * op,
-                   SpiceDouble          refval,
-                   SpiceDouble          tol,
-                   SpiceDouble          adjust,
-                   SpiceBoolean         rpt,
+SpiceBoolean return_c(void);
 
-                   void             ( * udrepi ) ( SpiceCell       * cnfine,
-                                                   ConstSpiceChar  * srcpre,
-                                                   ConstSpiceChar  * srcsuf ),
+void recsph_c(ConstSpiceDouble rectan[3], SpiceDouble *r, SpiceDouble *colat, SpiceDouble *lon);
 
-                   void             ( * udrepu ) ( SpiceDouble       ivbeg,
-                                                   SpiceDouble       ivend,
-                                                   SpiceDouble       et      ),
+void rotate_c(SpiceDouble angle, SpiceInt iaxis, SpiceDouble mout[3][3]);
 
-                   void             ( * udrepf ) ( void ),
-                   SpiceInt             nintvls,
-                   SpiceBoolean         bail,
-                   SpiceBoolean     ( * udbail ) ( void ),
-                   SpiceCell          * cnfine,
-                   SpiceCell          * result );
+void rotmat_c(ConstSpiceDouble m1[3][3], SpiceDouble angle, SpiceInt iaxis, SpiceDouble mout[3][3]);
 
+void rotvec_c(ConstSpiceDouble v1[3], SpiceDouble angle, SpiceInt iaxis, SpiceDouble vout[3]);
 
+SpiceDouble rpd_c(void);
 
-   void   gffove_c ( ConstSpiceChar    * inst,
-                     ConstSpiceChar    * tshape,
-                     ConstSpiceDouble    raydir [3],
-                     ConstSpiceChar    * target,
-                     ConstSpiceChar    * tframe,
-                     ConstSpiceChar    * abcorr,
-                     ConstSpiceChar    * obsrvr,
-                     SpiceDouble         tol,
-                     void            ( * udstep ) ( SpiceDouble       et,
-                                                    SpiceDouble     * step ),
-                     void            ( * udrefn ) ( SpiceDouble       t1,
-                                                    SpiceDouble       t2,
-                                                    SpiceBoolean      s1,
-                                                    SpiceBoolean      s2,
-                                                    SpiceDouble     * t    ),
-                     SpiceBoolean        rpt,
-                     void            ( * udrepi ) ( SpiceCell       * cnfine,
-                                                    ConstSpiceChar  * srcpre,
-                                                    ConstSpiceChar  * srcsuf ),
-                     void            ( * udrepu ) ( SpiceDouble       ivbeg,
-                                                    SpiceDouble       ivend,
-                                                    SpiceDouble       et      ),
-                     void            ( * udrepf ) ( void ),
-                     SpiceBoolean        bail,
-                     SpiceBoolean    ( * udbail ) ( void ),
-                     SpiceCell         * cnfine,
-                     SpiceCell         * result                               );
+void rquad_c(SpiceDouble a, SpiceDouble b, SpiceDouble c, SpiceDouble root1[2], SpiceDouble root2[2]);
 
+void saelgv_c(ConstSpiceDouble vec1[3], ConstSpiceDouble vec2[3], SpiceDouble smajor[3], SpiceDouble sminor[3]);
 
-   void              gfilum_c ( ConstSpiceChar     * method,
-                                ConstSpiceChar     * angtyp,
-                                ConstSpiceChar     * target,
-                                ConstSpiceChar     * illum,
-                                ConstSpiceChar     * fixref,
-                                ConstSpiceChar     * abcorr,
-                                ConstSpiceChar     * obsrvr,
-                                ConstSpiceDouble     spoint [3],
-                                ConstSpiceChar     * relate,
-                                SpiceDouble          refval,
-                                SpiceDouble          adjust,
-                                SpiceDouble          step,
-                                SpiceInt             nintvls,
-                                SpiceCell          * cnfine,
-                                SpiceCell          * result     );
+void scard_c(SpiceInt card, SpiceCell *cell);
 
+void scdecd_c(SpiceInt sc, SpiceDouble sclkdp, SpiceInt sclklen, SpiceChar *sclkch);
 
-   void              gfinth_c ( int sigcode );
+void sce2s_c(SpiceInt sc, SpiceDouble et, SpiceInt sclklen, SpiceChar *sclkch);
 
+void sce2c_c(SpiceInt sc, SpiceDouble et, SpiceDouble *sclkdp);
 
-   void   gfocce_c ( ConstSpiceChar    * occtyp,
-                     ConstSpiceChar    * front,
-                     ConstSpiceChar    * fshape,
-                     ConstSpiceChar    * fframe,
-                     ConstSpiceChar    * back,
-                     ConstSpiceChar    * bshape,
-                     ConstSpiceChar    * bframe,
-                     ConstSpiceChar    * obsrvr,
-                     ConstSpiceChar    * abcorr,
-                     SpiceDouble         tol,
-                     void            ( * udstep ) ( SpiceDouble      et,
-                                                    SpiceDouble    * step ),
-                     void            ( * udrefn ) ( SpiceDouble      t1,
-                                                    SpiceDouble      t2,
-                                                    SpiceBoolean     s1,
-                                                    SpiceBoolean     s2,
-                                                    SpiceDouble    * t    ),
-                     SpiceBoolean        rpt,
-                     void            ( * udrepi ) ( SpiceCell      * cnfine,
-                                                    ConstSpiceChar * srcpre,
-                                                    ConstSpiceChar * srcsuf ),
-                     void            ( * udrepu ) ( SpiceDouble      ivbeg,
-                                                    SpiceDouble      ivend,
-                                                    SpiceDouble      et     ),
-                     void            ( * udrepf ) ( void ),
-                     SpiceBoolean        bail,
-                     SpiceBoolean    ( * udbail ) ( void ),
-                     SpiceCell         * cnfine,
-                     SpiceCell         * result                               );
+void sce2t_c(SpiceInt sc, SpiceDouble et, SpiceDouble *sclkdp);
 
+void scencd_c(SpiceInt sc, ConstSpiceChar *sclkch, SpiceDouble *sclkdp);
 
+void scfmt_c(SpiceInt sc, SpiceDouble ticks, SpiceInt clkstrlen, SpiceChar *clkstr);
 
-   void              gfoclt_c ( ConstSpiceChar    * occtyp,
-                                ConstSpiceChar    * front,
-                                ConstSpiceChar    * fshape,
-                                ConstSpiceChar    * fframe,
-                                ConstSpiceChar    * back,
-                                ConstSpiceChar    * bshape,
-                                ConstSpiceChar    * bframe,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * abcorr,
-                                SpiceDouble         step,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result );
+void scpart_c(SpiceInt sc, SpiceInt *nparts, SpiceDouble *pstart, SpiceDouble *pstop);
 
+void scs2e_c(SpiceInt sc, ConstSpiceChar *sclkch, SpiceDouble *et);
 
+void sct2e_c(SpiceInt sc, SpiceDouble sclkdp, SpiceDouble *et);
 
-   void              gfpa_c ( ConstSpiceChar     * target,
-                              ConstSpiceChar     * illum,
-                              ConstSpiceChar     * abcorr,
-                              ConstSpiceChar     * obsrvr,
-                              ConstSpiceChar     * relate,
-                              SpiceDouble          refval,
-                              SpiceDouble          adjust,
-                              SpiceDouble          step,
-                              SpiceInt             nintvls,
-                              SpiceCell          * cnfine,
-                              SpiceCell          * result  );
+void sctiks_c(SpiceInt sc, ConstSpiceChar *clkstr, SpiceDouble *ticks);
 
+void sdiff_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
+SpiceBoolean set_c(SpiceCell *a, ConstSpiceChar *op, SpiceCell *b);
 
-   void              gfposc_c ( ConstSpiceChar    * target,
-                                ConstSpiceChar    * frame,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * crdsys,
-                                ConstSpiceChar    * coord,
-                                ConstSpiceChar    * relate,
-                                SpiceDouble         refval,
-                                SpiceDouble         adjust,
-                                SpiceDouble         step,
-                                SpiceInt            nintvls,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result  );
+void setmsg_c(ConstSpiceChar *msg);
 
+void shellc_c(SpiceInt ndim, SpiceInt lenvals, void *array);
 
-   void              gfrefn_c ( SpiceDouble         t1,
-                                SpiceDouble         t2,
-                                SpiceBoolean        s1,
-                                SpiceBoolean        s2,
-                                SpiceDouble       * t      );
+void shelld_c(SpiceInt ndim, SpiceDouble *array);
 
+void shelli_c(SpiceInt ndim, SpiceInt *array);
 
-   void              gfrepf_c ( void );
+void sigerr_c(ConstSpiceChar *message);
 
+void sincpt_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *fixref,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, ConstSpiceChar *dref, ConstSpiceDouble dvec[3],
+              SpiceDouble spoint[3], SpiceDouble *trgepc, SpiceDouble srfvec[3], SpiceBoolean *found);
 
-   void              gfrepi_c ( SpiceCell         * window,
-                                ConstSpiceChar    * begmss,
-                                ConstSpiceChar    * endmss );
+SpiceInt size_c(SpiceCell *size);
 
+SpiceDouble spd_c(void);
 
-   void              gfrepu_c ( SpiceDouble         ivbeg,
-                                SpiceDouble         ivend,
-                                SpiceDouble         time    );
+void sphcyl_c(SpiceDouble radius, SpiceDouble colat, SpiceDouble slon, SpiceDouble *r, SpiceDouble *lon,
+              SpiceDouble *z);
 
+void sphlat_c(SpiceDouble r, SpiceDouble colat, SpiceDouble lons, SpiceDouble *radius, SpiceDouble *lon,
+              SpiceDouble *lat);
 
-   void              gfrfov_c ( ConstSpiceChar    * inst,
-                                ConstSpiceDouble    raydir [3],
-                                ConstSpiceChar    * rframe,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         step,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result     );
+void sphrec_c(SpiceDouble r, SpiceDouble colat, SpiceDouble lon, SpiceDouble rectan[3]);
 
+void spk14a_c(SpiceInt handle, SpiceInt ncsets, ConstSpiceDouble coeffs[], ConstSpiceDouble epochs[]);
 
-   void               gfrr_c ( ConstSpiceChar      * target,
-                               ConstSpiceChar     * abcorr,
-                               ConstSpiceChar     * obsrvr,
-                               ConstSpiceChar     * relate,
-                               SpiceDouble          refval,
-                               SpiceDouble          adjust,
-                               SpiceDouble          step,
-                               SpiceInt             nintvls,
-                               SpiceCell          * cnfine,
-                               SpiceCell          * result  );
+void spk14b_c(SpiceInt handle, ConstSpiceChar *segid, SpiceInt body, SpiceInt center, ConstSpiceChar *frame,
+              SpiceDouble first, SpiceDouble last, SpiceInt chbdeg);
 
+void spk14e_c(SpiceInt handle);
 
-   void              gfsep_c  (  ConstSpiceChar   * targ1,
-                                 ConstSpiceChar   * shape1,
-                                 ConstSpiceChar   * frame1,
-                                 ConstSpiceChar   * targ2,
-                                 ConstSpiceChar   * shape2,
-                                 ConstSpiceChar   * frame2,
-                                 ConstSpiceChar   * abcorr,
-                                 ConstSpiceChar   * obsrvr,
-                                 ConstSpiceChar   * relate,
-                                 SpiceDouble        refval,
-                                 SpiceDouble        adjust,
-                                 SpiceDouble        step,
-                                 SpiceInt           nintvls,
-                                 SpiceCell        * cnfine,
-                                 SpiceCell        * result  );
+void spkapo_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceDouble sobs[6], ConstSpiceChar *abcorr,
+              SpiceDouble ptarg[3], SpiceDouble *lt);
 
+void spkapp_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceDouble sobs[6], ConstSpiceChar *abcorr,
+              SpiceDouble starg[6], SpiceDouble *lt);
 
-   void              gfsntc_c ( ConstSpiceChar    * target,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * method,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * dref,
-                                ConstSpiceDouble    dvec   [3],
-                                ConstSpiceChar    * crdsys,
-                                ConstSpiceChar    * coord,
-                                ConstSpiceChar    * relate,
-                                SpiceDouble         refval,
-                                SpiceDouble         adjust,
-                                SpiceDouble         step,
-                                SpiceInt            nintvls,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result  );
+void spkacs_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceChar *abcorr, SpiceInt obs,
+              SpiceDouble starg[6], SpiceDouble *lt, SpiceDouble *dlt);
 
+void spkaps_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceChar *abcorr, ConstSpiceDouble stobs[6],
+              ConstSpiceDouble accobs[6], SpiceDouble starg[6], SpiceDouble *lt, SpiceDouble *dlt);
 
-   void              gfsstp_c ( SpiceDouble         step   );
+void spkcls_c(SpiceInt handle);
 
+void spkcov_c(ConstSpiceChar *spk, SpiceInt idcode, SpiceCell *cover);
 
-   void              gfstep_c ( SpiceDouble         time,
-                                SpiceDouble       * step   );
+void spkcpo_c(ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *outref, ConstSpiceChar *refloc,
+              ConstSpiceChar *abcorr, ConstSpiceDouble obssta[3], ConstSpiceChar *obsctr, ConstSpiceChar *obsref,
+              SpiceDouble state[6], SpiceDouble *lt);
 
+void spkcpt_c(ConstSpiceDouble trgpos[3], ConstSpiceChar *trgctr, ConstSpiceChar *trgref, SpiceDouble et,
+              ConstSpiceChar *outref, ConstSpiceChar *refloc, ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr,
+              SpiceDouble state[6], SpiceDouble *lt);
 
-   void              gfstol_c ( SpiceDouble         value );
+void spkcvo_c(ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *outref, ConstSpiceChar *refloc,
+              ConstSpiceChar *abcorr, ConstSpiceDouble obssta[6], SpiceDouble obsepc, ConstSpiceChar *obsctr,
+              ConstSpiceChar *obsref, SpiceDouble state[6], SpiceDouble *lt);
 
+void spkcvt_c(ConstSpiceDouble trgsta[6], SpiceDouble trgepc, ConstSpiceChar *trgctr, ConstSpiceChar *trgref,
+              SpiceDouble et, ConstSpiceChar *outref, ConstSpiceChar *refloc, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, SpiceDouble state[6], SpiceDouble *lt);
 
-   void              gfsubc_c ( ConstSpiceChar    * target,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * method,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * crdsys,
-                                ConstSpiceChar    * coord,
-                                ConstSpiceChar    * relate,
-                                SpiceDouble         refval,
-                                SpiceDouble         adjust,
-                                SpiceDouble         step,
-                                SpiceInt            nintvls,
-                                SpiceCell         * cnfine,
-                                SpiceCell         * result  );
+void spkez_c(SpiceInt target, SpiceDouble epoch, ConstSpiceChar *frame, ConstSpiceChar *abcorr, SpiceInt observer,
+             SpiceDouble state[6], SpiceDouble *lt);
 
+void spkezp_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceChar *abcorr, SpiceInt obs,
+              SpiceDouble ptarg[3], SpiceDouble *lt);
 
-   void              gftfov_c ( ConstSpiceChar   * inst,
-                                ConstSpiceChar   * target,
-                                ConstSpiceChar   * tshape,
-                                ConstSpiceChar   * tframe,
-                                ConstSpiceChar   * abcorr,
-                                ConstSpiceChar   * obsrvr,
-                                SpiceDouble        step,
-                                SpiceCell        * cnfine,
-                                SpiceCell        * result  );
+void spkezr_c(ConstSpiceChar *target, SpiceDouble epoch, ConstSpiceChar *frame, ConstSpiceChar *abcorr,
+              ConstSpiceChar *observer, SpiceDouble state[6], SpiceDouble *lt);
 
+void spkgeo_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, SpiceInt obs, SpiceDouble state[6], SpiceDouble *lt);
 
+void spkgps_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, SpiceInt obs, SpiceDouble pos[3], SpiceDouble *lt);
 
-   void              gfudb_c (  void ( * udfuns ) ( SpiceDouble       et,
-                                                    SpiceDouble     * value ),
+void spklef_c(ConstSpiceChar *filename, SpiceInt *handle);
 
-                                void  ( * udfunb ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
-                                                          SpiceDouble * value ),
+void spkltc_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceChar *abcorr, ConstSpiceDouble stobs[6],
+              SpiceDouble starg[6], SpiceDouble *lt, SpiceDouble *dlt);
 
-                                                   SpiceDouble       et,
-                                                   SpiceBoolean    * xbool ),
+void spkobj_c(ConstSpiceChar *spk, SpiceCell *ids);
 
-                                SpiceDouble          step,
-                                SpiceCell          * cnfine,
-                                SpiceCell          * result );
+void spkopa_c(ConstSpiceChar *file, SpiceInt *handle);
 
+void spkopn_c(ConstSpiceChar *name, ConstSpiceChar *ifname, SpiceInt ncomch, SpiceInt *handle);
 
-   void              gfuds_c (  void ( * udfuns ) ( SpiceDouble      et,
-                                                    SpiceDouble    * value ),
+void spkpds_c(SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceInt type, SpiceDouble first, SpiceDouble last,
+              SpiceDouble descr[5]);
 
-                                void ( * udfunb ) ( void ( * udfuns )
-                                                    ( SpiceDouble    et,
-                                                      SpiceDouble  * value ),
+void spkpos_c(ConstSpiceChar *targ, SpiceDouble et, ConstSpiceChar *ref, ConstSpiceChar *abcorr, ConstSpiceChar *obs,
+              SpiceDouble ptarg[3], SpiceDouble *lt);
 
-                                                   SpiceDouble       x,
-                                                   SpiceBoolean    * xbool ),
+void spkpvn_c(SpiceInt handle, ConstSpiceDouble descr[5], SpiceDouble et, SpiceInt *ref, SpiceDouble state[6],
+              SpiceInt *center);
 
-                                ConstSpiceChar     * relate,
-                                SpiceDouble          refval,
-                                SpiceDouble          adjust,
-                                SpiceDouble          step,
-                                SpiceInt             nintvls,
-                                SpiceCell          * cnfine,
-                                SpiceCell          * result );
+void spksfs_c(SpiceInt body, SpiceDouble et, SpiceInt idlen, SpiceInt *handle, SpiceDouble descr[5], SpiceChar *ident,
+              SpiceBoolean *found);
 
+void spkssb_c(SpiceInt targ, SpiceDouble et, ConstSpiceChar *ref, SpiceDouble starg[6]);
 
-   void              gipool_c ( ConstSpiceChar    * name,
-                                SpiceInt            start,
-                                SpiceInt            room,
-                                SpiceInt          * n,
-                                SpiceInt          * ivals,
-                                SpiceBoolean      * found );
+void spksub_c(SpiceInt handle, SpiceDouble descr[5], ConstSpiceChar *ident, SpiceDouble begin, SpiceDouble end,
+              SpiceInt newh);
 
+void spkuds_c(ConstSpiceDouble descr[5], SpiceInt *body, SpiceInt *center, SpiceInt *frame, SpiceInt *type,
+              SpiceDouble *first, SpiceDouble *last, SpiceInt *begin, SpiceInt *end);
 
-   void              gnpool_c ( ConstSpiceChar    * name,
-                                SpiceInt            start,
-                                SpiceInt            room,
-                                SpiceInt            lenout,
-                                SpiceInt          * n,
-                                void              * kvars,
-                                SpiceBoolean      * found  );
+void spkuef_c(SpiceInt handle);
 
+void spkw02_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble intlen, SpiceInt n, SpiceInt polydg,
+              ConstSpiceDouble cdata[], SpiceDouble btime);
 
-   SpiceDouble       halfpi_c ( void );
+void spkw03_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble intlen, SpiceInt n, SpiceInt polydg,
+              ConstSpiceDouble cdata[], SpiceDouble btime);
 
-   void              hx2dp_c  ( ConstSpiceChar  * string,
-                                SpiceInt          lenout,
-                                SpiceDouble     * number,
-                                SpiceBoolean    * error,
-                                SpiceChar       * errmsg
-                              );
+void spkw05_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble gm, SpiceInt n, ConstSpiceDouble states[][6],
+              ConstSpiceDouble epochs[]);
 
+void spkw08_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceInt degree, SpiceInt n, ConstSpiceDouble states[][6],
+              SpiceDouble epoch1, SpiceDouble step);
 
-   void              ident_c  ( SpiceDouble         matrix[3][3] );
+void spkw09_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceInt degree, SpiceInt n, ConstSpiceDouble states[][6],
+              ConstSpiceDouble epochs[]);
 
+void spkw10_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, ConstSpiceDouble consts[8], SpiceInt n, ConstSpiceDouble elems[],
+              ConstSpiceDouble epochs[]);
 
-   void              ilumin_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceDouble    spoint [3],
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         srfvec [3],
-                                SpiceDouble       * phase,
-                                SpiceDouble       * solar,
-                                SpiceDouble       * emissn     );
+void spkw12_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceInt degree, SpiceInt n, ConstSpiceDouble states[][6],
+              SpiceDouble epoch0, SpiceDouble step);
 
+void spkw13_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceInt degree, SpiceInt n, ConstSpiceDouble states[][6],
+              ConstSpiceDouble epochs[]);
 
-   void              illum_c  ( ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceDouble    spoint [3],
-                                SpiceDouble       * phase,
-                                SpiceDouble       * solar,
-                                SpiceDouble       * emissn     );
+void spkw15_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble epoch, ConstSpiceDouble tp[3],
+              ConstSpiceDouble pa[3], SpiceDouble p, SpiceDouble ecc, SpiceDouble j2flg, ConstSpiceDouble pv[3],
+              SpiceDouble gm, SpiceDouble j2, SpiceDouble radius);
 
+void spkw17_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble epoch, ConstSpiceDouble eqel[9], SpiceDouble rapol,
+              SpiceDouble decpol);
 
-   void              illumg_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                ConstSpiceChar    * illum,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceDouble    spoint [3],
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         srfvec [3],
-                                SpiceDouble       * phase,
-                                SpiceDouble       * solar,
-                                SpiceDouble       * emissn     );
+void spkw18_c(SpiceInt handle, SpiceSPK18Subtype subtyp, SpiceInt body, SpiceInt center, ConstSpiceChar *frame,
+              SpiceDouble first, SpiceDouble last, ConstSpiceChar *segid, SpiceInt degree, SpiceInt n,
+              const void *packts, ConstSpiceDouble epochs[]);
 
+void spkw20_c(SpiceInt handle, SpiceInt body, SpiceInt center, ConstSpiceChar *frame, SpiceDouble first,
+              SpiceDouble last, ConstSpiceChar *segid, SpiceDouble intlen, SpiceInt n, SpiceInt polydg,
+              ConstSpiceDouble cdata[], SpiceDouble dscale, SpiceDouble tscale, SpiceDouble initjd, SpiceDouble initfr);
 
-   void              inedpl_c ( SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                ConstSpicePlane   * plane,
-                                SpiceEllipse      * ellipse,
-                                SpiceBoolean      * found    );
+void srfrec_c(SpiceInt body, SpiceDouble lon, SpiceDouble lat, SpiceDouble rectan[3]);
 
+void srfxpt_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, ConstSpiceChar *dref, ConstSpiceDouble dvec[3], SpiceDouble spoint[3],
+              SpiceDouble *dist, SpiceDouble *trgepc, SpiceDouble obspos[3], SpiceBoolean *found);
 
-   void              inelpl_c ( ConstSpiceEllipse * ellips,
-                                ConstSpicePlane   * plane,
-                                SpiceInt          * nxpts,
-                                SpiceDouble         xpt1[3],
-                                SpiceDouble         xpt2[3] );
+void ssize_c(SpiceInt size, SpiceCell *cell);
 
+void stelab_c(ConstSpiceDouble pobj[3], ConstSpiceDouble vobs[3], SpiceDouble appobj[3]);
 
-   void              insrtc_c ( ConstSpiceChar     * item,
-                                SpiceCell          * set   );
+void stpool_c(ConstSpiceChar *item, SpiceInt nth, ConstSpiceChar *contin, SpiceInt lenout, SpiceChar *string,
+              SpiceInt *size, SpiceBoolean *found);
 
+void str2et_c(ConstSpiceChar *date, SpiceDouble *et);
 
-   void              insrtd_c ( SpiceDouble          item,
-                                SpiceCell          * set  );
+void subpnt_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *fixref,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceDouble spoint[3], SpiceDouble *trgepc,
+              SpiceDouble srfvec[3]);
 
+void subpt_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *abcorr,
+             ConstSpiceChar *obsrvr, SpiceDouble spoint[3], SpiceDouble *alt);
 
-   void              insrti_c ( SpiceInt             item,
-                                SpiceCell          * set  );
+void subslr_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *fixref,
+              ConstSpiceChar *abcorr, ConstSpiceChar *obsrvr, SpiceDouble spoint[3], SpiceDouble *trgepc,
+              SpiceDouble srfvec[3]);
 
+void subsol_c(ConstSpiceChar *method, ConstSpiceChar *target, SpiceDouble et, ConstSpiceChar *abcorr,
+              ConstSpiceChar *obsrvr, SpiceDouble spoint[3]);
 
-   void              inter_c  (  SpiceCell        * a,
-                                 SpiceCell        * b,
-                                 SpiceCell        * c  );
+SpiceDouble sumad_c(ConstSpiceDouble array[], SpiceInt n);
 
+SpiceInt sumai_c(ConstSpiceInt array[], SpiceInt n);
 
-   void              inrypl_c ( ConstSpiceDouble    vertex [3],
-                                ConstSpiceDouble    dir    [3],
-                                ConstSpicePlane   * plane,
-                                SpiceInt          * nxpts,
-                                SpiceDouble         xpt    [3] );
+void surfnm_c(SpiceDouble a, SpiceDouble b, SpiceDouble c, ConstSpiceDouble point[3], SpiceDouble normal[3]);
 
+void surfpt_c(ConstSpiceDouble positn[3], ConstSpiceDouble u[3], SpiceDouble a, SpiceDouble b, SpiceDouble c,
+              SpiceDouble point[3], SpiceBoolean *found);
 
-   SpiceInt          intmax_c ( void );
+void surfpv_c(ConstSpiceDouble stvrtx[6], ConstSpiceDouble stdir[6], SpiceDouble a, SpiceDouble b, SpiceDouble c,
+              SpiceDouble stx[6], SpiceBoolean *found);
 
+void swpool_c(ConstSpiceChar *agent, SpiceInt nnames, SpiceInt lenvals, const void *names);
 
-   SpiceInt          intmax_  ( void );
+void sxform_c(ConstSpiceChar *from, ConstSpiceChar *to, SpiceDouble et, SpiceDouble xform[6][6]);
 
+void szpool_c(ConstSpiceChar *name, SpiceInt *n, SpiceBoolean *found);
 
-   SpiceInt          intmin_c ( void );
+void timdef_c(ConstSpiceChar *action, ConstSpiceChar *item, SpiceInt lenout, SpiceChar *value);
 
+void timout_c(SpiceDouble et, ConstSpiceChar *pictur, SpiceInt lenout, SpiceChar *output);
 
-   SpiceInt          intmin_  ( void );
+void tipbod_c(ConstSpiceChar *ref, SpiceInt body, SpiceDouble et, SpiceDouble tipm[3][3]);
 
+void tisbod_c(ConstSpiceChar *ref, SpiceInt body, SpiceDouble et, SpiceDouble tsipm[6][6]);
 
-   void              invert_c ( ConstSpiceDouble    m1[3][3],
-                                SpiceDouble         m2[3][3]  );
+ConstSpiceChar *tkvrsn_c(ConstSpiceChar *item);
 
+void tparse_c(ConstSpiceChar *string, SpiceInt lenout, SpiceDouble *sp2000, SpiceChar *errmsg);
 
-   void              invort_c ( ConstSpiceDouble    m  [3][3],
-                                SpiceDouble         mit[3][3] );
+void tpictr_c(ConstSpiceChar *sample, SpiceInt lenpictur, SpiceInt lenerror, SpiceChar *pictur, SpiceBoolean *ok,
+              SpiceChar *error);
 
+SpiceDouble trace_c(ConstSpiceDouble matrix[3][3]);
 
-   SpiceBoolean      isordv_c ( ConstSpiceInt     * array,
-                                SpiceInt            n      );
+void trcdep_c(SpiceInt *depth);
 
+void trcnam_c(SpiceInt index, SpiceInt namelen, SpiceChar *name);
 
-   SpiceBoolean      isrot_c  ( ConstSpiceDouble    m   [3][3],
-                                SpiceDouble         ntol,
-                                SpiceDouble         dtol       );
+void trcoff_c(void);
 
+void tsetyr_c(SpiceInt year);
 
+SpiceDouble twopi_c(void);
 
-   SpiceInt          isrchc_c ( ConstSpiceChar  * value,
-                                SpiceInt          ndim,
-                                SpiceInt          lenvals,
-                                const void      * array   );
+void twovec_c(ConstSpiceDouble axdef[3], SpiceInt indexa, ConstSpiceDouble plndef[3], SpiceInt indexp,
+              SpiceDouble mout[3][3]);
 
+SpiceDouble tyear_c(void);
 
-   SpiceInt          isrchd_c ( SpiceDouble          value,
-                                SpiceInt             ndim,
-                                ConstSpiceDouble   * array );
+void ucase_c(SpiceChar *in, SpiceInt lenout, SpiceChar *out);
 
+void ucrss_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3], SpiceDouble vout[3]);
 
-   SpiceInt          isrchi_c ( SpiceInt             value,
-                                SpiceInt             ndim,
-                                ConstSpiceInt      * array );
+void uddc_c(void (*udfunc)(SpiceDouble x, SpiceDouble *value),
 
+            SpiceDouble x, SpiceDouble dx, SpiceBoolean *isdecr);
 
-   SpiceBoolean      iswhsp_c ( ConstSpiceChar    * string );
+void uddf_c(void (*udfunc)(SpiceDouble x, SpiceDouble *value), SpiceDouble x, SpiceDouble dx, SpiceDouble *deriv);
 
+void udf_c(SpiceDouble x, SpiceDouble *value);
 
-   SpiceDouble       j1900_c  ( void );
+void union_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
+SpiceDouble unitim_c(SpiceDouble epoch, ConstSpiceChar *insys, ConstSpiceChar *outsys);
 
-   SpiceDouble       j1950_c  ( void );
+void unload_c(ConstSpiceChar *file);
 
+void unorm_c(ConstSpiceDouble v1[3], SpiceDouble vout[3], SpiceDouble *vmag);
 
-   SpiceDouble       j2000_c  ( void );
+void unormg_c(ConstSpiceDouble *v1, SpiceInt ndim, SpiceDouble *vout, SpiceDouble *vmag);
 
+void utc2et_c(ConstSpiceChar *utcstr, SpiceDouble *et);
 
-   SpiceDouble       j2100_c  ( void );
+void vadd_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3], SpiceDouble vout[3]);
 
+void vaddg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim, SpiceDouble *vout);
 
-   SpiceDouble       jyear_c  ( void );
+void valid_c(SpiceInt size, SpiceInt n, SpiceCell *a);
 
+void vcrss_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3], SpiceDouble vout[3]);
 
-   void              kclear_c ( void );
+SpiceDouble vdist_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3]);
 
+SpiceDouble vdistg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim);
 
-   void              kdata_c  ( SpiceInt          which,
-                                ConstSpiceChar  * kind,
-                                SpiceInt          fillen,
-                                SpiceInt          typlen,
-                                SpiceInt          srclen,
-                                SpiceChar       * file,
-                                SpiceChar       * filtyp,
-                                SpiceChar       * source,
-                                SpiceInt        * handle,
-                                SpiceBoolean    * found   );
+SpiceDouble vdot_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3]);
 
+SpiceDouble vdotg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim);
 
-   void              kinfo_c  ( ConstSpiceChar  * file,
-                                SpiceInt          typlen,
-                                SpiceInt          srclen,
-                                SpiceChar       * filtyp,
-                                SpiceChar       * source,
-                                SpiceInt        * handle,
-                                SpiceBoolean    * found  );
+void vequ_c(ConstSpiceDouble vin[3], SpiceDouble vout[3]);
 
+void vequg_c(ConstSpiceDouble *vin, SpiceInt ndim, SpiceDouble *vout);
 
-   void              kplfrm_c ( SpiceInt             frmcls,
-                                SpiceCell          * idset  );
+void vhat_c(ConstSpiceDouble v1[3], SpiceDouble vout[3]);
 
+void vhatg_c(ConstSpiceDouble *v1, SpiceInt ndim, SpiceDouble *vout);
 
-   void              ktotal_c ( ConstSpiceChar   * kind,
-                                SpiceInt         * count );
+void vlcom_c(SpiceDouble a, ConstSpiceDouble v1[3], SpiceDouble b, ConstSpiceDouble v2[3], SpiceDouble sum[3]);
 
+void vlcom3_c(SpiceDouble a, ConstSpiceDouble v1[3], SpiceDouble b, ConstSpiceDouble v2[3], SpiceDouble c,
+              ConstSpiceDouble v3[3], SpiceDouble sum[3]);
 
-   void              kxtrct_c ( ConstSpiceChar       * keywd,
-                                SpiceInt               termlen,
-                                const void           * terms,
-                                SpiceInt               nterms,
-                                SpiceInt               stringlen,
-                                SpiceInt               substrlen,
-                                SpiceChar            * string,
-                                SpiceBoolean         * found,
-                                SpiceChar            * substr  );
+void vlcomg_c(SpiceInt n, SpiceDouble a, ConstSpiceDouble *v1, SpiceDouble b, ConstSpiceDouble *v2, SpiceDouble *sum);
 
+void vminug_c(ConstSpiceDouble *vin, SpiceInt ndim, SpiceDouble *vout);
 
-   SpiceInt          lastnb_c ( ConstSpiceChar    * string );
+void vminus_c(ConstSpiceDouble v1[3], SpiceDouble vout[3]);
 
+SpiceDouble vnorm_c(ConstSpiceDouble v1[3]);
 
-   void              latcyl_c ( SpiceDouble         radius,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble       * r,
-                                SpiceDouble       * lonc,
-                                SpiceDouble       * z      );
+SpiceDouble vnormg_c(ConstSpiceDouble *v1, SpiceInt ndim);
 
+void vpack_c(SpiceDouble x, SpiceDouble y, SpiceDouble z, SpiceDouble v[3]);
 
-   void              latrec_c ( SpiceDouble         radius,
-                                SpiceDouble         longitude,
-                                SpiceDouble         latitude,
-                                SpiceDouble         rectan [3] );
+void vperp_c(ConstSpiceDouble a[3], ConstSpiceDouble b[3], SpiceDouble p[3]);
 
+void vprjp_c(ConstSpiceDouble vin[3], ConstSpicePlane *plane, SpiceDouble vout[3]);
 
-   void              latsph_c ( SpiceDouble         radius,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble       * rho,
-                                SpiceDouble       * colat,
-                                SpiceDouble       * lons   );
+void vprjpi_c(ConstSpiceDouble vin[3], ConstSpicePlane *projpl, ConstSpicePlane *invpl, SpiceDouble vout[3],
+              SpiceBoolean *found);
 
+void vproj_c(ConstSpiceDouble a[3], ConstSpiceDouble b[3], SpiceDouble p[3]);
 
-   void              lcase_c  ( SpiceChar         * in,
-                                SpiceInt            lenout,
-                                SpiceChar         * out     );
+SpiceDouble vrel_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3]);
 
+SpiceDouble vrelg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim);
 
-   void              ldpool_c ( ConstSpiceChar    * filename );
+void vrotv_c(ConstSpiceDouble v[3], ConstSpiceDouble axis[3], SpiceDouble theta, SpiceDouble r[3]);
 
+void vscl_c(SpiceDouble s, ConstSpiceDouble v1[3], SpiceDouble vout[3]);
 
-   void              lmpool_c ( const void        * cvals,
-                                SpiceInt            lenvals,
-                                SpiceInt             n       );
+void vsclg_c(SpiceDouble s, ConstSpiceDouble *v1, SpiceInt ndim, SpiceDouble *vout);
 
+SpiceDouble vsep_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3]);
 
-   void              lparse_c ( ConstSpiceChar    * list,
-                                ConstSpiceChar    * delim,
-                                SpiceInt            nmax,
-                                SpiceInt            lenout,
-                                SpiceInt          * n,
-                                void              * items   );
+void vsub_c(ConstSpiceDouble v1[3], ConstSpiceDouble v2[3], SpiceDouble vout[3]);
 
+void vsubg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim, SpiceDouble *vout);
 
-   void              lparsm_c ( ConstSpiceChar    * list,
-                                ConstSpiceChar    * delims,
-                                SpiceInt            nmax,
-                                SpiceInt            lenout,
-                                SpiceInt          * n,
-                                void              * items   );
+SpiceDouble vsepg_c(ConstSpiceDouble *v1, ConstSpiceDouble *v2, SpiceInt ndim);
 
+SpiceDouble vtmv_c(ConstSpiceDouble v1[3], ConstSpiceDouble matrix[3][3], ConstSpiceDouble v2[3]);
 
-   void              lparss_c ( ConstSpiceChar    * list,
-                                ConstSpiceChar    * delims,
-                                SpiceCell         * set     );
+SpiceDouble vtmvg_c(const void *v1, const void *matrix, const void *v2, SpiceInt nrow, SpiceInt ncol);
 
+void vupack_c(ConstSpiceDouble v[3], SpiceDouble *x, SpiceDouble *y, SpiceDouble *z);
 
-   SpiceDouble       lspcn_c  ( ConstSpiceChar    * body,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * abcorr );
+SpiceBoolean vzero_c(ConstSpiceDouble v[3]);
 
+SpiceBoolean vzerog_c(ConstSpiceDouble *v, SpiceInt ndim);
 
-   SpiceInt          lstlec_c ( ConstSpiceChar    * string,
-                                SpiceInt            n,
-                                SpiceInt            lenvals,
-                                const void        * array   );
+SpiceInt wncard_c(SpiceCell *window);
 
+void wncomd_c(SpiceDouble left, SpiceDouble right, SpiceCell *window, SpiceCell *result);
 
-   SpiceInt          lstled_c ( SpiceDouble         x,
-                                SpiceInt            n,
-                                ConstSpiceDouble  * array );
+void wncond_c(SpiceDouble left, SpiceDouble right, SpiceCell *window);
 
+void wndifd_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
-   SpiceInt          lstlei_c ( SpiceInt            x,
-                                SpiceInt            n,
-                                ConstSpiceInt     * array );
+SpiceBoolean wnelmd_c(SpiceDouble point, SpiceCell *window);
 
+void wnexpd_c(SpiceDouble left, SpiceDouble right, SpiceCell *window);
 
-   SpiceInt          lstltc_c ( ConstSpiceChar    * string,
-                                SpiceInt            n,
-                                SpiceInt            lenvals,
-                                const void        * array   );
+void wnextd_c(SpiceChar side, SpiceCell *window);
 
+void wnfetd_c(SpiceCell *window, SpiceInt n, SpiceDouble *left, SpiceDouble *right);
 
-   SpiceInt          lstltd_c ( SpiceDouble         x,
-                                SpiceInt            n,
-                                ConstSpiceDouble  * array );
+void wnfild_c(SpiceDouble sml, SpiceCell *window);
 
+void wnfltd_c(SpiceDouble sml, SpiceCell *window);
 
-   SpiceInt          lstlti_c ( SpiceInt            x,
-                                SpiceInt            n,
-                                ConstSpiceInt     * array );
+SpiceBoolean wnincd_c(SpiceDouble left, SpiceDouble right, SpiceCell *window);
 
+void wninsd_c(SpiceDouble left, SpiceDouble right, SpiceCell *window);
 
-   void              ltime_c  ( SpiceDouble         etobs,
-                                SpiceInt            obs,
-                                ConstSpiceChar    * dir,
-                                SpiceInt            targ,
-                                SpiceDouble       * ettarg,
-                                SpiceDouble       * elapsd  );
+void wnintd_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
+SpiceBoolean wnreld_c(SpiceCell *a, ConstSpiceChar *op, SpiceCell *b);
 
-   void              lx4dec_c ( ConstSpiceChar    * string,
-                                SpiceInt            first,
-                                SpiceInt          * last,
-                                SpiceInt          * nchar  );
+void wnsumd_c(SpiceCell *window, SpiceDouble *meas, SpiceDouble *avg, SpiceDouble *stddev, SpiceInt *shortest,
+              SpiceInt *longest);
 
+void wnunid_c(SpiceCell *a, SpiceCell *b, SpiceCell *c);
 
-   void              lx4num_c ( ConstSpiceChar    * string,
-                                SpiceInt            first,
-                                SpiceInt          * last,
-                                SpiceInt          * nchar  );
+void wnvald_c(SpiceInt size, SpiceInt n, SpiceCell *window);
 
+void xf2eul_c(ConstSpiceDouble xform[6][6], SpiceInt axisa, SpiceInt axisb, SpiceInt axisc, SpiceDouble eulang[6],
+              SpiceBoolean *unique);
 
-   void              lx4sgn_c ( ConstSpiceChar    * string,
-                                SpiceInt            first,
-                                SpiceInt          * last,
-                                SpiceInt          * nchar  );
+void xf2rav_c(ConstSpiceDouble xform[6][6], SpiceDouble rot[3][3], SpiceDouble av[3]);
 
+void xfmsta_c(ConstSpiceDouble input_state[6], ConstSpiceChar *input_coord_sys, ConstSpiceChar *output_coord_sys,
+              ConstSpiceChar *body, SpiceDouble output_state[6]);
 
-   void              lx4uns_c ( ConstSpiceChar    * string,
-                                SpiceInt            first,
-                                SpiceInt          * last,
-                                SpiceInt          * nchar  );
+void xpose_c(ConstSpiceDouble m1[3][3], SpiceDouble mout[3][3]);
 
+void xpose6_c(ConstSpiceDouble m1[6][6], SpiceDouble mout[6][6]);
 
-   void              lxqstr_c ( ConstSpiceChar    * string,
-                                SpiceChar           qchar,
-                                SpiceInt            first,
-                                SpiceInt          * last,
-                                SpiceInt          * nchar  );
+void xposeg_c(const void *matrix, SpiceInt nrow, SpiceInt ncol, void *xposem);
 
+void zzgetcml_c(SpiceInt *argc, SpiceChar ***argv, SpiceBoolean init);
 
-   void              m2eul_c  ( ConstSpiceDouble    r[3][3],
-                                SpiceInt            axis3,
-                                SpiceInt            axis2,
-                                SpiceInt            axis1,
-                                SpiceDouble       * angle3,
-                                SpiceDouble       * angle2,
-                                SpiceDouble       * angle1  );
+SpiceBoolean zzgfgeth_c(void);
 
+void zzgfsavh_c(SpiceBoolean status);
 
-   void              m2q_c    ( ConstSpiceDouble    r[3][3],
-                                SpiceDouble         q[4]     );
-
-
-
-   SpiceBoolean      matchi_c ( ConstSpiceChar    * string,
-                                ConstSpiceChar    * templ,
-                                SpiceChar           wstr,
-                                SpiceChar           wchr   );
-
-
-   SpiceBoolean      matchw_c ( ConstSpiceChar    * string,
-                                ConstSpiceChar    * templ,
-                                SpiceChar           wstr,
-                                SpiceChar           wchr   );
-
-
-   SpiceDouble       maxd_c  ( SpiceInt             n,
-                                                    ... );
-
-
-   SpiceInt          maxi_c  ( SpiceInt             n,
-                                                    ... );
-
-
-   void              mequ_c   ( ConstSpiceDouble    m1  [3][3],
-                                SpiceDouble         mout[3][3] );
-
-
-   void              mequg_c  ( const void        * m1,
-                                SpiceInt            nr,
-                                SpiceInt            nc,
-                                void              * mout );
-
-
-   SpiceDouble       mind_c   ( SpiceInt            n,
-                                                    ... );
-
-
-   SpiceInt          mini_c   ( SpiceInt            n,
-                                                    ... );
-
-
-   int               moved_   ( SpiceDouble       * arrfrm,
-                                SpiceInt          * ndim,
-                                SpiceDouble       * arrto  );
-
-
-   void              mtxm_c   ( ConstSpiceDouble    m1  [3][3],
-                                ConstSpiceDouble    m2  [3][3],
-                                SpiceDouble         mout[3][3] );
-
-
-   void              mtxmg_c  ( const void        * m1,
-                                const void        * m2,
-                                SpiceInt            row1,
-                                SpiceInt            col1,
-                                SpiceInt            col2,
-                                void              * mout  );
-
-
-   void              mtxv_c   ( ConstSpiceDouble    m1  [3][3],
-                                ConstSpiceDouble    vin [3],
-                                SpiceDouble         vout[3]    );
-
-
-   void              mtxvg_c  ( const void        * m1,
-                                const void        * v2,
-                                SpiceInt            ncol1,
-                                SpiceInt            nr1r2,
-                                void              * vout   );
-
-
-   void              mxm_c    ( ConstSpiceDouble    m1  [3][3],
-                                ConstSpiceDouble    m2  [3][3],
-                                SpiceDouble         mout[3][3] );
-
-
-   void              mxmg_c   ( const void        * m1,
-                                const void        * m2,
-                                SpiceInt            row1,
-                                SpiceInt            col1,
-                                SpiceInt            col2,
-                                void              * mout  );
-
-
-   void              mxmt_c   ( ConstSpiceDouble    m1  [3][3],
-                                ConstSpiceDouble    m2  [3][3],
-                                SpiceDouble         mout[3][3] );
-
-
-   void              mxmtg_c  ( const void        * m1,
-                                const void        * m2,
-                                SpiceInt            nrow1,
-                                SpiceInt            nc1c2,
-                                SpiceInt            nrow2,
-                                void              * mout  );
-
-
-   void              mxv_c    ( ConstSpiceDouble    m1[3][3],
-                                ConstSpiceDouble    vin[3],
-                                SpiceDouble         vout[3] );
-
-
-   void              mxvg_c   ( const void        * m1,
-                                const void        * v2,
-                                SpiceInt            nrow1,
-                                SpiceInt            nc1r2,
-                                void              * vout   );
-
-
-   void              namfrm_c ( ConstSpiceChar    * frname,
-                                SpiceInt          * frcode );
-
-
-   SpiceInt          ncpos_c  ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * chars,
-                                SpiceInt            start  );
-
-
-   SpiceInt          ncposr_c ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * chars,
-                                SpiceInt            start  );
-
-
-   void              nearpt_c ( ConstSpiceDouble    positn[3],
-                                SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                SpiceDouble         npoint[3],
-                                SpiceDouble       * alt        );
-
-
-   void              npedln_c ( SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                ConstSpiceDouble    linept[3],
-                                ConstSpiceDouble    linedr[3],
-                                SpiceDouble         pnear[3],
-                                SpiceDouble       * dist      );
-
-
-   void              npelpt_c ( ConstSpiceDouble    point[3],
-                                ConstSpiceEllipse * ellips,
-                                SpiceDouble         pnear[3],
-                                SpiceDouble       * dist      );
-
-
-   void              nplnpt_c ( ConstSpiceDouble    linpt  [3],
-                                ConstSpiceDouble    lindir [3],
-                                ConstSpiceDouble    point  [3],
-                                SpiceDouble         pnear  [3],
-                                SpiceDouble       * dist       );
-
-
-   void              nvc2pl_c ( ConstSpiceDouble    normal[3],
-                                SpiceDouble         constant,
-                                SpicePlane        * plane     );
-
-
-   void              nvp2pl_c ( ConstSpiceDouble    normal[3],
-                                ConstSpiceDouble    point[3],
-                                SpicePlane        * plane     );
-
-   void              occult_c ( ConstSpiceChar    * target1,
-                                ConstSpiceChar    * shape1,
-                                ConstSpiceChar    * frame1,
-                                ConstSpiceChar    * target2,
-                                ConstSpiceChar    * shape2,
-                                ConstSpiceChar    * frame2,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * observer,
-                                SpiceDouble         time,
-                                SpiceInt          * occult_code );
-
-   SpiceInt          ordc_c   ( ConstSpiceChar     * item,
-                                SpiceCell          * set   );
-
-
-   SpiceInt          ordd_c   ( SpiceDouble          item,
-                                SpiceCell          * set   );
-
-
-   SpiceInt          ordi_c   ( SpiceInt             item,
-                                SpiceCell          * set   );
-
-
-   void              orderc_c ( SpiceInt            lenvals,
-                                const void        * array,
-                                SpiceInt            ndim,
-                                SpiceInt          * iorder  );
-
-
-   void              orderd_c ( ConstSpiceDouble  * array,
-                                SpiceInt            ndim,
-                                SpiceInt          * iorder );
-
-
-   void              orderi_c ( ConstSpiceInt     * array,
-                                SpiceInt            ndim,
-                                SpiceInt          * iorder );
-
-
-   void              oscelt_c ( ConstSpiceDouble    state[6],
-                                SpiceDouble         et      ,
-                                SpiceDouble         mu      ,
-                                SpiceDouble         elts[8]  );
-
-
-   void              pckcov_c ( ConstSpiceChar    * pck,
-                                SpiceInt            idcode,
-                                SpiceCell         * cover   );
-
-
-   void              pckfrm_c ( ConstSpiceChar    * pck,
-                                SpiceCell         * ids  );
-
-
-   void              pcklof_c ( ConstSpiceChar    * fname,
-                                SpiceInt          * handle );
-
-
-   void              pckuof_c ( SpiceInt            handle );
-
-
-   void              pcpool_c ( ConstSpiceChar   * name,
-                                SpiceInt           n,
-                                SpiceInt           lenvals,
-                                const void        * cvals    );
-
-
-   void              pdpool_c ( ConstSpiceChar    * name,
-                                SpiceInt            n,
-                                ConstSpiceDouble  * dvals );
-
-
-   void              pgrrec_c ( ConstSpiceChar    * body,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         alt,
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble         rectan[3] );
-
-
-   SpiceDouble       phaseq_c ( SpiceDouble       et,
-                                ConstSpiceChar  * target,
-                                ConstSpiceChar  * illumn,
-                                ConstSpiceChar  * obsrvr,
-                                ConstSpiceChar  * abcorr );
-
-
-   SpiceDouble       pi_c     ( void );
-
-
-   void              pipool_c ( ConstSpiceChar    * name,
-                                SpiceInt            n,
-                                ConstSpiceInt     * ivals );
-
-
-   void              pjelpl_c ( ConstSpiceEllipse * elin,
-                                ConstSpicePlane   * plane,
-                                SpiceEllipse      * elout  );
-
-
-   void              pl2nvc_c ( ConstSpicePlane   * plane,
-                                SpiceDouble         normal[3],
-                                SpiceDouble       * constant  );
-
-
-   void              pl2nvp_c ( ConstSpicePlane   * plane,
-                                SpiceDouble         normal[3],
-                                SpiceDouble         point[3]  );
-
-
-   void              pl2psv_c ( ConstSpicePlane   * plane,
-                                SpiceDouble         point[3],
-                                SpiceDouble         span1[3],
-                                SpiceDouble         span2[3]  );
-
-
-   SpiceInt          pos_c    ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * substr,
-                                SpiceInt            start   );
-
-
-   SpiceInt          posr_c   ( ConstSpiceChar    * str,
-                                ConstSpiceChar    * substr,
-                                SpiceInt            start   );
-
-
-   void              prefix_c ( ConstSpiceChar    * pref,
-                                SpiceInt            spaces,
-                                SpiceInt            lenout,
-                                SpiceChar         * string  );
-
-
-   SpiceChar       * prompt_c ( ConstSpiceChar    * prmptStr,
-                                SpiceInt            lenout,
-                                SpiceChar         * buffer   );
-
-
-   void              prop2b_c ( SpiceDouble         gm,
-                                ConstSpiceDouble    pvinit[6],
-                                SpiceDouble         dt,
-                                SpiceDouble         pvprop[6] );
-
-
-   void              prsdp_c  ( ConstSpiceChar    * string,
-                                SpiceDouble       * dpval  );
-
-
-   void              prsint_c ( ConstSpiceChar    * string,
-                                SpiceInt          * intval );
-
-
-   void              psv2pl_c ( ConstSpiceDouble    point[3],
-                                ConstSpiceDouble    span1[3],
-                                ConstSpiceDouble    span2[3],
-                                SpicePlane        * plane     );
-
-
-   void              putcml_c ( SpiceInt            argc ,
-                                SpiceChar        ** argv  );
-
-
-   void              pxform_c ( ConstSpiceChar    * from,
-                                ConstSpiceChar    * to,
-                                SpiceDouble         et,
-                                SpiceDouble         rotate[3][3] );
-
-
-   void              pxfrm2_c ( ConstSpiceChar    * from,
-                                ConstSpiceChar    * to,
-                                SpiceDouble         etfrom,
-                                SpiceDouble         etto,
-                                SpiceDouble         rotate[3][3] );
-
-
-   void              q2m_c    ( ConstSpiceDouble    q[4],
-                                SpiceDouble         r[3][3] );
-
-
-   void              qcktrc_c ( SpiceInt            tracelen,
-                                SpiceChar         * trace    );
-
-
-   void              qdq2av_c ( ConstSpiceDouble    q[4],
-                                ConstSpiceDouble    dq[4],
-                                SpiceDouble         av[3] );
-
-
-   void              qxq_c    ( ConstSpiceDouble    q1[4],
-                                ConstSpiceDouble    q2[4],
-                                SpiceDouble         qout[4] );
-
-
-
-   void              radrec_c ( SpiceDouble         range,
-                                SpiceDouble         ra,
-                                SpiceDouble         dec,
-                                SpiceDouble         rectan[3] );
-
-
-   void              rav2xf_c ( ConstSpiceDouble     rot   [3][3],
-                                ConstSpiceDouble     av    [3],
-                                SpiceDouble          xform [6][6]  );
-
-
-   void              raxisa_c ( ConstSpiceDouble     matrix[3][3],
-                                SpiceDouble          axis  [3],
-                                SpiceDouble        * angle       );
-
-
-   void              rdtext_c ( ConstSpiceChar     * file,
-                                SpiceInt             lenout,
-                                SpiceChar          * line,
-                                SpiceBoolean       * eof    );
-
-
-   void              reccyl_c ( ConstSpiceDouble    rectan[3],
-                                SpiceDouble       * r,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * z         );
-
-
-   void              recgeo_c ( ConstSpiceDouble    rectan[3],
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * lat,
-                                SpiceDouble       * alt );
-
-
-   void              reclat_c ( ConstSpiceDouble    rectan[3],
-                                SpiceDouble       * radius,
-                                SpiceDouble       * longitude,
-                                SpiceDouble       * latitude  );
-
-
-   void              recpgr_c ( ConstSpiceChar    * body,
-                                SpiceDouble         rectan[3],
-                                SpiceDouble         re,
-                                SpiceDouble         f,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * lat,
-                                SpiceDouble       * alt       );
-
-
-   void              recrad_c ( ConstSpiceDouble    rectan[3],
-                                SpiceDouble       * radius,
-                                SpiceDouble       * ra,
-                                SpiceDouble       * dec  );
-
-
-
-   void              reordc_c ( ConstSpiceInt     * iorder,
-                                SpiceInt            ndim,
-                                SpiceInt            lenvals,
-                                void              * array    );
-
-
-   void              reordd_c ( ConstSpiceInt     * iorder,
-                                SpiceInt            ndim,
-                                SpiceDouble       * array   );
-
-
-   void              reordi_c ( ConstSpiceInt     * iorder,
-                                SpiceInt            ndim,
-                                SpiceInt          * array   );
-
-
-   void              reordl_c ( ConstSpiceInt     * iorder,
-                                SpiceInt            ndim,
-                                SpiceBoolean      * array   );
-
-
-   void              removc_c ( ConstSpiceChar     * item,
-                                SpiceCell          * set   );
-
-
-   void              removd_c ( SpiceDouble          item,
-                                SpiceCell          * set   );
-
-
-   void              removi_c ( SpiceInt             item,
-                                SpiceCell          * set   );
-
-
-   void              repmc_c  ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                ConstSpiceChar     * value,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              repmct_c ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                SpiceInt             value,
-                                SpiceChar            strCase,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              repmd_c  ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                SpiceDouble          value,
-                                SpiceInt             sigdig,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              repmf_c  ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                SpiceDouble          value,
-                                SpiceInt             sigdig,
-                                SpiceChar            format,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              repmi_c  ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                SpiceInt             value,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              repmot_c ( ConstSpiceChar     * in,
-                                ConstSpiceChar     * marker,
-                                SpiceInt             value,
-                                SpiceChar            strCase,
-                                SpiceInt             lenout,
-                                SpiceChar          * out     );
-
-
-   void              reset_c  ( void );
-
-
-   SpiceBoolean      return_c ( void );
-
-
-   void              recsph_c ( ConstSpiceDouble    rectan[3],
-                                SpiceDouble       * r,
-                                SpiceDouble       * colat,
-                                SpiceDouble       * lon );
-
-
-   void              rotate_c ( SpiceDouble         angle,
-                                SpiceInt            iaxis,
-                                SpiceDouble         mout[3][3] );
-
-
-   void              rotmat_c ( ConstSpiceDouble    m1[3][3],
-                                SpiceDouble         angle,
-                                SpiceInt            iaxis,
-                                SpiceDouble         mout[3][3] );
-
-
-   void              rotvec_c ( ConstSpiceDouble    v1[3],
-                                SpiceDouble         angle,
-                                SpiceInt            iaxis,
-                                SpiceDouble         vout[3] );
-
-
-   SpiceDouble       rpd_c    ( void );
-
-
-   void              rquad_c  ( SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                SpiceDouble         root1[2],
-                                SpiceDouble         root2[2] );
-
-
-   void              saelgv_c ( ConstSpiceDouble    vec1  [3],
-                                ConstSpiceDouble    vec2  [3],
-                                SpiceDouble         smajor[3],
-                                SpiceDouble         sminor[3]  );
-
-
-   void              scard_c (  SpiceInt            card,
-                                SpiceCell         * cell  );
-
-
-   void              scdecd_c ( SpiceInt            sc,
-                                SpiceDouble         sclkdp,
-                                SpiceInt            sclklen,
-                                SpiceChar         * sclkch   );
-
-
-   void              sce2s_c  ( SpiceInt            sc,
-                                SpiceDouble         et,
-                                SpiceInt            sclklen,
-                                SpiceChar         * sclkch   );
-
-
-   void              sce2c_c  ( SpiceInt            sc,
-                                SpiceDouble         et,
-                                SpiceDouble       * sclkdp   );
-
-
-   void              sce2t_c  ( SpiceInt            sc,
-                                SpiceDouble         et,
-                                SpiceDouble       * sclkdp   );
-
-
-   void              scencd_c ( SpiceInt            sc,
-                                ConstSpiceChar    * sclkch,
-                                SpiceDouble       * sclkdp   );
-
-
-   void              scfmt_c  ( SpiceInt            sc,
-                                SpiceDouble         ticks,
-                                SpiceInt            clkstrlen,
-                                SpiceChar         * clkstr    );
-
-
-   void              scpart_c ( SpiceInt            sc,
-                                SpiceInt          * nparts,
-                                SpiceDouble       * pstart,
-                                SpiceDouble       * pstop   );
-
-
-   void              scs2e_c  ( SpiceInt            sc,
-                                ConstSpiceChar    * sclkch,
-                                SpiceDouble       * et      );
-
-
-   void              sct2e_c  ( SpiceInt            sc,
-                                SpiceDouble         sclkdp,
-                                SpiceDouble       * et      );
-
-
-   void              sctiks_c ( SpiceInt            sc,
-                                ConstSpiceChar    * clkstr,
-                                SpiceDouble       * ticks   );
-
-
-   void              sdiff_c  ( SpiceCell         * a,
-                                SpiceCell         * b,
-                                SpiceCell         * c  );
-
-
-   SpiceBoolean      set_c    ( SpiceCell          * a,
-                                ConstSpiceChar     * op,
-                                SpiceCell          * b  );
-
-
-   void              setmsg_c ( ConstSpiceChar    * msg );
-
-
-   void              shellc_c ( SpiceInt            ndim,
-                                SpiceInt            lenvals,
-                                void              * array   );
-
-
-   void              shelld_c ( SpiceInt            ndim,
-                                SpiceDouble       * array   );
-
-
-   void              shelli_c ( SpiceInt            ndim,
-                                SpiceInt          * array   );
-
-
-   void              sigerr_c ( ConstSpiceChar    * message );
-
-
-   void              sincpt_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * dref,
-                                ConstSpiceDouble    dvec   [3],
-                                SpiceDouble         spoint [3],
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         srfvec [3],
-                                SpiceBoolean      * found         );
-
-
-   SpiceInt          size_c   ( SpiceCell         * size );
-
-
-   SpiceDouble       spd_c    ( void );
-
-
-   void              sphcyl_c ( SpiceDouble         radius,
-                                SpiceDouble         colat,
-                                SpiceDouble         slon,
-                                SpiceDouble       * r,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * z );
-
-
-   void              sphlat_c ( SpiceDouble         r,
-                                SpiceDouble         colat,
-                                SpiceDouble         lons,
-                                SpiceDouble       * radius,
-                                SpiceDouble       * lon,
-                                SpiceDouble       * lat   );
-
-
-   void              sphrec_c ( SpiceDouble         r,
-                                SpiceDouble         colat,
-                                SpiceDouble         lon,
-                                SpiceDouble         rectan[3] );
-
-
-   void              spk14a_c ( SpiceInt            handle,
-                                SpiceInt            ncsets,
-                                ConstSpiceDouble    coeffs [],
-                                ConstSpiceDouble    epochs []  );
-
-
-   void              spk14b_c ( SpiceInt            handle,
-                                ConstSpiceChar    * segid,
-                                SpiceInt            body,
-                                SpiceInt            center,
-                                ConstSpiceChar    * frame,
-                                SpiceDouble         first,
-                                SpiceDouble         last,
-                                SpiceInt            chbdeg  );
-
-
-   void              spk14e_c ( SpiceInt            handle );
-
-
-   void              spkapo_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceDouble    sobs[6],
-                                ConstSpiceChar    * abcorr,
-                                SpiceDouble         ptarg[3],
-                                SpiceDouble       * lt        );
-
-
-   void              spkapp_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceDouble    sobs   [6],
-                                ConstSpiceChar    * abcorr,
-                                SpiceDouble         starg  [6],
-                                SpiceDouble       * lt         );
-
-
-   void              spkacs_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * abcorr,
-                                SpiceInt            obs,
-                                SpiceDouble         starg[6],
-                                SpiceDouble       * lt,
-                                SpiceDouble       * dlt       );
-
-
-   void              spkaps_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceDouble    stobs[6],
-                                ConstSpiceDouble    accobs[6],
-                                SpiceDouble         starg[6],
-                                SpiceDouble       * lt,
-                                SpiceDouble       * dlt      );
-
-
-   void              spkcls_c ( SpiceInt            handle );
-
-
-   void              spkcov_c ( ConstSpiceChar    * spk,
-                                SpiceInt            idcode,
-                                SpiceCell         * cover   );
-
-
-   void              spkcpo_c ( ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * outref,
-                                ConstSpiceChar    * refloc,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceDouble    obssta [3],
-                                ConstSpiceChar    * obsctr,
-                                ConstSpiceChar    * obsref,
-                                SpiceDouble         state  [6],
-                                SpiceDouble       * lt          );
-
-
-   void              spkcpt_c ( ConstSpiceDouble    trgpos [3],
-                                ConstSpiceChar    * trgctr,
-                                ConstSpiceChar    * trgref,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * outref,
-                                ConstSpiceChar    * refloc,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         state  [6],
-                                SpiceDouble       * lt          );
-
-
-   void              spkcvo_c ( ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * outref,
-                                ConstSpiceChar    * refloc,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceDouble    obssta [6],
-                                SpiceDouble         obsepc,
-                                ConstSpiceChar    * obsctr,
-                                ConstSpiceChar    * obsref,
-                                SpiceDouble         state  [6],
-                                SpiceDouble       * lt         );
-
-
-   void              spkcvt_c ( ConstSpiceDouble    trgsta [6],
-                                SpiceDouble         trgepc,
-                                ConstSpiceChar    * trgctr,
-                                ConstSpiceChar    * trgref,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * outref,
-                                ConstSpiceChar    * refloc,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         state   [6],
-                                SpiceDouble       * lt          );
-
-
-   void              spkez_c  ( SpiceInt            target,
-                                SpiceDouble         epoch,
-                                ConstSpiceChar    * frame,
-                                ConstSpiceChar    * abcorr,
-                                SpiceInt            observer,
-                                SpiceDouble         state[6],
-                                SpiceDouble       * lt       );
-
-
-   void              spkezp_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * abcorr,
-                                SpiceInt            obs,
-                                SpiceDouble         ptarg[3],
-                                SpiceDouble       * lt        );
-
-
-   void              spkezr_c ( ConstSpiceChar    * target,
-                                SpiceDouble         epoch,
-                                ConstSpiceChar    * frame,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * observer,
-                                SpiceDouble         state[6],
-                                SpiceDouble       * lt       );
-
-
-   void              spkgeo_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                SpiceInt            obs,
-                                SpiceDouble         state[6],
-                                SpiceDouble       * lt       );
-
-
-   void              spkgps_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                SpiceInt            obs,
-                                SpiceDouble         pos[3],
-                                SpiceDouble       * lt     );
-
-
-   void              spklef_c ( ConstSpiceChar    * filename,
-                                SpiceInt          * handle   );
-
-
-   void              spkltc_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceDouble    stobs[6],
-                                SpiceDouble         starg[6],
-                                SpiceDouble       * lt,
-                                SpiceDouble       * dlt      );
-
-
-   void              spkobj_c ( ConstSpiceChar    * spk,
-                                SpiceCell         * ids );
-
-
-   void              spkopa_c ( ConstSpiceChar    * file,
-                                SpiceInt          * handle );
-
-
-   void              spkopn_c ( ConstSpiceChar    * name,
-                                ConstSpiceChar    * ifname,
-                                SpiceInt            ncomch,
-                                SpiceInt          * handle  );
-
-
-   void              spkpds_c ( SpiceInt            body,
-                                SpiceInt            center,
-                                ConstSpiceChar    * frame,
-                                SpiceInt            type,
-                                SpiceDouble         first,
-                                SpiceDouble         last,
-                                SpiceDouble         descr[5] );
-
-
-   void              spkpos_c ( ConstSpiceChar    * targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obs,
-                                SpiceDouble         ptarg[3],
-                                SpiceDouble       * lt        );
-
-
-   void              spkpvn_c ( SpiceInt            handle,
-                                ConstSpiceDouble    descr [5],
-                                SpiceDouble         et,
-                                SpiceInt          * ref,
-                                SpiceDouble         state [6],
-                                SpiceInt          * center    );
-
-
-   void              spksfs_c ( SpiceInt            body,
-                                SpiceDouble         et,
-                                SpiceInt            idlen,
-                                SpiceInt          * handle,
-                                SpiceDouble         descr [5],
-                                SpiceChar         * ident,
-                                SpiceBoolean      * found  );
-
-
-   void              spkssb_c ( SpiceInt            targ,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * ref,
-                                SpiceDouble         starg[6] );
-
-
-   void              spksub_c ( SpiceInt            handle,
-                                SpiceDouble         descr[5],
-                                ConstSpiceChar    * ident,
-                                SpiceDouble         begin,
-                                SpiceDouble         end,
-                                SpiceInt            newh    );
-
-
-   void              spkuds_c ( ConstSpiceDouble    descr [5],
-                                SpiceInt          * body,
-                                SpiceInt          * center,
-                                SpiceInt          * frame,
-                                SpiceInt          * type,
-                                SpiceDouble       * first,
-                                SpiceDouble       * last,
-                                SpiceInt          * begin,
-                                SpiceInt          * end     );
-
-
-   void              spkuef_c ( SpiceInt             handle );
-
-
-   void              spkw02_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          intlen,
-                                SpiceInt             n,
-                                SpiceInt             polydg,
-                                ConstSpiceDouble     cdata [],
-                                SpiceDouble          btime     );
-
-
-   void              spkw03_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          intlen,
-                                SpiceInt             n,
-                                SpiceInt             polydg,
-                                ConstSpiceDouble     cdata [],
-                                SpiceDouble          btime     );
-
-
-   void              spkw05_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          gm,
-                                SpiceInt             n,
-                                ConstSpiceDouble     states [][6],
-                                ConstSpiceDouble     epochs []     );
-
-
-   void              spkw08_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             degree,
-                                SpiceInt             n,
-                                ConstSpiceDouble     states[][6],
-                                SpiceDouble          epoch1,
-                                SpiceDouble          step         );
-
-
-   void              spkw09_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             degree,
-                                SpiceInt             n,
-                                ConstSpiceDouble     states[][6],
-                                ConstSpiceDouble     epochs[]     );
-
-
-   void              spkw10_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                ConstSpiceDouble     consts [8],
-                                SpiceInt             n,
-                                ConstSpiceDouble     elems  [],
-                                ConstSpiceDouble     epochs []  );
-
-
-   void              spkw12_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             degree,
-                                SpiceInt             n,
-                                ConstSpiceDouble     states[][6],
-                                SpiceDouble          epoch0,
-                                SpiceDouble          step        );
-
-
-   void              spkw13_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             degree,
-                                SpiceInt             n,
-                                ConstSpiceDouble     states[][6],
-                                ConstSpiceDouble     epochs[]     );
-
-
-   void              spkw15_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          epoch,
-                                ConstSpiceDouble     tp     [3],
-                                ConstSpiceDouble     pa     [3],
-                                SpiceDouble          p,
-                                SpiceDouble          ecc,
-                                SpiceDouble          j2flg,
-                                ConstSpiceDouble     pv     [3],
-                                SpiceDouble          gm,
-                                SpiceDouble          j2,
-                                SpiceDouble          radius     );
-
-
-   void              spkw17_c ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          epoch,
-                                ConstSpiceDouble     eqel   [9],
-                                SpiceDouble          rapol,
-                                SpiceDouble          decpol      );
-
-
-   void              spkw18_c ( SpiceInt             handle,
-                                SpiceSPK18Subtype    subtyp,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceInt             degree,
-                                SpiceInt             n,
-                                const void         * packts,
-                                ConstSpiceDouble     epochs[]     );
-
-
-   void             spkw20_c  ( SpiceInt             handle,
-                                SpiceInt             body,
-                                SpiceInt             center,
-                                ConstSpiceChar     * frame,
-                                SpiceDouble          first,
-                                SpiceDouble          last,
-                                ConstSpiceChar     * segid,
-                                SpiceDouble          intlen,
-                                SpiceInt             n,
-                                SpiceInt             polydg,
-                                ConstSpiceDouble     cdata[],
-                                SpiceDouble          dscale, 
-                                SpiceDouble          tscale,
-                                SpiceDouble          initjd,
-                                SpiceDouble          initfr  );
-
-
-
-   void              srfrec_c ( SpiceInt            body,
-                                SpiceDouble         lon,
-                                SpiceDouble         lat,
-                                SpiceDouble         rectan[3] );
-
-
-   void              srfxpt_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                ConstSpiceChar    * dref,
-                                ConstSpiceDouble    dvec   [3],
-                                SpiceDouble         spoint [3],
-                                SpiceDouble       * dist,
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         obspos [3],
-                                SpiceBoolean      * found         );
-
-
-   void              ssize_c  ( SpiceInt             size,
-                                SpiceCell          * cell  );
-
-
-   void              stelab_c ( ConstSpiceDouble    pobj[3],
-                                ConstSpiceDouble    vobs[3],
-                                SpiceDouble         appobj[3] );
-
-
-   void              stpool_c ( ConstSpiceChar    * item,
-                                SpiceInt            nth,
-                                ConstSpiceChar    * contin,
-                                SpiceInt            lenout,
-                                SpiceChar         * string,
-                                SpiceInt          * size,
-                                SpiceBoolean      * found  );
-
-
-   void              str2et_c ( ConstSpiceChar    * date,
-                                SpiceDouble       * et   );
-
-
-   void              subpnt_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         spoint [3],
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         srfvec [3] );
-
-
-   void              subpt_c  ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         spoint [3],
-                                SpiceDouble       * alt         );
-
-
-   void              subslr_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * fixref,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         spoint [3],
-                                SpiceDouble       * trgepc,
-                                SpiceDouble         srfvec [3] );
-
-
-   void              subsol_c ( ConstSpiceChar    * method,
-                                ConstSpiceChar    * target,
-                                SpiceDouble         et,
-                                ConstSpiceChar    * abcorr,
-                                ConstSpiceChar    * obsrvr,
-                                SpiceDouble         spoint[3] );
-
-
-   SpiceDouble       sumad_c  ( ConstSpiceDouble    array[],
-                                SpiceInt            n        );
-
-
-   SpiceInt          sumai_c  ( ConstSpiceInt       array[],
-                                SpiceInt            n        );
-
-
-   void              surfnm_c ( SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                ConstSpiceDouble    point[3],
-                                SpiceDouble         normal[3] );
-
-
-   void              surfpt_c ( ConstSpiceDouble    positn[3],
-                                ConstSpiceDouble    u[3],
-                                SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                SpiceDouble         point[3],
-                                SpiceBoolean      * found     );
-
-
-   void              surfpv_c ( ConstSpiceDouble    stvrtx[6],
-                                ConstSpiceDouble    stdir [6],
-                                SpiceDouble         a,
-                                SpiceDouble         b,
-                                SpiceDouble         c,
-                                SpiceDouble         stx   [6],
-                                SpiceBoolean      * found      );
-
-
-   void              swpool_c ( ConstSpiceChar    * agent,
-                                SpiceInt            nnames,
-                                SpiceInt            lenvals,
-                                const void        * names   );
-
-
-   void              sxform_c ( ConstSpiceChar    * from,
-                                ConstSpiceChar    * to,
-                                SpiceDouble         et,
-                                SpiceDouble         xform[6][6] );
-
-
-   void              szpool_c ( ConstSpiceChar    * name,
-                                SpiceInt          * n,
-                                SpiceBoolean      * found );
-
-
-   void              timdef_c ( ConstSpiceChar    * action,
-                                ConstSpiceChar    * item,
-                                SpiceInt            lenout,
-                                SpiceChar         * value );
-
-
-   void              timout_c ( SpiceDouble         et,
-                                ConstSpiceChar    * pictur,
-                                SpiceInt            lenout,
-                                SpiceChar         * output );
-
-
-   void              tipbod_c ( ConstSpiceChar    * ref,
-                                SpiceInt            body,
-                                SpiceDouble         et,
-                                SpiceDouble         tipm[3][3] );
-
-
-   void              tisbod_c ( ConstSpiceChar    * ref,
-                                SpiceInt            body,
-                                SpiceDouble         et,
-                                SpiceDouble         tsipm[6][6] );
-
-
-   ConstSpiceChar  * tkvrsn_c ( ConstSpiceChar    * item );
-
-
-   void              tparse_c ( ConstSpiceChar    * string,
-                                SpiceInt            lenout,
-                                SpiceDouble       * sp2000,
-                                SpiceChar         * errmsg  );
-
-
-   void              tpictr_c ( ConstSpiceChar    * sample,
-                                SpiceInt            lenpictur,
-                                SpiceInt            lenerror,
-                                SpiceChar         * pictur,
-                                SpiceBoolean      * ok,
-                                SpiceChar         * error     );
-
-
-   SpiceDouble       trace_c  ( ConstSpiceDouble    matrix[3][3] );
-
-
-   void              trcdep_c ( SpiceInt          * depth );
-
-
-   void              trcnam_c ( SpiceInt            index,
-                                SpiceInt            namelen,
-                                SpiceChar         * name     );
-
-
-   void              trcoff_c ( void );
-
-
-   void              tsetyr_c ( SpiceInt            year );
-
-
-   SpiceDouble       twopi_c  ( void );
-
-
-   void              twovec_c ( ConstSpiceDouble    axdef  [3],
-                                SpiceInt            indexa,
-                                ConstSpiceDouble    plndef [3],
-                                SpiceInt            indexp,
-                                SpiceDouble         mout   [3][3] );
-
-
-   SpiceDouble       tyear_c  ( void );
-
-
-   void              ucase_c  ( SpiceChar         * in,
-                                SpiceInt            lenout,
-                                SpiceChar         * out    );
-
-
-   void              ucrss_c  ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         vout[3] );
-
-
-   void              uddc_c ( void       ( * udfunc ) ( SpiceDouble    x,
-                                                        SpiceDouble  * value ),
-
-                              SpiceDouble    x,
-                              SpiceDouble    dx,
-                              SpiceBoolean * isdecr );
-
-
-   void              uddf_c ( void       ( * udfunc ) ( SpiceDouble    x,
-                                                        SpiceDouble  * value ),
-                              SpiceDouble    x,
-                              SpiceDouble    dx,
-                              SpiceDouble  * deriv );
-
-
-   void              udf_c   ( SpiceDouble   x, 
-                               SpiceDouble * value );
-
-
-   void              union_c  ( SpiceCell          * a,
-                                SpiceCell          * b,
-                                SpiceCell          * c  );
-
-
-   SpiceDouble       unitim_c ( SpiceDouble         epoch,
-                                ConstSpiceChar    * insys,
-                                ConstSpiceChar    * outsys );
-
-
-   void              unload_c ( ConstSpiceChar   * file );
-
-
-   void              unorm_c  ( ConstSpiceDouble    v1[3],
-                                SpiceDouble         vout[3],
-                                SpiceDouble       * vmag    );
-
-
-   void              unormg_c ( ConstSpiceDouble  * v1,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout,
-                                SpiceDouble       * vmag );
-
-
-   void              utc2et_c ( ConstSpiceChar    * utcstr,
-                                SpiceDouble       * et   );
-
-
-   void              vadd_c   ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         vout[3] ) ;
-
-
-   void              vaddg_c  ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout );
-
-
-   void              valid_c  ( SpiceInt             size,
-                                SpiceInt             n,
-                                SpiceCell          * a    );
-
-
-   void              vcrss_c  ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         vout[3] );
-
-
-   SpiceDouble       vdist_c  ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3] );
-
-
-   SpiceDouble       vdistg_c ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim );
-
-
-   SpiceDouble       vdot_c   ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3] );
-
-   SpiceDouble       vdotg_c  ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim );
-
-   void              vequ_c   ( ConstSpiceDouble    vin[3],
-                                SpiceDouble         vout[3] );
-
-
-   void              vequg_c  ( ConstSpiceDouble  * vin,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout );
-
-
-   void              vhat_c   ( ConstSpiceDouble    v1  [3],
-                                SpiceDouble         vout[3] );
-
-
-   void              vhatg_c  ( ConstSpiceDouble  * v1,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout  );
-
-
-   void              vlcom_c  ( SpiceDouble         a,
-                                ConstSpiceDouble    v1[3],
-                                SpiceDouble         b,
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         sum[3] );
-
-
-   void              vlcom3_c ( SpiceDouble         a,
-                                ConstSpiceDouble    v1[3],
-                                SpiceDouble         b,
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         c,
-                                ConstSpiceDouble    v3[3],
-                                SpiceDouble         sum[3] );
-
-
-   void              vlcomg_c ( SpiceInt            n,
-                                SpiceDouble         a,
-                                ConstSpiceDouble  * v1,
-                                SpiceDouble         b,
-                                ConstSpiceDouble  * v2,
-                                SpiceDouble       * sum );
-
-
-   void              vminug_c ( ConstSpiceDouble  * vin,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout );
-
-
-   void              vminus_c ( ConstSpiceDouble    v1[3],
-                                SpiceDouble         vout[3] );
-
-
-   SpiceDouble       vnorm_c  ( ConstSpiceDouble    v1[3] );
-
-
-   SpiceDouble       vnormg_c ( ConstSpiceDouble  * v1,
-                                SpiceInt            ndim );
-
-
-   void              vpack_c  ( SpiceDouble         x,
-                                SpiceDouble         y,
-                                SpiceDouble         z,
-                                SpiceDouble         v[3] );
-
-
-   void              vperp_c  ( ConstSpiceDouble    a[3],
-                                ConstSpiceDouble    b[3],
-                                SpiceDouble         p[3] );
-
-
-   void              vprjp_c  ( ConstSpiceDouble    vin   [3],
-                                ConstSpicePlane   * plane,
-                                SpiceDouble         vout  [3] );
-
-
-   void              vprjpi_c ( ConstSpiceDouble    vin    [3],
-                                ConstSpicePlane   * projpl,
-                                ConstSpicePlane   * invpl,
-                                SpiceDouble         vout   [3],
-                                SpiceBoolean      * found       );
-
-
-   void              vproj_c  ( ConstSpiceDouble    a[3],
-                                ConstSpiceDouble    b[3],
-                                SpiceDouble         p[3] );
-
-
-   SpiceDouble       vrel_c   ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3]  );
-
-
-   SpiceDouble       vrelg_c  ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim  );
-
-
-   void              vrotv_c  ( ConstSpiceDouble    v[3],
-                                ConstSpiceDouble    axis[3],
-                                SpiceDouble         theta,
-                                SpiceDouble         r[3] );
-
-
-   void              vscl_c   ( SpiceDouble         s,
-                                ConstSpiceDouble    v1[3],
-                                SpiceDouble         vout[3] );
-
-
-   void              vsclg_c  ( SpiceDouble         s,
-                                ConstSpiceDouble  * v1,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout  );
-
-
-   SpiceDouble       vsep_c   ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3] );
-
-
-   void              vsub_c   ( ConstSpiceDouble    v1[3],
-                                ConstSpiceDouble    v2[3],
-                                SpiceDouble         vout[3] );
-
-
-   void              vsubg_c  ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim,
-                                SpiceDouble       * vout  );
-
-
-   SpiceDouble       vsepg_c  ( ConstSpiceDouble  * v1,
-                                ConstSpiceDouble  * v2,
-                                SpiceInt            ndim );
-
-
-   SpiceDouble       vtmv_c   ( ConstSpiceDouble    v1     [3],
-                                ConstSpiceDouble    matrix [3][3],
-                                ConstSpiceDouble    v2     [3]    );
-
-
-   SpiceDouble       vtmvg_c  ( const void        * v1,
-                                const void        * matrix,
-                                const void        * v2,
-                                SpiceInt            nrow,
-                                SpiceInt            ncol          );
-
-
-   void              vupack_c ( ConstSpiceDouble    v[3],
-                                SpiceDouble       * x,
-                                SpiceDouble       * y,
-                                SpiceDouble       * z     );
-
-   SpiceBoolean      vzero_c  ( ConstSpiceDouble     v[3] );
-
-
-   SpiceBoolean      vzerog_c ( ConstSpiceDouble  * v,
-                                SpiceInt            ndim );
-
-   SpiceInt          wncard_c ( SpiceCell          * window );
-
-   void              wncomd_c ( SpiceDouble          left,
-                                SpiceDouble          right,
-                                SpiceCell          * window,
-                                SpiceCell          * result );
-
-
-   void              wncond_c ( SpiceDouble          left,
-                                SpiceDouble          right,
-                                SpiceCell          * window );
-
-
-   void              wndifd_c ( SpiceCell          * a,
-                                SpiceCell          * b,
-                                 SpiceCell         * c  );
-
-
-   SpiceBoolean      wnelmd_c ( SpiceDouble          point,
-                                SpiceCell          * window );
-
-
-   void              wnexpd_c ( SpiceDouble          left,
-                                SpiceDouble          right,
-                                SpiceCell          * window );
-
-
-   void              wnextd_c ( SpiceChar            side,
-                                SpiceCell          * window );
-
-
-   void              wnfetd_c ( SpiceCell          * window,
-                                SpiceInt             n,
-                                SpiceDouble        * left,
-                                SpiceDouble        * right   );
-
-
-   void              wnfild_c ( SpiceDouble          sml,
-                                SpiceCell          * window );
-
-
-   void              wnfltd_c ( SpiceDouble          sml,
-                                SpiceCell          * window );
-
-
-   SpiceBoolean      wnincd_c ( SpiceDouble          left,
-                                SpiceDouble          right,
-                                SpiceCell          * window  );
-
-
-   void              wninsd_c ( SpiceDouble          left,
-                                SpiceDouble          right,
-                                SpiceCell          * window );
-
-
-   void              wnintd_c ( SpiceCell          * a,
-                                SpiceCell          * b,
-                                SpiceCell          * c  );
-
-
-   SpiceBoolean      wnreld_c ( SpiceCell          * a,
-                                ConstSpiceChar     * op,
-                                SpiceCell          * b   );
-
-
-   void              wnsumd_c ( SpiceCell          * window,
-                                SpiceDouble        * meas,
-                                SpiceDouble        * avg,
-                                SpiceDouble        * stddev,
-                                SpiceInt           * shortest,
-                                SpiceInt           * longest   );
-
-
-   void              wnunid_c ( SpiceCell          * a,
-                                SpiceCell          * b,
-                                SpiceCell          * c  );
-
-
-   void              wnvald_c ( SpiceInt             size,
-                                SpiceInt             n,
-                                SpiceCell          * window );
-
-
-
-   void              xf2eul_c ( ConstSpiceDouble     xform  [6][6],
-                                SpiceInt             axisa,
-                                SpiceInt             axisb,
-                                SpiceInt             axisc,
-                                SpiceDouble          eulang [6],
-                                SpiceBoolean       * unique         );
-
-
-   void              xf2rav_c ( ConstSpiceDouble     xform [6][6],
-                                SpiceDouble          rot   [3][3],
-                                SpiceDouble          av    [3]     );
-
-   void              xfmsta_c ( ConstSpiceDouble     input_state  [6],
-                                ConstSpiceChar    *  input_coord_sys,
-                                ConstSpiceChar    *  output_coord_sys,
-                                ConstSpiceChar    *  body,
-                                SpiceDouble          output_state [6] );
-
-   void              xpose_c  ( ConstSpiceDouble    m1  [3][3],
-                                SpiceDouble         mout[3][3] );
-
-
-   void              xpose6_c ( ConstSpiceDouble    m1  [6][6],
-                                SpiceDouble         mout[6][6] );
-
-
-   void              xposeg_c ( const void        * matrix,
-                                SpiceInt            nrow,
-                                SpiceInt            ncol,
-                                void              * xposem );
-
-
-   void              zzgetcml_c( SpiceInt          * argc,
-                                 SpiceChar       *** argv,
-                                 SpiceBoolean        init );
-
-
-   SpiceBoolean      zzgfgeth_c ( void );
-
-
-   void              zzgfsavh_c( SpiceBoolean        status );
-
-
-   void              zzsynccl_c( SpiceTransDir       xdir,
-                                 SpiceCell         * cell );
-
+void zzsynccl_c(SpiceTransDir xdir, SpiceCell *cell);
 
 #endif

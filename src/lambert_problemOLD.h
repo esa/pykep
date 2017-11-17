@@ -27,7 +27,7 @@
 #define KEP_TOOLBOX_LAMBERT_PROBLEMO_H
 
 #include <cmath>
-#include<vector>
+#include <vector>
 
 #include "astro_constants.h"
 // Serialization code
@@ -35,15 +35,14 @@
 // Serialization code (END)
 #include "config.h"
 
-
-
-
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
 /// Lambert Problem (3 dimensional)
 /**
  * This class represent a Lambert's problem. When instantiated it assumes a prograde orbit (unless otherwise stated)
- * and evaluates all the solutions to the problem calling accordingly the lambert_3D routine with all possible rev numbers
+ * and evaluates all the solutions to the problem calling accordingly the lambert_3D routine with all possible rev
+ * numbers
  * After the object is instantiated the solutions can be retreived using the appropriate getters. Note that the
  * number of solutions will be N_max*2 + 1, where N_max is the maximum number of revolutions as evaluated by the
  * lambert_find_N routine.
@@ -62,63 +61,65 @@ namespace kep_toolbox {
 
 class __KEP_TOOL_VISIBLE lambert_problemOLD
 {
-	static const array3D default_r1;
-	static const array3D default_r2;
+    static const array3D default_r1;
+    static const array3D default_r2;
+
 public:
-	friend std::ostream &operator<<(std::ostream &, const lambert_problemOLD &);
-	lambert_problemOLD(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI/2, const double& mu = 1., const int &cw = 0, const int &multi_revs=5);
-	const std::vector<array3D>& get_v1() const;
-	const std::vector<array3D>& get_v2() const;
-	const array3D& get_r1() const;
-	const array3D& get_r2() const;
-	const double& get_tof() const;
-	const double& get_mu() const;
-	const std::vector<double>& get_a() const;
-	const std::vector<double>& get_p() const;
-	const std::vector<int>& get_iters() const;
-	bool is_reliable() const;
-	int get_Nmax() const;
+    friend std::ostream &operator<<(std::ostream &, const lambert_problemOLD &);
+    lambert_problemOLD(const array3D &r1 = default_r1, const array3D &r2 = default_r2, const double &tof = M_PI / 2,
+                       const double &mu = 1., const int &cw = 0, const int &multi_revs = 5);
+    const std::vector<array3D> &get_v1() const;
+    const std::vector<array3D> &get_v2() const;
+    const array3D &get_r1() const;
+    const array3D &get_r2() const;
+    const double &get_tof() const;
+    const double &get_mu() const;
+    const std::vector<double> &get_a() const;
+    const std::vector<double> &get_p() const;
+    const std::vector<int> &get_iters() const;
+    bool is_reliable() const;
+    int get_Nmax() const;
+
 private:
-// Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & const_cast<array3D&> (m_r1);
-		ar & const_cast<array3D&> (m_r2);
-		ar & const_cast<double&> (m_tof);
-		ar & const_cast<double&> (m_mu);
-		ar & m_lw;
-		ar & m_v1;
-		ar & m_v2;
-		ar & m_iters;
-		ar & m_a;
-		ar & m_p;
-		ar & m_s;
-		ar & m_c;
-		ar & m_iters;
-		ar & m_Nmax;
-		ar & m_has_converged;
-		ar & m_multi_revs;
-	}
-// Serialization code (END)
+    // Serialization code
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &const_cast<array3D &>(m_r1);
+        ar &const_cast<array3D &>(m_r2);
+        ar &const_cast<double &>(m_tof);
+        ar &const_cast<double &>(m_mu);
+        ar &m_lw;
+        ar &m_v1;
+        ar &m_v2;
+        ar &m_iters;
+        ar &m_a;
+        ar &m_p;
+        ar &m_s;
+        ar &m_c;
+        ar &m_iters;
+        ar &m_Nmax;
+        ar &m_has_converged;
+        ar &m_multi_revs;
+    }
+    // Serialization code (END)
 
-	const array3D m_r1, m_r2;
-	const double m_tof;
-	const double m_mu;
-	int m_lw;
-	std::vector<array3D> m_v1;
-	std::vector<array3D> m_v2;
-	std::vector<int> m_iters;
-	std::vector<double> m_a;
-	std::vector<double> m_p;
-	double m_s,m_c;
-	int m_Nmax;
-	bool m_has_converged;
-	int m_multi_revs;
-
+    const array3D m_r1, m_r2;
+    const double m_tof;
+    const double m_mu;
+    int m_lw;
+    std::vector<array3D> m_v1;
+    std::vector<array3D> m_v2;
+    std::vector<int> m_iters;
+    std::vector<double> m_a;
+    std::vector<double> m_p;
+    double m_s, m_c;
+    int m_Nmax;
+    bool m_has_converged;
+    int m_multi_revs;
 };
 __KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problemOLD &);
-} //namespaces
+} // namespaces
 
 #endif // KEP_TOOLBOX_LAMBERT_PROBLEM_H

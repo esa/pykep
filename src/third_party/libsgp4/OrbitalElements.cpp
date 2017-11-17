@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-
 #include "OrbitalElements.h"
 
 #include "Tle.h"
 
-OrbitalElements::OrbitalElements(const Tle& tle)
+OrbitalElements::OrbitalElements(const Tle &tle)
 {
     /*
      * extract and format tle data
@@ -63,4 +62,3 @@ OrbitalElements::OrbitalElements(const Tle& tle)
     perigee_ = (RecoveredSemiMajorAxis() * (1.0 - Eccentricity()) - kAE) * kXKMPER;
     period_ = kTWOPI / RecoveredMeanMotion();
 }
-

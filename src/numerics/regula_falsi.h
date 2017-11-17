@@ -28,39 +28,38 @@
 
 namespace kep_toolbox
 {
-	/// Regula-Falsi method
-	/**
-	 * Simple implementation of the Regula-Falsi method for zero finding.
-	 *
-	 * \param[in] a Starting point 1
-	 * \param[in] a Starting point 2
-	 * \param[in] F equation to be solved in the form F = 0. Needs to be callable as F(x)
-	 *
-	 * @author Dario Izzo (dario.izzo@esa.int)
-	 */
-	template <class my_float, class my_function>
-			int regula_falsi(my_float &a, my_float &b, my_function F,
-				   int max_loop, const double& accuracy)
+/// Regula-Falsi method
+/**
+ * Simple implementation of the Regula-Falsi method for zero finding.
+ *
+ * \param[in] a Starting point 1
+ * \param[in] a Starting point 2
+ * \param[in] F equation to be solved in the form F = 0. Needs to be callable as F(x)
+ *
+ * @author Dario Izzo (dario.izzo@esa.int)
+ */
+template <class my_float, class my_function>
+int regula_falsi(my_float &a, my_float &b, my_function F, int max_loop, const double &accuracy)
 
 {
-	int n=0;
-	double c=0;
-	double Fa=(F)(a);
-	double Fb=(F)(b);
-	double Fc=Fa;
-	while(n<max_loop){
-		if(fabs(Fc)<accuracy) break; //Equation solved within accuracy
-		c=(a*Fb-b*Fa)/(Fb-Fa);
-		Fc = (F)(c);
-		n++;
-		a = b;
-		Fa=Fb;
-		b = c;
-		Fb=Fc;
-	}
-	a=c;
-	b=c;
-	return n;
+    int n = 0;
+    double c = 0;
+    double Fa = (F)(a);
+    double Fb = (F)(b);
+    double Fc = Fa;
+    while (n < max_loop) {
+        if (fabs(Fc) < accuracy) break; // Equation solved within accuracy
+        c = (a * Fb - b * Fa) / (Fb - Fa);
+        Fc = (F)(c);
+        n++;
+        a = b;
+        Fa = Fb;
+        b = c;
+        Fb = Fc;
+    }
+    a = c;
+    b = c;
+    return n;
 }
 }
 
@@ -70,10 +69,10 @@ double func_1(double x) // root is 1.85792
 
 int main()
 {
-	double a = 1; double b=3; int iter;
-	iter = ::kep_toolbox::regula_falsi(a,b,func_1,100,1e-4);
-	std::cout << a << " " << b << " " << iter << std::endl;
-	return 0;
+    double a = 1; double b=3; int iter;
+    iter = ::kep_toolbox::regula_falsi(a,b,func_1,100,1e-4);
+    std::cout << a << " " << b << " " << iter << std::endl;
+    return 0;
 }
 */
 

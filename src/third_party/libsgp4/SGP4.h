@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-
 #ifndef SGP4_H_
 #define SGP4_H_
 
-#include "Tle.h"
-#include "OrbitalElements.h"
-#include "Eci.h"
-#include "SatelliteException.h"
-#include "DecayedException.h"
 #include "../../config.h"
+#include "DecayedException.h"
+#include "Eci.h"
+#include "OrbitalElements.h"
+#include "SatelliteException.h"
+#include "Tle.h"
 
 /**
  * @mainpage
@@ -34,10 +33,10 @@
 /**
  * @brief The simplified perturbations model 4 propagater.
  */
-class __KEP_TOOL_VISIBLE SGP4 {
+class __KEP_TOOL_VISIBLE SGP4
+{
 public:
-    SGP4(const Tle& tle)
-        : elements_(tle)
+    SGP4(const Tle &tle) : elements_(tle)
     {
         Initialise();
     }
@@ -46,13 +45,12 @@ public:
     {
     }
 
-    void SetTle(const Tle& tle);
+    void SetTle(const Tle &tle);
     Eci FindPosition(double tsince) const;
-    Eci FindPosition(const DateTime& date) const;
+    Eci FindPosition(const DateTime &date) const;
 
 private:
-    struct CommonConstants
-    {
+    struct CommonConstants {
         double cosio;
         double sinio;
         double eta;
@@ -71,8 +69,7 @@ private:
         double xmdot;  // secular rate of xmo   (radians/sec)
     };
 
-    struct NearSpaceConstants
-    {
+    struct NearSpaceConstants {
         double c5;
         double omgcof;
         double xmcof;
@@ -86,8 +83,7 @@ private:
         double t5cof;
     };
 
-    struct DeepSpaceConstants
-    {
+    struct DeepSpaceConstants {
         double gsto;
         double zmol;
         double zmos;
@@ -156,15 +152,13 @@ private:
         double del3;
     };
 
-    struct IntegratorValues
-    {
+    struct IntegratorValues {
         double xndot;
         double xnddt;
         double xldot;
     };
 
-    struct IntegratorConstants
-    {
+    struct IntegratorConstants {
         /*
          * integrator constants
          */
@@ -177,8 +171,7 @@ private:
         struct IntegratorValues values_0;
     };
 
-    struct IntegratorParams
-    {
+    struct IntegratorParams {
         /*
          * integrator values
          */
@@ -190,62 +183,25 @@ private:
          */
         struct IntegratorValues values_t;
     };
-    
+
     void Initialise();
     Eci FindPositionSDP4(const double tsince) const;
     Eci FindPositionSGP4(double tsince) const;
-    Eci CalculateFinalPositionVelocity(
-            const double tsince,
-            const double e,
-            const double a,
-            const double omega,
-            const double xl,
-            const double xnode,
-            const double xincl,
-            const double xlcof,
-            const double aycof,
-            const double x3thm1,
-            const double x1mth2,
-            const double x7thm1,
-            const double cosio,
-            const double sinio) const;
-    void DeepSpaceInitialise(
-            const double eosq,
-            const double sinio,
-            const double cosio,
-            const double betao,
-            const double theta2,
-            const double betao2,
-            const double xmdot,
-            const double omgdot,
-            const double xnodot);
-    void DeepSpaceCalculateLunarSolarTerms(
-            const double tsince,
-            double& pe,
-            double& pinc,
-            double& pl,
-            double& pgh,
-            double& ph) const;
-    void DeepSpacePeriodics(
-            const double tsince,
-            double& em,
-            double& xinc,
-            double& omgasm,
-            double& xnodes,
-            double& xll) const;
-    void DeepSpaceSecular(
-            const double tsince,
-            double& xll,
-            double& omgasm,
-            double& xnodes,
-            double& em,
-            double& xinc,
-            double& xn) const;
-    void DeepSpaceCalcDotTerms(struct IntegratorValues& values) const;
-    void DeepSpaceIntegrator(
-            const double delt,
-            const double step2,
-            const struct IntegratorValues& values) const;
+    Eci CalculateFinalPositionVelocity(const double tsince, const double e, const double a, const double omega,
+                                       const double xl, const double xnode, const double xincl, const double xlcof,
+                                       const double aycof, const double x3thm1, const double x1mth2,
+                                       const double x7thm1, const double cosio, const double sinio) const;
+    void DeepSpaceInitialise(const double eosq, const double sinio, const double cosio, const double betao,
+                             const double theta2, const double betao2, const double xmdot, const double omgdot,
+                             const double xnodot);
+    void DeepSpaceCalculateLunarSolarTerms(const double tsince, double &pe, double &pinc, double &pl, double &pgh,
+                                           double &ph) const;
+    void DeepSpacePeriodics(const double tsince, double &em, double &xinc, double &omgasm, double &xnodes,
+                            double &xll) const;
+    void DeepSpaceSecular(const double tsince, double &xll, double &omgasm, double &xnodes, double &em, double &xinc,
+                          double &xn) const;
+    void DeepSpaceCalcDotTerms(struct IntegratorValues &values) const;
+    void DeepSpaceIntegrator(const double delt, const double step2, const struct IntegratorValues &values) const;
     void Reset();
 
     /*

@@ -30,7 +30,7 @@
 
 inline void translate_exceptions()
 {
-	translate_p_exceptions();
+    translate_p_exceptions();
 }
 
 #endif

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
@@ -80,4 +79,3 @@ const double kEPOCH_JAN1_12H_1900 = 2415020.0;
 const double kEPOCH_JAN1_12H_2000 = 2451545.0;
 
 #endif
-

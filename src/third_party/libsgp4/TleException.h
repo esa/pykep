@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #ifndef TLEEXCEPTION_H_
 #define TLEEXCEPTION_H_
 
@@ -32,15 +31,14 @@ public:
      * Constructor
      * @param message Exception message
      */
-    TleException(const char* message)
-        : m_message(message)
+    TleException(const char *message) : m_message(message)
     {
     }
 
     /**
      * Destructor
      */
-    virtual ~TleException(void) throw ()
+    virtual ~TleException(void) throw()
     {
     }
 
@@ -48,7 +46,7 @@ public:
      * Get the exception message
      * @returns the exception message
      */
-    virtual const char* what() const throw ()
+    virtual const char *what() const throw()
     {
         return m_message.c_str();
     }
