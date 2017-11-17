@@ -31,6 +31,20 @@
 #include "array3D_operations.h"
 
 namespace kep_toolbox {
+
+/// From cartesian to osculating Keplerian
+/**
+* Transforms cartesian coordinates (r,v) to Keplerian elements (a,e,i,W,w,E).
+* Note that we use the eccentric anomaly (or Gudermannian if e > 1)
+*
+* @param[in] r0 cartesian position vector.
+* @param[in] v0 cartesian velocity vector.
+* @param[in] mu gravitational parameter.
+* 
+* @param[out] E the osculating Keplerian parameters (a,e,i,W,w,E).
+*
+* Note: this method will be singular if the elements are not defined or around parabolic motion
+*/
 template<class vettore3D, class vettore6D>
 void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6D& E)
 {
@@ -59,8 +73,6 @@ void ic2par(const vettore3D& r0, const vettore3D& v0, const double &mu, vettore6
 	vers( n, n ); // vers(x, y) = unit vector of y -> x
 
     ///4 - We compute evett: the eccentricity vector
-    ///This operation is singular when eccentricity is zero, in which case the orbital parameters
-    ///are not defined
 	R0 = norm( r0 );
 	cross( Dum_Vec, v0, h );
     for (i=0; i<3; i++)
