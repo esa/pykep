@@ -80,7 +80,7 @@ class _direct_base(object):
         traj = self.get_traj(z)
 
         # time
-        t = traj[:, 0] - traj[0,0]
+        t = traj[:, 0] - traj[0, 0]
 
         # throttle
         u = traj[:, 8]
@@ -118,7 +118,7 @@ class _direct_base(object):
 
         Args:
             - z (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
- 
+
         Returns:
             np.array full information on states and controls along the trajectory nodes
         """
@@ -148,24 +148,25 @@ class _direct_base(object):
 
         # control
         u = self._get_controls(z)
-        # since controls are only defined at midpoints we need to add the values at the non midpoint nodes
-        tmp = [0] * len(u)*2
+        # since controls are only defined at midpoints we need to add the
+        # values at the non midpoint nodes
+        tmp = [0] * len(u) * 2
         for i in range(self.nseg):
-            tmp[i*6] = u[i*3]
-            tmp[i*6+1] = u[i*3+1]
-            tmp[i*6+2] = u[i*3+2]
-            tmp[i*6+3] = u[i*3]
-            tmp[i*6+4] = u[i*3+1]
-            tmp[i*6+5] = u[i*3+2]
+            tmp[i * 6] = u[i * 3]
+            tmp[i * 6 + 1] = u[i * 3 + 1]
+            tmp[i * 6 + 2] = u[i * 3 + 2]
+            tmp[i * 6 + 3] = u[i * 3]
+            tmp[i * 6 + 4] = u[i * 3 + 1]
+            tmp[i * 6 + 5] = u[i * 3 + 2]
         tmp.append(u[-3])
         tmp.append(u[-2])
         tmp.append(u[-1])
-        u = np.asarray(tmp, np.float64).reshape((self.nseg*2+1, 3))
+        u = np.asarray(tmp, np.float64).reshape((self.nseg * 2 + 1, 3))
         # throttle
-        umag = np.linalg.norm(u, axis=1).reshape((self.nseg*2+1, 1))
+        umag = np.linalg.norm(u, axis=1).reshape((self.nseg * 2 + 1, 1))
 
         # full dataset [t, x, y, z, vx, vy, vz, m, u, ux, uy, uz]
-        return np.hstack((t.reshape((self.nseg*2+1, 1)), r, v, m.reshape((self.nseg*2+1, 1)), umag, u))
+        return np.hstack((t.reshape((self.nseg * 2 + 1, 1)), r, v, m.reshape((self.nseg * 2 + 1, 1)), umag, u))
 
     def pretty(self, z):
         """
@@ -176,17 +177,20 @@ class _direct_base(object):
 
         Prints human readable information on the trajectory represented by the decision vector x
         """
-        data = self.get_traj(z) 
+        data = self.get_traj(z)
         self._pretty(z)
 
-        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(data[0,1], data[0,2], data[0,3]))
-        print("Spacecraft Initial Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
-        print("Spacecraft Initial Mass  (kg)    : {!r}".format(data[0,7]))
+        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(
+            data[0, 1], data[0, 2], data[0, 3]))
+        print("Spacecraft Initial Velocity (m/s): [{!r}, {!r}, {!r}]".format(
+            data[0, 4], data[0, 5], data[0, 6]))
+        print("Spacecraft Initial Mass  (kg)    : {!r}".format(data[0, 7]))
 
-        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(data[-1,1], data[-1,2], data[-1,3]))
-        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[-1,4], data[-1,5], data[-1,6]))
-        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
-           
+        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(
+            data[-1, 1], data[-1, 2], data[-1, 3]))
+        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(
+            data[-1, 4], data[-1, 5], data[-1, 6]))
+        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1, 7]))
 
 
 class direct_pl2pl(_direct_base):
@@ -321,12 +325,17 @@ class direct_pl2pl(_direct_base):
             self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
 
     def _pretty(self, z):
-        print("\nLow-thrust NEP transfer from " + self.p0.name + " to " + self.pf.name)
-        print("\nLaunch epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0], pk.epoch(z[0])))
-        print("Arrival epoch: {!r} MJD2000, a.k.a. {!r}".format(z[0]+z[1], pk.epoch(z[0]+z[1])))
+        print("\nLow-thrust NEP transfer from " +
+              self.p0.name + " to " + self.pf.name)
+        print("\nLaunch epoch: {!r} MJD2000, a.k.a. {!r}".format(
+            z[0], pk.epoch(z[0])))
+        print("Arrival epoch: {!r} MJD2000, a.k.a. {!r}".format(
+            z[0] + z[1], pk.epoch(z[0] + z[1])))
         print("Time of flight (days): {!r} ".format(z[1]))
-        print("\nLaunch DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(z[3]**2+z[4]**2+z[5]**2) / 1000, z[3] / 1000, z[4] / 1000, z[5] / 1000))
-        print("Arrival DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(z[6]**2+z[7]**2+z[8]**2) / 1000, z[6] / 1000, z[7] / 1000, z[8] / 1000))
+        print("\nLaunch DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(
+            z[3]**2 + z[4]**2 + z[5]**2) / 1000, z[3] / 1000, z[4] / 1000, z[5] / 1000))
+        print("Arrival DV (km/s) {!r} - [{!r},{!r},{!r}]".format(np.sqrt(
+            z[6]**2 + z[7]**2 + z[8]**2) / 1000, z[6] / 1000, z[7] / 1000, z[8] / 1000))
 
     @staticmethod
     def _get_controls(z):

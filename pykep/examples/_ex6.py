@@ -11,25 +11,25 @@ def run_example6(n_seg=5):
     from pykep.examples import add_gradient, algo_factory
     from matplotlib import pyplot as plt
 
-
-    # If you have no access to snopt7, try slsqp (multiple starts may be necessary)
+    # If you have no access to snopt7, try slsqp (multiple starts may be
+    # necessary)
     algo = algo_factory("snopt7")
 
     udp = add_gradient(
-            mr_lt_nep(
-                t0=[9600., 9700.],
-                seq=[gtoc7(5318), gtoc7(14254), gtoc7(7422), gtoc7(5028)],
-                n_seg=n_seg,
-                mass=[800., 2000.],
-                leg_tof=[100., 365.25],
-                rest=[30., 365.25],
-                Tmax=0.3,
-                Isp=3000.,
-                traj_tof=365.25 * 3.,
-                objective='mass',
-                c_tol=1e-05
-            ),
-        with_grad = False)
+        mr_lt_nep(
+            t0=[9600., 9700.],
+            seq=[gtoc7(5318), gtoc7(14254), gtoc7(7422), gtoc7(5028)],
+            n_seg=n_seg,
+            mass=[800., 2000.],
+            leg_tof=[100., 365.25],
+            rest=[30., 365.25],
+            Tmax=0.3,
+            Isp=3000.,
+            traj_tof=365.25 * 3.,
+            objective='mass',
+            c_tol=1e-05
+        ),
+        with_grad=False)
 
     prob = pg.problem(udp)
     prob.c_tol = [1e-5] * prob.get_nc()

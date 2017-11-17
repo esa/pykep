@@ -24,14 +24,14 @@ class mga_1dsm:
        The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.
     """
 
-    def __init__(self, 
-        seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], 
-        t0=[epoch(0), epoch(1000)], 
-        tof=[1.0, 5.0], 
-        vinf=[0.5, 2.5], 
-        add_vinf_dep=False, 
-        add_vinf_arr=True, 
-        multi_objective=False):
+    def __init__(self,
+                 seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
+                 t0=[epoch(0), epoch(1000)],
+                 tof=[1.0, 5.0],
+                 vinf=[0.5, 2.5],
+                 add_vinf_dep=False,
+                 add_vinf_arr=True,
+                 multi_objective=False):
         """
         pykep.trajopt.mga_1dsm(seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
 
@@ -47,7 +47,8 @@ class mga_1dsm:
         # Sanity checks ...... all planets need to have the same
         # mu_central_body
         if ([r.mu_central_body for r in seq].count(seq[0].mu_central_body) != len(seq)):
-            raise ValueError('All planets in the sequence need to have exactly the same mu_central_body')
+            raise ValueError(
+                'All planets in the sequence need to have exactly the same mu_central_body')
         self.__add_vinf_dep = add_vinf_dep
         self.__add_vinf_arr = add_vinf_arr
         self.__n_legs = len(seq) - 1
@@ -69,8 +70,10 @@ class mga_1dsm:
         tof = self._tof
         vinf = self._vinf
         seq = self.seq
-        lb = [t0[0].mjd2000, tof[0]] + [0.0, 0.0, vinf[0] * 1000, 1e-5, 1e-5] + [-2 * pi, 1.1, 1e-5, 1e-5] * (self.__n_legs - 1)
-        ub = [t0[1].mjd2000, tof[1]] + [1.0, 1.0, vinf[1] * 1000, 1.0 - 1e-5, 1.0 - 1e-5] + [2 * pi, 30.0, 1.0 - 1e-5, 1.0 - 1e-5] * (self.__n_legs - 1)
+        lb = [t0[0].mjd2000, tof[0]] + [0.0, 0.0, vinf[0] * 1000, 1e-5,
+                                        1e-5] + [-2 * pi, 1.1, 1e-5, 1e-5] * (self.__n_legs - 1)
+        ub = [t0[1].mjd2000, tof[1]] + [1.0, 1.0, vinf[1] * 1000, 1.0 - 1e-5,
+                                        1.0 - 1e-5] + [2 * pi, 30.0, 1.0 - 1e-5, 1.0 - 1e-5] * (self.__n_legs - 1)
         # Accounting that each planet has a different safe radius......
         for i, pl in enumerate(seq[1:-1]):
             lb[8 + 4 * i] = pl.safe_radius / pl.radius
@@ -108,7 +111,8 @@ class mga_1dsm:
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = propagate_lagrangian(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
+        r, v = propagate_lagrangian(
+            r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[5]) * T[0] * DAY2SEC
@@ -122,12 +126,15 @@ class mga_1dsm:
         # 4 - And we proceed with each successive leg
         for i in range(1, self.__n_legs):
             # Fly-by
-            v_out = fb_prop(v_end_l, v_P[i], x[8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
+            v_out = fb_prop(v_end_l, v_P[i], x[
+                            8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
             # s/c propagation before the DSM
-            r, v = propagate_lagrangian(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
+            r, v = propagate_lagrangian(
+                r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[9 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt, self.common_mu, False, False)
+            l = lambert_problem(r, r_P[i + 1], dt,
+                                self.common_mu, False, False)
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
@@ -173,12 +180,14 @@ class mga_1dsm:
 
         # 3 - We start with the first leg
         print("First Leg: " + self.seq[0].name + " to " + self.seq[1].name)
-        print("Departure: " + str(t_P[0]) + " (" + str(t_P[0].mjd2000) + " mjd2000) ")
+        print("Departure: " + str(t_P[0]) +
+              " (" + str(t_P[0].mjd2000) + " mjd2000) ")
         print("Duration: " + str(T[0]) + "days")
         print("VINF: " + str(x[4] / 1000) + " km/sec")
 
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = propagate_lagrangian(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
+        r, v = propagate_lagrangian(
+            r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
 
         print("DSM after " + str(x[5] * T[0]) + " days")
 
@@ -198,17 +207,20 @@ class mga_1dsm:
                   self.seq[i].name + " to " + self.seq[i + 1].name)
             print("Duration: " + str(T[i]) + "days")
             # Fly-by
-            v_out = fb_prop(v_end_l, v_P[i], x[8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
+            v_out = fb_prop(v_end_l, v_P[i], x[
+                            8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
             print(
                 "Fly-by epoch: " + str(t_P[i]) + " (" + str(t_P[i].mjd2000) + " mjd2000) ")
             print(
                 "Fly-by radius: " + str(x[8 + (i - 1) * 4]) + " planetary radii")
             # s/c propagation before the DSM
-            r, v = propagate_lagrangian(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
+            r, v = propagate_lagrangian(
+                r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             print("DSM after " + str(x[9 + (i - 1) * 4] * T[i]) + " days")
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[9 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt, self.common_mu, False, False)
+            l = lambert_problem(r, r_P[i + 1], dt,
+                                self.common_mu, False, False)
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
@@ -265,13 +277,16 @@ class mga_1dsm:
         for i, planet in enumerate(self.seq):
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = planet.eph(t_P[i])
-            plot_planet(planet, t0=t_P[i], color=(0.8, 0.6, 0.8), legend=True, units = AU, ax=axis)
+            plot_planet(planet, t0=t_P[i], color=(
+                0.8, 0.6, 0.8), legend=True, units=AU, ax=axis)
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = propagate_lagrangian(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
+        r, v = propagate_lagrangian(
+            r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu)
 
-        plot_kepler(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu, N=100, color='b', legend=False, units=AU, ax=axis)
+        plot_kepler(r_P[0], v0, x[5] * T[0] * DAY2SEC, self.common_mu,
+                    N=100, color='b', legend=False, units=AU, ax=axis)
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[5]) * T[0] * DAY2SEC
@@ -286,15 +301,20 @@ class mga_1dsm:
         # 4 - And we proceed with each successive leg
         for i in range(1, self.__n_legs):
             # Fly-by
-            v_out = fb_prop(v_end_l, v_P[i], x[8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
+            v_out = fb_prop(v_end_l, v_P[i], x[
+                            8 + (i - 1) * 4] * self.seq[i].radius, x[7 + (i - 1) * 4], self.seq[i].mu_self)
             # s/c propagation before the DSM
-            r, v = propagate_lagrangian(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
-            plot_kepler(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu, N=100, color='b', legend=False, units=AU, ax=axis)
+            r, v = propagate_lagrangian(
+                r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
+            plot_kepler(r_P[i], v_out, x[9 + (i - 1) * 4] * T[i] * DAY2SEC,
+                        self.common_mu, N=100, color='b', legend=False, units=AU, ax=axis)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[9 + (i - 1) * 4]) * T[i] * DAY2SEC
 
-            l = lambert_problem(r, r_P[i + 1], dt, self.common_mu, False, False)
-            plot_lambert(l, sol=0, color='r', legend=False, units=AU, N=1000, ax=axis)
+            l = lambert_problem(r, r_P[i + 1], dt,
+                                self.common_mu, False, False)
+            plot_lambert(l, sol=0, color='r', legend=False,
+                         units=AU, N=1000, ax=axis)
 
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]

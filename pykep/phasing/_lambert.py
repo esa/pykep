@@ -17,7 +17,7 @@ class lambert_metric(base):
     The result is a pygmo multi-objective problem that can be solved efficiently by MO optimization algorithms
     """
 
-    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500):
+    def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax=0.3, Isp=3000, ms=1500):
         """
 pykep.phasing.lambert_metric(epoch_bounds,A1, A2, max_acc, multi_objective)
 
@@ -37,7 +37,8 @@ Example::
         # First we call the constructor of the base class telling
         # essentially to pygmo what kind of problem to expect (2 objective, 0
         # contraints etc.)
-        super(lambert_metric, self).__init__(2, 0, 1 + (not single_objective), 0, 0, 0)
+        super(lambert_metric, self).__init__(
+            2, 0, 1 + (not single_objective), 0, 0, 0)
 
         # then we set the problem bounds (in this case equal for all
         # components)
@@ -64,7 +65,8 @@ Example::
         r2, v2 = self._ast2.eph(x[1])
 
         # 3 - We compute Lambert arc
-        l = lambert_problem(r1, r2, (x[1] - x[0]) * DAY2SEC, self._ast1.mu_central_body, False, 0)
+        l = lambert_problem(
+            r1, r2, (x[1] - x[0]) * DAY2SEC, self._ast1.mu_central_body, False, 0)
 
         # 4 - We compute the two impulses
         v1l = l.get_v1()[0]
@@ -78,7 +80,8 @@ Example::
         g0 = 9.80665
         Tmax = self._Tmax
         ms = self._ms
-        MIMA = 2 * Tmax / norm(a1) / (1. + exp(-norm(a1) * (x[1] - x[0]) * DAY2SEC / Isp / g0) )
+        MIMA = 2 * Tmax / norm(a1) / (1. + exp(-norm(a1)
+                                               * (x[1] - x[0]) * DAY2SEC / Isp / g0))
 
         DV1 = sum([l * l for l in DV1])
         DV2 = sum([l * l for l in DV2])
@@ -116,7 +119,8 @@ Example::
             dep, arr = ind.cur_x
             rdep, vdep = A1.eph(epoch(dep))
             rarr, varr = A2.eph(epoch(arr))
-            l = lambert_problem(rdep, rarr, (arr - dep) * DAY2SEC, A1.mu_central_body, False, 1)
+            l = lambert_problem(rdep, rarr, (arr - dep) *
+                                DAY2SEC, A1.mu_central_body, False, 1)
             axis = plot_lambert(l, ax=axis, alpha=0.8, color='k')
 
         if ax is None:
@@ -129,7 +133,8 @@ Example::
         from mpl_toolkits.mplot3d import Axes3D
 
         if pop.champion.f[0] == self._UNFEASIBLE:
-            raise Exception('Input population contains only unfeasible individuals')
+            raise Exception(
+                'Input population contains only unfeasible individuals')
 
         rx, ry = self._compute_ref_point()
         axis = pop.plot_pareto_fronts()
@@ -143,12 +148,13 @@ Example::
 
     def compute_hypervolume(self, pop):
         if pop.champion.f[0] == self._UNFEASIBLE:
-            raise Exception('Input population contains only unfeasible individuals')
+            raise Exception(
+                'Input population contains only unfeasible individuals')
         hv = hypervolume(pop)
         return (hv.compute(self._compute_ref_point()) * DAY2SEC / AU)
 
     def _compute_ref_point(self):
-        rx = self._Tmax/self._ms * DAY2SEC * (self.ub[0] - self.lb[0])
+        rx = self._Tmax / self._ms * DAY2SEC * (self.ub[0] - self.lb[0])
         ry = self.ub[0]
         return (rx, ry)
 

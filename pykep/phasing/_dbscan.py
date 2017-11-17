@@ -4,7 +4,7 @@ class dbscan():
     Essentially, it locates planet clusters
     """
     from pykep.core import AU, EARTH_VELOCITY
-    
+
     def _axis_equal_3d(self, ax):
         """Rescales 3D axis limits using equal scale."""
         import numpy
@@ -63,7 +63,8 @@ class dbscan():
             scaling_vector = [ref_r] * 3
         elif metric == 'orbital':
             self._T = T
-            self._X = [self._orbital_metric(*p.eph(self._epoch)) for p in self._asteroids]
+            self._X = [self._orbital_metric(
+                *p.eph(self._epoch)) for p in self._asteroids]
             scaling_vector = [1.] * 6  # no scaling
         self._X = numpy.array(self._X)
 
@@ -147,7 +148,8 @@ class dbscan():
             print("No clusters have been found yet")
             return
         if cluster_id >= self.n_clusters or cluster_id < 0:
-            print("cluster_id should be larger then 0 and smaller than the number of clusters (-1)")
+            print(
+                "cluster_id should be larger then 0 and smaller than the number of clusters (-1)")
             return
         if len(epochs) != 9:
             print("The epochs requested must be exactly 9 as to assemble 3x3 subplots")

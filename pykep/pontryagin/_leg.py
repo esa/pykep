@@ -501,7 +501,6 @@ class leg(object):
         # controls
         u = np.asarray([self._dynamics._pontryagin(fs)
                         for fs in self.trajectory])
-        
 
         # get Hamiltonian
         H = np.asarray([self._dynamics._hamiltonian(fs)
@@ -520,7 +519,7 @@ class leg(object):
 
         return traj
 
-    def plot_traj(self, axes, mark="k", atol=1e-11, rtol=1e-11, units=AU, quiver = False, length = 1):
+    def plot_traj(self, axes, mark="k", atol=1e-11, rtol=1e-11, units=AU, quiver=False, length=1):
         """Plots trajectory onto a 3D axis.
 
         Args:
@@ -575,22 +574,23 @@ class leg(object):
 
         # plot trajectory
         axes.plot(traj[:, 0], traj[:, 1], traj[:, 2], mark)
-        
 
         if quiver:
             thrusts = full_data[:, 17:20]
             magnitudes = full_data[:, 16]
-            thrusts[:,0] = thrusts[:,0] * magnitudes
-            thrusts[:,1] = thrusts[:,1] * magnitudes
-            thrusts[:,2] = thrusts[:,2] * magnitudes
+            thrusts[:, 0] = thrusts[:, 0] * magnitudes
+            thrusts[:, 1] = thrusts[:, 1] * magnitudes
+            thrusts[:, 2] = thrusts[:, 2] * magnitudes
 
             axes.set_aspect("equal")
             xlim = axes.get_xlim()
             zlim = axes.get_zlim()
-            ratio = (xlim[1] - xlim[0])/(zlim[1] - zlim[0])
-            thrusts[:,2] = thrusts[:,2] / ratio # to compensate for non equal z axes
+            ratio = (xlim[1] - xlim[0]) / (zlim[1] - zlim[0])
+            # to compensate for non equal z axes
+            thrusts[:, 2] = thrusts[:, 2] / ratio
 
-            axes.quiver(traj[:, 0], traj[:, 1], traj[:, 2], thrusts[:, 0], thrusts[:, 1], thrusts[:, 2], color= 'r', length=length, normalize=False, arrow_length_ratio=0.00, alpha=0.6)
+            axes.quiver(traj[:, 0], traj[:, 1], traj[:, 2], thrusts[:, 0], thrusts[:, 1], thrusts[
+                        :, 2], color='r', length=length, normalize=False, arrow_length_ratio=0.00, alpha=0.6)
 
         return axes
 

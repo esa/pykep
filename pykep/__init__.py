@@ -1,7 +1,8 @@
 ###########################################################
 # We check what extensions are available
 ###########################################################
-__extensions__ = {'matplotlib': False, 'mplot3d': False, 'pygmo': False, 'scikit-learn': False, 'scipy': False}
+__extensions__ = {'matplotlib': False, 'mplot3d': False,
+                  'pygmo': False, 'scikit-learn': False, 'scipy': False}
 # 1 - matplotlib
 try:
     from matplotlib import __version__ as matplotlib_ver
@@ -41,16 +42,17 @@ except ImportError:
 # We import the submodules
 ###########################################################
 
-# For convenience, bring all core classes into the root namespace when importing *.
+# For convenience, bring all core classes into the root namespace when
+# importing *.
 from pykep.core import *
 from pykep import core, sims_flanagan, pontryagin, orbit_plots, examples, phasing, util, planet, trajopt
-
 
 
 ###########################################################
 # We define pykep module
 ###########################################################
 __doc__ = 'pykep is the answer ... but what was the question?'
-__all__ = ['core', 'sims_flanagan', 'pontryagin', 'orbit_plots', 'examples', 'trajopt', 'phasing', 'util', 'planet']
+__all__ = ['core', 'sims_flanagan', 'pontryagin', 'orbit_plots',
+           'examples', 'trajopt', 'phasing', 'util', 'planet']
 __version__ = {'major': 1, 'minor': 3, 'bugfix': 9}
 __all__ += [name for name in dir(core) if not name.startswith('_')]

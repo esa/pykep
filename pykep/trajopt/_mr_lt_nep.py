@@ -24,7 +24,8 @@ class mr_lt_nep(object):
 
     def __init__(
             self,
-            seq=[pk.planet.gtoc7(3413), pk.planet.gtoc7(234), pk.planet.gtoc7(11432)],
+            seq=[pk.planet.gtoc7(3413), pk.planet.gtoc7(
+                234), pk.planet.gtoc7(11432)],
             n_seg=5,
             t0=[13000, 13200],
             leg_tof=[1, 365.25 * 3],
@@ -83,7 +84,8 @@ class mr_lt_nep(object):
             leg.set_mu(pk.MU_SUN)
 
         if objective not in ['mass', 'time']:
-            raise ValueError("Error in defining the objective. Was it one of mass or time?")
+            raise ValueError(
+                "Error in defining the objective. Was it one of mass or time?")
         self.__objective = objective
 
     def fitness(self, x_full):
@@ -114,7 +116,8 @@ class mr_lt_nep(object):
             xe = pk.sims_flanagan.sc_state(r, v, x[3])
 
             # Building the SF leg
-            self.__legs[i].set_spacecraft(pk.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
+            self.__legs[i].set_spacecraft(
+                pk.sims_flanagan.spacecraft(sc_mass, .3, 3000.))
             self.__legs[i].set(start, x0, x[-3 * self.__nseg:], end, xe)
 
             # Setting all constraints
@@ -132,11 +135,13 @@ class mr_lt_nep(object):
             sc_mass = x[3]  # update mass to final mass of leg
 
             if i < self.__num_legs - 1:
-                x_next = x_full[(i + 1) * self.__dim_leg:(i + 2) * self.__dim_leg]
+                x_next = x_full[
+                    (i + 1) * self.__dim_leg:(i + 2) * self.__dim_leg]
                 time_ineq = x[0] + x[1] + x[2] - x_next[0]
                 ineqs.append(time_ineq / 365.25)
             else:
-                final_time_ineq = x[0] + x[1] + x[2] - x_full[0] - x_full[-1]  # <- total time
+                final_time_ineq = x[0] + x[1] + x[2] - \
+                    x_full[0] - x_full[-1]  # <- total time
                 ineqs.append(final_time_ineq / 365.25)
 
         retval = retval + eqs + ineqs
@@ -153,11 +158,13 @@ class mr_lt_nep(object):
         # We set the ptoblem box-bounds
         # set leg bounds
         lb_leg = [t0[0], leg_tof[0], rest[0], mass[0]] + [-1] * nseg * 3
-        ub_leg = [t0[1] + traj_tof * n, leg_tof[1], rest[1], mass[1]] + [1] * nseg * 3
+        ub_leg = [t0[1] + traj_tof * n, leg_tof[1],
+                  rest[1], mass[1]] + [1] * nseg * 3
 
         # set n leg bounds
         lb = lb_leg * n
-        ub = [t0[1], leg_tof[1], rest[1], mass[1]] + [1] * nseg * 3 + ub_leg * (n - 1)
+        ub = [t0[1], leg_tof[1], rest[1], mass[1]] + \
+            [1] * nseg * 3 + ub_leg * (n - 1)
 
         # set total time bounds
         lb += [1.]
@@ -209,15 +216,16 @@ class mr_lt_nep(object):
         # Plotting the pykep.planet both at departure and arrival dates
         for i in range(self.__num_legs):
             idx = i * self.__dim_leg
-            plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(0.7, 0.7, 0.7), s=30, ax=axis)
-            plot_planet(self.__seq[i + 1], epoch(x[idx] + x[idx + 1]), units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, ax=axis)
+            plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(
+                0.7, 0.7, 0.7), s=30, ax=axis)
+            plot_planet(self.__seq[i + 1], epoch(x[idx] + x[idx + 1]),
+                        units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, ax=axis)
 
         # Computing the legs
         self.fitness(x)
 
         # Plotting the legs
         for leg in self.__legs:
-            plot_sf_leg(leg, units=AU, N=10, ax=axis, legend = False)
-
+            plot_sf_leg(leg, units=AU, N=10, ax=axis, legend=False)
 
         return axis

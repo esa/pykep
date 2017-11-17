@@ -103,7 +103,7 @@ class _dynamics(object):
             -ly,
             -lz,
             ix * lvx * x12 + iy * lvy * x12 + iz * lvz * x12,
-            self.alpha*u + (1 - self.alpha)*u**2
+            self.alpha * u + (1 - self.alpha) * u**2
         ])
 
         return dfs

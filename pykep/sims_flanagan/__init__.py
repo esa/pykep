@@ -195,7 +195,8 @@ def _leg_eph(self, t, debug=False):
 
     # We check that the leg is high fidelity, otherwise this makes little sense
     if not self.high_fidelity:
-        raise ValueError("The eph method works only for high fidelity legs at the moment")
+        raise ValueError(
+            "The eph method works only for high fidelity legs at the moment")
 
     # Extract some information from the leg
     mu = self.get_mu()
@@ -211,7 +212,8 @@ def _leg_eph(self, t, debug=False):
             raise ValueError("DEBUG!!!!")
         return r[idx], v[idx], m[idx]
 
-    # Find the index to start from (need to account for the midpoint repetition)
+    # Find the index to start from (need to account for the midpoint
+    # repetition)
     idx = bisect(t_grid, t0) - 1
 
     # We compute the number of segments of forward propagation

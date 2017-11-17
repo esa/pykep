@@ -36,6 +36,7 @@ Example::
 keplerian._orig_init = keplerian.__init__
 keplerian.__init__ = _keplerian_ctor
 
+
 def _j2_ctor(self, *args):
     """
 pykep.planet.j2(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius, J2RG2 [, name = 'unknown'])

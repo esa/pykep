@@ -322,7 +322,8 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v, m = propagate_taylor_disturbance(r, v, m, thrust, disturbance, dt, mu, veff, -10, -10)
+        r, v, m = propagate_taylor_disturbance(
+            r, v, m, thrust, disturbance, dt, mu, veff, -10, -10)
 
     # And we plot
     if legend:
@@ -429,7 +430,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         if leg.high_fidelity is False:
             dV = [max_thrust / m * dt * dumb for dumb in t.value]
             if plot_line:
-                plot_kepler(r, v, dt / 2, mu, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                plot_kepler(r, v, dt / 2, mu, N=N, units=units,
+                            color=(alpha, 0, 1 - alpha), ax=axis)
             r, v = propagate_lagrangian(r, v, dt / 2, mu)
             x[2 * i + 1] = r[0] / units
             y[2 * i + 1] = r[1] / units
@@ -437,7 +439,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             # v= v+dV
             v = [a + b for a, b in zip(v, dV)]
             if plot_line:
-                plot_kepler(r, v, dt / 2, mu, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                plot_kepler(r, v, dt / 2, mu, N=N, units=units,
+                            color=(alpha, 0, 1 - alpha), ax=axis)
             r, v = propagate_lagrangian(r, v, dt / 2, mu)
             x[2 * i + 2] = r[0] / units
             y[2 * i + 2] = r[1] / units
@@ -447,14 +450,18 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         else:
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
-                plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
+                plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N,
+                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+            r, v, m = propagate_taylor(
+                r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 1] = r[0] / units
             y[2 * i + 1] = r[1] / units
             z[2 * i + 1] = r[2] / units
             if plot_line:
-                plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
+                plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N,
+                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+            r, v, m = propagate_taylor(
+                r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 2] = r[0] / units
             y[2 * i + 2] = r[1] / units
             z[2 * i + 2] = r[2] / units
@@ -466,9 +473,12 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     y_midpoint = y[1::2]
     z_midpoint = z[1::2]
     if plot_segments:
-        axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1], label='nodes', marker='o')
-        axis.scatter(x_midpoint, y_midpoint, z_midpoint, label='mid-points', marker='x')
-        axis.scatter(x_grid[-1], y_grid[-1], z_grid[-1], marker='^', c='y', label='mismatch point')
+        axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1],
+                     label='nodes', marker='o')
+        axis.scatter(x_midpoint, y_midpoint, z_midpoint,
+                     label='mid-points', marker='x')
+        axis.scatter(x_grid[-1], y_grid[-1], z_grid[-1],
+                     marker='^', c='y', label='mismatch point')
 
     # Backward propagation
 
@@ -493,7 +503,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         if leg.high_fidelity is False:
             dV = [max_thrust / m * dt * dumb for dumb in t.value]
             if plot_line:
-                plot_kepler(r, v, -dt / 2, mu, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                plot_kepler(r, v, -dt / 2, mu, N=N, units=units,
+                            color=(alpha, 0, 1 - alpha), ax=axis)
             r, v = propagate_lagrangian(r, v, -dt / 2, mu)
             x[-2 * i - 2] = r[0] / units
             y[-2 * i - 2] = r[1] / units
@@ -501,7 +512,8 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             # v= v+dV
             v = [a - b for a, b in zip(v, dV)]
             if plot_line:
-                plot_kepler(r, v, -dt / 2, mu, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                plot_kepler(r, v, -dt / 2, mu, N=N, units=units,
+                            color=(alpha, 0, 1 - alpha), ax=axis)
             r, v = propagate_lagrangian(r, v, -dt / 2, mu)
             x[-2 * i - 3] = r[0] / units
             y[-2 * i - 3] = r[1] / units
@@ -510,14 +522,18 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         else:
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
-                plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
+                plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N,
+                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+            r, v, m = propagate_taylor(
+                r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 2] = r[0] / units
             y[-2 * i - 2] = r[1] / units
             z[-2 * i - 2] = r[2] / units
             if plot_line:
-                plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N, units=units, color=(alpha, 0, 1 - alpha), ax=axis)
-            r, v, m = propagate_taylor(r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
+                plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N,
+                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+            r, v, m = propagate_taylor(
+                r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 3] = r[0] / units
             y[-2 * i - 3] = r[1] / units
             z[-2 * i - 3] = r[2] / units
@@ -530,9 +546,12 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     z_midpoint = z[1::2]
 
     if plot_segments:
-        axis.scatter(x_grid[1:], y_grid[1:], z_grid[1:], marker='o', label='nodes')
-        axis.scatter(x_midpoint, y_midpoint, z_midpoint, marker='x', label='mid-points')
-        axis.scatter(x_grid[0], y_grid[0], z_grid[0], marker='^', c='y', label='mismatch point')
+        axis.scatter(x_grid[1:], y_grid[1:], z_grid[
+                     1:], marker='o', label='nodes')
+        axis.scatter(x_midpoint, y_midpoint, z_midpoint,
+                     marker='x', label='mid-points')
+        axis.scatter(x_grid[0], y_grid[0], z_grid[0],
+                     marker='^', c='y', label='mismatch point')
 
     if legend:
         axis.legend()

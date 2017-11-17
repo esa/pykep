@@ -1,9 +1,13 @@
 # We define a meta-problem augmenting a generic UDP with a numercial gradient so that algorithms
 # needing the gradient can be used. Note that algorithm such as snopt7 have an internal system to compute gradients
-# in case the problem is fed to it without. Hence the kwarg with_grad is provided to deactivate the gradient.
+# in case the problem is fed to it without. Hence the kwarg with_grad is
+# provided to deactivate the gradient.
 
 import pygmo as pg
+
+
 class add_gradient:
+
     def __init__(self, udp, with_grad=False):
         self.udp_inner = udp
         self.prob = pg.problem(udp)
@@ -31,8 +35,11 @@ class add_gradient:
     def has_gradient(self):
         return self.with_grad
 
-# We define a utility class that sets the algorithm to be used (in pagmo's terminology the UDA or user defined algorithm).
-def algo_factory(name, original_screen_output = True):
+# We define a utility class that sets the algorithm to be used (in pagmo's
+# terminology the UDA or user defined algorithm).
+
+
+def algo_factory(name, original_screen_output=True):
     if name is "slsqp":
         uda = pg.nlopt('slsqp')
         uda.xtol_rel = 1e-5
@@ -64,7 +71,8 @@ def algo_factory(name, original_screen_output = True):
         return algo
     elif name is "snopt7":
         import pygmo_plugins_nonfree as pg7
-        uda = pg7.snopt7(original_screen_output, "/usr/local/lib/libsnopt7_c.so")
+        uda = pg7.snopt7(original_screen_output,
+                         "/usr/local/lib/libsnopt7_c.so")
         uda.set_integer_option("Major iterations limit", 2000)
         uda.set_integer_option("Iterations limit", 200000)
         uda.set_numeric_option("Major optimality tolerance", 1e-2)

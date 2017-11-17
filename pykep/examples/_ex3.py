@@ -1,5 +1,6 @@
 import pykep as pk
 
+
 class mga_lt_EVMe(object):
 
     """
@@ -40,8 +41,11 @@ class mga_lt_EVMe(object):
         return self.__nseg1 + self.__nseg2 + 3
 
     def get_bounds(self):
-        lb = [3000, 100, self.__mass / 2] + [-self.__Vinf_dep] * 3 + [-6000] * 3 + [200, self.__mass / 9] + [-6000] * 3 + [-self.__Vinf_arr] * 3 + [-1, -1, -1] * (self.__nseg1 + self.__nseg2)
-        ub = [4000, 1000, self.__mass] + [self.__Vinf_dep] * 3 + [6000] * 3 + [2000, self.__mass] + [6000] * 3 + [self.__Vinf_arr] * 3 + [1, 1, 1] * (self.__nseg1 + self.__nseg2)
+        lb = [3000, 100, self.__mass / 2] + [-self.__Vinf_dep] * 3 + [-6000] * 3 + [200, self.__mass /
+                                                                                    9] + [-6000] * 3 + [-self.__Vinf_arr] * 3 + [-1, -1, -1] * (self.__nseg1 + self.__nseg2)
+        ub = [4000, 1000, self.__mass] + [self.__Vinf_dep] * 3 + [6000] * 3 + [2000, self.__mass] + \
+            [6000] * 3 + [self.__Vinf_arr] * 3 + \
+            [1, 1, 1] * (self.__nseg1 + self.__nseg2)
         return (lb, ub)
 
     # This is the objective function
@@ -79,10 +83,10 @@ class mga_lt_EVMe(object):
         # Defining the constraints
         # departure
         v_dep_con = (x[3] * x[3] + x[4] * x[4] + x[5] * x[5] -
-                        self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
+                     self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
         # arrival
         v_arr_con = (x[14] * x[14] + x[15] * x[15] + x[16] * x[16] -
-                        self.__Vinf_arr * self.__Vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
+                     self.__Vinf_arr * self.__Vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
         # fly-by at Venus
         DV_eq, alpha_ineq = fb_con(x[6:9], x[11:14], self.__venus)
 
@@ -153,11 +157,11 @@ class mga_lt_EVMe(object):
         plot_sf_leg(self.__leg2, units=AU, N=10, ax=axis)
         # The planets
         plot_planet(
-            self.__earth, t_E, units=AU, legend=True, color=(0.7, 0.7, 1), ax = axis)
+            self.__earth, t_E, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
         plot_planet(
-            self.__venus, t_V, units=AU, legend=True, color=(0.7, 0.7, 1), ax = axis)
+            self.__venus, t_V, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
         plot_planet(
-            self.__mercury, t_M, units=AU, legend=True, color=(0.7, 0.7, 1), ax = axis)
+            self.__mercury, t_M, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
         plt.show()
 
 """
@@ -167,6 +171,8 @@ problem that uses the Sims-Flanagan transcription to model the low-thrust trajec
 are also demonstrated via the plot method. The interplanetary mission modelled is an LT-MGA Earth-Venus-Mercury mission.
 
 """
+
+
 def run_example3():
     import pygmo as pg
     from pykep.examples import add_gradient, algo_factory
@@ -190,7 +196,7 @@ def run_example3():
     pop = algo.evolve(pop)
 
     print("Is the solution found a feasible trajectory? " +
-            str(prob.feasibility_x(pop.champion_x)))
+          str(prob.feasibility_x(pop.champion_x)))
     udp.udp_inner.plot(pop.champion_x)
 
 if __name__ == "__main__":

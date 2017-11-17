@@ -4,6 +4,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+
 class _indirect_base(object):
     """Base class for indirect trajectory optimisation problems.
 
@@ -33,14 +34,13 @@ class _indirect_base(object):
             raise TypeError(
                 "Both atol and rtol must be an instance of either float or int.")
 
-
     def get_nobj(self):
         return 1
 
     def get_nec(self):
         return self.leg.nec
 
-    def plot_traj(self, z, mark="k", atol=1e-12, rtol=1e-12, units=pk.AU, axes = None, quiver = False, length = 1):
+    def plot_traj(self, z, mark="k", atol=1e-12, rtol=1e-12, units=pk.AU, axes=None, quiver=False, length=1):
         """This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.
 
         Args:
@@ -71,11 +71,12 @@ class _indirect_base(object):
         axes.scatter([0], [0], [0], color='y')
 
         # leg
-        self.leg.plot_traj(axes, mark, atol, rtol, units, quiver=quiver, length = length)
+        self.leg.plot_traj(axes, mark, atol, rtol, units,
+                           quiver=quiver, length=length)
 
         return axes
 
-    def plot_control(self, z, mark="k.-", atol=1e-12, rtol=1e-12, axes = None):
+    def plot_control(self, z, mark="k.-", atol=1e-12, rtol=1e-12, axes=None):
         """Plots the control profile of the trajectory, as a function of time.
 
         Args:
@@ -95,7 +96,8 @@ class _indirect_base(object):
             axes = fig.gca()
 
         # leg
-        self.leg.plot('tof', 'u', mark=mark, atol=atol, rtol=rtol, xlabel="Time [mjd2000]", ylabel="Throttle [ND]", axes = axes)
+        self.leg.plot('tof', 'u', mark=mark, atol=atol, rtol=rtol,
+                      xlabel="Time [mjd2000]", ylabel="Throttle [ND]", axes=axes)
 
         return axes
 
@@ -114,9 +116,11 @@ class _indirect_base(object):
         # set leg
         self.fitness(z)
 
-        # get states [t, x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm, umag, ux, uy, uz, H]
+        # get states [t, x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm,
+        # umag, ux, uy, uz, H]
         x = self.leg.get_states()
-        # we make sure the throttles have the correct magnitude (get_states returns a direction as defined by the primer)
+        # we make sure the throttles have the correct magnitude (get_states
+        # returns a direction as defined by the primer)
         for t in x:
             t[-4] *= t[-5]
             t[-3] *= t[-5]
@@ -124,17 +128,23 @@ class _indirect_base(object):
         return x
 
     def pretty(self, z):
-        data = self.get_traj(z) 
+        data = self.get_traj(z)
         self._pretty(z)
 
-        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(data[0,1], data[0,2], data[0,3]))
-        print("Spacecraft Initial Velocity (m/s)  : [{!r}, {!r}, {!r}]".format(data[0,4], data[0,5], data[0,6]))
-        print("Spacecraft Initial Mass  (kg)      : {!r}".format(data[0,7]))
+        print("\nSpacecraft Initial Position (m)  : [{!r}, {!r}, {!r}]".format(
+            data[0, 1], data[0, 2], data[0, 3]))
+        print("Spacecraft Initial Velocity (m/s)  : [{!r}, {!r}, {!r}]".format(
+            data[0, 4], data[0, 5], data[0, 6]))
+        print("Spacecraft Initial Mass  (kg)      : {!r}".format(data[0, 7]))
 
-        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(data[-1,1], data[-1,2], data[-1,3]))
-        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(data[-1,4], data[-1,5], data[-1,6]))
-        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1,7]))
-        print("Used propellant  (kg)          : {!r}".format(data[0,7] - data[-1,7]))
+        print("Spacecraft Final Position (m)  : [{!r}, {!r}, {!r}]".format(
+            data[-1, 1], data[-1, 2], data[-1, 3]))
+        print("Spacecraft Final Velocity (m/s): [{!r}, {!r}, {!r}]".format(
+            data[-1, 4], data[-1, 5], data[-1, 6]))
+        print("Spacecraft Final Mass  (kg)    : {!r}".format(data[-1, 7]))
+        print("Used propellant  (kg)          : {!r}".format(
+            data[0, 7] - data[-1, 7]))
+
 
 class indirect_pt2pt(_indirect_base):
     """
@@ -147,18 +157,21 @@ class indirect_pt2pt(_indirect_base):
         z = [T, l0]
 
     """
-    def __init__(self, 
-        x0 = [-51051524893.335152, -142842795180.97464, 1139935.2553601924, 30488.847061907356, -10612.482697050367, -204.23284335657095, 1000],
-        xf = [24753885674.871033, 231247560000.17883, 4236305010.4256544, -23171.900670190855, 4635.6817290400222, 666.44019588506023, 910.48383959441833],
-        thrust = 0.3,
-        isp = 3000,
-        mu = pk.MU_SUN,
-        tof=[276.15166075931495, 276.15166075931495],
-        freetime=False, 
-        alpha=0,    # quadratic control
-        bound = False, 
-        atol=1e-12, 
-        rtol=1e-12):
+
+    def __init__(self,
+                 x0=[-51051524893.335152, -142842795180.97464, 1139935.2553601924,
+                     30488.847061907356, -10612.482697050367, -204.23284335657095, 1000],
+                 xf=[24753885674.871033, 231247560000.17883, 4236305010.4256544, -
+                     23171.900670190855, 4635.6817290400222, 666.44019588506023, 910.48383959441833],
+                 thrust=0.3,
+                 isp=3000,
+                 mu=pk.MU_SUN,
+                 tof=[276.15166075931495, 276.15166075931495],
+                 freetime=False,
+                 alpha=0,    # quadratic control
+                 bound=False,
+                 atol=1e-12,
+                 rtol=1e-12):
         """
         Constructs an instance of the ``pykep.trajopt.indirect_pt2pt`` problem.
 
@@ -178,9 +191,11 @@ class indirect_pt2pt(_indirect_base):
 
         # Cartesian states
         if not all([(isinstance(x, list) or isinstance(x, tuple) or isinstance(x, np.ndarray)) for x in [x0, xf]]):
-            raise TypeError("Both x0 and xf must be supplied as an instance of either list, tuple, or numpy.ndarray.")
+            raise TypeError(
+                "Both x0 and xf must be supplied as an instance of either list, tuple, or numpy.ndarray.")
         elif not all([len(x) == 7 for x in [x0, xf]]):
-            raise TypeError("Both x0 and xf must be supplied with 7 dimensions.")
+            raise TypeError(
+                "Both x0 and xf must be supplied with 7 dimensions.")
         else:
             self.x0 = pk.sims_flanagan.sc_state()
             self.x0.set(x0)
@@ -232,16 +247,18 @@ class indirect_pt2pt(_indirect_base):
         elemf = list(pk.ic2par(xf[0:3], xf[3:6], self.leg.mu))
 
         # Converts the eccentric anomaly into eccentric anomaly
-        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
-        elemf[5]  = elemf[5] - elemf[1] * np.sin(elemf[5])
+        elem0[5] = elem0[5] - elem0[1] * np.sin(elem0[5])
+        elemf[5] = elemf[5] - elemf[1] * np.sin(elemf[5])
 
         # Creates two virtual keplerian planets with the said elements
         kep0 = pk.planet.keplerian(t0, elem0)
         kepf = pk.planet.keplerian(tf, elemf)
 
         # Plots the departure and arrival osculating orbits
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
-        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
     def _pretty(self, z):
         print("\nPoint to point transfer: ")
@@ -260,19 +277,21 @@ class indirect_or2or(_indirect_base):
 
     """
 
-    def __init__(self, 
-        elem0  = [149598261129.93335,0.016711230601231957,2.640492490927786e-07,3.141592653589793,4.938194050401601,0], 
-        elemf = [227943822376.03537,0.09339409892101332,0.032283207367640024,0.8649771996521327,5.000312830124232,0], 
-        mass = 1000, 
-        thrust = 0.3, 
-        isp = 2500, 
-        atol = 1e-12, 
-        rtol = 1e-12, 
-        tof = [100, 700], 
-        freetime=True, 
-        alpha=0, 
-        bound=False, 
-        mu=pk.MU_SUN):
+    def __init__(self,
+                 elem0=[149598261129.93335, 0.016711230601231957,
+                        2.640492490927786e-07, 3.141592653589793, 4.938194050401601, 0],
+                 elemf=[227943822376.03537, 0.09339409892101332,
+                        0.032283207367640024, 0.8649771996521327, 5.000312830124232, 0],
+                 mass=1000,
+                 thrust=0.3,
+                 isp=2500,
+                 atol=1e-12,
+                 rtol=1e-12,
+                 tof=[100, 700],
+                 freetime=True,
+                 alpha=0,
+                 bound=False,
+                 mu=pk.MU_SUN):
         """Initialises ``pykep.trajopt.indirect_or2or`` problem.
 
         Args:
@@ -341,30 +360,32 @@ class indirect_or2or(_indirect_base):
         # Transversality conditions
         # At start
         lambdas0 = np.array(self.leg.trajectory[0, 7:13])
-        r0norm = np.sqrt(r0[0]*r0[0]+r0[1]*r0[1]+r0[2]*r0[2])
+        r0norm = np.sqrt(r0[0] * r0[0] + r0[1] * r0[1] + r0[2] * r0[2])
         tmp = - pk.MU_SUN / r0norm**3
-        tangent = np.array([v0[0],v0[1],v0[2], tmp * r0[0], tmp * r0[1], tmp * r0[2]])
+        tangent = np.array([v0[0], v0[1], v0[2], tmp *
+                            r0[0], tmp * r0[1], tmp * r0[2]])
         tangent_norm = np.linalg.norm(tangent)
         tangent = tangent / tangent_norm
-        T0 = np.dot(lambdas0,tangent)
+        T0 = np.dot(lambdas0, tangent)
 
         # At end
         lambdasf = np.array(self.leg.trajectory[-1, 7:13])
-        rfnorm = np.sqrt(rf[0]*rf[0]+rf[1]*rf[1]+rf[2]*rf[2])
+        rfnorm = np.sqrt(rf[0] * rf[0] + rf[1] * rf[1] + rf[2] * rf[2])
         tmp = - pk.MU_SUN / rfnorm**3
-        tangent = np.array([vf[0],vf[1],vf[2], tmp * rf[0], tmp * rf[1], tmp * rf[2]])
+        tangent = np.array([vf[0], vf[1], vf[2], tmp *
+                            rf[0], tmp * rf[1], tmp * rf[2]])
         tangent_norm = np.linalg.norm(tangent)
         tangent = tangent / tangent_norm
-        Tf = np.dot(lambdasf,tangent)
+        Tf = np.dot(lambdasf, tangent)
 
-        return np.hstack(([1], ceq, [T0,Tf]))
+        return np.hstack(([1], ceq, [T0, Tf]))
 
     def get_nec(self):
         return self.leg.nec + 2
 
     def get_bounds(self):
-        lb = [self.tof[0], -4*np.pi, -4*np.pi] + [-1e2] * 7
-        ub = [self.tof[1], 4*np.pi, 4*np.pi] + [1e2] * 7
+        lb = [self.tof[0], -4 * np.pi, -4 * np.pi] + [-1e2] * 7
+        ub = [self.tof[1], 4 * np.pi, 4 * np.pi] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units):
@@ -391,7 +412,7 @@ class indirect_or2or(_indirect_base):
         elem0 = np.hstack([self.elem0[:5], [M0]])
         elemf = np.hstack([self.elemf[:5], [Mf]])
 
-        # Keplerian points 
+        # Keplerian points
         kep0 = pk.planet.keplerian(t0, elem0)
         kepf = pk.planet.keplerian(tf, elemf)
 
@@ -408,6 +429,7 @@ class indirect_or2or(_indirect_base):
         print("Time of flight (days): {!r} ".format(z[0]))
         print("Starting mean anomaly (rad): {!r} ".format(z[1]))
         print("Arrival mean anomaly (rad): {!r} ".format(z[2]))
+
 
 class indirect_pt2or(_indirect_base):
     """Represents an indirect trajectory optimisation problem between a Cartesian state and an orbit.
@@ -443,7 +465,6 @@ class indirect_pt2or(_indirect_base):
             self, mass, thrust, isp, mu, True, freetime, alpha, bound,
             atol, rtol
         )
-
 
         # departure state and arrival Keplerian elements
         self.x0 = np.asarray(x0, np.float64)
@@ -483,12 +504,13 @@ class indirect_pt2or(_indirect_base):
 
         # Transversality condition at the end
         lambdasf = np.array(self.leg.trajectory[-1, 7:13])
-        rfnorm = np.sqrt(rf[0]*rf[0]+rf[1]*rf[1]+rf[2]*rf[2])
+        rfnorm = np.sqrt(rf[0] * rf[0] + rf[1] * rf[1] + rf[2] * rf[2])
         tmp = - pk.MU_SUN / rfnorm**3
-        tangent = np.array([vf[0],vf[1],vf[2], tmp * rf[0], tmp * rf[1], tmp * rf[2]])
+        tangent = np.array([vf[0], vf[1], vf[2], tmp *
+                            rf[0], tmp * rf[1], tmp * rf[2]])
         tangent_norm = np.linalg.norm(tangent)
         tangent = tangent / tangent_norm
-        Tf = np.dot(lambdasf,tangent)
+        Tf = np.dot(lambdasf, tangent)
 
         return np.hstack(([1], ceq, [Tf]))
 
@@ -496,8 +518,8 @@ class indirect_pt2or(_indirect_base):
         return self.leg.nec + 1
 
     def get_bounds(self):
-        lb = [self.tof[0], -4*np.pi] + [-1e2] * 7
-        ub = [self.tof[1], 4*np.pi] + [1e2] * 7
+        lb = [self.tof[0], -4 * np.pi] + [-1e2] * 7
+        ub = [self.tof[1], 4 * np.pi] + [1e2] * 7
         return (lb, ub)
 
     def _plot_traj(self, z, axes, units=pk.AU):
@@ -520,7 +542,7 @@ class indirect_pt2or(_indirect_base):
         # Keplerian elements of the osculating orbit at start
         elem0 = list(pk.ic2par(self.x0[0:3], self.x0[3:6], self.leg.mu))
         # Eccentric to Mean Anomaly
-        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
+        elem0[5] = elem0[5] - elem0[1] * np.sin(elem0[5])
 
         # Mean Anomaly at the target orbit
         Mf = z[1] - self.elemf[1] * np.sin(z[1])
@@ -532,8 +554,10 @@ class indirect_pt2or(_indirect_base):
         kepf = pk.planet.keplerian(tf, self.elemf)
 
         # plot departure and arrival
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
-        pk.orbit_plots.plot_planet(kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
     def _pretty(self, z):
         print("\nPoint to orbit transfer: ")
@@ -541,6 +565,7 @@ class indirect_pt2or(_indirect_base):
         print("To (osculating elements): ", list(self.elemf))
         print("Time of flight (days): {!r} ".format(z[0]))
         print("Arrival mean anomaly (rad): {!r} ".format(z[1]))
+
 
 class indirect_pt2pl(_indirect_base):
     """
@@ -555,20 +580,21 @@ class indirect_pt2pl(_indirect_base):
 
     """
 
-    def __init__(self, 
-            x0 = [-24482087316.947845, -150000284705.77328, -196089391.29376224,31677.87649549203, -5859.747563624047, -351.75278222719828, 1000], 
-            pf = "mars",
-            mass = 1000, 
-            thrust = 0.3, 
-            isp = 3000, 
-            tof = [230,280],
-            t0 =1251.0286746844447,
-            mu=pk.MU_SUN,
-            alpha=0, 
-            bound=False, 
-            atol = 1e-12, 
-            rtol= 1e-12
-            ):
+    def __init__(self,
+                 x0=[-24482087316.947845, -150000284705.77328, -196089391.29376224,
+                     31677.87649549203, -5859.747563624047, -351.75278222719828, 1000],
+                 pf="mars",
+                 mass=1000,
+                 thrust=0.3,
+                 isp=3000,
+                 tof=[230, 280],
+                 t0=1251.0286746844447,
+                 mu=pk.MU_SUN,
+                 alpha=0,
+                 bound=False,
+                 atol=1e-12,
+                 rtol=1e-12
+                 ):
         """Initialises ``pykep.trajopt.indirect_pt2or`` problem.
 
         Args:
@@ -597,8 +623,8 @@ class indirect_pt2pl(_indirect_base):
         self.t0 = pk.epoch(t0)
         # departure state
         self.x0 = np.asarray(x0, np.float64)
-        #arrival planet
-        self.pf =  pk.planet.jpl_lp(pf)
+        # arrival planet
+        self.pf = pk.planet.jpl_lp(pf)
         # bounds on the time of flight
         self.tof = tof
         # store the alfa value (immutable)
@@ -614,7 +640,7 @@ class indirect_pt2pl(_indirect_base):
         l0 = np.asarray(z[1:])
 
         # arrival conditions
-        rf,vf = self.pf.eph(tf)
+        rf, vf = self.pf.eph(tf)
 
         # departure state
         x0 = pk.sims_flanagan.sc_state(self.x0[0:3], self.x0[3:6], self.x0[6])
@@ -628,7 +654,7 @@ class indirect_pt2pl(_indirect_base):
         # equality constraints
         ceq = self.leg.mismatch_constraints(atol=self.atol, rtol=self.rtol)
 
-        obj = self.leg.trajectory[-1,-1] * self.leg._dynamics.c2 * 1000
+        obj = self.leg.trajectory[-1, -1] * self.leg._dynamics.c2 * 1000
 
         return np.hstack(([obj], ceq))
 
@@ -661,19 +687,21 @@ class indirect_pt2pl(_indirect_base):
         elem0 = list(pk.ic2par(x0[0:3], x0[3:6], self.leg.mu))
 
         # Converts the eccentric anomaly into eccentric anomaly
-        elem0[5]  = elem0[5] - elem0[1] * np.sin(elem0[5])
+        elem0[5] = elem0[5] - elem0[1] * np.sin(elem0[5])
 
         # Creates a virtual keplerian planet with the said elements
         kep0 = pk.planet.keplerian(t0, elem0)
 
         # Plots the departure and arrival osculating orbits
-        pk.orbit_plots.plot_planet(kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
-        pk.orbit_plots.plot_planet(self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+        pk.orbit_plots.plot_planet(
+            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
     def _pretty(self, z):
         print("\nPlanet to orbit transfer, alpha is: ",  self._alpha)
         print("\nFrom (cartesian): " + str(list(self.x0)))
-        print("Launch epoch: {!r} MJD2000, a.k.a. {!r}".format(self.t0.mjd2000, self.t0))
+        print("Launch epoch: {!r} MJD2000, a.k.a. {!r}".format(
+            self.t0.mjd2000, self.t0))
         print("\nTo (planet): " + self.pf.name)
         print("Time of flight (days): {!r} ".format(z[0]))
-

@@ -4,7 +4,8 @@ from pykep.core._core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get
 from pykep.core._core import _epoch_type
 # We import symbols we use in this file
 from pykep.core._core import epoch
-# We import all symbols in the core namespace (also the ones we do not use in this file, but we still want in the namespace core)
+# We import all symbols in the core namespace (also the ones we do not use
+# in this file, but we still want in the namespace core)
 from pykep.core._core import *
 
 """Defining astronomical constants defined in the keplerian_toolbox file astro_constants.h"""

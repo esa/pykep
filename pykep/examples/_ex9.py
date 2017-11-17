@@ -14,15 +14,16 @@ def run_example9():
 
     # 2 - Problem
     udp = add_gradient(pk.trajopt.indirect_pt2pl(
-        x0 = [44459220055.461708, -145448367557.6174, 1195278.0377499966, 31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
-        t0 = 1285.6637861007277,
-        pf = "mars",
-        thrust = 0.1,
-        isp = 3000,
-        mu = pk.MU_SUN,
+        x0=[44459220055.461708, -145448367557.6174, 1195278.0377499966,
+            31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
+        t0=1285.6637861007277,
+        pf="mars",
+        thrust=0.1,
+        isp=3000,
+        mu=pk.MU_SUN,
         tof=[600, 720],
         alpha=0,    # quadratic control
-        bound = True),
+        bound=True),
         with_grad=False
     )
     prob = pg.problem(udp)
@@ -30,26 +31,28 @@ def run_example9():
 
     # 3 - Population
     pop = pg.population(prob)
-    z = np.hstack(([np.random.uniform(udp.udp_inner.tof[0], udp.udp_inner.tof[1])], 10 * np.random.randn(7)))
+    z = np.hstack(([np.random.uniform(udp.udp_inner.tof[0],
+                                      udp.udp_inner.tof[1])], 10 * np.random.randn(7)))
     pop.push_back(z)
 
     # 4 - Solve the problem (evolve)
     pop = algo.evolve(pop)
 
-    homotopy_path = [0.2,0.4,0.6,0.8,0.9,0.98, 0.99, 0.995, 1]
+    homotopy_path = [0.2, 0.4, 0.6, 0.8, 0.9, 0.98, 0.99, 0.995, 1]
     for alpha in homotopy_path:
-        z =  pop.champion_x
+        z = pop.champion_x
         print("alpha is: ", alpha)
         udp = add_gradient(pk.trajopt.indirect_pt2pl(
-            x0 = [44459220055.461708, -145448367557.6174, 1195278.0377499966, 31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
-            t0 = 1285.6637861007277,
-            pf = "mars",
-            thrust = 0.1,
-            isp = 3000,
-            mu = pk.MU_SUN,
+            x0=[44459220055.461708, -145448367557.6174, 1195278.0377499966,
+                31208.214734303529, 9931.5012318647168, -437.07278242521573, 1000],
+            t0=1285.6637861007277,
+            pf="mars",
+            thrust=0.1,
+            isp=3000,
+            mu=pk.MU_SUN,
             tof=[600, 720],
             alpha=alpha,    # quadratic control
-            bound = True),
+            bound=True),
             with_grad=False
         )
         prob = pg.problem(udp)
@@ -60,9 +63,8 @@ def run_example9():
         pop.push_back(z)
         pop = algo.evolve(pop)
 
-
     # 8 - Inspect the solution
-    print("Feasible?:", prob.feasibility_x(pop.champion_x) )
+    print("Feasible?:", prob.feasibility_x(pop.champion_x))
 
     # plot trajectory
     axis = udp.udp_inner.plot_traj(pop.champion_x, quiver=True, mark='k')
@@ -70,7 +72,7 @@ def run_example9():
 
     # plot control
     udp.udp_inner.plot_control(pop.champion_x)
-    plt.title("The control profile (throttle)")   
+    plt.title("The control profile (throttle)")
 
     plt.ion()
     plt.show()
@@ -78,7 +80,6 @@ def run_example9():
     udp.udp_inner.pretty(pop.champion_x)
 
     print("\nDecision vector: ", list(pop.champion_x))
-
 
 
 if __name__ == "__main__":

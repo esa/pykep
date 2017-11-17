@@ -1,5 +1,6 @@
 import pykep as pk
 
+
 class mga_lt_earth_mars_sundmann(object):
 
     """
@@ -17,13 +18,13 @@ class mga_lt_earth_mars_sundmann(object):
         self.__Vinf = Vinf * 1000
         # here we construct the trajectory leg in Sundman's variable t =
         # (r/10AU)^1.5 s
-        self.__leg = pk.sims_flanagan.leg_s(nseg, 1.0 / (100 * pk.AU) ** 1.0, 1.0)
+        self.__leg = pk.sims_flanagan.leg_s(
+            nseg, 1.0 / (100 * pk.AU) ** 1.0, 1.0)
         self.__leg.set_mu(pk.MU_SUN)
         self.__leg.set_spacecraft(self.__sc)
         # This is needed to use the plotting function plot_sf_leg
         self.__leg.high_fidelity = False
         self.__nseg = nseg
-
 
     def get_nic(self):
         return self.__nseg + 1
@@ -32,8 +33,10 @@ class mga_lt_earth_mars_sundmann(object):
         return 8
 
     def get_bounds(self):
-        lb = [5000, 2400, 10000, self.__sc.mass / 10, -self.__Vinf, -self.__Vinf, -self.__Vinf] + [-1] * 3 * self.__nseg
-        ub = [8000, 2500, 150000, self.__sc.mass, self.__Vinf, self.__Vinf, self.__Vinf] + [1] * 3 * self.__nseg
+        lb = [5000, 2400, 10000, self.__sc.mass / 10, -self.__Vinf, -
+              self.__Vinf, -self.__Vinf] + [-1] * 3 * self.__nseg
+        ub = [8000, 2500, 150000, self.__sc.mass, self.__Vinf,
+              self.__Vinf, self.__Vinf] + [1] * 3 * self.__nseg
         return (lb, ub)
 
     def fitness(self, x):
@@ -52,14 +55,17 @@ class mga_lt_earth_mars_sundmann(object):
 
         r, v = self.__mars.eph(end)
         xe = sc_state(r, v, x[3])
-        self.__leg.set(start, x0, x[-3 * self.__nseg:], end, xe, x[2] * DAY2SEC)
-        v_inf_con = (x[4] * x[4] + x[5] * x[5] + x[6] * x[6] - self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
+        self.__leg.set(start, x0, x[-3 * self.__nseg:],
+                       end, xe, x[2] * DAY2SEC)
+        v_inf_con = (x[4] * x[4] + x[5] * x[5] + x[6] * x[6] -
+                     self.__Vinf * self.__Vinf) / (EARTH_VELOCITY * EARTH_VELOCITY)
         try:
-            constraints = list(self.__leg.mismatch_constraints() + self.__leg.throttles_constraints()) + [v_inf_con]
+            constraints = list(self.__leg.mismatch_constraints(
+            ) + self.__leg.throttles_constraints()) + [v_inf_con]
         except:
             print(
                 "warning: CANNOT EVALUATE constraints .... possible problem in the Taylor integration in the Sundmann variable")
-            constraints =  (1e14,) * (8 + 1 + self.__nseg + 2)
+            constraints = (1e14,) * (8 + 1 + self.__nseg + 2)
         # We then scale all constraints to non-dimensional values
         constraints[0] /= AU
         constraints[1] /= AU
@@ -100,15 +106,17 @@ class mga_lt_earth_mars_sundmann(object):
         plot_sf_leg(self.__leg, units=AU, N=10, ax=axis)
         # The planets
         plot_planet(
-            self.__earth, start, units=AU, legend=True, color=(0.8, 0.8, 1), ax = axis)
+            self.__earth, start, units=AU, legend=True, color=(0.8, 0.8, 1), ax=axis)
         plot_planet(
-            self.__mars, end, units=AU, legend=True, color=(0.8, 0.8, 1), ax = axis)
+            self.__mars, end, units=AU, legend=True, color=(0.8, 0.8, 1), ax=axis)
         plt.show()
 
 
 """
 This example demonstrates the use of the interplanetary leg in Sundman's variable to obtain automated mesh optimization
 """
+
+
 def run_example4():
     import pygmo as pg
     from pykep.examples import add_gradient, algo_factory
@@ -134,9 +142,8 @@ def run_example4():
     pop = algo.evolve(pop)
 
     print("Is the solution found a feasible trajectory? " +
-            str(prob.feasibility_x(pop.champion_x)))
+          str(prob.feasibility_x(pop.champion_x)))
     udp.udp_inner.plot(pop.champion_x)
 
 if __name__ == "__main__":
     run_example4()
-

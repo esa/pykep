@@ -49,7 +49,8 @@ class pl2pl_N_impulses(object):
         # Sanity checks
         # 1) all planets need to have the same mu_central_body
         if (start.mu_central_body != target.mu_central_body):
-            raise ValueError('Starting and ending pykep.planet must have the same mu_central_body')
+            raise ValueError(
+                'Starting and ending pykep.planet must have the same mu_central_body')
         # 2) Number of impulses must be at least 2
         if N_max < 2:
             raise ValueError('Number of impulses N is less than 2')
@@ -66,17 +67,21 @@ class pl2pl_N_impulses(object):
         self.N_max = N_max
         self.phase_free = phase_free
         self.multi_objective = multi_objective
-        self.vinf = [s*1000 for s in vinf]
+        self.vinf = [s * 1000 for s in vinf]
 
         self.__common_mu = start.mu_central_body
-        
+
         # And we compute the bounds
         if phase_free:
-            self._lb = [0, tof[0]] + [0.0, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [0.0] + [0]
-            self._ub = [2 * start.compute_period(epoch(0)) * SEC2DAY, tof[1]] + [1.0, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
+            self._lb = [0, tof[0]] + [0.0, 0.0, 0.0,
+                                      vinf[0] * 1000] * (N_max - 2) + [0.0] + [0]
+            self._ub = [2 * start.compute_period(epoch(0)) * SEC2DAY, tof[1]] + [1.0, 1.0, 1.0, vinf[
+                1] * 1000] * (N_max - 2) + [1.0] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
         else:
-            self._lb = [t0[0].mjd2000, tof[0]] + [0.0, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [0.0]
-            self._ub = [t0[1].mjd2000, tof[1]] + [1.0, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0]
+            self._lb = [t0[0].mjd2000, tof[0]] + \
+                [0.0, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [0.0]
+            self._ub = [t0[1].mjd2000, tof[1]] + \
+                [1.0, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0]
 
     def get_nobj(self):
         return self.obj_dim
@@ -114,7 +119,8 @@ class pl2pl_N_impulses(object):
 
             # We apply the (i+1)-th impulse
             vsc = [a + b for a, b in zip(vsc, [Vinfx, Vinfy, Vinfz])]
-            rsc, vsc = propagate_lagrangian(rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
+            rsc, vsc = propagate_lagrangian(
+                rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
         cw = (ic2par(rsc, vsc, self.start.mu_central_body)[2] > pi / 2)
 
         # We now compute the remaining two final impulses
@@ -157,7 +163,6 @@ class pl2pl_N_impulses(object):
             fig = plt.figure()
             axes = fig.gca(projection='3d')
 
-
         axes.scatter(0, 0, 0, color='y')
 
         # 1 -  we 'decode' the chromosome recording the various deep space
@@ -175,13 +180,15 @@ class pl2pl_N_impulses(object):
             r_target, v_target = self.target.eph(epoch(x[-1]))
         else:
             r_target, v_target = self.target.eph(epoch(x[0] + x[1]))
-        plot_planet(self.start, t0=epoch(x[0]), color=(0.8, 0.6, 0.8), legend=True, units = AU, ax=axes, s=0)
-        plot_planet(self.target, t0=epoch(x[0] + x[1]), color=(0.8, 0.6, 0.8), legend=True, units = AU, ax=axes, s=0)
+        plot_planet(self.start, t0=epoch(x[0]), color=(
+            0.8, 0.6, 0.8), legend=True, units=AU, ax=axes, s=0)
+        plot_planet(self.target, t0=epoch(
+            x[0] + x[1]), color=(0.8, 0.6, 0.8), legend=True, units=AU, ax=axes, s=0)
 
         DV_list = x[5::4]
         maxDV = max(DV_list)
         DV_list = [s / maxDV * 30 for s in DV_list]
-        colors = ['b','r'] * (len(DV_list) + 1)
+        colors = ['b', 'r'] * (len(DV_list) + 1)
 
         # 3 - We loop across inner impulses
         rsc = r_start
@@ -196,25 +203,29 @@ class pl2pl_N_impulses(object):
 
             # We apply the (i+1)-th impulse
             vsc = [a + b for a, b in zip(vsc, [Vinfx, Vinfy, Vinfz])]
-            axes.scatter(rsc[0]/AU, rsc[1]/AU, rsc[2]/AU, color='k', s = DV_list[i])
-            plot_kepler(rsc, vsc, T[i] * DAY2SEC, self.__common_mu, N=200, color=colors[i], legend=False, units=AU, ax=axes)
-            rsc, vsc = propagate_lagrangian(rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
+            axes.scatter(rsc[0] / AU, rsc[1] / AU, rsc[2] /
+                         AU, color='k', s=DV_list[i])
+            plot_kepler(rsc, vsc, T[i] * DAY2SEC, self.__common_mu,
+                        N=200, color=colors[i], legend=False, units=AU, ax=axes)
+            rsc, vsc = propagate_lagrangian(
+                rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
 
         cw = (ic2par(rsc, vsc, self.start.mu_central_body)[2] > pi / 2)
         # We now compute the remaining two final impulses
         # Lambert arc to reach seq[1]
         dt = T[-1] * DAY2SEC
         l = lambert_problem(rsc, r_target, dt, self.__common_mu, cw, False)
-        plot_lambert(l, sol=0, color=colors[i+1], legend=False, units=AU, ax=axes, N=200)
+        plot_lambert(l, sol=0, color=colors[
+                     i + 1], legend=False, units=AU, ax=axes, N=200)
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
         DV1 = norm([a - b for a, b in zip(v_beg_l, vsc)])
         DV2 = norm([a - b for a, b in zip(v_end_l, v_target)])
 
-        axes.scatter(rsc[0]/AU, rsc[1]/AU, rsc[2]/AU, color='k', s = min(DV1/ maxDV *30, 40))
-        axes.scatter(r_target[0]/AU, r_target[1]/AU, r_target[2]/AU, color='k', s = min(DV2/ maxDV *30, 40))
-
-
+        axes.scatter(rsc[0] / AU, rsc[1] / AU, rsc[2] / AU,
+                     color='k', s=min(DV1 / maxDV * 30, 40))
+        axes.scatter(r_target[0] / AU, r_target[1] / AU,
+                     r_target[2] / AU, color='k', s=min(DV2 / maxDV * 30, 40))
 
         return axes
 
@@ -248,7 +259,8 @@ class pl2pl_N_impulses(object):
 
             # We apply the (i+1)-th impulse
             vsc = [a + b for a, b in zip(vsc, [Vinfx, Vinfy, Vinfz])]
-            rsc, vsc = propagate_lagrangian(rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
+            rsc, vsc = propagate_lagrangian(
+                rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
         cw = (ic2par(rsc, vsc, self.start.mu_central_body)[2] > pi / 2)
 
         # We now compute the remaining two final impulses

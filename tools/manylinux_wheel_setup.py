@@ -30,32 +30,33 @@ CLASSIFIERS = [
 ]
 KEYWORDS = 'space keplerian math physics interplanetary'
 INSTALL_REQUIRES = ['numpy']
-PLATFORMS = ['Unix','Windows','OSX']
+PLATFORMS = ['Unix', 'Windows', 'OSX']
 
 extension_module = Extension(
     'dummy',
-     sources=['dummy.cpp']
+    sources=['dummy.cpp']
 )
 
 setup(name=NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    url=URL,
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    license=LICENSE,
-    classifiers=CLASSIFIERS,
-    keywords=KEYWORDS,
-    platforms=PLATFORMS,
-    install_requires=INSTALL_REQUIRES,
-    ext_modules = [extension_module],
-    packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing', 'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
-    # Include pre-compiled extension
-    package_data={
-                'pykep.core': ['_core.so'],
-                'pykep.planet': ['_planet.so'],
-                'pykep.sims_flanagan': ['_sims_flanagan.so'],
-                'pykep.util': ['_util.so']
-                },
-)
+      version=VERSION,
+      description=DESCRIPTION,
+      long_description=LONG_DESCRIPTION,
+      url=URL,
+      author=AUTHOR,
+      author_email=AUTHOR_EMAIL,
+      license=LICENSE,
+      classifiers=CLASSIFIERS,
+      keywords=KEYWORDS,
+      platforms=PLATFORMS,
+      install_requires=INSTALL_REQUIRES,
+      ext_modules=[extension_module],
+      packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
+                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
+      # Include pre-compiled extension
+      package_data={
+          'pykep.core': ['_core.so'],
+          'pykep.planet': ['_planet.so'],
+          'pykep.sims_flanagan': ['_sims_flanagan.so'],
+          'pykep.util': ['_util.so']
+      },
+      )

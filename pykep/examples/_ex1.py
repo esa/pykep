@@ -1,4 +1,4 @@
-def run_example1(impulses = 4):
+def run_example1(impulses=4):
     import pykep as pk
     import pygmo as pg
     import numpy as np
@@ -14,12 +14,11 @@ def run_example1(impulses = 4):
         vinf=[0., 4],
         phase_free=False,
         multi_objective=False,
-        t0=[pk.epoch(0), pk.epoch(1000)])
-    , with_grad=False)
+        t0=[pk.epoch(0), pk.epoch(1000)]), with_grad=False)
     prob = pg.problem(udp)
 
     # algorithm
-    uda = pg.cmaes(gen = 1000)
+    uda = pg.cmaes(gen=1000)
     algo = pg.algorithm(uda)
     algo.set_verbosity(10)
 
@@ -38,4 +37,3 @@ def run_example1(impulses = 4):
 
 if __name__ == "__main__":
     run_example1()
-

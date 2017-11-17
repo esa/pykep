@@ -1,4 +1,4 @@
-def run_example11(n_seg = 30):
+def run_example11(n_seg=30):
     """
     This example demonstrates the use of the class lt_margo developed for the internal ESA CDF study on the 
     interplanetary mission named MARGO. The class was used to produce the preliminary traget selection
@@ -20,17 +20,17 @@ def run_example11(n_seg = 30):
 
     # 2 - Problem
     udp = add_gradient(pk.trajopt.lt_margo(
-                 target = pk.planet.mpcorb(mpcorbline),
-                 n_seg = n_seg,
-                 grid_type = "uniform",
-                 t0 = [pk.epoch(8000), pk.epoch(9000)],
-                 tof = [200, 365.25*3],
-                 m0 = 20.0,
-                 Tmax = 0.0017,
-                 Isp = 3000.0,
-                 earth_gravity = False,
-                 sep = True,
-                 start = "earth"),
+        target=pk.planet.mpcorb(mpcorbline),
+        n_seg=n_seg,
+        grid_type="uniform",
+        t0=[pk.epoch(8000), pk.epoch(9000)],
+        tof=[200, 365.25 * 3],
+        m0=20.0,
+        Tmax=0.0017,
+        Isp=3000.0,
+        earth_gravity=False,
+        sep=True,
+        start="earth"),
         with_grad=False
     )
     prob = pg.problem(udp)
@@ -41,9 +41,9 @@ def run_example11(n_seg = 30):
 
     # 4 - Solve the problem (evolve)
     pop = algo.evolve(pop)
-    
+
     # 5 - Inspect the solution
-    print("Feasible?:", prob.feasibility_x(pop.champion_x) )
+    print("Feasible?:", prob.feasibility_x(pop.champion_x))
 
     # 6 - plot trajectory
     axis = udp.udp_inner.plot_traj(pop.champion_x, plot_segments=True)

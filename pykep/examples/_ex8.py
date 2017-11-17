@@ -8,7 +8,6 @@ def run_example8(nseg=40):
     from matplotlib import pyplot as plt
     from pykep.examples import add_gradient, algo_factory
 
-
     # 1 - Algorithm
     algo = algo_factory("snopt7")
 
@@ -34,7 +33,6 @@ def run_example8(nseg=40):
     # 3 - Population
     pop = pg.population(prob, 1)
 
-
     # 4 - Solve the problem (evolve)
     pop = algo.evolve(pop)
 
@@ -49,7 +47,7 @@ def run_example8(nseg=40):
     axis = udp.udp_inner.plot_traj(pop.champion_x)
     plt.title("The trajectory in the heliocentric frame")
     axis = udp.udp_inner.plot_control(pop.champion_x)
-    plt.title("The control profile (throttle)")   
+    plt.title("The control profile (throttle)")
 
     plt.ion()
     plt.show()

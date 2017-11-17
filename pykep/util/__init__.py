@@ -26,13 +26,15 @@ def read_satcat(satcatfilename=None):
       cross_section = satcat["1958-002B"].radarA
     """
     from collections import namedtuple
-    satcatentry = namedtuple('satcatentry', 'noradn multnameflag payloadflag operationstatus name ownership launchdate launchsite decay period incl apogee perigee radarA orbitstatus')
+    satcatentry = namedtuple(
+        'satcatentry', 'noradn multnameflag payloadflag operationstatus name ownership launchdate launchsite decay period incl apogee perigee radarA orbitstatus')
     satcat = dict()
 
     with open(satcatfilename, 'r') as f:
         for l1 in f:
             intdsgn = l1[0:11].strip()
-            satcat[intdsgn] = satcatentry(l1[13:18], l1[19:20], l1[20:21], l1[21:22], l1[23:47], l1[49:54], l1[56:66], l1[68:73], l1[75:85], l1[87:94], l1[96:101], l1[103:109], l1[111:117], l1[119:127], l1[129:132])
+            satcat[intdsgn] = satcatentry(l1[13:18], l1[19:20], l1[20:21], l1[21:22], l1[23:47], l1[49:54], l1[
+                                          56:66], l1[68:73], l1[75:85], l1[87:94], l1[96:101], l1[103:109], l1[111:117], l1[119:127], l1[129:132])
     return satcat
 
 
