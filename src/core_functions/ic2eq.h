@@ -96,7 +96,10 @@ void ic2eq(const vettore3D &r0, const vettore3D &v0, const double &mu, vettore6D
     auto ecc = norm(e);
     auto temp = dot(e, r0);
     auto ni = acos(temp / ecc / R0);
-
+    temp = dot(r0, v0);
+    if (temp < 0.0) {
+        ni = 2 * M_PI - ni;
+    }
     // 4 -  We compute the true longitute L
     auto zita = std::atan2(h / ecc, k / ecc);
     auto L = ni + zita;

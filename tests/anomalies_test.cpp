@@ -48,12 +48,10 @@ int main()
     std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(0, 2.0);
     std::uniform_real_distribution<> dis2(-1.0, 1.0);
-    auto tol = 1e-8; // this is low as singularities (high e, e~~1 etc.) may
-                     // result in precision loss
+    auto tol = 1e-8; // tolerance is low as ill cases may be radnomly sample (e~1 etc.) resulting in precision loss
     bool fail = false;
 
-    // We test that par2eq and eq2par are perfectly inverse of one another (wthin
-    // tol)
+    // We test that par2eq and eq2par are perfectly inverse of one another (wthin tol)
     for (auto i = 0u; i < 100000; ++i) {
         // We test on random arrays that the conversion is invertible
         std::vector<double> E = {dis(gen), dis(gen), dis(gen), dis(gen), dis(gen), dis2(gen)};
@@ -65,9 +63,7 @@ int main()
         par2eq(EQ, E, false);
         eq2par(EINV, EQ, false);
         for (auto j = 0u; j < 3; ++j) {
-            if (std::abs(E[j] - EINV[j]) > tol) {
-                fail = true;
-            }
+            if (std::abs(E[j] - EINV[j]) > tol) fail = true;
         }
         // for anomalies we need to check sin and cos
         for (auto j = 3u; j < 6; ++j) {
@@ -99,14 +95,21 @@ int main()
         for (auto j = 0u; j < 3; ++j) {
             if (std::abs((r[j] - r1[j]) / std::max(std::abs(r[j]), 1.)) > tol) {
                 fail = true;
+                print("Keplerian radius: ", r, "\n");
+                print("Equinoctial radius: ", r1, "\n");
+                print("Keplerian Elements: ", E, "\n");
+                print("Diff: ", std::abs((r[j] - r1[j]) / std::max(std::abs(r[j]), 1.)), "\n");
             }
             if (std::abs((v[j] - v1[j]) / std::max(std::abs(v[j]), 1.)) > tol) {
                 fail = true;
+                print("Keplerian velocity: ", v, "\n");
+                print("Equinoctial velocity: ", v1, "\n");
+                print("Keplerian Elements: ", E, "\n");
+                print("Diff: ", ((v[j] - v1[j]) / std::max(std::abs(v[j]), 1.)), "\n");
             }
         }
     }
-    // We test that ic2par and ic2eq return the same values on the same initial
-    // conditions
+    // We test that ic2par and ic2eq return the same values on the same initial conditions
     for (auto i = 0u; i < 100000; ++i) {
         std::vector<double> r0 = {dis2(gen), dis2(gen), dis2(gen)};
         std::vector<double> v0 = {dis2(gen), r0[0] + dis(gen), dis2(gen)};
@@ -123,7 +126,14 @@ int main()
             if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
             }
-            if (std::abs(std::cos(EQ[5]) - std::cos(EQ2[5])) > tol) {
+        }
+        ic2eq(r0, v0, mu, EQ, true);
+        par2eq(EQ2, E, true);
+        for (auto j = 0u; j < 5; ++j) {
+            if (std::abs((EQ[j] - EQ2[j]) / std::max(std::abs(EQ[j]), 1.)) > tol) {
+                fail = true;
+            }
+            if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
             }
         }
