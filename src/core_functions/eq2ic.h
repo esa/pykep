@@ -27,6 +27,7 @@
 #define KEP_TOOLBOX_EQ2IC_H
 
 #include <cmath>
+#include "../io.h"
 
 namespace kep_toolbox
 {
@@ -80,13 +81,17 @@ void eq2ic(const vettore6D &EQ, const double &mu, vettore3D &r, vettore3D &v, co
     // Auxiliary
     auto b = std::sqrt(1 - h * h - k * k);
     auto radius = par / (1 + h * std::sin(L) + k * std::cos(L));
-
     // In the equinoctial reference frame
     auto X = radius * std::cos(L);
     auto Y = radius * std::sin(L);
     auto VX = -std::sqrt(mu / par) * (h + std::sin(L));
     auto VY = std::sqrt(mu / par) * (k + std::cos(L));
 
+/*print("r is: ", radius, "\n");
+print("f is: [", fx, ", ", fy, ", ", fz, "]\n");
+print("g is: [", gx, ", ", gy, ", ", gz, "]\n");
+print("X is: ", X , "\n");
+print("Y is: ", Y , "\n");*/
     // Results
     r[0] = X * fx + Y * gx;
     r[1] = X * fy + Y * gy;
@@ -95,6 +100,9 @@ void eq2ic(const vettore6D &EQ, const double &mu, vettore3D &r, vettore3D &v, co
     v[0] = VX * fx + VY * gx;
     v[1] = VX * fy + VY * gy;
     v[2] = VX * fz + VY * gz;
+
+/*print("rx: ", r[0], "\n");
+print("ry: ", r[1], "\n\n");*/
 
     return;
 }

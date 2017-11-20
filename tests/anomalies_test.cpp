@@ -89,23 +89,27 @@ int main()
         std::vector<double> E = {dis(gen), dis(gen), dis(gen), dis(gen), dis(gen), dis2(gen)};
         std::vector<double> EQ(6);
         std::vector<double> r(3), v(3), r1(3), v1(3);
+        par2eq(EQ, E, false);
+        par2ic(E, mu, r, v);
+        eq2ic(EQ, mu, r1, v1, false);
+        for (auto j = 0u; j < 3; ++j) {
+            if (std::abs((r[j] - r1[j]) / std::max(std::abs(r[j]), 1.)) > tol) {
+                fail = true;
+            }
+            if (std::abs((v[j] - v1[j]) / std::max(std::abs(v[j]), 1.)) > tol) {
+                fail = true;
+            }
+        }
+        // 2 - retrograde
         par2eq(EQ, E, true);
         par2ic(E, mu, r, v);
         eq2ic(EQ, mu, r1, v1, true);
         for (auto j = 0u; j < 3; ++j) {
             if (std::abs((r[j] - r1[j]) / std::max(std::abs(r[j]), 1.)) > tol) {
                 fail = true;
-                print("Keplerian radius: ", r, "\n");
-                print("Equinoctial radius: ", r1, "\n");
-                print("Keplerian Elements: ", E, "\n");
-                print("Diff: ", std::abs((r[j] - r1[j]) / std::max(std::abs(r[j]), 1.)), "\n");
             }
             if (std::abs((v[j] - v1[j]) / std::max(std::abs(v[j]), 1.)) > tol) {
                 fail = true;
-                print("Keplerian velocity: ", v, "\n");
-                print("Equinoctial velocity: ", v1, "\n");
-                print("Keplerian Elements: ", E, "\n");
-                print("Diff: ", ((v[j] - v1[j]) / std::max(std::abs(v[j]), 1.)), "\n");
             }
         }
     }
@@ -122,9 +126,12 @@ int main()
         for (auto j = 0u; j < 5; ++j) {
             if (std::abs((EQ[j] - EQ2[j]) / std::max(std::abs(EQ[j]), 1.)) > tol) {
                 fail = true;
+                print("Fail in direct elements 1-5\n");
             }
             if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
+                print("Fail in direct elements L\n");
+                
             }
         }
         ic2eq(r0, v0, mu, EQ, true);
@@ -132,11 +139,29 @@ int main()
         for (auto j = 0u; j < 5; ++j) {
             if (std::abs((EQ[j] - EQ2[j]) / std::max(std::abs(EQ[j]), 1.)) > tol) {
                 fail = true;
+                print("Fail in retrograde elements 1-5\n");                
             }
             if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
+                fail = true;
+                print("err: ", std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])), "\n");
+                print("Fail in retrograde elements L\n");
+                print("From par2eq", EQ2, "\n");
+                print("From ic2eq", EQ, "\n");
+                print("r", r0, "\n");
+                print("v", v0, "\n");
+                print("mu", mu, "\n");
             }
         }
+        /*std::vector<double> EQ = {1.12,0.1,0.3,0.21,0.11,0.1};
+        std::vector<double> E(6), r(3), v(3);
+        auto mu = 2.3;
+        print("EQ: ", EQ, "\n");
+        eq2ic(EQ, mu, r, v, true);
+        print("r: ", r, "\n\n");
+        ic2eq(r,v,mu, EQ, true);
+        print("EQ: ", EQ, "\n");*/
     }
     return fail;
 }
+

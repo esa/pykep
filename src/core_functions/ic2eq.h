@@ -29,6 +29,7 @@
 #include <cmath>
 
 #include "array3D_operations.h"
+#include "../io.h"
 
 namespace kep_toolbox
 {
@@ -72,6 +73,7 @@ void ic2eq(const vettore3D &r0, const vettore3D &v0, const double &mu, vettore6D
     // 1 - We compute the equinoctial frame
     cross(w, r0, v0);
     vers(w, w);
+
     auto p = w[0] / (1 + I * w[2]);
     auto q = -w[1] / (1 + I * w[2]);
     auto den = p * p + q * q + 1;
@@ -91,18 +93,29 @@ void ic2eq(const vettore3D &r0, const vettore3D &v0, const double &mu, vettore6D
     }
     auto h = dot(e, g);
     auto k = dot(e, f);
-
-    // 3 - We compute the true anomaly (in 0, 2*PI)
     auto ecc = norm(e);
-    auto temp = dot(e, r0);
-    auto ni = acos(temp / ecc / R0);
-    temp = dot(r0, v0);
-    if (temp < 0.0) {
-        ni = 2 * M_PI - ni;
+
+    // 3 - We compute the true longitude L
+    // This solution is certainly not the most elegant, but it works and will never be singular.
+
+    auto det1 = (g[1]*f[0]-f[1]*g[0]); // xy
+    auto det2 = (g[2]*f[0]-f[2]*g[0]); // xz
+    auto det3 = (g[2]*f[1]-f[2]*g[1]); // yz
+    auto max = std::max({std::abs(det1), std::abs(det2), std::abs(det3)});
+
+    double X, Y;
+    if (std::abs(det1) == max) {
+        X = (g[1]*r0[0] - g[0] * r0[1]) / det1;
+        Y = (-f[1]*r0[0]+f[0]*r0[1]) / det1;
+    } else if (std::abs(det2) == max) {
+        X = (g[2]*r0[0] - g[0] * r0[2]) / det2;
+        Y = (-f[2]*r0[0]+f[0]*r0[2]) / det2;
+    } else {
+        X = (g[2]*r0[1] - g[1] * r0[2]) / det3;
+        Y = (-f[2]*r0[1]+f[1]*r0[2]) / det3;
     }
-    // 4 -  We compute the true longitute L
-    auto zita = std::atan2(h / ecc, k / ecc);
-    auto L = ni + zita;
+
+    auto L = std::atan2(Y/R0, X/R0);
 
     // 5 - We assign the results
     EQ[0] = a * (1. - ecc * ecc);

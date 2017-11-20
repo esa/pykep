@@ -27,7 +27,13 @@
 #include <iomanip>
 #include <iostream>
 
-#include "../src/keplerian_toolbox.h"
+#include "../src/planet/jpl_low_precision.h"
+#include "../src/epoch.h"
+#include "../src/sims_flanagan/spacecraft.h"
+#include "../src/sims_flanagan/leg_s.h"
+
+#include "../src/epoch.h"
+
 
 using namespace std;
 using namespace kep_toolbox;

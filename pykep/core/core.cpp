@@ -58,20 +58,50 @@
 
 using namespace boost::python;
 
-static inline tuple par2ic_wrapper(const kep_toolbox::array6D &kep, const double &mu)
+static inline tuple par2ic_wrapper(const kep_toolbox::array6D &E, const double &mu)
 {
     kep_toolbox::array3D r0, v0;
-    kep_toolbox::par2ic(kep, mu, r0, v0);
+    kep_toolbox::par2ic(E, mu, r0, v0);
     return boost::python::make_tuple(r0, v0);
 }
 
 static inline kep_toolbox::array6D ic2par_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
                                                   const double &mu)
 {
-    kep_toolbox::array6D parameters;
-    kep_toolbox::ic2par(r0, v0, mu, parameters);
-    return parameters;
+    kep_toolbox::array6D E;
+    kep_toolbox::ic2par(r0, v0, mu, E);
+    return E;
 }
+
+static inline kep_toolbox::array6D par2eq_wrapper(const kep_toolbox::array6D &E, const bool retrograde = false)
+{
+    kep_toolbox::array6D EQ;
+    kep_toolbox::par2eq(EQ, E, retrograde);
+    return EQ;
+}
+
+static inline kep_toolbox::array6D eq2par_wrapper(const kep_toolbox::array6D &EQ, const bool retrograde= false)
+{
+    kep_toolbox::array6D E;
+    kep_toolbox::eq2par(E, EQ, retrograde);
+    return EQ;
+}
+
+static inline tuple eq2ic_wrapper(const kep_toolbox::array6D &EQ, const double &mu, const bool retrograde= false)
+{
+    kep_toolbox::array3D r0, v0;
+    kep_toolbox::eq2ic(EQ, mu, r0, v0, retrograde);
+    return boost::python::make_tuple(r0, v0);
+}
+
+static inline kep_toolbox::array6D ic2eq_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
+                                                 const double &mu, const bool retrograde= false)
+{
+    kep_toolbox::array6D EQ;
+    kep_toolbox::ic2eq(r0, v0, mu, EQ, retrograde);
+    return EQ;
+}
+
 static inline tuple closest_distance_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
                                              const kep_toolbox::array3D &r1, const kep_toolbox::array3D &v1,
                                              const double &mu)
@@ -370,97 +400,6 @@ BOOST_PYTHON_MODULE(_core)
         .def(repr(self))
         .def_pickle(python_class_pickle_suite<kep_toolbox::lambert_problem>());
 
-    // Lambert problem OLD.
-    /*class_<kep_toolbox::lambert_problemOLD>("lambert_problemOLD","Represents a
-       multiple revolution Lambert's problem",
-            init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const
-       double &, optional<const double &, const int &, const int&> >(
-                    "lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs =
-       5])\n\n"
-                    "- r1: starting position (x1,y1,z1)\n"
-                    "- r2: 3D final position (x2,y2,z2)\n"
-                    "- t: time of flight\n"
-                    "- mu: gravitational parameter (default is 1)\n"
-                    "- cw: True for retrograde motion (clockwise), False if
-       counter-clock wise (default is False)\n"
-                    "- multi_revs: Maximum number of multirevs to be computed
-       (default is 5)\n"
-                    "NOTE: Units need to be consistent.\n\n"
-                    "NOTE: The multirev Lambert's problem will be solved upon
-       construction and its solution stored in data members.\n\n"
-                    "Example (non-dimensional units used)::\n\n"
-                    "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )"
-            ))
-            .def("get_v1",&kep_toolbox::lambert_problemOLD::get_v1,return_value_policy<copy_const_reference>(),
-                    "Returns a sequence of vectors containing the velocities at r1
-       of all computed solutions to the Lambert's Problem\n\n"
-                    "Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev,
-       ...\n\n"
-                    "Example (extracts v1 for the 0 revs solution)::\n\n"
-                    "  v10 = l.get_v1()[0]"
-            )
-            .def("get_v2",&kep_toolbox::lambert_problemOLD::get_v2,return_value_policy<copy_const_reference>(),
-                    "Returns a sequence of vectors containing the velocities at r2
-       of all computed solutions to the Lambert's Problem\n\n"
-                    "Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev,
-       ...\n\n"
-                    "Example (extracts v2 for the 0 revs solution)::\n\n"
-                    "  v20 = l.get_v2()[0]"
-            )
-            .def("get_r1",&kep_toolbox::lambert_problemOLD::get_r1,return_value_policy<copy_const_reference>(),
-                    "Returns a vector containing the r1 defining the Lambert's
-       Problem\n\n"
-                    "Example ::\n\n"
-                    "  r1 = l.get_r1()"
-            )
-            .def("get_r2",&kep_toolbox::lambert_problemOLD::get_r2,return_value_policy<copy_const_reference>(),
-                    "Returns a vector containing the r2 defining the Lambert's
-       Problem\n\n"
-                    "Example ::\n\n"
-                    "  r2 = l.get_r2()"
-            )
-            .def("get_tof",&kep_toolbox::lambert_problemOLD::get_tof,return_value_policy<copy_const_reference>(),
-                    "Returns the time of flight defining the Lambert's
-       Problem\n\n"
-                    "Example::\n\n"
-                    "  t = l.get_tof()"
-            )
-            .def("get_mu",&kep_toolbox::lambert_problemOLD::get_mu,return_value_policy<copy_const_reference>(),
-                    "Returns the gravitational parameter defining the Lambert's
-       Problem\n\n"
-                    "Example::\n\n"
-                    "  mu = l.get_mu()"
-            )
-            .def("get_x",&kep_toolbox::lambert_problemOLD::get_a,return_value_policy<copy_const_reference>(),
-                    "Returns a sequence containing the a values of all computed
-       solutions to the Lambert's Problem\n\n"
-                    "Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev,
-       ...\n\n"
-                    "Example (extracts a for the 0 revs solution)::\n\n"
-                    "  x0 = l.get_a()[0]"
-            )
-            .def("get_iters",&kep_toolbox::lambert_problemOLD::get_iters,return_value_policy<copy_const_reference>(),
-                    "Returns a sequence containing the number of iterations
-       employed to compute each solution to the Lambert's Problem\n\n"
-                    "Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev,
-       ...\n\n"
-                    "Example (extracts the number of iterations employed for the 0
-       revs solution)::\n\n"
-                    "  p0 = l.get_iters()[0]"
-            )
-            .def("get_Nmax",&kep_toolbox::lambert_problemOLD::get_Nmax,
-                    "Returns the maximum number of revolutions allowed. The total
-       number of solution to the Lambert's problem will thus be n_sol = Nmax*2 +
-       1\n\n"
-                    "Example::\n\n"
-                    "  Nmax = l.get_Nmax()\n"
-                    "  n_sol = Nmax*2+1"
-            )
-            .def(repr(self))
-            .def_pickle(python_class_pickle_suite<kep_toolbox::lambert_problemOLD>())
-            .def(init<>());
-    */
-
     // Lagrangian propagator for keplerian orbits
     def("propagate_lagrangian", &propagate_lagrangian_wrapper,
         "pykep.propagate_lagrangian(r,v,t,mu)\n\n"
@@ -624,14 +563,37 @@ BOOST_PYTHON_MODULE(_core)
                                    "- mu: gravity parameter\n\n"
                                    "Returns the osculating keplerian elements a,e,i,W,w,E\n"
                                    "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-                                   "NOTE: routine gets singular for zero inclination\n"
+                                   "a is the semi-major axis always a positive quantity.\n"                                   
+                                   "NOTE: The routine is singular when the elements are not defined.\n"
                                    "Example:: \n\n"
                                    "  el = ic2par([1,0,0],[0,1,0],1.0)");
 
     def("par2ic", &par2ic_wrapper, "pykep.par2ic(E,mu)\n\n"
-                                   "- kep: osculating keplerian elements a,e,i,W,w,E\n"
-                                   "- mu: gravity parameter\n\n"
-                                   "Returns cartesian elements from Keplerian elements");
+                                   "- kep: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
+                                   "- mu: gravity parameter (l^3/s^2)\n\n"
+                                   "Returns cartesian elements from Keplerian elements\n"
+                                   "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+                                   "a is the semi-major axis always a positive quantity.\n"
+                                   "Example:: \n\n"
+                                   "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)");
+
+    def("ic2eq", &ic2eq_wrapper, "pykep.ic2eq(r,v,mu, retrogade = False)\n\n"
+    "- r: position (cartesian)\n"
+    "- v: velocity (cartesian)\n"
+    "- mu: gravity parameter\n\n"
+    "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+    "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+    "L is the true mean longitude\n"
+    "Example:: \n\n"
+    "  el = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)", ( arg("r"), arg("v"), arg("mu"), arg("retrograde")=false ) );
+
+    def("eq2ic", &eq2ic_wrapper, "pykep.eq2ic(EQ,mu, retrograde = False)\n\n"
+    "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+    "- mu: gravity parameter (l^3/s^2)\n\n"
+    "Returns cartesian elements from Keplerian elements\n"
+    "L is the true longitude\n"
+    "Example:: \n\n"
+    "  r, v = pk.eq2ic([1,0.3,0.1,0.1,0.2,0.2], 1, False)");
 
     def("damon", &damon_wrapper, "pykep.damon(v1,v2,tof)\n\n"
                                  "- v1: starting velocity relative to the departure body. This is\n"
