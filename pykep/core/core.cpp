@@ -80,14 +80,14 @@ static inline kep_toolbox::array6D par2eq_wrapper(const kep_toolbox::array6D &E,
     return EQ;
 }
 
-static inline kep_toolbox::array6D eq2par_wrapper(const kep_toolbox::array6D &EQ, const bool retrograde= false)
+static inline kep_toolbox::array6D eq2par_wrapper(const kep_toolbox::array6D &EQ, const bool retrograde = false)
 {
     kep_toolbox::array6D E;
     kep_toolbox::eq2par(E, EQ, retrograde);
     return EQ;
 }
 
-static inline tuple eq2ic_wrapper(const kep_toolbox::array6D &EQ, const double &mu, const bool retrograde= false)
+static inline tuple eq2ic_wrapper(const kep_toolbox::array6D &EQ, const double &mu, const bool retrograde = false)
 {
     kep_toolbox::array3D r0, v0;
     kep_toolbox::eq2ic(EQ, mu, r0, v0, retrograde);
@@ -95,7 +95,7 @@ static inline tuple eq2ic_wrapper(const kep_toolbox::array6D &EQ, const double &
 }
 
 static inline kep_toolbox::array6D ic2eq_wrapper(const kep_toolbox::array3D &r0, const kep_toolbox::array3D &v0,
-                                                 const double &mu, const bool retrograde= false)
+                                                 const double &mu, const bool retrograde = false)
 {
     kep_toolbox::array6D EQ;
     kep_toolbox::ic2eq(r0, v0, mu, EQ, retrograde);
@@ -537,63 +537,89 @@ BOOST_PYTHON_MODULE(_core)
 
     // Basic Astrodynamics
     def("closest_distance", &closest_distance_wrapper,
-        "pykep.closest_distance(r0,v0,r1,v1,mu)\n\n"
-        "- r0: initial position (cartesian)\n"
-        "- v0: initial velocity (cartesian)\n"
-        "- r1: final position (cartesian)\n"
-        "- v1: final velocity (cartesian)\n"
+        "pykep.closest_distance(r1,v1,r2,v2,mu = 1.0)\n\n"
+        "- r1: initial position (cartesian)\n"
+        "- v1: initial velocity (cartesian)\n"
+        "- r2: final position (cartesian)\n"
+        "- v2: final velocity (cartesian)\n"
         "- mu: planet gravitational constant\n\n"
         "Returns a tuple containing the closest distance along a keplerian orbit "
-        "defined by r0,v0,r1,v1 (it assumes the orbit actually exists) and the "
+        "defined by r1,v1,r2,v2 (it assumes the orbit actually exists) and the "
         "apoapsis radius of the resulting orbit. \n"
         "Example::\n\n"
-        "  d,ra = closest_distance([1,0,0],[0,1,0],[],[],1.0)\n");
+        "  d,ra = closest_distance([1,0,0],[0,1,0],[0,1,0],[-1,0,0],1.0)\n",
+        (arg("r1"), arg("v1"), arg("r2"), arg("v2"), arg("mu") = 1.0));
 
-    def("barker", &kep_toolbox::barker, "pykep.barker(r1,r2,mu)\n\n"
+    def("barker", &kep_toolbox::barker, "pykep.barker(r1,r2,mu = 1.0)\n\n"
                                         "- r1: initial position (cartesian)\n"
                                         "- r2: final position (cartesian)\n"
                                         "- mu: gravity parameter\n\n"
                                         "Returns the time of flight as evaluated by the Barker equation. \n"
                                         "Example:: \n\n"
-                                        "  t = barker([1,0,0],[0,1,0],1.0)");
+                                        "  t = barker([1,0,0],[0,1,0],1.0)",
+        (arg("r1"), arg("r2"), arg("mu") = 1.0));
 
-    def("ic2par", &ic2par_wrapper, "pykep.ic2par(r,v,mu)\n\n"
+    def("ic2par", &ic2par_wrapper, "pykep.ic2par(r,v,mu = 1.0)\n\n"
                                    "- r: position (cartesian)\n"
                                    "- v: velocity (cartesian)\n"
                                    "- mu: gravity parameter\n\n"
                                    "Returns the osculating keplerian elements a,e,i,W,w,E\n"
                                    "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-                                   "a is the semi-major axis always a positive quantity.\n"                                   
+                                   "a is the semi-major axis always a positive quantity.\n"
                                    "NOTE: The routine is singular when the elements are not defined.\n"
                                    "Example:: \n\n"
-                                   "  el = ic2par([1,0,0],[0,1,0],1.0)");
+                                   "  el = ic2par([1,0,0],[0,1,0],1.0)",
+        (arg("r"), arg("v"), arg("mu") = 1.0));
 
-    def("par2ic", &par2ic_wrapper, "pykep.par2ic(E,mu)\n\n"
-                                   "- kep: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
+    def("par2ic", &par2ic_wrapper, "pykep.par2ic(E,mu = 1.0)\n\n"
+                                   "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
                                    "- mu: gravity parameter (l^3/s^2)\n\n"
                                    "Returns cartesian elements from Keplerian elements\n"
                                    "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
                                    "a is the semi-major axis always a positive quantity.\n"
                                    "Example:: \n\n"
-                                   "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)");
+                                   "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)",
+        (arg("E"), arg("mu") = 1.0));
 
-    def("ic2eq", &ic2eq_wrapper, "pykep.ic2eq(r,v,mu, retrogade = False)\n\n"
-    "- r: position (cartesian)\n"
-    "- v: velocity (cartesian)\n"
-    "- mu: gravity parameter\n\n"
-    "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-    "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
-    "L is the true mean longitude\n"
-    "Example:: \n\n"
-    "  el = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)", ( arg("r"), arg("v"), arg("mu"), arg("retrograde")=false ) );
+    def("ic2eq", &ic2eq_wrapper, "pykep.ic2eq(r,v,mu = 1.0, retrogade = False)\n\n"
+                                 "- r: position (cartesian)\n"
+                                 "- v: velocity (cartesian)\n"
+                                 "- mu: gravity parameter\n\n"
+                                 "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+                                 "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                 "L is the true mean longitude\n"
+                                 "Example:: \n\n"
+                                 "  E = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)",
+        (arg("r"), arg("v"), arg("mu") = 1.0, arg("retrograde") = false));
 
-    def("eq2ic", &eq2ic_wrapper, "pykep.eq2ic(EQ,mu, retrograde = False)\n\n"
-    "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
-    "- mu: gravity parameter (l^3/s^2)\n\n"
-    "Returns cartesian elements from Keplerian elements\n"
-    "L is the true longitude\n"
-    "Example:: \n\n"
-    "  r, v = pk.eq2ic([1,0.3,0.1,0.1,0.2,0.2], 1, False)");
+    def("eq2ic", &eq2ic_wrapper, "pykep.eq2ic(EQ,mu = 1.0, retrograde = False)\n\n"
+                                 "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                 "- mu: gravity parameter (l^3/s^2)\n\n"
+                                 "Returns cartesian elements from Keplerian elements\n"
+                                 "L is the true longitude\n"
+                                 "Example:: \n\n"
+                                 "  r, v = pk.eq2ic(eq = [1,0.3,0.1,0.1,0.2,0.2], mu = 1, retrograde = False)",
+        (arg("eq"), arg("mu") = 1.0, arg("retrograde") = false));
+
+    def("eq2par", &eq2par_wrapper, "pykep.eq2par(EQ, retrograde = False)\n\n"
+                                   "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                   "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+                                   "Returns the osculating Keplerian elements a,e,i,W,w,E \n"
+                                   "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+                                   "a is the semi-major axis, always a positive quantity.\n"
+                                   "L is the true longitude\n"
+                                   "Example:: \n\n"
+                                   "  E = pk.eq2par(eq = [1,0.3,0.1,0.1,0.2,0.2], retrograde = False)",
+        (arg("eq"), arg("retrograde") = false));
+
+    def("par2eq", &par2eq_wrapper, "pykep.par2eq(E, retrograde = False)\n\n"
+                                   "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
+                                   "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+                                   "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                   "L is the true mean longitude\n"
+                                   "Example:: \n\n"
+                                   "  E = pk.par2eq(E = [1.0,0.1,0.2,0.3,0.4,0.5], retrograde = False)",
+        (arg("E"), arg("retrograde") = false));
 
     def("damon", &damon_wrapper, "pykep.damon(v1,v2,tof)\n\n"
                                  "- v1: starting velocity relative to the departure body. This is\n"
@@ -611,7 +637,8 @@ BOOST_PYTHON_MODULE(_core)
                                  "This function uses the model developed by Damon Landau (JPL)\n"
                                  "during GTOC7 to compute an approximation to the low-thrust transfer\n\n"
                                  "Example:: \n\n"
-                                 " a1, a2, tau, dv = pykep.damon(v1,v2,tof)");
+                                 " a1, a2, tau, dv = pykep.damon(v1,v2,tof)",
+        (arg("v1"), arg("v2"), arg("tof")));
 
     def("max_start_mass", &kep_toolbox::max_start_mass,
         "pykep.max_start_mass(a, dv, T_max, Isp)\n\n"
