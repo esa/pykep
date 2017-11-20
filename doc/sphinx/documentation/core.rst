@@ -21,6 +21,10 @@ Name                                            Type            Description
 :func:`pykep.barker`                            function        computes the (parabolic) time-of-flight from the Barker equation
 :func:`pykep.ic2par`                            function        Transforms r and v into the osculating orbital elements
 :func:`pykep.par2ic`                            function        Transforms osculating orbital elements into r and v
+:func:`pykep.par2eq`                            function        Transforms osculating orbital elements into modified equinoctial
+:func:`pykep.eq2par`                            function        Transforms modified equinoctial into osculating orbital elements 
+:func:`pykep.eq2ic`                             function        Transforms modified equinoctial elements into r and v
+:func:`pykep.ic2eq`                             function        Transforms r and v into modified equinoctial elements
 =========================================       =========       ================================================
 
 
