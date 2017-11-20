@@ -414,12 +414,12 @@ BOOST_PYTHON_MODULE(_core)
 
     // Taylor propagation of inertially constant thrust arcs
     def("propagate_taylor", &propagate_taylor_wrapper,
-        "pykep.propagate_taylor(r,v,m,u,t,mu,veff,log10tol,log10rtol)\n\n"
+        "pykep.propagate_taylor(r,v,m,thrust,tof,mu,veff,log10tol,log10rtol)\n\n"
         "- r: start position, x,y,z\n"
         "- v: start velocity, vx,vy,vz\n"
         "- m: starting mass\n"
-        "- u: fixed inertial thrust, ux,uy,uz\n"
-        "- t: propagation time\n"
+        "- thrust: fixed inertial thrust, ux,uy,uz\n"
+        "- tof: propagation time\n"
         "- mu: central body gravity constant\n\n"
         "- veff: the product (Isp g0) defining the engine efficiency \n\n"
         "- log10tol: the logarithm of the absolute tolerance passed to taylor "
@@ -430,7 +430,9 @@ BOOST_PYTHON_MODULE(_core)
         "mass after the propagation.\n\n"
         "Example::\n\n"
         "  r,v,m = "
-        "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)");
+        "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)",
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
+    );
 
     // Taylor propagation of inertially constant thrust arcs with an inertially constant disturbance
     def("propagate_taylor_disturbance", &propagate_taylor_disturbance_wrapper,
@@ -440,25 +442,26 @@ BOOST_PYTHON_MODULE(_core)
         "- m: starting mass\n"
         "- thrust: fixed inertial thrust, cartesian components\n"
         "- disturbance: fixed inertial disturbance force, cartesian components\n"
-        "- t: propagation time\n"
+        "- tof: propagation time\n"
         "- mu: central body gravity constant\n\n"
         "- veff: the product (Isp g0) defining the engine efficiency \n\n"
         "- log10tol: the logarithm of the absolute tolerance passed to taylor propagator \n\n"
         "- log10rtol: the logarithm of the relative tolerance passed to taylor propagator \n\n"
         "Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
         "Example::\n\n"
-        "  r,v,m = propagate_taylor_disturbance([1,0,0],[0,1,0],100,[0,0,0],[1e-2,1e-3,1e-4],pi/2,1,1,-15,-15)");
-
+        "  r,v,m = propagate_taylor_disturbance([1,0,0],[0,1,0],100,[0,0,0],[1e-2,1e-3,1e-4],pi/2,1,1,-15,-15)",
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("disturbance"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
+    );
     // Taylor propagation of inertially constant thrust arcs under the J2
     // influence
     def("propagate_taylor_J2", &propagate_taylor_J2_wrapper,
-        "pykep.propagate_taylor_J2(r,v,m,u,t,mu,veff,J2RG2,log10tol,log10rtol)"
+        "pykep.propagate_taylor_J2(r,v,m,thrust,t,mu,veff,J2RG2,log10tol,log10rtol)"
         "\n\n"
         "- r: start position, x,y,z\n"
         "- v: start velocity, vx,vy,vz\n"
         "- m: starting mass\n"
-        "- u: fixed inertial thrust, ux,uy,uz\n"
-        "- t: propagation time\n"
+        "- thrust: fixed inertial thrust, ux,uy,uz\n"
+        "- tof: propagation time\n"
         "- mu: central body gravity constant\n\n"
         "- veff: the product (Isp g0) defining the engine efficiency \n\n"
         "- J2RG2: the product (J2 RE^2) defining the gravity J2 perturbance \n\n"
@@ -470,8 +473,9 @@ BOOST_PYTHON_MODULE(_core)
         "mass after the propagation.\n\n"
         "Example::\n\n"
         "  r,v,m = "
-        "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,1e-3,-15,-15)");
-
+        "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,1e-3,-15,-15)",
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
+    );
     // Taylor propagation of inertially constant thrust arcs (using the
     // generalized sundmann variable)
     def("propagate_taylor_s", &propagate_taylor_s_wrapper,
