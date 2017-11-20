@@ -2,8 +2,8 @@
 
 -Abstract
 
-   The memory allocation prototypes and macros for use in CSPICE. 
-   
+   The memory allocation prototypes and macros for use in CSPICE.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -31,11 +31,11 @@
 
 -Particulars
 
-   The routines maintain a count of the number of mallocs vs. free, 
-   signalling an error if any unreleased memory exists at the end 
+   The routines maintain a count of the number of mallocs vs. free,
+   signalling an error if any unreleased memory exists at the end
    of an Icy interface call.
 
-   The macro ALLOC_CHECK performs malloc/free test. If used, the macro 
+   The macro ALLOC_CHECK performs malloc/free test. If used, the macro
    should exists at the end of any routine using these memory management
    routines.
 
@@ -47,10 +47,10 @@
       alloc_SpiceString_C_array
       alloc_SpiceString_C_Copy_array
       alloc_SpiceDouble_C_array
-      alloc_SpiceInt_C_array                   
+      alloc_SpiceInt_C_array
       alloc_SpiceString
       alloc_SpiceString_Pointer_array
-      free_SpiceString_C_array 
+      free_SpiceString_C_array
       free_SpiceMemory
 
 -Version
@@ -61,7 +61,7 @@
 
    CSPICE 1.0.2 10-MAY-2007 (EDW)
 
-      Minor edits to clarify 'size' in alloc_SpiceMemory as 
+      Minor edits to clarify 'size' in alloc_SpiceMemory as
       size_t.
 
    CSPICE 1.0.1 23-JUN-2005 (EDW)
@@ -70,56 +70,48 @@
       an array of pointers to SpiceChar.
 
    Icy 1.0.0 December 19, 2003 (EDW)
-   
+
       Initial release.
 
 */
- 
+
 #ifndef ZZALLOC_H
 #define ZZALLOC_H
 
-   /*
-   Allocation call prototypes: 
-   */
-   int           alloc_count                    ();
+/*
+Allocation call prototypes:
+*/
+int alloc_count();
 
-   SpiceChar  ** alloc_SpiceString_C_array      ( int string_length, 
-                                                  int string_count   );
+SpiceChar **alloc_SpiceString_C_array(int string_length, int string_count);
 
-   SpiceChar  ** alloc_SpiceString_C_Copy_array ( int array_len ,
-                                                  int string_len,
-                                                  SpiceChar ** array );
+SpiceChar **alloc_SpiceString_C_Copy_array(int array_len, int string_len, SpiceChar **array);
 
-   SpiceDouble * alloc_SpiceDouble_C_array      ( int rows, 
-                                                  int cols );
+SpiceDouble *alloc_SpiceDouble_C_array(int rows, int cols);
 
-   SpiceInt    * alloc_SpiceInt_C_array         ( int rows, 
-                                                  int cols );
+SpiceInt *alloc_SpiceInt_C_array(int rows, int cols);
 
-   SpiceChar   * alloc_SpiceString              ( int length );
+SpiceChar *alloc_SpiceString(int length);
 
-   SpiceChar  ** alloc_SpiceString_Pointer_array( int array_len );
-   
-   void          free_SpiceString_C_array       ( int dim, 
-                                                  SpiceChar ** array );
+SpiceChar **alloc_SpiceString_Pointer_array(int array_len);
 
-   void        * alloc_SpiceMemory              ( size_t size );
+void free_SpiceString_C_array(int dim, SpiceChar **array);
 
-   void          free_SpiceMemory               ( void * ptr );
+void *alloc_SpiceMemory(size_t size);
 
+void free_SpiceMemory(void *ptr);
 
-   /*
-   Simple macro to ensure a zero value alloc count at end of routine. 
-   Note, the need to use this macro exists only in those routines 
-   allocating/deallocating memory.
-   */
-#define ALLOC_CHECK  if (  alloc_count() != 0 )                            \
-                {                                                          \
-                setmsg_c ( "Malloc/Free count not zero at end of routine." \
-                           " Malloc count = #.");                          \
-                errint_c ( "#", alloc_count()            );                \
-                sigerr_c ( "SPICE(MALLOCCOUNT)"        );                  \
-                }
+/*
+Simple macro to ensure a zero value alloc count at end of routine.
+Note, the need to use this macro exists only in those routines
+allocating/deallocating memory.
+*/
+#define ALLOC_CHECK                                                                                                    \
+    if (alloc_count() != 0) {                                                                                          \
+        setmsg_c("Malloc/Free count not zero at end of routine."                                                       \
+                 " Malloc count = #.");                                                                                \
+        errint_c("#", alloc_count());                                                                                  \
+        sigerr_c("SPICE(MALLOCCOUNT)");                                                                                \
+    }
 
 #endif
-

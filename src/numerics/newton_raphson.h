@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PaGMO development team,                     *
+ *   Copyright (C) 2004-2018 The pagmo development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *   http://apps.sourceforge.net/mediawiki/pagmo                             *
  *   http://apps.sourceforge.net/mediawiki/pagmo/index.php?title=Developers  *
@@ -28,32 +28,30 @@
 
 namespace kep_toolbox
 {
-	/// Newton-Raphson method
-	/**
-	 * Standard implementation of the Newton-Raphson method to solve a non-linear equation
-	 *
-	 * \param[in] x Starting point
-	 * \param[in] F equation to be solved in the form F = 0. Needs to be callable as F(x)
-	 * \param[in] dF derivative of F with respect to x.  Needs to be callable as dF(x)
-	 *
-	 * @author Dario Izzo (dario.izzo@esa.int)
-	 */
-	template <class my_float, class my_functionA, class my_functionB>
-			int newton_raphson(my_float &x, my_functionA F, my_functionB dF,
-				   int max_loop, const double& accuracy)
-	{
-		my_float term;
-		//double start = x; //DS: unused
-		//main iteration
-		do
-		{
-			term = (F)(x) / (dF)(x);
-			x = x - term;
-		}
-		// check if term is within required accuracy or loop limit is exceeded
-		while ((fabs(term / std::max(std::fabs(x), 1.)) > accuracy) && (--max_loop));
-		return max_loop;
-	}
+/// Newton-Raphson method
+/**
+ * Standard implementation of the Newton-Raphson method to solve a non-linear equation
+ *
+ * \param[in] x Starting point
+ * \param[in] F equation to be solved in the form F = 0. Needs to be callable as F(x)
+ * \param[in] dF derivative of F with respect to x.  Needs to be callable as dF(x)
+ *
+ * @author Dario Izzo (dario.izzo@esa.int)
+ */
+template <class my_float, class my_functionA, class my_functionB>
+int newton_raphson(my_float &x, my_functionA F, my_functionB dF, int max_loop, const double &accuracy)
+{
+    my_float term;
+    // double start = x; //DS: unused
+    // main iteration
+    do {
+        term = (F)(x) / (dF)(x);
+        x = x - term;
+    }
+    // check if term is within required accuracy or loop limit is exceeded
+    while ((fabs(term / std::max(std::fabs(x), 1.)) > accuracy) && (--max_loop));
+    return max_loop;
+}
 }
 /*
 //----------------------------------------------------------------------------//
@@ -112,31 +110,31 @@ int main()
     cout << "\nFind root of f(x) = cosh(x) + cos(x) - 3 = 0";
     double x = 1.0;                                   // initial 'guess' at root
     if (newton(x, func_1, fdiv_1, 100, 1.0e-8))
-	  cout << "\n   root x = " << x << ", test of f(x) = " << func_1(x);
+      cout << "\n   root x = " << x << ", test of f(x) = " << func_1(x);
     else  cout << "\n   failed to find root ";
 
     cout << "\n\nFind root of f(x) = x * x - 25 = 0";
     x = 1.0;                                          // initial 'guess' at root
     if ( newton(x, func_2, fdiv_2, 100, 1.0e-8))
-	  cout << "\n   root x = " << x << ", test of f(x) = " << func_2(x);
+      cout << "\n   root x = " << x << ", test of f(x) = " << func_2(x);
     else  cout << "\n   failed to find root ";
 
     cout << "\n\nFind root of f(x) = x^2 - 10x + 34  = 0";
     complex<double> xc = complex<double>(1.0, 1.0);   // initial 'guess' at root
     if ( newton(xc, func_3, fdiv_3, 100, 1.0e-8))
-	  cout << "\n   root x = " << xc << ", test of f(x) = " << func_3(xc);
+      cout << "\n   root x = " << xc << ", test of f(x) = " << func_3(xc);
     else  cout << "\n   failed to find root ";
 
     cout << "\n\nFind root of f(x) = x^2 - 10x + 34  = 0";
     xc = complex<double>(1.0, -1.0);                  // initial 'guess' at root
     if ( newton(xc, func_3, fdiv_3, 100, 1.0e-8))
-	  cout << "\n   root x = " << xc << ", test of f(x) = " << func_3(xc);
+      cout << "\n   root x = " << xc << ", test of f(x) = " << func_3(xc);
     else  cout << "\n   failed to find root ";
 
     cout << "\n\nFind root of f(x) = 2x^3 - 4x^2 - 22x + 24 = 0";
     x = 5.0;                                          // initial 'guess' at root
     if ( newton(x, func_4, fdiv_4, 100, 1.0e-8) )
-	  cout << "\n   root x = " << x << ", test of f(x) = " << func_4(x);
+      cout << "\n   root x = " << x << ", test of f(x) = " << func_4(x);
     else  cout << "\n   failed to find root ";
 
     cout << "\n\nFind root of f(x) = E - e sin(E) - M";

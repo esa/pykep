@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -49,29 +49,27 @@
  * @author Johannes Simon (johannessimon81_AT_gmail.com)
  */
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
 template <class vettore3D>
-inline void fb_vel(double &dV, const vettore3D &v_rel_in,
-                   const vettore3D &v_rel_out, const planet::base &pl) {
-  double Vin2 = v_rel_in[0] * v_rel_in[0] + v_rel_in[1] * v_rel_in[1] +
-                v_rel_in[2] * v_rel_in[2];
-  double Vout2 = v_rel_out[0] * v_rel_out[0] + v_rel_out[1] * v_rel_out[1] +
-                 v_rel_out[2] * v_rel_out[2];
-  // eq_V2 = Vin2 - Vout2;
+inline void fb_vel(double &dV, const vettore3D &v_rel_in, const vettore3D &v_rel_out, const planet::base &pl)
+{
+    double Vin2 = v_rel_in[0] * v_rel_in[0] + v_rel_in[1] * v_rel_in[1] + v_rel_in[2] * v_rel_in[2];
+    double Vout2 = v_rel_out[0] * v_rel_out[0] + v_rel_out[1] * v_rel_out[1] + v_rel_out[2] * v_rel_out[2];
+    // eq_V2 = Vin2 - Vout2;
 
-  double e_min = 1 + pl.get_safe_radius() / pl.get_mu_self() * Vin2;
-  double alpha = acos((v_rel_in[0] * v_rel_out[0] + v_rel_in[1] * v_rel_out[1] +
-                       v_rel_in[2] * v_rel_out[2]) /
-                      sqrt(Vin2 * Vout2));
-  double ineq_delta = alpha - 2 * asin(1 / e_min);
+    double e_min = 1 + pl.get_safe_radius() / pl.get_mu_self() * Vin2;
+    double alpha = acos((v_rel_in[0] * v_rel_out[0] + v_rel_in[1] * v_rel_out[1] + v_rel_in[2] * v_rel_out[2])
+                        / sqrt(Vin2 * Vout2));
+    double ineq_delta = alpha - 2 * asin(1 / e_min);
 
-  if (ineq_delta > 0.0)
-    dV = sqrt(Vout2 + Vin2 - 2.0 * sqrt(Vout2 * Vin2) * cos(ineq_delta));
-  else
-    dV = fabs(sqrt(Vout2) - sqrt(Vin2));
+    if (ineq_delta > 0.0)
+        dV = sqrt(Vout2 + Vin2 - 2.0 * sqrt(Vout2 * Vin2) * cos(ineq_delta));
+    else
+        dV = fabs(sqrt(Vout2) - sqrt(Vin2));
 
-  return;
+    return;
 }
 } // namespace end
 

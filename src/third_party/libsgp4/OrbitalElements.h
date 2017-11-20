@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-
 #ifndef ORBITALELEMENTS_H_
 #define ORBITALELEMENTS_H_
 
-#include "Util.h"
-#include "DateTime.h"
 #include "../../config.h"
+#include "DateTime.h"
+#include "Util.h"
 
 class Tle;
 
@@ -30,7 +29,7 @@ class Tle;
 class __KEP_TOOL_VISIBLE OrbitalElements
 {
 public:
-    OrbitalElements(const Tle& tle);
+    OrbitalElements(const Tle &tle);
 
     virtual ~OrbitalElements()
     {

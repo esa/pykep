@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #include "DateTime.h"
 
 #if 0

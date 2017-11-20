@@ -14,22 +14,22 @@ extern "C" {
 #endif
 #ifndef MSDOS
 #ifdef OPEN_DECL
-extern int creat(const char*,int), open(const char*,int);
+extern int creat(const char *, int), open(const char *, int);
 #endif
 extern int close(int);
-extern int read(int,void*,size_t), write(int,void*,size_t);
-extern int unlink(const char*);
+extern int read(int, void *, size_t), write(int, void *, size_t);
+extern int unlink(const char *);
 #ifndef _POSIX_SOURCE
 #ifndef NON_UNIX_STDIO
-extern FILE *fdopen(int, const char*);
+extern FILE *fdopen(int, const char *);
 #endif
 #endif
 #endif /*KR_HEADERS*/
 
-extern char *mktemp(char*);
+extern char *mktemp(char *);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 #endif
 

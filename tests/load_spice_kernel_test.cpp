@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -23,61 +23,61 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include <string>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+#include <string>
 
-#include "../src/util/spice_utils.h"
 #include "../src/epoch.h"
+#include "../src/util/spice_utils.h"
 
 // In this test we test the functionality of loading spice kernels
 // Summary for: C_G_1000012_2012_2017.bsp
- 
-//Body: CHURYUMOV-GERASIMENKO (1000012) w.r.t. SUN (10)
+
+// Body: CHURYUMOV-GERASIMENKO (1000012) w.r.t. SUN (10)
 //      Start of Interval (ET)              End of Interval (ET)
 //      -----------------------------       -----------------------------
 //      2012 JAN 01 00:00:00.000            2017 JAN 01 00:00:00.000
 
 using namespace kep_toolbox::util;
 
-std::string stream(double input[6]) 
+std::string stream(double input[6])
 {
-	std::ostringstream retval;
-	retval << "[";
-	for (int i=0; i<6; ++i) {
-		retval << std::setprecision(16)<< input[i] << " ";
-	}
-	retval << "]";
-	return retval.str();
+    std::ostringstream retval;
+    retval << "[";
+    for (int i = 0; i < 6; ++i) {
+        retval << std::setprecision(16) << input[i] << " ";
+    }
+    retval << "]";
+    return retval.str();
 }
 
-int main() {
-	// We start loading the four kernels shipped with the kep_toolbox
-	load_spice_kernel("pck00010.tpc");
-	load_spice_kernel("gm_de431.tpc");
-	int dim = 0;
+int main()
+{
+    // We start loading the four kernels shipped with the kep_toolbox
+    load_spice_kernel("pck00010.tpc");
+    load_spice_kernel("gm_de431.tpc");
+    int dim = 0;
 
-	// Some definitions
-	SpiceDouble radii[3];
-	SpiceDouble mu_mars[1];
-	SpiceDouble state[6];
-	double lt;
+    // Some definitions
+    SpiceDouble radii[3];
+    SpiceDouble mu_mars[1];
+    SpiceDouble state[6];
+    double lt;
 
-	// We define the epoch to compute ephemeridess
-	kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
-	SpiceDouble spice_epoch = epoch_to_spice(when);
+    // We define the epoch to compute ephemeridess
+    kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
+    SpiceDouble spice_epoch = epoch_to_spice(when);
 
-	// We set SPICE to allow error handling
-	erract_c("SET",0,"RETURN");
+    // We set SPICE to allow error handling
+    erract_c("SET", 0, "RETURN");
 
-	// We check if the kernels have been loaded correctly by extracting a few 
-	// properties of mars
-	bodvrd_c ( "MARS", "RADII", 3, &dim, radii );
-	std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl ;
+    // We check if the kernels have been loaded correctly by extracting a few
+    // properties of mars
+    bodvrd_c("MARS", "RADII", 3, &dim, radii);
+    std::cout << "Mars Radius in km: " << std::setprecision(16) << radii[0] << std::endl;
 
-	bodvrd_c ( "MARS", "GM", 1, &dim, mu_mars );
-	std::cout << "Mars gravity parameter in km: " << std::setprecision(16) << mu_mars[0] << std::endl << std::endl;
+    bodvrd_c("MARS", "GM", 1, &dim, mu_mars);
+    std::cout << "Mars gravity parameter in km: " << std::setprecision(16) << mu_mars[0] << std::endl << std::endl;
 
-	return failed_c();
+    return failed_c();
 }
-

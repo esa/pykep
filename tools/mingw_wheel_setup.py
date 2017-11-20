@@ -3,10 +3,10 @@ from setuptools.dist import Distribution
 from distutils import util
 import sys
 
-NAME = 'PyKEP'
-VERSION = '@PyKEP_VERSION@'
+NAME = 'pykep'
+VERSION = '@pykep_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
-LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
+LONG_DESCRIPTION = 'pykep is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
 URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
@@ -34,36 +34,39 @@ CLASSIFIERS = [
 ]
 KEYWORDS = 'space keplerian math physics interplanetary'
 INSTALL_REQUIRES = ['numpy']
-PLATFORMS = ['Unix','Windows','OSX']
+PLATFORMS = ['Unix', 'Windows', 'OSX']
+
 
 class BinaryDistribution(Distribution):
+
     def has_ext_modules(foo):
         return True
 
 # Setup the list of external dlls.
 import os.path
 mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(sys.version_info[0])
-l = open(mingw_wheel_libs,'r').readlines()
+l = open(mingw_wheel_libs, 'r').readlines()
 DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
 
 setup(name=NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    url=URL,
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    license=LICENSE,
-    classifiers=CLASSIFIERS,
-    keywords=KEYWORDS,
-    platforms=PLATFORMS,
-    install_requires=INSTALL_REQUIRES,
-    packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.pontryagin', 'PyKEP.trajopt', 'PyKEP.util'],
-    # Include pre-compiled extension
-    package_data={
-                'PyKEP.core': ['_core.pyd'] + DLL_LIST,
-                'PyKEP.planet': ['_planet.pyd'],
-                'PyKEP.sims_flanagan': ['_sims_flanagan.pyd'],
-                'PyKEP.util': ['_util.pyd']
-                },
-    distclass=BinaryDistribution)
+      version=VERSION,
+      description=DESCRIPTION,
+      long_description=LONG_DESCRIPTION,
+      url=URL,
+      author=AUTHOR,
+      author_email=AUTHOR_EMAIL,
+      license=LICENSE,
+      classifiers=CLASSIFIERS,
+      keywords=KEYWORDS,
+      platforms=PLATFORMS,
+      install_requires=INSTALL_REQUIRES,
+      packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
+                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
+      # Include pre-compiled extension
+      package_data={
+          'pykep.core': ['_core.pyd'] + DLL_LIST,
+          'pykep.planet': ['_planet.pyd'],
+          'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
+          'pykep.util': ['_util.pyd']
+      },
+      distclass=BinaryDistribution)

@@ -14,29 +14,25 @@
  * limitations under the License.
  */
 
-
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
 #include <cmath>
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <string>
 
 /**
  * @brief Generic vector
  *
  * Stores x, y, z, w
  */
-struct Vector
-{
+struct Vector {
 public:
-
     /**
      * Default constructor
      */
-    Vector()
-        : x(0.0), y(0.0), z(0.0), w(0.0)
+    Vector() : x(0.0), y(0.0), z(0.0), w(0.0)
     {
     }
 
@@ -46,10 +42,7 @@ public:
      * @param arg_y y value
      * @param arg_z z value
      */
-    Vector(const double arg_x,
-            const double arg_y,
-            const double arg_z)
-        : x(arg_x), y(arg_y), z(arg_z), w(0.0)
+    Vector(const double arg_x, const double arg_y, const double arg_z) : x(arg_x), y(arg_y), z(arg_z), w(0.0)
     {
     }
 
@@ -60,19 +53,16 @@ public:
      * @param arg_z z value
      * @param arg_w w value
      */
-    Vector(const double arg_x,
-            const double arg_y,
-            const double arg_z,
-            const double arg_w)
+    Vector(const double arg_x, const double arg_y, const double arg_z, const double arg_w)
         : x(arg_x), y(arg_y), z(arg_z), w(arg_w)
     {
     }
-    
+
     /**
      * Copy constructor
      * @param v value to copy from
      */
-    Vector(const Vector& v)
+    Vector(const Vector &v)
     {
         x = v.x;
         y = v.y;
@@ -91,10 +81,9 @@ public:
      * Assignment operator
      * @param v value to copy from
      */
-    Vector& operator=(const Vector& v)
+    Vector &operator=(const Vector &v)
     {
-        if (this != &v)
-        {
+        if (this != &v) {
             x = v.x;
             y = v.y;
             z = v.z;
@@ -107,12 +96,9 @@ public:
      * Subtract operator
      * @param v value to suctract from
      */
-    Vector operator-(const Vector& v)
+    Vector operator-(const Vector &v)
     {
-        return Vector(x - v.x,
-                y - v.y,
-                z - v.z,
-                0.0);
+        return Vector(x - v.x, y - v.y, z - v.z, 0.0);
     }
 
     /**
@@ -128,11 +114,9 @@ public:
      * Calculates the dot product
      * @returns dot product
      */
-    double Dot(const Vector& vec) const
+    double Dot(const Vector &vec) const
     {
-        return (x * vec.x) +
-            (y * vec.y) +
-            (z * vec.z);
+        return (x * vec.x) + (y * vec.y) + (z * vec.z);
     }
 
     /**
@@ -160,7 +144,7 @@ public:
     double w;
 };
 
-inline std::ostream& operator<<(std::ostream& strm, const Vector& v)
+inline std::ostream &operator<<(std::ostream &strm, const Vector &v)
 {
     return strm << v.ToString();
 }

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-
 #ifndef SOLARPOSITION_H_
 #define SOLARPOSITION_H_
 
+#include "../../config.h"
 #include "DateTime.h"
 #include "Eci.h"
-#include "../../config.h"
 
 /**
  * @brief Find the position of the sun
@@ -36,7 +35,7 @@ public:
     {
     }
 
-    Eci FindPosition(const DateTime& dt);
+    Eci FindPosition(const DateTime &dt);
 
 private:
     double Delta_ET(double year) const;

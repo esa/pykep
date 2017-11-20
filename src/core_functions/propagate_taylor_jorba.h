@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -30,7 +30,8 @@ extern "C" {
 #include "jorba.h"
 }
 
-namespace kep_toolbox {
+namespace kep_toolbox
+{
 
 /// Taylor series propagation of a constant thrust segment
 /**
@@ -55,54 +56,52 @@ namespace kep_toolbox {
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 template <class T>
-void propagate_taylor_jorba(T &r0, T &v0, double &m0, const T &u,
-                            const double &t, const double &mu,
-                            const double &veff, const int &log10tolerance = -9,
-                            const int &log10rtolerance = -9) {
-  int i, order = 20, itmp = 0, direction;
-  MY_FLOAT startT, stopT, nextT;
-  MY_FLOAT xx[7];
-  InitMyFloat(startT);
-  InitMyFloat(stopT);
-  InitMyFloat(nextT);
-  for (i = 0; i < 7; i++) {
-    InitMyFloat(xx[i])
-  };
+void propagate_taylor_jorba(T &r0, T &v0, double &m0, const T &u, const double &t, const double &mu, const double &veff,
+                            const int &log10tolerance = -9, const int &log10rtolerance = -9)
+{
+    int i, order = 20, itmp = 0, direction;
+    MY_FLOAT startT, stopT, nextT;
+    MY_FLOAT xx[7];
+    InitMyFloat(startT);
+    InitMyFloat(stopT);
+    InitMyFloat(nextT);
+    for (i = 0; i < 7; i++) {
+        InitMyFloat(xx[i])
+    };
 
-  /* assign initials */
-  xx[0] = r0[0];
-  xx[1] = r0[1];
-  xx[2] = r0[2];
-  xx[3] = v0[0];
-  xx[4] = v0[1];
-  xx[5] = v0[2];
-  xx[6] = m0;
-  startT = 0;
-  stopT = t;
+    /* assign initials */
+    xx[0] = r0[0];
+    xx[1] = r0[1];
+    xx[2] = r0[2];
+    xx[3] = v0[0];
+    xx[4] = v0[1];
+    xx[5] = v0[2];
+    xx[6] = m0;
+    startT = 0;
+    stopT = t;
 
-  /* the main loop */
-  T u_copy(u);
-  if (t > 0) {
-    direction = 1;
-  } else {
-    direction = -1;
-    u_copy[0] = -u_copy[0];
-    u_copy[1] = -u_copy[1];
-    u_copy[2] = -u_copy[2];
-  }
+    /* the main loop */
+    T u_copy(u);
+    if (t > 0) {
+        direction = 1;
+    } else {
+        direction = -1;
+        u_copy[0] = -u_copy[0];
+        u_copy[1] = -u_copy[1];
+        u_copy[2] = -u_copy[2];
+    }
 
-  do {
-    itmp = taylor_step_fixed_thrust(&startT, xx, direction, 1, log10tolerance,
-                                    log10rtolerance, &stopT, &nextT, &order, mu,
-                                    veff, u_copy[0], u_copy[1], u_copy[2]);
-  } while (itmp == 0); /* while */
-  r0[0] = xx[0];
-  r0[1] = xx[1];
-  r0[2] = xx[2];
-  v0[0] = xx[3];
-  v0[1] = xx[4];
-  v0[2] = xx[5];
-  m0 = xx[6];
+    do {
+        itmp = taylor_step_fixed_thrust(&startT, xx, direction, 1, log10tolerance, log10rtolerance, &stopT, &nextT,
+                                        &order, mu, veff, u_copy[0], u_copy[1], u_copy[2]);
+    } while (itmp == 0); /* while */
+    r0[0] = xx[0];
+    r0[1] = xx[1];
+    r0[2] = xx[2];
+    v0[0] = xx[3];
+    v0[1] = xx[4];
+    v0[2] = xx[5];
+    m0 = xx[6];
 }
 }
 

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-
 #ifndef DATETIME_H_
 #define DATETIME_H_
 
+#include "TimeSpan.h"
+#include "Util.h"
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include "TimeSpan.h"
-#include "Util.h"
 
 #ifdef __MACH__
 #include <mach/clock.h>
@@ -31,16 +30,14 @@
 
 namespace
 {
-    static int daysInMonth[2][13] = {
-        //  1   2   3   4   5   6   7   8   9   10  11  12
-        {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-        {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-    };
-    static int cumulDaysInMonth[2][13] = {
-        //  1  2   3   4   5    6    7    8    9    10   11   12
-        {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
-        {0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}
-    };
+static int daysInMonth[2][13] = {
+    //  1   2   3   4   5   6   7   8   9   10  11  12
+    {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
+static int cumulDaysInMonth[2][13] = {
+    //  1  2   3   4   5    6    7    8    9    10   11   12
+    {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
+    {0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}};
 }
 
 /**
@@ -62,8 +59,7 @@ public:
      * Constructor
      * @param[in] ticks raw tick value
      */
-    DateTime(unsigned long long ticks)
-        : m_encoded(ticks)
+    DateTime(unsigned long long ticks) : m_encoded(ticks)
     {
     }
 
@@ -112,28 +108,13 @@ public:
      * @param[in] second the second
      * @param[in] microsecond the microsecond
      */
-    void Initialise(int year,
-            int month,
-            int day,
-            int hour,
-            int minute,
-            int second,
-            int microsecond)
+    void Initialise(int year, int month, int day, int hour, int minute, int second, int microsecond)
     {
-        if (!IsValidYearMonthDay(year, month, day) ||
-                hour < 0 || hour > 23 ||
-                minute < 0 || minute > 59 ||
-                second < 0 || second > 59 ||
-                microsecond < 0 || microsecond > 999999)
-        {
+        if (!IsValidYearMonthDay(year, month, day) || hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0
+            || second > 59 || microsecond < 0 || microsecond > 999999) {
             throw 1;
         }
-        m_encoded = TimeSpan(
-                AbsoluteDays(year, month, day),
-                hour,
-                minute,
-                second,
-                microsecond).Ticks();
+        m_encoded = TimeSpan(AbsoluteDays(year, month, day), hour, minute, second, microsecond).Ticks();
     }
 
     /**
@@ -147,8 +128,7 @@ public:
         struct timespec ts;
         int res;
 
-
-    #ifdef __MACH__
+#ifdef __MACH__
         // OS X does not have clock_gettime, use clock_get_time
         // credits: https://gist.github.com/jbenet/1087739
         clock_serv_t cclock;
@@ -159,26 +139,17 @@ public:
         ts.tv_sec = mts.tv_sec;
         ts.tv_nsec = mts.tv_nsec;
         res = 0;
-    #else
+#else
         res = clock_gettime(CLOCK_REALTIME, &ts);
-    #endif
-          
-        if (res == 0)
-        {
-            if (microseconds)
-            {
-                dt = DateTime(UnixEpoch
-                    + ts.tv_sec * TicksPerSecond
-                    + ts.tv_nsec / 1000LL * TicksPerMicrosecond);
+#endif
+
+        if (res == 0) {
+            if (microseconds) {
+                dt = DateTime(UnixEpoch + ts.tv_sec * TicksPerSecond + ts.tv_nsec / 1000LL * TicksPerMicrosecond);
+            } else {
+                dt = DateTime(UnixEpoch + ts.tv_sec * TicksPerSecond);
             }
-            else
-            {
-                dt = DateTime(UnixEpoch
-                    + ts.tv_sec * TicksPerSecond);
-            }
-        }
-        else
-        {
+        } else {
             throw 1;
         }
 
@@ -192,8 +163,7 @@ public:
      */
     static bool IsLeapYear(int year)
     {
-        if (!IsValidYear(year))
-        {
+        if (!IsValidYear(year)) {
             throw 1;
         }
 
@@ -208,8 +178,7 @@ public:
     static bool IsValidYear(int year)
     {
         bool valid = true;
-        if (year < 1 || year > 9999)
-        {
+        if (year < 1 || year > 9999) {
             valid = false;
         }
         return valid;
@@ -224,20 +193,16 @@ public:
     static bool IsValidYearMonth(int year, int month)
     {
         bool valid = true;
-        if (IsValidYear(year))
-        {
-            if (month < 1 || month > 12)
-            {
+        if (IsValidYear(year)) {
+            if (month < 1 || month > 12) {
                 valid = false;
             }
-        }
-        else 
-        {
+        } else {
             valid = false;
         }
         return valid;
     }
-    
+
     /**
      * Check whether the year/month/day is valid
      * @param[in] year the year to check
@@ -248,15 +213,11 @@ public:
     static bool IsValidYearMonthDay(int year, int month, int day)
     {
         bool valid = true;
-        if (IsValidYearMonth(year, month))
-        {
-            if (day < 1 || day > DaysInMonth(year, month))
-            {
+        if (IsValidYearMonth(year, month)) {
+            if (day < 1 || day > DaysInMonth(year, month)) {
                 valid = false;
             }
-        }
-        else
-        {
+        } else {
             valid = false;
         }
         return valid;
@@ -270,19 +231,15 @@ public:
      */
     static int DaysInMonth(int year, int month)
     {
-        if (!IsValidYearMonth(year, month))
-        {
+        if (!IsValidYearMonth(year, month)) {
             throw 1;
         }
-        
-        const int* daysInMonthPtr;
 
-        if (IsLeapYear(year))
-        {
+        const int *daysInMonthPtr;
+
+        if (IsLeapYear(year)) {
             daysInMonthPtr = daysInMonth[1];
-        }
-        else
-        {
+        } else {
             daysInMonthPtr = daysInMonth[0];
         }
 
@@ -298,19 +255,15 @@ public:
      */
     int DayOfYear(int year, int month, int day) const
     {
-        if (!IsValidYearMonthDay(year, month, day))
-        {
+        if (!IsValidYearMonthDay(year, month, day)) {
             throw 1;
         }
 
         int daysThisYear = day;
 
-        if (IsLeapYear(year))
-        {
+        if (IsLeapYear(year)) {
             daysThisYear += cumulDaysInMonth[1][month];
-        }
-        else
-        {
+        } else {
             daysThisYear += cumulDaysInMonth[0][month];
         }
 
@@ -331,10 +284,7 @@ public:
          * - minus prior century years
          * + plus prior years divisible by 400 days
          */
-        long long daysSoFar = 365 * previousYear
-            + previousYear / 4
-            - previousYear / 100
-            + previousYear / 400;
+        long long daysSoFar = 365 * previousYear + previousYear / 4 - previousYear / 100 + previousYear / 400;
 
         return static_cast<double>(daysSoFar) + doy - 1.0;
     }
@@ -350,11 +300,8 @@ public:
          * - minus prior century years
          * + plus prior years divisible by 400 days
          */
-        int result = DayOfYear(year, month, day) - 1
-            + 365 * previousYear
-            + previousYear / 4
-            - previousYear / 100
-            + previousYear / 400;
+        int result = DayOfYear(year, month, day) - 1 + 365 * previousYear + previousYear / 4 - previousYear / 100
+                     + previousYear / 400;
 
         return result;
     }
@@ -379,21 +326,18 @@ public:
         return static_cast<int>(((m_encoded / TicksPerDay) + 1LL) % 7LL);
     }
 
-    bool Equals(const DateTime& dt) const
+    bool Equals(const DateTime &dt) const
     {
         return (m_encoded == dt.m_encoded);
     }
 
-    int Compare(const DateTime& dt) const
+    int Compare(const DateTime &dt) const
     {
         int ret = 0;
 
-        if (m_encoded < dt.m_encoded)
-        {
+        if (m_encoded < dt.m_encoded) {
             return -1;
-        }
-        else if (m_encoded > dt.m_encoded)
-        {
+        } else if (m_encoded > dt.m_encoded) {
             return 1;
         }
 
@@ -414,13 +358,10 @@ public:
         month += months % 12;
         year += months / 12;
 
-        if (month < 1)
-        {
+        if (month < 1) {
             month += 12;
             --year;
-        }
-        else if (month > 12)
-        {
+        } else if (month > 12) {
             month -= 12;
             ++year;
         }
@@ -436,7 +377,7 @@ public:
      * @param[in] t the TimeSpan to add
      * @returns a DateTime which has the given TimeSpan added
      */
-    DateTime Add(const TimeSpan& t) const
+    DateTime Add(const TimeSpan &t) const
     {
         return AddTicks(t.Ticks());
     }
@@ -481,10 +422,10 @@ public:
         return m_encoded;
     }
 
-    void FromTicks(int& year, int& month, int& day) const
+    void FromTicks(int &year, int &month, int &day) const
     {
         int totalDays = static_cast<int>(m_encoded / TicksPerDay);
-        
+
         /*
          * number of 400 year cycles
          */
@@ -494,8 +435,7 @@ public:
          * number of 100 year cycles
          */
         int num100 = totalDays / 36524;
-        if (num100 == 4)
-        {
+        if (num100 == 4) {
             /*
              * last day of the last leap century
              */
@@ -511,8 +451,7 @@ public:
          * number of years
          */
         int num1 = totalDays / 365;
-        if (num1 == 4)
-        {
+        if (num1 == 4) {
             /*
              * last day of the last leap olympiad
              */
@@ -524,23 +463,19 @@ public:
          * find year
          */
         year = (num400 * 400) + (num100 * 100) + (num4 * 4) + num1 + 1;
-        
+
         /*
          * convert day of year to month/day
          */
-        const int* daysInMonthPtr;
-        if (IsLeapYear(year))
-        {
+        const int *daysInMonthPtr;
+        if (IsLeapYear(year)) {
             daysInMonthPtr = daysInMonth[1];
-        }
-        else
-        {
+        } else {
             daysInMonthPtr = daysInMonth[0];
         }
 
         month = 1;
-        while (totalDays >= daysInMonthPtr[month] && month <= 12)
-        {
+        while (totalDays >= daysInMonthPtr[month] && month <= 12) {
             totalDays -= daysInMonthPtr[month++];
         }
 
@@ -630,10 +565,8 @@ public:
         const double t = (ToJulian() - 2451545.0) / 36525.0;
 
         // Rotation angle in arcseconds
-        double theta = 67310.54841
-            + (876600.0 * 3600.0 + 8640184.812866) * t
-            + 0.093104 * t * t
-            - 0.0000062 * t * t * t;
+        double theta
+            = 67310.54841 + (876600.0 * 3600.0 + 8640184.812866) * t + 0.093104 * t * t - 0.0000062 * t * t * t;
 
         // 360.0 / 86400.0 = 1.0 / 240.0
         return Util::WrapTwoPI(Util::DegreesToRadians(theta / 240.0));
@@ -671,64 +604,62 @@ private:
     unsigned long long m_encoded;
 };
 
-inline std::ostream& operator<<(std::ostream& strm, const DateTime& dt)
+inline std::ostream &operator<<(std::ostream &strm, const DateTime &dt)
 {
     return strm << dt.ToString();
 }
 
-inline DateTime operator+(const DateTime& dt, TimeSpan ts)
+inline DateTime operator+(const DateTime &dt, TimeSpan ts)
 {
     long long int res = dt.Ticks() + ts.Ticks();
-    if (res < 0 || res > MaxValueTicks)
-    {
-           throw 1;
-    }
-
-    return DateTime(res);
-}
-
-inline DateTime operator-(const DateTime& dt, const TimeSpan& ts)
-{
-    long long int res = dt.Ticks() - ts.Ticks();
-    if (res < 0 || res > MaxValueTicks)
-    {
+    if (res < 0 || res > MaxValueTicks) {
         throw 1;
     }
 
     return DateTime(res);
 }
 
-inline TimeSpan operator-(const DateTime& dt1, const DateTime& dt2)
+inline DateTime operator-(const DateTime &dt, const TimeSpan &ts)
+{
+    long long int res = dt.Ticks() - ts.Ticks();
+    if (res < 0 || res > MaxValueTicks) {
+        throw 1;
+    }
+
+    return DateTime(res);
+}
+
+inline TimeSpan operator-(const DateTime &dt1, const DateTime &dt2)
 {
     return TimeSpan(dt1.Ticks() - dt2.Ticks());
 }
 
-inline bool operator==(const DateTime& dt1, const DateTime& dt2)
+inline bool operator==(const DateTime &dt1, const DateTime &dt2)
 {
     return dt1.Equals(dt2);
 }
 
-inline bool operator>(const DateTime& dt1, const DateTime& dt2)
+inline bool operator>(const DateTime &dt1, const DateTime &dt2)
 {
     return (dt1.Compare(dt2) > 0);
 }
 
-inline bool operator>=(const DateTime& dt1, const DateTime& dt2)
+inline bool operator>=(const DateTime &dt1, const DateTime &dt2)
 {
     return (dt1.Compare(dt2) >= 0);
 }
 
-inline bool operator!=(const DateTime& dt1, const DateTime& dt2)
+inline bool operator!=(const DateTime &dt1, const DateTime &dt2)
 {
     return !dt1.Equals(dt2);
 }
 
-inline bool operator<(const DateTime& dt1, const DateTime& dt2)
+inline bool operator<(const DateTime &dt1, const DateTime &dt2)
 {
     return (dt1.Compare(dt2) < 0);
 }
 
-inline bool operator<=(const DateTime& dt1, const DateTime& dt2)
+inline bool operator<=(const DateTime &dt1, const DateTime &dt2)
 {
     return (dt1.Compare(dt2) <= 0);
 }

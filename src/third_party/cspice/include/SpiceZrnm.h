@@ -60,7 +60,6 @@
 
 */
 
-
 #ifndef HAVE_SPICERENAME_H
 
 /*
@@ -68,15 +67,14 @@ Redefine names causing symbol conflicts:
 */
 #define HAVE_SPICERENAME_H
 
-   /* dpstrf_ may exist in the LAPACK library. */
+/* dpstrf_ may exist in the LAPACK library. */
 
-   #define   dpstrf_   zz_dpstrf_
+#define dpstrf_ zz_dpstrf_
 
-   /* Just in case. */
+/* Just in case. */
 
-   #define   pi_       zz_pi_
-   #define   vnorm_    zz_vnorm_
-   #define   vdist_    zz_vdist_
+#define pi_ zz_pi_
+#define vnorm_ zz_vnorm_
+#define vdist_ zz_vdist_
 
 #endif
-

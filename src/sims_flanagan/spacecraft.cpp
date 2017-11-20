@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -27,23 +27,27 @@
 
 #include "spacecraft.h"
 
-namespace kep_toolbox{ namespace sims_flanagan{
+namespace kep_toolbox
+{
+namespace sims_flanagan
+{
 
-
-std::string spacecraft::human_readable() const {
-	std::ostringstream s;
-	s << "NEP spacecraft:" << std::endl << std::endl;
-	s << "mass: " << get_mass() << std::endl;
-	s << "thrust: " << get_thrust() << std::endl;
-	s << "isp: " << get_isp() << std::endl;
-	return s.str();
+std::string spacecraft::human_readable() const
+{
+    std::ostringstream s;
+    s << "NEP spacecraft:" << std::endl << std::endl;
+    s << "mass: " << get_mass() << std::endl;
+    s << "thrust: " << get_thrust() << std::endl;
+    s << "isp: " << get_isp() << std::endl;
+    return s.str();
 };
 
-std::ostream &operator<<(std::ostream &s, const spacecraft &in ) {
-	s << "Spacecraft mass: " << in.get_mass() << std::endl;
-	s << "Spacecraft thrust: " << in.get_thrust() << std::endl;
-	s << "Spacecraft isp: " << in.get_isp();
-	return s;
+std::ostream &operator<<(std::ostream &s, const spacecraft &in)
+{
+    s << "Spacecraft mass: " << in.get_mass() << std::endl;
+    s << "Spacecraft thrust: " << in.get_thrust() << std::endl;
+    s << "Spacecraft isp: " << in.get_isp();
+    return s;
 };
-
-}} //end of namespaces
+}
+} // end of namespaces

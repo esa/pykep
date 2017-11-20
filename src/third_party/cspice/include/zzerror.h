@@ -2,7 +2,7 @@
 
 -Abstract
 
-   The error control routine prototypes for use in CSPICE. 
+   The error control routine prototypes for use in CSPICE.
 
 -Disclaimer
 
@@ -50,10 +50,10 @@
 
 -Files
 
-   None. 
+   None.
 
 -Author_and_Institution
-   
+
    E. D. Wright    (JPL)
 
 -Literature_References
@@ -65,7 +65,7 @@
    -CSPICE 1.1.0 14-JAN-2013 (EDW)
 
       Added parameter:
-      
+
          SCALAR_OP
 
    -CSPICE 1.0.0 17-OCT-2005 (EDW)
@@ -77,10 +77,9 @@
 #ifndef ZZERROR_H
 #define ZZERROR_H
 
-   const char * zzerror( long cnt );
-   void         zzerrorinit();
+const char *zzerror(long cnt);
+void zzerrorinit();
 
-   #define      SCALAR_OP         -1
+#define SCALAR_OP -1
 
 #endif
-

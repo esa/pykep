@@ -1,5 +1,5 @@
-Automated Mesh Adaptation in Interplanetary Trajectory Optimization
-===================================================================
+Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization
+==============================================================================
 
 .. figure:: ../images/gallery4.png
    :alt: "Eart-Venus low-thrust transfer with on-line mesh adaptation"
@@ -9,15 +9,15 @@ This plot is produced by the following code:
 
 .. code-block:: python
 
-   from PyKEP import *
-   examples.run_example4(nseg=20)
+   import pykep as pk
+   pk.examples.run_example4(nseg=20)
    
 In this case, an interplanetary trajectory is computed using a new type of leg using Sundmann's variable rather than time and thus obtaining
 automated mesh adaptation. By letting time flow slower when near the sun, we obtain segments of different length depending on their distance from the Sun.
 This translate in a more efficient segment distribution, both from the Taylor integration perspective and for the thrust numerical grid perspective. In case the user has a license for SNOPT, the use of this typically result in a performance gain
 
 The code for this example can be studied `here. 
-<https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex4.py>`_ Feel free to leave comments.
+<https://github.com/esa/pykep/blob/master/pykep/examples/_ex4.py>`_ Feel free to leave comments.
 
 
 A preliminary study of this unique technique, can be found in the paper below.

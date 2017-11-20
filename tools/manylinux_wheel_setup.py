@@ -1,8 +1,8 @@
 from distutils.core import setup, Extension
-NAME = 'PyKEP'
-VERSION = '@PyKEP_VERSION@'
+NAME = 'pykep'
+VERSION = '@pykep_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
-LONG_DESCRIPTION = 'PyKEP is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
+LONG_DESCRIPTION = 'pykep is a scientific library providing basic space flight mechanics computations mostly based on perturbed Keplerian dynamics.'
 URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
@@ -30,32 +30,33 @@ CLASSIFIERS = [
 ]
 KEYWORDS = 'space keplerian math physics interplanetary'
 INSTALL_REQUIRES = ['numpy']
-PLATFORMS = ['Unix','Windows','OSX']
+PLATFORMS = ['Unix', 'Windows', 'OSX']
 
 extension_module = Extension(
     'dummy',
-     sources=['dummy.cpp']
+    sources=['dummy.cpp']
 )
 
 setup(name=NAME,
-    version=VERSION,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    url=URL,
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    license=LICENSE,
-    classifiers=CLASSIFIERS,
-    keywords=KEYWORDS,
-    platforms=PLATFORMS,
-    install_requires=INSTALL_REQUIRES,
-    ext_modules = [extension_module],
-    packages=['PyKEP', 'PyKEP.core', 'PyKEP.examples', 'PyKEP.orbit_plots', 'PyKEP.phasing', 'PyKEP.planet', 'PyKEP.sims_flanagan', 'PyKEP.pontryagin', 'PyKEP.trajopt', 'PyKEP.util'],
-    # Include pre-compiled extension
-    package_data={
-                'PyKEP.core': ['_core.so'],
-                'PyKEP.planet': ['_planet.so'],
-                'PyKEP.sims_flanagan': ['_sims_flanagan.so'],
-                'PyKEP.util': ['_util.so']
-                },
-)
+      version=VERSION,
+      description=DESCRIPTION,
+      long_description=LONG_DESCRIPTION,
+      url=URL,
+      author=AUTHOR,
+      author_email=AUTHOR_EMAIL,
+      license=LICENSE,
+      classifiers=CLASSIFIERS,
+      keywords=KEYWORDS,
+      platforms=PLATFORMS,
+      install_requires=INSTALL_REQUIRES,
+      ext_modules=[extension_module],
+      packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
+                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
+      # Include pre-compiled extension
+      package_data={
+          'pykep.core': ['_core.so'],
+          'pykep.planet': ['_planet.so'],
+          'pykep.sims_flanagan': ['_sims_flanagan.so'],
+          'pykep.util': ['_util.so']
+      },
+      )

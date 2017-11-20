@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -28,19 +28,22 @@
 
 #include <string>
 
-#include "base.h"
-#include "../util/spice_utils.h"
-#include "../serialization.h"
 #include "../config.h"
+#include "../serialization.h"
+#include "../util/spice_utils.h"
+#include "base.h"
 
-namespace kep_toolbox{ namespace planet {
+namespace kep_toolbox
+{
+namespace planet
+{
 
 /// A planet using the SPICE Toolbox
 /**
  * This class allows to instantiate a planet that uses SPICE toolbox
  * to compute the ephemerides.
  *
- * NOTE: The class does not check upon construction that the required kernels are loaded 
+ * NOTE: The class does not check upon construction that the required kernels are loaded
  * in memory. Its only when the ephemerides are actually called that an exception is thrown
  * in case the required kernels are not loaded
  *
@@ -52,45 +55,41 @@ namespace kep_toolbox{ namespace planet {
 class __KEP_TOOL_VISIBLE spice : public base
 {
 public:
-	spice(const std::string & = "CHURYUMOV-GERASIMENKO", 
-		const std::string & = "SUN", 
-		const std::string & = "ECLIPJ2000", 
-		const std::string & = "NONE",
-		double = 0, // mu_central_body
-		double = 0, // mu_self
-		double = 0, // radius
-		double = 0  // safe_radius
-	);
-	planet_ptr clone() const;
-	std::string human_readable_extra() const;
+    spice(const std::string & = "CHURYUMOV-GERASIMENKO", const std::string & = "SUN",
+          const std::string & = "ECLIPJ2000", const std::string & = "NONE",
+          double = 0, // mu_central_body
+          double = 0, // mu_self
+          double = 0, // radius
+          double = 0  // safe_radius
+          );
+    planet_ptr clone() const;
+    std::string human_readable_extra() const;
 
 private:
-	void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
 
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & boost::serialization::base_object<base>(*this);
-		ar & const_cast<std::string& >(m_target);
-		ar & const_cast<std::string& >(m_observer);
-		ar & const_cast<std::string& >(m_reference_frame);
-		ar & const_cast<std::string& >(m_aberrations);
-	}
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &boost::serialization::base_object<base>(*this);
+        ar &const_cast<std::string &>(m_target);
+        ar &const_cast<std::string &>(m_observer);
+        ar &const_cast<std::string &>(m_reference_frame);
+        ar &const_cast<std::string &>(m_aberrations);
+    }
 
-	const std::string m_target;
-	const std::string m_observer;
-	const std::string m_reference_frame;
-	const std::string m_aberrations;
+    const std::string m_target;
+    const std::string m_observer;
+    const std::string m_reference_frame;
+    const std::string m_aberrations;
 
-	// Dummy variables that store intermidiate values to transfer to and from SPICE 
-	mutable SpiceDouble m_state[6];
-	mutable SpiceDouble m_lt;
-
+    // Dummy variables that store intermidiate values to transfer to and from SPICE
+    mutable SpiceDouble m_state[6];
+    mutable SpiceDouble m_lt;
 };
-
-
-}} /// End of namespace kep_toolbox
+}
+} /// End of namespace kep_toolbox
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::spice)
 

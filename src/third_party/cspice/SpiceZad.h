@@ -6,7 +6,7 @@
 
    Perform CSPICE declarations to support passed-in function
    adapters used in wrapper interfaces.
-            
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -35,29 +35,29 @@
 -Required_Reading
 
    None.
-   
+
 -Particulars
 
    This header file contains declarations used by the CSPICE
    passed-in function adapter ("PFA") system. This system enables
    CSPICE wrapper functions to support passed-in function
-   arguments whose prototypes are C-style, even when these 
+   arguments whose prototypes are C-style, even when these
    functions are to be called from f2c'd Fortran routines
    expecting f2c-style interfaces.
 
    This header declares:
 
-     - The prototype for the passed-in function argument 
+     - The prototype for the passed-in function argument
        pointer storage and fetch routines
 
           zzadsave_c
           zzadget_c
 
-     - Prototypes for CSPICE adapter functions. Each passed-in       
+     - Prototypes for CSPICE adapter functions. Each passed-in
        function argument in a CSPICE wrapper has a corresponding
        adapter function. The adapter functions have interfaces
        that match those of their f2c'd counterparts; this allows
-       the adapters to be called by f2c'd SPICELIB code. The 
+       the adapters to be called by f2c'd SPICELIB code. The
        adapters look up saved function pointers for routines
        passed in by the wrapper's caller and call these functions.
 
@@ -73,137 +73,107 @@ Literature_References
 -Author_and_Institution
 
    N.J. Bachman       (JPL)
-   
+
 -Restrictions
 
    None.
-      
+
 -Version
 
-   -CSPICE Version 2.2.0, 29-NOV-2011 (EDW)  
+   -CSPICE Version 2.2.0, 29-NOV-2011 (EDW)
 
       Updated to support the user defined boolean function capability.
 
-   -CSPICE Version 2.1.0, 21-DEC-2009 (EDW)  
+   -CSPICE Version 2.1.0, 21-DEC-2009 (EDW)
 
       Updated to support the user defined scalar function capability.
 
-   -CSPICE Version 2.0.0, 29-JAN-2009 (NJB)  
+   -CSPICE Version 2.0.0, 29-JAN-2009 (NJB)
 
       Now conditionally includes SpiceZfc.h.
-   
+
       Updated to reflect new calling sequence of f2c'd
       routine gfrefn_. Some header updates were made
       as well.
 
-   -CSPICE Version 1.0.0, 29-MAR-2008 (NJB)  
+   -CSPICE Version 1.0.0, 29-MAR-2008 (NJB)
 
 */
-
 
 /*
    This file has dependencies defined in SpiceZfc.h. Include that
    file if it hasn't already been included.
 */
 #ifndef HAVE_SPICEF2C_H
-   #include "SpiceZfc.h"
+#include "SpiceZfc.h"
 #endif
-
-
 
 #ifndef HAVE_SPICE_ZAD_H
 
-   #define HAVE_SPICE_ZAD_H
-   
+#define HAVE_SPICE_ZAD_H
 
+/*
+Prototypes for GF adapters:
+*/
 
-   /*
-   Prototypes for GF adapters:
-   */
+logical zzadbail_c(void);
 
-   logical  zzadbail_c ( void );
+int zzadstep_c(doublereal *et, doublereal *step);
 
+int zzadrefn_c(doublereal *t1, doublereal *t2, logical *s1, logical *s2, doublereal *t);
 
-   int      zzadstep_c ( doublereal   * et,
-                         doublereal   * step );
+int zzadrepf_c(void);
 
+int zzadrepi_c(doublereal *cnfine, char *srcpre, char *srcsuf, ftnlen srcprelen, ftnlen srcsuflen);
 
-   int      zzadrefn_c ( doublereal   * t1,
-                         doublereal   * t2,
-                         logical      * s1,
-                         logical      * s2,
-                         doublereal   * t    );
+int zzadrepu_c(doublereal *ivbeg, doublereal *ivend, doublereal *et);
 
+int zzadfunc_c(doublereal *et, doublereal *value);
 
-   int      zzadrepf_c ( void );
+int zzadqdec_c(U_fp udfunc, doublereal *et, logical *xbool);
 
+/*
+Define the enumerated type
 
-   int      zzadrepi_c ( doublereal   * cnfine,
-                         char         * srcpre,
-                         char         * srcsuf,
-                         ftnlen         srcprelen,
-                         ftnlen         srcsuflen );
+   SpicePassedInFunc
 
+for names of passed-in functions. Using this type gives
+us compile-time checking and avoids string comparisons.
+*/
+enum _SpicePassedInFunc {
+    UDBAIL,
+    UDREFN,
+    UDREPF,
+    UDREPI,
+    UDREPU,
+    UDSTEP,
+    UDFUNC,
+    UDQDEC,
+};
 
-   int      zzadrepu_c ( doublereal   * ivbeg,
-                         doublereal   * ivend,
-                         doublereal   * et      );
+typedef enum _SpicePassedInFunc SpicePassedInFunc;
 
+/*
+SPICE_N_PASSED_IN_FUNC is the count of SpicePassedInFunc values.
+*/
+#define SPICE_N_PASSED_IN_FUNC 8
 
-   int      zzadfunc_c ( doublereal   * et,
-                         doublereal   * value );
+/*
+CSPICE wrappers supporting passed-in function arguments call
+the adapter setup interface function once per each such argument;
+these calls save the function pointers for later use within the
+f2c'd code that calls passed-in functions. The saved pointers
+will be used in calls by the adapter functions whose prototypes
+are declared above.
 
+Prototypes for adapter setup interface:
+*/
+void zzadsave_c(SpicePassedInFunc functionID, void *functionPtr);
 
-   int      zzadqdec_c (  U_fp          udfunc,
-                          doublereal  * et,
-                          logical     * xbool );
+void *zzadget_c(SpicePassedInFunc functionID);
 
-   /*
-   Define the enumerated type 
-
-      SpicePassedInFunc
-
-   for names of passed-in functions. Using this type gives
-   us compile-time checking and avoids string comparisons.
-   */
-   enum _SpicePassedInFunc  { 
-                               UDBAIL,
-                               UDREFN,
-                               UDREPF,
-                               UDREPI,
-                               UDREPU,
-                               UDSTEP,
-                               UDFUNC,
-                               UDQDEC,
-                            };
-   
-   typedef enum _SpicePassedInFunc SpicePassedInFunc;
-   
-   /*
-   SPICE_N_PASSED_IN_FUNC is the count of SpicePassedInFunc values.
-   */
-   #define SPICE_N_PASSED_IN_FUNC     8
-
-
-   /*
-   CSPICE wrappers supporting passed-in function arguments call
-   the adapter setup interface function once per each such argument;
-   these calls save the function pointers for later use within the
-   f2c'd code that calls passed-in functions. The saved pointers
-   will be used in calls by the adapter functions whose prototypes
-   are declared above.
-
-   Prototypes for adapter setup interface: 
-   */
-   void    zzadsave_c ( SpicePassedInFunc    functionID,
-                        void               * functionPtr );
-
-   void *  zzadget_c  ( SpicePassedInFunc    functionID  );
- 
- 
 #endif
 
 /*
-End of header file SpiceZad.h 
+End of header file SpiceZad.h
 */
-

@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-
 #ifndef COORDGEODETIC_H_
 #define COORDGEODETIC_H_
 
 #include "Util.h"
 
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <string>
 
 /**
  * @brief Stores a geodetic location (latitude, longitude, altitude).
  *
  * Internally the values are stored in radians and kilometres.
  */
-struct CoordGeodetic
-{
+struct CoordGeodetic {
 public:
     /**
      * Default constructor
      */
-    CoordGeodetic()
-        : latitude(0.0),
-        longitude(0.0),
-        altitude(0.0)
+    CoordGeodetic() : latitude(0.0), longitude(0.0), altitude(0.0)
     {
     }
 
@@ -49,19 +44,12 @@ public:
      * @param[in] alt the altitude in kilometers
      * @param[in] is_radians whether the latitude/longitude is in radians
      */
-    CoordGeodetic(
-            double lat,
-            double lon,
-            double alt,
-            bool is_radians = false)
+    CoordGeodetic(double lat, double lon, double alt, bool is_radians = false)
     {
-        if (is_radians)
-        {
+        if (is_radians) {
             latitude = lat;
             longitude = lon;
-        }
-        else
-        {
+        } else {
             latitude = Util::DegreesToRadians(lat);
             longitude = Util::DegreesToRadians(lon);
         }
@@ -72,7 +60,7 @@ public:
      * Copy constructor
      * @param[in] geo object to copy from
      */
-    CoordGeodetic(const CoordGeodetic& geo)
+    CoordGeodetic(const CoordGeodetic &geo)
     {
         latitude = geo.latitude;
         longitude = geo.longitude;
@@ -90,10 +78,9 @@ public:
      * Assignment operator
      * @param[in] geo object to copy from
      */
-    CoordGeodetic& operator=(const CoordGeodetic& geo)
+    CoordGeodetic &operator=(const CoordGeodetic &geo)
     {
-        if (this != &geo)
-        {
+        if (this != &geo) {
             latitude = geo.latitude;
             longitude = geo.longitude;
             altitude = geo.altitude;
@@ -106,7 +93,7 @@ public:
      * @param[in] geo the object to compare with
      * @returns whether the object is equal
      */
-    bool operator==(const CoordGeodetic& geo) const
+    bool operator==(const CoordGeodetic &geo) const
     {
         return IsEqual(geo);
     }
@@ -116,7 +103,7 @@ public:
      * @param[in] geo the object to compare with
      * @returns whether the object is not equal
      */
-    bool operator!=(const CoordGeodetic& geo) const
+    bool operator!=(const CoordGeodetic &geo) const
     {
         return !IsEqual(geo);
     }
@@ -143,13 +130,10 @@ public:
     double altitude;
 
 private:
-    bool IsEqual(const CoordGeodetic& geo) const
+    bool IsEqual(const CoordGeodetic &geo) const
     {
         bool equal = false;
-        if (latitude == geo.latitude &&
-                longitude == geo.longitude &&
-                altitude == geo.altitude)
-        {
+        if (latitude == geo.latitude && longitude == geo.longitude && altitude == geo.altitude) {
             equal = false;
         }
         return equal;
@@ -161,7 +145,7 @@ private:
  * @params[in,out] strm stream to output to
  * @params[in] g the CoordGeodetic to print
  */
-inline std::ostream& operator<<(std::ostream& strm, const CoordGeodetic& g)
+inline std::ostream &operator<<(std::ostream &strm, const CoordGeodetic &g)
 {
     return strm << g.ToString();
 }

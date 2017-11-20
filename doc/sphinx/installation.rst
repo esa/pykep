@@ -1,23 +1,23 @@
 .. _howtoinstall:
 
-Install PyKEP
+Install pykep
 ======================
 
-PyKEP supports 32 and 64 bits architectures and both python 2.7 and python 3.4-3.5 We are unfortunately not in the position to provide
-binaries for everybody, so you will most likely need to compile the source code youself. This process, under unix architectures is
-painless, while under windows architectures it can be troublesome. For this reason we provide the 64 bits binaries of each release.
+pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X We are unfortunately not in the position to provide
+binaries for everybody, so it is likely you will need to compile the source code youself. This process, under unix architectures is
+painless, while under windows architectures it can be troublesome, but we do provide windows 64 bits binaries via PyPi
 
 Using Windows Binaries
 ----------------------
 
-If you have a windows 64-bits based python (27, 34 or 35) you can install PyKEP via pip typing:
+If you have a windows 64-bits based python (27, 34, 35 or 36) you can install pykep via pip typing::
 
   pip install pykep
 
 Compiling and Installing under Unix
 -----------------------------------
 
-Assuming you have prepared your system for compiling PyKEP (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have
+Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have
 created a directory keptoolbox in your current directory, move there::
 
   cd pykep
@@ -60,8 +60,8 @@ Here is a typical example of the output obtained::
   Install the project...
   -- Install configuration: ""
   -- Installing: /usr/local/lib/libkeplerian_toolbox.dylib
-  -- Up-to-date: /usr/local/lib/python2.7/site-packages/PyKEP/__init__.py
-  -- Installing: /usr/local/lib/python2.7/site-packages/PyKEP/core/_core.so
+  -- Up-to-date: /usr/local/lib/python2.7/site-packages/pykep/__init__.py
+  -- Installing: /usr/local/lib/python2.7/site-packages/pykep/core/_core.so
 
 Compiling and Installing under Windows
 --------------------------------------
@@ -71,8 +71,8 @@ Unsing minGW things will be the same as under Unix, just make sure that
 * You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).
 * Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)
 * Check, when running CMake, that all libraries are found correctly
-* When running a make install, Windows will probably put your PyKEP directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
-* Put all dll (boost and keplerian_toolbox) in PyKEP/core
+* When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
+* Put all dll (boost and keplerian_toolbox) in pykep/core
 * Hope for the best (kidding its super easy ...)
 
 Systems with both Python 2 and Python 3 installed

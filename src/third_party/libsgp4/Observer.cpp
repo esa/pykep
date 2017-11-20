@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 #include "Observer.h"
 
 #include "CoordTopocentric.h"
@@ -48,21 +47,16 @@ CoordTopocentric Observer::GetLookAngle(const Eci &eci)
     double sin_theta = sin(theta);
     double cos_theta = cos(theta);
 
-    double top_s = sin_lat * cos_theta * range.x
-        + sin_lat * sin_theta * range.y - cos_lat * range.z;
-    double top_e = -sin_theta * range.x
-        + cos_theta * range.y;
-    double top_z = cos_lat * cos_theta * range.x 
-        + cos_lat * sin_theta * range.y + sin_lat * range.z;
+    double top_s = sin_lat * cos_theta * range.x + sin_lat * sin_theta * range.y - cos_lat * range.z;
+    double top_e = -sin_theta * range.x + cos_theta * range.y;
+    double top_z = cos_lat * cos_theta * range.x + cos_lat * sin_theta * range.y + sin_lat * range.z;
     double az = atan(-top_e / top_s);
 
-    if (top_s > 0.0)
-    {
+    if (top_s > 0.0) {
         az += kPI;
     }
 
-    if (az < 0.0)
-    {
+    if (az < 0.0) {
         az += 2.0 * kPI;
     }
 
@@ -75,8 +69,5 @@ CoordTopocentric Observer::GetLookAngle(const Eci &eci)
      * range in km
      * range rate in km/s
      */
-    return CoordTopocentric(az,
-            el,
-            range.w,
-            rate);
+    return CoordTopocentric(az, el, range.w, rate);
 }

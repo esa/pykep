@@ -1,5 +1,5 @@
 /*****************************************************************************
- *   Copyright (C) 2004-2015 The PyKEP development team,                     *
+ *   Copyright (C) 2004-2018 The pykep development team,                     *
  *   Advanced Concepts Team (ACT), European Space Agency (ESA)               *
  *                                                                           *
  *   https://gitter.im/esa/pykep                                             *
@@ -33,8 +33,10 @@
 // Serialization code (END)
 #include "../config.h"
 
-namespace kep_toolbox {
-namespace sims_flanagan{
+namespace kep_toolbox
+{
+namespace sims_flanagan
+{
 
 /// Spacecraft
 /**
@@ -43,39 +45,62 @@ namespace sims_flanagan{
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-
 class __KEP_TOOL_VISIBLE spacecraft
 {
-	friend std::ostream &operator<<(std::ostream &s, const spacecraft &in );
+    friend std::ostream &operator<<(std::ostream &s, const spacecraft &in);
+
 public:
-	spacecraft():m_mass(0),m_thrust(0),m_isp(0) {}
-	spacecraft(const double &mass_, const double &thrust_, const double &isp_) : m_mass(mass_), m_thrust(thrust_), m_isp(isp_) {}
-	double get_mass() const {return m_mass;}
-	double get_thrust() const {return m_thrust;}
-	double get_isp() const {return m_isp;}
-	void set_mass(const double _mass) {m_mass=_mass;}
-	void set_thrust(const double _thrust) {m_thrust=_thrust;}
-	void set_isp(const double _isp) {m_isp=_isp;}
-	std::string human_readable() const;
+    spacecraft() : m_mass(0), m_thrust(0), m_isp(0)
+    {
+    }
+    spacecraft(const double &mass_, const double &thrust_, const double &isp_)
+        : m_mass(mass_), m_thrust(thrust_), m_isp(isp_)
+    {
+    }
+    double get_mass() const
+    {
+        return m_mass;
+    }
+    double get_thrust() const
+    {
+        return m_thrust;
+    }
+    double get_isp() const
+    {
+        return m_isp;
+    }
+    void set_mass(const double _mass)
+    {
+        m_mass = _mass;
+    }
+    void set_thrust(const double _thrust)
+    {
+        m_thrust = _thrust;
+    }
+    void set_isp(const double _isp)
+    {
+        m_isp = _isp;
+    }
+    std::string human_readable() const;
+
 private:
-// Serialization code
-	friend class boost::serialization::access;
-	template <class Archive>
-	void serialize(Archive &ar, const unsigned int)
-	{
-		ar & m_mass;
-		ar & m_thrust;
-		ar & m_isp;
-	}
-// Serialization code (END)
-	double m_mass;
-	double m_thrust;
-	double m_isp;
+    // Serialization code
+    friend class boost::serialization::access;
+    template <class Archive>
+    void serialize(Archive &ar, const unsigned int)
+    {
+        ar &m_mass;
+        ar &m_thrust;
+        ar &m_isp;
+    }
+    // Serialization code (END)
+    double m_mass;
+    double m_thrust;
+    double m_isp;
 };
 
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const spacecraft &in );
-
-
-}} //Namespaces
+__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const spacecraft &in);
+}
+} // Namespaces
 
 #endif // KEP_TOOLBOX_SPACECRAFT_H

@@ -1,111 +1,83 @@
 .. _trajopt:
 
 ===================================
-The trajopt module (requires PyGMO)
+The trajopt module (requires pygmo)
 ===================================
 
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
-:class:`PyKEP.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre
-:class:`PyKEP.trajopt.pl2pl_N_impulses`         class           A direct transfer between planets allowing for many DSMs
-:class:`PyKEP.trajopt.mga_lt_nep`               class           A multiple Gravity Assist Trajectory low-thrust optimization problem
-:class:`PyKEP.trajopt.mr_lt_nep`                class           A multiple randezvous low-thrust optimization problem
-:class:`PyKEP.trajopt._direct_base`             class           Base direct transfer between Cartesian states in the direct transcription.
-:class:`PyKEP.trajopt.direct_or2or`             class           A direct transfer between orbits in the direct transcription.
-:class:`PyKEP.trajopt._indirect_base`           class           Base direct transfer between Cartesian states in the indirect transcription.
-:class:`PyKEP.trajopt.indirect_pt2pt`           class           A direct transfer between Cartesian states in the indirect transcription.
-:class:`PyKEP.trajopt.indirect_pl2pl`           class           A direct transfer between planets in the indirect transcription.
-:class:`PyKEP.trajopt.indirect_or2or`           class           A direct transfer between orbits in the indirect transcription.
-:class:`PyKEP.trajopt.indirect_pt2or`           class           A direct transfer between a Cartesian state and orbit in the indirect transcription.
+:class:`pykep.trajopt.lt_margo`                 class           A cubesat mission to near earth asteroids. Solar Electric Propulsion and Earth gravity can be modelled.
+:class:`pykep.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre
+:class:`pykep.trajopt.mr_lt_nep`                class           A multiple randezvous low-thrust optimization problem (e.g. for asteroids in the main belt)
+:class:`pykep.trajopt.direct_pl2pl`             class           A transfer between planets using a direct transcription.
+:class:`pykep.trajopt.indirect_pt2pt`           class           A transfer between Cartesian states using an indirect transcription.
+:class:`pykep.trajopt.indirect_or2or`           class           A transfer between orbits using an indirect transcription.
+:class:`pykep.trajopt.indirect_pt2or`           class           A transfer transfer between a Cartesian state and orbit using an indirect transcription.
 =========================================       =========       ================================================
 
 Detailed Documentation
 ======================
 
-.. autoclass:: PyKEP.trajopt.mga_1dsm(*args)
+.. autoclass:: pykep.trajopt.lt_margo(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_1dsm.__init__(*args)
+   .. automethod:: pykep.trajopt.lt_margo.__init__(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_1dsm.set_tof(*args)
+   .. automethod:: pykep.trajopt.lt_margo.pretty(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_1dsm.set_launch_window(*args)
+   .. automethod:: pykep.trajopt.lt_margo.plot_traj(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_1dsm.set_vinf(*args)
+   .. automethod:: pykep.trajopt.lt_margo.plot_dists_thrust(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_1dsm.pretty(*args)
-
-   .. automethod:: PyKEP.trajopt.mga_1dsm.plot(*args)
+   .. automethod:: pykep.trajopt.lt_margo.double_segments(*args)
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.mga_lt_nep(*args)
+.. autoclass:: pykep.trajopt.direct_pl2pl(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_lt_nep.__init__(*args)
+   .. automethod:: pykep.trajopt.direct_pl2pl.__init__(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_lt_nep.high_fidelity(*args)
+   .. automethod:: pykep.trajopt.direct_pl2pl.pretty(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_lt_nep.ic_from_mga_1dsm(*args)
+   .. automethod:: pykep.trajopt.direct_pl2pl.plot_traj(*args)
 
-   .. automethod:: PyKEP.trajopt.mga_lt_nep.plot(*args)
+   .. automethod:: pykep.trajopt.direct_pl2pl.plot_control(*args)
 
-------------
-
-.. autoclass:: PyKEP.trajopt.mr_lt_nep(*args)
-
-   .. automethod:: PyKEP.trajopt.mr_lt_nep.__init__(*args)
-
-   .. automethod:: PyKEP.trajopt.mr_lt_nep.plot(*args)
+   .. automethod:: pykep.trajopt.direct_pl2pl.get_traj(*args)
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.pl2pl_N_impulses(*args)
+.. autoclass:: pykep.trajopt.mga_1dsm(*args)
 
-   .. automethod:: PyKEP.trajopt.pl2pl_N_impulses.__init__(*args)
+   .. automethod:: pykep.trajopt.mga_1dsm.__init__(*args)
 
-------------
+   .. automethod:: pykep.trajopt.mga_1dsm.pretty(*args)
 
-.. autoclass:: PyKEP.trajopt._direct_base(object)
-
-  .. automethod:: PyKEP.trajopt._direct_base.plot_traj(z, units=PyKEP.AU, N=20)
-  .. automethod:: PyKEP.trajopt._direct_base.plot_control(z, mark="k.-", time=True)
-  .. automethod:: PyKEP.trajopt._direct_base.get_traj(z)
+   .. automethod:: pykep.trajopt.mga_1dsm.plot(*args)
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.direct_or2or(_direct_base)
+.. autoclass:: pykep.trajopt.mr_lt_nep(*args)
 
-  .. automethod:: PyKEP.trajopt.direct_or2or.__init__(elem0, elemf, mass, thrust, isp, nseg, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, mu=PyKEP.MU_SUN, hf=True)
+   .. automethod:: pykep.trajopt.mr_lt_nep.__init__(*args)
 
-------------
-
-.. autoclass:: PyKEP.trajopt._indirect_base(object)
-
-  .. automethod:: PyKEP.trajopt._indirect_base.plot_traj(z, mark="k.-", atol=1e-12, rtol=1e-12, units=PyKEP.AU)
-  .. automethod:: PyKEP.trajopt._indirect_base.plot_control(z, mark="k.-", atol=1e-12, rtol=1e-12)
+   .. automethod:: pykep.trajopt.mr_lt_nep.plot(*args)
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.indirect_pt2pt(_indirect_base)
+.. autoclass:: pykep.trajopt.indirect_pt2pt(_indirect_base)
 
-  .. automethod:: PyKEP.trajopt.indirect_pt2pt.__init__(x0, xf, mass, thrust, isp, mu, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, atol=1e-10, rtol=1e-10)
+  .. automethod:: pykep.trajopt.indirect_pt2pt.__init__(*args)
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.indirect_pl2pl(_indirect_base)
+.. autoclass:: pykep.trajopt.indirect_or2or(_indirect_base)
 
-  .. automethod:: PyKEP.trajopt.indirect_pl2pl.__init__(p0, pf, mass, thrust, isp, atol, rtol, t0lb, t0ub, Tlb, Tub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN)
+  .. automethod:: pykep.trajopt.indirect_or2or.__init__(*args)
 
 
 ------------
 
-.. autoclass:: PyKEP.trajopt.indirect_or2or(_indirect_base)
+.. autoclass:: pykep.trajopt.indirect_pt2or(_indirect_base)
 
-  .. automethod:: PyKEP.trajopt.indirect_or2or.__init__(elem0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, M0lb, M0ub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN)
-
-
-------------
-
-.. autoclass:: PyKEP.trajopt.indirect_pt2or(_indirect_base)
-
-  .. automethod:: PyKEP.trajopt.indirect_pt2or.__init__(x0, elemf, mass, thrust, isp, atol, rtol, Tlb, Tub, Mflb, Mfub, freemass=True, freetime=True, alpha=1, bound=True, mu=pk.MU_SUN)
+  .. automethod:: pykep.trajopt.indirect_pt2or.__init__(*args)
