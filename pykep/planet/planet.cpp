@@ -253,7 +253,7 @@ BOOST_PYTHON_MODULE(_planet)
             "- self_radius: 	Safe radius of target bodyn\n\n"
             ".. note::\n\n"
             "   The presence of the corresponding kernel files are only checked upon call to the ephemerides method. "
-            "As a consequence this object can still be constructed with invalid names\n"
+            "   As a consequence this object can still be constructed with invalid names\n"
             "   or spelling mistakes. Only later the ephemerides call will fail throwing an excpetion\n\n"
             ".. note::\n\n"
             "   mu_central_body must be set if the period or the orbital elements need to be computed"
