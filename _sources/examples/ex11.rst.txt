@@ -1,0 +1,37 @@
+Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO 
+===================================================================================
+
+.. figure:: ../images/margo.jpg
+   :align: left
+
+.. figure:: ../images/gallery11.png
+   :align: left
+
+.. figure:: ../images/gallery11b.png
+   :align: left
+
+These plots are produced by the following code:
+
+.. code-block:: python
+
+   import pykep as pk
+   pk.examples.run_example11()
+
+
+This example demonstrates the use of the :class:`pykep.trajopt.lt_margo` which represents, in cartesian
+coordinates, the solar electric propulsion mission of the interplanetary cubesat MARGO, studied during 2017 in
+the European Space Agency's Concurrent Design Facility. The code was used to select the best candidates for the mission.
+
+The MPCORB database object "2014 YD" is used as an example. You can also activate the Earth gravity by changing the
+kwarg in the constructor.
+
+The code for this example can be studied `here. 
+<https://github.com/esa/pykep/blob/master/pykep/examples/_ex11.py>`_ Feel free to leave comments.
+
+The study of MARGO target selection is found here:
+
+Alessio Mereta and Dario Izzo: `Target selection for a small low-thrust mission to near-Earth asteroids <http://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2018-margo.pdf>`_ Astrodynamics, 2018.
+
+
+
+

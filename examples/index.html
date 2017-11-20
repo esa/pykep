@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Examples &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>Examples &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -82,7 +81,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Examples</a></li>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#generic">Generic</a></li>
+<li><a class="reference internal" href="#advanced-research-topics-requires-pygmo">Advanced Research Topics (requires pygmo)</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -110,19 +113,42 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>In this page we provide several examples that should just run out of the box if you have all the dependencies
+installed correctly. On top of pykep you may need to install pygmo, matplotlib, scipy, pygmo_plugins_nonfree.
+Many example run using the commercial optimizer snopt7 (wrapped by pygmo_plugins_nonfree),
+in case you hacve no access to it the NLOPT optimizer slsqp as well as ipopt may be used. Both of which
+are shipped in the pygmo optimization suite.</p>
+<p>Some of the examples are the outcome of research we performed for the European Space Agency and contain rather
+advanced optimization techniques and methods. Please quote our papers in case you find them of use in your research.</p>
+<div class="section" id="generic">
+<h2>Generic<a class="headerlink" href="#generic" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="ex1.html">Low-thrust global optimization (Nuclear electric propulsion)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ex2.html">Multi-revs Lambert Problem</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ex3.html">LT-MGA global optimization (Nuclear electric propulsion)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ex4.html">Automated Mesh Adaptation in Interplanetary Trajectory Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ex5.html">MGA 1DSM global optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ex6.html">Asteroid hopping in the main belt (requires PyGMO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex1.html">Multiple impulses transfer between Earth and Venus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex2.html">Multi revolutions Lambert Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex12.html">Orbital parameters (osculating and modified equinoctial)</a></li>
 </ul>
+</div>
+</div>
+<div class="section" id="advanced-research-topics-requires-pygmo">
+<h2>Advanced Research Topics (requires pygmo)<a class="headerlink" href="#advanced-research-topics-requires-pygmo" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ex3.html">Global optimization of a low-thrust trajectory (Nuclear electric propulsion)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex4.html">Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex5.html">Global optimization of a multiple gravity assist trajectory with one deep space manouvre per leg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex6.html">Asteroid hopping in the main belt with a low-thrust spacecraft</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex7.html">Optimal transfer from Earth to Mars orbits using Pontryagin Maximum Principle (quadratic control)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex8.html">Mass optimal Mars Randezvous using a direct method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex9.html">Using homotopy and Pontryagin to refine solutions from the direct method - Part I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex10.html">Using homotopy and Pontryagin to refine solutions from the direct method - Part II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex11.html">Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO</a></li>
+</ul>
+</div>
 </div>
 </div>
 
@@ -138,8 +164,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

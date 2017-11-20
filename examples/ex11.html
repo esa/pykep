@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO &#8212; pykep 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="../documentation/index.html">Docs</a></li>
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="design-of-a-solar-electric-propulsion-mission-for-the-interplanetary-cubesat-margo">
+<h1>Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO<a class="headerlink" href="#design-of-a-solar-electric-propulsion-mission-for-the-interplanetary-cubesat-margo" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-left">
+<img alt="../_images/margo.jpg" src="../_images/margo.jpg" />
+</div>
+<div class="figure align-left">
+<img alt="../_images/gallery11.png" src="../_images/gallery11.png" />
+</div>
+<div class="figure align-left">
+<img alt="../_images/gallery11b.png" src="../_images/gallery11b.png" />
+</div>
+<p>These plots are produced by the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pykep</span> <span class="kn">as</span> <span class="nn">pk</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">run_example11</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This example demonstrates the use of the <a class="reference internal" href="../documentation/trajopt.html#pykep.trajopt.lt_margo" title="pykep.trajopt.lt_margo"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.lt_margo</span></code></a> which represents, in cartesian
+coordinates, the solar electric propulsion mission of the interplanetary cubesat MARGO, studied during 2017 in
+the European Space Agency&#8217;s Concurrent Design Facility. The code was used to select the best candidates for the mission.</p>
+<p>The MPCORB database object &#8220;2014 YD&#8221; is used as an example. You can also activate the Earth gravity by changing the
+kwarg in the constructor.</p>
+<p>The code for this example can be studied <a class="reference external" href="https://github.com/esa/pykep/blob/master/pykep/examples/_ex11.py">here.</a> Feel free to leave comments.</p>
+<p>The study of MARGO target selection is found here:</p>
+<p>Alessio Mereta and Dario Izzo: <a class="reference external" href="http://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2018-margo.pdf">Target selection for a small low-thrust mission to near-Earth asteroids</a> Astrodynamics, 2018.</p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

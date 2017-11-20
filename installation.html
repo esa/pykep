@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Install PyKEP &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>Install pykep &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -82,7 +81,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Install PyKEP</a><ul>
+<li><a class="reference internal" href="#">Install pykep</a><ul>
 <li><a class="reference internal" href="#using-windows-binaries">Using Windows Binaries</a></li>
 <li><a class="reference internal" href="#compiling-and-installing-under-unix">Compiling and Installing under Unix</a></li>
 <li><a class="reference internal" href="#compiling-and-installing-under-windows">Compiling and Installing under Windows</a></li>
@@ -116,64 +115,63 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="install-pykep">
-<span id="howtoinstall"></span><h1>Install PyKEP<a class="headerlink" href="#install-pykep" title="Permalink to this headline">¶</a></h1>
-<p>PyKEP supports 32 and 64 bits architectures and both python 2.7 and python 3.4. We are unfortunately not in the position to provide
-binaries for everybody, so you will most likely need to compile the source code youself. This process, under unix architectures is
-painless, while under windows architectures it can be troublesome. For this reason we tend to provide at least the win32-python2.7 version
-of PyKEP at each release.</p>
+<span id="howtoinstall"></span><h1>Install pykep<a class="headerlink" href="#install-pykep" title="Permalink to this headline">¶</a></h1>
+<p>pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X We are unfortunately not in the position to provide
+binaries for everybody, so it is likely you will need to compile the source code youself. This process, under unix architectures is
+painless, while under windows architectures it can be troublesome, but we do provide windows 64 bits binaries via PyPi</p>
 <div class="section" id="using-windows-binaries">
 <h2>Using Windows Binaries<a class="headerlink" href="#using-windows-binaries" title="Permalink to this headline">¶</a></h2>
-<p>Some of the releases have also binaries provided. This largely depends on whether one of the main developers
-has access to a working Windows machine at the time of the release. Download the <a class="reference external" href="https://github.com/esa/pykep/releases">binaries</a>
-and extract the whole folder as it is in your python site-packages directory.
-(e.g. extract to C:/Python27/Lib/site-packages/)</p>
+<p>If you have a windows 64-bits based python (27, 34, 35 or 36) you can install pykep via pip typing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pykep</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="compiling-and-installing-under-unix">
 <h2>Compiling and Installing under Unix<a class="headerlink" href="#compiling-and-installing-under-unix" title="Permalink to this headline">¶</a></h2>
-<p>Assuming you have prepared your system for compiling PyKEP (see <a class="reference internal" href="system.html#prepareyoursystem"><em>Preparing your system to compile PyKEP</em></a>) and that you have just downloaded the source code following the instructions given, see <a class="reference internal" href="downloading.html#howtodownload"><em>Download PyKEP code</em></a>, you will have
+<p>Assuming you have prepared your system for compiling pykep (see <a class="reference internal" href="system.html#prepareyoursystem"><span class="std std-ref">Preparing your system to compile pykep</span></a>) and that you have just downloaded the source code following the instructions given, see <a class="reference internal" href="downloading.html#howtodownload"><span class="std std-ref">Download pykep code</span></a>, you will have
 created a directory keptoolbox in your current directory, move there:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd pykep
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pykep</span>
 </pre></div>
 </div>
 <p>You will now need to create a build directory where to build the source code, so:</p>
-<div class="highlight-python"><div class="highlight"><pre>mkdir build
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
 </pre></div>
 </div>
 <p>You can now move there:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd build
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
 </pre></div>
 </div>
 <p>and have ccmake help you select the options that are most suitable for you:</p>
-<div class="highlight-python"><div class="highlight"><pre>ccmake ../
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ccmake</span> <span class="o">../</span>
 </pre></div>
 </div>
 <p>At this point (after pressing c once to configure) you should be seeing something like this on the screen:</p>
 <img alt="_images/ccmake.png" src="_images/ccmake.png" />
 <p>You can now press &#8216;g&#8217; to generate a make file and exit ccmake utility. You are back to the prompt where you can now type:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">make</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre>sudo make install
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>Watch carefully the message in the terminal where the installation path is given to check
 that the correct python dist-packages or site-packages directory has been located</p>
 <p>Here is a typical example of the output obtained:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ 91%] Built target propagate_lagrangian_test
-[ 92%] Built target propagate_lagrangian_u_test
-[ 94%] Built target propagate_taylor_jorba_test
-[ 96%] Built target propagate_taylor_s_test
-[ 98%] Built target propagate_taylor_test
-[100%] Built target sgp4_test
-Install the project...
--- Install configuration: &quot;&quot;
--- Installing: /usr/local/lib/libkeplerian_toolbox.dylib
--- Up-to-date: /usr/local/lib/python2.7/site-packages/PyKEP/__init__.py
--- Installing: /usr/local/lib/python2.7/site-packages/PyKEP/core/_core.so
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mi">91</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_lagrangian_test</span>
+<span class="p">[</span> <span class="mi">92</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_lagrangian_u_test</span>
+<span class="p">[</span> <span class="mi">94</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_taylor_jorba_test</span>
+<span class="p">[</span> <span class="mi">96</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_taylor_s_test</span>
+<span class="p">[</span> <span class="mi">98</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_taylor_test</span>
+<span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">sgp4_test</span>
+<span class="n">Install</span> <span class="n">the</span> <span class="n">project</span><span class="o">...</span>
+<span class="o">--</span> <span class="n">Install</span> <span class="n">configuration</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+<span class="o">--</span> <span class="n">Installing</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libkeplerian_toolbox</span><span class="o">.</span><span class="n">dylib</span>
+<span class="o">--</span> <span class="n">Up</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">date</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pykep</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<span class="o">--</span> <span class="n">Installing</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python2</span><span class="o">.</span><span class="mi">7</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">pykep</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">_core</span><span class="o">.</span><span class="n">so</span>
 </pre></div>
 </div>
 </div>
@@ -184,45 +182,45 @@ Install the project...
 <li>You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).</li>
 <li>Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)</li>
 <li>Check, when running CMake, that all libraries are found correctly</li>
-<li>When running a make install, Windows will probably put your PyKEP directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)</li>
-<li>Put all dll (boost and keplerian_toolbox) in PyKEP/core</li>
+<li>When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)</li>
+<li>Put all dll (boost and keplerian_toolbox) in pykep/core</li>
 <li>Hope for the best (kidding its super easy ...)</li>
 </ul>
 </div>
 <div class="section" id="systems-with-both-python-2-and-python-3-installed">
 <h2>Systems with both Python 2 and Python 3 installed<a class="headerlink" href="#systems-with-both-python-2-and-python-3-installed" title="Permalink to this headline">¶</a></h2>
 <p>If your system has several versions of python installed check the PYTHON_EXECUTABLE variable in cmake. The libraries, includes and site-packages directory are determined accordingly. If you want to change python version, just define explicitly such a variable. For example (assuming you are in a directory pykep/build):</p>
-<div class="highlight-python"><div class="highlight"><pre>cmake ../ -DBUILD_PYKEP=&quot;ON&quot;  -DPYTHON_EXECUTABLE=&quot;/usr/bin/python3.3m&quot;
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span> <span class="o">-</span><span class="n">DBUILD_PYKEP</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span>  <span class="o">-</span><span class="n">DPYTHON_EXECUTABLE</span><span class="o">=</span><span class="s2">&quot;/usr/bin/python3.3m&quot;</span>
 </pre></div>
 </div>
 <p>It is always good practice to check what cmake has actually located by typing:</p>
-<div class="highlight-python"><div class="highlight"><pre>cmake ../
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span>
 </pre></div>
 </div>
 <p>which could look something like:</p>
-<div class="highlight-python"><div class="highlight"><pre>-- OS detected: Darwin
--- CXX Compiler detected: Clang
--- CMake additional search path for libraries: /usr/local/lib
--- Enabling &#39;-ftemplate-depth=256&#39; compiler flag required since boost 1.54.
--- Enabling &#39;-std=c++11&#39; compiler flag
--- CXX compilation flags:  -ftemplate-depth=256 -std=c++11
--- Python interpreter: /usr/local/bin/python3
--- Python interpreter verison: 3.4
--- Python includes path: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/include/python3.4m
--- Python modules install path: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages
--- Python library name: /usr/local/Cellar/python3/3.4.2_1/Frameworks/Python.framework/Versions/3.4/lib/libpython3.4.dylib
--- Required Boost libraries: serialization;date_time;python3
--- Boost version: 1.57.0
--- Found the following Boost libraries:
---   serialization
---   date_time
---   python3
--- Detected Boost version: 105700
--- Boost include dirs: /usr/local/include
--- Boost libraries: /usr/local/lib/libboost_serialization-mt.dylib;/usr/local/lib/libboost_date_time-mt.dylib;/usr/local/lib/libboost_python3-mt.dylib
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/darioizzo/Documents/pykep/build
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">OS</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Darwin</span>
+<span class="o">--</span> <span class="n">CXX</span> <span class="n">Compiler</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Clang</span>
+<span class="o">--</span> <span class="n">CMake</span> <span class="n">additional</span> <span class="n">search</span> <span class="n">path</span> <span class="k">for</span> <span class="n">libraries</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span>
+<span class="o">--</span> <span class="n">Enabling</span> <span class="s1">&#39;-ftemplate-depth=256&#39;</span> <span class="n">compiler</span> <span class="n">flag</span> <span class="n">required</span> <span class="n">since</span> <span class="n">boost</span> <span class="mf">1.54</span><span class="o">.</span>
+<span class="o">--</span> <span class="n">Enabling</span> <span class="s1">&#39;-std=c++11&#39;</span> <span class="n">compiler</span> <span class="n">flag</span>
+<span class="o">--</span> <span class="n">CXX</span> <span class="n">compilation</span> <span class="n">flags</span><span class="p">:</span>  <span class="o">-</span><span class="n">ftemplate</span><span class="o">-</span><span class="n">depth</span><span class="o">=</span><span class="mi">256</span> <span class="o">-</span><span class="n">std</span><span class="o">=</span><span class="n">c</span><span class="o">++</span><span class="mi">11</span>
+<span class="o">--</span> <span class="n">Python</span> <span class="n">interpreter</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python3</span>
+<span class="o">--</span> <span class="n">Python</span> <span class="n">interpreter</span> <span class="n">verison</span><span class="p">:</span> <span class="mf">3.4</span>
+<span class="o">--</span> <span class="n">Python</span> <span class="n">includes</span> <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">python3</span><span class="o">/</span><span class="mf">3.4</span><span class="o">.</span><span class="mi">2</span><span class="n">_1</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">Python</span><span class="o">.</span><span class="n">framework</span><span class="o">/</span><span class="n">Versions</span><span class="o">/</span><span class="mf">3.4</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">4</span><span class="n">m</span>
+<span class="o">--</span> <span class="n">Python</span> <span class="n">modules</span> <span class="n">install</span> <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">python3</span><span class="o">/</span><span class="mf">3.4</span><span class="o">.</span><span class="mi">2</span><span class="n">_1</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">Python</span><span class="o">.</span><span class="n">framework</span><span class="o">/</span><span class="n">Versions</span><span class="o">/</span><span class="mf">3.4</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">4</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span>
+<span class="o">--</span> <span class="n">Python</span> <span class="n">library</span> <span class="n">name</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">python3</span><span class="o">/</span><span class="mf">3.4</span><span class="o">.</span><span class="mi">2</span><span class="n">_1</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">Python</span><span class="o">.</span><span class="n">framework</span><span class="o">/</span><span class="n">Versions</span><span class="o">/</span><span class="mf">3.4</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libpython3</span><span class="o">.</span><span class="mf">4.</span><span class="n">dylib</span>
+<span class="o">--</span> <span class="n">Required</span> <span class="n">Boost</span> <span class="n">libraries</span><span class="p">:</span> <span class="n">serialization</span><span class="p">;</span><span class="n">date_time</span><span class="p">;</span><span class="n">python3</span>
+<span class="o">--</span> <span class="n">Boost</span> <span class="n">version</span><span class="p">:</span> <span class="mf">1.57</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">--</span> <span class="n">Found</span> <span class="n">the</span> <span class="n">following</span> <span class="n">Boost</span> <span class="n">libraries</span><span class="p">:</span>
+<span class="o">--</span>   <span class="n">serialization</span>
+<span class="o">--</span>   <span class="n">date_time</span>
+<span class="o">--</span>   <span class="n">python3</span>
+<span class="o">--</span> <span class="n">Detected</span> <span class="n">Boost</span> <span class="n">version</span><span class="p">:</span> <span class="mi">105700</span>
+<span class="o">--</span> <span class="n">Boost</span> <span class="n">include</span> <span class="n">dirs</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span>
+<span class="o">--</span> <span class="n">Boost</span> <span class="n">libraries</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libboost_serialization</span><span class="o">-</span><span class="n">mt</span><span class="o">.</span><span class="n">dylib</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libboost_date_time</span><span class="o">-</span><span class="n">mt</span><span class="o">.</span><span class="n">dylib</span><span class="p">;</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libboost_python3</span><span class="o">-</span><span class="n">mt</span><span class="o">.</span><span class="n">dylib</span>
+<span class="o">--</span> <span class="n">Configuring</span> <span class="n">done</span>
+<span class="o">--</span> <span class="n">Generating</span> <span class="n">done</span>
+<span class="o">--</span> <span class="n">Build</span> <span class="n">files</span> <span class="n">have</span> <span class="n">been</span> <span class="n">written</span> <span class="n">to</span><span class="p">:</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">darioizzo</span><span class="o">/</span><span class="n">Documents</span><span class="o">/</span><span class="n">pykep</span><span class="o">/</span><span class="n">build</span>
 </pre></div>
 </div>
 </div>
@@ -240,8 +238,8 @@ Install the project...
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

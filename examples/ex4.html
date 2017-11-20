@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Automated Mesh Adaptation in Interplanetary Trajectory Optimization &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -82,7 +81,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Automated Mesh Adaptation in Interplanetary Trajectory Optimization</a></li>
+<li><a class="reference internal" href="#">Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization</a></li>
 </ul>
 </ul>
 </li>
@@ -110,22 +109,22 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
-  <div class="section" id="automated-mesh-adaptation-in-interplanetary-trajectory-optimization">
-<h1>Automated Mesh Adaptation in Interplanetary Trajectory Optimization<a class="headerlink" href="#automated-mesh-adaptation-in-interplanetary-trajectory-optimization" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="automated-mesh-adaptation-in-low-thrust-interplanetary-trajectory-optimization">
+<h1>Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization<a class="headerlink" href="#automated-mesh-adaptation-in-low-thrust-interplanetary-trajectory-optimization" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-right">
 <img alt="&quot;Eart-Venus low-thrust transfer with on-line mesh adaptation&quot;" src="../_images/gallery4.png" />
 </div>
 <p>This plot is produced by the following code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">PyKEP</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">examples</span><span class="o">.</span><span class="n">run_example4</span><span class="p">(</span><span class="n">nseg</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pykep</span> <span class="kn">as</span> <span class="nn">pk</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">run_example4</span><span class="p">(</span><span class="n">nseg</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In this case, an interplanetary trajectory is computed using a new type of leg using Sundmann&#8217;s variable rather than time and thus obtaining
 automated mesh adaptation. By letting time flow slower when near the sun, we obtain segments of different length depending on their distance from the Sun.
 This translate in a more efficient segment distribution, both from the Taylor integration perspective and for the thrust numerical grid perspective. In case the user has a license for SNOPT, the use of this typically result in a performance gain</p>
-<p>The code for this example can be studied <a class="reference external" href="https://github.com/esa/pykep/blob/master/PyKEP/examples/_ex4.py">here.</a> Feel free to leave comments.</p>
+<p>The code for this example can be studied <a class="reference external" href="https://github.com/esa/pykep/blob/master/pykep/examples/_ex4.py">here.</a> Feel free to leave comments.</p>
 <p>A preliminary study of this unique technique, can be found in the paper below.</p>
 <p>C H Yam, D Izzo and Biscani F: <a class="reference external" href="http://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2010-(AstroTools)Sundmann.pdf">Towards a High Fidelity Direct Transcription Method for Optimisation of Low-Thrust Trajectories</a> International Conference on Astrodynamics Tools and Techniques - ICATT,     2010.</p>
 </div>
@@ -142,8 +141,8 @@ This translate in a more efficient segment distribution, both from the Taylor in
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

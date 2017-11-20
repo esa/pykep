@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyKEP Documentation &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>pykep Documentation &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -82,9 +81,9 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">PyKEP Documentation</a><ul>
+<li><a class="reference internal" href="#">pykep Documentation</a><ul>
 <li><a class="reference internal" href="#documentation-of-the-main-modules">Documentation of the main modules</a></li>
-<li><a class="reference internal" href="#constants-defined-within-pykep-namespace">Constants defined within PyKEP namespace</a></li>
+<li><a class="reference internal" href="#constants-defined-within-pykep-namespace">Constants defined within pykep namespace</a></li>
 </ul>
 </li>
 </ul>
@@ -114,30 +113,30 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="pykep-documentation">
-<h1>PyKEP Documentation<a class="headerlink" href="#pykep-documentation" title="Permalink to this headline">¶</a></h1>
-<p>PyKEP is made of main modules called <a class="reference internal" href="core.html#core"><em>The core module</em></a>, <a class="reference internal" href="planets.html#planet"><em>The planet module</em></a>, <a class="reference internal" href="simsflanagan.html#simsflanagan"><em>The simsflanagan module</em></a>, <a class="reference internal" href="phasing.html#phasing"><em>The phasing module</em></a>, <a class="reference internal" href="trajopt.html#trajopt"><em>The trajopt module (requires PyGMO)</em></a>, <a class="reference internal" href="orbitplots.html#orbitplots"><em>The orbit plotting module</em></a>, <a class="reference internal" href="util.html#util"><em>The utility module</em></a>. When we import PyKEP via:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">PyKEP</span> <span class="kn">as</span> <span class="nn">pkp</span>
+<h1>pykep Documentation<a class="headerlink" href="#pykep-documentation" title="Permalink to this headline">¶</a></h1>
+<p>pykep is made of main modules called <a class="reference internal" href="core.html#core"><span class="std std-ref">The core module</span></a>, <a class="reference internal" href="planets.html#planet"><span class="std std-ref">The planet module</span></a>, <a class="reference internal" href="simsflanagan.html#simsflanagan"><span class="std std-ref">The simsflanagan module</span></a>, <a class="reference internal" href="pontryagin.html#pontryagin"><span class="std std-ref">The pontryagin module</span></a>, <a class="reference internal" href="phasing.html#phasing"><span class="std std-ref">The phasing module</span></a>, <a class="reference internal" href="trajopt.html#trajopt"><span class="std std-ref">The trajopt module (requires pygmo)</span></a>, <a class="reference internal" href="orbitplots.html#orbitplots"><span class="std std-ref">The orbit plotting module</span></a>, <a class="reference internal" href="util.html#util"><span class="std std-ref">The utility module</span></a>. When we import pykep via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pkp</span>
 </pre></div>
 </div>
-<p>the core module gets imported in the PyKEP namespace, while all other modules will appear in dedicated namespaces, e.g.
-PyKEP.trajopt, PyKEP.phasing etc.</p>
+<p>the core module gets imported in the pykep namespace, while all other modules will appear in dedicated namespaces, e.g.
+pykep.trajopt, pykep.phasing etc.</p>
 <p>In addition, two important dictionaries will be imported:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pkp</span><span class="o">.</span><span class="n">__version__</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pkp</span><span class="o">.</span><span class="n">__version__</span>
 <span class="n">pkp</span><span class="o">.</span><span class="n">__extensions__</span>
 </pre></div>
 </div>
-<p>The first one, pkp.__version__, is the PyKEP version dictionary that can be queried for major, minor or bugfix number. PyKEP 1.2.0
+<p>The first one, pkp.__version__, is the pykep version dictionary that can be queried for major, minor or bugfix number. pykep 1.2.0
 means that the major version is 1, the minor is 2 and the bugfix version is 0.</p>
-<p>The second one, pkp.__extensions__, is the PyKEP extension dictionary containing the extension installed in the system as detected by PyKEP.
+<p>The second one, pkp.__extensions__, is the pykep extension dictionary containing the extension installed in the system as detected by pykep.
 For example:</p>
-<div class="highlight-python"><div class="highlight"><pre> {&#39;matplotlib&#39;: True,
-&#39;mplot3d&#39;: True,
-&#39;pygmo&#39;: True,
-&#39;scikit-learn&#39;: True,
-&#39;scipy&#39;: True}
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="s1">&#39;mplot3d&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="s1">&#39;pygmo&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="s1">&#39;scikit-learn&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="s1">&#39;scipy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 </pre></div>
 </div>
 <div class="section" id="documentation-of-the-main-modules">
@@ -146,15 +145,17 @@ For example:</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="core.html">The core module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simsflanagan.html">The simsflanagan module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pontryagin.html">The pontryagin module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="phasing.html">The phasing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trajopt.html">The trajopt module (requires PyGMO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html">The trajopt module (requires pygmo)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="orbitplots.html">The orbit plotting module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="planets.html">The planet module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">The utility module</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="constants-defined-within-pykep-namespace">
-<h2>Constants defined within PyKEP namespace<a class="headerlink" href="#constants-defined-within-pykep-namespace" title="Permalink to this headline">¶</a></h2>
+<h2>Constants defined within pykep namespace<a class="headerlink" href="#constants-defined-within-pykep-namespace" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="30%" />
@@ -166,41 +167,41 @@ For example:</p>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>PyKEP.AU</td>
+<tr class="row-even"><td>pykep.AU</td>
 <td>One astronomical unit in meters</td>
 </tr>
-<tr class="row-odd"><td>PyKEP.DAY2SEC</td>
+<tr class="row-odd"><td>pykep.DAY2SEC</td>
 <td>Conversion factor from days to seconds</td>
 </tr>
-<tr class="row-even"><td>PyKEP.DAY2YEAR</td>
+<tr class="row-even"><td>pykep.DAY2YEAR</td>
 <td>Conversion factor from days to years</td>
 </tr>
-<tr class="row-odd"><td>PyKEP.DEG2RAD</td>
+<tr class="row-odd"><td>pykep.DEG2RAD</td>
 <td>Conversion factor from degrees to radians</td>
 </tr>
-<tr class="row-even"><td>PyKEP.RAD2DEG</td>
+<tr class="row-even"><td>pykep.RAD2DEG</td>
 <td>Conversion factor from radians to degree</td>
 </tr>
-<tr class="row-odd"><td>PyKEP.SEC2DAY</td>
+<tr class="row-odd"><td>pykep.SEC2DAY</td>
 <td>Conversion factor from seconds to days</td>
 </tr>
-<tr class="row-even"><td>PyKEP.MU_SUN</td>
+<tr class="row-even"><td>pykep.MU_SUN</td>
 <td>Sun gravitational constant in m^3/s^2</td>
 </tr>
-<tr class="row-odd"><td>PyKEP.EARTH_VELOCITY</td>
+<tr class="row-odd"><td>pykep.EARTH_VELOCITY</td>
 <td>Square root of MU_SUN/AU. Average earth velocity in meters per seconds.</td>
 </tr>
-<tr class="row-even"><td>PyKEP.G0</td>
+<tr class="row-even"><td>pykep.G0</td>
 <td>The standard gravity acceleration at ground level in m/s^2</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>PyKEP follows two conventions that are to be kept in mind.</p>
+<p>pykep follows two conventions that are to be kept in mind.</p>
 <ul class="last simple">
-<li><em>Units</em>: The S.I. system is used to perform all computations in PyKEP and it is the default choice for everything. In some cases, to help the user instantiate objects and define problems, classes and functions may accept inputs in different units or return results in different units, but this is only exceptional and documented in the class or function help.</li>
-<li><em>Orbital parameters</em>: In PyKEP, the osculating Keplerian elements are always in the following order: a,e,i,W,w,M (E or H), where a is the semi-major axis, e the eccentriciy, i the inclination, W the Right Axcension of the Acending Node, w the argument of perigee and M the mean anomaly (E and H being the eccentric and hyperbolic anomalies).</li>
+<li><em>Units</em>: The S.I. system is used to perform all computations in pykep and it is the default choice for everything. In some cases, to help the user instantiate objects and define problems, classes and functions may accept inputs in different units or return results in different units, but this is only exceptional and documented in the class or function help.</li>
+<li><em>Orbital parameters</em>: In pykep, the osculating Keplerian elements are always in the following order: a,e,i,W,w,M (E or H), where a is the semi-major axis, e the eccentriciy, i the inclination, W the Right Axcension of the Acending Node, w the argument of perigee and M the mean anomaly (E and H being the eccentric and hyperbolic anomalies).</li>
 </ul>
 </div>
 </div>
@@ -218,8 +219,8 @@ For example:</p>
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

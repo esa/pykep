@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The simsflanagan module &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>The simsflanagan module &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -113,16 +112,16 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="the-simsflanagan-module">
 <span id="simsflanagan"></span><h1>The simsflanagan module<a class="headerlink" href="#the-simsflanagan-module" title="Permalink to this headline">¶</a></h1>
 <p>The sims_flanagan module contains our implementation of the low-thrust interplanetary trajectory optimization model
 first described in a paper by Sims and Flanagan in 1997 and later improved to include high-fidelity propagations
-and easy mesh refinement by the PyKEP development team. The key papers containing most details are:</p>
+and easy mesh refinement by the pykep development team. The key papers containing most details are:</p>
 <ul class="simple">
 <li>Sims, Jon A., and Steve N. Flanagan. &#8220;Preliminary design of low-thrust interplanetary missions.&#8221; (1997).</li>
-<li>Izzo, Dario. &#8220;PyGMO and PyKEP: open source tools for massively parallel optimization in astrodynamics (the case of interplanetary trajectory optimization).&#8221; Proceed. Fifth International Conf. Astrodynam. Tools and Techniques, ICATT. 2012.</li>
+<li>Izzo, Dario. &#8220;pygmo and pykep: open source tools for massively parallel optimization in astrodynamics (the case of interplanetary trajectory optimization).&#8221; Proceed. Fifth International Conf. Astrodynam. Tools and Techniques, ICATT. 2012.</li>
 </ul>
 <p>The list of classes and the detailed documentation follows.</p>
 <table border="1" class="docutils">
@@ -138,15 +137,15 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="#PyKEP.sims_flanagan.spacecraft" title="PyKEP.sims_flanagan.spacecraft"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.sims_flanagan.spacecraft</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pykep.sims_flanagan.spacecraft" title="pykep.sims_flanagan.spacecraft"><code class="xref py py-class docutils literal"><span class="pre">pykep.sims_flanagan.spacecraft</span></code></a></td>
 <td>class</td>
 <td>represents a nuclear electric propelled spacecraft</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#PyKEP.sims_flanagan.sc_state" title="PyKEP.sims_flanagan.sc_state"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.sims_flanagan.sc_state</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pykep.sims_flanagan.sc_state" title="pykep.sims_flanagan.sc_state"><code class="xref py py-class docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code></a></td>
 <td>class</td>
 <td>represent the spacecraft state (r,v,m)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#PyKEP.sims_flanagan.leg" title="PyKEP.sims_flanagan.leg"><tt class="xref py py-class docutils literal"><span class="pre">PyKEP.sims_flanagan.leg</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#pykep.sims_flanagan.leg" title="pykep.sims_flanagan.leg"><code class="xref py py-class docutils literal"><span class="pre">pykep.sims_flanagan.leg</span></code></a></td>
 <td>class</td>
 <td>represents one leg in the Sims-Flanagan model</td>
 </tr>
@@ -155,30 +154,30 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 <div class="section" id="detailed-documentation">
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="PyKEP.sims_flanagan.spacecraft">
-<em class="property">class </em><tt class="descclassname">PyKEP.sims_flanagan.</tt><tt class="descname">spacecraft</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.spacecraft" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.spacecraft">
+<em class="property">class </em><code class="descclassname">pykep.sims_flanagan.</code><code class="descname">spacecraft</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains design parameters of a NEP spacecraft</p>
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.spacecraft.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.spacecraft.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>PyKEP.sims_flanagan.spacecraft(mass,thrust,isp)</p>
+<dt id="pykep.sims_flanagan.spacecraft.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>pykep.sims_flanagan.spacecraft(mass,thrust,isp)</p>
 <ul class="simple">
 <li>mass: the spacecraft mass</li>
 <li>thrust: the maximum thrust of the spacecraft propulsion system</li>
 <li>isp: the specific impulse of the spacecarft propulsion system</li>
 </ul>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>PyKEP.sims_flanagan.spacecraft(mass,thrust,isp)</p>
+<p>pykep.sims_flanagan.spacecraft(mass,thrust,isp)</p>
 <ul class="simple">
 <li>mass: the spacecraft mass</li>
 <li>thrust: the maximum thrust of the spacecraft propulsion system</li>
 <li>isp: the specific impulse of the spacecarft propulsion system</li>
 </ul>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -187,50 +186,50 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="PyKEP.sims_flanagan.sc_state">
-<em class="property">class </em><tt class="descclassname">PyKEP.sims_flanagan.</tt><tt class="descname">sc_state</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.sc_state" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.sc_state">
+<em class="property">class </em><code class="descclassname">pykep.sims_flanagan.</code><code class="descname">sc_state</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the state of a spacecraft as position, velocity and mass</p>
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.sc_state.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.sc_state.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>PyKEP.sims_flanagan.sc_state(r,v,m)</p>
+<dt id="pykep.sims_flanagan.sc_state.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>pykep.sims_flanagan.sc_state(r,v,m)</p>
 <ul class="simple">
 <li>r: triplet containing the position vector in cartesian coordiantes</li>
 <li>v: triplet containing the velocity vector in cartesian coordiantes</li>
 <li>m: mass</li>
 </ul>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1000</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>PyKEP.sims_flanagan.sc_state(r,v,m)</p>
+<p>pykep.sims_flanagan.sc_state(r,v,m)</p>
 <ul class="simple">
 <li>r: triplet containing the position vector in cartesian coordiantes</li>
 <li>v: triplet containing the velocity vector in cartesian coordiantes</li>
 <li>m: mass</li>
 </ul>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1000</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.sc_state.set">
-<tt class="descname">set</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.sc_state.set" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.sc_state.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the whole spacecraft state at once using a 7 dimensional tuple</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x0</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.sc_state.get">
-<tt class="descname">get</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.sc_state.get" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.sc_state.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the whole spacecraft state at once putting it into a 7 dimensional tuple</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">state</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -239,13 +238,13 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 
 <hr class="docutils" />
 <dl class="class">
-<dt id="PyKEP.sims_flanagan.leg">
-<em class="property">class </em><tt class="descclassname">PyKEP.sims_flanagan.</tt><tt class="descname">leg</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg">
+<em class="property">class </em><code class="descclassname">pykep.sims_flanagan.</code><code class="descname">leg</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents one low-thrust  trajectory leg in the sims-flanagan model</p>
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>PyKEP.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)</p>
+<dt id="pykep.sims_flanagan.leg.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>pykep.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)</p>
 <ul class="simple">
 <li>start: starting epoch</li>
 <li>x0: starting sc_state</li>
@@ -256,20 +255,20 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 <li>mu: central body gravity parameter</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">start</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
-<span class="n">earth</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;earth&#39;</span><span class="p">)</span>
-<span class="n">mars</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;mars&#39;</span><span class="p">)</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">)</span>
+<span class="n">mars</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s1">&#39;mars&#39;</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
 <span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
 <span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">mars</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-<span class="n">xe</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="n">mu</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">MU_SUN</span>
-<span class="n">l</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">,</span><span class="n">sc</span><span class="p">,</span><span class="n">mu</span><span class="p">)</span>
+<span class="n">xe</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">,</span><span class="n">sc</span><span class="p">,</span><span class="n">mu</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>PyKEP.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)</p>
+<p>pykep.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)</p>
 <ul class="simple">
 <li>start: starting epoch</li>
 <li>x0: starting sc_state</li>
@@ -280,88 +279,88 @@ and easy mesh refinement by the PyKEP development team. The key papers containin
 <li>mu: central body gravity parameter</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">start</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
-<span class="n">earth</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;earth&#39;</span><span class="p">)</span>
-<span class="n">mars</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s">&#39;mars&#39;</span><span class="p">)</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">340</span><span class="p">)</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">)</span>
+<span class="n">mars</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">planet_ss</span><span class="p">(</span><span class="s1">&#39;mars&#39;</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
 <span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
 <span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">mars</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-<span class="n">xe</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="n">mu</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">MU_SUN</span>
-<span class="n">l</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">,</span><span class="n">sc</span><span class="p">,</span><span class="n">mu</span><span class="p">)</span>
+<span class="n">xe</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="p">,</span><span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">,</span><span class="n">sc</span><span class="p">,</span><span class="n">mu</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.set">
-<tt class="descname">set</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.set" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets leg&#8217;s data, leaving the spacecraft and the central body gravitational parameter unchanged</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.high_fidelity">
-<tt class="descname">high_fidelity</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.high_fidelity" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.high_fidelity">
+<code class="descname">high_fidelity</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.high_fidelity" title="Permalink to this definition">¶</a></dt>
 <dd><p>If True propagation is not impulsive, but continuous</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">l</span><span class="o">.</span><span class="n">high_fidelity</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">high_fidelity</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.mismatch_constraints">
-<tt class="descname">mismatch_constraints</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.mismatch_constraints">
+<code class="descname">mismatch_constraints</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple containing the state mismatch of the leg x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be feasible)</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ceq</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ceq</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.throttles_constraints">
-<tt class="descname">throttles_constraints</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.throttles_constraints" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.throttles_constraints">
+<code class="descname">throttles_constraints</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.throttles_constraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple containing the throttle magnitudes minus one</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">c</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">throttles_constraints</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">throttles_constraints</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.set_mu">
-<tt class="descname">set_mu</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.set_mu" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.set_mu">
+<code class="descname">set_mu</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_mu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the leg central body gravitational parameter</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">l</span><span class="o">.</span><span class="n">set_mu</span><span class="p">(</span><span class="n">PyKEP</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">set_mu</span><span class="p">(</span><span class="n">pykep</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.set_spacecraft">
-<tt class="descname">set_spacecraft</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.set_spacecraft" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.set_spacecraft">
+<code class="descname">set_spacecraft</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_spacecraft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the leg spacecraft</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre>sc = PyKEP.sims_flanagan.spacecraft(4500,0.05,2500)
-l = PyKEP.sims_flanagan.leg() l.set_spacecraft(sc)
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span> <span class="n">l</span><span class="o">.</span><span class="n">set_spacecraft</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="PyKEP.sims_flanagan.leg.get_states">
-<tt class="descname">get_states</tt><big>(</big><big>)</big><a class="headerlink" href="#PyKEP.sims_flanagan.leg.get_states" title="Permalink to this definition">¶</a></dt>
+<dt id="pykep.sims_flanagan.leg.get_states">
+<code class="descname">get_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.get_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the spacecraft states (t,r,v,m) at the leg grid points</p>
 <p>Examples:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">times</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">PyKEP</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">get_states</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">times</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">get_states</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -383,8 +382,8 @@ l = PyKEP.sims_flanagan.leg() l.set_spacecraft(sc)
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

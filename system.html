@@ -6,21 +6,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Preparing your system to compile PyKEP &mdash; PyKEP 1.2.2dev documentation</title>
+    <title>Preparing your system to compile pykep &#8212; pykep 2.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.2.2dev',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -28,16 +26,17 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="PyKEP 1.2.2dev documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body>
+  <body role="document">
 
   <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,8 +48,8 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">
-          PyKEP</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.2</b></span>
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -82,7 +81,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Preparing your system to compile PyKEP</a><ul>
+<li><a class="reference internal" href="#">Preparing your system to compile pykep</a><ul>
 <li><a class="reference internal" href="#compiling-under-a-unix-system">Compiling under a Unix System</a></li>
 <li><a class="reference internal" href="#compiling-under-windows">Compiling under Windows</a></li>
 </ul>
@@ -114,15 +113,15 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 content">
       
   <div class="section" id="preparing-your-system-to-compile-pykep">
-<span id="prepareyoursystem"></span><h1>Preparing your system to compile PyKEP<a class="headerlink" href="#preparing-your-system-to-compile-pykep" title="Permalink to this headline">¶</a></h1>
+<span id="prepareyoursystem"></span><h1>Preparing your system to compile pykep<a class="headerlink" href="#preparing-your-system-to-compile-pykep" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="compiling-under-a-unix-system">
 <h2>Compiling under a Unix System<a class="headerlink" href="#compiling-under-a-unix-system" title="Permalink to this headline">¶</a></h2>
-<p>We assume you have root access to your unix machine and a working python installation. As PyKEP has some dependencies, you will need to install
-a few packages before being able to install PyKEP on your machine. All are supported by most package managers,
-so that a simple apt-get or emerge should suffice to prepare your system.</p>
+<p>We assume you have root access to your unix machine and a working python installation. As pykep has some dependencies,
+you will need to install a few packages before being able to install pykep on your machine. All are supported
+by most package managers, so that a simple pacman, apt-get, emerge should suffice to prepare your system.</p>
 <ul class="simple">
 <li>Install <a class="reference external" href="http://git-scm.com">git</a></li>
 <li>Install <a class="reference external" href="http://www.cmake.org">CMake</a> with its ccmake utility</li>
@@ -133,7 +132,7 @@ so that a simple apt-get or emerge should suffice to prepare your system.</p>
 <h2>Compiling under Windows<a class="headerlink" href="#compiling-under-windows" title="Permalink to this headline">¶</a></h2>
 <p>Whoa, Whoa why would you want to do such a crazy crazy thing???? Anyway you need to</p>
 <ul class="simple">
-<li>Install <a class="reference external" href="http://git-scm.com">Python 2.7</a></li>
+<li>Install <a class="reference external" href="http://git-scm.com">Python 2.7</a> or 3.X</li>
 <li>Install <a class="reference external" href="http://www.cmake.org">MinGW (gcc compiler)</a></li>
 <li>Install <a class="reference external" href="http://www.cmake.org">CMake</a></li>
 <li>Install <a class="reference external" href="http://www.boost.org">boost libraries</a> both headers and compiled libraries</li>
@@ -153,8 +152,8 @@ so that a simple apt-get or emerge should suffice to prepare your system.</p>
       
     </p>
     <p>
-        &copy; Copyright 2015, PyKEP Development Team.<br/>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.1.<br/>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
     </p>
   </div>
 </footer>

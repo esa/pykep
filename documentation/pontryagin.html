@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The pontryagin module &#8212; pykep 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pykep</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="index.html">Docs</a></li>
+                <li><a href="../examples/index.html">Examples</a></li>
+                <li><a href="../credits.html">Credits</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The pontryagin module</a><ul>
+<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="the-pontryagin-module">
+<span id="pontryagin"></span><h1>The pontryagin module<a class="headerlink" href="#the-pontryagin-module" title="Permalink to this headline">¶</a></h1>
+<p>This module contains the class <code class="docutils literal"><span class="pre">pykep.pontryagin.leg</span></code>, which allows one to
+efficiently construct low-thrust trajectories using the indirect optimal
+control transcription alla moda di Pontryagin&#8217;s maximum principle.
+<code class="docutils literal"><span class="pre">pykep.pontryagin.leg</span></code> transcribes the two-point boundary value problem
+resulting from <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin&#8217;s maximum principle</a> , in which one must correctly
+choose (via and optimiser, e.g. <a class="reference external" href="https://esa.github.io/pagmo_plugins_nonfree/py_snopt7.html">SNOPT</a>) the nondimensional costate
+variables (nondimensional variables each corresponding to the respective
+components of the state) to lead the dynamical system (i.e. spacecraft dynamics)
+to chosen boundary conditions (within some tolerance). The user can choose
+the parameters <code class="docutils literal"><span class="pre">type(freemass)</span> <span class="pre">==</span> <span class="pre">bool</span></code> and <code class="docutils literal"><span class="pre">type(freetime)</span> <span class="pre">==</span> <span class="pre">bool</span></code>
+to enforce transversality conditions on the arrival mass and time.
+If <code class="docutils literal"><span class="pre">freemass</span> <span class="pre">==</span> <span class="pre">True</span></code> than the final mass may vary; if <code class="docutils literal"><span class="pre">freetime</span> <span class="pre">==</span> <span class="pre">True</span></code>
+than the final time may vary.</p>
+<p>This configurability allows one to correctly construct any of the following:</p>
+<ul class="simple">
+<li>single shooting trajectory optimisation problems</li>
+<li>multiple shooting trajectory optimisation problem</li>
+<li>trajectory optimisation problems with flybys</li>
+</ul>
+<p>The list of classes and the detailed documentation follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="9%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference internal" href="#pykep.pontryagin.leg" title="pykep.pontryagin.leg"><code class="xref py py-class docutils literal"><span class="pre">pykep.pontryagin.leg</span></code></a></td>
+<td>class</td>
+<td>represents one leg in the Pontryagin model</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="detailed-documentation">
+<h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pykep.pontryagin.leg">
+<em class="property">class </em><code class="descclassname">pykep.pontryagin.</code><code class="descname">leg</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indirect optimal control transcription trajectory leg.</p>
+<p>This class represents an indirect optimal control transcription
+(alla moda di <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin&#8217;s maximum principle</a>) of a generic
+two-point boundary trajectory.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd><ul class="first last simple">
+<li>t0 (<code class="docutils literal"><span class="pre">float</span></code>): Departure time [mjd2000].</li>
+<li>x0 (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].</li>
+<li>l0 (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Costate variables [ND, ND, ND, ND, ND, ND, ND].</li>
+<li>tf (<code class="docutils literal"><span class="pre">float</span></code>): Arrival time [mjd2000].</li>
+<li>xf (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].</li>
+<li>sc (<code class="docutils literal"><span class="pre">pykep.sims_flanagan.spacecraft</span></code>): Generic spacecraft with propulsive properties.</li>
+<li>mu (<code class="docutils literal"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</li>
+<li>freemass (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final mass transversality condition.</li>
+<li>freetime (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</li>
+<li>alpha (<code class="docutils literal"><span class="pre">float</span></code>): Homotopy parametre.</li>
+<li>bound (<code class="docutils literal"><span class="pre">bool</span></code>): Activates bounded control.</li>
+<li>nec (<code class="docutils literal"><span class="pre">int</span></code>): Number of equality constraints.</li>
+<li>trajectory (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Array of nondimensional fullstates.</li>
+<li>times (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Vector of nondimensional integration times.</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pykep.pontryagin.leg.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>t0=None</em>, <em>x0=None</em>, <em>l0=None</em>, <em>tf=None</em>, <em>xf=None</em>, <em>sc=pykep.sims_flanagan.spacecraft(1000</em>, <em>0.3</em>, <em>2500)</em>, <em>mu=pykep.MU_SUN</em>, <em>freemass=True</em>, <em>freetime=True</em>, <em>alpha=1</em>, <em>bound=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises an indirect optimal control transcription trajectory leg.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>t0 (<code class="docutils literal"><span class="pre">pykep.epoch</span></code>, <code class="docutils literal"><span class="pre">None</span></code>): Departure time [mjd2000].</li>
+<li>x0 (<code class="docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code>, <code class="docutils literal"><span class="pre">None</span></code>): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].</li>
+<li>l0 (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">None</span></code>): Costate variables [ND, ND, ND, ND, ND, ND, ND].</li>
+<li>tf (<code class="docutils literal"><span class="pre">pykep.epoch</span></code>, <code class="docutils literal"><span class="pre">None</span></code>): Arrival time [mjd2000].</li>
+<li>xf (<code class="docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code>, <code class="docutils literal"><span class="pre">None</span></code>): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].</li>
+<li>sc (<code class="docutils literal"><span class="pre">pykep.sims_flanagan.spacecraft</span></code>): Generic spacecraft with propulsive properties.</li>
+<li>mu (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Gravitational parametre of primary body [m^3/s^2].</li>
+<li>freemass (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final mass transversality condition.</li>
+<li>freetime (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</li>
+<li>alpha (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy. Setting the parametre to 1 enforces a mass-optimal control law, with a characteristic bang-bang control profile (either full throttle or off). Setting the parametre to 0 enforces a pure quadratic control law.</li>
+<li>bound (<code class="docutils literal"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</li>
+</ul>
+</dd>
+<dt>Raises:</dt>
+<dd><ul class="first last simple">
+<li>TypeError: If <code class="docutils literal"><span class="pre">sc</span></code> is not supplied as an instance of <cite>pykep.sims_flanagan.spacecraft</cite>.</li>
+<li>TypeError: If <code class="docutils literal"><span class="pre">mu</span></code> is neither supplied as an instance of <code class="docutils literal"><span class="pre">float</span></code> nor <code class="docutils literal"><span class="pre">int</span></code>.</li>
+<li>ValueError: If <code class="docutils literal"><span class="pre">mu</span></code> is not supplied as a positive number.</li>
+<li>TypeError: If either <code class="docutils literal"><span class="pre">freemass</span></code>, <code class="docutils literal"><span class="pre">freetime</span></code>, or <code class="docutils literal"><span class="pre">bound</span></code> is not supplied as an instance of <code class="docutils literal"><span class="pre">bool</span></code>.</li>
+<li>AttributeError: If equality constraint dimension cannot be determined form <code class="docutils literal"><span class="pre">freemass</span></code> and <code class="docutils literal"><span class="pre">freetime</span></code>.</li>
+<li>TypeError: If <code class="docutils literal"><span class="pre">alpha</span></code> is neither supplied as an instance of <code class="docutils literal"><span class="pre">float</span></code> nor <code class="docutils literal"><span class="pre">int</span></code>.</li>
+<li>ValueError: If <code class="docutils literal"><span class="pre">alpha</span></code> is not in between 0 and 1.</li>
+<li>ValueError: If <code class="docutils literal"><span class="pre">alpha</span> <span class="pre">==</span> <span class="pre">1</span></code> and <code class="docutils literal"><span class="pre">bound</span> <span class="pre">==</span> <span class="pre">False</span></code>. Control cannot be unbounded with mass-optimal control.</li>
+<li>TypeError: If either <code class="docutils literal"><span class="pre">t0</span></code> or <code class="docutils literal"><span class="pre">tf</span></code> is not supplied as an instance of <code class="docutils literal"><span class="pre">pykep.epoch</span></code>.</li>
+<li>ValueError: If departure time, <code class="docutils literal"><span class="pre">t0.mjd2000</span></code> does not occur before arrival time, <cite>t`f.mjd2000`</cite>.</li>
+<li>TypeError: If either <code class="docutils literal"><span class="pre">x0</span></code> or <code class="docutils literal"><span class="pre">xf</span></code> is not supplied as an instance of <code class="docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code>.</li>
+<li>TypeError: If costate, <code class="docutils literal"><span class="pre">l0</span></code>, is neither supplied as an instance of <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal"><span class="pre">list</span></code>, nor <code class="docutils literal"><span class="pre">tuple</span></code>.</li>
+<li>TypeError: If costate, <code class="docutils literal"><span class="pre">l0</span></code>, is does not have 7 elements. Each element of <code class="docutils literal"><span class="pre">l0</span></code> corresponds to the respective elements of <code class="docutils literal"><span class="pre">x0</span></code>.</li>
+</ul>
+</dd>
+<dt>Examples:</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Typically spacecraft trajectories are optimised to reduce final
+mass, which theoretically results in a bang-bang control profile.
+However, a bang-bang control profile (either 0 or 1) is problematic
+to an optimiser due to its discontinous nature. The trajectory
+optimisation problem becomes easier when one first optimises with
+unbounded quadratic control (<code class="docutils literal"><span class="pre">alpha</span> <span class="pre">==</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">bound</span> <span class="pre">==</span> <span class="pre">False</span></code>),
+stores the solution, then uses the solution to optimise with
+bounded quadratic control (<code class="docutils literal"><span class="pre">alpha</span> <span class="pre">==</span> <span class="pre">0</span> <span class="pre">and</span> <span class="pre">bound</span> <span class="pre">==</span> <span class="pre">True</span></code>). Then
+using the solution from bounded quadratic control, one can
+incrementally optimise for increasing homotopy parametres
+(e.g. <code class="docutils literal"><span class="pre">alphas</span> <span class="pre">=</span> <span class="pre">numpy.linspace(0,</span> <span class="pre">1,</span> <span class="pre">200)</span></code>) until a mass-optimal
+control solution converges.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Boundary conditions <code class="docutils literal"><span class="pre">t0</span></code>, <code class="docutils literal"><span class="pre">x0</span></code>, <code class="docutils literal"><span class="pre">l0</span></code>, <code class="docutils literal"><span class="pre">tf</span></code>, and <code class="docutils literal"><span class="pre">xf</span></code>
+are optional in the constructor. If some, but not all, boundary
+conditions are supplied, they are not set and disregarded. If the
+boundary conditions are not set upon construction (<code class="docutils literal"><span class="pre">__init__</span></code>),
+they must be set with <code class="docutils literal"><span class="pre">set(t0,</span> <span class="pre">x0,</span> <span class="pre">l0,</span> <span class="pre">tf,</span> <span class="pre">xf)</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal"><span class="pre">mismatch_constraints</span></code> will not work unless the boundary
+conditions have been set either through <code class="docutils literal"><span class="pre">__init__</span></code> or <code class="docutils literal"><span class="pre">set</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pykep.pontryagin.leg.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>t0</em>, <em>x0</em>, <em>l0</em>, <em>tf</em>, <em>xf</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the departure and arrival boundary conditions of the trajectory.</p>
+<p>This instance method sets the departure time <cite>t0</cite>, departure state <cite>x0</cite>,
+departure costate <cite>l0</cite>, arrival time <cite>tf</cite>, arrival state <cite>xf</cite>.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>t0 (<code class="docutils literal"><span class="pre">pykep.epoch</span></code>): Departure time [mjd2000].</li>
+<li>x0 (<code class="docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code>): Cartesian departure state [m, m, m, m/s, m/s, m/s, kg].</li>
+<li>l0 (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>): Costate variables [ND, ND, ND, ND, ND, ND, ND].</li>
+<li>tf (<code class="docutils literal"><span class="pre">pykep.epoch</span></code>): Arrival time [mjd2000].</li>
+<li>xf (<code class="docutils literal"><span class="pre">pykep.epoch</span></code>): Cartesian arrival state [m, m, m, m/s, m/s, m/s, kg].</li>
+</ul>
+</dd>
+<dt>Raises:</dt>
+<dd><ul class="first last simple">
+<li>TypeError: If either <code class="docutils literal"><span class="pre">t0</span></code> or <code class="docutils literal"><span class="pre">tf</span></code> is not supplied as an instance of <code class="docutils literal"><span class="pre">pykep.epoch</span></code>.</li>
+<li>TypeError: If either <code class="docutils literal"><span class="pre">x0</span></code> or <code class="docutils literal"><span class="pre">xf</span></code> is not supllied as an instance of <code class="docutils literal"><span class="pre">pykep.sims_flanagan.sc_state</span></code>.</li>
+<li>TypeError: If <code class="docutils literal"><span class="pre">l0</span></code> is neither supllied as a <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal"><span class="pre">list</span></code>, nor <code class="docutils literal"><span class="pre">tuple</span></code>.</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If <code class="docutils literal"><span class="pre">args</span></code> were not supplied in <code class="docutils literal"><span class="pre">__init__</span></code>, <code class="docutils literal"><span class="pre">set</span></code> must be called before calling <code class="docutils literal"><span class="pre">mismatch_constraints</span></code>.</p>
+</div>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">()</span> <span class="c1"># t0, x0, l0, tf, xf not set yet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span> <span class="c1"># now they&#39;re set</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pykep.pontryagin.leg.mismatch_constraints">
+<code class="descname">mismatch_constraints</code><span class="sig-paren">(</span><em>atol=1e-5</em>, <em>rtol=1e-5</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the nondimensional mismatch equality constraints of the arrival boundary conditions.</p>
+<p>This method propagates the nondimensional dynamics of the spacecraft
+from the departure time <cite>t0</cite> to the arrival time <cite>tf</cite>, then evaluates
+the nondimensional mismatch between the desired arrival state <cite>xf</cite>,
+arrival mass costate <cite>lmf == 0</cite> (<cite>if freemass == True</cite>), and arrival
+Hamiltonian <cite>H == 0</cite> (<cite>if freetime == True</cite>) and the supplied desired
+arrival boundary conditions.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
+<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first simple">
+<li><code class="docutils literal"><span class="pre">numpy.ndarray</span></code>: Equality constraints vector <code class="docutils literal"><span class="pre">ceq</span></code> composed of the arrival mismatch in position &amp; velocity, arrival mass costate if <code class="docutils literal"><span class="pre">freemass</span> <span class="pre">==</span> <span class="pre">True</span></code>, arrival mismatch in mass if <code class="docutils literal"><span class="pre">freemass</span> <span class="pre">==</span> <span class="pre">False</span></code>, and arrival Hamiltonian if <code class="docutils literal"><span class="pre">freetime</span> <span class="pre">==</span> <span class="pre">True</span></code>.</li>
+</ul>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ceq</span> <span class="o">=</span> <span class="p">[</span><span class="n">drf</span><span class="p">,</span> <span class="n">dvf</span><span class="p">,</span> <span class="n">dmf</span><span class="p">]</span>    <span class="c1"># freemass == False; freetime == False</span>
+<span class="n">ceq</span> <span class="o">=</span> <span class="p">[</span><span class="n">drf</span><span class="p">,</span> <span class="n">dvf</span><span class="p">,</span> <span class="n">lmf</span><span class="p">]</span>    <span class="c1"># freemass == True; freetime == False</span>
+<span class="n">ceq</span> <span class="o">=</span> <span class="p">[</span><span class="n">drf</span><span class="p">,</span> <span class="n">dvf</span><span class="p">,</span> <span class="n">lmf</span><span class="p">,</span> <span class="n">H</span><span class="p">]</span> <span class="c1"># freemass == True; freetime == True</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd><ul class="first last simple">
+<li>TypeError: If either <code class="docutils literal"><span class="pre">atol</span></code> or <code class="docutils literal"><span class="pre">rtol</span></code> is supplied as neither an instance of <code class="docutils literal"><span class="pre">float</span></code> nor <code class="docutils literal"><span class="pre">int</span></code>.</li>
+<li>AttributeError: If boundary conditions <code class="docutils literal"><span class="pre">t0</span></code>, <code class="docutils literal"><span class="pre">x0</span></code>, <code class="docutils literal"><span class="pre">l0</span></code>, <code class="docutils literal"><span class="pre">tf</span></code>, and <code class="docutils literal"><span class="pre">x0</span></code> have not been set through either <code class="docutils literal"><span class="pre">__init__</span></code> or <code class="docutils literal"><span class="pre">set</span></code>.</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This method uses an explicit Runge-Kutta method of order (4)5
+due to Dormand &amp; Prince with adaptive stepsize control.
+Smaller values of <code class="docutils literal"><span class="pre">atol</span></code> and <code class="docutils literal"><span class="pre">rtol</span></code> will increase the accuracy of
+a converged trajectory optimisation solution. However, smaller
+values result in slower integration executions and thus slower
+optimiser iterations. It is preferable to first solve a trajectory
+optimisation problem with higher values of <code class="docutils literal"><span class="pre">atol</span></code> and <code class="docutils literal"><span class="pre">rtol</span></code> to
+quickly converge to an approximate solution, subsequently resolving
+the problem with smaller tolerance values using the previous solution.
+This method is akin to mesh refinement in direct trajectory optimisation.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">State arrival boundary conditions in position and velocity are
+always returned. If the final mass transversality condition is
+activated (<code class="docutils literal"><span class="pre">freemass</span> <span class="pre">==</span> <span class="pre">True</span></code>), than the final mass costate is
+returned as part of the equality constraint vector. Otherwise
+(<code class="docutils literal"><span class="pre">freemass</span> <span class="pre">==</span> <span class="pre">False</span></code>), the final mass mismatch is returned as part
+of the equality constraint vector. If the final time transversality
+condition is activated <code class="docutils literal"><span class="pre">freetime</span> <span class="pre">==</span> <span class="pre">True</span></code>, then than the final
+Hamiltonian will be returned as part of the equality constraint
+vector. Otherwise (<code class="docutils literal"><span class="pre">freetime</span> <span class="pre">==</span> <span class="pre">False</span></code>), the Hamiltonian will not
+be supplied as part of the equality constraint vector.</p>
+</div>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><div class="first highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="go">[ -1.15402379e+01  -2.23345886e+00  -9.30022917e-01  -2.53440778e+00</span>
+<span class="go">  -3.44246359e+00  -3.96669697e-01  -2.82967399e+03  -8.58526037e-01]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">nec</span>
+<span class="go">8</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="go">[-0.82435194  0.4375439   0.04615264  0.69192818 -0.18327442 -0.00930848</span>
+<span class="go">  0.46335841  1.66752446]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">nec</span>
+<span class="go">8</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="go">[  4.95782514e+00  -7.94403974e+00  -1.10158930e-02   7.27278513e+00</span>
+<span class="go">  -1.70998019e+00   9.13925064e-02  -1.45194673e+06]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">nec</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="go">[-0.90868565  0.23238016  0.04596579  0.61543688 -0.50023407 -0.0058185</span>
+<span class="go">  0.62170522]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">nec</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+<span class="go">AttributeError: Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pykep.pontryagin.leg.get_states">
+<code class="descname">get_states</code><span class="sig-paren">(</span><em>atol=1e-12</em>, <em>rtol=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.get_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the trajectory data of time, states, costates, and controls.</p>
+<p>This method propagates the spacecrafts dynamics with a chosen <code class="docutils literal"><span class="pre">atol</span></code>
+<code class="docutils literal"><span class="pre">rtol</span></code> from <code class="docutils literal"><span class="pre">t0</span></code>, <code class="docutils literal"><span class="pre">x0</span></code>, <code class="docutils literal"><span class="pre">l0</span></code> to <code class="docutils literal"><span class="pre">t0</span></code>, then returns a <cite>numpy.ndarray</cite>
+with the number of rows corresponding to the number of data points
+along the trajectory (as determinded by <code class="docutils literal"><span class="pre">atol</span></code> and <code class="docutils literal"><span class="pre">rtol</span></code>), and 19
+columns.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
+<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first simple">
+<li><code class="docutils literal"><span class="pre">numpy.ndarray</span></code>: Trajectory data array of shape <code class="docutils literal"><span class="pre">(npts,</span> <span class="pre">20)</span></code>, where
+<code class="docutils literal"><span class="pre">npts</span></code> is the number of data points along the trajectory, as determind by the integration
+error tolerances <code class="docutils literal"><span class="pre">atol</span></code> and <code class="docutils literal"><span class="pre">rtol</span></code>.</li>
+</ul>
+<p>The returned array is characterised by:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">vx0</span><span class="p">,</span> <span class="n">vy0</span><span class="p">,</span> <span class="n">vz0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">lx0</span><span class="p">,</span> <span class="n">ly0</span><span class="p">,</span> <span class="n">lz0</span><span class="p">,</span> <span class="n">lvx0</span><span class="p">,</span> <span class="n">lvy0</span><span class="p">,</span> <span class="n">lvz0</span><span class="p">,</span> <span class="n">lm0</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">ux0</span><span class="p">,</span> <span class="n">uy0</span><span class="p">,</span> <span class="n">uz0</span><span class="p">,</span> <span class="n">H0</span><span class="p">],</span>
+<span class="o">...</span>
+ <span class="p">[</span><span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">vxf</span><span class="p">,</span> <span class="n">vyf</span><span class="p">,</span> <span class="n">vzf</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">lxf</span><span class="p">,</span> <span class="n">lyf</span><span class="p">,</span> <span class="n">lzf</span><span class="p">,</span> <span class="n">lvxf</span><span class="p">,</span> <span class="n">lvyf</span><span class="p">,</span> <span class="n">lvzf</span><span class="p">,</span> <span class="n">lmf</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">uf</span><span class="p">,</span> <span class="n">uxf</span><span class="p">,</span> <span class="n">uyf</span><span class="p">,</span> <span class="n">uzf</span><span class="p">,</span> <span class="n">Hf</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd><ul class="first last simple">
+<li>TypeError: If either <code class="docutils literal"><span class="pre">atol</span></code> or <code class="docutils literal"><span class="pre">rtol</span></code> is supplied as neither an instance of <code class="docutils literal"><span class="pre">float</span></code> nor <code class="docutils literal"><span class="pre">int</span></code>.</li>
+<li>AttributeError: If boundary conditions <code class="docutils literal"><span class="pre">t0</span></code>, <code class="docutils literal"><span class="pre">x0</span></code>, <code class="docutils literal"><span class="pre">l0</span></code>, <code class="docutils literal"><span class="pre">tf</span></code>, and <code class="docutils literal"><span class="pre">x0</span></code> have not been set through either <code class="docutils literal"><span class="pre">__init__</span></code> or <code class="docutils literal"><span class="pre">set</span></code>.</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The returned array has the units of
+[mjd2000, m, m, m, m/s, m/s, m/s, kg, ND, ND, ND, ND, ND, ND, ND, s, ND, ND, ND, ND, ND].</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Setting either <code class="docutils literal"><span class="pre">atol</span></code> or <code class="docutils literal"><span class="pre">rtol</span></code> smaller than <code class="docutils literal"><span class="pre">1e-12</span></code> may result in numerical integration difficulties.</p>
+</div>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># times</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="c1"># positions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span> <span class="c1"># velocities</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">7</span><span class="p">]</span> <span class="c1"># masses</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lm</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">14</span><span class="p">]</span> <span class="c1"># mass costates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">15</span><span class="p">]</span> <span class="c1"># control throttles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">19</span><span class="p">]</span> <span class="c1"># Hamiltonians</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="c1"># plot the control throttle history</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pykep.pontryagin.leg.plot_traj">
+<code class="descname">plot_traj</code><span class="sig-paren">(</span><em>axis</em>, <em>mark=&quot;k.-&quot;</em>, <em>atol=1e-11</em>, <em>rtol=1e-11</em>, <em>units=pykep.AU</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots trajectory onto a 3D axis.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>axes (<code class="docutils literal"><span class="pre">matplotlib.axes._subplots.Axes3DSubplot</span></code>): 3D axis onto which to plot the trajectory.</li>
+<li>mark (<code class="docutils literal"><span class="pre">str</span></code>): Marker style.</li>
+<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
+<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
+<li>units (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Length unit by which to normalise data.</li>
+<li>quiver (<code class="docutils literal"><span class="pre">bool</span></code>): Activates the visualization of the throttle arrows</li>
+<li>length (<code class="docutils literal"><span class="pre">float</span></code>): Length of thrust arrow if quiver is True</li>
+</ul>
+</dd>
+<dt>Raises:</dt>
+<dd><ul class="first last simple">
+<li>TypeError: If <code class="docutils literal"><span class="pre">axes</span></code> is not an instance of <code class="docutils literal"><span class="pre">mpl_toolkits.mplot3d.Axes3D</span></code>.</li>
+<li>TypeError: If <code class="docutils literal"><span class="pre">mark</span></code> is not an instance of <code class="docutils literal"><span class="pre">str</span></code>.</li>
+<li>TypeError: If either <code class="docutils literal"><span class="pre">atol</span></code>, <code class="docutils literal"><span class="pre">rtol</span></code>, or <code class="docutils literal"><span class="pre">units</span></code> is neither an instance of <code class="docutils literal"><span class="pre">float</span></code> nor <code class="docutils literal"><span class="pre">int</span></code>.</li>
+</ul>
+</dd>
+<dt>Examples:</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span> <span class="c1"># spacecraft</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;earth&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;mars&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tf</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span><span class="p">,</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">p0</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rf</span><span class="p">,</span> <span class="n">vf</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xf</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">sc_state</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">mass</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pykep.pontryagin.leg.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>mark=&quot;k.-&quot;</em>, <em>atol=1e-12</em>, <em>rtol=1e-12</em>, <em>unitsx=1</em>, <em>unitsy=1</em>, <em>xlabel=False</em>, <em>ylabel=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots in two dimensions of the leg&#8217;s trajectory data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;vx&#39;</span><span class="p">,</span> <span class="s1">&#39;vy&#39;</span><span class="p">,</span> <span class="s1">&#39;vz&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lx&#39;</span><span class="p">,</span> <span class="s1">&#39;ly&#39;</span><span class="p">,</span> <span class="s1">&#39;lz&#39;</span><span class="p">,</span> <span class="s1">&#39;lvx&#39;</span><span class="p">,</span> <span class="s1">&#39;lvy&#39;</span><span class="p">,</span> <span class="s1">&#39;lvz&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><ul class="first last simple">
+<li>x (<code class="docutils literal"><span class="pre">str</span></code>): x-axis dimension in <code class="docutils literal"><span class="pre">keys</span></code>.</li>
+<li>y (<code class="docutils literal"><span class="pre">str</span></code>): y-axis dimension in <code class="docutils literal"><span class="pre">keys</span></code>.</li>
+<li>mark (<code class="docutils literal"><span class="pre">str</span></code>): Marker style.</li>
+<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
+<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
+<li>unitsx (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Unit by which to normalise x-axis data.</li>
+<li>unitsy (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Unit by which to normalise y-axis data.</li>
+<li>xlabel (<code class="docutils literal"><span class="pre">str</span></code>, <code class="docutils literal"><span class="pre">bool</span></code>): x-axis label. If label is <code class="docutils literal"><span class="pre">False</span></code>, no label is placed; if <code class="docutils literal"><span class="pre">True</span></code>, dimension name is placed.</li>
+<li>ylabel (<code class="docutils literal"><span class="pre">str</span></code>, <code class="docutils literal"><span class="pre">bool</span></code>): y-axis label. If label is <code class="docutils literal"><span class="pre">False</span></code>, no label is placed; if <code class="docutils literal"><span class="pre">True</span></code>, dimension name is placed.</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
