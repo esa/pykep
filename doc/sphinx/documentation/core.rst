@@ -92,3 +92,19 @@ Detailed Documentation
 ------------
 
 .. autofunction:: pykep.par2ic(*args)
+
+------------
+
+.. autofunction:: pykep.par2eq(*args)
+
+------------
+
+.. autofunction:: pykep.eq2par(*args)
+
+------------
+
+.. autofunction:: pykep.eq2ic(*args)
+
+------------
+
+.. autofunction:: pykep.ic2eq(*args)

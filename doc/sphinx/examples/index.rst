@@ -17,6 +17,7 @@ Generic
 
   ex1
   ex2
+  ex12
 
 Advanced Research Topics (requires pygmo)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
