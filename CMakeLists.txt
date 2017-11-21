@@ -1,19 +1,21 @@
-cmake_minimum_required(VERSION 3.0.0)
+# CMake version check.
+cmake_minimum_required(VERSION 3.2)
 
-PROJECT(pykep VERSION 2.0)
-# We enable cmake test capability
-ENABLE_TESTING()
+# Main pykep project version.
+set(PYKEP_PROJECT_VERSION 2.1)
+project(pykep VERSION ${PYKEP_PROJECT_VERSION})
+enable_testing()
 
-# Set default build type to "Release", change it in the GUI if you need to build with debug.
-IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE Release CACHE STRING
-		"Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-	FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+# Set default build type to "Release".
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING
+        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+    FORCE)
+endif()
 
-#Some screen output
-MESSAGE(STATUS "OS detected: ${CMAKE_SYSTEM_NAME}")
-MESSAGE(STATUS "CXX Compiler detected: ${CMAKE_CXX_COMPILER_ID}")
+#Some information to screen
+message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "CXX Compiler detected: ${CMAKE_CXX_COMPILER_ID}")
 
 # Setting OS specific cmake variables
 # 1 - OSX
@@ -28,6 +30,10 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 # Some screen output
 MESSAGE(STATUS "CMake additional search path for libraries: ${CMAKE_LIBRARY_PATH}")
+
+# Writing some configuration files with version update ...
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)
 
 # We set compiler specific flags
 INCLUDE(cmake_scripts/set_compiler_flags.cmake)

@@ -51,8 +51,9 @@ from pykep import core, sims_flanagan, pontryagin, orbit_plots, examples, phasin
 ###########################################################
 # We define pykep module
 ###########################################################
+version = '2.1'
 __doc__ = 'pykep is the answer ... but what was the question?'
 __all__ = ['core', 'sims_flanagan', 'pontryagin', 'orbit_plots',
            'examples', 'trajopt', 'phasing', 'util', 'planet']
-__version__ = {'major': 1, 'minor': 3, 'bugfix': 9}
+__version__ = {'major': int(version.split('.')[0]), 'minor': int(version.split('.')[1])}
 __all__ += [name for name in dir(core) if not name.startswith('_')]
