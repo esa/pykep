@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #ifdef __MACH__
 #include <mach/clock.h>
