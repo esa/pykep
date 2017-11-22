@@ -56,7 +56,7 @@ ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
 ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	# Disable the idiotic minmax macros on MSVC, some annoying warnings,
 	# and enable the bigobj option.
-	list(APPEND CMAKE_CXX_FLAGS "-DBOOST_ALL_DYN_LINK" "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
+	# list(APPEND CMAKE_CXX_FLAGS "-DBOOST_ALL_DYN_LINK" "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
 ENDIF()
 
 # The following flags will be tried on all compilers
