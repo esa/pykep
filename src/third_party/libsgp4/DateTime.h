@@ -29,6 +29,7 @@
     #include <mach/mach.h>
 #elif defined _MSC_VER
     #include <Windows.h>
+    #define NOMINMAX
     // MSVC does not have clock get time, use workaround
     // credits: https://stackoverflow.com/questions/5404277/porting-clock-gettime-to-windows
     #define BILLION                             (1E9)
