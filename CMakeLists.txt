@@ -55,6 +55,7 @@ OPTION(BUILD_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
 # Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
 
+
 # Finding the boost libraries needed for the keplerian_toolbox
 SET(REQUIRED_BOOST_LIBS serialization date_time)
 IF(BUILD_PYKEP)
@@ -72,6 +73,15 @@ MESSAGE(STATUS "Detected Boost version: ${Boost_VERSION}")
 MESSAGE(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
 MESSAGE(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+
+if (WIN32)
+# disable autolinking in boost
+add_definitions( -DBOOST_ALL_NO_LIB )
+
+# force all boost libraries to dynamic link (we already disabled
+# autolinking, so I don't know why we need this, but we do!)
+add_definitions( -DBOOST_ALL_DYN_LINK )
+endif()
 
 # Initialise (empty) list of libraries to link against.
 SET(LIBRARIES_4_STATIC "")
@@ -117,6 +127,7 @@ IF(BUILD_PYKEP)
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/manylinux_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
     endif()
 ENDIF(BUILD_PYKEP)
+
 
 # Build Tests and link them to static library.
 IF(BUILD_TESTS)
