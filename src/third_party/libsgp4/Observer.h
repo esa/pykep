@@ -22,7 +22,7 @@
 #include "Eci.h"
 
 class DateTime;
-class CoordTopocentric;
+struct CoordTopocentric;
 
 /**
  * @brief Stores an observers location in Eci coordinates.
