@@ -50,13 +50,7 @@ OPTION(BUILD_TESTS "Build tests'." ON)
 
 # Build Option: when active the JPL SPICE toolbox is used to extend pykep. You can choose
 # to build the library or use a pre-build library
-OPTION(USE_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
 OPTION(BUILD_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
-
-# Check consistency.
-if(USE_SPICE AND BUILD_SPICE)
-message(FATAL_ERROR "Please select whether to build spice or just try to find a library")
-endif()
 
 # Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
