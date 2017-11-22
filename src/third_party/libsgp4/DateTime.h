@@ -24,9 +24,11 @@
 #include <sstream>
 #include <algorithm>
 
-#ifdef __MACH__
-#include <mach/clock.h>
-#include <mach/mach.h>
+#if defined __MACH__
+    #include <mach/clock.h>
+    #include <mach/mach.h>
+#elif defined _MSC_VER
+    #include <Windows.h>
 #endif
 
 namespace
@@ -129,7 +131,7 @@ public:
         struct timespec ts;
         int res;
 
-#ifdef __MACH__
+#if defined __MACH__
         // OS X does not have clock_gettime, use clock_get_time
         // credits: https://gist.github.com/jbenet/1087739
         clock_serv_t cclock;
@@ -140,9 +142,46 @@ public:
         ts.tv_sec = mts.tv_sec;
         ts.tv_nsec = mts.tv_nsec;
         res = 0;
+#elif defined _MSC_VER
+        // MSVC does not have clock get time, use workaround
+        // credits: https://stackoverflow.com/questions/5404277/porting-clock-gettime-to-windows
+        #define BILLION                             (1E9)
+
+        static BOOL g_first_time = 1;
+        static LARGE_INTEGER g_counts_per_sec;
+
+        struct timespec { long tv_sec; long tv_nsec; };
+
+        int clock_gettime(int dummy, struct timespec *ct)
+        {
+            LARGE_INTEGER count;
+
+            if (g_first_time)
+            {
+                g_first_time = 0;
+
+                if (0 == QueryPerformanceFrequency(&g_counts_per_sec))
+                {
+                    g_counts_per_sec.QuadPart = 0;
+                }
+            }
+
+            if ((NULL == ct) || (g_counts_per_sec.QuadPart <= 0) ||
+                    (0 == QueryPerformanceCounter(&count)))
+            {
+                return -1;
+            }
+
+            ct->tv_sec = count.QuadPart / g_counts_per_sec.QuadPart;
+            ct->tv_nsec = ((count.QuadPart % g_counts_per_sec.QuadPart) * BILLION) / g_counts_per_sec.QuadPart;
+
+            return 0;
+        }
+        res = clock_gettime(0, &ts);
 #else
         res = clock_gettime(CLOCK_REALTIME, &ts);
 #endif
+
 
         if (res == 0) {
             if (microseconds) {
