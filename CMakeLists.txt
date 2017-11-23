@@ -98,9 +98,12 @@ add_subdirectory("${CMAKE_SOURCE_DIR}/src")
 
 # Build main and link it to static library.
 if(BUILD_MAIN)
-	ADD_EXECUTABLE(main main.cpp)
-	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static Boost::boost Boost::serialization Boost::date_time)
-	endif(BUILD_MAIN)
+	add_executable(main main.cpp)
+	target_link_libraries(main keplerian_toolbox_static Boost::boost Boost::serialization Boost::date_time)
+    set_property(TARGET main PROPERTY CXX_STANDARD 11)
+    set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET main PROPERTY CXX_EXTENSIONS NO)
+endif(BUILD_MAIN)
 
 # Build Tests and link them to static library.
 if(BUILD_TESTS)

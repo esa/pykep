@@ -35,7 +35,10 @@ IF(BUILD_SPICE)
 ENDIF()
 
 if(BUILD_MAIN OR BUILD_TESTS)
-    ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
+	ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
+    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD 11)
+    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_EXTENSIONS NO)
 endif()
 
 #Build Dynamic Library
@@ -48,6 +51,9 @@ if(BUILD_PYKEP)
 	add_library(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
 	target_link_libraries(keplerian_toolbox ${KEP_TOOL_NEEDED})
 	set_target_properties(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD 11)
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_EXTENSIONS NO)
 	install(TARGETS keplerian_toolbox
 		RUNTIME DESTINATION ${LIB_INSTALL_PATH}
 		LIBRARY DESTINATION ${LIB_INSTALL_PATH}
