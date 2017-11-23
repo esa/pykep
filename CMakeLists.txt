@@ -6,6 +6,11 @@ set(PYKEP_PROJECT_VERSION 2.1)
 project(pykep VERSION ${PYKEP_PROJECT_VERSION})
 enable_testing()
 
+# Module path setup.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
+
+message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
+
 # Set default build type to "Release".
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING
@@ -13,33 +18,15 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-#Some information to screen
-message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "CXX Compiler detected: ${CMAKE_CXX_COMPILER_ID}")
-
-# Setting OS specific cmake variables
-# 1 - OSX
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	SET(CMAKE_MACOSX_RPATH OFF)
-	SET(CMAKE_OSX_ROOT "")
-	SET(CMAKE_OSX_DEPLOYMENT_TARGET "")
-	# Homebrew directory added to path
-	SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/lib)
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-# 2 - NONE
-
-# Some screen output
-MESSAGE(STATUS "CMake additional search path for libraries: ${CMAKE_LIBRARY_PATH}")
-
 # Writing some configuration files with version update ...
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py" @ONLY)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)
 
-# We set compiler specific flags
-INCLUDE(cmake_scripts/set_compiler_flags.cmake)
+# Initial setup of compiler flags.
+include(YACMACompilerLinkerSettings)
 
 # Provides build options to CMake
-# Build Option: when active the file main.cpp is built and linked to the pagmo static library
+# Build Option: when active the file main.cpp is built and linked to the PYKEP static library
 OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
 
 # Build Option: when active builds Python bindings called pykep
@@ -55,69 +42,78 @@ OPTION(BUILD_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
 # Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
 OPTION(INSTALL_HEADERS "Installs the header files" OFF)
 
-
-# Finding the boost libraries needed for the keplerian_toolbox
-SET(REQUIRED_BOOST_LIBS serialization date_time)
-IF(BUILD_PYKEP)
-	INCLUDE(cmake_scripts/python_setup.cmake)
-	IF(PYTHON_VERSION_MAJOR LESS 3)
-		SET(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python)
-	ELSE(PYTHON_VERSION_MAJOR LESS 3)
-		SET(REQUIRED_BOOST_LIBS ${REQUIRED_BOOST_LIBS} python3)
-	ENDIF(PYTHON_VERSION_MAJOR LESS 3)
-ENDIF(BUILD_PYKEP)
-MESSAGE(STATUS "Required Boost libraries: ${REQUIRED_BOOST_LIBS}")
-# Minimum version must have std::array serialization
-FIND_PACKAGE(Boost 1.56.0 REQUIRED COMPONENTS "${REQUIRED_BOOST_LIBS}")
-MESSAGE(STATUS "Detected Boost version: ${Boost_VERSION}")
-MESSAGE(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
-MESSAGE(STATUS "Boost libraries: ${Boost_LIBRARIES}")
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-
-if (WIN32)
-# disable autolinking in boost
-add_definitions( -DBOOST_ALL_NO_LIB )
-
-# force all boost libraries to dynamic link (we already disabled
-# autolinking, so I don't know why we need this, but we do!)
-add_definitions( -DBOOST_ALL_DYN_LINK )
+# Assemble the flags.
+set(PYKEP_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
+set(PYKEP_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
+  message(STATUS "Clang compiler on OSX detected, setting the standard library to 'libc++'.")
+  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-stdlib=libc++")
+  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-stdlib=libc++")
+endif()
+if(YACMA_COMPILER_IS_MSVC)
+  # Disable the idiotic minmax macros on MSVC, some annoying warnings,
+  # and enable the bigobj option.
+  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
+  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
+endif()
+if(YACMA_COMPILER_IS_INTELXX)
+  # NOTE: on MSVC we use the push/pop pragmas, but they do not seem to work on Intel (the pragmas
+  # in icc influence the behaviour at instantiation point, not at definition point).
+  # These warnings are useful in principle, but they are generated a lot from cereal and we have no
+  # way of disabling them selectively. Just rely on the other compilers to provde good diagnostic.
+  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
+  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
+endif()
+if(MINGW)
+	# Flag needed to deal with big binaries in MinGW.
+	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
+	list(APPEND PYKEP_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
+	list(APPEND PYKEP_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
 endif()
 
-# Initialise (empty) list of libraries to link against.
-SET(LIBRARIES_4_STATIC "")
-SET(LIBRARIES_4_DYNAMIC "")
-SET(LIBRARIES_4_PYTHON_MODULES "")
+if(BUILD_PYKEP)
+# pygmo dependencies.
+include(YACMAPythonSetup)
 
-# Define the libraries to link against.
-SET(LIBRARIES_4_STATIC ${LIBRARIES_4_STATIC} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-SET(LIBRARIES_4_DYNAMIC ${LIBRARIES_4_DYNAMIC} ${LIBRARIES_4_STATIC})
-IF(PYTHON_VERSION_MAJOR LESS 3)
-	SET(LIBRARIES_4_PYTHON_MODULES ${LIBRARIES_4_PYTHON_MODULES} ${Boost_PYTHON_LIBRARY}  ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-ELSE(PYTHON_VERSION_MAJOR LESS 3)
-	SET(LIBRARIES_4_PYTHON_MODULES ${LIBRARIES_4_PYTHON_MODULES} ${Boost_PYTHON3_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY})
-ENDIF(PYTHON_VERSION_MAJOR LESS 3)
+# Python version check.
+if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
+	message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+endif()
+
+# Internal variable that will be used to tell PYKEPFindBoost to locate Boost.Python.
+set(_PYKEP_FIND_BOOST_PYTHON TRUE)
+endif()
+
+# Boost setup. Will allow using Boost::library_name for the needed components
+include(PykepFindBoost)
 
 # We build cspice static library and link it in pykep libraries
-IF(BUILD_SPICE)
-	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
-	SET(LIBRARIES_4_STATIC ${LIBRARIES_4_STATIC} cspice)
-    SET(LIBRARIES_4_DYNAMIC ${LIBRARIES_4_DYNAMIC} cspice)
-    ADD_DEFINITIONS(-DPYKEP_USING_SPICE)
-ENDIF(BUILD_SPICE)
+if(BUILD_SPICE)
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
+    add_definitions(-DPYKEP_USING_SPICE)
+endif(BUILD_SPICE)
 
 # Here we define the file list and make the static and dynamic library
-ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/src")
+add_subdirectory("${CMAKE_SOURCE_DIR}/src")
 
 # Build main and link it to static library.
-IF(BUILD_MAIN)
+if(BUILD_MAIN)
 	ADD_EXECUTABLE(main main.cpp)
-	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static ${LIBRARIES_4_STATIC})
-ENDIF(BUILD_MAIN)
+	TARGET_LINK_LIBRARIES(main keplerian_toolbox_static Boost::boost Boost::serialization Boost::date_time)
+	endif(BUILD_MAIN)
+
+# Build Tests and link them to static library.
+if(BUILD_TESTS)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
+	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+endif(BUILD_TESTS)
 
 # Build pykep and link it to dynamic library.
-IF(BUILD_PYKEP)
-	SET(LIBRARIES_4_PYTHON_MODULES keplerian_toolbox ${LIBRARIES_4_PYTHON_MODULES})
-	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/pykep")
+if(BUILD_PYKEP)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
 	if(MINGW)
 		message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
 		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
@@ -125,15 +121,8 @@ IF(BUILD_PYKEP)
 	else(MINGW)
         message(STATUS "Creating the files for the generation of a manylinux binary wheel.")
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/manylinux_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
-    endif()
-ENDIF(BUILD_PYKEP)
+	endif()
+endif()
 
 
-# Build Tests and link them to static library.
-IF(BUILD_TESTS)
-	ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-ENDIF(BUILD_TESTS)
+
