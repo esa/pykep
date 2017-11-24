@@ -4,24 +4,48 @@ environment:
   TWINE_PASSWORD:
     secure: UGpLM1eTRobLbka7TwQ3LA==
   matrix:
+    #- BUILD_TYPE: "MSVC_64_Python36" # Still issues with python .... also many warning from conversions
+    #  COMPILER: MSVC15
+    #  PLATFORM: "x64"
     #- BUILD_TYPE: "Release"
     - BUILD_TYPE: "Python27"
     - BUILD_TYPE: "Python34"
     - BUILD_TYPE: "Python35"
     - BUILD_TYPE: "Python36"
 
-install:
 
-# Rename sh.exe as sh.exe in PATH interferes with MinGW.
-- rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+install:
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda config --add channels conda-forge --force
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda clean --all -y
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update conda -y 
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda update --all -y
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pykep python=3.6 cmake boost
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pykep
+
+- if [%BUILD_TYPE%]==[Python27] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python34] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python35] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python36] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+
 # Get a Python version to run the script.
-- call tools\appveyor-download.cmd "https://github.com/bluescarni/binary_deps/raw/master/python35_mingw_64.7z" -FileName python.7z
-- 7z x -aoa -oC:\python4appveyor\ python.7z > NUL
+# - call tools\appveyor-download.cmd "https://github.com/bluescarni/binary_deps/raw/master/python35_mingw_64.7z" -FileName python.7z
+# - 7z x -aoa -oC:\python4appveyor\ python.7z > NUL
 
 build_script:
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] mkdir build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cd build
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DCMAKE_BUILD_TYPE=Release -DBUILD_MAIN=no -DBUILD_TESTS=yes -DBUILD_SPICE=no -DBUILD_PYKEP=yes ..
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake --build . --config Release --target install
 
-- cd C:\projects\pykep
-- C:\python4appveyor\Python35\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python27] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python34] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python35] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python36] C:\Python36-x64\python.exe tools\install_appveyor.py
+
+test_script:
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] ctest --output-on-failure
+- if [%BUILD_TYPE%]==[MSVC_64_Python36] python -c "import pykep as pk; e = pk.epoch(0)"
 
 # Enable this to be able to login to the build worker. You can use the
 # `remmina` program in Ubuntu, or Microsoft Remote Desktop app in osx

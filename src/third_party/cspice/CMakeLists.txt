@@ -1,11 +1,13 @@
 # Add all c files to the library
-FILE(GLOB CSPICE_LIB_SRC_LIST "*.c")
+file(GLOB CSPICE_LIB_SRC_LIST "*.c")
 
 #Build Static Library
-ADD_LIBRARY(cspice STATIC ${CSPICE_LIB_SRC_LIST})
+add_library(cspice STATIC ${CSPICE_LIB_SRC_LIST})
+set_property(TARGET cspice PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 
 # Disable all warnings for SPICE compilation
-TARGET_COMPILE_OPTIONS(cspice PUBLIC "-w")
+target_compile_options(cspice PUBLIC "-w")
 
 
 

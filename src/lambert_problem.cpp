@@ -101,7 +101,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
 
     // 2 - We now have lambda, T and we will find all x
     // 2.1 - Let us first detect the maximum number of revolutions for which there exists a solution
-    m_Nmax = T / M_PI;
+    m_Nmax = static_cast<int>(T / M_PI);
     double T00 = acos(m_lambda) + m_lambda * sqrt(1.0 - lambda2);
     double T0 = (T00 + m_Nmax * M_PI);
     double T1 = 2.0 / 3.0 * (1.0 - lambda3), DT = 0.0, DDT = 0.0, DDDT = 0.0;

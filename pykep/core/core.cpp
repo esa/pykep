@@ -84,7 +84,7 @@ static inline kep_toolbox::array6D eq2par_wrapper(const kep_toolbox::array6D &EQ
 {
     kep_toolbox::array6D E;
     kep_toolbox::eq2par(E, EQ, retrograde);
-    return EQ;
+    return E;
 }
 
 static inline tuple eq2ic_wrapper(const kep_toolbox::array6D &EQ, const double &mu, const bool retrograde = false)

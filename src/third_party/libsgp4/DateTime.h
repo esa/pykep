@@ -22,10 +22,11 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
-#ifdef __MACH__
-#include <mach/clock.h>
-#include <mach/mach.h>
+#if defined __MACH__
+    #include <mach/clock.h>
+    #include <mach/mach.h>
 #endif
 
 namespace
@@ -128,7 +129,7 @@ public:
         struct timespec ts;
         int res;
 
-#ifdef __MACH__
+#if defined __MACH__
         // OS X does not have clock_gettime, use clock_get_time
         // credits: https://gist.github.com/jbenet/1087739
         clock_serv_t cclock;
@@ -139,9 +140,12 @@ public:
         ts.tv_sec = mts.tv_sec;
         ts.tv_nsec = mts.tv_nsec;
         res = 0;
+#elif defined _MSC_VER
+        // IN WINDOWS AN ALTERNATIVE SHOULD BE HERE FOR CLOCK_GETTIME
 #else
         res = clock_gettime(CLOCK_REALTIME, &ts);
 #endif
+
 
         if (res == 0) {
             if (microseconds) {
@@ -367,7 +371,8 @@ public:
         }
 
         int maxday = DaysInMonth(year, month);
-        day = std::min(day, maxday);
+        //day = std::min(day, maxday);
+        day = (day < maxday) ? day : maxday;
 
         return DateTime(year, month, day).Add(TimeOfDay());
     }

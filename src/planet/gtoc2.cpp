@@ -973,7 +973,7 @@ gtoc2::gtoc2(int astid)
     set_name(std::string("GTOC2 asteroid id: ") + boost::lexical_cast<std::string>(gtoc2_asteroids_data[astid][0]));
     set_elements(elem);
     set_ref_epoch(epoch(gtoc2_asteroids_data[astid][7], epoch::MJD));
-    m_group = gtoc2_asteroids_data[astid][8];
+    m_group = static_cast<int>(gtoc2_asteroids_data[astid][8]);
 }
 
 /// Polimorphic copy consruction

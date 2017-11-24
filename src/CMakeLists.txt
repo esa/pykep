@@ -32,26 +32,34 @@ IF(BUILD_SPICE)
 		${CMAKE_CURRENT_SOURCE_DIR}/planet/spice.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/util/spice_utils.cpp
 	)
-ENDIF(BUILD_SPICE)
+ENDIF()
 
 if(BUILD_MAIN OR BUILD_TESTS)
-    ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
-endif(BUILD_MAIN OR BUILD_TESTS)
+	ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
+    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD 11)
+    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD_REQUIRED YES)
+	set_property(TARGET keplerian_toolbox_static PROPERTY CXX_EXTENSIONS NO)
+	target_link_libraries(keplerian_toolbox_static "Boost::boost")	
+endif()
 
 #Build Dynamic Library
-SET(LIB_INSTALL_PATH "lib")
-ADD_LIBRARY(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
-TARGET_LINK_LIBRARIES(keplerian_toolbox ${LIBRARIES_4_DYNAMIC})
-INSTALL(TARGETS keplerian_toolbox
-    RUNTIME DESTINATION ${LIB_INSTALL_PATH}
-    LIBRARY DESTINATION ${LIB_INSTALL_PATH}
-)
-
-#Build Dynamic Library (only if needed by pykep)
-IF(BUILD_PYKEP)
-	#INCLUDE(FindPythonLibs)
-	SET_TARGET_PROPERTIES(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
-ENDIF(BUILD_PYKEP)
+if(BUILD_PYKEP)
+	set(LIB_INSTALL_PATH "lib")
+	set(KEP_TOOL_NEEDED "Boost::boost" "Boost::date_time" "Boost::serialization")
+	if(BUILD_SPICE)
+		list(APPEND KEP_TOOL_NEEDED "cspice")
+	endif()
+	add_library(keplerian_toolbox SHARED ${PYKEP_LIB_SRC_LIST})
+	target_link_libraries(keplerian_toolbox ${KEP_TOOL_NEEDED})
+	set_target_properties(keplerian_toolbox PROPERTIES COMPILE_FLAGS "-DKEP_TOOL_DLL_EXPORT_API")
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD 11)
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_EXTENSIONS NO)
+	install(TARGETS keplerian_toolbox
+		RUNTIME DESTINATION ${LIB_INSTALL_PATH}
+		LIBRARY DESTINATION ${LIB_INSTALL_PATH}
+	)
+endif()
 
 #Installs the headers
 IF(INSTALL_HEADERS)
