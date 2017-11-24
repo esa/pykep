@@ -64,6 +64,9 @@ make install
 # Compile wheels
 cd /pykep/build/wheel
 mv ${PATH_TO_PYTHON}/lib/python${PYTHON_VERSION}/site-packages/pykep ./
+# we create a copy of the libkeplerian_toolbox.so in /usl/lib so that the system linker can find it
+cp ${PATH_TO_PYTHON}/lib/libkeplerian_toolbox.so /usr/local/lib
+
 # The following line is needed as a workaround to the auditwheel problem KeyError = .lib
 # Using and compiling a null extension module (see manylinux_wheel_setup.py)
 # fixes the issue (TODO: probably better ways?)
