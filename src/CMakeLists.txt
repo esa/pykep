@@ -38,7 +38,8 @@ if(BUILD_MAIN OR BUILD_TESTS)
 	ADD_LIBRARY(keplerian_toolbox_static STATIC ${PYKEP_LIB_SRC_LIST})
     set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD 11)
     set_property(TARGET keplerian_toolbox_static PROPERTY CXX_STANDARD_REQUIRED YES)
-    set_property(TARGET keplerian_toolbox_static PROPERTY CXX_EXTENSIONS NO)
+	set_property(TARGET keplerian_toolbox_static PROPERTY CXX_EXTENSIONS NO)
+	target_link_libraries(keplerian_toolbox "Boost::boost")	
 endif()
 
 #Build Dynamic Library
