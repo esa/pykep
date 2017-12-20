@@ -49,6 +49,8 @@ class _indirect_base(object):
             - atol (``float``, ``int``): absolute integration tolerance.
             - rtol (``float``, ``int``): relative integration tolerance.
             - units (``float``, ``int``): units by which to scale the trajectory dimensions.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
+            - quiver (``bool``): when True the thrust is visualized with a quiver plot
             - length (``float``): Length of thrust arrow if quiver is True
 
         """
@@ -84,7 +86,7 @@ class _indirect_base(object):
             - mark (``string``): matplotlib marker.
             - atol (``float``, ``int``): absolute integration tolerance.
             - rtol (``float``, ``int``): relative integration tolerance.
-
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
         """
 
         # set problem
@@ -393,8 +395,7 @@ class indirect_or2or(_indirect_base):
 
         Args:
             - z (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
-            - atol (``float``, ``int``): Absolute integration solution tolerance.
-            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
             - units (``float``, ``int``): Length unit by which to normalise data.
 
         Examples:
@@ -527,8 +528,7 @@ class indirect_pt2or(_indirect_base):
 
         Args:
             - z (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
-            - atol (``float``, ``int``): Absolute integration solution tolerance.
-            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
             - units (``float``, ``int``): Length unit by which to normalise data.
 
         Examples:
@@ -560,6 +560,14 @@ class indirect_pt2or(_indirect_base):
             kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
 
     def _pretty(self, z):
+        """
+        prob.pretty(x)
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Prints human readable information on the trajectory represented by the decision vector x
+        """
         print("\nPoint to orbit transfer: ")
         print("\nFrom (cartesian): ", list(self.x0))
         print("To (osculating elements): ", list(self.elemf))
@@ -668,8 +676,7 @@ class indirect_pt2pl(_indirect_base):
 
         Args:
             - z (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
-            - atol (``float``, ``int``): Absolute integration solution tolerance.
-            - rtol (``float``, ``int``): Relative integration solution tolerance.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
             - units (``float``, ``int``): Length unit by which to normalise data.
 
         Examples:
