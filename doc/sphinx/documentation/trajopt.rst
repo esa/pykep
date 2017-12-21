@@ -15,7 +15,7 @@ Name                                            Type            Description
 :class:`pykep.trajopt.direct_pl2pl`             class           A low-thrust transfer between planets using a direct transcription.
 :class:`pykep.trajopt.indirect_pt2pt`           class           A low-thrust transfer between Cartesian states using an indirect transcription.
 :class:`pykep.trajopt.indirect_or2or`           class           A low-thrust transfer between orbits using an indirect transcription.
-:class:`pykep.trajopt.indirect_pt2or`           class           A low-thrust transfer transfer between a Cartesian state and orbit using an indirect transcription.
+:class:`pykep.trajopt._launchers`               class           Contains functors delivering the performance of launchers in terms of mass delivered
 =========================================       =========       ================================================
 
 Detailed Documentation
@@ -111,3 +111,11 @@ Detailed Documentation
 .. autoclass:: pykep.trajopt.indirect_pt2or(_indirect_base)
 
   .. automethod:: pykep.trajopt.indirect_pt2or.__init__(*args)
+
+------------
+
+.. autoclass:: pykep.trajopt._launchers
+
+  .. automethod:: pykep.trajopt._launchers.atlas501(*args)
+
+  .. automethod:: pykep.trajopt._launchers.soyuzf(*args)

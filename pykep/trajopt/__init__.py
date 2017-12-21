@@ -16,6 +16,9 @@ if (__extensions__['pygmo']):
     # The open traj gym
     from pykep.trajopt._gym import gym
     gym = gym()
+    # The launchers models
+    from pykep.trajopt._launchers import _launchers
+    launchers = _launchers()
 
 if (__extensions__['pygmo'] and __extensions__['mplot3d'] and __extensions__['scipy']):
     from pykep.trajopt._indirect import indirect_or2or, indirect_pt2or, indirect_pt2pt, indirect_pt2pl
