@@ -143,7 +143,7 @@ class pl2pl_N_impulses(object):
         else:
             return (DV1 + DV2 + DV_others, x[1])
 
-    def plot_trajectory(self, x, axes=None):
+    def plot(self, x, axes=None):
         """
         ax = prob.plot_trajectory(x, axes=None)
 

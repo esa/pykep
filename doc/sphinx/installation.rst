@@ -3,19 +3,23 @@
 Install pykep
 ======================
 
-pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X We are unfortunately not in the position to provide
-binaries for everybody, so it is likely you will need to compile the source code youself. This process, under unix architectures is
-painless, while under windows architectures it can be troublesome, but we do provide windows 64 bits binaries via PyPi
+pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X. 
+We are unfortunately not in the position to provide binaries for everybody, so it is possible you will need to compile
+the source code youself. This process, under unix architectures is painless, while under windows architectures it can be a pain.
 
-Using Windows Binaries
-----------------------
+Using Binaries (encouraged for: win and osx)
+--------------------------------------------
 
-If you have a windows 64-bits based python (27, 34, 35 or 36) you can install pykep via pip typing::
+If you have a compatible architecture you can install pykep via pip/conda typing::
 
   pip install pykep
 
-Compiling and Installing under Unix
------------------------------------
+or, if you are using conda (encouraged)
+
+  conda install pykep
+
+Compiling and Installing (encouraged for expert users under linux)
+------------------------------------------------------------------
 
 Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have
 created a directory keptoolbox in your current directory, move there::
@@ -74,6 +78,7 @@ Unsing minGW things will be the same as under Unix, just make sure that
 * When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
 * Put all dll (boost and keplerian_toolbox) in pykep/core
 * Hope for the best (kidding its super easy ...)
+* No, really hope for the best
 
 Systems with both Python 2 and Python 3 installed
 -------------------------------------------------

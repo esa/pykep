@@ -4,23 +4,26 @@ import numpy as np
 
 class mga:
     """
-    This class is a pygmo (http://esa.github.io/pygmo/) problem representing a Multiple Gravity Assist
-    trajectory with no deep space manouvres.
+    This class transcribes a Multiple Gravity Assist trajectory with no deep space manouvres into an optimisation problem.
+    It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
 
     The decision vector (chromosome) is::
 
       direct encoding: [t0, T1, T2 ... ] in [mjd2000, days, days ... ]
-      alpha encoding: [t0, T, a1, a2 ...] in [mjd2000, days, nd, nd ... ]
+      alpha encoding:  [t0, T, a1, a2 ...] in [mjd2000, days, nd, nd ... ]
+      eta encoding:    [t0, n1, n2, n3 ...] in [mjd2000, nd, nd ...]
 
     .. note::
 
-       The time of flights of the MGA trajectory can be encoded in two different ways: directly or using the alpha encoding.
-       The alpha encoding (introduced by our previous research), allows to only specify bounds on the entire trajectory, and not
-       on the single legs and was introduced for multi-objective cases where the total time-of-flight is the second objective
-       and benefits from being box bounded.
-       In the alpha encoding each leg time-of-flight is decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i)).
+       The time of flights of a MGA trajectory (and in general) can be encoded in different ways.
+       When they are present in the decision vector, we have the *direct* encoding. This is the most 'evolvable' encoding
+       but also the one that requires the most problem knowledge (e.g. to define the bounds on each leg) and is not 
+       very flexible in dealing with constraints on the total time of flight. The *alpha* and *eta* encodings, instead allow
+       to only specify bounds on the entire trajectory, and not on the single legs. 
+       In the *alpha* encoding each leg time-of-flight is decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i)).
+       In the *eta* encoding  each leg time-of-flight is decoded as follows, T_i = (tof_max - \sum_0^(i-1)(T_j)) * eta_i
 
     .. note::
 
@@ -30,25 +33,27 @@ class mga:
     def __init__(self,
                  seq=[pk.planet.jpl_lp('earth'), pk.planet.jpl_lp(
                      'venus'), pk.planet.jpl_lp('earth')],
-                 t0=[pk.epoch(0), pk.epoch(1000)],
+                 t0=[0, 1000],
                  tof=[100, 500],
                  vinf=2.5,
                  multi_objective=False,
-                 alpha_encoding=False,
+                 tof_encoding='direct',
                  orbit_insertion=False,
                  e_target=None,
                  rp_target=None
                  ):
-        """
-        pk.trajopt.mga(seq=[pk.planet.jpl_lp('earth'), pk.planet.jpl_lp('venus'), pk.planet.jpl_lp('earth')], t0=[pk.epoch(0), pk.epoch(1000)], tof=[100, 500], vinf=2.5, multi_objective=False, alpha_encoding=False, orbit_insertion=False, e_target=None, rp_target=None)
+        """mga(seq=[pk.planet.jpl_lp('earth'), pk.planet.jpl_lp('venus'), pk.planet.jpl_lp('earth')], t0=[0, 1000], tof=[100, 500], vinf=2.5, multi_objective=False, alpha_encoding=False, orbit_insertion=False, e_target=None, rp_target=None)
 
         Args:
             - seq (``list of pk.planet``): sequence of body encounters including the starting object
             - t0 (``list of pk.epoch``): the launch window
-            - tof (``list``): list of pairs defining lower and upper bounds ind days on the various legs. If alpha_encoding
-                 is True, then the list contains only two floats defining the upper and lower bounds on the total tof 
+            - tof (``list`` or ``float``): bounds on the time of flight. If *tof_encoding* is 'direct', this contains a list
+              of 2D lists defining the upper and lower bounds on each leg. If *tof_encoding* is 'alpha',
+              this contains a 2D list with the lower and upper bounds on the time-of-flight. If *tof_encoding*
+              is 'eta' tof is a float defining the upper bound on the time-of-flight
             - vinf (``float``): the vinf provided at launch for free
-            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case alpha encoding is reccomended
+            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case, 'alpha' or `eta` encodings are reccomended
+            - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
             - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
             - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
             - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet
@@ -70,14 +75,22 @@ class mga:
             if (type(t0[i]) != type(pk.epoch(0))):
                 t0[i] = pk.epoch(t0[i])
         # 3 - Check the tof bounds
-        if alpha_encoding:
+        if tof_encoding is 'alpha':
             if len(tof) != 2:
                 raise ValueError(
-                    'The tof needs to be have len equal to 2')
-        else:
+                    'When tof_encoding is alpha, the tof must have a length of 2 (lower and upper bounds on the tof)')
+        elif tof_encoding is 'direct':
             if len(tof) != (len(seq) - 1):
                 raise ValueError(
+                    'When tof_encoding is direct, the tof must be a float (upper bound on the time of flight)' + str(len(seq) - 1))
+        elif tof_encoding is 'eta':
+            if type(tof) != type(0.1):
+                raise ValueError(
                     'The tof needs to be have len equal to  ' + str(len(seq) - 1))
+        if not tof_encoding in ['alpha', 'eta', 'direct']:
+            raise ValueError(
+                "tof_encoding must be one of 'alpha', 'eta', 'direct'")
+
         # 4 - Check that if orbit insertion is selected e_target and r_p are
         # defined
         if orbit_insertion:
@@ -94,7 +107,7 @@ class mga:
         self.tof = tof
         self.vinf = vinf * 1000
         self.multi_objective = multi_objective
-        self.alpha_encoding = alpha_encoding
+        self.tof_encoding = tof_encoding
         self.orbit_insertion = orbit_insertion
         self.e_target = e_target
         self.rp_target = rp_target
@@ -112,35 +125,111 @@ class mga:
         seq = self.seq
         n_legs = self._n_legs
 
-        if self.alpha_encoding:
+        if self.tof_encoding is 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
             lb = [t0[0].mjd2000, tof[0]] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000, tof[1]] + [1.0 - 1e-3] * (n_legs)
-        else:
+        elif self.tof_encoding is 'direct':
             # decision vector is  [t0, T1, T2, T3, ... ]
             lb = [t0[0].mjd2000] + [it[0] for it in self.tof]
             ub = [t0[1].mjd2000] + [it[1] for it in self.tof]
+        elif self.tof_encoding is 'eta':
+            # decision vector is  [t0, n1, n2, ....]
+            lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
+            ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
         return (lb, ub)
 
     def _decode_tofs(self, x):
-        if self.alpha_encoding:
+        if self.tof_encoding is 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
             T = np.log(x[2:])
             return T / sum(T) * x[1]
-        else:
+        elif self.tof_encoding is 'direct':
             # decision vector is  [t0, T1, T2, T3, ... ]
             return x[1:]
+        elif self.tof_encoding is 'eta':
+            # decision vector is  [t0, n1, n2, n3, ... ]
+            dt = self.tof
+            T = [0] * self._n_legs
+            T[0] = dt * x[1]
+            for i in range(1, len(T)):
+                T[i] = (dt - sum(T[:i])) * x[i + 1]
+            return T
 
     def alpha2direct(self, x):
+        """alpha2direct(x)
+
+        Args:
+            - x (``array-like``): a chromosome encoding an MGA trajectory in the alpha encoding
+
+        Returns:
+            ``numpy.array``: a chromosome encoding the MGA trajectory using the direct encoding
+        """
         T = np.log(x[2:])
         retval = T / sum(T) * x[1]
         retval = np.insert(retval, 0, x[0])
         return retval
 
     def direct2alpha(self, x):
+        """direct2alpha(x)
+
+        Args:
+            - x (``array-like``): a chromosome encoding an MGA trajectory in the direct encoding
+
+        Returns:
+            ``numpy.array``: a chromosome encoding the MGA trajectory using the alpha encoding
+        """
         T = np.sum(x[1:])
         alphas = np.exp(x[1:] / (-T))
-        retval = np.insert(alphas,0, [x[0], T])
+        retval = np.insert(alphas, 0, [x[0], T])
+        return retval
+
+    def eta2direct(self, x):
+        """eta2direct(x)
+
+        Args:
+            - x (``array-like``): a chromosome encoding an MGA trajectory in the eta encoding
+
+        Returns:
+            ``numpy.array``: a chromosome encoding the MGA trajectory using the direct encoding
+
+        Raises:
+            - ValueError: when the tof_encoding is not 'eta'
+        """
+        if self.tof_encoding is not 'eta':
+            raise ValueError(
+                "cannot call this method if the tof_encoding is not 'eta'")
+   
+        # decision vector is  [t0, n1, n2, n3, ... ]
+        n = len(x) - 1
+        dt = self.tof
+        T = [0] * n
+        T[0] = dt * x[1]
+        for i in range(1, len(T)):
+            T[i] = (dt - sum(T[:i])) * x[i + 1]
+        np.insert(T, 0, [0])
+        return T
+
+    def direct2eta(self, x):
+        """direct2eta(x)
+
+        Args:
+            - x (``array-like``): a chromosome encoding an MGA trajectory in the direct encoding
+
+        Returns:
+            ``numpy.array``: a chromosome encoding the MGA trajectory using the eta encoding
+
+        Raises:
+            - ValueError: when the tof_encoding is not 'eta'
+        """
+        if self.tof_encoding is not 'eta':
+            raise ValueError(
+                "cannot call this method if the tof_encoding is not 'eta'")
+        from copy import deepcopy
+        retval = deepcopy(x)
+        retval[1] = x[1] / self.tof
+        for i in range(2, len(x)):
+            retval[i] = x[i] / (self.tof - sum(x[1:i]))
         return retval
 
     def _compute_dvs(self, x):
@@ -168,7 +257,7 @@ class mga:
         # 5 - we add the departure and arrival dVs
         DVlaunch_tot = np.linalg.norm(
             [a - b for a, b in zip(v[0], l[0].get_v1()[0])])
-        DVlaunch = max(0,DVlaunch_tot - self.vinf)
+        DVlaunch = max(0, DVlaunch_tot - self.vinf)
         DVarrival = np.linalg.norm(
             [a - b for a, b in zip(v[-1], l[-1].get_v2()[0])])
         if self.orbit_insertion:
@@ -183,14 +272,20 @@ class mga:
 
     # Objective function
     def fitness(self, x):
-        DVlaunch, DVfb, DVarrival, _, _= self._compute_dvs(x)
+        DVlaunch, DVfb, DVarrival, _, _ = self._compute_dvs(x)
+        if self.tof_encoding is 'direct':
+            T = sum(x[1:])
+        elif self.tof_encoding is 'alpha':
+            T = x[1]
+        elif self.tof_encoding is 'eta':
+            T = sum(self.eta2direct(x)[1:])
         if self.multi_objective:
-            return [DVlaunch + np.sum(DVfb) + DVarrival, x[1]]
+            return [DVlaunch + np.sum(DVfb) + DVarrival, T]
         else:
             return [DVlaunch + np.sum(DVfb) + DVarrival]
 
     def pretty(self, x):
-        """prob.pretty(x)
+        """pretty(x)
 
         Args:
             - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
@@ -210,7 +305,7 @@ class mga:
         print("\tHyperbolic velocity: ", DVlaunch_tot, "[m/s]")
         print("\tInitial DV: ", DVlaunch, "[m/s]")
 
-        for pl,e, dv in zip(seq[1:-1], ep[1:-1], DVfb):
+        for pl, e, dv in zip(seq[1:-1], ep[1:-1], DVfb):
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
@@ -223,16 +318,15 @@ class mga:
         print("Time of flights: ", T, "[days]")
 
     def plot(self, x, axes=None, units=pk.AU, N=60):
-        """Plots the spacecraft trajectory.
+        """plot(self, x, axes=None, units=pk.AU, N=60)
+
+        Plots the spacecraft trajectory.
 
         Args:
             - x (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
             - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
             - units (``float``, ``int``): Length unit by which to normalise data.
             - N (``float``): Number of points to plot per leg
-
-        Examples:
-            >>> prob.extract(pykep.trajopt.indirect_pt2or).plot_traj(pop.champion_x)
         """
         import matplotlib as mpl
         import matplotlib.pyplot as plt
@@ -249,7 +343,8 @@ class mga:
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         DVlaunch, DVfb, DVarrival, l, _ = self._compute_dvs(x)
         for pl, e in zip(self.seq, ep):
-            pk.orbit_plots.plot_planet(pl, pk.epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), ax=axes)
+            pk.orbit_plots.plot_planet(pl, pk.epoch(
+                e), units=units, legend=True, color=(0.7, 0.7, 1), ax=axes)
         for lamb in l:
             pk.orbit_plots.plot_lambert(
                 lamb, N=N, sol=0, units=units, color='k', legend=False, ax=axes, alpha=0.8)
@@ -262,29 +357,38 @@ if __name__ == "__main__":
     udp = mga(seq=seq,
               t0=[-1000., 0.],
               tof=[4000., 7000.],
-              vinf=0.,
-              alpha_encoding=True,
+              vinf=3.,
+              tof_encoding='alpha',
               orbit_insertion=True,
               e_target=0.98,
               rp_target=108950000)
-    
-    udp = mga(seq=seq, 
-            t0=[-1000., 0.], 
-            tof=[[30,400], [100,470], [30, 400], [400, 2000], [1000, 6000]], 
-            vinf=3., 
-            alpha_encoding=False,
-            orbit_insertion=True,
-            e_target = 0.98,
-            rp_target = 108950000)   
-    
+
+    udp = mga(seq=seq,
+              t0=[-1000., 0.],
+              tof=[[30, 400], [100, 470], [30, 400], [400, 2000], [1000, 6000]],
+              vinf=3.,
+              tof_encoding='direct',
+              orbit_insertion=True,
+              e_target=0.98,
+              rp_target=108950000)
+
+    udp = mga(seq=seq,
+              t0=[-1000., 0.],
+              tof=7000.,
+              vinf=3.,
+              tof_encoding='eta',
+              orbit_insertion=True,
+              e_target=0.98,
+              rp_target=108950000)
+
     #udp = mga(seq=seq, t0=[-1000., 0.], tof=[[130,200], [430,470], [30, 70], [900, 1200], [4000, 5000]], vinf=0., alpha_encoding=False)
     prob = pg.problem(udp)
-    #uda = pg.cmaes(1500, force_bounds = True, sigma0 = 0.5, ftol = 1e-4)
-    uda = pg.sade(2500)
+    uda = pg.cmaes(1500, force_bounds=True, sigma0=0.5, ftol=1e-4)
+    #uda = pg.sade(4500)
     algo = pg.algorithm(uda)
     algo.set_verbosity(10)
     res = list()
-    for i in range(100):
-        pop = pg.population(prob, 20)
-        pop = algo.evolve(pop)
-        res.append(pop.champion_f)
+    # for i in range(100):
+    pop = pg.population(prob, 100)
+    pop = algo.evolve(pop)
+    res.append(pop.champion_f)
