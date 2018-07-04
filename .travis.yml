@@ -9,6 +9,10 @@ env:
 
 matrix:
   include:
+  - env: PYKEP_BUILD="manylinux64Py36" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+    sudo: required
+    services:
+    - docker
   #- sudo: required
   #  services:
   #  - docker
@@ -49,10 +53,7 @@ matrix:
   #  - docker
   #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
   #    PATH_TO_PYTHON="/opt/python/cp27-cp27m" PRE_CMD=linux32
-  - env: PYKEP_BUILD="manylinux64Py36" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-      sudo: required
-      services:
-      - docker
+
 install:
 - docker pull $DOCKER_IMAGE
 script:
