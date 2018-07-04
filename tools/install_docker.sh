@@ -9,16 +9,16 @@ set -e
 CMAKE_VERSION="3.11.1"
 BOOST_VERSION="1.67.0"
 
-if [[ ${AUDI_BUILD} == *36 ]]; then
+if [[ ${PYKEP_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
-elif [[ ${AUDI_BUILD} == *35 ]]; then
+elif [[ ${PYKEP_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
-elif [[ ${AUDI_BUILD} == *34 ]]; then
+elif [[ ${PYKEP_BUILD} == *34 ]]; then
 	PYTHON_DIR="cp34-cp34m"
-elif [[ ${AUDI_BUILD} == *27 ]]; then
+elif [[ ${PYKEP_BUILD} == *27 ]]; then
 	PYTHON_DIR="cp27-cp27mu"
 else
-	echo "Invalid build type: ${AUDI_BUILD}"
+	echo "Invalid build type: ${PYKEP_BUILD}"
 	exit 1
 fi
 
