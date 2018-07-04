@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 # Main pykep project version.
-set(PYKEP_PROJECT_VERSION 2.1)
+set(PYKEP_PROJECT_VERSION 2.2)
 project(pykep VERSION ${PYKEP_PROJECT_VERSION})
 enable_testing()
 
@@ -72,16 +72,16 @@ if(MINGW)
 endif()
 
 if(BUILD_PYKEP)
-# pygmo dependencies.
-include(YACMAPythonSetup)
+    # pygmo dependencies.
+    include(YACMAPythonSetup)
 
-# Python version check.
-if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
-	message(FATAL_ERROR "Minimum supported Python version is 2.7.")
-endif()
+    # Python version check.
+    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
+        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
+    endif()
 
-# Internal variable that will be used to tell PYKEPFindBoost to locate Boost.Python.
-set(_PYKEP_FIND_BOOST_PYTHON TRUE)
+    # Internal variable that will be used to tell PYKEPFindBoost to locate Boost.Python.
+    set(_PYKEP_FIND_BOOST_PYTHON TRUE)
 endif()
 
 # Boost setup. Will allow using Boost::library_name for the needed components

@@ -1,5 +1,7 @@
 set(_PYKEP_REQUIRED_BOOST_LIBS)
 list(APPEND _PYKEP_REQUIRED_BOOST_LIBS date_time serialization)
+find_package(Boost 1.55.0 REQUIRED COMPONENTS "${_PYKEP_REQUIRED_BOOST_LIBS}")
+
 if(_PYKEP_FIND_BOOST_PYTHON)
     # NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
     # major and minor python version as a suffix. See the release notes:
