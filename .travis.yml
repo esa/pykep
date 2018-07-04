@@ -1,52 +1,65 @@
-notifications:
-  email: false
-matrix:
-  include:
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python36" PYTHON_VERSION="3.6"
-      PATH_TO_PYTHON="/opt/python/cp36-cp36m"
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
-      PATH_TO_PYTHON="/opt/python/cp35-cp35m"
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
-      PATH_TO_PYTHON="/opt/python/cp34-cp34m"
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
-      PATH_TO_PYTHON="/opt/python/cp27-cp27m"
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python36" PYTHON_VERSION="3.6"
-      PATH_TO_PYTHON="/opt/python/cp36-cp36m" PRE_CMD=linux32
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
-      PATH_TO_PYTHON="/opt/python/cp35-cp35m" PRE_CMD=linux32
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
-      PATH_TO_PYTHON="/opt/python/cp34-cp34m" PRE_CMD=linux32
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
-      PATH_TO_PYTHON="/opt/python/cp27-cp27m" PRE_CMD=linux32
-install:
-- docker pull $DOCKER_IMAGE
-script:
-- docker run --rm -e TWINE_PASSWORD -e BUILD_TYPE -e PYTHON_VERSION -e PATH_TO_PYTHON -e TRAVIS_TAG
-  -v `pwd`:/pykep $DOCKER_IMAGE $PRE_CMD /pykep/tools/install_travis.sh
+language: cpp
+sudo: required
+branches:
+  except: "/pr\\/.*/"
+
 env:
   global:
     secure: X39My22te29N1jN6wZ1mfR9Lgx82X5TGaWJSX6Yqp4KGkeg1PU6+C8SjFZmsZmmA26vJXsgT+WC909M043zp6Gkpx/CTzr9HZCwdImDMzWfTq6Q9h1Z44KsgSEi39XCiFd6/1hvxG+EHZTS5672y/3NoyU4TBaWstYwQFxbXcfQ=
+
+matrix:
+  include:
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python36" PYTHON_VERSION="3.6"
+  #    PATH_TO_PYTHON="/opt/python/cp36-cp36m"
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
+  #    PATH_TO_PYTHON="/opt/python/cp35-cp35m"
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
+  #    PATH_TO_PYTHON="/opt/python/cp34-cp34m"
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
+  #    PATH_TO_PYTHON="/opt/python/cp27-cp27m"
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python36" PYTHON_VERSION="3.6"
+  #    PATH_TO_PYTHON="/opt/python/cp36-cp36m" PRE_CMD=linux32
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python35" PYTHON_VERSION="3.5"
+  #    PATH_TO_PYTHON="/opt/python/cp35-cp35m" PRE_CMD=linux32
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python34" PYTHON_VERSION="3.4"
+  #    PATH_TO_PYTHON="/opt/python/cp34-cp34m" PRE_CMD=linux32
+  #- sudo: required
+  #  services:
+  #  - docker
+  #  env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686 BUILD_TYPE="Python27" PYTHON_VERSION="2.7"
+  #    PATH_TO_PYTHON="/opt/python/cp27-cp27m" PRE_CMD=linux32
+  - env: PYKEP_BUILD="manylinux64Py36" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+      sudo: required
+      services:
+      - docker
+install:
+- docker pull $DOCKER_IMAGE
+script:
+- mkdir build
+- cd build
+- bash ../tools/install_travis.sh
+notifications:
+  email: false
+
+
