@@ -117,15 +117,16 @@ endif(BUILD_TESTS)
 # Build pykep and link it to dynamic library.
 if(BUILD_PYKEP)
 	add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
-	if(MINGW)
-		message(STATUS "Creating the files for the generation of a binary wheel for MinGW.")
-		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
-		configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt")
-	else(MINGW)
-        message(STATUS "Creating the files for the generation of a manylinux binary wheel.")
-        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py")
-	endif()
+    if(MINGW OR ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        message(STATUS "Creating the files for the generation of a binary wheel.")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py" @ONLY)
+        if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+            # NOTE: this is necessary on linux but harmful on mingw.
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
+        endif()
+        if(MINGW)
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}.txt" @ONLY)
+        endif()
+    endif()
 endif()
-
-
 
