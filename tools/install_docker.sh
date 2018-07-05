@@ -73,6 +73,9 @@ cd wheel
 # Copy the installed pyaudi files, wherever they might be in /usr/local,
 # into the current dir.
 cp -a `find /usr/local/lib -type d -iname 'pykep'` ./
+
+${PATH_TO_PYTHON}/bin/pip install numpy wheel
+
 # Create the wheel and repair it.
 /opt/python/${PYTHON_DIR}/bin/python setup.py bdist_wheel
 auditwheel repair dist/pykep* -w ./dist2
