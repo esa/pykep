@@ -56,7 +56,7 @@ if os.name == 'nt':
           'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
           'pykep.util': ['_util.pyd']
       }
-else
+else:
     PACKAGE_DATA = {
           'pykep.core': ['_core.so'],
           'pykep.planet': ['_planet.so'],
