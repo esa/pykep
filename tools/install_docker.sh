@@ -9,7 +9,9 @@ set -e
 CMAKE_VERSION="3.11.1"
 BOOST_VERSION="1.67.0"
 
-if [[ ${PYKEP_BUILD} == *36 ]]; then
+if [[ ${PYKEP_BUILD} == *37 ]]; then
+	PYTHON_DIR="cp37-cp37m"
+elif [[ ${PYKEP_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 elif [[ ${PYKEP_BUILD} == *35 ]]; then
 	PYTHON_DIR="cp35-cp35m"
