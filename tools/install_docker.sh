@@ -62,11 +62,17 @@ cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMA
 make -j2 install
 
 # Compile wheels
-cd /pykep/build/wheel
-mv ${PATH_TO_PYTHON}/lib/python${PYTHON_VERSION}/site-packages/pykep ./
+#cd /pykep/build/wheel
+#mv ${PATH_TO_PYTHON}/lib/python${PYTHON_VERSION}/site-packages/pykep ./
 # we create a copy of the libkeplerian_toolbox.so in /usr/lib so that the system linker can find it
 # cp ${PATH_TO_PYTHON}/lib/libkeplerian_toolbox.so /usr/local/lib
 
+
+# Compile wheels
+cd wheel
+# Copy the installed pyaudi files, wherever they might be in /usr/local,
+# into the current dir.
+cp -a `find /usr/local/lib -type d -iname 'pykep'` ./
 # Create the wheel and repair it.
 /opt/python/${PYTHON_DIR}/bin/python setup.py bdist_wheel
 auditwheel repair dist/pykep* -w ./dist2
