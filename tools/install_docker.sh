@@ -83,7 +83,7 @@ cp -a `find /usr/local/lib -type d -iname 'pykep'` ./
 auditwheel repair dist/pykep* -w ./dist2
 # Try to install it and run the tests.
 cd /
-/opt/python/${PYTHON_DIR}/bin/pip install /audi/build/wheel/dist2/pykep*
+/opt/python/${PYTHON_DIR}/bin/pip install /pykep/build/wheel/dist2/pykep*
 /opt/python/${PYTHON_DIR}/bin/python -c "import pykep; print(pykep.epoch(0))"
 
 # Upload in PyPi
@@ -96,28 +96,3 @@ if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
 fi
 
 
-
-
-# The following line is needed as a workaround to the auditwheel problem KeyError = .lib
-# Using and compiling a null extension module (see manylinux_wheel_setup.py)
-# fixes the issue (TODO: probably better ways?)
-#touch dummy.cpp
-
-# We install required dependncies (do it here, do not let pip install do it)
-#${PATH_TO_PYTHON}/bin/pip install numpy
-#${PATH_TO_PYTHON}/bin/pip wheel ./ -w wheelhouse/
-# Bundle external shared libraries into the wheels (only py35 has auditwheel)
-#auditwheel repair wheelhouse/pykep*.whl -w ./wheelhouse2/
-# Install packages (not sure what --no-index -f does, should also work without, but just in case)
-#${PATH_TO_PYTHON}/bin/pip install pykep --no-index -f wheelhouse2
-# Test
-#${PATH_TO_PYTHON}/bin/python -c "import pykep; print(pykep.epoch(0))"
-
-# Upload in PyPi
-# This variable will contain something if this is a tagged build (vx.y.z), otherwise it will be empty.
-#export PYKEP_RELEASE_VERSION=`echo "${TRAVIS_TAG}"|grep -E 'v[0-9]+\.[0-9]+.*'|cut -c 2-`
-#if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
- #   echo "Release build detected, uploading to PyPi."
- #   ${PATH_TO_PYTHON}/bin/pip install twine
- #   ${PATH_TO_PYTHON}/bin/twine upload -u darioizzo wheelhouse2/pykep*.whl
-#fi
