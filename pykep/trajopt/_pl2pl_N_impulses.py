@@ -15,7 +15,7 @@ class pl2pl_N_impulses(object):
 
     ... in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]
 
-    Each leg time-of-flight can be decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i))
+    Each time-of-flight can be decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i))
 
     .. note::
 
@@ -94,8 +94,8 @@ class pl2pl_N_impulses(object):
         return (self._lb, self._ub)
 
     def fitness(self, x):
-        # 1 -  we 'decode' the chromosome recording the various deep space
-        # manouvres timing (days) in the list T
+        # 1 -  we 'decode' the chromosome into the various deep space
+        # manouvres times (days) in the list T
         T = list([0] * (self.N_max - 1))
 
         for i in range(len(T)):

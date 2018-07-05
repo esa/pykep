@@ -18,7 +18,7 @@ def run_example1(impulses=4):
     prob = pg.problem(udp)
 
     # algorithm
-    uda = pg.cmaes(gen=1000)
+    uda = pg.cmaes(gen=1000, force_bounds = True)
     algo = pg.algorithm(uda)
     algo.set_verbosity(10)
 
@@ -29,7 +29,7 @@ def run_example1(impulses=4):
     pop = algo.evolve(pop)
 
     # inspect the solution
-    udp.udp_inner.plot_trajectory(pop.champion_x)
+    udp.udp_inner.plot(pop.champion_x)
     plt.ion()
     plt.show()
 
