@@ -15,7 +15,7 @@ class pl2pl_N_impulses(object):
 
     ... in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]
 
-    Each leg time-of-flight can be decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i))
+    Each time-of-flight can be decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i))
 
     .. note::
 
@@ -59,6 +59,10 @@ class pl2pl_N_impulses(object):
             t0 = [epoch(0), epoch(1000)]
         if (t0 is not None and phase_free):
             raise ValueError('When phase_free is True no t0 can be specified')
+        if (type(t0[0]) != type(epoch(0))):
+            t0[0] = epoch(t0[0])
+        if (type(t0[1]) != type(epoch(0))):
+            t0[1] = epoch(t0[1])
 
         self.obj_dim = multi_objective + 1
         # We then define all class data members
@@ -73,15 +77,15 @@ class pl2pl_N_impulses(object):
 
         # And we compute the bounds
         if phase_free:
-            self._lb = [0, tof[0]] + [0.0, 0.0, 0.0,
-                                      vinf[0] * 1000] * (N_max - 2) + [0.0] + [0]
-            self._ub = [2 * start.compute_period(epoch(0)) * SEC2DAY, tof[1]] + [1.0, 1.0, 1.0, vinf[
-                1] * 1000] * (N_max - 2) + [1.0] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
+            self._lb = [0, tof[0]] + [1e-3, 0.0, 0.0,
+                                      vinf[0] * 1000] * (N_max - 2) + [1e-3] + [0]
+            self._ub = [2 * start.compute_period(epoch(0)) * SEC2DAY, tof[1]] + [1.0-1e-3, 1.0, 1.0, vinf[
+                1] * 1000] * (N_max - 2) + [1.0-1e-3] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
         else:
             self._lb = [t0[0].mjd2000, tof[0]] + \
-                [0.0, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [0.0]
+                [1e-3, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [1e-3]
             self._ub = [t0[1].mjd2000, tof[1]] + \
-                [1.0, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0]
+                [1.0-1e-3, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0-1e-3]
 
     def get_nobj(self):
         return self.obj_dim
@@ -90,8 +94,8 @@ class pl2pl_N_impulses(object):
         return (self._lb, self._ub)
 
     def fitness(self, x):
-        # 1 -  we 'decode' the chromosome recording the various deep space
-        # manouvres timing (days) in the list T
+        # 1 -  we 'decode' the chromosome into the various deep space
+        # manouvres times (days) in the list T
         T = list([0] * (self.N_max - 1))
 
         for i in range(len(T)):
@@ -139,7 +143,7 @@ class pl2pl_N_impulses(object):
         else:
             return (DV1 + DV2 + DV_others, x[1])
 
-    def plot_trajectory(self, x, axes=None):
+    def plot(self, x, axes=None):
         """
         ax = prob.plot_trajectory(x, axes=None)
 

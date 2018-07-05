@@ -1,13 +1,21 @@
 set(_PYKEP_REQUIRED_BOOST_LIBS)
 list(APPEND _PYKEP_REQUIRED_BOOST_LIBS date_time serialization)
+find_package(Boost 1.55.0 REQUIRED COMPONENTS "${_PYKEP_REQUIRED_BOOST_LIBS}")
+
 if(_PYKEP_FIND_BOOST_PYTHON)
-    if(${PYTHON_VERSION_MAJOR} EQUAL 2)
-        list(APPEND _PYKEP_REQUIRED_BOOST_LIBS python)
+    # NOTE: since Boost 1.67, the naming of the Boost.Python library has changed to include the
+    # major and minor python version as a suffix. See the release notes:
+    # https://www.boost.org/users/history/version_1_67_0.html
+    if(${Boost_MAJOR_VERSION} GREATER 1 OR (${Boost_MAJOR_VERSION} EQUAL 1 AND ${Boost_MINOR_VERSION} GREATER 66))
+        list(APPEND _PYKEP_REQUIRED_BOOST_LIBS "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
     else()
-        list(APPEND _PYKEP_REQUIRED_BOOST_LIBS python3)
+        if(${PYTHON_VERSION_MAJOR} EQUAL 2)
+            list(APPEND _PYKEP_REQUIRED_BOOST_LIBS python)
+        else()
+            list(APPEND _PYKEP_REQUIRED_BOOST_LIBS python3)
+        endif()
     endif()
 endif()
-
 message(STATUS "Required Boost libraries: ${_PYKEP_REQUIRED_BOOST_LIBS}")
 find_package(Boost 1.55.0 REQUIRED COMPONENTS "${_PYKEP_REQUIRED_BOOST_LIBS}")
 if(NOT Boost_FOUND)

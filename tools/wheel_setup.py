@@ -1,4 +1,8 @@
-from distutils.core import setup, Extension
+from setuptools import setup
+from setuptools.dist import Distribution
+from distutils import util
+import sys
+
 NAME = 'pykep'
 VERSION = '@pykep_VERSION@'
 DESCRIPTION = 'Basic space flight mechanics computations mostly based on perturbed Keplerian dynamics'
@@ -7,6 +11,7 @@ URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
 LICENSE = 'GPLv3+/LGPL3+'
+INSTALL_REQUIRES = ['numpy']
 CLASSIFIERS = [
     # How mature is this project? Common values are
     #   3 - Alpha
@@ -29,13 +34,35 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3'
 ]
 KEYWORDS = 'space keplerian math physics interplanetary'
-INSTALL_REQUIRES = ['numpy']
 PLATFORMS = ['Unix', 'Windows', 'OSX']
 
-extension_module = Extension(
-    'dummy',
-    sources=['dummy.cpp']
-)
+
+class BinaryDistribution(Distribution):
+
+    def has_ext_modules(foo):
+        return True
+
+
+# Setup the list of external dlls.
+import os.path
+if os.name == 'nt':
+    mingw_wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(
+        sys.version_info[0])
+    l = open(mingw_wheel_libs, 'r').readlines()
+    DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
+    PACKAGE_DATA = {
+          'pykep.core': ['_core.pyd'] + DLL_LIST,
+          'pykep.planet': ['_planet.pyd'],
+          'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
+          'pykep.util': ['_util.pyd']
+      }
+else:
+    PACKAGE_DATA = {
+          'pykep.core': ['_core.so'],
+          'pykep.planet': ['_planet.so'],
+          'pykep.sims_flanagan': ['_sims_flanagan.so'],
+          'pykep.util': ['_util.so']
+      }
 
 setup(name=NAME,
       version=VERSION,
@@ -49,14 +76,8 @@ setup(name=NAME,
       keywords=KEYWORDS,
       platforms=PLATFORMS,
       install_requires=INSTALL_REQUIRES,
-      ext_modules=[extension_module],
       packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
                 'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
       # Include pre-compiled extension
-      package_data={
-          'pykep.core': ['_core.so'],
-          'pykep.planet': ['_planet.so'],
-          'pykep.sims_flanagan': ['_sims_flanagan.so'],
-          'pykep.util': ['_util.so']
-      },
-      )
+      package_data=PACKAGE_DATA,
+      distclass=BinaryDistribution)

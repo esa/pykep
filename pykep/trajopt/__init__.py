@@ -9,9 +9,16 @@ from pykep import __extensions__
 if (__extensions__['pygmo']):
     from pykep.trajopt._lt_margo import lt_margo
     from pykep.trajopt._mga_1dsm import mga_1dsm
+    from pykep.trajopt._mga import mga
     #from pykep.trajopt._mga_lt_nep import mga_lt_nep
     from pykep.trajopt._mr_lt_nep import mr_lt_nep
     from pykep.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
+    # The open traj gym
+    from pykep.trajopt._gym import gym
+    gym = gym()
+    # The launchers models
+    from pykep.trajopt._launchers import _launchers
+    launchers = _launchers()
 
 if (__extensions__['pygmo'] and __extensions__['mplot3d'] and __extensions__['scipy']):
     from pykep.trajopt._indirect import indirect_or2or, indirect_pt2or, indirect_pt2pt, indirect_pt2pl
