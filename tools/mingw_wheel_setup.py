@@ -50,6 +50,19 @@ if os.name == 'nt':
         sys.version_info[0])
     l = open(mingw_wheel_libs, 'r').readlines()
     DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
+    PACKAGE_DATA = {
+          'pykep.core': ['_core.pyd'] + DLL_LIST,
+          'pykep.planet': ['_planet.pyd'],
+          'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
+          'pykep.util': ['_util.pyd']
+      }
+else
+    PACKAGE_DATA = {
+          'pykep.core': ['_core.so'],
+          'pykep.planet': ['_planet.so'],
+          'pykep.sims_flanagan': ['_sims_flanagan.so'],
+          'pykep.util': ['_util.so']
+      }
 
 setup(name=NAME,
       version=VERSION,
@@ -66,10 +79,5 @@ setup(name=NAME,
       packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
                 'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
       # Include pre-compiled extension
-      package_data={
-          'pykep.core': ['_core.pyd'] + DLL_LIST,
-          'pykep.planet': ['_planet.pyd'],
-          'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
-          'pykep.util': ['_util.pyd']
-      },
+      package_data=PACKAGE_DATA,
       distclass=BinaryDistribution)
