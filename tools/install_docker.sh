@@ -87,10 +87,10 @@ cd /
 # Upload in PyPi
 # This variable will contain something if this is a tagged build (vx.y.z), otherwise it will be empty.
 export PYKEP_RELEASE_VERSION=`echo "${TRAVIS_TAG}"|grep -E 'v[0-9]+\.[0-9]+.*'|cut -c 2-`
-if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
-    echo "Release build detected, uploading to PyPi."
-    /opt/python/${PYTHON_DIR}/bin/pip install twine
-    /opt/python/${PYTHON_DIR}/bin/twine upload -u darioizzo /audi/build/wheel/dist2/pykep*
-fi
+#if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
+echo "Release build detected, uploading to PyPi."
+/opt/python/${PYTHON_DIR}/bin/pip install twine
+/opt/python/${PYTHON_DIR}/bin/twine upload -u darioizzo /pykep/build/wheel/dist2/pykep*
+#fi
 
 
