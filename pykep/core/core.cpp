@@ -590,14 +590,14 @@ BOOST_PYTHON_MODULE(_core)
                                  "- v: velocity (cartesian)\n"
                                  "- mu: gravity parameter\n\n"
                                  "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-                                 "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                 "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
                                  "L is the true mean longitude\n"
                                  "Example:: \n\n"
                                  "  E = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)",
         (arg("r"), arg("v"), arg("mu") = 1.0, arg("retrograde") = false));
 
     def("eq2ic", &eq2ic_wrapper, "pykep.eq2ic(EQ,mu = 1.0, retrograde = False)\n\n"
-                                 "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                 "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
                                  "- mu: gravity parameter (l^3/s^2)\n\n"
                                  "Returns cartesian elements from Keplerian elements\n"
                                  "L is the true longitude\n"
@@ -606,7 +606,7 @@ BOOST_PYTHON_MODULE(_core)
         (arg("eq"), arg("mu") = 1.0, arg("retrograde") = false));
 
     def("eq2par", &eq2par_wrapper, "pykep.eq2par(EQ, retrograde = False)\n\n"
-                                   "- EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                   "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
                                    "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
                                    "Returns the osculating Keplerian elements a,e,i,W,w,E \n"
                                    "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
@@ -619,7 +619,7 @@ BOOST_PYTHON_MODULE(_core)
     def("par2eq", &par2eq_wrapper, "pykep.par2eq(E, retrograde = False)\n\n"
                                    "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
                                    "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-                                   "Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L\n"
+                                   "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
                                    "L is the true mean longitude\n"
                                    "Example:: \n\n"
                                    "  E = pk.par2eq(E = [1.0,0.1,0.2,0.3,0.4,0.5], retrograde = False)",
