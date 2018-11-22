@@ -36,7 +36,7 @@ namespace kep_toolbox
 /// From osculating Keplerian to equinoctial
 /**
 * Transforms osculating Keplerian parameters (a,e,i,W,w,E) to
-* modified equinoctial elements (p,h,k,p,q,L).
+* modified equinoctial elements (p,f,g,h,k,L).
 * Note that we use the eccentric anomaly E (or Gudermannian) and the true longitude L (i.e. f + om + Om)
 *
 * @param[in] E the osculating Keplerian parameters (a,e,i,W,w,E), anomalies in rad.
@@ -51,16 +51,16 @@ void par2eq(vettore6D &EQ, const vettore6D &E, const bool retrogade = false)
     int I;
     if (retrogade) {
         I = -1;
-        EQ[3] = 1. / std::tan(E[2] / 2) * std::sin(E[3]);
-        EQ[4] = 1. / std::tan(E[2] / 2) * std::cos(E[3]);
+        EQ[3] = 1. / std::tan(E[2] / 2) * std::cos(E[3]);
+        EQ[4] = 1. / std::tan(E[2] / 2) * std::sin(E[3]);
     } else {
         I = 1;
-        EQ[3] = std::tan(E[2] / 2) * std::sin(E[3]);
-        EQ[4] = std::tan(E[2] / 2) * std::cos(E[3]);
+        EQ[3] = std::tan(E[2] / 2) * std::cos(E[3]);
+        EQ[4] = std::tan(E[2] / 2) * std::sin(E[3]);
     }
     EQ[0] = E[0] * (1 - E[1] * E[1]);
-    EQ[1] = E[1] * std::sin(E[4] + I * E[3]);
-    EQ[2] = E[1] * std::cos(E[4] + I * E[3]);
+    EQ[1] = E[1] * std::cos(E[4] + I * E[3]);
+    EQ[2] = E[1] * std::sin(E[4] + I * E[3]);
     double f;
     if (E[1] < 1) {
         f = e2f(E[5], E[1]);
