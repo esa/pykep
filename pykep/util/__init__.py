@@ -69,9 +69,9 @@ def read_tle(tle_file, verbose=False, with_name=True):
     with open(tle_file, 'r') as f:
         for line in f:
             if with_name:
-                line1 = f.next()[:69]
+                line1 = next(f)[:69]
             else:
                 line1 = line[:69]
-            line2 = f.next()[:69]
+            line2 = next(f)[:69]
             planet_list.append(tle(line1, line2))
     return planet_list
