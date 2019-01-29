@@ -134,7 +134,7 @@ private:
     {
         bool equal = false;
         if (latitude == geo.latitude && longitude == geo.longitude && altitude == geo.altitude) {
-            equal = false;
+            equal = true;
         }
         return equal;
     }

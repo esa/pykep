@@ -1,11 +1,16 @@
 language: cpp
 sudo: required
+
+# Do not build branches of the form "pr/*". By prefixing pull requests coming
+# from branches inside the repository with pr/, this avoids building both the
+# branch push _and_ the pull request.
 branches:
   except: "/pr\\/.*/"
 
 env:
   global:
-    secure: X39My22te29N1jN6wZ1mfR9Lgx82X5TGaWJSX6Yqp4KGkeg1PU6+C8SjFZmsZmmA26vJXsgT+WC909M043zp6Gkpx/CTzr9HZCwdImDMzWfTq6Q9h1Z44KsgSEi39XCiFd6/1hvxG+EHZTS5672y/3NoyU4TBaWstYwQFxbXcfQ=
+    # twine password.
+    - secure: "TTYUO/dbT7fN2Dt3A9eaSI7/kvyySk6RGlh7LInnfswqdBkiPQKh593rR2wHXAqgY7f8CyHUjPoKiml3WLuK6n5jKyzE6zHaq8BjHYmlbSa82+BGUxcyQAI3eJrXCJDIVsV9EITUyWsyVYo0XRLnhOoIbiI9quClMmzBU6ZNWks="
 
 matrix:
   include:
@@ -25,7 +30,6 @@ matrix:
     sudo: required
     services:
     - docker
-  
 install:
 - docker pull $DOCKER_IMAGE
 script:
@@ -34,5 +38,4 @@ script:
 - bash ../tools/install_travis.sh
 notifications:
   email: false
-
-
+  

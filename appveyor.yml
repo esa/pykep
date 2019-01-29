@@ -2,7 +2,8 @@ version: '{build}'
 
 environment:
   TWINE_PASSWORD:
-    secure: UGpLM1eTRobLbka7TwQ3LA==
+    secure: M+qvYgRh05fEw6G9aglK4g==
+    
   matrix:
     #- BUILD_TYPE: "MSVC_64_Python36" # Still issues with python .... also many warning from conversions
     #  COMPILER: MSVC15
