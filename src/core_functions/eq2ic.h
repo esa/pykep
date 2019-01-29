@@ -34,10 +34,10 @@ namespace kep_toolbox
 
 /// From equinoctial to cartesian
 /**
-* Transforms equinoctial elements (a,h,k,p,q,L) to cartesian.
+* Transforms equinoctial elements (p,f,g,h,k,L) to cartesian.
 * Note that we use the true longitude LF (i.e. L + om + Om)
 *
-* @param[in] EQ the the equinoctial elements (p,h,k,p,q,L) in SI.
+* @param[in] EQ the the equinoctial elements (p,f,g,h,k,L) in SI.
 * @param[in] mu gravitational parameter, (m^3/s^2)
 *
 * @param[out] r the cartesian position corresponding to the input elements
@@ -58,34 +58,34 @@ void eq2ic(const vettore6D &EQ, const double &mu, vettore3D &r, vettore3D &v, co
     // computations
     // to make sense
     auto par = std::abs(EQ[0]);
-    auto h = EQ[1];
-    auto k = EQ[2];
-    auto p = EQ[3];
-    auto q = EQ[4];
+    auto f = EQ[1];
+    auto g = EQ[2];
+    auto h = EQ[3];
+    auto k = EQ[4];
     auto L = EQ[5];
 
     // We compute the equinoctial reference frame
-    auto den = p * p + q * q + 1;
-    auto fx = (1 - p * p + q * q) / den;
-    auto fy = (2 * p * q) / den;
-    auto fz = (-2 * I * p) / den;
+    auto den = k * k + h * h + 1;
+    auto fx = (1 - k * k + h * h) / den;
+    auto fy = (2 * k * h) / den;
+    auto fz = (-2 * I * k) / den;
 
-    auto gx = (2 * I * p * q) / den;
-    auto gy = (1 + p * p - q * q) * I / den;
-    auto gz = (2 * q) / den;
+    auto gx = (2 * I * k * h) / den;
+    auto gy = (1 + k * k - h * h) * I / den;
+    auto gz = (2 * h) / den;
 
-    auto wx = (2 * p) / den;
-    auto wy = (-2 * q) / den;
-    auto wz = (1 - p * p - q * q) * I / den;
+    auto wx = (2 * k) / den;
+    auto wy = (-2 * h) / den;
+    auto wz = (1 - k * k - h * h) * I / den;
 
     // Auxiliary
-    auto b = std::sqrt(1 - h * h - k * k);
-    auto radius = par / (1 + h * std::sin(L) + k * std::cos(L));
+    auto b = std::sqrt(1 - g * g - f * f);
+    auto radius = par / (1 + g * std::sin(L) + f * std::cos(L));
     // In the equinoctial reference frame
     auto X = radius * std::cos(L);
     auto Y = radius * std::sin(L);
-    auto VX = -std::sqrt(mu / par) * (h + std::sin(L));
-    auto VY = std::sqrt(mu / par) * (k + std::cos(L));
+    auto VX = -std::sqrt(mu / par) * (g + std::sin(L));
+    auto VY = std::sqrt(mu / par) * (f + std::cos(L));
 
 /*print("r is: ", radius, "\n");
 print("f is: [", fx, ", ", fy, ", ", fz, "]\n");
