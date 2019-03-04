@@ -10,7 +10,6 @@ def wget(url, out):
 
 
 def rm_fr(path):
-    import os
     import shutil
     if os.path.isdir(path) and not os.path.islink(path):
         shutil.rmtree(path)
@@ -22,7 +21,6 @@ def run_command(raw_command, directory=None, verbose=True):
     # Helper function to run a command and display optionally its output
     # unbuffered.
     import shlex
-    import sys
     from subprocess import Popen, PIPE, STDOUT
     print(raw_command)
     proc = Popen(shlex.split(raw_command), cwd=directory,
