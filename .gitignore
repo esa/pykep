@@ -3,5 +3,7 @@ CMakeLists.txt.user
 *~
 *.pyc
 doc/sphinx/_build
+doc/sphinx/conf.py
+pykep/__init__.py
 CMakeCache.txt
 CMakeFiles/
