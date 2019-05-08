@@ -335,15 +335,14 @@ BOOST_PYTHON_MODULE(_core)
     class_<kep_toolbox::lambert_problem>(
         "lambert_problem", "Represents a multiple revolution Lambert's problem",
         init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &, const int &,
-             const int &>("lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = "
-                          "5])\n\n"
+             const int &>("lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)\n\n"
                           "- r1: starting position (x1,y1,z1)\n"
-                          "- r2: 3D final position (x2,y2,z2)\n"
-                          "- t: time of flight\n"
+                          "- r2: final position    (x2,y2,z2)\n"
+                          "- tof: time of flight\n"
                           "- mu: gravitational parameter (default is 1)\n"
                           "- cw: True for retrograde motion (clockwise), False if "
                           "counter-clock wise (default is False)\n"
-                          "- multi_revs: Maximum number of multirevs to be computed (default "
+                          "- max_revs: Maximum number of multirevs to be computed (default "
                           "is 5)\n\n"
                           ".. note::\n"
                           "   Units need to be consistent.\n"
