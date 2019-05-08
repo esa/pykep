@@ -6,24 +6,24 @@ set -x
 # Exit on error.
 set -e
 
-if [[ ${DCGP_BUILD} == *37 ]]; then
+if [[ ${PYKEP_BUILD} == *37 ]]; then
 	PYTHON_DIR="cp37-cp37m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python37.so"
 	PYTHON_VERSION="37"
-elif [[ ${DCGP_BUILD} == *36 ]]; then
+elif [[ ${PYKEP_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python36.so"
 	PYTHON_VERSION="36"
-elif [[ ${DCGP_BUILD} == *27mu ]]; then
+elif [[ ${PYKEP_BUILD} == *27mu ]]; then
 	PYTHON_DIR="cp27-cp27mu"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python27mu.so"
 	PYTHON_VERSION="27"
-elif [[ ${DCGP_BUILD} == *27 ]]; then
+elif [[ ${PYKEP_BUILD} == *27 ]]; then
 	PYTHON_DIR="cp27-cp27m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python27.so"
 	PYTHON_VERSION="27"
 else
-	echo "Invalid build type: ${DCGP_BUILD}"
+	echo "Invalid build type: ${PYKEP_BUILD}"
 	exit 1
 fi
 
