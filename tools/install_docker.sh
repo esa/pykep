@@ -33,7 +33,14 @@ cd install
 # Install and compile pykep
 cd /pykep
 cd build
-cmake -DBUILD_MAIN=no -DBUILD_PYKEP=yes -DBUILD_SPICE=yes -DBUILD_TESTS=no -DCMAKE_BUILD_TYPE=Release -DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
+cmake -DBoost_NO_BOOST_CMAKE=ON \
+      -DBUILD_MAIN=no \
+	  -DBUILD_PYKEP=yes \
+	  -DBUILD_SPICE=yes \
+	  -DBUILD_TESTS=no \
+	  -DCMAKE_BUILD_TYPE=Release \
+	  -DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} \
+	  -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
 make -j2 install
 
 # Compile wheels
@@ -48,7 +55,7 @@ auditwheel repair dist/pykep* -w ./dist2
 # Try to install it and run the tests.
 cd /
 /opt/python/${PYTHON_DIR}/bin/pip install /pykep/build/wheel/dist2/pykep*
-/opt/python/${PYTHON_DIR}/bin/python -c "import pykep; print(pykep.epoch(0))"
+/opt/python/${PYTHON_DIR}/bin/python -c "from pykep import test; test.run_test_suite();"
 
 # Upload in PyPi
 # This variable will contain something if this is a tagged build (vx.y.z), otherwise it will be empty.

@@ -45,7 +45,7 @@ ADD_SUBDIRECTORY(orbit_plots)
 ADD_SUBDIRECTORY(examples)
 ADD_SUBDIRECTORY(trajopt)
 ADD_SUBDIRECTORY(phasing)
-INSTALL(FILES __init__.py DESTINATION ${PYKEP_INSTALL_PATH})
+INSTALL(FILES __init__.py test.py DESTINATION ${PYKEP_INSTALL_PATH})
 
 # Definitions needed for windows ... (using dlls)
 ADD_DEFINITIONS(-DKEP_TOOL_DLL_EXPORT_API)
