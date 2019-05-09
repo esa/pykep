@@ -54,30 +54,28 @@ if is_release_build:
 is_python_build = 'Python' in BUILD_TYPE
 
 # Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-6.2.0-release-posix-seh-rt_v5-rev1.7z', 'mw64.7z')
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z', 'mw64.7z')
 run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 
-# Download common deps.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mingw_64.7z', 'boost.7z')
+# Download boost (this includes also all the boost_python libraries)
+wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1_70.7z', 'boost.7z')
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 
 # Setup of the dependencies for a Python build.
 if is_python_build:
-    if 'Python36' in BUILD_TYPE:
+    if 'Python37' in BUILD_TYPE:
+        python_version = '37'
+    elif 'Python36' in BUILD_TYPE:
         python_version = '36'
-    elif 'Python35' in BUILD_TYPE:
-        python_version = '35'
-    elif 'Python34' in BUILD_TYPE:
-        python_version = '34'
     elif 'Python27' in BUILD_TYPE:
         python_version = '27'
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
+
     python_package = r'python' + python_version + r'_mingw_64.7z'
-    boost_python_package = r'boost_python_' + python_version + r'_mingw_64.7z'
     # Remove any existing Python installation.
     rm_fr(r'c:\\Python' + python_version)
     # Set paths.
@@ -90,11 +88,7 @@ if is_python_build:
     wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
          python_package, 'python.7z')
     run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
-    # Get Boost Python.
-    wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
-         boost_python_package, 'boost_python.7z')
-    run_command(r'7z x -aoa -oC:\\ boost_python.7z', verbose=False)
-    # Install pip and deps.
+      # Install pip and deps.
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
     if is_release_build:
@@ -111,7 +105,7 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\l
 # Configuration step.
 if is_python_build:
     run_command(r'cmake -G "MinGW Makefiles" ..  -DBUILD_PYKEP=yes -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBoost_PYTHON' + (python_version[0] if python_version[0] == '3' else r'') + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' +
-                (python_version[0] if python_version[0] == '3' else r'') + r'-mgw62-mt-1_63.dll  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
+                python_version + r'-mgw81-mt-x64-1_70.dll  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\libs\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DBUILD_TESTS=yes ' + common_cmake_opts
@@ -135,7 +129,7 @@ if is_python_build:
     import shutil
     os.chdir('wheel')
     shutil.move(pykep_install_path, r'.')
-    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version[0])
+    wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version)
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
     for _ in DLL_LIST:
         shutil.copy(_, 'pykep/core')
