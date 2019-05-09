@@ -38,6 +38,7 @@
 #error Minimum supported Python version is 2.6.
 #endif
 
+#include <boost/math/constants/constants.hpp>
 #include <boost/python.hpp>
 #include <boost/python/class.hpp>
 #include <boost/python/converter/registry.hpp>
@@ -281,19 +282,23 @@ BOOST_PYTHON_MODULE(_core)
         .value("JD", kep_toolbox::epoch::JD);
 
     // Epoch class
-    class_<kep_toolbox::epoch>("epoch", "Represents a precise point in time. The "
-                                        "boost::posix_time_ptime classes are used to handle the "
-                                        "conversion to and from string",
+    class_<kep_toolbox::epoch>("epoch",
+                               "Represents a precise point in time. The "
+                               "boost::posix_time_ptime classes are used to handle the "
+                               "conversion to and from string",
                                init<optional<const double &, kep_toolbox::epoch::type>>())
-        .add_property("jd", &kep_toolbox::epoch::jd, "Returns the Julian Date\n\n"
-                                                     "Example::\n\n"
-                                                     "  jd = e.jd")
-        .add_property("mjd", &kep_toolbox::epoch::mjd, "Returns the Modified Julian Date\n\n"
-                                                       "Example::\n\n"
-                                                       "  jd = e.mjd")
-        .add_property("mjd2000", &kep_toolbox::epoch::mjd2000, "Returns the Modifeid Julian Date 2000\n\n"
-                                                               "Example::\n\n"
-                                                               "  jd = e.mjd2000")
+        .add_property("jd", &kep_toolbox::epoch::jd,
+                      "Returns the Julian Date\n\n"
+                      "Example::\n\n"
+                      "  jd = e.jd")
+        .add_property("mjd", &kep_toolbox::epoch::mjd,
+                      "Returns the Modified Julian Date\n\n"
+                      "Example::\n\n"
+                      "  jd = e.mjd")
+        .add_property("mjd2000", &kep_toolbox::epoch::mjd2000,
+                      "Returns the Modified Julian Date 2000\n\n"
+                      "Example::\n\n"
+                      "  jd = e.mjd2000")
         .def(repr(self))
         .def_pickle(python_class_pickle_suite<kep_toolbox::epoch>());
 
@@ -329,23 +334,25 @@ BOOST_PYTHON_MODULE(_core)
     // Lambert.
     class_<kep_toolbox::lambert_problem>(
         "lambert_problem", "Represents a multiple revolution Lambert's problem",
-        init<optional<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &,
-                      const int &, const int &>>("lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = "
-                                                 "5])\n\n"
-                                                 "- r1: starting position (x1,y1,z1)\n"
-                                                 "- r2: 3D final position (x2,y2,z2)\n"
-                                                 "- t: time of flight\n"
-                                                 "- mu: gravitational parameter (default is 1)\n"
-                                                 "- cw: True for retrograde motion (clockwise), False if "
-                                                 "counter-clock wise (default is False)\n"
-                                                 "- multi_revs: Maximum number of multirevs to be computed (default "
-                                                 "is 5)\n\n"
-                                                 ".. note::\n"
-                                                 "   Units need to be consistent.\n"
-                                                 "   The multirev Lambert's problem will be solved upon construction "
-                                                 "and its solution stored in data members.\n\n"
-                                                 "Example (non-dimensional units used)::\n\n"
-                                                 "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )"))
+        init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &, const int &,
+             const int &>("lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)\n\n"
+                          "- r1: starting position (x1,y1,z1)\n"
+                          "- r2: final position    (x2,y2,z2)\n"
+                          "- tof: time of flight\n"
+                          "- mu: gravitational parameter (default is 1)\n"
+                          "- cw: True for retrograde motion (clockwise), False if "
+                          "counter-clock wise (default is False)\n"
+                          "- max_revs: Maximum number of multirevs to be computed (default "
+                          "is 5)\n\n"
+                          ".. note::\n"
+                          "   Units need to be consistent.\n"
+                          "   The multirev Lambert's problem will be solved upon construction "
+                          "and its solution stored in data members.\n\n"
+                          "Example (non-dimensional units used)::\n\n"
+                          "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )",
+                          (arg("r1") = kep_toolbox::array3D{1, 0, 0}, arg("r2") = kep_toolbox::array3D{0, 1, 0},
+                           arg("tof") = boost::math::constants::pi<double>() / 2., arg("mu") = 1., arg("cw") = false,
+                           arg("max_revs") = 0)))
         .def("get_v1", &kep_toolbox::lambert_problem::get_v1, return_value_policy<copy_const_reference>(),
              "Returns a sequence of vectors containing the velocities at r1 of "
              "all computed solutions to the Lambert's Problem\n\n"
@@ -431,8 +438,8 @@ BOOST_PYTHON_MODULE(_core)
         "Example::\n\n"
         "  r,v,m = "
         "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)",
-        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
-    );
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15,
+         arg("log10rtol") = 1e-15));
 
     // Taylor propagation of inertially constant thrust arcs with an inertially constant disturbance
     def("propagate_taylor_disturbance", &propagate_taylor_disturbance_wrapper,
@@ -450,8 +457,8 @@ BOOST_PYTHON_MODULE(_core)
         "Returns a tuple containing r, v, and m the final position, velocity and mass after the propagation.\n\n"
         "Example::\n\n"
         "  r,v,m = propagate_taylor_disturbance([1,0,0],[0,1,0],100,[0,0,0],[1e-2,1e-3,1e-4],pi/2,1,1,-15,-15)",
-        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("disturbance"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
-    );
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("disturbance"), arg("tof"), arg("mu"), arg("veff"),
+         arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15));
     // Taylor propagation of inertially constant thrust arcs under the J2
     // influence
     def("propagate_taylor_J2", &propagate_taylor_J2_wrapper,
@@ -474,8 +481,8 @@ BOOST_PYTHON_MODULE(_core)
         "Example::\n\n"
         "  r,v,m = "
         "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,1e-3,-15,-15)",
-        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15, arg("log10rtol") = 1e-15)
-    );
+        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15,
+         arg("log10rtol") = 1e-15));
     // Taylor propagation of inertially constant thrust arcs (using the
     // generalized sundmann variable)
     def("propagate_taylor_s", &propagate_taylor_s_wrapper,
@@ -502,42 +509,45 @@ BOOST_PYTHON_MODULE(_core)
         "2,1.0,1.0,1.0,1.0,-10,-10)");
 
     // Fly-by helper functions
-    def("fb_con", &fb_con_wrapper, "pykep.fb_con(vin,vout,pl)\n\n"
-                                   "- vin: cartesian coordinates of the relative hyperbolic velocity before "
-                                   "the fly-by\n"
-                                   "- vout: vout, cartesian coordinates of the relative hyperbolic velocity "
-                                   "after the fly-by\n"
-                                   "- pl: fly-by planet\n\n"
-                                   "Returns a tuple containing (eq, ineq). \n"
-                                   "  eq represents the violation of the equality constraint norm(vin)**2 = "
-                                   "norm(vout)**2.\n"
-                                   "  ineq represents the violation of the inequality constraint on the "
-                                   "hyperbola asymptote maximum deflection\n\n"
-                                   "Example::\n\n"
-                                   "  v2_eq, delta_ineq = fb_con(vin, vout, planet_ss('earth'))\n"
-                                   "  v2_eq = v2_eq / EARTH_VELOCITY**2\n");
-    def("fb_prop", &fb_prop_wrapper, "pykep.fb_prop(v,v_pla,rp,beta,mu)\n\n"
-                                     "- v: spacecarft velocity before the encounter (cartesian, absolute)\n"
-                                     "- v-pla: planet inertial velocity at encounter (cartesian, absolute)\n"
-                                     "- rp: fly-by radius\n"
-                                     "- beta: fly-by plane orientation\n"
-                                     "- mu: planet gravitational constant\n\n"
-                                     "Returns the cartesian components of the spacecarft velocity after the "
-                                     "encounter. \n"
-                                     "Example::\n\n"
-                                     "  vout = fb_prop([1,0,0],[0,1,0],2,3.1415/2,1)\n");
-    def("fb_vel", &fb_vel_wrapper, "pykep.fb_vel(vin,vout,pl)\n\n"
-                                   "- vin: cartesian coordinates of the relative hyperbolic velocity before "
-                                   "the fly-by\n"
-                                   "- vout: vout, cartesian coordinates of the relative hyperbolic velocity "
-                                   "after the fly-by\n"
-                                   "- pl: fly-by planet\n\n"
-                                   "Returns a number dV. \n"
-                                   "  dV represents the norm of the delta-V needed to make a given fly-by "
-                                   "possible. dV is necessary to fix the magnitude and the direction of "
-                                   "vout.\n\n"
-                                   "Example::\n\n"
-                                   "  dV = fb_vel(vin, vout, planet_ss('earth'))\n");
+    def("fb_con", &fb_con_wrapper,
+        "pykep.fb_con(vin,vout,pl)\n\n"
+        "- vin: cartesian coordinates of the relative hyperbolic velocity before "
+        "the fly-by\n"
+        "- vout: vout, cartesian coordinates of the relative hyperbolic velocity "
+        "after the fly-by\n"
+        "- pl: fly-by planet\n\n"
+        "Returns a tuple containing (eq, ineq). \n"
+        "  eq represents the violation of the equality constraint norm(vin)**2 = "
+        "norm(vout)**2.\n"
+        "  ineq represents the violation of the inequality constraint on the "
+        "hyperbola asymptote maximum deflection\n\n"
+        "Example::\n\n"
+        "  v2_eq, delta_ineq = fb_con(vin, vout, planet_ss('earth'))\n"
+        "  v2_eq = v2_eq / EARTH_VELOCITY**2\n");
+    def("fb_prop", &fb_prop_wrapper,
+        "pykep.fb_prop(v,v_pla,rp,beta,mu)\n\n"
+        "- v: spacecarft velocity before the encounter (cartesian, absolute)\n"
+        "- v-pla: planet inertial velocity at encounter (cartesian, absolute)\n"
+        "- rp: fly-by radius\n"
+        "- beta: fly-by plane orientation\n"
+        "- mu: planet gravitational constant\n\n"
+        "Returns the cartesian components of the spacecarft velocity after the "
+        "encounter. \n"
+        "Example::\n\n"
+        "  vout = fb_prop([1,0,0],[0,1,0],2,3.1415/2,1)\n");
+    def("fb_vel", &fb_vel_wrapper,
+        "pykep.fb_vel(vin,vout,pl)\n\n"
+        "- vin: cartesian coordinates of the relative hyperbolic velocity before "
+        "the fly-by\n"
+        "- vout: vout, cartesian coordinates of the relative hyperbolic velocity "
+        "after the fly-by\n"
+        "- pl: fly-by planet\n\n"
+        "Returns a number dV. \n"
+        "  dV represents the norm of the delta-V needed to make a given fly-by "
+        "possible. dV is necessary to fix the magnitude and the direction of "
+        "vout.\n\n"
+        "Example::\n\n"
+        "  dV = fb_vel(vin, vout, planet_ss('earth'))\n");
 
     // Basic Astrodynamics
     def("closest_distance", &closest_distance_wrapper,
@@ -554,94 +564,102 @@ BOOST_PYTHON_MODULE(_core)
         "  d,ra = closest_distance([1,0,0],[0,1,0],[0,1,0],[-1,0,0],1.0)\n",
         (arg("r1"), arg("v1"), arg("r2"), arg("v2"), arg("mu") = 1.0));
 
-    def("barker", &kep_toolbox::barker, "pykep.barker(r1,r2,mu = 1.0)\n\n"
-                                        "- r1: initial position (cartesian)\n"
-                                        "- r2: final position (cartesian)\n"
-                                        "- mu: gravity parameter\n\n"
-                                        "Returns the time of flight as evaluated by the Barker equation. \n"
-                                        "Example:: \n\n"
-                                        "  t = barker([1,0,0],[0,1,0],1.0)",
+    def("barker", &kep_toolbox::barker,
+        "pykep.barker(r1,r2,mu = 1.0)\n\n"
+        "- r1: initial position (cartesian)\n"
+        "- r2: final position (cartesian)\n"
+        "- mu: gravity parameter\n\n"
+        "Returns the time of flight as evaluated by the Barker equation. \n"
+        "Example:: \n\n"
+        "  t = barker([1,0,0],[0,1,0],1.0)",
         (arg("r1"), arg("r2"), arg("mu") = 1.0));
 
-    def("ic2par", &ic2par_wrapper, "pykep.ic2par(r,v,mu = 1.0)\n\n"
-                                   "- r: position (cartesian)\n"
-                                   "- v: velocity (cartesian)\n"
-                                   "- mu: gravity parameter\n\n"
-                                   "Returns the osculating keplerian elements a,e,i,W,w,E\n"
-                                   "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-                                   "a is the semi-major axis always a positive quantity.\n"
-                                   "NOTE: The routine is singular when the elements are not defined.\n"
-                                   "Example:: \n\n"
-                                   "  el = ic2par([1,0,0],[0,1,0],1.0)",
+    def("ic2par", &ic2par_wrapper,
+        "pykep.ic2par(r,v,mu = 1.0)\n\n"
+        "- r: position (cartesian)\n"
+        "- v: velocity (cartesian)\n"
+        "- mu: gravity parameter\n\n"
+        "Returns the osculating keplerian elements a,e,i,W,w,E\n"
+        "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+        "a is the semi-major axis always a positive quantity.\n"
+        "NOTE: The routine is singular when the elements are not defined.\n"
+        "Example:: \n\n"
+        "  el = ic2par([1,0,0],[0,1,0],1.0)",
         (arg("r"), arg("v"), arg("mu") = 1.0));
 
-    def("par2ic", &par2ic_wrapper, "pykep.par2ic(E,mu = 1.0)\n\n"
-                                   "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
-                                   "- mu: gravity parameter (l^3/s^2)\n\n"
-                                   "Returns cartesian elements from Keplerian elements\n"
-                                   "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-                                   "a is the semi-major axis always a positive quantity.\n"
-                                   "Example:: \n\n"
-                                   "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)",
+    def("par2ic", &par2ic_wrapper,
+        "pykep.par2ic(E,mu = 1.0)\n\n"
+        "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
+        "- mu: gravity parameter (l^3/s^2)\n\n"
+        "Returns cartesian elements from Keplerian elements\n"
+        "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+        "a is the semi-major axis always a positive quantity.\n"
+        "Example:: \n\n"
+        "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)",
         (arg("E"), arg("mu") = 1.0));
 
-    def("ic2eq", &ic2eq_wrapper, "pykep.ic2eq(r,v,mu = 1.0, retrogade = False)\n\n"
-                                 "- r: position (cartesian)\n"
-                                 "- v: velocity (cartesian)\n"
-                                 "- mu: gravity parameter\n\n"
-                                 "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-                                 "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
-                                 "L is the true mean longitude\n"
-                                 "Example:: \n\n"
-                                 "  E = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)",
+    def("ic2eq", &ic2eq_wrapper,
+        "pykep.ic2eq(r,v,mu = 1.0, retrogade = False)\n\n"
+        "- r: position (cartesian)\n"
+        "- v: velocity (cartesian)\n"
+        "- mu: gravity parameter\n\n"
+        "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+        "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
+        "L is the true mean longitude\n"
+        "Example:: \n\n"
+        "  E = ic2eq(r = [1,0,0], v = [0,1,0], mu =1.0)",
         (arg("r"), arg("v"), arg("mu") = 1.0, arg("retrograde") = false));
 
-    def("eq2ic", &eq2ic_wrapper, "pykep.eq2ic(EQ,mu = 1.0, retrograde = False)\n\n"
-                                 "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
-                                 "- mu: gravity parameter (l^3/s^2)\n\n"
-                                 "Returns cartesian elements from Keplerian elements\n"
-                                 "L is the true longitude\n"
-                                 "Example:: \n\n"
-                                 "  r, v = pk.eq2ic(eq = [1,0.3,0.1,0.1,0.2,0.2], mu = 1, retrograde = False)",
+    def("eq2ic", &eq2ic_wrapper,
+        "pykep.eq2ic(EQ,mu = 1.0, retrograde = False)\n\n"
+        "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
+        "- mu: gravity parameter (l^3/s^2)\n\n"
+        "Returns cartesian elements from Keplerian elements\n"
+        "L is the true longitude\n"
+        "Example:: \n\n"
+        "  r, v = pk.eq2ic(eq = [1,0.3,0.1,0.1,0.2,0.2], mu = 1, retrograde = False)",
         (arg("eq"), arg("mu") = 1.0, arg("retrograde") = false));
 
-    def("eq2par", &eq2par_wrapper, "pykep.eq2par(EQ, retrograde = False)\n\n"
-                                   "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
-                                   "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-                                   "Returns the osculating Keplerian elements a,e,i,W,w,E \n"
-                                   "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-                                   "a is the semi-major axis, always a positive quantity.\n"
-                                   "L is the true longitude\n"
-                                   "Example:: \n\n"
-                                   "  E = pk.eq2par(eq = [1,0.3,0.1,0.1,0.2,0.2], retrograde = False)",
+    def("eq2par", &eq2par_wrapper,
+        "pykep.eq2par(EQ, retrograde = False)\n\n"
+        "- EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
+        "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+        "Returns the osculating Keplerian elements a,e,i,W,w,E \n"
+        "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
+        "a is the semi-major axis, always a positive quantity.\n"
+        "L is the true longitude\n"
+        "Example:: \n\n"
+        "  E = pk.eq2par(eq = [1,0.3,0.1,0.1,0.2,0.2], retrograde = False)",
         (arg("eq"), arg("retrograde") = false));
 
-    def("par2eq", &par2eq_wrapper, "pykep.par2eq(E, retrograde = False)\n\n"
-                                   "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
-                                   "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
-                                   "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
-                                   "L is the true mean longitude\n"
-                                   "Example:: \n\n"
-                                   "  E = pk.par2eq(E = [1.0,0.1,0.2,0.3,0.4,0.5], retrograde = False)",
+    def("par2eq", &par2eq_wrapper,
+        "pykep.par2eq(E, retrograde = False)\n\n"
+        "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
+        "- retrogade: uses the retrograde parameters. Default value is False.\n\n"
+        "Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L\n"
+        "L is the true mean longitude\n"
+        "Example:: \n\n"
+        "  E = pk.par2eq(E = [1.0,0.1,0.2,0.3,0.4,0.5], retrograde = False)",
         (arg("E"), arg("retrograde") = false));
 
-    def("damon", &damon_wrapper, "pykep.damon(v1,v2,tof)\n\n"
-                                 "- v1: starting velocity relative to the departure body. This is\n"
-                                 "      computed from the Lambert solution linking initial and\n"
-                                 "      final position in tof\n"
-                                 "- v2: ending velocity relative to the arrival body. This is\n"
-                                 "      computed from the Lambert solution linking initial and\n"
-                                 "      final position in tof\n"
-                                 "- tof: time of flight\n\n"
-                                 "Returns:\n\n"
-                                 "- a1: acceleration vector in the first part of the transfer\n"
-                                 "- a2: acceleration vector in the second part of the transfer\n"
-                                 "- tau: duration of the first part of the transfer\n"
-                                 "- dv: total estimated DV\n\n"
-                                 "This function uses the model developed by Damon Landau (JPL)\n"
-                                 "during GTOC7 to compute an approximation to the low-thrust transfer\n\n"
-                                 "Example:: \n\n"
-                                 " a1, a2, tau, dv = pykep.damon(v1,v2,tof)",
+    def("damon", &damon_wrapper,
+        "pykep.damon(v1,v2,tof)\n\n"
+        "- v1: starting velocity relative to the departure body. This is\n"
+        "      computed from the Lambert solution linking initial and\n"
+        "      final position in tof\n"
+        "- v2: ending velocity relative to the arrival body. This is\n"
+        "      computed from the Lambert solution linking initial and\n"
+        "      final position in tof\n"
+        "- tof: time of flight\n\n"
+        "Returns:\n\n"
+        "- a1: acceleration vector in the first part of the transfer\n"
+        "- a2: acceleration vector in the second part of the transfer\n"
+        "- tau: duration of the first part of the transfer\n"
+        "- dv: total estimated DV\n\n"
+        "This function uses the model developed by Damon Landau (JPL)\n"
+        "during GTOC7 to compute an approximation to the low-thrust transfer\n\n"
+        "Example:: \n\n"
+        " a1, a2, tau, dv = pykep.damon(v1,v2,tof)",
         (arg("v1"), arg("v2"), arg("tof")));
 
     def("max_start_mass", &kep_toolbox::max_start_mass,

@@ -7,22 +7,26 @@ pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X.
 We are unfortunately not in the position to provide binaries for everybody, so it is possible you will need to compile
 the source code youself. This process, under unix architectures is painless, while under windows architectures it can be a pain.
 
-Using Binaries (encouraged for: win and osx)
---------------------------------------------
+
+Using Binaries (encouraged whenever possible)
+----------------------------------------------
 
 If you have a compatible architecture you can install pykep via pip/conda typing::
 
   pip install pykep
 
-or, if you are using conda (encouraged)
+or, if you are using conda::
 
   conda install pykep
 
-Compiling and Installing (encouraged for expert users under linux)
+In case both fail, you probably do not have an architecture which we support binaries for.
+
+Compiling and Installing under Linux (degree of pain: low)
 ------------------------------------------------------------------
 
-Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code following the instructions given, see :ref:`howtodownload`, you will have
-created a directory keptoolbox in your current directory, move there::
+Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code
+following the instructions given, see :ref:`howtodownload`, you will have created a directory keptoolbox in your current directory, 
+move there::
 
   cd pykep
 
@@ -38,9 +42,12 @@ and have ccmake help you select the options that are most suitable for you::
 
   ccmake ../
 
-At this point (after pressing c once to configure) you should be seeing something like this on the screen:
+At this point (after pressing c once to configure and having selected the correct options) you should be seeing something like this on the screen:
 
-.. image:: images/ccmake.*
+.. image:: images/ccmake.png
+
+Note that in the case above only the tests are built, not the python module nor the headers will be installed. Also note that the 
+```CMAKE_INSTALL_PREFIX``` points to the ```.local``` folder of the user. This correspond to a (suggested) local installation of **pykep**.
 
 You can now press 'g' to generate a make file and exit ccmake utility. You are back to the prompt where you can now type::
 
@@ -55,27 +62,70 @@ that the correct python dist-packages or site-packages directory has been locate
 
 Here is a typical example of the output obtained::
 
-  [ 91%] Built target propagate_lagrangian_test
-  [ 92%] Built target propagate_lagrangian_u_test
-  [ 94%] Built target propagate_taylor_jorba_test
-  [ 96%] Built target propagate_taylor_s_test
-  [ 98%] Built target propagate_taylor_test
+  [ 99%] Built target propagate_lagrangian_u_test
+  [ 99%] Built target anomalies_test
+  [ 99%] Built target lambert_test
+  [ 99%] Built target propagate_taylor_test
+  [ 99%] Built target load_spice_kernel_test
+  [ 99%] Built target propagate_lagrangian_test
+  [ 99%] Built target propagate_taylor_s_test 
+  [100%] Built target spice_planet_test
   [100%] Built target sgp4_test
   Install the project...
-  -- Install configuration: ""
-  -- Installing: /usr/local/lib/libkeplerian_toolbox.dylib
-  -- Up-to-date: /usr/local/lib/python2.7/site-packages/pykep/__init__.py
-  -- Installing: /usr/local/lib/python2.7/site-packages/pykep/core/_core.so
+  -- Install configuration: "Release"
 
-Compiling and Installing under Windows
---------------------------------------
+You can run the tests now typing::
 
-Unsing minGW things will be the same as under Unix, just make sure that
+  make test
+
+And you should see something like::
+
+  Running tests...
+  Test project /home/dario/Develop/pykep/build
+      Start  1: lambert_test
+  1/12 Test  #1: lambert_test .....................   Passed    1.19 sec
+      Start  2: propagate_lagrangian_test
+  2/12 Test  #2: propagate_lagrangian_test ........   Passed    0.15 sec
+      Start  3: propagate_lagrangian_u_test
+  3/12 Test  #3: propagate_lagrangian_u_test ......   Passed    0.20 sec
+      Start  4: propagate_taylor_test
+  4/12 Test  #4: propagate_taylor_test ............   Passed    0.19 sec
+      Start  5: propagate_taylor_J2_test
+  5/12 Test  #5: propagate_taylor_J2_test .........   Passed    0.33 sec
+      Start  6: propagate_taylor_jorba_test
+  6/12 Test  #6: propagate_taylor_jorba_test ......   Passed    0.22 sec
+      Start  7: propagate_taylor_s_test
+  7/12 Test  #7: propagate_taylor_s_test ..........   Passed    0.22 sec
+      Start  8: leg_s_test
+  8/12 Test  #8: leg_s_test .......................   Passed    0.00 sec
+      Start  9: sgp4_test
+  9/12 Test  #9: sgp4_test ........................   Passed    0.12 sec
+      Start 10: anomalies_test
+  10/12 Test #10: anomalies_test ...................   Passed    0.56 sec
+      Start 11: load_spice_kernel_test
+  11/12 Test #11: load_spice_kernel_test ...........   Passed    0.04 sec
+      Start 12: spice_planet_test
+  12/12 Test #12: spice_planet_test ................   Passed    0.01 sec
+
+  100% tests passed, 0 tests failed out of 12
+
+  Total Test time (real) =   3.24 sec
+
+You can now activate, in ccmake, the build option ```BUILD_PYKEP``` and compile/install the python module, or ```INSTALL_HEADER``` and install the headers.
+
+.. note::
+
+   Check carefully what boost python library is selected automatically by cmake, and if needed change it.
+
+Compiling and Installing under Windows (degree of pain: high)
+------------------------------------------------------------------
+
+Unsing minGW things should be roughly the same as under Unix, just make sure that
 
 * You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).
 * Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)
 * Check, when running CMake, that all libraries are found correctly
-* When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/Python27/Lib/site-packages/)
+* When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/PythonXX/Lib/site-packages/)
 * Put all dll (boost and keplerian_toolbox) in pykep/core
 * Hope for the best (kidding its super easy ...)
 * No, really hope for the best

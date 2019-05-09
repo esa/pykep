@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 # Main pykep project version.
-set(PYKEP_PROJECT_VERSION 2.3)
+set(PYKEP_PROJECT_VERSION 2.4)
 project(pykep VERSION ${PYKEP_PROJECT_VERSION})
 enable_testing()
 
