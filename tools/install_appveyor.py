@@ -67,14 +67,17 @@ run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 # Setup of the dependencies for a Python build.
 if is_python_build:
     if 'Python37-x64' in BUILD_TYPE:
-        python_version = '37'
-        python_folder = 'Python37-x64'
+        python_version = r'37'
+        python_folder = r'Python37-x64'
+        python_library = r'C:\\' + python_folder + r'\\python37.dll '
     elif 'Python36-x64' in BUILD_TYPE:
         python_version = '36'
-        python_folder = 'Python36-x64'
+        python_folder = r'Python36-x64'
+        python_library = 'C:\\' + python_folder + r'\\python37.dll '
     elif 'Python27-x64' in BUILD_TYPE:
-        python_version = '27'
-        python_folder = 'Python27-x64'
+        python_version = r'27'
+        python_folder = r'Python27-x64'
+        python_library = r'C:\\' + python_folder + r'\\libs\\python37.dll '
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
@@ -112,13 +115,13 @@ if is_python_build:
         r'-DBUILD_PYKEP=yes ' + \
         r'-DBUILD_MAIN=no ' + \
         r'-DBUILD_TESTS=no ' + \
-        r'-DBoost_INCLUDE_DIR=c:\\local\\include ' \
-        r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' \
-        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' \
-        r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' \
-        r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' \
-        r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' \
-        r'-DPYTHON_LIBRARY=C:\\' + python_folder + r'\\python' + python_version + r'.dll ' \
+        r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
+        r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
+        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
+        r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
+        r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
+        r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
+        r'-DPYTHON_LIBRARY=' + python_library + r' ' + \
         r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
