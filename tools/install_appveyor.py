@@ -56,7 +56,7 @@ is_python_build = 'Python' in BUILD_TYPE
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z', 'mw64.7z')
 run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
 ORIGINAL_PATH = os.environ['PATH']
-os.environ['PATH'] = r'C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0mingw64\\bin;' + os.environ['PATH']
+os.environ['PATH'] = r'C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin;' + os.environ['PATH']
 
 # Download boost (this includes also all the boost_python libraries)
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1_70.7z', 'boost.7z')
