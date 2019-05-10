@@ -107,8 +107,9 @@ if is_python_build:
     run_command(r'cmake -G "MinGW Makefiles" ..  \
                  -DBUILD_PYKEP=yes \
                  -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' \
-                 -DBoost_SERIALIZATION_LIBRARY_RELEASE = c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll \
-                 -DBoost_DATE_TIME_LIBRARY_RELEASE = c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll \
+                 -DBoost_INCLUDE_DIR=c:\\local\\include\\boost \
+                 -DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll \
+                 -DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll \
                  -DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll  \
                  -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe \
                  -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll')
