@@ -104,7 +104,6 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\l
 
 # Configuration step.
 if is_python_build:
-    # WARNING: Cannot break the following in multiple lines using \ 
     run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release ' + \
         common_cmake_opts + \
         r'-DBUILD_PYKEP=yes ' + \
