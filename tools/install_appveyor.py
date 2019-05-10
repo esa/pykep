@@ -66,12 +66,12 @@ run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 
 # Setup of the dependencies for a Python build.
 if is_python_build:
-    if 'Python37' in BUILD_TYPE:
-        python_version = '37'
-    elif 'Python36' in BUILD_TYPE:
-        python_version = '36'
-    elif 'Python27' in BUILD_TYPE:
-        python_version = '27'
+    if 'Python37-x64' in BUILD_TYPE:
+        python_version = '37-x64'
+    elif 'Python36-x64' in BUILD_TYPE:
+        python_version = '36-x64'
+    elif 'Python27-x64' in BUILD_TYPE:
+        python_version = '27-x64'
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
@@ -79,10 +79,10 @@ if is_python_build:
     # Remove any existing Python installation named PythonXX in c:\
     # rm_fr(r'c:\\Python' + python_version)
     # Set paths.
-    pinterp = r'c:\\Python' + python_version + r'-x64\\python.exe'
-    pip = r'c:\\Python' + python_version + r'-x64\\scripts\\pip'
-    twine = r'c:\\Python' + python_version + r'-x64\\scripts\\twine'
-    pykep_install_path = r'C:\\Python' + python_version + r'-x64\\Lib\\site-packages\\pykep'
+    pinterp = r'c:\\Python' + python_version + r'\\python.exe'
+    pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
+    twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
+    pykep_install_path = r'C:\\Python' + python_version + r'\\Lib\\site-packages\\pykep'
     # Get Python.
     #wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
     #     python_package, 'python.7z')
@@ -112,9 +112,10 @@ if is_python_build:
         r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' \
         r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' \
         r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' \
-        r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'-x64\\include ' \
-        r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'-x64\\python.exe ' \
-        r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'-x64\\python' + python_version + r'.dll')
+        r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include ' \
+        r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe ' \
+        r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll' + 
+        r'-CMAKE_CXX_FLAGS="D_hypot=hypot"'\)
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DBUILD_TESTS=yes ' + common_cmake_opts

@@ -9,9 +9,9 @@ environment:
     #  COMPILER: MSVC15
     #  PLATFORM: "x64"
     #- BUILD_TYPE: "Release"
-    - BUILD_TYPE: "Python37"
-    - BUILD_TYPE: "Python36"
-    - BUILD_TYPE: "Python27"
+    - BUILD_TYPE: "Python36-x64"
+    - BUILD_TYPE: "Python37-x64"
+    - BUILD_TYPE: "Python27-x64"
 
 install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
@@ -22,9 +22,9 @@ install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] conda create -y --name pykep python=3.6 cmake boost
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] call activate pykep
 
-- if [%BUILD_TYPE%]==[Python37] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
-- if [%BUILD_TYPE%]==[Python36] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
-- if [%BUILD_TYPE%]==[Python27] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python37-x86] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python36-x86] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- if [%BUILD_TYPE%]==[Python27-x86] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
 # Get a Python version to run the script.
 # - call tools\appveyor-download.cmd "https://github.com/bluescarni/binary_deps/raw/master/python35_mingw_64.7z" -FileName python.7z
@@ -36,9 +36,9 @@ build_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=%CONDA_PREFIX%/Library -DCMAKE_BUILD_TYPE=Release -DBUILD_MAIN=no -DBUILD_TESTS=yes -DBUILD_SPICE=no -DBUILD_PYKEP=yes ..
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] cmake --build . --config Release --target install
 
-- if [%BUILD_TYPE%]==[Python37] C:\Python36-x64\python.exe tools\install_appveyor.py
-- if [%BUILD_TYPE%]==[Python36] C:\Python36-x64\python.exe tools\install_appveyor.py
-- if [%BUILD_TYPE%]==[Python27] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python37-x86] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python36-x86] C:\Python36-x64\python.exe tools\install_appveyor.py
+- if [%BUILD_TYPE%]==[Python27-x86] C:\Python36-x64\python.exe tools\install_appveyor.py
 
 test_script:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] ctest --output-on-failure
