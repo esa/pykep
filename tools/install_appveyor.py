@@ -89,7 +89,7 @@ if is_python_build:
          python_package, 'python.7z')
     run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
     # Install pip and deps.
-    run_command(r'pinterp' + r'--version', verbose=True)
+    run_command(pinterp + r' --version', verbose=True)
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
     if is_release_build:
