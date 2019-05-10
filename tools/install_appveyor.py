@@ -54,10 +54,11 @@ if is_release_build:
 is_python_build = 'Python' in BUILD_TYPE
 
 # Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z', 'mw64.7z')
-run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
-ORIGINAL_PATH = os.environ['PATH']
-os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
+#wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z', 'mw64.7z')
+#run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
+#ORIGINAL_PATH = os.environ['PATH']
+# CHeck here for the pre-installed software on appveyor machines: https://www.appveyor.com/docs/windows-images-software/
+os.environ['PATH'] = r'C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0;' + os.environ['PATH']
 
 # Download boost (this includes also all the boost_python libraries)
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1_70.7z', 'boost.7z')
@@ -77,7 +78,13 @@ if is_python_build:
     elif 'Python27-x64' in BUILD_TYPE:
         python_version = r'27'
         python_folder = r'Python27-x64'
-        python_library = r'C:\\Windows\\System32\\python27.dll '
+        python_library = r'C:\\' + python_folder + r'libs\\python27.dll '
+        # Fot py27 I could not get it to work with the normal python. Since this anyway going to disappear, I
+        # am handling it as an exception using the old patched py27 by bluescarni
+        rm_fr(r'c:\\Python27-x64')
+        wget(r'https://github.com/bluescarni/binary_deps/raw/master/python27_mingw_64.7z', 'python.7z')
+        run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
+        run_command(r'mv C:\\Python27 C:\\Python27-x64', verbose=False)
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
