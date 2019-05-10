@@ -113,9 +113,9 @@ if is_python_build:
         r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' \
         r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' \
         r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' \
-        r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include ' \
-        r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe ' \
-        r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll')
+        r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'-x64\\include ' \
+        r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'-x64\\python.exe ' \
+        r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'-x64\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DBUILD_TESTS=yes ' + common_cmake_opts
