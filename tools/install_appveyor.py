@@ -79,10 +79,10 @@ if is_python_build:
     # Remove any existing Python installation named PythonXX in c:\
     # rm_fr(r'c:\\Python' + python_version)
     # Set paths.
-    pinterp = r'c:\\Python' + python_version + r'-x86\\python.exe'
-    pip = r'c:\\Python' + python_version + r'-x86\\scripts\\pip'
-    twine = r'c:\\Python' + python_version + r'-x86\\scripts\\twine'
-    pykep_install_path = r'C:\\Python-x86' + \
+    pinterp = r'c:\\Python' + python_version + r'-x64\\python.exe'
+    pip = r'c:\\Python' + python_version + r'-x64\\scripts\\pip'
+    twine = r'c:\\Python' + python_version + r'-x64\\scripts\\twine'
+    pykep_install_path = r'C:\\Python-x64' + \
         python_version + r'\\Lib\\site-packages\\pykep'
     # Get Python.
     #wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
