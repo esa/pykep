@@ -126,14 +126,11 @@ else:
 #run_command(r'cmake --build . --target install')
 run_command(r'mingw32-make install VERBOSE=1')
 
-# Move the shared library in the correct python DESTINATION
-#run_command(r'move "C:\Program Files (x86)\Keplerian_Toolbox\lib\libkeplerian_toolbox.dll" "c:\local\lib"')
-
 # Testing, packaging.
 if is_python_build:
     # Run the Python tests.
     run_command(
-        pinterp + r' -c "import pykep; print(pykep.epoch(0))"')
+        pinterp + r' -c "from pykep import test; test.run_test_suite();"')
     # Build the wheel.
     import shutil
     os.chdir('wheel')
@@ -148,7 +145,7 @@ if is_python_build:
 
     os.chdir('/')
     run_command(
-        pinterp + r' -c "import pykep; print(pykep.epoch(0))"')
+        pinterp + r' -c "from pykep import test; test.run_test_suite();"')
     if is_release_build:
         os.chdir('C:/projects/pykep/build/wheel')
         run_command(twine + r' upload -u darioizzo dist\\' +
