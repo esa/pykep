@@ -77,7 +77,7 @@ if is_python_build:
     elif 'Python27-x64' in BUILD_TYPE:
         python_version = r'27'
         python_folder = r'Python27-x64'
-        python_library = r'C:\\' + python_folder + r'libs\\python27.dll '
+        python_library = r'C:\\' + python_folder + r'\\libs\\python27.dll '
         # Fot py27 I could not get it to work with the normal python. Since this anyway going to disappear, I
         # am handling it as an exception using the old patched py27 by bluescarni
         rm_fr(r'c:\\Python27-x64')
