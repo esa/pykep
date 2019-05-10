@@ -76,7 +76,7 @@ if is_python_build:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
     python_package = r'python' + python_version + r'_mingw_64.7z'
-    # Remove any existing Python installation.
+    # Remove any existing Python installation named PythonXX in c:\
     rm_fr(r'c:\\Python' + python_version)
     # Set paths.
     pinterp = r'c:\\Python' + python_version + r'\\python.exe'
@@ -104,9 +104,10 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\l
 
 # Configuration step.
 if is_python_build:
-    run_command(r'cmake -G "MinGW Makefiles" ..\\  \
-                 -DBUILD_PYKEP=yes \
+    run_command(r'cmake -G "MinGW Makefiles" .. \
                  -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' \
+                 -DBUILD_PYKEP=yes \
+                 -DBUILD_TESTS=no \
                  -DBoost_INCLUDE_DIR=c:\\local\\include\\boost \
                  -DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll \
                  -DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll \
