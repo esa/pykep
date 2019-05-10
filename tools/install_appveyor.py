@@ -104,7 +104,7 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\l
 
 # Configuration step.
 if is_python_build:
-    run_command(r'cmake -G "MinGW Makefiles" ..  \
+    run_command(r'cmake -G "MinGW Makefiles" ..\\  \
                  -DBUILD_PYKEP=yes \
                  -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' \
                  -DBoost_INCLUDE_DIR=c:\\local\\include\\boost \
