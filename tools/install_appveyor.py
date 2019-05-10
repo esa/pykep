@@ -67,11 +67,14 @@ run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 # Setup of the dependencies for a Python build.
 if is_python_build:
     if 'Python37-x64' in BUILD_TYPE:
-        python_version = '37-x64'
+        python_version = '37'
+        python_folder = 'Python37-x64'
     elif 'Python36-x64' in BUILD_TYPE:
         python_version = '36-x64'
+        python_folder = 'Python36-x64'
     elif 'Python27-x64' in BUILD_TYPE:
         python_version = '27-x64'
+        python_folder = 'Python32-x64'
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
@@ -79,10 +82,10 @@ if is_python_build:
     # Remove any existing Python installation named PythonXX in c:\
     # rm_fr(r'c:\\Python' + python_version)
     # Set paths.
-    pinterp = r'c:\\Python' + python_version + r'\\python.exe'
-    pip = r'c:\\Python' + python_version + r'\\scripts\\pip'
-    twine = r'c:\\Python' + python_version + r'\\scripts\\twine'
-    pykep_install_path = r'C:\\Python' + python_version + r'\\Lib\\site-packages\\pykep'
+    pinterp = python_folder + r'\\python.exe'
+    pip = python_folder + r'\\scripts\\pip'
+    twine = python_folder + r'\\scripts\\twine'
+    pykep_install_path = python_folder + r'\\Lib\\site-packages\\pykep'
     # Get Python.
     #wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
     #     python_package, 'python.7z')
@@ -107,14 +110,15 @@ if is_python_build:
     run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release ' + \
         common_cmake_opts + \
         r'-DBUILD_PYKEP=yes ' + \
+        r'-DBUILD_MAIN=no ' + \
         r'-DBUILD_TESTS=no ' + \
         r'-DBoost_INCLUDE_DIR=c:\\local\\include ' \
         r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' \
         r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' \
-        r'-DBoost_PYTHON' + python_version[:2] + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version[:2] + r'-mgw81-mt-x64-1_70.dll ' \
-        r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include ' \
-        r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe ' \
-        r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll ' \
+        r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' \
+        r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' \
+        r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' \
+        r'-DPYTHON_LIBRARY=C:\\' + python_folder + r'\\python' + python_version + r'.dll ' \
         r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
