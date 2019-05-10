@@ -100,7 +100,7 @@ os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 # Proceed to the build.
 os.makedirs('build')
 os.chdir('build')
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=yes '
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DBUILD_SPICE=no '
 
 # Configuration step.
 if is_python_build:
@@ -115,7 +115,7 @@ if is_python_build:
         r'-DPYTHON_INCLUDE_DIR=C:\\Python' + python_version + r'\\include ' \
         r'-DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe ' \
         r'-DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll ' \
-        r'-CMAKE_CXX_FLAGS="D_hypot=hypot"')
+        r'-CMAKE_CXX_FLAGS="-D_hypot=hypot"')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DBUILD_TESTS=yes ' + common_cmake_opts
