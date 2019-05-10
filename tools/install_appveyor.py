@@ -2,12 +2,10 @@ import os
 import re
 import sys
 
-
 def wget(url, out):
     import urllib.request
     print('Downloading "' + url + '" as "' + out + '"')
     urllib.request.urlretrieve(url, out)
-
 
 def rm_fr(path):
     import shutil
@@ -15,7 +13,6 @@ def rm_fr(path):
         shutil.rmtree(path)
     elif os.path.exists(path):
         os.remove(path)
-
 
 def run_command(raw_command, directory=None, verbose=True):
     # Helper function to run a command and display optionally its output
@@ -43,6 +40,7 @@ def run_command(raw_command, directory=None, verbose=True):
         raise RuntimeError(output)
     return output
 
+# ----------------------------------SCRIPT START-----------------------------------------#
 # Build type setup.
 BUILD_TYPE = os.environ['BUILD_TYPE']
 is_release_build = (os.environ['APPVEYOR_REPO_TAG'] == 'true') and bool(
@@ -52,18 +50,19 @@ if is_release_build:
           os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
 is_python_build = 'Python' in BUILD_TYPE
 
-# Get mingw and set the path.
-wget(r'https://github.com/bluescarni/binary_deps/raw/master/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z', 'mw64.7z')
-run_command(r'7z x -oC:\\ mw64.7z', verbose=False)
+# Check here for a list of installed software in the appveyor VMs: https://www.appveyor.com/docs/windows-images-software/
+# USING: mingw64 8.1.0
 ORIGINAL_PATH = os.environ['PATH']
 os.environ['PATH'] = r'C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin;' + os.environ['PATH']
-
-# Download boost (this includes also all the boost_python libraries)
+# Set the path so that the precompiled boost libs can be found.
+os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
+# Download boost (this includes also all the boost_python libraries, will all be installed in \\local)
+# USING: boost 1.70 from binary deps
 wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1_70.7z', 'boost.7z')
 # Extract them.
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 
-# Setup of the dependencies for a Python build.
+# Setup of the Python build variables (version based)
 if is_python_build:
     if 'Python37-x64' in BUILD_TYPE:
         python_version = r'37'
@@ -77,8 +76,8 @@ if is_python_build:
         python_version = r'27'
         python_folder = r'Python27-x64'
         python_library = r'C:\\' + python_folder + r'\\libs\\python27.dll '
-        # Fot py27 I could not get it to work with the normal python. Since this is anyway going to disappear, I
-        # am handling it as an exception using the old patched py27 by bluescarni
+        # Fot py27 I could not get it to work with the appveyor python (I was close but got tired).
+        # Since this is anyway going to disappear (py27 really!!!), I am handling it as a one time workaround using the old py27 patched by bluescarni
         rm_fr(r'c:\\Python27-x64')
         wget(r'https://github.com/bluescarni/binary_deps/raw/master/python27_mingw_64.7z', 'python.7z')
         run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
@@ -86,27 +85,17 @@ if is_python_build:
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
-    #python_package = r'python' + python_version + r'_mingw_64.7z'
-    # Remove any existing Python installation named PythonXX in c:\
-    # rm_fr(r'c:\\Python' + python_version)
     # Set paths.
     pinterp = r"C:\\" + python_folder + r'\\python.exe'
     pip = r"C:\\" + python_folder + r'\\scripts\\pip'
     twine = r"C:\\" + python_folder + r'\\scripts\\twine'
-    pykep_install_path = r"C:\\" + python_folder + r'\\Lib\\site-packages\\pykep'
-    # Get Python.
-    #wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
-    #     python_package, 'python.7z')
-    #run_command(r'7z x -aoa -oC:\\ python.7z', verbose=False)
+    module_install_path = r"C:\\" + python_folder + r'\\Lib\\site-packages\\pykep'
     # Install pip and deps.
     run_command(pinterp + r' --version', verbose=True)
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
     if is_release_build:
         run_command(pip + ' install twine')
-
-# Set the path so that the precompiled libs can be found.
-os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 
 # Proceed to the build.
 os.makedirs('build')
@@ -136,7 +125,6 @@ else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
 
 # Build+install step.
-#run_command(r'cmake --build . --target install')
 run_command(r'mingw32-make install VERBOSE=1')
 
 # Testing, packaging.
@@ -147,7 +135,7 @@ if is_python_build:
     # Build the wheel.
     import shutil
     os.chdir('wheel')
-    shutil.move(pykep_install_path, r'.')
+    shutil.move(module_install_path, r'.')
     wheel_libs = 'mingw_wheel_libs_python{}.txt'.format(python_version)
     DLL_LIST = [_[:-1] for _ in open(wheel_libs, 'r').readlines()]
     for _ in DLL_LIST:
