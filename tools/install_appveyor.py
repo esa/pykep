@@ -73,11 +73,11 @@ if is_python_build:
     elif 'Python36-x64' in BUILD_TYPE:
         python_version = '36'
         python_folder = r'Python36-x64'
-        python_library = 'C:\\' + python_folder + r'\\python37.dll '
+        python_library = 'C:\\' + python_folder + r'\\python36.dll '
     elif 'Python27-x64' in BUILD_TYPE:
         python_version = r'27'
         python_folder = r'Python27-x64'
-        python_library = r'C:\\' + python_folder + r'\\libs\\python37.dll '
+        python_library = r'C:\\' + python_folder + r'\\libs\\python27.dll '
     else:
         raise RuntimeError('Unsupported Python build: ' + BUILD_TYPE)
 
