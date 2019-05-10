@@ -9,9 +9,9 @@ environment:
     #  COMPILER: MSVC15
     #  PLATFORM: "x64"
     #- BUILD_TYPE: "Release"
-    - BUILD_TYPE: "Python27-x64"
-    - BUILD_TYPE: "Python37-x64"
     - BUILD_TYPE: "Python36-x64"
+    - BUILD_TYPE: "Python37-x64"
+    - BUILD_TYPE: "Python27-x64"
 
 install:
 - if [%BUILD_TYPE%]==[MSVC_64_Python36] set PATH=C:\Miniconda36-x64\Scripts;%PATH%
