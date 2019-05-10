@@ -104,7 +104,7 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\l
 
 # Configuration step.
 if is_python_build:
-    run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBUILD_PYKEP=yes -DBUILD_TESTS=no -DBoost_INCLUDE_DIR=c:\\local\\include\\boost -DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll -DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll -DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe \ -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll')
+    run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release ' + common_cmake_opts + r' -DBUILD_PYKEP=yes -DBUILD_TESTS=no -DBoost_INCLUDE_DIR=c:\\local\\include\\boost -DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll -DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll -DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll -DPYTHON_EXECUTABLE=C:\\Python' + python_version + r'\\python.exe -DPYTHON_LIBRARY=C:\\Python' + python_version + r'\\python' + python_version + r'.dll')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DBUILD_TESTS=yes ' + common_cmake_opts
