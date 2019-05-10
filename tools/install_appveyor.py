@@ -82,8 +82,7 @@ if is_python_build:
     pinterp = r'c:\\Python' + python_version + r'-x64\\python.exe'
     pip = r'c:\\Python' + python_version + r'-x64\\scripts\\pip'
     twine = r'c:\\Python' + python_version + r'-x64\\scripts\\twine'
-    pykep_install_path = r'C:\\Python-x64' + \
-        python_version + r'\\Lib\\site-packages\\pykep'
+    pykep_install_path = r'C:\\Python' + python_version + r'-x64\\Lib\\site-packages\\pykep'
     # Get Python.
     #wget(r'https://github.com/bluescarni/binary_deps/raw/master/' +
     #     python_package, 'python.7z')
