@@ -53,7 +53,8 @@ is_python_build = 'Python' in BUILD_TYPE
 # Check here for a list of installed software in the appveyor VMs: https://www.appveyor.com/docs/windows-images-software/
 # USING: mingw64 8.1.0
 ORIGINAL_PATH = os.environ['PATH']
-os.environ['PATH'] = r'C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64\\bin;' + os.environ['PATH']
+run_command(r'mv C:\\mingw-w64\\x86_64-8.1.0-posix-seh-rt_v6-rev0\\mingw64 C:\\mingw64')
+os.environ['PATH'] = r'C:\\mingw64\\bin;' + os.environ['PATH']
 # Set the path so that the precompiled boost libs can be found.
 os.environ['PATH'] = os.environ['PATH'] + r';c:\\local\\lib'
 # Download boost (this includes also all the boost_python libraries, will all be installed in \\local)
