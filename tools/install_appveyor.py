@@ -111,8 +111,8 @@ if is_python_build:
         r'-DBUILD_MAIN=no ' + \
         r'-DBUILD_TESTS=no ' + \
         r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
-        r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
-        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
+        #r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
+        #r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
         r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
         r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
         r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
