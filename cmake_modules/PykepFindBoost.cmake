@@ -1,7 +1,7 @@
 # Run a first pass for finding the headers only,
-# and establishing the Boost version.
+# and establishing the Boost version (used to define the python lib name)
 set(_PYKEP_BOOST_MINIMUM_VERSION 1.55.0)
-#find_package(Boost ${_PYKEP_BOOST_MINIMUM_VERSION} QUIET REQUIRED)
+find_package(Boost ${_PYKEP_BOOST_MINIMUM_VERSION} QUIET REQUIRED)
 
 set(_PYKEP_REQUIRED_BOOST_LIBS date_time serialization)
 
