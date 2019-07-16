@@ -1,9 +1,9 @@
 from pykep.trajopt import mga, pl2pl_N_impulses
-from pykep import planet
+from pykep.planet import jpl_lp
 
 # Some "private" variables, the actual gym is below.
-_seq_cassini = [planet.jpl_lp('earth'), planet.jpl_lp('venus'), planet.jpl_lp(
-'venus'), planet.jpl_lp('earth'), planet.jpl_lp('jupiter'), planet.jpl_lp('saturn')]
+_seq_cassini = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp(
+'venus'), jpl_lp('earth'), jpl_lp('jupiter'), jpl_lp('saturn')]
 class _cassini1_udp(mga):
     def __init__(self):
         super(_cassini1_udp, self).__init__(
@@ -67,8 +67,8 @@ class _cassini1n_udp(mga):
 class _emNimp_udp(pl2pl_N_impulses):
     def __init__(self, N = 3):
         super(_emNimp_udp, self).__init__(
-                start=planet.jpl_lp('earth'),
-                target=planet.jpl_lp('mars'),
+                start=jpl_lp('earth'),
+                target=jpl_lp('mars'),
                 N_max=N,
                 tof=[200., 700.],
                 vinf=[0., 4.],
