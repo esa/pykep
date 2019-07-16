@@ -3,14 +3,14 @@ from pykep.planet import jpl_lp, keplerian
 from pykep import AU, DEG2RAD, MU_SUN, epoch
 
 # Some "private" variables, the actual gym is below.
-# CASSINI
-_seq_cassini = [jpl_lp('earth'), 
+# CASSINI1
+_seq_cassini1 = [jpl_lp('earth'), 
                 jpl_lp('venus'), 
                 jpl_lp('venus'), 
                 jpl_lp('earth'), 
                 jpl_lp('jupiter'), 
                 jpl_lp('saturn')]
-# ROSETTA
+# ROSETTA (we need to modify the safe radius of the planets to match the wanted problem)
 _churyumov = keplerian(epoch(52504.23754000012, "mjd"),
                                  [3.50294972836275 * AU,
                                   0.6319356,
@@ -28,11 +28,24 @@ _seq_rosetta = [jpl_lp('earth'),
                 jpl_lp('earth'), 
                 _churyumov]
 
+# CASSINI2 (we need to modify the safe radius of the planets to match the wanted problem)
+_earth_cassini2 = jpl_lp('earth')
+_earth_cassini2.safe_radius = 1.15
+_venus_cassini2 = jpl_lp('venus')
+_venus_cassini2.safe_radius = 1.05
+_jupiter_cassini2 = jpl_lp('jupiter')
+_jupiter_cassini2.safe_radius = 1.7
+_seq_cassini2 = [_earth_cassini2,
+                _venus_cassini2,
+                _venus_cassini2,
+                _earth_cassini2,
+                _jupiter_cassini2,
+                jpl_lp('saturn')]
 
 class _cassini1_udp(mga):
     def __init__(self):
         super(_cassini1_udp, self).__init__(
-            seq=_seq_cassini,
+            seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=[[30, 400], [100, 470], [30, 400], [400, 2000], [1000, 6000]],
             vinf=3.,
@@ -47,7 +60,7 @@ class _cassini1_udp(mga):
     def get_extra_info(self):
         retval = "\tTrajectory Optimisation Gym problem (P1): Cassini MGA, single objective, direct encoding\n"
         retval += "\tPlanetary sequence" + \
-            str([pl.name for pl in _seq_cassini])
+            str([pl.name for pl in _seq_cassini1])
         return retval
 
     def __repr__(self):
@@ -57,7 +70,7 @@ class _cassini1_udp(mga):
 class _cassini1a_udp(mga):
     def __init__(self):
         super(_cassini1a_udp, self).__init__(
-            seq=_seq_cassini,
+            seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=[4000., 7000.],
             vinf=3.,
@@ -72,7 +85,7 @@ class _cassini1a_udp(mga):
     def get_extra_info(self):
         retval = "\tTrajectory Optimisation Gym problem (P2): Cassini MGA, single objective, alpha encoding\n"
         retval += "\tPlanetary sequence" + \
-            str([pl.name for pl in _seq_cassini])
+            str([pl.name for pl in _seq_cassini1])
         return retval
 
     def __repr__(self):
@@ -82,7 +95,7 @@ class _cassini1a_udp(mga):
 class _cassini1n_udp(mga):
     def __init__(self):
         super(_cassini1n_udp, self).__init__(
-            seq=_seq_cassini,
+            seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=7000.,
             vinf=3.,
@@ -97,7 +110,7 @@ class _cassini1n_udp(mga):
     def get_extra_info(self):
         retval = "\tTrajectory Optimisation Gym problem (P3): Cassini MGA, single objective, eta encoding\n"
         retval += "\tPlanetary sequence" + \
-            str([pl.name for pl in _seq_cassini])
+            str([pl.name for pl in _seq_cassini1])
         return retval
 
     def __repr__(self):
@@ -165,6 +178,22 @@ class _rosetta_udp(mga_1dsm):
             eta_ub = 0.9,
             rp_ub = 9.
         )
+
+class _cassini2_udp(mga_1dsm):
+    def __init__(self):
+        super(_cassini2_udp, self).__init__(
+            seq =_seq_cassini2,
+            t0 = [-1000, 0],
+            tof = [[100, 400], [100, 500], [30, 300], [400, 1600], [800, 2200]],
+            vinf = [3., 5.],
+            add_vinf_dep = True,
+            add_vinf_arr = True,
+            tof_encoding = "direct",
+            multi_objective = False,
+            eta_lb = 0.01,
+            eta_ub = 0.9,
+            rp_ub = 70.
+        )
 # ------------------------------------------------THE GYM ----------------------------------------------#
 # ------------------------------------------------------------------------------------------------------#
 
@@ -196,5 +225,8 @@ class gym:
     eve_mga1dsm_n = _eve_mga1dsm_udp(
         tof_encoding='eta', t0=[epoch(0), epoch(3000)], tof=700)
 
-    # Problem P10: Rosetta mission, single objective, direct encoding
+    # Problem P10: Rosetta mission MGA1DSM, single objective, direct encoding
     rosetta = _rosetta_udp()
+
+    # Problem P11: Cassini mission MGA1DSM, single objective, direct encoding
+    cassini2 = _cassini2_udp()

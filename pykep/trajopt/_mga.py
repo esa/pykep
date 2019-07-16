@@ -1,6 +1,5 @@
 from pykep.core import epoch, lambert_problem, DAY2SEC, fb_vel, AU
 from pykep.planet import jpl_lp
-from pykep.orbit_plots import plot_planet, plot_lambert
 
 import numpy as np
 
@@ -338,6 +337,8 @@ class mga:
         import matplotlib as mpl
         import matplotlib.pyplot as plt
         from mpl_toolkits.mplot3d import Axes3D
+
+        from pykep.orbit_plots import plot_planet, plot_lambert
 
         # Creating the axes if necessary
         if axes is None:
