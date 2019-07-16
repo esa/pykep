@@ -1,9 +1,11 @@
 from pykep.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU, epoch
 from pykep.planet import jpl_lp
-from math import pi, cos, sin, acos, log
-from scipy.linalg import norm
+from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
 
+# Avoiding scipy dependency
+def norm(x):
+    return sqrt(sum([it * it for it in x]))
 
 class mga_1dsm:
     r"""
