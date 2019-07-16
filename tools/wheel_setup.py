@@ -11,7 +11,7 @@ URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
 LICENSE = 'GPLv3+/LGPL3+'
-INSTALL_REQUIRES = ['numpy']
+INSTALL_REQUIRES = ['numpy', 'scipy', 'matplotlib']
 CLASSIFIERS = [
     # How mature is this project? Common values are
     #   3 - Alpha
