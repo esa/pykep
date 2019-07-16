@@ -1,4 +1,4 @@
-from pykep.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU
+from pykep.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU, epoch
 from pykep.planet import jpl_lp
 from math import pi, cos, sin, acos, log
 from scipy.linalg import norm
@@ -47,12 +47,16 @@ class mga_1dsm:
                  add_vinf_dep=False,
                  add_vinf_arr=True,
                  tof_encoding='direct',
-                 multi_objective=False):
+                 multi_objective=False,
+                 eta_lb = 0.1,
+                 eta_ub = 0.9,
+                 rp_ub = 30
+                 ):
         """
         pykep.trajopt.mga_1dsm(seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
 
         - seq (``list`` of ``pykep.planet``): the encounter sequence (including the starting launch)
-        - t0 (``list of pk.epoch``): the launch window
+        - t0 (``list`` of ``pykep.epoch`` or ``floats``): the launch window (in mjd2000 if floats)
         - tof (``list`` or ``float``): bounds on the time of flight (days). If *tof_encoding* is 'direct', this contains a list
             of 2D lists defining the upper and lower bounds on each leg. If *tof_encoding* is 'alpha',
             this contains a list of two floats containing the lower and upper bounds on the time-of-flight. If *tof_encoding*
@@ -85,6 +89,15 @@ class mga_1dsm:
             if np.shape(np.array(tof)) != ():
                 raise TypeError(
                     'tof_encoding is ' + tof_encoding + ' and tof must be a float')
+        # 4 - Check launch window t0. If defined in terms of floats transform into epochs
+        if len(t0) != 2:
+            raise TypeError(
+                    't0 is ' + t0 + ' while should be a list of two floats or epochs')
+        if type(t0[0]) is not epoch:
+            t0[0] = epoch(t0[0])
+        if type(t0[1]) is not epoch:
+            t0[1] = epoch(t0[1])
+
 
         self._seq = seq
         self._t0 = t0
@@ -93,6 +106,9 @@ class mga_1dsm:
         self._add_vinf_dep = add_vinf_dep
         self._add_vinf_arr = add_vinf_arr
         self._tof_encoding = tof_encoding
+        self._eta_lb = eta_lb
+        self._eta_ub = eta_ub
+        self._rp_ub = rp_ub
 
         self.n_legs = len(seq) - 1
         self.obj_dim = multi_objective + 1
@@ -107,10 +123,10 @@ class mga_1dsm:
         vinf = self._vinf
         seq = self._seq
         # Base for all possiblities (eta encoding)
-        lb = [t0[0].mjd2000] + [0.0, 0.0, vinf[0] * 1000, 1e-3,
-                                1e-3] + [-2 * pi, 1.1, 1e-3, 1e-3] * (self.n_legs - 1)
-        ub = [t0[1].mjd2000] + [1.0, 1.0, vinf[1] * 1000, 1.0 - 1e-3,
-                                1.0 - 1e-3] + [2 * pi, 30.0, 1.0 - 1e-3, 1.0 - 1e-3] * (self.n_legs - 1)
+        lb = [t0[0].mjd2000] + [0.0, 0.0, vinf[0] * 1000, self._eta_lb,
+                                1e-3] + [-2 * pi, np.nan, self._eta_lb, 1e-3] * (self.n_legs - 1)
+        ub = [t0[1].mjd2000] + [1.0, 1.0, vinf[1] * 1000, self._eta_ub,
+                                1.0 - 1e-3] + [2 * pi, self._rp_ub, self._eta_ub, 1.0 - 1e-3] * (self.n_legs - 1)
         # Distinguishing among cases (only direct and alpha)
         if self._tof_encoding is 'alpha':
             lb = lb + [tof[0]]
@@ -340,7 +356,7 @@ class mga_1dsm:
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = planet.eph(t_P[i])
             plot_planet(planet, t0=t_P[i], color=(
-                0.8, 0.6, 0.8), legend=True, units=AU, ax=axis)
+                0.8, 0.6, 0.8), legend=True, units=AU, ax=axis, N=150)
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]

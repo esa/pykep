@@ -54,7 +54,7 @@ class lambert_test_case(_ut.TestCase):
     def runTest(self):
         from .core import lambert_problem
         lambert_problem(r1=[1, 1, 0], r2=[0, 1, 0],
-                             mu=1., cw=False, max_revs=0, tof=0.3)
+                        mu=1., cw=False, max_revs=0, tof=0.3)
 
 
 class mga_1dsm_test_case(_ut.TestCase):
@@ -128,6 +128,25 @@ class mga_1dsm_test_case(_ut.TestCase):
         self.assertAlmostEqual(retval[3], 1.)
 
 
+class gym_test_case(_ut.TestCase):
+    """Test case for the gym
+
+    """
+
+    def runTest(self):
+        self.run_rosetta_test()
+
+    def run_rosetta_test(self):
+        from .trajopt import gym
+        udp = gym.rosetta
+        x = [1.53488329e+03, 4.56388378e-01, 9.51717655e-01, 4.18212047e+03,
+             4.32159299e-01, 3.65256539e+02, 5.03363275e+00, 2.38949977e+00,
+             4.55746823e-01, 7.09999954e+02, 1.79894273e+00, 1.05000003e+00,
+             6.09083347e-01, 2.60816142e+02, 4.95158968e+00, 3.16049580e+00,
+             6.89049263e-01, 7.29775762e+02, 4.30823655e+00, 1.10842692e+00,
+             4.16075410e-01, 1.84999995e+03]
+        self.assertAlmostEqual(udp.fitness(x)[0], 1371.4992595125018)
+
 def run_test_suite(level=0):
     """Run the full test suite.
 
@@ -142,6 +161,8 @@ def run_test_suite(level=0):
     suite = _ut.TestLoader().loadTestsFromTestCase(core_functions_test_case)
     suite.addTest(lambert_test_case())
     suite.addTest(mga_1dsm_test_case())
+    suite.addTest(gym_test_case())
+
 
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
 
