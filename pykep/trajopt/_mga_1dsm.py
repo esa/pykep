@@ -73,7 +73,7 @@ class mga_1dsm:
         - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T)
         - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
         - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
-        - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet
+        - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)
         """
 
         # Sanity checks
@@ -115,6 +115,9 @@ class mga_1dsm:
             if e_target is None:
                 raise ValueError(
                     'The e_target needs to be specified when orbit insertion is selected')
+            if add_vinf_arr is False:
+                raise ValueError(
+                    'When orbit insertion is selected, the add_vinf_arr must be True')
 
         self._seq = seq
         self._t0 = t0
@@ -123,10 +126,10 @@ class mga_1dsm:
         self._add_vinf_dep = add_vinf_dep
         self._add_vinf_arr = add_vinf_arr
         self._tof_encoding = tof_encoding
-        self._multi_objective = multi_objective,
-        self._orbit_insertion = orbit_insertion,
-        self._e_target = e_target,
-        self.rp_target = rp_target,
+        self._multi_objective = multi_objective
+        self._orbit_insertion = orbit_insertion
+        self._e_target = e_target
+        self._rp_target = rp_target
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
@@ -241,6 +244,14 @@ class mga_1dsm:
         # Last Delta-v
         if self._add_vinf_arr:
             DV[-1] = norm([a - b for a, b in zip(v_end_l, v_P[-1])])
+            if self._orbit_insertion:
+                # In this case we compute the insertion DV as a single pericenter
+                # burn
+                DVper = np.sqrt(DV[-1] * DV[-1] + 2 *
+                                self._seq[-1].mu_self / self._rp_target)
+                DVper2 = np.sqrt(2 * self._seq[-1].mu_self / self._rp_target -
+                                self._seq[-1].mu_self / self._rp_target * (1. - self._e_target))
+                DV[-1] = np.abs(DVper - DVper2)
 
         if self._add_vinf_dep:
             DV[0] += x[3]
@@ -331,6 +342,16 @@ class mga_1dsm:
         print(
             "Arrival epoch: " + str(t_P[-1]) + " (" + str(t_P[-1].mjd2000) + " mjd2000) ")
         print("Arrival Vinf: " + str(DV[-1]) + "m/s")
+        if self._orbit_insertion:
+            # In this case we compute the insertion DV as a single pericenter
+            # burn
+            DVper = np.sqrt(DV[-1] * DV[-1] + 2 *
+                            self._seq[-1].mu_self / self._rp_target)
+            DVper2 = np.sqrt(2 * self._seq[-1].mu_self / self._rp_target -
+                            self._seq[-1].mu_self / self._rp_target * (1. - self._e_target))
+            DVinsertion = np.abs(DVper - DVper2)
+            print("Insertion DV: " + str(DVinsertion) + "m/s")
+
         print("Total mission time: " + str(sum(T) / 365.25) + " years (" + str(sum(T)) + " days)")
 
     # Plot of the trajectory

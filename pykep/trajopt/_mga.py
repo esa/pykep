@@ -61,7 +61,7 @@ class mga:
             - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
             - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
             - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
-            - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet
+            - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)
 
         Raises:
             - ValueError: if *planets* do not share the same central body (checked on the mu_central_body attribute)

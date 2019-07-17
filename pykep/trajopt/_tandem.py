@@ -7,7 +7,7 @@ from math import log, acos, cos, sin, asin, exp
 from copy import deepcopy
 
 class _tandem_udp(mga_1dsm):
-    def __init__(self, prob_id=1, constrained=True):
+    def __init__(self, prob_id = 1, constrained = True):
         # Redefining the planets as to change their safe radius
         earth = jpl_lp('earth')
         earth.safe_radius = 1.05
@@ -57,21 +57,25 @@ class _tandem_udp(mga_1dsm):
         if prob_id > 24 or type(prob_id) != int or prob_id < 1:
             raise ValueError("TandEM problem id must be an integer in [1, 24]")
 
+        super(_tandem_udp, self).__init__(
+            seq = seq_tandem[prob_id - 1],
+            t0 = [5475, 9132],
+            tof = [[20, 2500], [20, 2500], [20, 2500], [20, 2500]],
+            vinf = [2.5, 4.9],
+            add_vinf_dep = False,
+            add_vinf_arr = True,
+            tof_encoding = 'direct',
+            multi_objective = False,
+            orbit_insertion = True,
+            e_target = 0.98531407996358,
+            rp_target = 80330000,
+            eta_lb = 0.01,
+            eta_ub = 0.99,
+            rp_ub = 10
+        )
+
         self.prob_id = prob_id
         self.constrained = constrained
-        super(_tandem_udp, self).__init__(
-            seq=seq_tandem[prob_id - 1],
-            t0=[5475, 9132],
-            tof=[[20, 2500], [20, 2500], [20, 2500], [20, 2500]],
-            vinf=[2.5, 4.9],
-            add_vinf_dep=False,
-            add_vinf_arr=True,
-            tof_encoding='direct',
-            multi_objective=False,
-            eta_lb=0.01,
-            eta_ub=0.99,
-            rp_ub=10
-        )
 
     def fitness(self, x):
         # The Earth position and velocity at x[0]
