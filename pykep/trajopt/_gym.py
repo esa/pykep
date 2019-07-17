@@ -18,7 +18,7 @@ _churyumov = keplerian(epoch(52504.23754000012, "mjd"),
                                   50.92302 * DEG2RAD,
                                   11.36788 * DEG2RAD,
                                   0. * DEG2RAD],
-                                 MU_SUN, 0., 0., 0., "Churyumov–Gerasimenko")
+                                 MU_SUN, 0., 0., 0., "Churyumov-Gerasimenko")
 _mars_rosetta = jpl_lp('mars')
 _mars_rosetta.safe_radius = 1.05
 _seq_rosetta = [jpl_lp('earth'), 
