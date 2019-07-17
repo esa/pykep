@@ -10,12 +10,12 @@ from pykep.trajopt._mga import mga
 #from pykep.trajopt._mga_lt_nep import mga_lt_nep
 from pykep.trajopt._mr_lt_nep import mr_lt_nep
 from pykep.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
-# The open traj gym
-from pykep.trajopt._gym import gym
-gym = gym()
 # The launchers models
 from pykep.trajopt._launchers import _launchers
 launchers = _launchers()
+# The open traj gym
+from pykep.trajopt._gym import gym
+gym = gym()
 
 from pykep.trajopt._indirect import indirect_or2or, indirect_pt2or, indirect_pt2pt, indirect_pt2pl
 from pykep.trajopt._direct import direct_pl2pl
