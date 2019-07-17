@@ -42,14 +42,17 @@ class mga_1dsm:
     """
 
     def __init__(self,
-                 seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
-                 t0=[epoch(0), epoch(1000)],
-                 tof=[[10, 300], [10, 300]],
-                 vinf=[0.5, 2.5],
-                 add_vinf_dep=False,
-                 add_vinf_arr=True,
-                 tof_encoding='direct',
-                 multi_objective=False,
+                 seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
+                 t0 = [epoch(0), epoch(1000)],
+                 tof = [[10, 300], [10, 300]],
+                 vinf = [0.5, 2.5],
+                 add_vinf_dep = False,
+                 add_vinf_arr = True,
+                 tof_encoding = 'direct',
+                 multi_objective = False,
+                 orbit_insertion = False,
+                 e_target = None,
+                 rp_target = None,
                  eta_lb = 0.1,
                  eta_ub = 0.9,
                  rp_ub = 30
@@ -64,9 +67,13 @@ class mga_1dsm:
             this contains a list of two floats containing the lower and upper bounds on the time-of-flight. If *tof_encoding*
             is 'eta' tof is a float defining the upper bound on the time-of-flight
         - vinf (``list``): the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec
-        - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T)
         - add_vinf_dep (``bool``): when True the computed Dv includes the initial hyperbolic velocity (at launch)
         - add_vinf_arr (``bool``): when True the computed Dv includes the final hyperbolic velocity (at the last planet)
+        - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
+        - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T)
+        - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
+        - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
+        - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet
         """
 
         # Sanity checks
@@ -99,7 +106,15 @@ class mga_1dsm:
             t0[0] = epoch(t0[0])
         if type(t0[1]) is not epoch:
             t0[1] = epoch(t0[1])
-
+        # 5 - Check that if orbit insertion is selected e_target and r_p are
+        # defined
+        if orbit_insertion:
+            if rp_target is None:
+                raise ValueError(
+                    'The rp_target needs to be specified when orbit insertion is selected')
+            if e_target is None:
+                raise ValueError(
+                    'The e_target needs to be specified when orbit insertion is selected')
 
         self._seq = seq
         self._t0 = t0
@@ -108,16 +123,19 @@ class mga_1dsm:
         self._add_vinf_dep = add_vinf_dep
         self._add_vinf_arr = add_vinf_arr
         self._tof_encoding = tof_encoding
+        self._multi_objective = multi_objective,
+        self._orbit_insertion = orbit_insertion,
+        self._e_target = e_target,
+        self.rp_target = rp_target,
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
 
         self.n_legs = len(seq) - 1
-        self.obj_dim = multi_objective + 1
         self.common_mu = seq[0].mu_central_body
 
     def get_nobj(self):
-        return self.obj_dim
+        return self._multi_objective + 1
 
     def get_bounds(self):
         t0 = self._t0
@@ -227,7 +245,7 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
-        if self.obj_dim == 1:
+        if self._multi_objective == 1:
             return (sum(DV),)
         else:
             return (sum(DV), sum(T))
