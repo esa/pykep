@@ -21,7 +21,7 @@ class _juice_udp(mga_1dsm):
         super(_juice_udp, self).__init__(
             seq=[earth, earth, venus, earth, mars, earth, jupiter],
             t0=[8000, 8400],
-            tof=[[100, 400], [100, 400], [100, 400], [100, 400], [500, 800], [500, 1500]],
+            tof=[[300, 400], [100, 200], [300, 400], [100, 200], [600, 700], [1000, 1100]],
             vinf=[2.5, 3.475],
             add_vinf_dep=False,
             add_vinf_arr=True,
