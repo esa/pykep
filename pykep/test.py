@@ -136,7 +136,7 @@ class gym_test_case(_ut.TestCase):
     def runTest(self):
         self.run_rosetta_test()
         self.run_cassini2_test()
-
+        self.run_tandem_test()
 
     def run_rosetta_test(self):
         from .trajopt import gym
@@ -159,6 +159,17 @@ class gym_test_case(_ut.TestCase):
         9.00000000e-01,  5.88481599e+02,  4.76774269e+00,  7.00000000e+01,
         1.00000000e-02,  2.20000000e+03]
         self.assertAlmostEqual(udp.fitness(x)[0], 8511.423044703053)
+
+    def run_tandem_test(self):
+        from .trajopt import gym
+        udp = gym.tandem(prob_id = 6, constrained=False)
+        x = [ 7.98593791e+03,  9.02569236e-01,  3.59510662e-01,  3.31011777e+03,
+        1.00000000e-02,  1.68854894e+02, -1.15321363e+00,  1.05006538e+00,
+        4.21911761e-01,  3.38579352e+02, -1.68143357e+00,  1.10121434e+00,
+        6.39679220e-01,  1.17925136e+03, -2.02838607e+00,  1.05000000e+00,
+        2.31554532e-01,  1.80000707e+03]
+        self.assertAlmostEqual(udp.fitness(x)[0], -7.355990585895818)
+
 
 def run_test_suite(level=0):
     """Run the full test suite.

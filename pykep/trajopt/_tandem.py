@@ -1,11 +1,15 @@
 from pykep.trajopt import mga_1dsm, launchers
 from pykep.planet import jpl_lp
+from pykep import epoch_from_string
 
 import numpy as np
 from numpy.linalg import norm
 from math import log, acos, cos, sin, asin, exp
 from copy import deepcopy
 
+"""
+IMPORTANT: This is not the same as the old TandEM (GTOP database) problem and thus values should not be compared
+"""
 class _tandem_udp(mga_1dsm):
     def __init__(self, prob_id = 1, constrained = True):
         # Redefining the planets as to change their safe radius
@@ -17,9 +21,7 @@ class _tandem_udp(mga_1dsm):
         mars = jpl_lp('mars')
         mars.safe_radius = 1.05
         jupiter = jpl_lp('jupiter')
-        # This safe radius is clearly too low, but
-        # its set like this for consistency to the old GTOP database
-        jupiter.safe_radius = 1.05
+        jupiter.safe_radius = 1.7
         saturn = jpl_lp('saturn')
 
         # Defining the different sequences
@@ -78,23 +80,14 @@ class _tandem_udp(mga_1dsm):
         self.constrained = constrained
 
     def fitness(self, x):
-        # The Earth position and velocity at x[0]
-        rE, vE = self._seq[0].eph(x[0])
-        # We define a reference system on the ecliptic plane
-        vtemp = np.cross(rE, vE)
-        iP1 = np.array(vE) / norm(vE)
-        zP1 = vtemp / norm(vtemp)
-        jP1 = np.cross(zP1, iP1)
-        # And compute the outgoing hyperbolic velocity in it
-        theta = 2. * np.pi * x[1]
-        phi = acos(2. * x[2] - 1.) - np.pi / 2.
-        vinf = x[3] * (cos(theta) * cos(phi) * iP1 + sin(theta)
-                       * cos(phi) * jP1 + sin(phi) * zP1)
-        # We transform it (only the needed component) to an equatorial system
-        incl = 0.409072975
-        vinf[2] = vinf[1] * sin(incl) + vinf[2] * cos(incl)
+        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
+        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
+        earth_axis_inclination = 0.409072975
+        # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
+        Vinfz = - Vinfy * sin(earth_axis_inclination) + Vinfz * cos(earth_axis_inclination)
         # And we find the vinf declination (in degrees)
-        sindelta = vinf[2] / x[3]
+        sindelta = Vinfz / x[3]
         declination = asin(sindelta) / np.pi * 180.
         # We now have the initial mass of the spacecraft
         m_initial = launchers.atlas501(x[3] / 1000., declination)
@@ -108,7 +101,6 @@ class _tandem_udp(mga_1dsm):
         if m_final == 0:
             m_final = 1e-320
         if self.constrained:
-            T = self._decode_times_and_vinf(x)[0]
             retval = [-log(m_final), sum(T) - 3652.5]
         else:
             retval = [-log(m_final), ]
@@ -124,5 +116,39 @@ class _tandem_udp(mga_1dsm):
         retval = "\t Sequence: " + \
             [pl.name for pl in self._seq].__repr__() + "\n\t Constrained: " + \
             str(self.constrained)
-
         return retval
+    
+    def pretty(self, x):
+        """
+        prob.plot(x)
+
+        - x: encoded trajectory
+
+        Prints human readable information on the trajectory represented by the decision vector x
+
+        Example::
+
+          print(prob.pretty(x))
+        """
+        super(_tandem_udp, self).pretty(x)
+        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
+        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
+        earth_axis_inclination = 0.409072975
+        # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
+        Vinfz = - Vinfy * sin(earth_axis_inclination) + Vinfz * cos(earth_axis_inclination)
+        # And we find the vinf declination (in degrees)
+        sindelta = Vinfz / x[3]
+        declination = asin(sindelta) / np.pi * 180.
+        m_initial = launchers.atlas501(x[3] / 1000., declination)
+        # And we can evaluate the final mass via Tsiolkowsky
+        Isp = 312.
+        g0 = 9.80665
+        DV = super(_tandem_udp, self).fitness(x)[0]
+        DV = DV + 0.165  # losses for 3 swgbys + insertion
+        m_final = m_initial * exp(-DV / Isp / g0)
+        print("\nInitial mass:", m_initial)
+        print("Final mass:", m_final)
+        print("Declination:", declination)
+
+
