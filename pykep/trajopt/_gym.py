@@ -2,6 +2,8 @@ from pykep.trajopt import mga, pl2pl_N_impulses, mga_1dsm
 from pykep.planet import jpl_lp, keplerian
 from pykep import AU, DEG2RAD, MU_SUN, epoch
 from ._tandem import _tandem_udp
+from ._juice import _juice_udp
+
 
 # Some "private" variables, the actual gym is below.
 # CASSINI1
@@ -234,3 +236,6 @@ class gym:
 
     # Problem P12: TandEM mission MGA1DSM, single objective, direct encoding, time constrained
     tandem = _tandem_udp
+
+    # Problem P13: JUICE mission MGA1DSM, single objective, direct encoding
+    juice = _juice_udp()

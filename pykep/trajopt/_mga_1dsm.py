@@ -256,7 +256,7 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
-        if self._multi_objective == 1:
+        if not self._multi_objective:
             return (sum(DV),)
         else:
             return (sum(DV), sum(T))
