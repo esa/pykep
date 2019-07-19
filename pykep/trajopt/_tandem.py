@@ -95,7 +95,7 @@ class _tandem_udp(mga_1dsm):
         Isp = 312.
         g0 = 9.80665
         DV = super(_tandem_udp, self).fitness(x)[0]
-        DV = DV + 0.165  # losses for 3 swgbys + insertion
+        DV = DV + 165.  # losses for 3 swgbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         # Numerical guard for the exponential
         if m_final == 0:
