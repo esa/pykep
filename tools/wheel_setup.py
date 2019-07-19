@@ -77,7 +77,7 @@ setup(name=NAME,
       platforms=PLATFORMS,
       install_requires=INSTALL_REQUIRES,
       packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
-                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', , 'pykep.trajopt.gym', 'pykep.util'],
+                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.trajopt.gym', 'pykep.util'],
       # Include pre-compiled extension
       package_data=PACKAGE_DATA,
       distclass=BinaryDistribution)
