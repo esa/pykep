@@ -1,9 +1,5 @@
 import pykep as pk
 import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
 
 class _direct_base(object):
     """Base class for direct trajectory optimisation problems with one only leg.
@@ -45,7 +41,7 @@ class _direct_base(object):
             - units (``float``, ``int``): units by which to scale the trajectory dimensions.
             - N (``int``): Number of points to be plotted along one arc.
         """
-
+        import matplotlib.pyplot as plt
         # a call to the fitness on the chromosome z will change the class data member leg and set it
         # to represent the data in the chromosome z
         self.fitness(z)
@@ -75,7 +71,7 @@ class _direct_base(object):
             - time (``bool``): If ``True``, x-axis is time in ``mjd2000``. If ``False``, x-axis is node index.
 
         """
-
+        import matplotlib.pyplot as plt
         # data
         traj = self.get_traj(z)
 
