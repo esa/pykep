@@ -6,8 +6,8 @@ transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
 from pykep.util._util import *
-from loader import load_coefficients as load_gravity_model
-from gottlieb import gottlieb as gravity_spherical_harmonic
+from load_gravity_model import load_gravity_model
+from  gravity_spherical_harmonic import gravity_spherical_harmonic
 
 
 def read_satcat(satcatfilename=None):
