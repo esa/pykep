@@ -14,8 +14,6 @@ from pykep.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
 from pykep.trajopt._launchers import _launchers
 launchers = _launchers()
 # The open traj gym
-from pykep.trajopt._gym import gym
-gym = gym()
-
+from . import gym 
 from pykep.trajopt._indirect import indirect_or2or, indirect_pt2or, indirect_pt2pt, indirect_pt2pl
 from pykep.trajopt._direct import direct_pl2pl
