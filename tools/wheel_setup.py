@@ -11,7 +11,7 @@ URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
 LICENSE = 'GPLv3+/LGPL3+'
-INSTALL_REQUIRES = ['numpy']
+INSTALL_REQUIRES = ['numpy', 'scipy', 'matplotlib']
 CLASSIFIERS = [
     # How mature is this project? Common values are
     #   3 - Alpha
@@ -77,7 +77,7 @@ setup(name=NAME,
       platforms=PLATFORMS,
       install_requires=INSTALL_REQUIRES,
       packages=['pykep', 'pykep.core', 'pykep.examples', 'pykep.orbit_plots', 'pykep.phasing',
-                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.util'],
+                'pykep.planet', 'pykep.sims_flanagan', 'pykep.pontryagin', 'pykep.trajopt', 'pykep.trajopt.gym', 'pykep.util'],
       # Include pre-compiled extension
       package_data=PACKAGE_DATA,
       distclass=BinaryDistribution)

@@ -22,14 +22,6 @@ matrix:
     sudo: required
     services:
     - docker
-  - env: PYKEP_BUILD="manylinux64Py27" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
-    sudo: required
-    services:
-    - docker
-  - env: PYKEP_BUILD="manylinux64Py27mu" DOCKER_IMAGE="pagmo2/manylinux1_x86_64_with_deps"
-    sudo: required
-    services:
-    - docker
 install:
 - docker pull $DOCKER_IMAGE
 script:

@@ -1,10 +1,12 @@
-import pykep as pk
+from pykep.core import epoch, lambert_problem, DAY2SEC, fb_vel, AU
+from pykep.planet import jpl_lp
+
 import numpy as np
 
 
 class mga:
-    """
-    This class transcribes a Multiple Gravity Assist trajectory with no deep space manouvres into an optimisation problem.
+    r"""
+    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space manouvres into an optimisation problem.
     It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
@@ -18,12 +20,16 @@ class mga:
     .. note::
 
        The time of flights of a MGA trajectory (and in general) can be encoded in different ways.
-       When they are present in the decision vector, we have the *direct* encoding. This is the most 'evolvable' encoding
+       When they are directly present in the decision vector, we have the *direct* encoding. This is the most 'evolvable' encoding
        but also the one that requires the most problem knowledge (e.g. to define the bounds on each leg) and is not 
-       very flexible in dealing with constraints on the total time of flight. The *alpha* and *eta* encodings, instead allow
-       to only specify bounds on the entire trajectory, and not on the single legs. 
-       In the *alpha* encoding each leg time-of-flight is decoded as follows, T_n = T log(alpha_n) / \sum_i(log(alpha_i)).
+       very flexible in dealing with constraints on the total time of flight. The *alpha* and *eta* encodings, instead, allow
+       to only specify bounds on the time of flight of the entire trajectory, and not on the single legs: a property that is attractive
+       for multi-objective optimization, for example.
+
+       In the *alpha* encoding each leg time-of-flight is decoded as follows, T_i = T log(alpha_i) / \sum_n(log(alpha_n)).
        In the *eta* encoding  each leg time-of-flight is decoded as follows, T_i = (tof_max - \sum_0^(i-1)(T_j)) * eta_i
+
+       The chromosome dimension for the direct and eta encoding is the same, while the alpha encoding requires one more gene.
 
     .. note::
 
@@ -31,10 +37,9 @@ class mga:
     """
 
     def __init__(self,
-                 seq=[pk.planet.jpl_lp('earth'), pk.planet.jpl_lp(
-                     'venus'), pk.planet.jpl_lp('earth')],
+                 seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
                  t0=[0, 1000],
-                 tof=[100, 500],
+                 tof=[[30, 200], [200, 300]],
                  vinf=2.5,
                  multi_objective=False,
                  tof_encoding='direct',
@@ -56,11 +61,11 @@ class mga:
             - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
             - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
             - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
-            - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet
+            - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)
 
         Raises:
             - ValueError: if *planets* do not share the same central body (checked on the mu_central_body attribute)
-            - ValueError: if *t0* does not contain objects able to construct a pk.epoch (e.g. pk. epoch or floats)
+            - ValueError: if *t0* does not contain objects able to construct a epoch (e.g. pk. epoch or floats)
             - ValueError: if *tof* is badly defined
             - ValueError: it the target orbit is not defined and *orbit_insertion* is True
         """
@@ -72,19 +77,21 @@ class mga:
                 'All planets in the sequence need to have exactly the same mu_central_body')
         # 2 - We try to build epochs out of the t0 list (mjd2000 by default)
         for i in range(len(t0)):
-            if (type(t0[i]) != type(pk.epoch(0))):
-                t0[i] = pk.epoch(t0[i])
+            if (type(t0[i]) != type(epoch(0))):
+                t0[i] = epoch(t0[i])
         # 3 - Check the tof bounds
         if tof_encoding is 'alpha':
             if len(tof) != 2:
                 raise ValueError(
-                    'When tof_encoding is alpha, the tof must have a length of 2 (lower and upper bounds on the tof)')
+                    r'When the tof_encoding is \'alpha\', tof is expected to be something like [lb, ub]')
         elif tof_encoding is 'direct':
             if len(tof) != (len(seq) - 1):
                 raise ValueError(
                     'When tof_encoding is direct, the tof must be a float (upper bound on the time of flight)' + str(len(seq) - 1))
         elif tof_encoding is 'eta':
-            if type(tof) != type(0.1):
+            try:
+                float(tof)
+            except TypeError:
                 raise ValueError(
                     'The tof needs to be have len equal to  ' + str(len(seq) - 1))
         if not tof_encoding in ['alpha', 'eta', 'direct']:
@@ -122,7 +129,6 @@ class mga:
     def get_bounds(self):
         t0 = self.t0
         tof = self.tof
-        seq = self.seq
         n_legs = self._n_legs
 
         if self.tof_encoding is 'alpha':
@@ -199,7 +205,7 @@ class mga:
         if self.tof_encoding is not 'eta':
             raise ValueError(
                 "cannot call this method if the tof_encoding is not 'eta'")
-   
+
         # decision vector is  [t0, n1, n2, n3, ... ]
         n = len(x) - 1
         dt = self.tof
@@ -245,15 +251,15 @@ class mga:
         # 3 - we solve the lambert problems
         l = list()
         for i in range(self._n_legs):
-            l.append(pk.lambert_problem(
-                r[i], r[i + 1], T[i] * pk.DAY2SEC, self._common_mu, False, 0))
+            l.append(lambert_problem(
+                r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, 0))
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
         DVfb = list()
         for i in range(len(l) - 1):
             vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
             vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
-            DVfb.append(pk.fb_vel(vin, vout, self.seq[i + 1]))
+            DVfb.append(fb_vel(vin, vout, self.seq[i + 1]))
         # 5 - we add the departure and arrival dVs
         DVlaunch_tot = np.linalg.norm(
             [a - b for a, b in zip(v[0], l[0].get_v1()[0])])
@@ -317,7 +323,7 @@ class mga:
 
         print("Time of flights: ", T, "[days]")
 
-    def plot(self, x, axes=None, units=pk.AU, N=60):
+    def plot(self, x, axes=None, units=AU, N=60):
         """plot(self, x, axes=None, units=pk.AU, N=60)
 
         Plots the spacecraft trajectory.
@@ -332,6 +338,8 @@ class mga:
         import matplotlib.pyplot as plt
         from mpl_toolkits.mplot3d import Axes3D
 
+        from pykep.orbit_plots import plot_planet, plot_lambert
+
         # Creating the axes if necessary
         if axes is None:
             mpl.rcParams['legend.fontsize'] = 10
@@ -341,19 +349,20 @@ class mga:
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        DVlaunch, DVfb, DVarrival, l, _ = self._compute_dvs(x)
+        _, _, _, l, _ = self._compute_dvs(x)
         for pl, e in zip(self.seq, ep):
-            pk.orbit_plots.plot_planet(pl, pk.epoch(
-                e), units=units, legend=True, color=(0.7, 0.7, 1), ax=axes)
+            plot_planet(pl, epoch(e), units=units, legend=True,
+                        color=(0.7, 0.7, 1), ax=axes)
         for lamb in l:
-            pk.orbit_plots.plot_lambert(
-                lamb, N=N, sol=0, units=units, color='k', legend=False, ax=axes, alpha=0.8)
+            plot_lambert(lamb, N=N, sol=0, units=units, color='k',
+                         legend=False, ax=axes, alpha=0.8)
         return axes
+
 
 if __name__ == "__main__":
     import pygmo as pg
-    seq = [pk.planet.jpl_lp('earth'), pk.planet.jpl_lp('venus'), pk.planet.jpl_lp(
-        'venus'), pk.planet.jpl_lp('earth'), pk.planet.jpl_lp('jupiter'), pk.planet.jpl_lp('saturn')]
+    seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp(
+        'venus'), jpl_lp('earth'), jpl_lp('jupiter'), jpl_lp('saturn')]
     udp = mga(seq=seq,
               t0=[-1000., 0.],
               tof=[4000., 7000.],

@@ -23,7 +23,8 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
       plot_planet(pl, ax=ax)
       plt.show()
     """
-    from pykep import MU_SUN, SEC2DAY, epoch, AU
+    from pykep import MU_SUN, SEC2DAY, epoch, AU, RAD2DEG
+    from pykep.planet import keplerian
     from math import pi, sqrt
     import numpy as np
     import matplotlib.pylab as plt
@@ -37,9 +38,15 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
 
     if t0 == 'pykep.epoch(0)':
         t0 = epoch(0)
+    if type(t0) is not epoch:
+        t0 = epoch(t0)
 
     # orbit period at epoch
     T = plnt.compute_period(t0) * SEC2DAY
+
+    # make an osculating copy of the planet
+    el = list(plnt.osculating_elements(t0))
+    plnt_k = keplerian(t0, el, plnt.mu_central_body, plnt.mu_self, plnt.radius, plnt.safe_radius, plnt.name)
 
     # points where the orbit will be plotted
     when = np.linspace(0, T, N)
@@ -50,7 +57,7 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     z = np.array([0.0] * N)
 
     for i, day in enumerate(when):
-        r, v = plnt.eph(epoch(t0.mjd2000 + day))
+        r, v = plnt_k.eph(epoch(t0.mjd2000 + day))
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
@@ -65,9 +72,6 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
 
     if legend:
         axis.legend()
-
-    if ax is None:  # show only if axis is not set
-        plt.show()
     return axis
 
 
