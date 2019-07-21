@@ -3,27 +3,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Install pykep &#8212; pykep 2.4 documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '2.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
@@ -37,8 +28,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container">
@@ -115,11 +105,11 @@ architectures. In case yours is not include, you will have to compile the code f
 <div class="section" id="using-binaries-encouraged-whenever-possible">
 <h2>Using Binaries (encouraged whenever possible)<a class="headerlink" href="#using-binaries-encouraged-whenever-possible" title="Permalink to this headline">¶</a></h2>
 <p>If you have a compatible architecture you can install pykep via pip/conda typing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pykep</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pykep</span>
 </pre></div>
 </div>
 <p>or, if you are using conda:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pykep</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pykep</span>
 </pre></div>
 </div>
 <p>In case both fail, you probably do not have an architecture which we support binaries for.</p>
@@ -129,39 +119,39 @@ architectures. In case yours is not include, you will have to compile the code f
 <p>Assuming you have prepared your system for compiling pykep (see <a class="reference internal" href="system.html#prepareyoursystem"><span class="std std-ref">Preparing your system to compile pykep</span></a>) and that you have just downloaded the source code
 following the instructions given, see <a class="reference internal" href="downloading.html#howtodownload"><span class="std std-ref">Download pykep source code</span></a>, you will have created a directory keptoolbox in your current directory,
 move there:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pykep</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pykep</span>
 </pre></div>
 </div>
 <p>You will now need to create a build directory where to build the source code, so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
 </pre></div>
 </div>
 <p>You can now move there:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
 </pre></div>
 </div>
 <p>and have ccmake help you select the options that are most suitable for you:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ccmake</span> <span class="o">../</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ccmake</span> <span class="o">../</span>
 </pre></div>
 </div>
 <p>At this point (after pressing c once to configure and having selected the correct options) you should be seeing something like this on the screen:</p>
 <img alt="_images/ccmake.png" src="_images/ccmake.png" />
 <p>Note that in the case above only the tests are built, not the python module nor the headers will be installed. Also note that the
-<code class="docutils literal"><span class="pre">`CMAKE_INSTALL_PREFIX`</span></code> points to the <code class="docutils literal"><span class="pre">`.local`</span></code> folder of the user.
+<code class="docutils literal notranslate"><span class="pre">`CMAKE_INSTALL_PREFIX`</span></code> points to the <code class="docutils literal notranslate"><span class="pre">`.local`</span></code> folder of the user.
 This correspond to a (suggested) local installation of <strong>pykep</strong>.</p>
 <p>You can now press ‘g’ to generate a make file and exit ccmake utility.
 You are back to the prompt where you can now type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>Watch carefully the message in the terminal where the installation path is given to check
 that the correct python dist-packages or site-packages directory has been located</p>
 <p>Here is a typical example of the output obtained:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_lagrangian_u_test</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_lagrangian_u_test</span>
 <span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">anomalies_test</span>
 <span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">lambert_test</span>
 <span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_taylor_test</span>
@@ -175,11 +165,11 @@ that the correct python dist-packages or site-packages directory has been locate
 </pre></div>
 </div>
 <p>You can run the tests now typing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
 </pre></div>
 </div>
 <p>And you should see something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Running</span> <span class="n">tests</span><span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Running</span> <span class="n">tests</span><span class="o">...</span>
 <span class="n">Test</span> <span class="n">project</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">dario</span><span class="o">/</span><span class="n">Develop</span><span class="o">/</span><span class="n">pykep</span><span class="o">/</span><span class="n">build</span>
     <span class="n">Start</span>  <span class="mi">1</span><span class="p">:</span> <span class="n">lambert_test</span>
 <span class="mi">1</span><span class="o">/</span><span class="mi">12</span> <span class="n">Test</span>  <span class="c1">#1: lambert_test .....................   Passed    1.19 sec</span>
@@ -211,37 +201,37 @@ that the correct python dist-packages or site-packages directory has been locate
 <span class="n">Total</span> <span class="n">Test</span> <span class="n">time</span> <span class="p">(</span><span class="n">real</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">3.24</span> <span class="n">sec</span>
 </pre></div>
 </div>
-<p>You can now activate, in ccmake, the build option <code class="docutils literal"><span class="pre">`BUILD_PYKEP`</span></code> and compile/install the python module, or <code class="docutils literal"><span class="pre">`INSTALL_HEADER`</span></code> and install the headers.</p>
+<p>You can now activate, in ccmake, the build option <code class="docutils literal notranslate"><span class="pre">`BUILD_PYKEP`</span></code> and compile/install the python module, or <code class="docutils literal notranslate"><span class="pre">`INSTALL_HEADER`</span></code> and install the headers.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Check carefully what boost python library is selected automatically by cmake, and if needed change it.</p>
+<p class="admonition-title">Note</p>
+<p>Check carefully what boost python library is selected automatically by cmake, and if needed change it.</p>
 </div>
 </div>
 <div class="section" id="compiling-and-installing-under-windows-degree-of-pain-high">
 <h2>Compiling and Installing under Windows (degree of pain: high)<a class="headerlink" href="#compiling-and-installing-under-windows-degree-of-pain-high" title="Permalink to this headline">¶</a></h2>
 <p>Unsing minGW things should be roughly the same as under Unix, just make sure that</p>
 <ul class="simple">
-<li>You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).</li>
-<li>Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)</li>
-<li>Check, when running CMake, that all libraries are found correctly</li>
-<li>When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/PythonXX/Lib/site-packages/)</li>
-<li>Put all dll (boost and keplerian_toolbox) in pykep/core</li>
-<li>Hope for the best (kidding its super easy …)</li>
-<li>No, really hope for the best</li>
+<li><p>You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).</p></li>
+<li><p>Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)</p></li>
+<li><p>Check, when running CMake, that all libraries are found correctly</p></li>
+<li><p>When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/PythonXX/Lib/site-packages/)</p></li>
+<li><p>Put all dll (boost and keplerian_toolbox) in pykep/core</p></li>
+<li><p>Hope for the best (kidding its super easy …)</p></li>
+<li><p>No, really hope for the best</p></li>
 </ul>
 </div>
 <div class="section" id="systems-with-multiple-python-versions">
 <h2>Systems with multiple python versions<a class="headerlink" href="#systems-with-multiple-python-versions" title="Permalink to this headline">¶</a></h2>
 <p>If your system has several versions of python installed check the PYTHON_EXECUTABLE variable in cmake. The libraries, includes and site-packages directory are determined accordingly. If you want to change python version, just define explicitly such a variable. For example (assuming you are in a directory pykep/build):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span> <span class="o">-</span><span class="n">DBUILD_PYKEP</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span>  <span class="o">-</span><span class="n">DPYTHON_EXECUTABLE</span><span class="o">=</span><span class="s2">&quot;/usr/bin/python3.3m&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span> <span class="o">-</span><span class="n">DBUILD_PYKEP</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span>  <span class="o">-</span><span class="n">DPYTHON_EXECUTABLE</span><span class="o">=</span><span class="s2">&quot;/usr/bin/python3.3m&quot;</span>
 </pre></div>
 </div>
 <p>It is always good practice to check what cmake has actually located by typing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">../</span>
 </pre></div>
 </div>
 <p>which could look something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">OS</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Darwin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">OS</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Darwin</span>
 <span class="o">--</span> <span class="n">CXX</span> <span class="n">Compiler</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Clang</span>
 <span class="o">--</span> <span class="n">CMake</span> <span class="n">additional</span> <span class="n">search</span> <span class="n">path</span> <span class="k">for</span> <span class="n">libraries</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span>
 <span class="o">--</span> <span class="n">Enabling</span> <span class="s1">&#39;-ftemplate-depth=256&#39;</span> <span class="n">compiler</span> <span class="n">flag</span> <span class="n">required</span> <span class="n">since</span> <span class="n">boost</span> <span class="mf">1.54</span><span class="o">.</span>
@@ -282,7 +272,7 @@ that the correct python dist-packages or site-packages directory has been locate
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

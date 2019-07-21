@@ -3,27 +3,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>The planet module &#8212; pykep 2.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
@@ -37,8 +28,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container">
@@ -109,58 +99,58 @@
       
   <div class="section" id="the-planet-module">
 <span id="planet"></span><h1>The planet module<a class="headerlink" href="#the-planet-module" title="Permalink to this headline">¶</a></h1>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="27%" />
-<col width="5%" />
-<col width="68%" />
+<col style="width: 27%" />
+<col style="width: 5%" />
+<col style="width: 68%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Type</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet._base</span></code></a></td>
-<td>class</td>
-<td>The base class for all planets (cannot be instantiated)</td>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet._base</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>The base class for all planets (cannot be instantiated)</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></td>
-<td>class</td>
-<td>A simple planet with Keplerian ephemerides</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A simple planet with Keplerian ephemerides</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.planet.jpl_lp" title="pykep.planet.jpl_lp"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.jpl_lp</span></code></a></td>
-<td>class</td>
-<td>A solar system planet using jpl low-precision ephemerides</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.planet.jpl_lp" title="pykep.planet.jpl_lp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.jpl_lp</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A solar system planet using jpl low-precision ephemerides</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.planet.tle" title="pykep.planet.tle"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.tle</span></code></a></td>
-<td>class</td>
-<td>An Earth artificial satellite from its TLE (ephemerides are computed via the SGP4 propagator)</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.planet.tle" title="pykep.planet.tle"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.tle</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>An Earth artificial satellite from its TLE (ephemerides are computed via the SGP4 propagator)</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.planet.spice" title="pykep.planet.spice"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.spice</span></code></a></td>
-<td>class</td>
-<td>A planet with ephemerides computed using the JPL SPICE Toolbox (requires BUILD_SPICE option active when building from cmake)</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.planet.spice" title="pykep.planet.spice"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.spice</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A planet with ephemerides computed using the JPL SPICE Toolbox (requires BUILD_SPICE option active when building from cmake)</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.planet.mpcorb" title="pykep.planet.mpcorb"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.mpcorb</span></code></a></td>
-<td>class</td>
-<td>A planet from the MPCORB database (keplerian ephemerides)</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.planet.mpcorb" title="pykep.planet.mpcorb"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.mpcorb</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A planet from the MPCORB database (keplerian ephemerides)</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.planet.gtoc2" title="pykep.planet.gtoc2"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.gtoc2</span></code></a></td>
-<td>class</td>
-<td>An asteroid from the GTOC2 competition (keplerian ephemerides)</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.planet.gtoc2" title="pykep.planet.gtoc2"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.gtoc2</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>An asteroid from the GTOC2 competition (keplerian ephemerides)</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.planet.gtoc5" title="pykep.planet.gtoc5"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.gtoc5</span></code></a></td>
-<td>class</td>
-<td>An asteroid from the GTOC5 competition (keplerian ephemerides)</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.planet.gtoc5" title="pykep.planet.gtoc5"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.gtoc5</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>An asteroid from the GTOC5 competition (keplerian ephemerides)</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.planet.gtoc6" title="pykep.planet.gtoc6"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.gtoc6</span></code></a></td>
-<td>class</td>
-<td>A Jupiter moon from the GTOC6 competition (keplerian ephemerides)</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.planet.gtoc6" title="pykep.planet.gtoc6"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.gtoc6</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A Jupiter moon from the GTOC6 competition (keplerian ephemerides)</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.planet.gtoc7" title="pykep.planet.gtoc7"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.gtoc7</span></code></a></td>
-<td>class</td>
-<td>An asteroid from the GTOC7 competition (keplerian ephemerides)</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.planet.gtoc7" title="pykep.planet.gtoc7"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.gtoc7</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>An asteroid from the GTOC7 competition (keplerian ephemerides)</p></td>
 </tr>
 </tbody>
 </table>
@@ -168,35 +158,35 @@
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pykep.planet._base">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">_base</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">_base</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base" title="Permalink to this definition">¶</a></dt>
 <dd><p>The base class for all planets, it cannot be instantiated as it contains pure virtual methods</p>
 <dl class="method">
 <dt id="pykep.planet._base.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet._base(mu_central body, mu_self, radius, self_radius, name)</p>
 <ul class="simple">
-<li>mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides)</li>
-<li>mu_self:              Gravity parameter of the target</li>
-<li>radius:                       Radius of target body</li>
-<li>self_radius:  Safe radius of target body</li>
-<li>name:                         Body name</li>
+<li><p>mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides)</p></li>
+<li><p>mu_self:              Gravity parameter of the target</p></li>
+<li><p>radius:                       Radius of target body</p></li>
+<li><p>self_radius:  Safe radius of target body</p></li>
+<li><p>name:                         Body name</p></li>
 </ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.planet._base.eph">
-<code class="descname">eph</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.eph" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eph</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.eph" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet._base.eph(when)</p>
 <ul class="simple">
-<li>when: a <a class="reference internal" href="core.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> indicating the epoch at which the ephemerides are needed, it can also be a double in which case its interpreted as a mjd2000</li>
+<li><p>when: a <a class="reference internal" href="core.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a> indicating the epoch at which the ephemerides are needed, it can also be a double in which case its interpreted as a mjd2000</p></li>
 </ul>
 <p>Retuns a tuple containing the planet position and velocity in SI units</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is a pure virtual method and must be reimplemented in the derived class</p>
+<p class="admonition-title">Note</p>
+<p>This is a pure virtual method and must be reimplemented in the derived class</p>
 </div>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5433</span><span class="p">),</span> <span class="s1">&#39;mjd2000&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5433</span><span class="p">),</span> <span class="s1">&#39;mjd2000&#39;</span><span class="p">)</span>
 <span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="mi">5433</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -204,11 +194,11 @@
 
 <dl class="method">
 <dt id="pykep.planet._base.osculating_elements">
-<code class="descname">osculating_elements</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.osculating_elements" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">osculating_elements</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.osculating_elements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retruns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch
 (SI units used). If no epoch is passed 0. is assumed</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">elem</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">osculating_elements</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">elem</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">osculating_elements</span><span class="p">()</span>
 <span class="n">elem</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">osculating_elements</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mf">2345.3</span><span class="p">,</span> <span class="s1">&#39;mjd2000&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -216,10 +206,10 @@
 
 <dl class="method">
 <dt id="pykep.planet._base.compute_period">
-<code class="descname">compute_period</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.compute_period" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_period</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.compute_period" title="Permalink to this definition">¶</a></dt>
 <dd><p>The planet orbital period in [sec]</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">compute_period</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">compute_period</span><span class="p">()</span>
 <span class="n">T</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">compute_period</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mf">2345.3</span><span class="p">,</span> <span class="s1">&#39;mjd2000&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -227,51 +217,51 @@
 
 <dl class="method">
 <dt id="pykep.planet._base.human_readable_extra">
-<code class="descname">human_readable_extra</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.human_readable_extra" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">human_readable_extra</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet._base.human_readable_extra" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet._base.human_readable_extra()</p>
 <p>Retuns a string with extra information on the problem.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is a virtual method and can be reimplemented in the derived class. In which case __repr__ will append its returned value</p>
+<p class="admonition-title">Note</p>
+<p>This is a virtual method and can be reimplemented in the derived class. In which case __repr__ will append its returned value</p>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet._base.mu_central_body">
-<code class="descname">mu_central_body</code><a class="headerlink" href="#pykep.planet._base.mu_central_body" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mu_central_body</code><a class="headerlink" href="#pykep.planet._base.mu_central_body" title="Permalink to this definition">¶</a></dt>
 <dd><p>The central body gravity parameter in [m^3/s^2]</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">mu_central_body</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">mu_central_body</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet._base.mu_self">
-<code class="descname">mu_self</code><a class="headerlink" href="#pykep.planet._base.mu_self" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mu_self</code><a class="headerlink" href="#pykep.planet._base.mu_self" title="Permalink to this definition">¶</a></dt>
 <dd><p>The body gravity parameter in [m^3/s^2]</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mu_pla</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">mu_self</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mu_pla</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">mu_self</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet._base.radius">
-<code class="descname">radius</code><a class="headerlink" href="#pykep.planet._base.radius" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">radius</code><a class="headerlink" href="#pykep.planet._base.radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>The planet radius in [m]</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">radius</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">radius</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet._base.safe_radius">
-<code class="descname">safe_radius</code><a class="headerlink" href="#pykep.planet._base.safe_radius" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">safe_radius</code><a class="headerlink" href="#pykep.planet._base.safe_radius" title="Permalink to this definition">¶</a></dt>
 <dd><p>The body safe radius in [m](distance at which it is safe for spacecraft to fly-by)</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Rs</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">safe_radius</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Rs</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">safe_radius</span>
 <span class="n">earth</span><span class="o">.</span><span class="n">safe_radius</span> <span class="o">=</span> <span class="mf">1.05</span>
 </pre></div>
 </div>
@@ -279,10 +269,10 @@
 
 <dl class="attribute">
 <dt id="pykep.planet._base.name">
-<code class="descname">name</code><a class="headerlink" href="#pykep.planet._base.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><a class="headerlink" href="#pykep.planet._base.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The body Name</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">name</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">earth</span><span class="o">.</span><span class="n">name</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -292,29 +282,29 @@
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.keplerian">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">keplerian</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.keplerian" title="Permalink to this definition">¶</a></dt>
-<dd><p>A planet with Keplerian ephemerides, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet._base</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">keplerian</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.keplerian" title="Permalink to this definition">¶</a></dt>
+<dd><p>A planet with Keplerian ephemerides, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet._base</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.keplerian.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.keplerian.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.keplerian.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.keplerian(when,orbital_elements, mu_central_body, mu_self,radius, safe_radius [, name = ‘unknown’])</p>
 <p>pykep.planet.keplerian(when,r,v, mu_central_body, mu_self,radius, safe_radius [, name = ‘unknown’])</p>
 <ul class="simple">
-<li>when: a <a class="reference internal" href="core.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> indicating the orbital elements reference epoch</li>
-<li>orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)</li>
-<li>r,v: position and velocity of an object at when (SI units)</li>
-<li>mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)</li>
-<li>mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)</li>
-<li>radius: body radius (SI units, i.e. meters)</li>
-<li>safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)</li>
-<li>name: body name</li>
+<li><p>when: a <a class="reference internal" href="core.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a> indicating the orbital elements reference epoch</p></li>
+<li><p>orbital_elements: a sequence of six containing a,e,i,W,w,M (SI units, i.e. meters and radiants)</p></li>
+<li><p>r,v: position and velocity of an object at when (SI units)</p></li>
+<li><p>mu_central_body: gravity parameter of the central body (SI units, i.e. m^2/s^3)</p></li>
+<li><p>mu_self: gravity parameter of the planet (SI units, i.e. m^2/s^3)</p></li>
+<li><p>radius: body radius (SI units, i.e. meters)</p></li>
+<li><p>safe_radius: mimimual radius that is safe during a fly-by of the planet (SI units, i.e. m)</p></li>
+<li><p>name: body name</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">All classes having Keplerian ephemerides as <a class="reference internal" href="#pykep.planet.mpcorb" title="pykep.planet.mpcorb"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.mpcorb</span></code></a> inherit from this (c++) class</p>
+<p class="admonition-title">Note</p>
+<p>All classes having Keplerian ephemerides as <a class="reference internal" href="#pykep.planet.mpcorb" title="pykep.planet.mpcorb"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.mpcorb</span></code></a> inherit from this (c++) class</p>
 </div>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mi">54000</span><span class="p">,</span><span class="s2">&quot;mjd&quot;</span><span class="p">),(</span><span class="mf">9.99e-01</span> <span class="o">*</span> <span class="n">AU</span><span class="p">,</span> <span class="mf">1.67e-02</span><span class="p">,</span> <span class="mf">8.85e-04</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">1.75e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">2.87e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">2.57e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">),</span> <span class="n">MU_SUN</span><span class="p">,</span> <span class="mf">398600e9</span><span class="p">,</span> <span class="mi">6378000</span><span class="p">,</span> <span class="mi">6900000</span><span class="p">,</span>  <span class="s1">&#39;Earth&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="p">(</span><span class="n">epoch</span><span class="p">(</span><span class="mi">54000</span><span class="p">,</span><span class="s2">&quot;mjd&quot;</span><span class="p">),(</span><span class="mf">9.99e-01</span> <span class="o">*</span> <span class="n">AU</span><span class="p">,</span> <span class="mf">1.67e-02</span><span class="p">,</span> <span class="mf">8.85e-04</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">1.75e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">2.87e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">2.57e+02</span> <span class="o">*</span> <span class="n">DEG2RAD</span><span class="p">),</span> <span class="n">MU_SUN</span><span class="p">,</span> <span class="mf">398600e9</span><span class="p">,</span> <span class="mi">6378000</span><span class="p">,</span> <span class="mi">6900000</span><span class="p">,</span>  <span class="s1">&#39;Earth&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -324,17 +314,17 @@
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.jpl_lp">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">jpl_lp</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.jpl_lp" title="Permalink to this definition">¶</a></dt>
-<dd><p>A solar system planet that uses the JPL low-precision ephemerides, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet._base</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">jpl_lp</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.jpl_lp" title="Permalink to this definition">¶</a></dt>
+<dd><p>A solar system planet that uses the JPL low-precision ephemerides, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet._base</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.jpl_lp.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.jpl_lp.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.jpl_lp.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.jpl_lp(name)</p>
 <ul class="simple">
-<li>name: string containing the common planet name (e.g. ‘earth’, ‘venus’ etc.)</li>
+<li><p>name: string containing the common planet name (e.g. ‘earth’, ‘venus’ etc.)</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -344,57 +334,57 @@
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.mpcorb">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">mpcorb</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.mpcorb" title="Permalink to this definition">¶</a></dt>
-<dd><p>A planet from the MPCORB database, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">mpcorb</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.mpcorb" title="Permalink to this definition">¶</a></dt>
+<dd><p>A planet from the MPCORB database, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.mpcorb.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.mpcorb.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.mpcorb.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.mpcorb(line)</p>
 <ul class="simple">
-<li>line: a line from the MPCORB database file</li>
+<li><p>line: a line from the MPCORB database file</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">apophis</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">mpcorb</span><span class="p">(</span><span class="s1">&#39;99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">apophis</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">mpcorb</span><span class="p">(</span><span class="s1">&#39;99942   19.2   0.15 K107N 202.49545  126.41859  204.43202    3.33173  0.1911104  1.11267324   0.9223398  1 MPO164109  1397   2 2004-2008 0.40 M-v 3Eh MPCAPO     C802  (99942) Apophis            20080109&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet.mpcorb.H">
-<code class="descname">H</code><a class="headerlink" href="#pykep.planet.mpcorb.H" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">H</code><a class="headerlink" href="#pykep.planet.mpcorb.H" title="Permalink to this definition">¶</a></dt>
 <dd><p>The asteroid absolute magnitude. This is assuming an albedo of 0.25 and using the formula at www.physics.sfasu.edu/astro/asteroids/sizemagnitude.html
 Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">H</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">H</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet.mpcorb.n_observations">
-<code class="descname">n_observations</code><a class="headerlink" href="#pykep.planet.mpcorb.n_observations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">n_observations</code><a class="headerlink" href="#pykep.planet.mpcorb.n_observations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of observations made on the asteroid
 Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">n_observations</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">n_observations</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet.mpcorb.n_oppositions">
-<code class="descname">n_oppositions</code><a class="headerlink" href="#pykep.planet.mpcorb.n_oppositions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">n_oppositions</code><a class="headerlink" href="#pykep.planet.mpcorb.n_oppositions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Numper of oppositions the asteroid has been observed in.
 Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">n_oppositions</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">n_oppositions</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pykep.planet.mpcorb.year_of_discovery">
-<code class="descname">year_of_discovery</code><a class="headerlink" href="#pykep.planet.mpcorb.year_of_discovery" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">year_of_discovery</code><a class="headerlink" href="#pykep.planet.mpcorb.year_of_discovery" title="Permalink to this definition">¶</a></dt>
 <dd><p>The year the asteroid was first discovered. In case the asteroid has been observed only once (n_observations), this number is, instead, the Arc Length in days
 Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">year_of_discovery</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">apophis</span><span class="o">.</span><span class="n">year_of_discovery</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -404,18 +394,18 @@ Example:</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.tle">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">tle</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.tle" title="Permalink to this definition">¶</a></dt>
-<dd><p>An Earth satellite defined from the TLE format, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet._base</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">tle</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.tle" title="Permalink to this definition">¶</a></dt>
+<dd><p>An Earth satellite defined from the TLE format, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet._base</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.tle.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.tle.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.tle.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.tle(line1, line2)</p>
 <ul class="simple">
-<li>line1: string containing the first line of a TLE (69 well formatted chars)</li>
-<li>line2: string containing the second line of a TLE (69 well formatted chars)</li>
+<li><p>line1: string containing the first line of a TLE (69 well formatted chars)</p></li>
+<li><p>line2: string containing the second line of a TLE (69 well formatted chars)</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">line1</span> <span class="o">=</span> <span class="s1">&#39;1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">line1</span> <span class="o">=</span> <span class="s1">&#39;1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95&#39;</span>
 <span class="n">line2</span> <span class="o">=</span> <span class="s1">&#39;2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438&#39;</span>
 <span class="n">arianne</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">tle</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">line2</span><span class="p">)</span>
 </pre></div>
@@ -427,33 +417,33 @@ Example:</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.spice">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">spice</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.spice" title="Permalink to this definition">¶</a></dt>
-<dd><p>A planet using the eph from the SPICE Toolbox, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet._base</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">spice</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.spice" title="Permalink to this definition">¶</a></dt>
+<dd><p>A planet using the eph from the SPICE Toolbox, derives from <a class="reference internal" href="#pykep.planet._base" title="pykep.planet._base"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet._base</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.spice.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.spice.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.spice.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.spice(target, observer, ref_frame, aberrations, mu_central_body, mu_self, radius, self_radius)</p>
 <ul class="simple">
-<li>target:                       Target body (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers">NAIF IDs</a>)</li>
-<li>observer:             Observer body (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers">NAIF IDs</a>)</li>
-<li>ref_frame:            The reference frame (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Frames%20Supported%20in%20SPICE">SPICE supported frames</a>)</li>
-<li>aberrations:  Aberration correction type (see spkezr_c docs &lt;<a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html">http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html</a>&gt;`_)</li>
-<li>mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides). Note that this is needed to compute the orbital elements</li>
-<li>mu_self:              Gravity parameter of the target</li>
-<li>radius:                       Radius of target body</li>
-<li>self_radius:  Safe radius of target bodyn</li>
+<li><p>target:                       Target body (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers">NAIF IDs</a>)</p></li>
+<li><p>observer:             Observer body (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html#NAIF%20Object%20ID%20numbers">NAIF IDs</a>)</p></li>
+<li><p>ref_frame:            The reference frame (see <a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html#Frames%20Supported%20in%20SPICE">SPICE supported frames</a>)</p></li>
+<li><p>aberrations:  Aberration correction type (see spkezr_c docs &lt;<a class="reference external" href="http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html">http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html</a>&gt;`_)</p></li>
+<li><p>mu_central_body: Gravity parameter of the central body (this is not used to compute the ephemerides). Note that this is needed to compute the orbital elements</p></li>
+<li><p>mu_self:              Gravity parameter of the target</p></li>
+<li><p>radius:                       Radius of target body</p></li>
+<li><p>self_radius:  Safe radius of target bodyn</p></li>
 </ul>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The presence of the corresponding kernel files are only checked upon call to the ephemerides method.    As a consequence this object can still be constructed with invalid names
+<p class="admonition-title">Note</p>
+<p>The presence of the corresponding kernel files are only checked upon call to the ephemerides method.    As a consequence this object can still be constructed with invalid names
 or spelling mistakes. Only later the ephemerides call will fail throwing an excpetion</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">mu_central_body must be set if the period or the orbital elements need to be computed</p>
+<p class="admonition-title">Note</p>
+<p>mu_central_body must be set if the period or the orbital elements need to be computed</p>
 </div>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">planet</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">spice</span><span class="p">(</span><span class="s1">&#39;EARTH&#39;</span><span class="p">,</span> <span class="s1">&#39;SUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ECLIPJ2000&#39;</span><span class="p">,</span> <span class="s1">&#39;NONE&#39;</span><span class="p">,</span> <span class="n">MU_SUN</span><span class="p">,</span> <span class="n">MU_EARTH</span><span class="p">,</span> <span class="n">ERATH_R</span><span class="p">,</span> <span class="n">EARTH_R</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">planet</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">spice</span><span class="p">(</span><span class="s1">&#39;EARTH&#39;</span><span class="p">,</span> <span class="s1">&#39;SUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ECLIPJ2000&#39;</span><span class="p">,</span> <span class="s1">&#39;NONE&#39;</span><span class="p">,</span> <span class="n">MU_SUN</span><span class="p">,</span> <span class="n">MU_EARTH</span><span class="p">,</span> <span class="n">ERATH_R</span><span class="p">,</span> <span class="n">EARTH_R</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -463,22 +453,22 @@ or spelling mistakes. Only later the ephemerides call will fail throwing an excp
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.gtoc2">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">gtoc2</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc2" title="Permalink to this definition">¶</a></dt>
-<dd><p>An asteroid from gtoc2, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">gtoc2</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc2" title="Permalink to this definition">¶</a></dt>
+<dd><p>An asteroid from gtoc2, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.gtoc2.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc2.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc2.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.gtoc2(ast_id)</p>
 <ul class="simple">
-<li>ast_id: Construct from a consecutive id from 0 to 910 (Earth).The order is that of the original data file from JPL</li>
-<li>Group 1:   0 - 95</li>
-<li>Group 2:  96 - 271</li>
-<li>Group 3: 272 - 571</li>
-<li>Group 4: 572 - 909</li>
-<li>Earth:   910</li>
+<li><p>ast_id: Construct from a consecutive id from 0 to 910 (Earth).The order is that of the original data file from JPL</p></li>
+<li><p>Group 1:   0 - 95</p></li>
+<li><p>Group 2:  96 - 271</p></li>
+<li><p>Group 3: 272 - 571</p></li>
+<li><p>Group 4: 572 - 909</p></li>
+<li><p>Earth:   910</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">earth_gtoc2</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc2</span><span class="p">(</span><span class="mi">910</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">earth_gtoc2</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc2</span><span class="p">(</span><span class="mi">910</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -488,17 +478,17 @@ or spelling mistakes. Only later the ephemerides call will fail throwing an excp
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.gtoc5">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">gtoc5</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc5" title="Permalink to this definition">¶</a></dt>
-<dd><p>An asteroid from gtoc5, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">gtoc5</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc5" title="Permalink to this definition">¶</a></dt>
+<dd><p>An asteroid from gtoc5, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.gtoc5.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc5.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc5.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.gtoc5(ast_id)</p>
 <ul class="simple">
-<li>ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the originaldata file distributed by the Russian, see the (<a class="reference external" href="http://sophia.estec.esa.int/gtoc_portal/">gtoc portal</a>). Earth is 7076</li>
+<li><p>ast_id: a consecutive id from 1 to 7076 (Earth). The order is that of the originaldata file distributed by the Russian, see the (<a class="reference external" href="http://sophia.estec.esa.int/gtoc_portal/">gtoc portal</a>). Earth is 7076</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">russian_ast</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc5</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">russian_ast</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc5</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -508,17 +498,17 @@ or spelling mistakes. Only later the ephemerides call will fail throwing an excp
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.gtoc6">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">gtoc6</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc6" title="Permalink to this definition">¶</a></dt>
-<dd><p>A Jupiter moon from gtoc6, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">gtoc6</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc6" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Jupiter moon from gtoc6, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.gtoc6.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc6.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc6.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.gtoc6(name)</p>
 <ul class="simple">
-<li>name: string containing the common planet name (e.g. ‘io’, ‘europa’, ‘callisto’ or ‘ganymede’)</li>
+<li><p>name: string containing the common planet name (e.g. ‘io’, ‘europa’, ‘callisto’ or ‘ganymede’)</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">io</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc6</span><span class="p">(</span><span class="s1">&#39;io&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">io</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc6</span><span class="p">(</span><span class="s1">&#39;io&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -528,17 +518,17 @@ or spelling mistakes. Only later the ephemerides call will fail throwing an excp
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.planet.gtoc7">
-<em class="property">class </em><code class="descclassname">pykep.planet.</code><code class="descname">gtoc7</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc7" title="Permalink to this definition">¶</a></dt>
-<dd><p>An asteroid from gtoc7, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal"><span class="pre">pykep.planet.keplerian</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.planet.</code><code class="sig-name descname">gtoc7</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc7" title="Permalink to this definition">¶</a></dt>
+<dd><p>An asteroid from gtoc7, derives from <a class="reference internal" href="#pykep.planet.keplerian" title="pykep.planet.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.planet.keplerian</span></code></a></p>
 <dl class="method">
 <dt id="pykep.planet.gtoc7.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc7.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.planet.gtoc7.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.planet.gtoc7(ast_id)</p>
 <ul class="simple">
-<li>ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original file , see the (<a class="reference external" href="http://sophia.estec.esa.int/gtoc_portal/">gtoc portal</a>).</li>
+<li><p>ast_id: a consecutive id from 0 (Earth) to 16256. The order is that of the original file , see the (<a class="reference external" href="http://sophia.estec.esa.int/gtoc_portal/">gtoc portal</a>).</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc7</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">earth</span> <span class="o">=</span> <span class="n">planet</span><span class="o">.</span><span class="n">gtoc7</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -561,7 +551,7 @@ or spelling mistakes. Only later the ephemerides call will fail throwing an excp
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>

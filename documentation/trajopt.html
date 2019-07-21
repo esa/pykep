@@ -3,27 +3,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>The trajopt module &#8212; pykep 2.4 documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.4',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
@@ -37,8 +28,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-  </head>
-  <body>
+  </head><body>
 
 <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container">
@@ -112,54 +102,54 @@
 <p>This module contains classes that help instantiating interplanetary trajectory optimization problems. While
 the resulting problems are compatible with the optimization package pygmo, which can thus be used to assemble a
 solution strategy, they can be also interfaced with any other optimization package / method.</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="27%" />
-<col width="6%" />
-<col width="67%" />
+<col style="width: 27%" />
+<col style="width: 6%" />
+<col style="width: 67%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Type</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.mga" title="pykep.trajopt.mga"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.mga</span></code></a></td>
-<td>class</td>
-<td>A Multiple Gravity Assist Trajectory with no deep space manouvres</td>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.mga" title="pykep.trajopt.mga"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.mga</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A Multiple Gravity Assist Trajectory with no deep space manouvres</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.mga_1dsm" title="pykep.trajopt.mga_1dsm"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.mga_1dsm</span></code></a></td>
-<td>class</td>
-<td>A multiple Gravity Assist Trajectory with one deep space manouvre at each leg</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.mga_1dsm" title="pykep.trajopt.mga_1dsm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.mga_1dsm</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A multiple Gravity Assist Trajectory with one deep space manouvre at each leg</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.pl2pl_N_impulses" title="pykep.trajopt.pl2pl_N_impulses"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.pl2pl_N_impulses</span></code></a></td>
-<td>class</td>
-<td>A single leg transfer with N impulses</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.pl2pl_N_impulses" title="pykep.trajopt.pl2pl_N_impulses"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.pl2pl_N_impulses</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A single leg transfer with N impulses</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.lt_margo" title="pykep.trajopt.lt_margo"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.lt_margo</span></code></a></td>
-<td>class</td>
-<td>A cubesat mission to near Earth asteroids. Solar Electric Propulsion and Earth gravity are modelled.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.lt_margo" title="pykep.trajopt.lt_margo"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.lt_margo</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A cubesat mission to near Earth asteroids. Solar Electric Propulsion and Earth gravity are modelled.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.mr_lt_nep" title="pykep.trajopt.mr_lt_nep"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.mr_lt_nep</span></code></a></td>
-<td>class</td>
-<td>A multiple randezvous low-thrust optimization problem (e.g. for asteroids in the main belt)</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.mr_lt_nep" title="pykep.trajopt.mr_lt_nep"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.mr_lt_nep</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A multiple randezvous low-thrust optimization problem (e.g. for asteroids in the main belt)</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.direct_pl2pl" title="pykep.trajopt.direct_pl2pl"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.direct_pl2pl</span></code></a></td>
-<td>class</td>
-<td>A low-thrust transfer between planets using a direct transcription.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.direct_pl2pl" title="pykep.trajopt.direct_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.direct_pl2pl</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A low-thrust transfer between planets using a direct transcription.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.indirect_pt2pt" title="pykep.trajopt.indirect_pt2pt"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.indirect_pt2pt</span></code></a></td>
-<td>class</td>
-<td>A low-thrust transfer between Cartesian states using an indirect transcription.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.indirect_pt2pt" title="pykep.trajopt.indirect_pt2pt"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.indirect_pt2pt</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A low-thrust transfer between Cartesian states using an indirect transcription.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.indirect_or2or" title="pykep.trajopt.indirect_or2or"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.indirect_or2or</span></code></a></td>
-<td>class</td>
-<td>A low-thrust transfer between orbits using an indirect transcription.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.indirect_or2or" title="pykep.trajopt.indirect_or2or"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.indirect_or2or</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>A low-thrust transfer between orbits using an indirect transcription.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt._launchers" title="pykep.trajopt._launchers"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt._launchers</span></code></a></td>
-<td>class</td>
-<td>Contains functors delivering the performance of launchers in terms of mass delivered</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt._launchers" title="pykep.trajopt._launchers"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt._launchers</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>Contains functors delivering the performance of launchers in terms of mass delivered</p></td>
 </tr>
 </tbody>
 </table>
@@ -168,81 +158,81 @@ solution strategy, they can be also interfaced with any other optimization packa
 <p>Some instances of the classes above are provided in an Interplanetary Trajectory Optimization Gym. A problem test set
 we use to test and tune optimization approaches able to tackle a wide variety of problems with little / no tuning.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Most problem have a <cite>pretty</cite> and a <cite>plot</cite> method that can be used to visualize decision vectors (chromosomes).</p>
+<p class="admonition-title">Note</p>
+<p>Most problem have a <cite>pretty</cite> and a <cite>plot</cite> method that can be used to visualize decision vectors (chromosomes).</p>
 </div>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="30%" />
-<col width="7%" />
-<col width="63%" />
+<col style="width: 30%" />
+<col style="width: 7%" />
+<col style="width: 63%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Name</th>
-<th class="head">Type</th>
-<th class="head">Description</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a></td>
-<td>instance</td>
-<td>Cassini inspired MGA problem. Time of flights are encoded directly in the chromosome.</td>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Cassini inspired MGA problem. Time of flights are encoded directly in the chromosome.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.cassini1_a" title="pykep.trajopt.gym.cassini1_a"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini1_a</span></code></a></td>
-<td>instance</td>
-<td>Cassini inspired MGA problem. Time of flights use alpha encoding.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.cassini1_a" title="pykep.trajopt.gym.cassini1_a"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini1_a</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Cassini inspired MGA problem. Time of flights use alpha encoding.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.cassini1_n" title="pykep.trajopt.gym.cassini1_n"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini1_n</span></code></a></td>
-<td>instance</td>
-<td>Cassini inspired MGA problem. Time of flights use eta encoding.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.cassini1_n" title="pykep.trajopt.gym.cassini1_n"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini1_n</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Cassini inspired MGA problem. Time of flights use eta encoding.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a></td>
-<td>instance</td>
-<td>Earth-Mars transfer with 3 impulses</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Mars transfer with 3 impulses</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.em5imp" title="pykep.trajopt.gym.em5imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em5imp</span></code></a></td>
-<td>instance</td>
-<td>Earth-Mars transfer with 5 impulses</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.em5imp" title="pykep.trajopt.gym.em5imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em5imp</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Mars transfer with 5 impulses</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.em7imp" title="pykep.trajopt.gym.em7imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em7imp</span></code></a></td>
-<td>instance</td>
-<td>Earth-Mars transfer with 7 impulses</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.em7imp" title="pykep.trajopt.gym.em7imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em7imp</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Mars transfer with 7 impulses</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a></td>
-<td>instance</td>
-<td>Earth-Venus-Earth transfer. Time of flights are encoded directly in the chromosome.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Venus-Earth transfer. Time of flights are encoded directly in the chromosome.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="pykep.trajopt.gym.eve_mga1dsm_a"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_a</span></code></a></td>
-<td>instance</td>
-<td>Earth-Venus-Earth transfer. Time of flights use alpha encoding.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="pykep.trajopt.gym.eve_mga1dsm_a"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_a</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Venus-Earth transfer. Time of flights use alpha encoding.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="pykep.trajopt.gym.eve_mga1dsm_n"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_n</span></code></a></td>
-<td>instance</td>
-<td>Earth-Venus-Earth transfer. Time of flights use eta encoding.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="pykep.trajopt.gym.eve_mga1dsm_n"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_n</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Earth-Venus-Earth transfer. Time of flights use eta encoding.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.cassini2" title="pykep.trajopt.gym.cassini2"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini2</span></code></a></td>
-<td>instance</td>
-<td>Cassini inspired MGA-1DSM problem.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.cassini2" title="pykep.trajopt.gym.cassini2"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini2</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Cassini inspired MGA-1DSM problem.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.rosetta" title="pykep.trajopt.gym.rosetta"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.rosetta</span></code></a></td>
-<td>instance</td>
-<td>Rosetta inspired MGA-1DSM problem.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.rosetta" title="pykep.trajopt.gym.rosetta"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.rosetta</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Rosetta inspired MGA-1DSM problem.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.tandem" title="pykep.trajopt.gym.tandem"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.tandem</span></code></a></td>
-<td>class</td>
-<td>TandEM inspired MGA-1DSM problem.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.tandem" title="pykep.trajopt.gym.tandem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tandem</span></code></a></p></td>
+<td><p>class</p></td>
+<td><p>TandEM inspired MGA-1DSM problem.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.juice" title="pykep.trajopt.gym.juice"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.juice</span></code></a></td>
-<td>instance</td>
-<td>JUICE inspired MGA-1DSM problem.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.juice" title="pykep.trajopt.gym.juice"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.juice</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>JUICE inspired MGA-1DSM problem.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pykep.trajopt.gym.juice_mo" title="pykep.trajopt.gym.juice_mo"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.juice_mo</span></code></a></td>
-<td>instance</td>
-<td>JUICE inspired MGA-1DSM multiobjective problem.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pykep.trajopt.gym.juice_mo" title="pykep.trajopt.gym.juice_mo"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.juice_mo</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>JUICE inspired MGA-1DSM multiobjective problem.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pykep.trajopt.gym.messenger" title="pykep.trajopt.gym.messenger"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.messenger</span></code></a></td>
-<td>instance</td>
-<td>Messenger inspired MGA-1DSM problem.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="#pykep.trajopt.gym.messenger" title="pykep.trajopt.gym.messenger"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.messenger</span></code></a></p></td>
+<td><p>instance</p></td>
+<td><p>Messenger inspired MGA-1DSM problem.</p></td>
 </tr>
 </tbody>
 </table>
@@ -251,20 +241,20 @@ we use to test and tune optimization approaches able to tackle a wide variety of
 <h3>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pykep.trajopt.mga">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">mga</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">mga</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space manouvres into an optimisation problem.
 It may be used as a User Defined Problem (UDP) for the pygmo (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) optimisation suite.</p>
 <ul class="simple">
-<li>Izzo, Dario. “Global optimization and space pruning for spacecraft trajectory design.” Spacecraft Trajectory Optimization 1 (2010): 178-200.</li>
+<li><p>Izzo, Dario. “Global optimization and space pruning for spacecraft trajectory design.” Spacecraft Trajectory Optimization 1 (2010): 178-200.</p></li>
 </ul>
 <p>The decision vector (chromosome) is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T1</span><span class="p">,</span> <span class="n">T2</span> <span class="o">...</span> <span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mjd2000</span><span class="p">,</span> <span class="n">days</span><span class="p">,</span> <span class="n">days</span> <span class="o">...</span> <span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T1</span><span class="p">,</span> <span class="n">T2</span> <span class="o">...</span> <span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mjd2000</span><span class="p">,</span> <span class="n">days</span><span class="p">,</span> <span class="n">days</span> <span class="o">...</span> <span class="p">]</span>
 <span class="n">alpha</span> <span class="n">encoding</span><span class="p">:</span>  <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span> <span class="o">...</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mjd2000</span><span class="p">,</span> <span class="n">days</span><span class="p">,</span> <span class="n">nd</span><span class="p">,</span> <span class="n">nd</span> <span class="o">...</span> <span class="p">]</span>
 <span class="n">eta</span> <span class="n">encoding</span><span class="p">:</span>    <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span> <span class="o">...</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mjd2000</span><span class="p">,</span> <span class="n">nd</span><span class="p">,</span> <span class="n">nd</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The time of flights of a MGA trajectory (and in general) can be encoded in different ways.
 When they are directly present in the decision vector, we have the <em>direct</em> encoding. This is the most ‘evolvable’ encoding
 but also the one that requires the most problem knowledge (e.g. to define the bounds on each leg) and is not 
@@ -273,39 +263,37 @@ to only specify bounds on the time of flight of the entire trajectory, and not o
 for multi-objective optimization, for example.</p>
 <p>In the <em>alpha</em> encoding each leg time-of-flight is decoded as follows, T_i = T log(alpha_i) / sum_n(log(alpha_n)).
 In the <em>eta</em> encoding  each leg time-of-flight is decoded as follows, T_i = (tof_max - sum_0^(i-1)(T_j)) * eta_i</p>
-<p class="last">The chromosome dimension for the direct and eta encoding is the same, while the alpha encoding requires one more gene.</p>
+<p>The chromosome dimension for the direct and eta encoding is the same, while the alpha encoding requires one more gene.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The resulting problem is box-bounded (unconstrained).</p>
+<p class="admonition-title">Note</p>
+<p>The resulting problem is box-bounded (unconstrained).</p>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.mga.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>mga(seq=[pk.planet.jpl_lp(‘earth’), pk.planet.jpl_lp(‘venus’), pk.planet.jpl_lp(‘earth’)], t0=[0, 1000], tof=[100, 500], vinf=2.5, multi_objective=False, alpha_encoding=False, orbit_insertion=False, e_target=None, rp_target=None)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>seq (<code class="docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">pk.planet</span></code>): sequence of body encounters including the starting object</li>
-<li>t0 (<code class="docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">pk.epoch</span></code>): the launch window</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code> or <code class="docutils literal"><span class="pre">float</span></code>): bounds on the time of flight. If <em>tof_encoding</em> is ‘direct’, this contains a list
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>seq (<code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">pk.planet</span></code>): sequence of body encounters including the starting object</p></li>
+<li><p>t0 (<code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">pk.epoch</span></code>): the launch window</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>): bounds on the time of flight. If <em>tof_encoding</em> is ‘direct’, this contains a list
 of 2D lists defining the upper and lower bounds on each leg. If <em>tof_encoding</em> is ‘alpha’,
 this contains a 2D list with the lower and upper bounds on the time-of-flight. If <em>tof_encoding</em>
-is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
-<li>vinf (<code class="docutils literal"><span class="pre">float</span></code>): the vinf provided at launch for free</li>
-<li>multi_objective (<code class="docutils literal"><span class="pre">bool</span></code>): when True constructs a multiobjective problem (dv, T). In this case, ‘alpha’ or <cite>eta</cite> encodings are reccomended</li>
-<li>tof_encoding (<code class="docutils literal"><span class="pre">str</span></code>): one of ‘direct’, ‘alpha’ or ‘eta’. Selects the encoding for the time of flights</li>
-<li>orbit_insertion (<code class="docutils literal"><span class="pre">bool</span></code>): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target</li>
-<li>e_target (<code class="docutils literal"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit eccentricity around the final planet</li>
-<li>rp_target (<code class="docutils literal"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)</li>
+is ‘eta’ tof is a float defining the upper bound on the time-of-flight</p></li>
+<li><p>vinf (<code class="docutils literal notranslate"><span class="pre">float</span></code>): the vinf provided at launch for free</p></li>
+<li><p>multi_objective (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True constructs a multiobjective problem (dv, T). In this case, ‘alpha’ or <cite>eta</cite> encodings are reccomended</p></li>
+<li><p>tof_encoding (<code class="docutils literal notranslate"><span class="pre">str</span></code>): one of ‘direct’, ‘alpha’ or ‘eta’. Selects the encoding for the time of flights</p></li>
+<li><p>orbit_insertion (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target</p></li>
+<li><p>e_target (<code class="docutils literal notranslate"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit eccentricity around the final planet</p></li>
+<li><p>rp_target (<code class="docutils literal notranslate"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)</p></li>
 </ul>
 </dd>
-<dt>Raises:</dt>
-<dd><ul class="first last simple">
-<li>ValueError: if <em>planets</em> do not share the same central body (checked on the mu_central_body attribute)</li>
-<li>ValueError: if <em>t0</em> does not contain objects able to construct a epoch (e.g. pk. epoch or floats)</li>
-<li>ValueError: if <em>tof</em> is badly defined</li>
-<li>ValueError: it the target orbit is not defined and <em>orbit_insertion</em> is True</li>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>ValueError: if <em>planets</em> do not share the same central body (checked on the mu_central_body attribute)</p></li>
+<li><p>ValueError: if <em>t0</em> does not contain objects able to construct a epoch (e.g. pk. epoch or floats)</p></li>
+<li><p>ValueError: if <em>tof</em> is badly defined</p></li>
+<li><p>ValueError: it the target orbit is not defined and <em>orbit_insertion</em> is True</p></li>
 </ul>
 </dd>
 </dl>
@@ -313,49 +301,45 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.alpha2direct">
-<code class="descname">alpha2direct</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.alpha2direct" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">alpha2direct</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.alpha2direct" title="Permalink to this definition">¶</a></dt>
 <dd><p>alpha2direct(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the alpha encoding</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the alpha encoding</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><code class="docutils literal"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the direct encoding</dd>
+<dt>Returns:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the direct encoding</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.direct2alpha">
-<code class="descname">direct2alpha</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.direct2alpha" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">direct2alpha</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.direct2alpha" title="Permalink to this definition">¶</a></dt>
 <dd><p>direct2alpha(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the direct encoding</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the direct encoding</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><code class="docutils literal"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the alpha encoding</dd>
+<dt>Returns:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the alpha encoding</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.eta2direct">
-<code class="descname">eta2direct</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.eta2direct" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eta2direct</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.eta2direct" title="Permalink to this definition">¶</a></dt>
 <dd><p>eta2direct(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the eta encoding</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the eta encoding</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><code class="docutils literal"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the direct encoding</dd>
-<dt>Raises:</dt>
-<dd><ul class="first last simple">
-<li>ValueError: when the tof_encoding is not ‘eta’</li>
+<dt>Returns:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the direct encoding</p>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>ValueError: when the tof_encoding is not ‘eta’</p></li>
 </ul>
 </dd>
 </dl>
@@ -363,19 +347,17 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.direct2eta">
-<code class="descname">direct2eta</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.direct2eta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">direct2eta</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.direct2eta" title="Permalink to this definition">¶</a></dt>
 <dd><p>direct2eta(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the direct encoding</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a chromosome encoding an MGA trajectory in the direct encoding</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><code class="docutils literal"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the eta encoding</dd>
-<dt>Raises:</dt>
-<dd><ul class="first last simple">
-<li>ValueError: when the tof_encoding is not ‘eta’</li>
+<dt>Returns:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>: a chromosome encoding the MGA trajectory using the eta encoding</p>
+</dd>
+<dt>Raises:</dt><dd><ul class="simple">
+<li><p>ValueError: when the tof_encoding is not ‘eta’</p></li>
 </ul>
 </dd>
 </dl>
@@ -383,12 +365,11 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.pretty">
-<code class="descname">pretty</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.pretty" title="Permalink to this definition">¶</a></dt>
 <dd><p>pretty(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
 </dl>
@@ -397,16 +378,15 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot(self, x, axes=None, units=pk.AU, N=60)</p>
 <p>Plots the spacecraft trajectory.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome.</li>
-<li>axes (<code class="docutils literal"><span class="pre">matplotlib.axes._subplots.Axes3DSubplot</span></code>): 3D axes to use for the plot</li>
-<li>units (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Length unit by which to normalise data.</li>
-<li>N (<code class="docutils literal"><span class="pre">float</span></code>): Number of points to plot per leg</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome.</p></li>
+<li><p>axes (<code class="docutils literal notranslate"><span class="pre">matplotlib.axes._subplots.Axes3DSubplot</span></code>): 3D axes to use for the plot</p></li>
+<li><p>units (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Length unit by which to normalise data.</p></li>
+<li><p>N (<code class="docutils literal notranslate"><span class="pre">float</span></code>): Number of points to plot per leg</p></li>
 </ul>
 </dd>
 </dl>
@@ -417,14 +397,14 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</li>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.mga_1dsm">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">mga_1dsm</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">mga_1dsm</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class transcribes a Multiple Gravity Assist trajectory with one deep space manouvre per leg (MGA-1DSM) into an optimisation problem.
 It may be used as a User Defined Problem (UDP) for the pygmo (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) optimisation suite.</p>
 <ul class="simple">
-<li>Izzo, Dario. “Global optimization and space pruning for spacecraft trajectory design.” Spacecraft Trajectory Optimization 1 (2010): 178-200.</li>
+<li><p>Izzo, Dario. “Global optimization and space pruning for spacecraft trajectory design.” Spacecraft Trajectory Optimization 1 (2010): 178-200.</p></li>
 </ul>
 <p>The decision vector (chromosome) is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">t0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">Vinf</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">T1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">rp</span><span class="o">/</span><span class="n">rV</span><span class="p">,</span> <span class="n">eta2</span><span class="p">,</span> <span class="n">T2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="n">encoding</span><span class="p">:</span> <span class="p">[</span><span class="n">t0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">Vinf</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">T1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">rp</span><span class="o">/</span><span class="n">rV</span><span class="p">,</span> <span class="n">eta2</span><span class="p">,</span> <span class="n">T2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span> 
 <span class="n">alpha</span> <span class="n">encoding</span><span class="p">:</span>  <span class="p">[</span><span class="n">t0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">Vinf</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">a1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">rp</span><span class="o">/</span><span class="n">rV</span><span class="p">,</span> <span class="n">eta2</span><span class="p">,</span> <span class="n">a2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span> <span class="o">+</span> <span class="p">[</span><span class="n">T</span><span class="p">]</span>
 <span class="n">eta</span> <span class="n">encoding</span><span class="p">:</span>    <span class="p">[</span><span class="n">t0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">Vinf</span><span class="p">,</span> <span class="n">eta1</span><span class="p">,</span> <span class="n">n1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">rp</span><span class="o">/</span><span class="n">rV</span><span class="p">,</span> <span class="n">eta2</span><span class="p">,</span> <span class="n">n2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span>
 
@@ -432,7 +412,7 @@ It may be used as a User Defined Problem (UDP) for the pygmo (<a class="referenc
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>The time of flights of a MGA-1DSM trajectory (and in general) can be encoded in different ways.
 When they are directly present in the decision vector, we have a <em>direct</em> encoding. This is the most ‘evolvable’ encoding
 but also the one that requires the most problem knowledge (e.g. to define the bounds on each leg) and is not 
@@ -441,63 +421,63 @@ to only specify bounds on the time of flight of the entire trajectory, and not o
 for multi-objective optimization, for example.</p>
 <p>In the <em>alpha</em> encoding each leg time-of-flight is decoded as follows, T_i = T log(alpha_i) / sum_n(log(alpha_n)).
 In the <em>eta</em> encoding  each leg time-of-flight is decoded as follows, T_i = (tof_max - sum_0^(i-1)(T_j)) * eta_i</p>
-<p class="last">The chromosome dimension for the direct and eta encoding is the same, while the alpha encoding requires one more gene.</p>
+<p>The chromosome dimension for the direct and eta encoding is the same, while the alpha encoding requires one more gene.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The resulting problem is box-bounded (unconstrained).</p>
+<p class="admonition-title">Note</p>
+<p>The resulting problem is box-bounded (unconstrained).</p>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.mga_1dsm.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.trajopt.mga_1dsm(seq = [jpl_lp(‘earth’), jpl_lp(‘venus’), jpl_lp(‘earth’)], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)</p>
 <ul class="simple">
-<li>seq (<code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">pykep.planet</span></code>): the encounter sequence (including the starting launch)</li>
-<li>t0 (<code class="docutils literal"><span class="pre">list</span></code> of <code class="docutils literal"><span class="pre">pykep.epoch</span></code> or <code class="docutils literal"><span class="pre">floats</span></code>): the launch window (in mjd2000 if floats)</li>
-<li><dl class="first docutils">
-<dt>tof (<code class="docutils literal"><span class="pre">list</span></code> or <code class="docutils literal"><span class="pre">float</span></code>): bounds on the time of flight (days). If <em>tof_encoding</em> is ‘direct’, this contains a list</dt>
-<dd>of 2D lists defining the upper and lower bounds on each leg. If <em>tof_encoding</em> is ‘alpha’,
+<li><p>seq (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">pykep.planet</span></code>): the encounter sequence (including the starting launch)</p></li>
+<li><p>t0 (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">pykep.epoch</span></code> or <code class="docutils literal notranslate"><span class="pre">floats</span></code>): the launch window (in mjd2000 if floats)</p></li>
+<li><dl class="simple">
+<dt>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>): bounds on the time of flight (days). If <em>tof_encoding</em> is ‘direct’, this contains a list</dt><dd><p>of 2D lists defining the upper and lower bounds on each leg. If <em>tof_encoding</em> is ‘alpha’,
 this contains a list of two floats containing the lower and upper bounds on the time-of-flight. If <em>tof_encoding</em>
-is ‘eta’ tof is a float defining the upper bound on the time-of-flight</dd>
+is ‘eta’ tof is a float defining the upper bound on the time-of-flight</p>
+</dd>
 </dl>
 </li>
-<li>vinf (<code class="docutils literal"><span class="pre">list</span></code>): the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec</li>
-<li>add_vinf_dep (<code class="docutils literal"><span class="pre">bool</span></code>): when True the computed Dv includes the initial hyperbolic velocity (at launch)</li>
-<li>add_vinf_arr (<code class="docutils literal"><span class="pre">bool</span></code>): when True the computed Dv includes the final hyperbolic velocity (at the last planet)</li>
-<li>tof_encoding (<code class="docutils literal"><span class="pre">str</span></code>): one of ‘direct’, ‘alpha’ or ‘eta’. Selects the encoding for the time of flights</li>
-<li>multi_objective (<code class="docutils literal"><span class="pre">bool</span></code>): when True constructs a multiobjective problem (dv, T)</li>
-<li>orbit_insertion (<code class="docutils literal"><span class="pre">bool</span></code>): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target</li>
-<li>e_target (<code class="docutils literal"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit eccentricity around the final planet</li>
-<li>rp_target (<code class="docutils literal"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)</li>
+<li><p>vinf (<code class="docutils literal notranslate"><span class="pre">list</span></code>): the minimum and maximum allowed initial hyperbolic velocity (at launch), in km/sec</p></li>
+<li><p>add_vinf_dep (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True the computed Dv includes the initial hyperbolic velocity (at launch)</p></li>
+<li><p>add_vinf_arr (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True the computed Dv includes the final hyperbolic velocity (at the last planet)</p></li>
+<li><p>tof_encoding (<code class="docutils literal notranslate"><span class="pre">str</span></code>): one of ‘direct’, ‘alpha’ or ‘eta’. Selects the encoding for the time of flights</p></li>
+<li><p>multi_objective (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True constructs a multiobjective problem (dv, T)</p></li>
+<li><p>orbit_insertion (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target</p></li>
+<li><p>e_target (<code class="docutils literal notranslate"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit eccentricity around the final planet</p></li>
+<li><p>rp_target (<code class="docutils literal notranslate"><span class="pre">float</span></code>): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)</p></li>
 </ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga_1dsm.pretty">
-<code class="descname">pretty</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.pretty" title="Permalink to this definition">¶</a></dt>
 <dd><p>prob.plot(x)</p>
 <ul class="simple">
-<li>x: encoded trajectory</li>
+<li><p>x: encoded trajectory</p></li>
 </ul>
 <p>Prints human readable information on the trajectory represented by the decision vector x</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.mga_1dsm.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mga_1dsm.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = prob.plot(x, ax=None)</p>
 <ul class="simple">
-<li>x: encoded trajectory</li>
-<li>ax: matplotlib axis where to plot. If None figure and axis will be created</li>
-<li>[out] ax: matplotlib axis where to plot</li>
+<li><p>x: encoded trajectory</p></li>
+<li><p>ax: matplotlib axis where to plot. If None figure and axis will be created</p></li>
+<li><p>[out] ax: matplotlib axis where to plot</p></li>
 </ul>
 <p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -507,34 +487,33 @@ is ‘eta’ tof is a float defining the upper bound on the time-of-flight</dd>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.pl2pl_N_impulses">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">pl2pl_N_impulses</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">pl2pl_N_impulses</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is a pygmo (<a class="reference external" href="http://esa.github.io/pygmo/">http://esa.github.io/pygmo/</a>) problem representing a single leg transfer
 between two planets allowing up to a maximum number of impulsive Deep Space Manouvres.</p>
 <p>The decision vector is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">t0</span><span class="p">,</span><span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">V_inf</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="n">tf</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">t0</span><span class="p">,</span><span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">V_inf</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="n">tf</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>… in the units: [mjd2000, days] + [nd, nd, m/sec, nd] + [nd] + [mjd2000]</p>
 <p>Each time-of-flight can be decoded as follows, T_n = T log(alpha_n) / sum_i(log(alpha_i))</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.</p>
+<p class="admonition-title">Note</p>
+<p>The resulting problem is box-bounded (unconstrained). The resulting trajectory is time-bounded.</p>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.pl2pl_N_impulses.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>prob = pykep.trajopt.pl2pl_N_impulses(start=jpl_lp(‘earth’), target=jpl_lp(‘venus’), N_max=3, tof=[20., 400.], vinf=[0., 4.], phase_free=True, multi_objective=False, t0=None)</p>
-<dl class="docutils">
-<dt>Args: </dt>
-<dd><ul class="first last simple">
-<li>start (<code class="docutils literal"><span class="pre">pykep.planet</span></code>): the starting planet</li>
-<li>target (<code class="docutils literal"><span class="pre">pykep.planet</span></code>): the target planet</li>
-<li>N_max (<code class="docutils literal"><span class="pre">int</span></code>): maximum number of impulses</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): the box bounds [lower,upper] for the time of flight (days)</li>
-<li>vinf (<code class="docutils literal"><span class="pre">list</span></code>): the box bounds [lower,upper] for each DV magnitude (km/sec)</li>
-<li>phase_free (<code class="docutils literal"><span class="pre">bool</span></code>): when True, no randezvous condition are enforced and start and arrival anomalies will be free</li>
-<li>multi_objective (<code class="docutils literal"><span class="pre">bool</span></code>):  when True, a multi-objective problem is constructed with DV and time of flight as objectives</li>
-<li>t0 (<code class="docutils literal"><span class="pre">list</span></code>):  the box bounds on the launch window containing two pykep.epoch. This is not needed if phase_free is True.</li>
+<dl class="simple">
+<dt>Args: </dt><dd><ul class="simple">
+<li><p>start (<code class="docutils literal notranslate"><span class="pre">pykep.planet</span></code>): the starting planet</p></li>
+<li><p>target (<code class="docutils literal notranslate"><span class="pre">pykep.planet</span></code>): the target planet</p></li>
+<li><p>N_max (<code class="docutils literal notranslate"><span class="pre">int</span></code>): maximum number of impulses</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): the box bounds [lower,upper] for the time of flight (days)</p></li>
+<li><p>vinf (<code class="docutils literal notranslate"><span class="pre">list</span></code>): the box bounds [lower,upper] for each DV magnitude (km/sec)</p></li>
+<li><p>phase_free (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True, no randezvous condition are enforced and start and arrival anomalies will be free</p></li>
+<li><p>multi_objective (<code class="docutils literal notranslate"><span class="pre">bool</span></code>):  when True, a multi-objective problem is constructed with DV and time of flight as objectives</p></li>
+<li><p>t0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>):  the box bounds on the launch window containing two pykep.epoch. This is not needed if phase_free is True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -542,21 +521,21 @@ between two planets allowing up to a maximum number of impulsive Deep Space Mano
 
 <dl class="method">
 <dt id="pykep.trajopt.pl2pl_N_impulses.pretty">
-<code class="descname">pretty</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.pretty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.pl2pl_N_impulses.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.pl2pl_N_impulses.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = prob.plot_trajectory(x, axes=None)</p>
 <ul class="simple">
-<li>x: encoded trajectory</li>
-<li>axes: matplotlib axis where to plot. If None figure and axis will be created</li>
-<li>[out] ax: matplotlib axis where to plot</li>
+<li><p>x: encoded trajectory</p></li>
+<li><p>axes: matplotlib axis where to plot. If None figure and axis will be created</p></li>
+<li><p>[out] ax: matplotlib axis where to plot</p></li>
 </ul>
 <p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -566,7 +545,7 @@ between two planets allowing up to a maximum number of impulsive Deep Space Mano
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.lt_margo">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">lt_margo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">lt_margo</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can be used as a User Defined Problem (UDP) in the pygmo2 software and if successfully solved,
 represents a low-thrust interplanetary trajectory from the Earth (or from the
 Sun-Earth L1 or L2 Lagrangian point) to a target NEO. The trajectory is modeled using the Sims-Flanagan model, 
@@ -574,48 +553,46 @@ extended to include the Earth’s gravity (assumed constant along each segment).
 The propulsion model can be both nuclear (NEP) or solar (SEP).</p>
 <p>This problem was developed and used during the European Space Agency interplanetary cubesat M-ARGO study.</p>
 <p>The decision vector (chromosome) is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">mf</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">mf</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">throttles2</span><span class="p">]</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.lt_margo.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>prob = lt_margo(target = pk.planet.mpcorb(mpcorbline), n_seg = 30, grid_type = “uniform”, t0 = [epoch(8000), epoch(9000)], tof = [200, 365.25*3], m0 = 20.0, Tmax = 0.0017, Isp = 3000.0, earth_gravity = False, sep = False, start = “earth”)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>target (<code class="docutils literal"><span class="pre">pykep.planet</span></code>): target planet</li>
-<li>n_seg (<code class="docutils literal"><span class="pre">int</span></code>): number of segments to use in the problem transcription (time grid)</li>
-<li>grid_type (<code class="docutils literal"><span class="pre">string</span></code>): “uniform” for uniform segments, “nonuniform” toi use a denser grid in the first part of the trajectory</li>
-<li>t0 (<code class="docutils literal"><span class="pre">list</span></code>): list of two pykep.epoch defining the bounds on the launch epoch</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): list of two floats defining the bounds on the time of flight (days)</li>
-<li>m0 (<code class="docutils literal"><span class="pre">float</span></code>): initial mass of the spacecraft (kg)</li>
-<li>Tmax (<code class="docutils literal"><span class="pre">float</span></code>): maximum thrust at 1 AU (N)</li>
-<li>Isp (<code class="docutils literal"><span class="pre">float</span></code>): engine specific impulse (s)</li>
-<li>earth_gravity (<code class="docutils literal"><span class="pre">bool</span></code>): activates the Earth gravity effect in the dynamics</li>
-<li>sep (<code class="docutils literal"><span class="pre">bool</span></code>): Activates a Solar Electric Propulsion model for the thrust - distance dependency.</li>
-<li>start(<code class="docutils literal"><span class="pre">string</span></code>): Starting point (“earth”, “l1”, or “l2”).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>target (<code class="docutils literal notranslate"><span class="pre">pykep.planet</span></code>): target planet</p></li>
+<li><p>n_seg (<code class="docutils literal notranslate"><span class="pre">int</span></code>): number of segments to use in the problem transcription (time grid)</p></li>
+<li><p>grid_type (<code class="docutils literal notranslate"><span class="pre">string</span></code>): “uniform” for uniform segments, “nonuniform” toi use a denser grid in the first part of the trajectory</p></li>
+<li><p>t0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>): list of two pykep.epoch defining the bounds on the launch epoch</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): list of two floats defining the bounds on the time of flight (days)</p></li>
+<li><p>m0 (<code class="docutils literal notranslate"><span class="pre">float</span></code>): initial mass of the spacecraft (kg)</p></li>
+<li><p>Tmax (<code class="docutils literal notranslate"><span class="pre">float</span></code>): maximum thrust at 1 AU (N)</p></li>
+<li><p>Isp (<code class="docutils literal notranslate"><span class="pre">float</span></code>): engine specific impulse (s)</p></li>
+<li><p>earth_gravity (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): activates the Earth gravity effect in the dynamics</p></li>
+<li><p>sep (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates a Solar Electric Propulsion model for the thrust - distance dependency.</p></li>
+<li><p>start(<code class="docutils literal notranslate"><span class="pre">string</span></code>): Starting point (“earth”, “l1”, or “l2”).</p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">L1 and L2 are approximated as the points on the line connecting the Sun and the Earth at a distance of, respectively, 0.99 and 1.01 AU from the Sun.</p>
+<p class="admonition-title">Note</p>
+<p>L1 and L2 are approximated as the points on the line connecting the Sun and the Earth at a distance of, respectively, 0.99 and 1.01 AU from the Sun.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If the Earth’s gravity is enabled, the starting point cannot be the Earth</p>
+<p class="admonition-title">Note</p>
+<p>If the Earth’s gravity is enabled, the starting point cannot be the Earth</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.lt_margo.pretty">
-<code class="descname">pretty</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.pretty" title="Permalink to this definition">¶</a></dt>
 <dd><p>prob.pretty(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
 </dl>
@@ -624,53 +601,49 @@ The propulsion model can be both nuclear (NEP) or solar (SEP).</p>
 
 <dl class="method">
 <dt id="pykep.trajopt.lt_margo.plot_traj">
-<code class="descname">plot_traj</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.plot_traj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_traj</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.plot_traj" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = prob.plot_traj(self, x, units=AU, plot_segments=True, plot_thrusts=False, axes=None)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
-<li>units (<code class="docutils literal"><span class="pre">float</span></code>): the length unit to be used in the plot</li>
-<li>plot_segments (<code class="docutils literal"><span class="pre">bool</span></code>): when True plots also the segments boundaries</li>
-<li>plot_thrusts (<code class="docutils literal"><span class="pre">bool</span></code>): when True plots also the thrust vectors</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
+<li><p>units (<code class="docutils literal notranslate"><span class="pre">float</span></code>): the length unit to be used in the plot</p></li>
+<li><p>plot_segments (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True plots also the segments boundaries</p></li>
+<li><p>plot_thrusts (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): when True plots also the thrust vectors</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>matplotlib.axes: axes where to plot</dd>
+<dt>Returns:</dt><dd><p>matplotlib.axes: axes where to plot</p>
+</dd>
 </dl>
 <p>Visualizes the the trajectory in a 3D plot</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.lt_margo.plot_dists_thrust">
-<code class="descname">plot_dists_thrust</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.plot_dists_thrust" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_dists_thrust</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.plot_dists_thrust" title="Permalink to this definition">¶</a></dt>
 <dd><p>axes = prob.plot_dists_thrust(self, x, axes=None)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>matplotlib.axes: axes where to plot</dd>
+<dt>Returns:</dt><dd><p>matplotlib.axes: axes where to plot</p>
+</dd>
 </dl>
 <p>Plots the distance of the spacecraft from the Earth/Sun and the thrust profile</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.lt_margo.double_segments">
-<code class="descname">double_segments</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.double_segments" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">double_segments</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.lt_margo.double_segments" title="Permalink to this definition">¶</a></dt>
 <dd><p>new_prob, new_x = prob.double_segments(self,x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>the new udp having twice the segments</li>
-<li>list: the new chromosome to be used as initial guess</li>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p>the new udp having twice the segments</p></li>
+<li><p>list: the new chromosome to be used as initial guess</p></li>
 </ul>
 </dd>
 </dl>
@@ -687,31 +660,30 @@ unfeasible”, due to the new refined Earth’s gravity and/or SEP thrust that a
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.direct_pl2pl">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">direct_pl2pl</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">direct_pl2pl</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a direct transcription transfer between solar system planets.</p>
 <p>This problem works by manipulating the starting epoch t0, the transfer time T the final mass mf and the controls 
 The dicision vector is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">Vxi</span><span class="p">,</span> <span class="n">Vyi</span><span class="p">,</span> <span class="n">Vzi</span><span class="p">,</span> <span class="n">Vxf</span><span class="p">,</span> <span class="n">Vyf</span><span class="p">,</span> <span class="n">Vzf</span><span class="p">,</span> <span class="n">controls</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">Vxi</span><span class="p">,</span> <span class="n">Vyi</span><span class="p">,</span> <span class="n">Vzi</span><span class="p">,</span> <span class="n">Vxf</span><span class="p">,</span> <span class="n">Vyf</span><span class="p">,</span> <span class="n">Vzf</span><span class="p">,</span> <span class="n">controls</span><span class="p">]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.direct_pl2pl.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialises a direct transcription orbit to orbit problem.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>p0 (<code class="docutils literal"><span class="pre">str</span></code>): Departure planet name. (will be used to construct a planet.jpl_lp object)</li>
-<li>pf (<code class="docutils literal"><span class="pre">str</span></code>): Arrival planet name. (will be used to construct a planet.jpl_lp object)</li>
-<li>mass (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</li>
-<li>thrust (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</li>
-<li>isp (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</li>
-<li>nseg (<code class="docutils literal"><span class="pre">int</span></code>): Number of colocation nodes.</li>
-<li>t0 (<code class="docutils literal"><span class="pre">list</span></code>): Launch epochs bounds [mjd2000].</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): Transfer time bounds [days].</li>
-<li>vinf_dep (<code class="docutils literal"><span class="pre">float</span></code>): allowed launch DV [km/s]</li>
-<li>vinf_arr (<code class="docutils literal"><span class="pre">float</span></code>): allowed arrival DV [km/s]</li>
-<li>hf (<code class="docutils literal"><span class="pre">bool</span></code>): High-fidelity. Activates a continuous representation for the thrust.</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>p0 (<code class="docutils literal notranslate"><span class="pre">str</span></code>): Departure planet name. (will be used to construct a planet.jpl_lp object)</p></li>
+<li><p>pf (<code class="docutils literal notranslate"><span class="pre">str</span></code>): Arrival planet name. (will be used to construct a planet.jpl_lp object)</p></li>
+<li><p>mass (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</p></li>
+<li><p>thrust (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</p></li>
+<li><p>isp (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</p></li>
+<li><p>nseg (<code class="docutils literal notranslate"><span class="pre">int</span></code>): Number of colocation nodes.</p></li>
+<li><p>t0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>): Launch epochs bounds [mjd2000].</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): Transfer time bounds [days].</p></li>
+<li><p>vinf_dep (<code class="docutils literal notranslate"><span class="pre">float</span></code>): allowed launch DV [km/s]</p></li>
+<li><p>vinf_arr (<code class="docutils literal notranslate"><span class="pre">float</span></code>): allowed arrival DV [km/s]</p></li>
+<li><p>hf (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): High-fidelity. Activates a continuous representation for the thrust.</p></li>
 </ul>
 </dd>
 </dl>
@@ -719,12 +691,11 @@ The dicision vector is:</p>
 
 <dl class="method">
 <dt id="pykep.trajopt.direct_pl2pl.pretty">
-<code class="descname">pretty</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.pretty" title="Permalink to this definition">¶</a></dt>
 <dd><p>pretty(x)</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
 </dl>
@@ -733,14 +704,13 @@ The dicision vector is:</p>
 
 <dl class="method">
 <dt id="pykep.trajopt.direct_pl2pl.plot_traj">
-<code class="descname">plot_traj</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.plot_traj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_traj</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.plot_traj" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function plots the 3 dimensional spacecraft trajectory, given a solution chromosome.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>z (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
-<li>units (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): units by which to scale the trajectory dimensions.</li>
-<li>N (<code class="docutils literal"><span class="pre">int</span></code>): Number of points to be plotted along one arc.</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>z (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
+<li><p>units (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): units by which to scale the trajectory dimensions.</p></li>
+<li><p>N (<code class="docutils literal notranslate"><span class="pre">int</span></code>): Number of points to be plotted along one arc.</p></li>
 </ul>
 </dd>
 </dl>
@@ -748,14 +718,13 @@ The dicision vector is:</p>
 
 <dl class="method">
 <dt id="pykep.trajopt.direct_pl2pl.plot_control">
-<code class="descname">plot_control</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.plot_control" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_control</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.plot_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the control profile of the trajectory, as a function of time.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>z (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
-<li>mark (<code class="docutils literal"><span class="pre">string</span></code>): matplotlib marker.</li>
-<li>time (<code class="docutils literal"><span class="pre">bool</span></code>): If <code class="docutils literal"><span class="pre">True</span></code>, x-axis is time in <code class="docutils literal"><span class="pre">mjd2000</span></code>. If <code class="docutils literal"><span class="pre">False</span></code>, x-axis is node index.</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>z (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
+<li><p>mark (<code class="docutils literal notranslate"><span class="pre">string</span></code>): matplotlib marker.</p></li>
+<li><p>time (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, x-axis is time in <code class="docutils literal notranslate"><span class="pre">mjd2000</span></code>. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, x-axis is node index.</p></li>
 </ul>
 </dd>
 </dl>
@@ -763,22 +732,21 @@ The dicision vector is:</p>
 
 <dl class="method">
 <dt id="pykep.trajopt.direct_pl2pl.get_traj">
-<code class="descname">get_traj</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.get_traj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_traj</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.direct_pl2pl.get_traj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the trajectory information.
 The returned np.array contains:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">traj</span> <span class="o">=</span> <span class="p">[[</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">vx0</span><span class="p">,</span> <span class="n">vy0</span><span class="p">,</span> <span class="n">vz0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">ux0</span><span class="p">,</span> <span class="n">uy0</span><span class="p">,</span> <span class="n">uz0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">traj</span> <span class="o">=</span> <span class="p">[[</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">vx0</span><span class="p">,</span> <span class="n">vy0</span><span class="p">,</span> <span class="n">vz0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">ux0</span><span class="p">,</span> <span class="n">uy0</span><span class="p">,</span> <span class="n">uz0</span><span class="p">]</span>
         <span class="o">...</span>
         <span class="p">[</span><span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">vxf</span><span class="p">,</span> <span class="n">vyf</span><span class="p">,</span> <span class="n">vzf</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">uf</span><span class="p">,</span> <span class="n">uxf</span><span class="p">,</span> <span class="n">uyf</span><span class="p">,</span> <span class="n">uzf</span><span class="p">]]</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>z (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal"><span class="pre">pygmo.population.champion_x</span></code>).</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>z (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Decision chromosome, e.g. (<code class="docutils literal notranslate"><span class="pre">pygmo.population.champion_x</span></code>).</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>np.array full information on states and controls along the trajectory nodes</dd>
+<dt>Returns:</dt><dd><p>np.array full information on states and controls along the trajectory nodes</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -787,12 +755,12 @@ The returned np.array contains:</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.mr_lt_nep">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">mr_lt_nep</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">mr_lt_nep</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents, as a global optimization problem (linearly constrained,
 high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
 with a nuclear electric propulsion engine.</p>
 <ul class="simple">
-<li>Izzo, D. et al., GTOC7 - Solution Returned by the ACT/ISAS team</li>
+<li><p>Izzo, D. et al., GTOC7 - Solution Returned by the ACT/ISAS team</p></li>
 </ul>
 <p>The decision vector (chromosome) is:
 [t1, tof1, rest1, m_f1] + [throttles1] +
@@ -800,43 +768,43 @@ with a nuclear electric propulsion engine.</p>
 …. + [total_tof]</p>
 <p>where the units are [mjd2000, days, days, kg] + [n/a] + …. + [days]</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.</p>
+<p class="admonition-title">Note</p>
+<p>The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.</p>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.mr_lt_nep.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>prob = mr_lt_nep(seq=[pykep.gtoc7(3413),pykep.gtoc7(234), pykep.gtoc7(11432)], n_seg=5, t0=[13000, 13200],</dt>
-<dd>leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
-Isp=3000., traj_tof=365.25 * 6, objective=’mass’, c_tol=1e-05)</dd>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>prob = mr_lt_nep(seq=[pykep.gtoc7(3413),pykep.gtoc7(234), pykep.gtoc7(11432)], n_seg=5, t0=[13000, 13200],</dt><dd><p>leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
+Isp=3000., traj_tof=365.25 * 6, objective=’mass’, c_tol=1e-05)</p>
+</dd>
 </dl>
 <ul class="simple">
-<li>seq: list of pykep.planet defining the encounter sequence for the trajectoty (including the initial planet)</li>
-<li>n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)</li>
-<li>t0: list of two pykep epochs defining the launch window</li>
-<li>leg_tof: list of two floats defining the minimum and maximum time of each leg (days)</li>
-<li>rest: list of two floats defining the minimum and maximum time the spacecraft can rest at one planet (days)</li>
-<li>mass: list of two floats defining the minimum final spacecraft mass and the starting spacecraft mass (kg)</li>
-<li>Tmax: maximum thrust (N)</li>
-<li>Isp: engine specific impulse (sec)</li>
-<li>traj_tof maximum total mission duration (days)</li>
-<li>c_tol: tolerance on the constraints</li>
+<li><p>seq: list of pykep.planet defining the encounter sequence for the trajectoty (including the initial planet)</p></li>
+<li><p>n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)</p></li>
+<li><p>t0: list of two pykep epochs defining the launch window</p></li>
+<li><p>leg_tof: list of two floats defining the minimum and maximum time of each leg (days)</p></li>
+<li><p>rest: list of two floats defining the minimum and maximum time the spacecraft can rest at one planet (days)</p></li>
+<li><p>mass: list of two floats defining the minimum final spacecraft mass and the starting spacecraft mass (kg)</p></li>
+<li><p>Tmax: maximum thrust (N)</p></li>
+<li><p>Isp: engine specific impulse (sec)</p></li>
+<li><p>traj_tof maximum total mission duration (days)</p></li>
+<li><p>c_tol: tolerance on the constraints</p></li>
 </ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt.mr_lt_nep.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.mr_lt_nep.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = prob.plot(x, ax=None)</p>
 <ul class="simple">
-<li>x: encoded trajectory</li>
-<li>ax: matplotlib axis where to plot. If None figure and axis will be created</li>
-<li>[out] ax: matplotlib axis where to plot</li>
+<li><p>x: encoded trajectory</p></li>
+<li><p>ax: matplotlib axis where to plot. If None figure and axis will be created</p></li>
+<li><p>[out] ax: matplotlib axis where to plot</p></li>
 </ul>
 <p>Plots the trajectory represented by a decision vector x on the 3d axis ax</p>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -846,31 +814,30 @@ Isp=3000., traj_tof=365.25 * 6, objective=’mass’, c_tol=1e-05)</dd>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.indirect_pt2pt">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">indirect_pt2pt</code><span class="sig-paren">(</span><em>_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2pt" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">indirect_pt2pt</code><span class="sig-paren">(</span><em class="sig-param">_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2pt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an indirect trajectory optimisation problem between two Cartesian states with heliocentric dynamics.
 The class can be used as UDP in pagmo.</p>
 <p>The decision chromosome is</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.indirect_pt2pt.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2pt.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructs an instance of the <code class="docutils literal"><span class="pre">pykep.trajopt.indirect_pt2pt</span></code> problem.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x0 (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Departure state [m, m, m, m/s, m/s, m/s, kg].</li>
-<li>xf (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Arrival state [m, m, m, m/s, m/s, m/s, kg].</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): Transfer time bounds [days].</li>
-<li>thrust (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</li>
-<li>isp (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</li>
-<li>mu (<code class="docutils literal"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</li>
-<li>freetime (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</li>
-<li>alpha (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Homotopy parameter (0 -quadratic control, 1 - mass optimal)</li>
-<li>bound (<code class="docutils literal"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</li>
-<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
-<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2pt.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an instance of the <code class="docutils literal notranslate"><span class="pre">pykep.trajopt.indirect_pt2pt</span></code> problem.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Departure state [m, m, m, m/s, m/s, m/s, kg].</p></li>
+<li><p>xf (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Arrival state [m, m, m, m/s, m/s, m/s, kg].</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): Transfer time bounds [days].</p></li>
+<li><p>thrust (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</p></li>
+<li><p>isp (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</p></li>
+<li><p>mu (<code class="docutils literal notranslate"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</p></li>
+<li><p>freetime (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</p></li>
+<li><p>alpha (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Homotopy parameter (0 -quadratic control, 1 - mass optimal)</p></li>
+<li><p>bound (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</p></li>
+<li><p>atol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Absolute integration solution tolerance.</p></li>
+<li><p>rtol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Relative integration solution tolerance.</p></li>
 </ul>
 </dd>
 </dl>
@@ -881,31 +848,30 @@ The class can be used as UDP in pagmo.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.indirect_or2or">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">indirect_or2or</code><span class="sig-paren">(</span><em>_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_or2or" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">indirect_or2or</code><span class="sig-paren">(</span><em class="sig-param">_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_or2or" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an indirect trajectory optimisation problem between two orbits.</p>
 <p>Decision chromosome is</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">M0</span><span class="p">,</span> <span class="n">Mf</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">M0</span><span class="p">,</span> <span class="n">Mf</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.indirect_or2or.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_or2or.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialises <code class="docutils literal"><span class="pre">pykep.trajopt.indirect_or2or</span></code> problem.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>elem0 (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Departure Keplerian elements (mutable eccentric anomaly).</li>
-<li>elemf (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Arrival Keplerian elements (mutable eccentric anomaly).</li>
-<li>mass (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</li>
-<li>thrust (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</li>
-<li>isp (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</li>
-<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
-<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): Transfer time bounds [days].</li>
-<li>freetime (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</li>
-<li>alpha (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.</li>
-<li>bound (<code class="docutils literal"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</li>
-<li>mu (<code class="docutils literal"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</li>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_or2or.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises <code class="docutils literal notranslate"><span class="pre">pykep.trajopt.indirect_or2or</span></code> problem.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>elem0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Departure Keplerian elements (mutable eccentric anomaly).</p></li>
+<li><p>elemf (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Arrival Keplerian elements (mutable eccentric anomaly).</p></li>
+<li><p>mass (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</p></li>
+<li><p>thrust (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</p></li>
+<li><p>isp (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</p></li>
+<li><p>atol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Absolute integration solution tolerance.</p></li>
+<li><p>rtol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Relative integration solution tolerance.</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): Transfer time bounds [days].</p></li>
+<li><p>freetime (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</p></li>
+<li><p>alpha (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.</p></li>
+<li><p>bound (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</p></li>
+<li><p>mu (<code class="docutils literal notranslate"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</p></li>
 </ul>
 </dd>
 </dl>
@@ -916,31 +882,30 @@ The class can be used as UDP in pagmo.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt.indirect_pt2or">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">indirect_pt2or</code><span class="sig-paren">(</span><em>_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2or" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">indirect_pt2or</code><span class="sig-paren">(</span><em class="sig-param">_indirect_base</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2or" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an indirect trajectory optimisation problem between a Cartesian state and an orbit.</p>
 <p>Decision chromosome is</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Mf</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Mf</span><span class="p">,</span> <span class="n">l0</span><span class="p">]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.indirect_pt2or.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2or.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialises <code class="docutils literal"><span class="pre">pykep.trajopt.indirect_pt2or</span></code> problem.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>x0 (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Departure state [m, m, m, m/s, m/s, m/s, kg].</li>
-<li>elemf (<code class="docutils literal"><span class="pre">list</span></code>, <code class="docutils literal"><span class="pre">tuple</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>): Arrival Keplerian elements SI units. (mean anomaly will be changed).</li>
-<li>mass (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</li>
-<li>thrust (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</li>
-<li>isp (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</li>
-<li>atol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Absolute integration solution tolerance.</li>
-<li>rtol (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Relative integration solution tolerance.</li>
-<li>tof (<code class="docutils literal"><span class="pre">list</span></code>): Transfer time bounds [days].</li>
-<li>freetime (<code class="docutils literal"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</li>
-<li>alpha (<code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">int</span></code>): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.</li>
-<li>bound (<code class="docutils literal"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</li>
-<li>mu (<code class="docutils literal"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</li>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.indirect_pt2or.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialises <code class="docutils literal notranslate"><span class="pre">pykep.trajopt.indirect_pt2or</span></code> problem.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>x0 (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Departure state [m, m, m, m/s, m/s, m/s, kg].</p></li>
+<li><p>elemf (<code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>): Arrival Keplerian elements SI units. (mean anomaly will be changed).</p></li>
+<li><p>mass (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft wet mass [kg].</p></li>
+<li><p>thrust (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft maximum thrust [N].</p></li>
+<li><p>isp (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Spacecraft specific impulse [s].</p></li>
+<li><p>atol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Absolute integration solution tolerance.</p></li>
+<li><p>rtol (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Relative integration solution tolerance.</p></li>
+<li><p>tof (<code class="docutils literal notranslate"><span class="pre">list</span></code>): Transfer time bounds [days].</p></li>
+<li><p>freetime (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates final time transversality condition. Allows final time to vary.</p></li>
+<li><p>alpha (<code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.</p></li>
+<li><p>bound (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.</p></li>
+<li><p>mu (<code class="docutils literal notranslate"><span class="pre">float</span></code>): Gravitational parametre of primary body [m^3/s^2].</p></li>
 </ul>
 </dd>
 </dl>
@@ -951,17 +916,16 @@ The class can be used as UDP in pagmo.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="pykep.trajopt._launchers">
-<em class="property">class </em><code class="descclassname">pykep.trajopt.</code><code class="descname">_launchers</code><a class="headerlink" href="#pykep.trajopt._launchers" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.trajopt.</code><code class="sig-name descname">_launchers</code><a class="headerlink" href="#pykep.trajopt._launchers" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class contains a few functions that return the mass launchers can deliver
 to a certain declination / vinf.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">In pykep the object pykep.trajopt.launchers is already an instance of this class and is to be used
+<p class="admonition-title">Note</p>
+<p>In pykep the object pykep.trajopt.launchers is already an instance of this class and is to be used
 as it has all the data preallocated upon import.</p>
 </div>
-<dl class="docutils">
-<dt>Examples:</dt>
-<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
+<dl>
+<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mass</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">launchers</span><span class="o">.</span><span class="n">soyuzf</span><span class="p">(</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">33.21</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mass2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">launchers</span><span class="o">.</span><span class="n">atlas501</span><span class="p">(</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">33.21</span><span class="p">)</span>
 </pre></div>
@@ -970,56 +934,53 @@ as it has all the data preallocated upon import.</p>
 </dl>
 <dl class="method">
 <dt id="pykep.trajopt._launchers.atlas501">
-<code class="descname">atlas501</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.atlas501" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">atlas501</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.atlas501" title="Permalink to this definition">¶</a></dt>
 <dd><p>atlas501(vinfs, decls)</p>
 <p>Computes the mass that the Atlas 501 launcher can deliver to a certain vinf and declination.
 If the inputs are arrays, then a mesh is considered and the mass is returned on points of the mesh</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>vinfs (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</li>
-<li>decls (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the declination in degrees</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>vinfs (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</p></li>
+<li><p>decls (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the declination in degrees</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</dd>
+<dt>Returns:</dt><dd><p>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt._launchers.soyuzf">
-<code class="descname">soyuzf</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.soyuzf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">soyuzf</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.soyuzf" title="Permalink to this definition">¶</a></dt>
 <dd><p>soyuzf(vinfs, decls)</p>
 <p>Computes the mass that the Soyutz-Fregat launcher can deliver to a certain vinf and declination.
 If the inputs are arrays, then a mesh is considered and the mass is returned on points of the mesh</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>vinfs (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</li>
-<li>decls (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the declination in degrees</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>vinfs (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</p></li>
+<li><p>decls (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the declination in degrees</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</dd>
+<dt>Returns:</dt><dd><p>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pykep.trajopt._launchers.ariane5">
-<code class="descname">ariane5</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.ariane5" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ariane5</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt._launchers.ariane5" title="Permalink to this definition">¶</a></dt>
 <dd><p>ariane5(vinfs, decls)</p>
 <p>Computes the mass that the Ariane5 launcher can deliver to a certain vinf and declination, assuming
 a launch from Kourou. Data provided to ESOC by Arianespace when Ariane launch for ExoMars was an option.
 If the inputs are arrays, then a mesh is considered and the mass is returned on points of the mesh.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>vinfs (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</li>
-<li>decls (<code class="docutils literal"><span class="pre">float</span></code> or array-like): the declination in degrees</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>vinfs (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the hyperbolic escape velocity in km/s</p></li>
+<li><p>decls (<code class="docutils literal notranslate"><span class="pre">float</span></code> or array-like): the declination in degrees</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt>
-<dd>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</dd>
+<dt>Returns:</dt><dd><p>Numpy array containg the mass delivered to escape with said declinations and magnitudes.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1028,7 +989,7 @@ If the inputs are arrays, then a mesh is considered and the mass is returned on 
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.cassini1">
-<code class="descclassname">gym.</code><code class="descname">cassini1</code><em class="property"> = Cassini MGA direct tof encoding (Trajectory Optimisation Gym P1)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">cassini1</code><em class="property"> = Cassini MGA direct tof encoding (Trajectory Optimisation Gym P1)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This is an MGA problem inspired to the Cassini spacecraft interplanetary transfer to Saturn.
@@ -1038,89 +999,89 @@ E-VVEJ-S (as the one used by Cassini spacecraft).
 As objective function we use the total deltaV accumulated during the mission, including the launch deltaV
 and the various deltaV one needs to give at the planets and upon arrival to perform the final orbit injection.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A more complex representation of this interplanetary trajectory transfer can be found
-in <a class="reference internal" href="#pykep.trajopt.gym.cassini2" title="pykep.trajopt.gym.cassini2"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini2</span></code></a></p>
+<p class="admonition-title">Note</p>
+<p>A more complex representation of this interplanetary trajectory transfer can be found
+in <a class="reference internal" href="#pykep.trajopt.gym.cassini2" title="pykep.trajopt.gym.cassini2"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini2</span></code></a></p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.cassini1_a">
-<code class="descclassname">gym.</code><code class="descname">cassini1_a</code><em class="property"> = Cassini MGA alpha tof encoding (Trajectory Optimisation Gym P2)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_a" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">cassini1_a</code><em class="property"> = Cassini MGA alpha tof encoding (Trajectory Optimisation Gym P2)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_a" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a>,
 but the time of flights are encoded using the alpha encoding technique.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.cassini1_n">
-<code class="descclassname">gym.</code><code class="descname">cassini1_n</code><em class="property"> = Cassini1 MGA eta tof encoding (Trajectory Optimisation Gym P3)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_n" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">cassini1_n</code><em class="property"> = Cassini1 MGA eta tof encoding (Trajectory Optimisation Gym P3)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_n" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.cassini1</span></code></a>,
 but the time of flights are encoded using the eta encoding technique.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.em3imp">
-<code class="descclassname">gym.</code><code class="descname">em3imp</code><em class="property"> = Earth-Mars 3 impulses (Trajectory Optimisation Gym P4)</em><a class="headerlink" href="#pykep.trajopt.gym.em3imp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">em3imp</code><em class="property"> = Earth-Mars 3 impulses (Trajectory Optimisation Gym P4)</em><a class="headerlink" href="#pykep.trajopt.gym.em3imp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This is a simple Earth Mars transfer that has the possibility to use multiple impulses. While the actual solution
 may not need more than a few, the problem is used to study the alpha encoding for manouvre timings and its evolvability.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The problem is rather simple and is used to study the multiple impulse transription (using alpha encoding)
-comparing it to the folowing problems <a class="reference internal" href="#pykep.trajopt.gym.em5imp" title="pykep.trajopt.gym.em5imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em5imp</span></code></a> and <a class="reference internal" href="#pykep.trajopt.gym.em7imp" title="pykep.trajopt.gym.em7imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em7imp</span></code></a>
+<p class="admonition-title">Note</p>
+<p>The problem is rather simple and is used to study the multiple impulse transription (using alpha encoding)
+comparing it to the folowing problems <a class="reference internal" href="#pykep.trajopt.gym.em5imp" title="pykep.trajopt.gym.em5imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em5imp</span></code></a> and <a class="reference internal" href="#pykep.trajopt.gym.em7imp" title="pykep.trajopt.gym.em7imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em7imp</span></code></a>
 having increasing number of impulses.</p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.em5imp">
-<code class="descclassname">gym.</code><code class="descname">em5imp</code><em class="property"> = Earth-Mars 5 impulses (Trajectory Optimisation Gym P5)</em><a class="headerlink" href="#pykep.trajopt.gym.em5imp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">em5imp</code><em class="property"> = Earth-Mars 5 impulses (Trajectory Optimisation Gym P5)</em><a class="headerlink" href="#pykep.trajopt.gym.em5imp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a>,
 but the number of impulses is increased.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.em7imp">
-<code class="descclassname">gym.</code><code class="descname">em7imp</code><em class="property"> = Earth-Mars 7 impulses (Trajectory Optimisation Gym P6)</em><a class="headerlink" href="#pykep.trajopt.gym.em7imp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">em7imp</code><em class="property"> = Earth-Mars 7 impulses (Trajectory Optimisation Gym P6)</em><a class="headerlink" href="#pykep.trajopt.gym.em7imp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.em3imp" title="pykep.trajopt.gym.em3imp"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.em3imp</span></code></a>,
 but the number of impulses is increased.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.eve_mga1dsm">
-<code class="descclassname">gym.</code><code class="descname">eve_mga1dsm</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">eve_mga1dsm</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This is an Earth - Venus - Earth transfer where 1 deep space manouvre is allowed at each leg.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Together with the problems <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="pykep.trajopt.gym.eve_mga1dsm_a"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_a</span></code></a> and <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="pykep.trajopt.gym.eve_mga1dsm_n"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_n</span></code></a>
+<p class="admonition-title">Note</p>
+<p>Together with the problems <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="pykep.trajopt.gym.eve_mga1dsm_a"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_a</span></code></a> and <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="pykep.trajopt.gym.eve_mga1dsm_n"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm_n</span></code></a>
 this simple problem is used to study the alpha, eta and direct encoding for the time of flights of an mga-1DSM
 type of problem.</p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.eve_mga1dsm_a">
-<code class="descclassname">gym.</code><code class="descname">eve_mga1dsm_a</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">eve_mga1dsm_a</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a>,
 but the time of flights are encoded using the alpha encoding technique.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.eve_mga1dsm_n">
-<code class="descclassname">gym.</code><code class="descname">eve_mga1dsm_n</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">eve_mga1dsm_n</code><em class="property"> = Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)</em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a>,
+<p>This is the same as <a class="reference internal" href="#pykep.trajopt.gym.eve_mga1dsm" title="pykep.trajopt.gym.eve_mga1dsm"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.eve_mga1dsm</span></code></a>,
 but the time of flights are encoded using the eta encoding technique.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.cassini2">
-<code class="descclassname">gym.</code><code class="descname">cassini2</code><em class="property"> = Cassini 2 (Trajectory Optimisation Gym P11)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">cassini2</code><em class="property"> = Cassini 2 (Trajectory Optimisation Gym P11)</em><a class="headerlink" href="#pykep.trajopt.gym.cassini2" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This is an MGA-1DSM problem inspired to the <a class="reference external" href="https://www.nasa.gov/mission_pages/cassini/main/index.html">Cassini</a>
@@ -1130,14 +1091,14 @@ The planetary fly-by sequence considered is E-VVEJ-S (as the one used by Cassini
 As objective function we use the total deltaV accumulated during the mission by the spacecraft,
 including the one necessary for the final orbit injection.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
+<p class="admonition-title">Note</p>
+<p>A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
 with the same name, but different implementation details and mission definition. They should not be comapred.</p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.rosetta">
-<code class="descclassname">gym.</code><code class="descname">rosetta</code><em class="property"> = Rosetta (Trajectory Optimisation Gym P10)</em><a class="headerlink" href="#pykep.trajopt.gym.rosetta" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">rosetta</code><em class="property"> = Rosetta (Trajectory Optimisation Gym P10)</em><a class="headerlink" href="#pykep.trajopt.gym.rosetta" title="Permalink to this definition">¶</a></dt>
 <dd><p>This represents a rendezvous mission to the comet 67P/Churyumov-Gerasimenko modelled as an MGA-1DSM transfer.
 The fly-by sequence selected (i.e. E-EMEE-C) is similar to the one planned for the spacecraft
 <a class="reference external" href="http://www.esa.int/Our_Activities/Space_Science/Rosetta">Rosetta</a>. The objective function considered is the
@@ -1146,15 +1107,15 @@ in the delta V computations.</p>
 </dd></dl>
 
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
+<p class="admonition-title">Note</p>
+<p>A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
 with the same name, but different implementation details and mission definition. They should not be comapred.</p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.tandem">
-<code class="descclassname">pykep.trajopt.gym.</code><code class="descname">tandem</code><a class="headerlink" href="#pykep.trajopt.gym.tandem" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym._tandem._tandem_udp</span></code></p>
+<code class="sig-prename descclassname">pykep.trajopt.gym.</code><code class="sig-name descname">tandem</code><a class="headerlink" href="#pykep.trajopt.gym.tandem" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym._tandem._tandem_udp</span></code></p>
 </dd></dl>
 
 <p>This class represents a rendezvous mission to Saturn modelled as an MGA-1DSM transfer. Mission parameters are
@@ -1164,29 +1125,28 @@ at Saturn is the main objective of this optimization problem.</p>
 European Space Agency working group on mission analysis on the mission named TandEM. TandEM is an interplanetary
 mission aimed at reaching Titan and Enceladus (two moons of Saturn).</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The Titan and Enceladus Mission (TandEM), an ambitious scientific mission to study the Saturnian system
+<p class="admonition-title">Note</p>
+<p>The Titan and Enceladus Mission (TandEM), an ambitious scientific mission to study the Saturnian system
 with particular emphasis on the moons Titan and Enceladus, was selected in October 2007 as a candidate mission
 within the ESA Cosmic Vision plan. In February 2009, TandEM exited the Cosmic Vision programme when ESA
 and NASA chose EJSM-Laplace as the L-class outer Solar System mission candidate.</p>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A significantly similar version of this problem was part of the no longer maintained GTOP database,
+<p class="admonition-title">Note</p>
+<p>A significantly similar version of this problem was part of the no longer maintained GTOP database,
 <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">https://www.esa.int/gsp/ACT/projects/gtop/gtop.html</a>. The exact definition is, though, different and results
 cannot thus not be compared to those posted in GTOP.</p>
 </div>
 <dl class="method">
 <dt id="pykep.trajopt.gym._tandem._tandem_udp.__init__">
-<code class="descclassname">_tandem_udp.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>prob_id = 1</em>, <em>constrained = True</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym._tandem._tandem_udp.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">_tandem_udp.</code><code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">prob_id = 1</em>, <em class="sig-param">constrained = True</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym._tandem._tandem_udp.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>The TandEM problem of the trajectory gym consists in 48 different instances varying in fly-by sequence and
 the presence of a time constraint.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><ul class="first last simple">
-<li>prob_id (int): The problem id defines the fly-by sequence.</li>
-<li>constrained (bool): Activates the constraint on the time of flight 
-(fitness will thus return two numbers, the objectove function and the inequality constraint violation)</li>
+<dl class="simple">
+<dt>Args:</dt><dd><ul class="simple">
+<li><p>prob_id (int): The problem id defines the fly-by sequence.</p></li>
+<li><p>constrained (bool): Activates the constraint on the time of flight 
+(fitness will thus return two numbers, the objectove function and the inequality constraint violation)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1195,7 +1155,7 @@ the presence of a time constraint.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.juice">
-<code class="descclassname">gym.</code><code class="descname">juice</code><em class="property"> = Juice (Trajectory Optimisation Gym P13-14)</em><a class="headerlink" href="#pykep.trajopt.gym.juice" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">juice</code><em class="property"> = Juice (Trajectory Optimisation Gym P13-14)</em><a class="headerlink" href="#pykep.trajopt.gym.juice" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>This class represents a rendezvous mission to Jupiter modelled as an MGA-1DSM transfer. The selected fly-by sequence,
@@ -1203,23 +1163,23 @@ E-EVEME-J, and other parameters are inspired to the ESA <a class="reference exte
 A launcher model (i.e. Ariane 5) is also used, so that the final mass delivered at Saturn is the main objective
 of this optimization problem.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA’s Cosmic Vision 2015-2025 programme.
+<p class="admonition-title">Note</p>
+<p>JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA’s Cosmic Vision 2015-2025 programme.
 Planned for launch in 2022 and arrival at Jupiter in 2029, it will spend at least three years making detailed
 observations of the giant gaseous planet Jupiter and three of its largest moons, Ganymede, Callisto and Europa.</p>
 </div>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.juice_mo">
-<code class="descclassname">gym.</code><code class="descname">juice_mo</code><em class="property"> = Juice (Trajectory Optimisation Gym P13-14)</em><a class="headerlink" href="#pykep.trajopt.gym.juice_mo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">juice_mo</code><em class="property"> = Juice (Trajectory Optimisation Gym P13-14)</em><a class="headerlink" href="#pykep.trajopt.gym.juice_mo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>This is the multiobjective version of <a class="reference internal" href="#pykep.trajopt.gym.juice" title="pykep.trajopt.gym.juice"><code class="xref py py-class docutils literal"><span class="pre">pykep.trajopt.gym.juice</span></code></a>.
+<p>This is the multiobjective version of <a class="reference internal" href="#pykep.trajopt.gym.juice" title="pykep.trajopt.gym.juice"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.juice</span></code></a>.
 Time of flights are encoded using the alpha encoding.</p>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="pykep.trajopt.gym.messenger">
-<code class="descclassname">gym.</code><code class="descname">messenger</code><em class="property"> = &lt;pykep.trajopt.gym._messenger._messenger_udp object&gt;</em><a class="headerlink" href="#pykep.trajopt.gym.messenger" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gym.</code><code class="sig-name descname">messenger</code><em class="property"> = &lt;pykep.trajopt.gym._messenger._messenger_udp object&gt;</em><a class="headerlink" href="#pykep.trajopt.gym.messenger" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a rendezvous mission to Mercury modelled as an MGA-1DSM transfer. The selected fly-by sequence,
 E-VVMeMeMe-Me, and other parameters are inspired to the Messenger mission. We have only omitted the first Earth fly-by that
 was used to correct for launcher performances, since we here do not make use of a luncher model.
@@ -1232,8 +1192,8 @@ use of additional problem knowledge is possible, but limiting the number of fitn
 </dd></dl>
 
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
+<p class="admonition-title">Note</p>
+<p>A similar problem was also part of the ESA’s <a class="reference external" href="https://www.esa.int/gsp/ACT/projects/gtop/gtop.html">GTOP database</a>
 with the same name, but different implementation details and mission definition. They should not be comapred.</p>
 </div>
 </div>
@@ -1253,7 +1213,7 @@ with the same name, but different implementation details and mission definition.
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
     </p>
   </div>
 </footer>
