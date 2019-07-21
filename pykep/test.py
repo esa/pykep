@@ -137,6 +137,8 @@ class gym_test_case(_ut.TestCase):
         self.run_rosetta_test()
         self.run_cassini2_test()
         self.run_tandem_test()
+        self.run_juice_test()
+        self.run_messenger_test()
 
     def run_rosetta_test(self):
         from .trajopt import gym
@@ -182,6 +184,17 @@ class gym_test_case(_ut.TestCase):
         1.96917559e-01,  1.08471126e+03]
         self.assertAlmostEqual(udp.fitness(x)[0], -7.987614956531155)
 
+    def run_messenger_test(self):
+        from .trajopt import gym
+        udp = gym.messenger
+        x = [ 2.03241398e+03,  6.40762059e-01,  6.63357785e-01,  4.04989271e+03,
+        6.63732323e-01,  4.50068524e+02, -3.86553343e+00,  3.52631372e+00,
+        5.57888828e-01,  2.24619580e+02, -4.45910441e+00,  1.22736521e+00,
+        7.08063036e-01,  2.17965497e+02, -2.47894274e+00,  1.43586128e+00,
+        5.88391838e-01,  2.62423586e+02, -2.40594385e-02,  2.45470457e+00,
+        7.25370468e-01,  3.58067954e+02,  1.47192632e+00,  1.05000000e+00,
+        9.02984391e-01,  5.38436770e+02]
+        self.assertAlmostEqual(udp.fitness(x)[0], 5855.814336322983)
 
 
 def run_test_suite(level=0):

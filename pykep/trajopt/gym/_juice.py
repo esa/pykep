@@ -9,11 +9,20 @@ from copy import deepcopy
 
 class _juice_udp(mga_1dsm):
     """
-    Write Me
+    This class represents a rendezvous mission to Jupiter modelled as an MGA-1DSM transfer. The selected fly-by sequence,
+    E-EVEME-J, and other parameters are inspired to the ESA Juice mission. A luncher model is included, namely an Ariane5 
+    launch from Kourou. 
+    JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA's Cosmic Vision 2015-2025 programme. 
+    Planned for launch in 2022 and arrival at Jupiter in 2029, it will spend at least three years making detailed
+    observations of the giant gaseous planet Jupiter and three of its largest moons, Ganymede, Callisto and Europa.
     """
-    def __init__(self):
+    def __init__(self, multi_objective, tof_encoding, tof):
         """
-        Write Me
+        Args:
+            - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objectove
+            - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selecst the encoding for the time of flights
+            - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
+
         """
         # Redefining the planets as to change their safe radius
         earth = jpl_lp('earth')
@@ -25,15 +34,15 @@ class _juice_udp(mga_1dsm):
         mars.safe_radius = 1.05
         jupiter = jpl_lp('jupiter')
 
-        super(_juice_udp, self).__init__(
+        super().__init__(
             seq=[earth, earth, venus, earth, mars, earth, jupiter],
             t0=[8000, 8400],
-            tof=[[300, 400], [100, 200], [300, 400], [100, 200], [600, 700], [1000, 1100]],
+            tof=tof,
             vinf=[1., 4.],
             add_vinf_dep=False,
             add_vinf_arr=True,
-            tof_encoding='direct',
-            multi_objective=False,
+            tof_encoding=tof_encoding,
+            multi_objective=multi_objective,
             orbit_insertion=True,
             e_target=0.98531407996358,
             rp_target=1070400000,
@@ -57,7 +66,7 @@ class _juice_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV = super(_juice_udp, self).fitness(x)[0]
+        DV = super().fitness(x)[0]
         DV = DV + 275.  # losses for 5 swingbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         # Numerical guard for the exponential
@@ -85,7 +94,7 @@ class _juice_udp(mga_1dsm):
 
           print(prob.pretty(x))
         """
-        super(_juice_udp, self).pretty(x)
+        super().pretty(x)
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
         # We transform it (only the needed component) to an equatorial system rotating along x 
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
@@ -99,7 +108,7 @@ class _juice_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV = super(_juice_udp, self).fitness(x)[0]
+        DV = super().fitness(x)[0]
         DV = DV + 275.  # losses for 5 swgbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         print("\nInitial mass:", m_initial)
@@ -108,4 +117,6 @@ class _juice_udp(mga_1dsm):
 
 
 # Problem P13: JUICE mission MGA1DSM, single objective, direct encoding
-juice = _juice_udp()
+juice = _juice_udp(multi_objective = False, tof_encoding = 'direct', tof = [[200, 500], [30, 300], [200, 500], [30, 300], [500, 800], [900, 1200]])
+# Problem P14: JUICE mission MGA1DSM, multiple objective, alpha encoding
+juice_mo = _juice_udp(multi_objective = True, tof_encoding = 'alpha', tof = [2000, 3000])

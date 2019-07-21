@@ -11,7 +11,7 @@ class _eve_mga1dsm_udp(mga_1dsm):
         """
         Write Me
         """
-        super(_eve_mga1dsm_udp, self).__init__(
+        super().__init__(
             seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
             t0=t0,
             tof=tof,

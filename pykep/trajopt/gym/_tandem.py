@@ -9,7 +9,26 @@ from copy import deepcopy
 
 class _tandem_udp(mga_1dsm):
     """ 
-    IMPORTANT: This is not the same as the old TandEM (GTOP database) problem and thus values should not be compared
+    This class represents a rendezvous mission to Saturn modelled as an MGA-1DSM transfer. Mission parameters are
+    inspired to the TandEM mission. A launcher model (i.e. Atlas 501) is also used, so that the final mass delivered
+    at Saturn is the main objective of this optimization problem.
+
+    The problem draws inspiration from the work performed in April 2008 by the
+    European Space Agency working group on mission analysis on the mission named TandEM. TandEM is an interplanetary
+    mission aimed at reaching Titan and Enceladus (two moons of Saturn). 
+
+    .. note::
+
+       The Titan and Enceladus Mission (TandEM), an ambitious scientific mission to study the Saturnian system
+       with particular emphasis on the moons Titan and Enceladus, was selected in October 2007 as a candidate mission
+       within the ESA Cosmic Vision plan. In February 2009, TandEM exited the Cosmic Vision programme when ESA
+       and NASA chose EJSM-Laplace as the L-class outer Solar System mission candidate.
+
+    .. note::
+
+       A significantly similar version of this problem was part of the no longer maintained GTOP database, 
+       https://www.esa.int/gsp/ACT/projects/gtop/gtop.html. The exact definition is, though, different and results
+       cannot thus not be compared to those posted in GTOP.
     """
     def __init__(self, prob_id = 1, constrained = True):
         """ 
@@ -62,7 +81,7 @@ class _tandem_udp(mga_1dsm):
         if prob_id > 24 or type(prob_id) != int or prob_id < 1:
             raise ValueError("TandEM problem id must be an integer in [1, 24]")
 
-        super(_tandem_udp, self).__init__(
+        super().__init__(
             seq = seq_tandem[prob_id - 1],
             t0 = [5475, 9132],
             tof = [[20, 2500], [20, 2500], [20, 2500], [20, 2500]],
@@ -97,7 +116,7 @@ class _tandem_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV = super(_tandem_udp, self).fitness(x)[0]
+        DV = super().fitness(x)[0]
         DV = DV + 165.  # losses for 3 swgbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         # Numerical guard for the exponential
@@ -133,7 +152,7 @@ class _tandem_udp(mga_1dsm):
 
           print(prob.pretty(x))
         """
-        super(_tandem_udp, self).pretty(x)
+        super().pretty(x)
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
         # We transform it (only the needed component) to an equatorial system rotating along x 
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
@@ -147,7 +166,7 @@ class _tandem_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV = super(_tandem_udp, self).fitness(x)[0]
+        DV = super().fitness(x)[0]
         DV = DV + 165.  # losses for 3 swgbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         print("\nInitial mass:", m_initial)

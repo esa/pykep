@@ -37,7 +37,7 @@ Example::
         # First we call the constructor of the base class telling
         # essentially to pygmo what kind of problem to expect (2 objective, 0
         # contraints etc.)
-        super(lambert_metric, self).__init__(
+        super().__init__(
             2, 0, 1 + (not single_objective), 0, 0, 0)
 
         # then we set the problem bounds (in this case equal for all

@@ -25,15 +25,18 @@ class _cassini2_udp(mga_1dsm):
         """
         Write Me
         """
-        super(_cassini2_udp, self).__init__(
+        super().__init__(
             seq =_seq_cassini2,
             t0 = [-1000, 0],
             tof = [[100, 400], [100, 500], [30, 300], [400, 1600], [800, 2200]],
             vinf = [3., 5.],
-            add_vinf_dep = True,
+            add_vinf_dep = False,
             add_vinf_arr = True,
             tof_encoding = "direct",
             multi_objective = False,
+            orbit_insertion=True,
+            e_target=0.98,
+            rp_target=108950000,
             eta_lb = 0.01,
             eta_ub = 0.9,
             rp_ub = 70.

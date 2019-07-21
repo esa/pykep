@@ -18,7 +18,7 @@ class _cassini1_udp(mga):
         """
         Write Me
         """
-        super(_cassini1_udp, self).__init__(
+        super().__init__(
             seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=[[30, 400], [100, 470], [30, 400], [400, 2000], [1000, 6000]],
@@ -49,7 +49,7 @@ class _cassini1a_udp(mga):
         """
         Write Me
         """
-        super(_cassini1a_udp, self).__init__(
+        super().__init__(
             seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=[4000., 7000.],
@@ -80,7 +80,7 @@ class _cassini1n_udp(mga):
         """
         Write Me
         """
-        super(_cassini1n_udp, self).__init__(
+        super().__init__(
             seq=_seq_cassini1,
             t0=[-1000., 0.],
             tof=7000.,
