@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>pykep Documentation &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <title>Code Documentation &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,81 +23,47 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The core module" href="core.html" />
+    <link rel="prev" title="Install pykep" href="../installation.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="../installation.html">Install</a></li>
-                <li><a href="#">Docs</a></li>
-                <li><a href="../examples/index.html">Examples</a></li>
-                <li><a href="../credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pykep Documentation</a><ul>
-<li><a class="reference internal" href="#documentation-of-the-main-modules">Documentation of the main modules</a></li>
-<li><a class="reference internal" href="#constants-defined-within-pykep-namespace">Constants defined within pykep namespace</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="../search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -106,32 +71,60 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="../installation.html" title="Previous Chapter: Install pykep"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Install pykep</span>
+    </a>
+  </li>
+  <li>
+    <a href="core.html" title="Next Chapter: The core module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">The core module &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
-  <div class="section" id="pykep-documentation">
-<h1>pykep Documentation<a class="headerlink" href="#pykep-documentation" title="Permalink to this headline">¶</a></h1>
-<p>pykep is made of main modules called <a class="reference internal" href="core.html#core"><span class="std std-ref">The core module</span></a>, <a class="reference internal" href="planets.html#planet"><span class="std std-ref">The planet module</span></a>, <a class="reference internal" href="simsflanagan.html#simsflanagan"><span class="std std-ref">The simsflanagan module</span></a>, <a class="reference internal" href="pontryagin.html#pontryagin"><span class="std std-ref">The pontryagin module</span></a>, <a class="reference internal" href="phasing.html#phasing"><span class="std std-ref">The phasing module</span></a>, <a class="reference internal" href="trajopt.html#trajopt"><span class="std std-ref">The trajopt module (requires pygmo)</span></a>, <a class="reference internal" href="orbitplots.html#orbitplots"><span class="std std-ref">The orbit plotting module</span></a>, <a class="reference internal" href="util.html#util"><span class="std std-ref">The utility module</span></a>. When we import pykep via:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pkp</span>
+  <div class="section" id="code-documentation">
+<h1>Code Documentation<a class="headerlink" href="#code-documentation" title="Permalink to this headline">¶</a></h1>
+<p>pykep is made of main modules called <a class="reference internal" href="core.html#core"><span class="std std-ref">The core module</span></a>, <a class="reference internal" href="planets.html#planet"><span class="std std-ref">The planet module</span></a>, <a class="reference internal" href="simsflanagan.html#simsflanagan"><span class="std std-ref">The simsflanagan module</span></a>, <a class="reference internal" href="pontryagin.html#pontryagin"><span class="std std-ref">The pontryagin module</span></a>, <a class="reference internal" href="phasing.html#phasing"><span class="std std-ref">The phasing module</span></a>, <a class="reference internal" href="trajopt.html#trajopt"><span class="std std-ref">The trajopt module</span></a>, <a class="reference internal" href="orbitplots.html#orbitplots"><span class="std std-ref">The orbit plotting module</span></a>, <a class="reference internal" href="util.html#util"><span class="std std-ref">The utility module</span></a>.</p>
+<p>When we import pykep via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
 </pre></div>
 </div>
 <p>the core module gets imported in the pykep namespace, while all other modules will appear in dedicated namespaces, e.g.
 pykep.trajopt, pykep.phasing etc.</p>
-<p>In addition, two important dictionaries will be imported:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pkp</span><span class="o">.</span><span class="n">__version__</span>
-<span class="n">pkp</span><span class="o">.</span><span class="n">__extensions__</span>
+<p>In addition, two dictionaries will be imported:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pk</span><span class="o">.</span><span class="n">__version__</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">__extensions__</span>
 </pre></div>
 </div>
-<p>The first one, pkp.__version__, is the pykep version dictionary that can be queried for major, minor or bugfix number. pykep 1.2.0
-means that the major version is 1, the minor is 2 and the bugfix version is 0.</p>
-<p>The second one, pkp.__extensions__, is the pykep extension dictionary containing the extension installed in the system as detected by pykep.
-For example:</p>
+<p>The first one, pk.__version__, is the pykep version dictionary that can be queried for major and minor version.</p>
+<p>The second one, pk.__extensions__, is the pykep extension dictionary containing relevant third-party dependencies
+as detected by pykep.</p>
+<p>For example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="s1">&#39;mplot3d&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="s1">&#39;pygmo&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -139,21 +132,7 @@ For example:</p>
 <span class="s1">&#39;scipy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 </pre></div>
 </div>
-<div class="section" id="documentation-of-the-main-modules">
-<h2>Documentation of the main modules<a class="headerlink" href="#documentation-of-the-main-modules" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="core.html">The core module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simsflanagan.html">The simsflanagan module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pontryagin.html">The pontryagin module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="phasing.html">The phasing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trajopt.html">The trajopt module (requires pygmo)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="orbitplots.html">The orbit plotting module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="planets.html">The planet module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">The utility module</a></li>
-</ul>
-</div>
-</div>
+<hr class="docutils" />
 <div class="section" id="constants-defined-within-pykep-namespace">
 <h2>Constants defined within pykep namespace<a class="headerlink" href="#constants-defined-within-pykep-namespace" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
@@ -188,10 +167,13 @@ For example:</p>
 <tr class="row-even"><td>pykep.MU_SUN</td>
 <td>Sun gravitational constant in m^3/s^2</td>
 </tr>
-<tr class="row-odd"><td>pykep.EARTH_VELOCITY</td>
+<tr class="row-odd"><td>pykep.MU_EARTH</td>
+<td>Earth gravitational constant in m^3/s^2</td>
+</tr>
+<tr class="row-even"><td>pykep.EARTH_VELOCITY</td>
 <td>Square root of MU_SUN/AU. Average earth velocity in meters per seconds.</td>
 </tr>
-<tr class="row-even"><td>pykep.G0</td>
+<tr class="row-odd"><td>pykep.G0</td>
 <td>The standard gravity acceleration at ground level in m/s^2</td>
 </tr>
 </tbody>
@@ -202,6 +184,22 @@ For example:</p>
 <ul class="last simple">
 <li><em>Units</em>: The S.I. system is used to perform all computations in pykep and it is the default choice for everything. In some cases, to help the user instantiate objects and define problems, classes and functions may accept inputs in different units or return results in different units, but this is only exceptional and documented in the class or function help.</li>
 <li><em>Orbital parameters</em>: In pykep, the osculating Keplerian elements are always in the following order: a,e,i,W,w,M (E or H), where a is the semi-major axis, e the eccentriciy, i the inclination, W the Right Axcension of the Acending Node, w the argument of perigee and M the mean anomaly (E and H being the eccentric and hyperbolic anomalies).</li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="documentation-of-the-main-modules">
+<h2>Documentation of the main modules<a class="headerlink" href="#documentation-of-the-main-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">The core module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simsflanagan.html">The simsflanagan module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pontryagin.html">The pontryagin module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phasing.html">The phasing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html">The trajopt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbitplots.html">The orbit plotting module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="planets.html">The planet module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">The utility module</a></li>
 </ul>
 </div>
 </div>
@@ -220,7 +218,7 @@ For example:</p>
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

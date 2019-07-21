@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The phasing module &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <title>The phasing module &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,80 +23,47 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The trajopt module" href="trajopt.html" />
+    <link rel="prev" title="The pontryagin module" href="pontryagin.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="../installation.html">Install</a></li>
-                <li><a href="index.html">Docs</a></li>
-                <li><a href="../examples/index.html">Examples</a></li>
-                <li><a href="../credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">The phasing module</a><ul>
-<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="../search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -105,14 +71,41 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="pontryagin.html" title="Previous Chapter: The pontryagin module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; The pontryagin module</span>
+    </a>
+  </li>
+  <li>
+    <a href="trajopt.html" title="Next Chapter: The trajopt module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">The trajopt module &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <div class="section" id="the-phasing-module">
 <span id="phasing"></span><h1>The phasing module<a class="headerlink" href="#the-phasing-module" title="Permalink to this headline">¶</a></h1>
@@ -149,27 +142,27 @@
 <dt id="pykep.phasing.knn">
 <em class="property">class </em><code class="descclassname">pykep.phasing.</code><code class="descname">knn</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn" title="Permalink to this definition">¶</a></dt>
 <dd><p>The class finds the k-nearest neighbours to a given planet from a list of planets.
-The problem of finding who is &#8220;close-by&#8221; can be efficiently solved using appropriate data structures.
+The problem of finding who is “close-by” can be efficiently solved using appropriate data structures.
 Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can then be queried efficiently
-for all asteroid within a given distance (&#8216;ball&#8217; query) or for all k closest asteroids (&#8216;knn&#8217; query).</p>
+for all asteroid within a given distance (‘ball’ query) or for all k closest asteroids (‘knn’ query).</p>
 <p>The notion of distance used (metric) can be:</p>
 <ul class="simple">
-<li>&#8216;euclidean&#8217;: the simple Euclidean distance over the asteroid&#8217;s (r,v). 
+<li>‘euclidean’: the simple Euclidean distance over the asteroid’s (r,v). 
 The position an velocity vectors are scaled w.r.t. some reference values.</li>
-<li>&#8216;orbital&#8217;, the distance is computed with respect to (r/T + v, r/T), corresponding to the DV computed over
+<li>‘orbital’, the distance is computed with respect to (r/T + v, r/T), corresponding to the DV computed over
 a linear model of the orbital transfer. The distance returned will thus be in m/s.</li>
 </ul>
 <dl class="method">
 <dt id="pykep.phasing.knn.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>USAGE: knn = knn(planet_list, t, metric=&#8217;orbital&#8217;, ref_r=AU, ref_v=EARTH_VELOCITY, T=365.25):</p>
+<dd><p>USAGE: knn = knn(planet_list, t, metric=’orbital’, ref_r=AU, ref_v=EARTH_VELOCITY, T=365.25):</p>
 <ul class="simple">
 <li>planet_list   list of pykep planets (typically thousands)</li>
 <li>t             epoch</li>
-<li>metric        one of [&#8216;euclidean&#8217;, &#8216;orbital&#8217;]</li>
-<li>ref_r         reference radius   (used as a scaling factor for r if the metric is &#8216;euclidean&#8217;)</li>
-<li>ref_v         reference velocity (used as a scaling factor for v if the metric is &#8216;euclidean&#8217;)</li>
-<li>T             average transfer time (used in the definition of the &#8216;orbital&#8217; metric)</li>
+<li>metric        one of [‘euclidean’, ‘orbital’]</li>
+<li>ref_r         reference radius   (used as a scaling factor for r if the metric is ‘euclidean’)</li>
+<li>ref_v         reference velocity (used as a scaling factor for v if the metric is ‘euclidean’)</li>
+<li>T             average transfer time (used in the definition of the ‘orbital’ metric)</li>
 </ul>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pykep</span> <span class="k">import</span> <span class="o">*</span>
@@ -186,21 +179,21 @@ a linear model of the orbital transfer. The distance returned will thus be in m/
 <code class="descname">find_neighbours</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.find_neighbours" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the neighbours of a given planet at a given epoch. The user may query for the
 k-nearest neighbours or for all neighbours within a given distance</p>
-<p>knn.find_neighbours(query_planet, query_type=&#8217;knn&#8217;, *args, **kwargs )</p>
+<p>knn.find_neighbours(query_planet, query_type=’knn’, *args, **kwargs )</p>
 <ul class="simple">
 <li>query_planet: the planet we want to find neighbours of. Can be an integer, in which case it refers to the idx in self.asteroid_list</li>
-<li>query_type: one of &#8216;knn&#8217; or &#8216;ball&#8217;.</li>
+<li>query_type: one of ‘knn’ or ‘ball’.</li>
 <li>*args, **args: according to the query type (read below)</li>
 </ul>
-<p>Returns (neighb, neighb_ids, dists), where dist is only computed if &#8216;knn&#8217; type query is made</p>
+<p>Returns (neighb, neighb_ids, dists), where dist is only computed if ‘knn’ type query is made</p>
 <p>The following kinds of spatial queries are currently implemented:</p>
 <dl class="docutils">
-<dt>query_type = &#8216;knn&#8217;:</dt>
-<dd>The kwarg &#8216;k&#8217; determines how many k-nearest neighbours are returned
+<dt>query_type = ‘knn’:</dt>
+<dd>The kwarg ‘k’ determines how many k-nearest neighbours are returned
 For arguments, see:
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html">http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html</a></dd>
-<dt>query_type = &#8216;ball&#8217;:</dt>
-<dd>The kwarg &#8216;r&#8217; determines the distance within which all asteroids are returned.
+<dt>query_type = ‘ball’:</dt>
+<dd>The kwarg ‘r’ determines the distance within which all asteroids are returned.
 For arguments, see:
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html">http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html</a></dd>
 </dl>
@@ -212,7 +205,7 @@ For arguments, see:
 <dl class="class">
 <dt id="pykep.phasing.dbscan">
 <em class="property">class </em><code class="descclassname">pykep.phasing.</code><code class="descname">dbscan</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class can be used to locate areas of the interplanetsry space that are &#8216;dense&#8217; at one epoch.
+<dd><p>This class can be used to locate areas of the interplanetsry space that are ‘dense’ at one epoch.
 Essentially, it locates planet clusters</p>
 <dl class="method">
 <dt id="pykep.phasing.dbscan.__init__">
@@ -226,15 +219,15 @@ Essentially, it locates planet clusters</p>
 <dl class="method">
 <dt id="pykep.phasing.dbscan.cluster">
 <code class="descname">cluster</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.cluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>USAGE: cl.cluster(t, eps=0.125, min_samples=10, metric=&#8217;orbital&#8217;, T=180, ref_r=AU, ref_v=EARTH_VELOCITY):</p>
+<dd><p>USAGE: cl.cluster(t, eps=0.125, min_samples=10, metric=’orbital’, T=180, ref_r=AU, ref_v=EARTH_VELOCITY):</p>
 <ul class="simple">
 <li>t: epoch (in MJD2000)</li>
 <li>eps: max distance between points in a cluster</li>
 <li>min_samples: minimum number of samples per cluster</li>
-<li>metric: one of &#8216;euclidean&#8217;, &#8216;euclidean_r&#8217;, orbital&#8217;</li>
-<li>T: average transfer time (used in the definition of the &#8216;orbital&#8217; metric)</li>
-<li>ref_r         reference radius   (used as a scaling factor for r if the metric is &#8216;euclidean&#8217; or &#8216;euclidean_r&#8217;)</li>
-<li>ref_v         reference velocity (used as a scaling factor for v if the metric is &#8216;euclidean&#8217;)</li>
+<li>metric: one of ‘euclidean’, ‘euclidean_r’, orbital’</li>
+<li>T: average transfer time (used in the definition of the ‘orbital’ metric)</li>
+<li>ref_r         reference radius   (used as a scaling factor for r if the metric is ‘euclidean’ or ‘euclidean_r’)</li>
+<li>ref_v         reference velocity (used as a scaling factor for v if the metric is ‘euclidean’)</li>
 </ul>
 </dd></dl>
 
@@ -292,7 +285,7 @@ The argument of perigee is not matched, so that this approximation is only good 
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

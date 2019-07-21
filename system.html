@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Preparing your system to compile pykep &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <title>Preparing your system to compile pykep &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,81 +23,47 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Install pykep" href="installation.html" />
+    <link rel="prev" title="Download pykep source code" href="downloading.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="installation.html">Install</a></li>
-                <li><a href="documentation/index.html">Docs</a></li>
-                <li><a href="examples/index.html">Examples</a></li>
-                <li><a href="credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Preparing your system to compile pykep</a><ul>
-<li><a class="reference internal" href="#compiling-under-a-unix-system">Compiling under a Unix System</a></li>
-<li><a class="reference internal" href="#compiling-under-windows">Compiling under Windows</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -106,14 +71,41 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="downloading.html" title="Previous Chapter: Download pykep source code"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Download pykep source code</span>
+    </a>
+  </li>
+  <li>
+    <a href="installation.html" title="Next Chapter: Install pykep"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Install pykep &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Install pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <div class="section" id="preparing-your-system-to-compile-pykep">
 <span id="prepareyoursystem"></span><h1>Preparing your system to compile pykep<a class="headerlink" href="#preparing-your-system-to-compile-pykep" title="Permalink to this headline">¶</a></h1>
@@ -130,10 +122,10 @@ by most package managers, so that a simple pacman, apt-get, emerge should suffic
 </div>
 <div class="section" id="compiling-under-windows">
 <h2>Compiling under Windows<a class="headerlink" href="#compiling-under-windows" title="Permalink to this headline">¶</a></h2>
-<p>Whoa, Whoa why would you want to do such a crazy crazy thing???? Anyway you need to</p>
+<p>Whoa, Whoa why would you want to do such a crazy crazy thing???? Anyway you need to:</p>
 <ul class="simple">
-<li>Install <a class="reference external" href="http://git-scm.com">Python 2.7</a> or 3.X</li>
-<li>Install <a class="reference external" href="http://www.cmake.org">MinGW (gcc compiler)</a></li>
+<li>Install <a class="reference external" href="https://www.python.org/">Python 3.X</a></li>
+<li>Install <a class="reference external" href="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/">MinGW (gcc compiler for windows)</a></li>
 <li>Install <a class="reference external" href="http://www.cmake.org">CMake</a></li>
 <li>Install <a class="reference external" href="http://www.boost.org">boost libraries</a> both headers and compiled libraries</li>
 </ul>
@@ -153,7 +145,7 @@ by most package managers, so that a simple pacman, apt-get, emerge should suffic
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

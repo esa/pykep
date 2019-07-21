@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The pontryagin module &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <title>The pontryagin module &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,80 +23,47 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The phasing module" href="phasing.html" />
+    <link rel="prev" title="The simsflanagan module" href="simsflanagan.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="../installation.html">Install</a></li>
-                <li><a href="index.html">Docs</a></li>
-                <li><a href="../examples/index.html">Examples</a></li>
-                <li><a href="../credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">The pontryagin module</a><ul>
-<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="../search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -105,22 +71,49 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="simsflanagan.html" title="Previous Chapter: The simsflanagan module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; The simsflanagan module</span>
+    </a>
+  </li>
+  <li>
+    <a href="phasing.html" title="Next Chapter: The phasing module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">The phasing module &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <div class="section" id="the-pontryagin-module">
 <span id="pontryagin"></span><h1>The pontryagin module<a class="headerlink" href="#the-pontryagin-module" title="Permalink to this headline">¶</a></h1>
 <p>This module contains the class <code class="docutils literal"><span class="pre">pykep.pontryagin.leg</span></code>, which allows one to
 efficiently construct low-thrust trajectories using the indirect optimal
-control transcription alla moda di Pontryagin&#8217;s maximum principle.
+control transcription alla moda di Pontryagin’s maximum principle.
 <code class="docutils literal"><span class="pre">pykep.pontryagin.leg</span></code> transcribes the two-point boundary value problem
-resulting from <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin&#8217;s maximum principle</a> , in which one must correctly
+resulting from <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin’s maximum principle</a> , in which one must correctly
 choose (via and optimiser, e.g. <a class="reference external" href="https://esa.github.io/pagmo_plugins_nonfree/py_snopt7.html">SNOPT</a>) the nondimensional costate
 variables (nondimensional variables each corresponding to the respective
 components of the state) to lead the dynamical system (i.e. spacecraft dynamics)
@@ -162,7 +155,7 @@ than the final time may vary.</p>
 <em class="property">class </em><code class="descclassname">pykep.pontryagin.</code><code class="descname">leg</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indirect optimal control transcription trajectory leg.</p>
 <p>This class represents an indirect optimal control transcription
-(alla moda di <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin&#8217;s maximum principle</a>) of a generic
+(alla moda di <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin’s maximum principle</a>) of a generic
 two-point boundary trajectory.</p>
 <dl class="docutils">
 <dt>Attributes:</dt>
@@ -515,7 +508,7 @@ error tolerances <code class="docutils literal"><span class="pre">atol</span></c
 <dl class="method">
 <dt id="pykep.pontryagin.leg.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>mark=&quot;k.-&quot;</em>, <em>atol=1e-12</em>, <em>rtol=1e-12</em>, <em>unitsx=1</em>, <em>unitsy=1</em>, <em>xlabel=False</em>, <em>ylabel=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plots in two dimensions of the leg&#8217;s trajectory data.</p>
+<dd><p>Plots in two dimensions of the leg’s trajectory data.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;vx&#39;</span><span class="p">,</span> <span class="s1">&#39;vy&#39;</span><span class="p">,</span> <span class="s1">&#39;vz&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lx&#39;</span><span class="p">,</span> <span class="s1">&#39;ly&#39;</span><span class="p">,</span> <span class="s1">&#39;lz&#39;</span><span class="p">,</span> <span class="s1">&#39;lvx&#39;</span><span class="p">,</span> <span class="s1">&#39;lvy&#39;</span><span class="p">,</span> <span class="s1">&#39;lvz&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -554,7 +547,7 @@ error tolerances <code class="docutils literal"><span class="pre">atol</span></c
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

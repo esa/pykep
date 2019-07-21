@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The orbit plotting module &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <title>The orbit plotting module &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,80 +23,47 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The planet module" href="planets.html" />
+    <link rel="prev" title="The trajopt module" href="trajopt.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="../installation.html">Install</a></li>
-                <li><a href="index.html">Docs</a></li>
-                <li><a href="../examples/index.html">Examples</a></li>
-                <li><a href="../credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">The orbit plotting module</a><ul>
-<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="../search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -105,14 +71,41 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="trajopt.html" title="Previous Chapter: The trajopt module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; The trajopt module</span>
+    </a>
+  </li>
+  <li>
+    <a href="planets.html" title="Next Chapter: The planet module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">The planet module &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <div class="section" id="the-orbit-plotting-module">
 <span id="orbitplots"></span><h1>The orbit plotting module<a class="headerlink" href="#the-orbit-plotting-module" title="Permalink to this headline">¶</a></h1>
@@ -156,9 +149,9 @@
 <dl class="function">
 <dt id="pykep.orbit_plots.plot_planet">
 <code class="descclassname">pykep.orbit_plots.</code><code class="descname">plot_planet</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_planet" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_planet(plnt, t0=&#8217;pykep.epoch(0)&#8217;, N=60, units=1.0, color=&#8217;k&#8217;, s=40, legend=False, ax=None)</p>
+<dd><p>ax = plot_planet(plnt, t0=’pykep.epoch(0)’, N=60, units=1.0, color=’k’, s=40, legend=False, ax=None)</p>
 <ul class="simple">
-<li>ax:        3D axis object created using fig.gca(projection=&#8216;3d&#8217;)</li>
+<li>ax:        3D axis object created using fig.gca(projection=‘3d’)</li>
 <li>plnt:      pykep.planet object we want to plot</li>
 <li>t0:        pykep.epoch object indicating when we want to plot the planet position</li>
 <li>units:     the length unit to be used in the plot</li>
@@ -184,21 +177,21 @@
 <dl class="function">
 <dt id="pykep.orbit_plots.plot_lambert">
 <code class="descclassname">pykep.orbit_plots.</code><code class="descname">plot_lambert</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_lambert" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_lambert(l, N=60, sol=0, units=&#8217;pykep.AU&#8217;, legend=&#8217;False&#8217;, ax=None, alpha=1.)</p>
+<dd><p>ax = plot_lambert(l, N=60, sol=0, units=’pykep.AU’, legend=’False’, ax=None, alpha=1.)</p>
 <ul class="simple">
-<li>ax:       3D axis object created using fig.gca(projection=&#8216;3d&#8217;)</li>
+<li>ax:       3D axis object created using fig.gca(projection=‘3d’)</li>
 <li>l:        pykep.lambert_problem object</li>
 <li>N:                number of points to be plotted along one arc</li>
 <li><dl class="first docutils">
-<dt>sol:      solution to the Lambert&#8217;s problem we want to plot (must be in 0..Nmax*2)</dt>
+<dt>sol:      solution to the Lambert’s problem we want to plot (must be in 0..Nmax*2)</dt>
 <dd>where Nmax is the maximum number of revolutions for which there exist a solution.</dd>
 </dl>
 </li>
 <li>units:    the length unit to be used in the plot</li>
 <li>color:    matplotlib color to use to plot the line</li>
-<li>legend:   when True it plots also the legend with info on the Lambert&#8217;s solution chosen</li>
+<li>legend:   when True it plots also the legend with info on the Lambert’s solution chosen</li>
 </ul>
-<p>Plots a particular solution to a Lambert&#8217;s problem</p>
+<p>Plots a particular solution to a Lambert’s problem</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -232,9 +225,9 @@
 <dl class="function">
 <dt id="pykep.orbit_plots.plot_kepler">
 <code class="descclassname">pykep.orbit_plots.</code><code class="descname">plot_kepler</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_kepler" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_kepler(r, v, t, mu, N=60, units=1, color=&#8217;b&#8217;, legend=False, ax=None):</p>
+<dd><p>ax = plot_kepler(r, v, t, mu, N=60, units=1, color=’b’, legend=False, ax=None):</p>
 <ul class="simple">
-<li>ax:               3D axis object created using fig.gca(projection=&#8216;3d&#8217;)</li>
+<li>ax:               3D axis object created using fig.gca(projection=‘3d’)</li>
 <li>r:                initial position (cartesian coordinates)</li>
 <li>v:                initial velocity (cartesian coordinates)</li>
 <li>t:                propagation time</li>
@@ -251,9 +244,9 @@
 <dl class="function">
 <dt id="pykep.orbit_plots.plot_taylor">
 <code class="descclassname">pykep.orbit_plots.</code><code class="descname">plot_taylor</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_taylor" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color=&#8217;b&#8217;, legend=False, ax=None):</p>
+<dd><p>ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color=’b’, legend=False, ax=None):</p>
 <ul class="simple">
-<li>ax:               3D axis object created using fig.gca(projection=&#8216;3d&#8217;)</li>
+<li>ax:               3D axis object created using fig.gca(projection=‘3d’)</li>
 <li>r:                initial position (cartesian coordinates)</li>
 <li>v:                initial velocity (cartesian coordinates)</li>
 <li>m:                initial mass</li>
@@ -273,9 +266,9 @@
 <dl class="function">
 <dt id="pykep.orbit_plots.plot_sf_leg">
 <code class="descclassname">pykep.orbit_plots.</code><code class="descname">plot_sf_leg</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_sf_leg" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_sf_leg(leg, N=5, units=1, color=&#8217;b&#8217;, legend=False, no_trajectory=False, ax=None):</p>
+<dd><p>ax = plot_sf_leg(leg, N=5, units=1, color=’b’, legend=False, no_trajectory=False, ax=None):</p>
 <ul class="simple">
-<li>ax:               3D axis object created using fig.gca(projection=&#8216;3d&#8217;)</li>
+<li>ax:               3D axis object created using fig.gca(projection=‘3d’)</li>
 <li>leg:      a pykep.sims_flanagan.leg</li>
 <li>N:                number of points to be plotted along one arc</li>
 <li>units:    the length unit to be used in the plot</li>
@@ -326,7 +319,7 @@
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>

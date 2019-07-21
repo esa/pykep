@@ -1,20 +1,19 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>The core module &#8212; pykep 2.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <title>The core module &#8212; pykep 2.4 documentation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '2.0',
+        VERSION:     '2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,80 +23,47 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The simsflanagan module" href="simsflanagan.html" />
+    <link rel="prev" title="Code Documentation" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
-  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../index.html">
-          pykep</a>
-        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
-      </div>
+<div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">
+        pykep</a>
+      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+    </div>
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-                <li><a href="../installation.html">Install</a></li>
-                <li><a href="index.html">Docs</a></li>
-                <li><a href="../examples/index.html">Examples</a></li>
-                <li><a href="../credits.html">Credits</a></li>
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">The core module</a><ul>
-<li><a class="reference internal" href="#detailed-documentation">Detailed Documentation</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-            
-            
-            
-          </ul>
-
+      <div class="collapse navbar-collapse nav-collapse">
+        <ul class="nav navbar-nav">
           
-            
+          
+          
+          
+        </ul>
+
+        
+          
 <form class="navbar-form navbar-right" action="../search.html" method="get">
  <div class="form-group">
   <input type="text" name="q" class="form-control" placeholder="Search" />
@@ -105,14 +71,41 @@
   <input type="hidden" name="check_keywords" value="yes" />
   <input type="hidden" name="area" value="default" />
 </form>
+        
+        
           
-        </div>
-    </div>
+            <ul class='nav navbar-nav navbar-right'>
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: Code Documentation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Code Documentation</span>
+    </a>
+  </li>
+  <li>
+    <a href="simsflanagan.html" title="Next Chapter: The simsflanagan module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">The simsflanagan module &raquo;</span>
+    </a>
+  </li>
+            </ul>
+          
+        
+      </div>
   </div>
+</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="col-md-9 content">
       
   <div class="section" id="the-core-module">
 <span id="core"></span><h1>The core module<a class="headerlink" href="#the-core-module" title="Permalink to this headline">¶</a></h1>
@@ -201,23 +194,23 @@
 <dl class="class">
 <dt id="pykep.lambert_problem">
 <em class="property">class </em><code class="descclassname">pykep.</code><code class="descname">lambert_problem</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a multiple revolution Lambert&#8217;s problem</p>
+<dd><p>Represents a multiple revolution Lambert’s problem</p>
 <dl class="method">
 <dt id="pykep.lambert_problem.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>lambert_problem(r1, r2, t [, mu = 1, cw = False, multi_revs = 5])</p>
+<dd><p>lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)</p>
 <ul class="simple">
 <li>r1: starting position (x1,y1,z1)</li>
-<li>r2: 3D final position (x2,y2,z2)</li>
-<li>t: time of flight</li>
+<li>r2: final position    (x2,y2,z2)</li>
+<li>tof: time of flight</li>
 <li>mu: gravitational parameter (default is 1)</li>
 <li>cw: True for retrograde motion (clockwise), False if counter-clock wise (default is False)</li>
-<li>multi_revs: Maximum number of multirevs to be computed (default is 5)</li>
+<li>max_revs: Maximum number of multirevs to be computed (default is 5)</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Units need to be consistent.
-The multirev Lambert&#8217;s problem will be solved upon construction and its solution stored in data members.</p>
+The multirev Lambert’s problem will be solved upon construction and its solution stored in data members.</p>
 </div>
 <p>Example (non-dimensional units used):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="n">lambert_problem</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="mi">5</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span> <span class="p">)</span>
@@ -228,8 +221,8 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.lambert_problem.get_v1">
 <code class="descname">get_v1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.get_v1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a sequence of vectors containing the velocities at r1 of all computed solutions to the Lambert&#8217;s Problem</p>
-<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<dd><p>Returns a sequence of vectors containing the velocities at r1 of all computed solutions to the Lambert’s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, …</p>
 <p>Example (extracts v1 for the 0 revs solution):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">v10</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_v1</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -239,8 +232,8 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.lambert_problem.get_v2">
 <code class="descname">get_v2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.get_v2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a sequence of vectors containing the velocities at r2 of all computed solutions to the Lambert&#8217;s Problem</p>
-<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<dd><p>Returns a sequence of vectors containing the velocities at r2 of all computed solutions to the Lambert’s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, …</p>
 <p>Example (extracts v2 for the 0 revs solution):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">v20</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_v2</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -250,8 +243,8 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.lambert_problem.get_x">
 <code class="descname">get_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.get_x" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a sequence containing the x values of all computed solutions to the Lambert&#8217;s Problem</p>
-<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<dd><p>Returns a sequence containing the x values of all computed solutions to the Lambert’s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, …</p>
 <p>Example (extracts x for the 0 revs solution):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_x</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -261,7 +254,7 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.lambert_problem.get_Nmax">
 <code class="descname">get_Nmax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.get_Nmax" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the maximum number of revolutions allowed. The total number of solution to the Lambert&#8217;s problem will thus be n_sol = Nmax*2 + 1</p>
+<dd><p>Returns the maximum number of revolutions allowed. The total number of solution to the Lambert’s problem will thus be n_sol = Nmax*2 + 1</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Nmax</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_Nmax</span><span class="p">()</span>
 <span class="n">n_sol</span> <span class="o">=</span> <span class="n">Nmax</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
@@ -272,8 +265,8 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.lambert_problem.get_iters">
 <code class="descname">get_iters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.lambert_problem.get_iters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a sequence containing the number of iterations employed to compute each solution to the Lambert&#8217;s Problem</p>
-<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, ...</p>
+<dd><p>Returns a sequence containing the number of iterations employed to compute each solution to the Lambert’s Problem</p>
+<p>Solutions are stored in order 0 rev, 1rev, 1rev, 2rev, 2rev, …</p>
 <p>Example (extracts the number of iterations employed for the 0 revs solution):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">p0</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_iters</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
@@ -290,10 +283,10 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="method">
 <dt id="pykep.epoch.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>pykep.epoch(julian_date=0, julian_date_type=&#8221;mjd2000&#8221;)</p>
+<dd><p>pykep.epoch(julian_date=0, julian_date_type=”mjd2000”)</p>
 <ul class="simple">
 <li>julian_date: a julian date, defaults to 0</li>
-<li>julian_date_type: julian date type, one of &#8220;jd&#8221;, &#8220;mjd&#8221; and &#8220;mjd2000&#8221;, defaults to &#8220;mjd2000&#8221;</li>
+<li>julian_date_type: julian date type, one of “jd”, “mjd” and “mjd2000”, defaults to “mjd2000”</li>
 </ul>
 <p>Examples:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">e1</span> <span class="o">=</span> <span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -326,7 +319,7 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <dl class="attribute">
 <dt id="pykep.epoch.mjd2000">
 <code class="descname">mjd2000</code><a class="headerlink" href="#pykep.epoch.mjd2000" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the Modifeid Julian Date 2000</p>
+<dd><p>Returns the Modified Julian Date 2000</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jd</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">mjd2000</span>
 </pre></div>
@@ -341,7 +334,7 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <code class="descclassname">pykep.</code><code class="descname">epoch_from_string</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch_from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.epoch_from_string(s)</p>
 <ul class="simple">
-<li>s: string containing a date in the format &#8216;YYYY-MM-DD HH:MM:SS&#8217;Returns a <a class="reference internal" href="#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> object constructed from a from a delimited string containing a date.Excess digits in fractional seconds will be dropped. Ex: &#8216;1:02:03.123456999&#8217; =&gt; &#8216;1:02:03.123456&#8217;.This behavior depends on the precision defined in astro_constant.h used to compile.</li>
+<li>s: string containing a date in the format ‘YYYY-MM-DD HH:MM:SS’Returns a <a class="reference internal" href="#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> object constructed from a from a delimited string containing a date.Excess digits in fractional seconds will be dropped. Ex: ‘1:02:03.123456999’ =&gt; ‘1:02:03.123456’.This behavior depends on the precision defined in astro_constant.h used to compile.</li>
 </ul>
 <p>NOTE: The function is based on the corresponding <a class="reference external" href="http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/posix_time.html#ptime_from_string">boost date_time library function</a></p>
 <p>Example:</p>
@@ -356,7 +349,7 @@ The multirev Lambert&#8217;s problem will be solved upon construction and its so
 <code class="descclassname">pykep.</code><code class="descname">epoch_from_iso_string</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch_from_iso_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.epoch_from_iso_string(s)</p>
 <ul class="simple">
-<li>s: string containing a date in the iso format &#8216;YYYYMMDDTHHMMSS&#8217;Returns a <a class="reference internal" href="#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> object constructed from a from a non delimited iso form string containing a date.</li>
+<li>s: string containing a date in the iso format ‘YYYYMMDDTHHMMSS’Returns a <a class="reference internal" href="#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal"><span class="pre">pykep.epoch</span></code></a> object constructed from a from a non delimited iso form string containing a date.</li>
 </ul>
 <p>NOTE: The function is based on the corresponding <a class="reference external" href="http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/posix_time.html#ptime_from_string">boost date_time library function</a></p>
 <p>Example:</p>
@@ -531,7 +524,7 @@ Example:</p>
 <li>E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)</li>
 <li>retrogade: uses the retrograde parameters. Default value is False.</li>
 </ul>
-<p>Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L
+<p>Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L
 L is the true mean longitude
 Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">par2eq</span><span class="p">(</span><span class="n">E</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">retrograde</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
@@ -545,7 +538,7 @@ Example:</p>
 <code class="descclassname">pykep.</code><code class="descname">eq2par</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.eq2par" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.eq2par(EQ, retrograde = False)</p>
 <ul class="simple">
-<li>EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L</li>
+<li>EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L</li>
 <li>retrogade: uses the retrograde parameters. Default value is False.</li>
 </ul>
 <p>Returns the osculating Keplerian elements a,e,i,W,w,E 
@@ -564,7 +557,7 @@ Example:</p>
 <code class="descclassname">pykep.</code><code class="descname">eq2ic</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.eq2ic" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.eq2ic(EQ,mu = 1.0, retrograde = False)</p>
 <ul class="simple">
-<li>EQ: modified equinoctial elements a(1-e^2),h,k,p,q,L</li>
+<li>EQ: modified equinoctial elements a(1-e^2),f,g,h,k,L</li>
 <li>mu: gravity parameter (l^3/s^2)</li>
 </ul>
 <p>Returns cartesian elements from Keplerian elements
@@ -586,7 +579,7 @@ Example:</p>
 <li>mu: gravity parameter</li>
 <li>retrogade: uses the retrograde parameters. Default value is False.</li>
 </ul>
-<p>Returns the modified equinoctial elements a(1-e^2),h,k,p,q,L
+<p>Returns the modified equinoctial elements a(1-e^2),f,g,h,k,L
 L is the true mean longitude
 Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="n">ic2eq</span><span class="p">(</span><span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">mu</span> <span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -610,7 +603,7 @@ Example:</p>
     </p>
     <p>
         &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
     </p>
   </div>
 </footer>
