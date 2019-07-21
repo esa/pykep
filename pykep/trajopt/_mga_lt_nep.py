@@ -69,7 +69,7 @@ class mga_lt_nep(base_problem):
         # First we call the constructor for the base pygmo problem
         # As our problem is n dimensional, box-bounded (may be multi-objective), we write
         # (dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
-        super(mga_lt_nep, self).__init__(
+        super().__init__(
             dim, 0, f_dim, c_dim, c_ineq_dim, 1e-4)
 
         # 2) We then define some class data members

@@ -18,9 +18,9 @@ by most package managers, so that a simple pacman, apt-get, emerge should suffic
 Compiling under Windows
 -----------------------
 
-Whoa, Whoa why would you want to do such a crazy crazy thing???? Anyway you need to
+Whoa, Whoa why would you want to do such a crazy crazy thing???? Anyway you need to:
 
-* Install `Python 2.7 <http://git-scm.com>`_ or 3.X
-* Install `MinGW (gcc compiler) <http://www.cmake.org>`_ 
+* Install `Python 3.X <https://www.python.org/>`_ 
+* Install `MinGW (gcc compiler for windows) <https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/>`_ 
 * Install `CMake <http://www.cmake.org>`_ 
 * Install `boost libraries <http://www.boost.org>`_ both headers and compiled libraries

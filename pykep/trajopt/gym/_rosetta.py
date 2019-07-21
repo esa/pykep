@@ -23,13 +23,22 @@ _seq_rosetta = [jpl_lp('earth'),
 
 class _rosetta_udp(mga_1dsm):
     """
-    Write Me
+    This class represents a rendezvous mission to the comet 67P/Churyumov-Gerasimenko modelled as an MGA-1DSM transfer.
+    The fly-by sequence selected (i.e. E-EMEE-C) is similar to the one planned for the spacecraft Rosetta. 
+    The objective function considered is the total mission delta V. No launcher model is employed and a final randezvous
+    with the comet is included in the delta V computations.
+
+    .. note::
+
+       A significantly similar version of this problem was part of the no longer maintained GTOP database, 
+       https://www.esa.int/gsp/ACT/projects/gtop/gtop.html. The exact definition is, though, different and results
+       should thus not be compared to those posted in GTOP.
     """
     def __init__(self):
         """
         Write Me
         """
-        super(_rosetta_udp, self).__init__(
+        super().__init__(
             seq =_seq_rosetta,
             t0 = [1460, 1825],
             tof = [[300, 500], [150, 800], [150, 800], [300, 800], [700, 1850]],
@@ -42,6 +51,12 @@ class _rosetta_udp(mga_1dsm):
             eta_ub = 0.9,
             rp_ub = 9.
         )
+
+    def get_name(self):
+        return "Rosetta (Trajectory Optimisation Gym P10)"
+
+    def __repr__(self):
+        return self.get_name()
 
 # Problem P10: Rosetta mission MGA1DSM, single objective, direct encoding
 rosetta = _rosetta_udp()

@@ -297,7 +297,7 @@ class direct_pl2pl(_direct_base):
         return np.hstack(([-mf], ceq, cineq, [v_dep_con, v_arr_con]))
 
     def get_nic(self):
-        return super(direct_pl2pl, self).get_nic() + 2
+        return super().get_nic() + 2
 
     def get_bounds(self):
         lb = [self.t0[0], self.tof[0], self.sc.mass * 0.1] + \

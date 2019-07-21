@@ -10,7 +10,7 @@ class _emNimp_udp(pl2pl_N_impulses):
         """
         Write Me
         """
-        super(_emNimp_udp, self).__init__(
+        super().__init__(
             start=jpl_lp('earth'),
             target=jpl_lp('mars'),
             N_max=N,

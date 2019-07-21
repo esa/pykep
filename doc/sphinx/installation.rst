@@ -3,9 +3,9 @@
 Install pykep
 ======================
 
-pykep supports 32 and 64 bits architectures and both python 2.7 and python 3.X. 
-We are unfortunately not in the position to provide binaries for everybody, so it is possible you will need to compile
-the source code youself. This process, under unix architectures is painless, while under windows architectures it can be a pain.
+pykep supports 32 and 64 bits architectures and python 3.X. Python 2.7 support was dropped as of version 2.4.
+Both PyPi and conda package mangers contain the binaries for pykep latest code, but only for a limited set of
+architectures. In case yours is not include, you will have to compile the code from source.
 
 
 Using Binaries (encouraged whenever possible)
@@ -47,9 +47,11 @@ At this point (after pressing c once to configure and having selected the correc
 .. image:: images/ccmake.png
 
 Note that in the case above only the tests are built, not the python module nor the headers will be installed. Also note that the 
-```CMAKE_INSTALL_PREFIX``` points to the ```.local``` folder of the user. This correspond to a (suggested) local installation of **pykep**.
+```CMAKE_INSTALL_PREFIX``` points to the ```.local``` folder of the user. 
+This correspond to a (suggested) local installation of **pykep**.
 
-You can now press 'g' to generate a make file and exit ccmake utility. You are back to the prompt where you can now type::
+You can now press 'g' to generate a make file and exit ccmake utility. 
+You are back to the prompt where you can now type::
 
   make
 
@@ -130,7 +132,7 @@ Unsing minGW things should be roughly the same as under Unix, just make sure tha
 * Hope for the best (kidding its super easy ...)
 * No, really hope for the best
 
-Systems with both Python 2 and Python 3 installed
+Systems with multiple python versions
 -------------------------------------------------
 
 If your system has several versions of python installed check the PYTHON_EXECUTABLE variable in cmake. The libraries, includes and site-packages directory are determined accordingly. If you want to change python version, just define explicitly such a variable. For example (assuming you are in a directory pykep/build)::
