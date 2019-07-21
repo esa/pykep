@@ -68,7 +68,7 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     else:
         label = None
     axis.plot(x, y, z, label=label, c=color, alpha=alpha)
-    axis.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=color)
+    axis.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=[color])
 
     if legend:
         axis.legend()

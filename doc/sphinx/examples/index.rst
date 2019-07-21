@@ -15,7 +15,7 @@ Generic
 .. toctree::
   :maxdepth: 2
 
-  ex1
+  ex1.ipynb
   ex2
   ex12
 
