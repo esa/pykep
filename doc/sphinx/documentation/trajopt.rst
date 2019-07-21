@@ -28,6 +28,10 @@ The space trajectory gym
 Some instances of the classes above are provided in an Interplanetary Trajectory Optimization Gym. A problem test set 
 we use to test and tune optimization approaches able to tackle a wide variety of problems with little / no tuning.
 
+.. note::
+
+   Most problem have a `pretty` and a `plot` method that can be used to visualize decision vectors (chromosomes).
+
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
@@ -40,7 +44,6 @@ Name                                            Type            Description
 :class:`pykep.trajopt.gym.eve_mga1dsm`          instance        Earth-Venus-Earth transfer. Time of flights are encoded directly in the chromosome.
 :class:`pykep.trajopt.gym.eve_mga1dsm_a`        instance        Earth-Venus-Earth transfer. Time of flights use alpha encoding.
 :class:`pykep.trajopt.gym.eve_mga1dsm_n`        instance        Earth-Venus-Earth transfer. Time of flights use eta encoding.
-:class:`pykep.trajopt.gym.eve_mga1dsm_n`        instance        Earth-Venus-Earth transfer. Time of flights use eta encoding.
 :class:`pykep.trajopt.gym.cassini2`             instance        Cassini inspired MGA-1DSM problem.
 :class:`pykep.trajopt.gym.rosetta`              instance        Rosetta inspired MGA-1DSM problem.
 :class:`pykep.trajopt.gym.tandem`               class           TandEM inspired MGA-1DSM problem.
@@ -49,6 +52,7 @@ Name                                            Type            Description
 :class:`pykep.trajopt.gym.messenger`            instance        Messenger inspired MGA-1DSM problem.
 =========================================       =========       ================================================
 
+---------------------------------------------------------------------------------
 
 Detailed Documentation
 ======================
@@ -182,4 +186,57 @@ but the time of flights are encoded using the alpha encoding technique.
 .. autoattribute:: pykep.trajopt.gym.cassini1_n
 
 This is the same as :class:`pykep.trajopt.gym.cassini1`, 
+but the time of flights are encoded using the eta encoding technique.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.em3imp
+
+This is a simple Earth Mars transfer that has the possibility to use multiple impulses. While the actual solution
+may not need more than a few, the problem is used to study the alpha encoding for manouvre timings and its evolvability.
+
+.. note::
+
+   The problem is rather simple and is used to study the multiple impulse transription (using alpha encoding)
+   comparing it to the folowing problems :class:`pykep.trajopt.gym.em5imp` and :class:`pykep.trajopt.gym.em7imp`
+   having increasing number of impulses.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.em5imp
+
+This is the same as :class:`pykep.trajopt.gym.em3imp`, 
+but the number of impulses is increased.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.em7imp
+
+This is the same as :class:`pykep.trajopt.gym.em3imp`, 
+but the number of impulses is increased.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.eve_mga1dsm
+
+This is an Earth - Venus - Earth transfer where 1 deep space manouvre is allowed at each leg. 
+
+.. note::
+
+   Together with the problems :class:`pykep.trajopt.gym.eve_mga1dsm_a` and :class:`pykep.trajopt.gym.eve_mga1dsm_n`
+   this simple problem is used to study the alpha, eta and direct encoding for the time of flights of an mga-1DSM
+   type of problem.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.eve_mga1dsm_a
+
+This is the same as :class:`pykep.trajopt.gym.eve_mga1dsm`, 
+but the time of flights are encoded using the alpha encoding technique.
+
+------------
+
+.. autoattribute:: pykep.trajopt.gym.eve_mga1dsm_n
+
+This is the same as :class:`pykep.trajopt.gym.eve_mga1dsm`, 
 but the time of flights are encoded using the eta encoding technique.

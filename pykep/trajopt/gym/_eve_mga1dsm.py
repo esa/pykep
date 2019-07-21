@@ -23,11 +23,14 @@ class _eve_mga1dsm_udp(mga_1dsm):
         )
 
     def get_name(self):
-        return "Earth-Venus-Earth mga-1dsm"
+        return "Earth-Venus-Earth mga-1dsm (Trajectory Optimisation Gym P7-9)"
 
     def get_extra_info(self):
         retval = "\ttof_encoding: " + self._tof_encoding
         return retval
+
+    def __repr__(self):
+        return self.get_name()
 
 
 # Problem P7: Earth-Venus-Earth MGA1DSM, single objective , direct encoding
