@@ -16,7 +16,7 @@ Generic
   :maxdepth: 2
 
   ex1.ipynb
-  ex2
+  ex2.ipynb
   ex12
 
 Advanced Research Topics (requires pygmo)

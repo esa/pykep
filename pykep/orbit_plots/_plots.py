@@ -154,7 +154,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
 
     # And we plot
     if legend:
-        label = 'Lambert solution (' + str((sol + 1) / 2) + ' revs.)'
+        label = 'Lambert solution (' + str((sol + 1) // 2) + ' revs.)'
     else:
         label = None
     axis.plot(x, y, z, c=color, label=label, alpha=alpha)
