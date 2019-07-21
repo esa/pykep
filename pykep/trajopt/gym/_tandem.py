@@ -32,7 +32,13 @@ class _tandem_udp(mga_1dsm):
     """
     def __init__(self, prob_id = 1, constrained = True):
         """ 
-        IMPORTANT: This is not the same as the old TandEM (GTOP database) problem and thus values should not be compared
+        The TandEM problem of the trajectory gym consists in 48 different instances varying in fly-by sequence and
+        the presence of a time constraint.
+
+        Args:
+            - prob_id (int): The problem id defines the fly-by sequence.
+            - constrained (bool): Activates the constraint on the time of flight 
+              (fitness will thus return two numbers, the objectove function and the inequality constraint violation)
         """
         # Redefining the planets as to change their safe radius
         earth = jpl_lp('earth')
@@ -172,6 +178,9 @@ class _tandem_udp(mga_1dsm):
         print("\nInitial mass:", m_initial)
         print("Final mass:", m_final)
         print("Declination:", declination)
+
+    def __repr__(self):
+        return "TandEM (Trajectory Optimisation Gym P12, multiple instances)"
 
 # Problem P12: TandEM mission MGA1DSM, single objective, direct encoding, time constrained
 tandem = _tandem_udp

@@ -42,5 +42,11 @@ class _cassini2_udp(mga_1dsm):
             rp_ub = 70.
         )
 
+    def get_name(self):
+        return "Cassini 2 (Trajectory Optimisation Gym P11)"
+
+    def __repr__(self):
+        return self.get_name()
+
 # Problem P11: Cassini mission MGA1DSM, single objective, direct encoding
 cassini2 = _cassini2_udp()

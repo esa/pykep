@@ -52,5 +52,11 @@ class _rosetta_udp(mga_1dsm):
             rp_ub = 9.
         )
 
+    def get_name(self):
+        return "Rosetta (Trajectory Optimisation Gym P10)"
+
+    def __repr__(self):
+        return self.get_name()
+
 # Problem P10: Rosetta mission MGA1DSM, single objective, direct encoding
 rosetta = _rosetta_udp()

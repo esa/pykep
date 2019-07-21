@@ -75,7 +75,10 @@ class _juice_udp(mga_1dsm):
         return [-log(m_final), ]
 
     def get_name(self):
-        return "JUICE"
+        return "Juice (Trajectory Optimisation Gym P13-14)"
+
+    def __repr__(self):
+        return self.get_name()
 
     def get_extra_info(self):
         retval = "\t Sequence: " + \
