@@ -4,12 +4,40 @@ from numba import jit
 
 @jit
 def gravity_spherical_harmonic(x, *args):
-    """Calculate the gravitational acceleration due to the spherical harmonics gravity model supplied.
+    """
+    Calculate the gravitational acceleration due to the spherical harmonics gravity model supplied.
 
-    :param x: (N x 3) array of Cartesian coordinates of satellite in frame defined by gravity model.
-    :type x: numpy.ndarray.
-    :return: (N x 3) array of the gravitational acceleration.
-    :rtype: numpy.ndarray.
+    Args:
+        - x (``array-like``): (N x 3) array of Cartesian coordinates of satellite in frame defined by gravity model.
+        - r_planet (``float``): Equatorial radius of central body.
+        - mu (``float``): Gravitational parameter of central body.
+        - c (``array-like``): Two-dimensional normalised C coefficient array: C[degree, order] = C_(n, m).
+        - s (``array-like``): Two-dimensional normalised S coefficient array: S[degree, order] = S_(n, m).
+        - n_max (``int``): Degree up to which to calculate the gravitational acceleration.
+        - m_max (``int``): Order up to which to calculate the gravitational acceleration. Cannot be higher than n_max.
+    
+    Returns:
+        - acc (``array-like``): (N x 3) array of the gravitational acceleration.
+
+    Example::
+
+        r, mu, c, s, n, m = pykep.util.load_gravity_model('gravity_models/Moon/glgm3150.txt')
+        x = numpy.array([[459.5, 795.8773461, 1591.754692], [-459.5, -795.8773461, -1591.754692]])
+        
+        acc_zonal = pykep.util.gravity_spherical_harmonic(x, r, mu, c, s, 20, 0)
+        acc_sqr = pykep.util.gravity_spherical_harmonic(x, r, mu, c, s, 20, 20)
+        acc_high = pykep.util.gravity_spherical_harmonic(x, r, mu, c, s, 900, 900)
+
+    .. note::
+
+       The name of each of the instantiated planets will be its international designator and
+       thus a valid key to the satcat dictionary
+
+    .. note::
+
+        This model was taken from a report by NASA:
+        https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
+        This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
     """
     acc = np.zeros(x.shape)
     for i in range(len(x[0])):
@@ -20,29 +48,26 @@ def gravity_spherical_harmonic(x, *args):
 
 @jit
 def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
-    """Calculate the gravitational acceleration on one set of coordinates due to
+    """
+    Calculate the gravitational acceleration on one set of coordinates due to
     the spherical harmonics gravity model supplied.
 
-    :param x: Cartesian coordinates of satellite in frame defined by gravity model.
-    :type x: numpy.ndarray.
-    :param r_planet: Equatorial radius of planet.
-    :type r_planet: float.
-    :param mu: Gravitational parameter of planet.
-    :type mu: float.
-    :param c: Two-dimensional normalised C coefficient array: C[degree, order] = Cnm
-    :type c: numpy.ndarray
-    :param s: Two-dimensional normalised S coefficient array: S[degree, order] = Snm
-    :type s: numpy.ndarray.
-    :param n_max: Degree up to which to calculate the gravitational acceleration.
-    :type n_max: int.
-    :param m_max: Order up to which to calculate the gravitational acceleration. Cannot be higher than n_max.
-    :type m_max: int.
-    :return: Vector of the gravitational acceleration in a cartesian coordinate frame defined by the gravity model.
-    :rtype: numpy.ndarray.
+    Args:
+        - x (``array-like``): Cartesian coordinates of satellite in frame defined by gravity model.
+        - r_planet (``float``): Equatorial radius of planet.
+        - mu (``float``): Gravitational parameter of planet.
+        - c (``array-like``): Two-dimensional normalised C coefficient array: C[degree, order] = Cnm
+        - s (``array-like``): Two-dimensional normalised S coefficient array: S[degree, order] = Snm
+        - n_max (``int``): Degree up to which to calculate the gravitational acceleration.
+        - m_max (``int``): Order up to which to calculate the gravitational acceleration. Cannot be higher than n_max.
+    
+    Returns:
+        - acceleration (``array-like``): Vector of the gravitational acceleration in a cartesian coordinate frame defined by the gravity model.
 
-    This model was taken from a report by NASA:
-    https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
-    This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
+    .. Source:
+        This model was taken from a report by NASA:
+        https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
+        This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
     """
     norm1, norm2, norm11, normn10, norm1m, norm2m, normn1 = _calculate_normalisation_parameters(n_max)
 
@@ -147,20 +172,23 @@ def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
 
 @jit
 def _calculate_normalisation_parameters(n_max):
-    """Calculate the parameters as defined in the report by NASA.
-    (https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf)
+    """
+    Calculate the normalisation parameters for the normalised Gottlieb algorithm. The mapping from the parameters defined in the report
+    (https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf) to the names used in the code looks like
 
-        lambda_n-1(n)       = norm1
-        lambda_n-2(n)       = norm2
-        lambda_n-1_n-1(n)   = norm11
-        lambda_n-1_m(n, m)  = norm1m
-        lambda_n-2_m(n, m)  = norm2m
-        lambda_n_m+1(n, m)  = normn1
-        lamdba_n_m+1(n, 0)  = normn10
+        - lambda_n-1(n)       = norm1
+        - lambda_n-2(n)       = norm2
+        - lambda_n-1_n-1(n)   = norm11
+        - lambda_n-1_m(n, m)  = norm1m
+        - lambda_n-2_m(n, m)  = norm2m
+        - lambda_n_m+1(n, m)  = normn1
+        - lamdba_n_m+1(n, 0)  = normn10
 
-    :param n_max: Maximum degree.
-    :type n_max: int.
-    :return: arrays of normalisation parameters.
+    Args:
+        - n_max (``int``): Maximum degree.
+
+    Returns:
+        Arrays of normalisation parameters.
     """
     m_max = n_max
     n_max += 1

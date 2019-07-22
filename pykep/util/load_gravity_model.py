@@ -4,19 +4,32 @@ import numpy as np
 def load_gravity_model(fp):
     """Load spherical harmonics model.
 
-    :param fp: path to model file.
-    :type fp: str.
-    :return: Radius of planet (km), mu of planet (km3/s2), degree and order of model, arrays of C and S coefficients.
+    Args:
+        - fp (``str``): path to model file.
 
-    The input file must follow a specific format. The first row contains planetary radius in km and
-    gravitational parameter in km3/s2.
-    The second row until the end contains normalised C and S coefficients for every degree and order.
-    The file is delimited using ';'.
+    Returns:
+        - planet_radius (``float``): Radius of central body (km)
+        - gravity_param (``float``): Gravitational parameter of central body (km3/s2)
+        - c_coefficients (``array-like``): Array of C_(n, m) coefficients.
+        - s_coefficients (``array-like``): Array of S_(n, m) coefficients.
+        - degree (``int``): Maximum degree of model.
+        - order (``int``): Maximum order of model.
 
-        1| radius;mu;degree;order
-        2| 0;0;C(0,0);S(0,0)
-        3| 1;0;C(1,0);S(1,0)
-        4| ...
+    Example::
+
+        r, mu, c, s, n, m = pykep.util.load_gravity_model('gravity_models/Earth/egm96.txt')
+
+    File format:
+        The input file must follow a specific format. The first row contains planetary radius in km and
+        gravitational parameter in km3/s2. The second row until the end contains normalised C and S 
+        coefficients for every degree and order. The file is delimited using ';'.
+    
+    File::
+
+          1| radius;mu;degree;order
+          2| 0;0;C(0,0);S(0,0)
+          3| 1;0;C(1,0);S(1,0)
+          4| ...
     """
     # todo: check file
 
