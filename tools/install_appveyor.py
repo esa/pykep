@@ -95,6 +95,8 @@ if is_python_build:
     run_command(pinterp + r' --version', verbose=True)
     wget(r'https://bootstrap.pypa.io/get-pip.py', 'get-pip.py')
     run_command(pinterp + ' get-pip.py --force-reinstall')
+    run_command(pip + ' install numpy scipy matplotlib')
+
     if is_release_build:
         run_command(pip + ' install twine')
 
