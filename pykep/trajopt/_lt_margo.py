@@ -379,9 +379,9 @@ class lt_margo:
         # Plotting the Sun, the Earth and the target
         axes.scatter([0], [0], [0], color='y')
         pk.orbit_plots.plot_planet(self.__earth, pk.epoch(
-            t0), units=units, legend=True, color=(0.7, 0.7, 1), ax=axes)
+            t0), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes)
         pk.orbit_plots.plot_planet(self.target, pk.epoch(
-            t0 + T), units=units, legend=True, color=(0.7, 0.7, 1), ax=axes)
+            t0 + T), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes)
 
         # Forward propagation
         xfwd = [0.0] * (fwd_seg + 1)
@@ -402,10 +402,10 @@ class lt_margo:
                 disturbance = [mfwd[i] * pk.MU_EARTH /
                                r3 * ri for ri in dfwd[i]]
                 pk.orbit_plots.plot_taylor_disturbance(rfwd[i], vfwd[i], mfwd[i], ufwd[i], disturbance, fwd_dt[
-                                                       i], pk.MU_SUN, veff, N=10, units=units, color=(alphas[i], 0, 1 - alphas[i]), ax=axes)
+                                                       i], pk.MU_SUN, veff, N=10, units=units, color=(alphas[i], 0, 1 - alphas[i]), axes=axes)
             else:
                 pk.orbit_plots.plot_taylor(rfwd[i], vfwd[i], mfwd[i], ufwd[i], fwd_dt[
-                                           i], pk.MU_SUN, veff, N=10, units=units, color=(alphas[i], 0, 1 - alphas[i]), ax=axes)
+                                           i], pk.MU_SUN, veff, N=10, units=units, color=(alphas[i], 0, 1 - alphas[i]), axes=axes)
             xfwd[i + 1] = rfwd[i + 1][0] / units
             yfwd[i + 1] = rfwd[i + 1][1] / units
             zfwd[i + 1] = rfwd[i + 1][2] / units
@@ -432,10 +432,10 @@ class lt_margo:
                 disturbance = [mfwd[i] * pk.MU_EARTH /
                                r3 * ri for ri in dbwd[-i - 1]]
                 pk.orbit_plots.plot_taylor_disturbance(rbwd[-i - 1], vbwd[-i - 1], mbwd[-i - 1], ubwd[-i - 1], disturbance, -bwd_dt[
-                                                       -i - 1], pk.MU_SUN, veff, N=10, units=units, color=(alphas[-i - 1], 0, 1 - alphas[-i - 1]), ax=axes)
+                                                       -i - 1], pk.MU_SUN, veff, N=10, units=units, color=(alphas[-i - 1], 0, 1 - alphas[-i - 1]), axes=axes)
             else:
                 pk.orbit_plots.plot_taylor(rbwd[-i - 1], vbwd[-i - 1], mbwd[-i - 1], ubwd[-i - 1], -bwd_dt[-i - 1],
-                                           pk.MU_SUN, veff, N=10, units=units, color=(alphas[-i - 1], 0, 1 - alphas[-i - 1]), ax=axes)
+                                           pk.MU_SUN, veff, N=10, units=units, color=(alphas[-i - 1], 0, 1 - alphas[-i - 1]), axes=axes)
             xbwd[-i - 2] = rbwd[-i - 2][0] / units
             ybwd[-i - 2] = rbwd[-i - 2][1] / units
             zbwd[-i - 2] = rbwd[-i - 2][2] / units

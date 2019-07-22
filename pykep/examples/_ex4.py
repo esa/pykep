@@ -103,12 +103,12 @@ class mga_lt_earth_mars_sundmann(object):
         # The Sun
         axis.scatter([0], [0], [0], color='y')
         # The leg
-        plot_sf_leg(self.__leg, units=AU, N=10, ax=axis)
+        plot_sf_leg(self.__leg, units=AU, N=10, axes=axis)
         # The planets
         plot_planet(
-            self.__earth, start, units=AU, legend=True, color=(0.8, 0.8, 1), ax=axis)
+            self.__earth, start, units=AU, legend=True, color=(0.8, 0.8, 1), axes=axis)
         plot_planet(
-            self.__mars, end, units=AU, legend=True, color=(0.8, 0.8, 1), ax=axis)
+            self.__mars, end, units=AU, legend=True, color=(0.8, 0.8, 1), axes=axis)
         plt.show()
 
 

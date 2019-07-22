@@ -1,55 +1,58 @@
-from pygmo.problem import base as base_problem
 from pykep.core import epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from pykep.planet import jpl_lp
 from pykep.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
 
 
-class mga_lt_nep(base_problem):
+class mga_lt_nep:
     """
     This class is a pygmo (http://esa.github.io/pygmo/) problem representing a low-thrust
-    interplanetary trajectory modelled as a Multiple Gravity Assist trajectory with sims_flanagan legs
+    interplanetary trajectory modelled as a Multiple Gravity Assist trajectory using multiple :class:`pykep.sims_flanagan_leg` 
 
-    - Yam, C.H., di Lorenzo, D., and Izzo, D.,	 Low-Thrust Trajectory Design as a Constrained Global Optimization Problem,  Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
+    - Yam, C.H., di Lorenzo, D., and Izzo, D., Low-Thrust Trajectory Design as a Constrained Global Optimization Problem, Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering, 225(11), pp.1243-1251, 2011.
 
     The decision vector (chromosome) is::
 
-      [t0] + [T1, mf1, Vxi1, Vyi1, Vzi1, Vxf1, Vyf1, Vzf1] + [T2, mf2, Vxi2, Vyi2, Vzi2, Vxf2, Vyf2, Vzf2] + ... + [throttles1] + [throttles2] + ...
+      [t0] + 
+      [T1, mf1, Vxi1, Vyi1, Vzi1, Vxf1, Vyf1, Vzf1] + 
+      [T2, mf2, Vxi2, Vyi2, Vzi2, Vxf2, Vyf2, Vzf2] + 
+      ... + 
+      [throttles1] + 
+      [throttles2] + 
+      ...
 
     .. note::
 
-      The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.
+      The resulting problem is non linearly constrained. 
     """
 
     def __init__(self,
-                 seq=[jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')],
-                 n_seg=[10] * 2,
-                 t0=[epoch(0), epoch(1000)],
-                 tof=[[200, 500], [200, 500]],
-                 vinf_dep=2.5,
-                 vinf_arr=2.0,
-                 mass=4000.0,
-                 Tmax=1.0,
-                 Isp=2000.0,
-                 fb_rel_vel=6,
-                 multi_objective=False,
-                 high_fidelity=False):
+                 seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('mercury')],
+                 n_seg = [5, 20],
+                 t0 = [3000, 4000],
+                 tof = [[100, 1000], [200, 2000]],
+                 vinf_dep = 3,
+                 vinf_arr = 2,
+                 mass = 2000.0,
+                 Tmax = 0.5,
+                 Isp = 3500.0,
+                 fb_rel_vel = 6,
+                 multi_objective = False,
+                 high_fidelity = False):
         """
-        prob = mga_lt_nep(seq = [jpl_lp('earth'),jpl_lp('venus'),jpl_lp('earth')], n_seg = [10]*2,
-        t0 = [epoch(0),epoch(1000)], tof = [[200,500],[200,500]], vinf_dep=2.5, vinf_arr=2.0, mass=4000.0, Tmax=1.0, Isp=2000.0,
-        multi_objective = False, fb_rel_vel = 6, high_fidelity=False)
+        Args::
 
-        - seq: list of pykep.planet defining the encounter sequence for the trajectoty (including the initial planet)
-        - n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
-        - t0: list of pykep epochs defining the launch window
-        - tof: minimum and maximum time of each leg (days)
-        - vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
-        - vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
-        - mass: spacecraft starting mass
-        - Tmax: maximum thrust
-        - Isp: engine specific impulse
-        - fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
-        - multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
-        - high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.
+            - seq (```list of pykep.planet```): defines the encounter sequence for the trajectoty (including the initial planet)
+            - n_seg (```list``` of ```int```): the number of segments to be used for each leg
+            - t0: list of pykep epochs defining the launch window
+            - tof: minimum and maximum time of each leg (days)
+            - vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
+            - vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
+            - mass: spacecraft starting mass
+            - Tmax: maximum thrust
+            - Isp: engine specific impulse
+            - fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
+            - multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
+            - high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.
         """
 
         # 1) We compute the problem dimensions .... and call the base problem
@@ -245,12 +248,12 @@ class mga_lt_nep(base_problem):
             self.__leg.set(t_P[i], x0, throttles, t_P[i + 1], xe)
             # update mass!
             m0 = x[2 + 8 * i]
-            plot_sf_leg(self.__leg, units=AU, N=10, ax=axis)
+            plot_sf_leg(self.__leg, units=AU, N=10, axes=axis)
 
         # Plotting planets
         for i, planet in enumerate(self.seq):
             plot_planet(planet, t_P[i], units=AU,
-                        legend=True, color=(0.7, 0.7, 1), ax=axis)
+                        legend=True, color=(0.7, 0.7, 1), axes=axis)
 
         plt.show()
         return axis

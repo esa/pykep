@@ -352,10 +352,10 @@ class mga:
         _, _, _, l, _ = self._compute_dvs(x)
         for pl, e in zip(self.seq, ep):
             plot_planet(pl, epoch(e), units=units, legend=True,
-                        color=(0.7, 0.7, 1), ax=axes)
+                        color=(0.7, 0.7, 1), axes=axes)
         for lamb in l:
             plot_lambert(lamb, N=N, sol=0, units=units, color='k',
-                         legend=False, ax=axes, alpha=0.8)
+                         legend=False, axes=axes, alpha=0.8)
         return axes
 
 
