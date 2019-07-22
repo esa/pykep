@@ -280,5 +280,6 @@ class pl2pl_N_impulses(object):
         DV_others = list(x[5::4])
         DV_others.extend([DV1, DV2])
 
+        print("Total DV (m/s): ", sum(DV_others))
         print("Dvs (m/s): ", DV_others)
         print("Tofs (days): ", T)

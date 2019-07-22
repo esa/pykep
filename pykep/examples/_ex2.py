@@ -21,12 +21,12 @@ def run_example2():
     pl = jpl_lp('earth')
     plot_planet(
         pl, t0=t1, color=(0.8, 0.8, 1), legend=True, units=AU, axes=axis)
-    rE, vE = pl.eph(t1)
+    rE, _ = pl.eph(t1)
 
     pl = jpl_lp('mars')
     plot_planet(
         pl, t0=t2, color=(0.8, 0.8, 1), legend=True, units=AU, axes=axis)
-    rM, vM = pl.eph(t2)
+    rM, _ = pl.eph(t2)
 
     l = lambert_problem(rE, rM, dt, MU_SUN)
     plot_lambert(l, color='b', legend=True, units=AU, axes=axis)

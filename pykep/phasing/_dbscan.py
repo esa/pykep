@@ -174,7 +174,7 @@ class dbscan():
             for pl in self._asteroids[::skip]:
                 axis = plot_planet(pl, axes=axis, alpha=0.05, s=0)
             for cluster_member in ids:
-                r, v = self._asteroids[cluster_member].eph(epoch(ep))
+                r, _ = self._asteroids[cluster_member].eph(epoch(ep))
                 axis.scatter([r[0]], [r[1]], [r[2]], marker='o', alpha=alpha)
 
         plt.draw()

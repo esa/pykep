@@ -1,7 +1,9 @@
+from numpy.linalg import norm
+from math import sqrt, asin, acos
+
 from pykep.core import epoch, fb_con, EARTH_VELOCITY, AU, MU_SUN
 from pykep.planet import jpl_lp
-from pykep.sims_flanagan._sims_flanagan import leg, spacecraft, sc_state
-
+from pykep.sims_flanagan import leg, spacecraft, sc_state
 
 class mga_lt_nep:
     """
@@ -41,147 +43,128 @@ class mga_lt_nep:
         """
         Args::
 
-            - seq (```list of pykep.planet```): defines the encounter sequence for the trajectoty (including the initial planet)
-            - n_seg (```list``` of ```int```): the number of segments to be used for each leg
-            - t0: list of pykep epochs defining the launch window
-            - tof: minimum and maximum time of each leg (days)
-            - vinf_dep: maximum launch hyperbolic velocity allowed (in km/sec)
-            - vinf_arr: maximum arrival hyperbolic velocity allowed (in km/sec)
-            - mass: spacecraft starting mass
-            - Tmax: maximum thrust
-            - Isp: engine specific impulse
-            - fb_rel_vel = determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec)
-            - multi-objective: when True defines the problem as a multi-objective problem, returning total DV and time of flight
-            - high_fidelity = makes the trajectory computations slower, but actually dynamically feasible.
+            - seq (```list of pykep.planet```): defines the encounter sequence for the trajectoty (including the initial planet).
+            - n_seg (```list``` of ```int```): the number of segments to be used for each leg.
+            - t0 (```list``` of ```floats```): the launch window (in mjd2000).
+            - tof (```list``` of ```2D-list```): minimum and maximum time of each leg (days).
+            - vinf_dep (```float```): maximum launch hyperbolic velocity allowed (in km/sec).
+            - vinf_arr (```float```): maximum arrival hyperbolic velocity allowed (in km/sec).
+            - mass (```float```): spacecraft starting mass. (in kg).
+            - Tmax (```float```): maximum thrust (in N).
+            - Isp (```float```):: engine specific impulse (in s).
+.           - fb_rel_vel (```float```): determines the bounds on the maximum allowed relative velocity at all fly-bys (in km/sec).
+            - multi-objective (```bool```): when True defines the problem as a multi-objective problem, returning total DV and time of flight.
+            - high_fidelity (```bool```):makes the trajectory computations slower, but actually dynamically feasible.
         """
+        # We define some data members (we use the double underscore to
+        # indicate they are private)
+        self._seq = seq
+        self._n_seg = n_seg
+        self._t0 = t0
+        self._tof = tof
+        self._vinf_dep = vinf_dep * 1000
+        self._vinf_arr = vinf_arr * 1000
+        self._mass = mass
+        self._Tmax = Tmax
+        self._fb_rel_vel = fb_rel_vel
+        self._multiobjective = multi_objective
+        self._high_fidelity = high_fidelity
 
-        # 1) We compute the problem dimensions .... and call the base problem
-        # constructor
-        self.__n_legs = len(seq) - 1
-        n_fb = self.__n_legs - 1
-        # 1a) The decision vector length
-        dim = 1 + self.__n_legs * 8 + sum(n_seg) * 3
-        # 1b) The total number of constraints (mismatch + fly-by + boundary +
-        # throttles
-        c_dim = self.__n_legs * 7 + n_fb * 2 + 2 + sum(n_seg)
-        # 1c) The number of inequality constraints (boundary + fly-by angle +
-        # throttles)
-        c_ineq_dim = 2 + n_fb + sum(n_seg)
-        # 1d) the number of objectives
-        f_dim = multi_objective + 1
-        # First we call the constructor for the base pygmo problem
-        # As our problem is n dimensional, box-bounded (may be multi-objective), we write
-        # (dim, integer dim, number of obj, number of con, number of inequality con, tolerance on con violation)
-        super().__init__(
-            dim, 0, f_dim, c_dim, c_ineq_dim, 1e-4)
+        self._n_legs = len(seq) - 1
+        self._sc = spacecraft(mass, Tmax, Isp)
+        self._leg = leg()
+        self._leg.set_mu(MU_SUN)
+        self._leg.set_spacecraft(self._sc)
 
-        # 2) We then define some class data members
-        # public:
-        self.seq = seq
-        # private:
-        self.__n_seg = n_seg
-        self.__vinf_dep = vinf_dep * 1000
-        self.__vinf_arr = vinf_arr * 1000
-        self.__sc = spacecraft(mass, Tmax, Isp)
-        self.__leg = leg()
-        self.__leg.set_mu(MU_SUN)
-        self.__leg.set_spacecraft(self.__sc)
-        self.__leg.high_fidelity = high_fidelity
-        fb_rel_vel *= 1000
-        # 3) We compute the bounds
-        lb = [t0[0].mjd2000] + [0, mass / 2, -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
-                                fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * self.__n_legs + [-1, -1, -1] * sum(self.__n_seg)
-        ub = [t0[1].mjd2000] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel,
-                                fb_rel_vel, fb_rel_vel] * self.__n_legs + [1, 1, 1] * sum(self.__n_seg)
-        # 3a ... and account for the bounds on the vinfs......
-        lb[3:6] = [-self.__vinf_dep] * 3
-        ub[3:6] = [self.__vinf_dep] * 3
-        lb[-sum(self.__n_seg) * 3 - 3:-sum(self.__n_seg)
-           * 3] = [-self.__vinf_arr] * 3
-        ub[-sum(self.__n_seg) * 3 - 3:-sum(self.__n_seg)
-           * 3] = [self.__vinf_arr] * 3
-        # 3b... and for the time of flight
-        lb[1:1 + 8 * self.__n_legs:8] = [el[0] for el in tof]
-        ub[1:1 + 8 * self.__n_legs:8] = [el[1] for el in tof]
+    def get_bounds(self):
+        # Convenience aliases
+        t0 = self._t0
+        mass = self._mass
+        fb_rel_vel = self._fb_rel_vel
+        n_legs = self._n_legs
+        n_seg = self._n_seg
+        vinf_dep = self._vinf_dep
+        vinf_arr = self._vinf_arr
+        tof = self._tof
 
-        # 4) And we set the bounds
-        self.set_bounds(lb, ub)
+        # Basic bounds
+        lb = [t0[0]] + [0., mass / 2., -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
+                                fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * n_legs + [-1, -1, -1] * sum(n_seg)
+        ub = [t0[1]] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel,
+                                fb_rel_vel, fb_rel_vel] * n_legs + [1, 1, 1] * sum(n_seg)
+        # bounds on the vinfs......
+        lb[3:6] = [-vinf_dep] * 3
+        ub[3:6] = [vinf_dep] * 3
+        lb[-sum(n_seg) * 3 - 3:-sum(n_seg) * 3] = [-vinf_arr] * 3
+        ub[-sum(n_seg) * 3 - 3:-sum(n_seg) * 3] = [vinf_arr] * 3
+        # and for the time of flight
+        lb[1:1 + 8 * n_legs:8] = [el[0] for el in tof]
+        ub[1:1 + 8 * n_legs:8] = [el[1] for el in tof]
 
-    # Objective function
-    def _objfun_impl(self, x):
-        if self.f_dimension == 1:
-            return (-x[2 + (self.__n_legs - 1) * 8],)
-        else:
-            return (-x[2 + (self.__n_legs - 1) * 8], sum(x[1:1 + 8 * self.__n_legs:8]))
+        return (lb, ub)
 
-    # Constraints function
-    def _compute_constraints_impl(self, x):
-        # 1 - We decode the chromosome extracting the time of flights
-        T = list([0] * (self.__n_legs))
-        for i in range(self.__n_legs):
-            T[i] = x[1 + i * 8]
+    def fitness(self, x):
+        # The final mass is the fitness
+        retval = [x[2 + 8 * (self._n_legs - 1)]]
+        # We compute the epochs and ephemerides of the planetary encounters
+        t_P = list([None] * (self._n_legs + 1))
+        r_P = list([None] * (self._n_legs + 1))
+        v_P = list([None] * (self._n_legs + 1))
+        for i in range(len(self._seq)):
+            t_P[i] = epoch(x[0] + sum(x[1:i*8:8]))
+            r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
+        # We assemble the constraints
+        for i in range(self._n_legs):
+            # Departure velocity of the spacecraft in the heliocentric frame
+            v = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
+            x0 = sc_state(rE, v, self.__sc.mass)
+            v = [a + b for a, b in zip(vV, x[6:9])]
+            xe = sc_state(rV, v, x[2])
+            self.__leg1.set(
+                t_E, x0, x[-3 * (self.__nseg1 + self.__nseg2):-self.__nseg2 * 3], t_V, xe)
 
-        # 2 - We compute the epochs and ephemerides of the planetary encounters
-        t_P = list([None] * (self.__n_legs + 1))
-        r_P = list([None] * (self.__n_legs + 1))
-        v_P = list([None] * (self.__n_legs + 1))
+        # Second leg
+        v = [a + b for a, b in zip(vV, x[11:14])]
+        x0 = sc_state(rV, v, x[2])
+        v = [a + b for a, b in zip(vM, x[14:17])]
+        xe = sc_state(rM, v, x[10])
+        self.__leg2.set(t_E, x0, x[(-3 * self.__nseg2):], t_V, xe)
 
-        for i, planet in enumerate(self.seq):
-            t_P[i] = epoch(x[0] + sum(T[0:i]))
-            r_P[i], v_P[i] = self.seq[i].eph(t_P[i])
-
-        # 3 - We iterate through legs to compute mismatches and throttles
-        # constraints
-        ceq = list()
-        cineq = list()
-        m0 = self.__sc.mass
-        for i in range(self.__n_legs):
-            # First Leg
-            v = [a + b for a, b in zip(v_P[i], x[(3 + i * 8):(6 + i * 8)])]
-            x0 = sc_state(r_P[i], v, m0)
-            v = [a + b for a, b in zip(v_P[i + 1], x[(6 + i * 8):(9 + i * 8)])]
-            xe = sc_state(r_P[i + 1], v, x[2 + i * 8])
-            throttles = x[(1 + 8 * self.__n_legs + 3 * sum(self.__n_seg[:i])):(
-                1 + 8 * self.__n_legs + 3 * sum(self.__n_seg[:i]) + 3 * self.__n_seg[i])]
-            self.__leg.set(t_P[i], x0, throttles, t_P[i + 1], xe)
-            # update mass!
-            m0 = x[2 + 8 * i]
-            ceq.extend(self.__leg.mismatch_constraints())
-            cineq.extend(self.__leg.throttles_constraints())
-
-        # Adding the boundary constraints
+        # Defining the constraints
         # departure
-        v_dep_con = (x[3] ** 2 + x[4] ** 2 + x[5] ** 2 -
-                     self.__vinf_dep ** 2) / (EARTH_VELOCITY ** 2)
+        v_dep_con = (x[3] * x[3] + x[4] * x[4] + x[5] * x[5] -
+                     self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
         # arrival
-        v_arr_con = (x[6 + (self.__n_legs - 1) * 8] ** 2 + x[7 + (self.__n_legs - 1) * 8] **
-                     2 + x[8 + (self.__n_legs - 1) * 8] ** 2 - self.__vinf_arr ** 2) / (EARTH_VELOCITY ** 2)
-        cineq.append(v_dep_con * 100)
-        cineq.append(v_arr_con * 100)
+        v_arr_con = (x[14] * x[14] + x[15] * x[15] + x[16] * x[16] -
+                     self.__Vinf_arr * self.__Vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
+        # fly-by at Venus
+        DV_eq, alpha_ineq = fb_con(x[6:9], x[11:14], self.__venus)
 
-        # We add the fly-by constraints
-        for i in range(self.__n_legs - 1):
-            DV_eq, alpha_ineq = fb_con(
-                x[6 + i * 8:9 + i * 8], x[11 + i * 8:14 + i * 8], self.seq[i + 1])
-            ceq.append(DV_eq / (EARTH_VELOCITY ** 2))
-            cineq.append(alpha_ineq)
+        # Assembling the constraints
+        constraints = list(self.__leg1.mismatch_constraints() + self.__leg2.mismatch_constraints()) + [DV_eq] + list(
+            self.__leg1.throttles_constraints() + self.__leg2.throttles_constraints()) + [v_dep_con] + [v_arr_con] + [alpha_ineq]
 
-        # Making the mismatches non dimensional
-        for i in range(self.__n_legs):
-            ceq[0 + i * 7] /= AU
-            ceq[1 + i * 7] /= AU
-            ceq[2 + i * 7] /= AU
-            ceq[3 + i * 7] /= EARTH_VELOCITY
-            ceq[4 + i * 7] /= EARTH_VELOCITY
-            ceq[5 + i * 7] /= EARTH_VELOCITY
-            ceq[6 + i * 7] /= self.__sc.mass
+        # We then scale all constraints to non-dimensional values
+        # leg 1
+        constraints[0] /= AU
+        constraints[1] /= AU
+        constraints[2] /= AU
+        constraints[3] /= EARTH_VELOCITY
+        constraints[4] /= EARTH_VELOCITY
+        constraints[5] /= EARTH_VELOCITY
+        constraints[6] /= self.__sc.mass
+        # leg 2
+        constraints[7] /= AU
+        constraints[8] /= AU
+        constraints[9] /= AU
+        constraints[10] /= EARTH_VELOCITY
+        constraints[11] /= EARTH_VELOCITY
+        constraints[12] /= EARTH_VELOCITY
+        constraints[13] /= self.__sc.mass
+        # fly-by at Venus
+        constraints[14] /= (EARTH_VELOCITY * EARTH_VELOCITY)
 
-        # We assemble the constraint vector
-        retval = list()
-        retval.extend(ceq)
-        retval.extend(cineq)
-
-        return retval
+        return retval + constraints
 
     # And this helps visualizing the trajectory
     def plot(self, x, ax=None):
