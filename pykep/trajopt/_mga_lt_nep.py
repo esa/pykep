@@ -105,7 +105,11 @@ class mga_lt_nep:
 
     def fitness(self, x):
         # The final mass is the fitness
-        retval = [x[2 + 8 * (self._n_legs - 1)]]
+        objfun = [x[2 + 8 * (self._n_legs - 1)]]
+        eq_c = []
+        ineq_c = []
+        if self._multiobjective:
+            objfun = objfun + [sum(x[1:8*self._n_legs:8])]
         # We compute the epochs and ephemerides of the planetary encounters
         t_P = list([None] * (self._n_legs + 1))
         r_P = list([None] * (self._n_legs + 1))
@@ -113,58 +117,47 @@ class mga_lt_nep:
         for i in range(len(self._seq)):
             t_P[i] = epoch(x[0] + sum(x[1:i*8:8]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
-        # We assemble the constraints
+        # We assemble the constraints. 
+        # 1 - Mismatch Constraints
         for i in range(self._n_legs):
             # Departure velocity of the spacecraft in the heliocentric frame
-            v = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
-            x0 = sc_state(rE, v, self.__sc.mass)
-            v = [a + b for a, b in zip(vV, x[6:9])]
-            xe = sc_state(rV, v, x[2])
-            self.__leg1.set(
-                t_E, x0, x[-3 * (self.__nseg1 + self.__nseg2):-self.__nseg2 * 3], t_V, xe)
+            v0 = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
+            if i==0:
+                m0 = self._mass
+            else:
+                m0 = x[2 + 8 * (i-1)]
+            x0 = sc_state(r-P[i], v0, m0)
+            vf = [a + b for a, b in zip(v_P[i+1], x[6 + 8 * i:9 + 8 * i])]
+            xf = sc_state(r_P[i+1], vf, x[2 + 8 * i])
+            self._leg.set(t_P[i], x0, x[-3 * sum(self._n_seg[i:]):-sum(self._n_seg[i+1:]) * 3], tf, xf)
+            mismatch = list(self._leg.mismatch_constraints())
+            # Making the mismatch non dimensional (assumes an heliocentric interplanetary trajectory)
+            mismatch[0] /= AU
+            mismatch[1] /= AU
+            mismatch[2] /= AU
+            mismatch[3] /= EARTH_VELOCITY
+            mismatch[4] /= EARTH_VELOCITY
+            mismatch[5] /= EARTH_VELOCITY
+            mismatch[6] /= self._mass
+            eq_c = eq_c + mismatch
 
-        # Second leg
-        v = [a + b for a, b in zip(vV, x[11:14])]
-        x0 = sc_state(rV, v, x[2])
-        v = [a + b for a, b in zip(vM, x[14:17])]
-        xe = sc_state(rM, v, x[10])
-        self.__leg2.set(t_E, x0, x[(-3 * self.__nseg2):], t_V, xe)
+        # 2 - Fly-by constraints
+        for i in range(self._n_legs - 1):
+            DV_eq, alpha_ineq = fb_con(x[6 + i * 8:9 + i * 8], x[11 + i * 8:14 + i * 8], self._seq[i+1])
+            eq_c = eq_c + [DV_eq / (EARTH_VELOCITY * EARTH_VELOCITY)]
+            ineq_c = ineq_c + [alpha_ineq]
 
-        # Defining the constraints
+        # 3 - Departure and arrival Vinf
         # departure
         v_dep_con = (x[3] * x[3] + x[4] * x[4] + x[5] * x[5] -
-                     self.__Vinf_dep * self.__Vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
+                     self._vinf_dep * self._vinf_dep) / (EARTH_VELOCITY * EARTH_VELOCITY)
         # arrival
-        v_arr_con = (x[14] * x[14] + x[15] * x[15] + x[16] * x[16] -
-                     self.__Vinf_arr * self.__Vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
-        # fly-by at Venus
-        DV_eq, alpha_ineq = fb_con(x[6:9], x[11:14], self.__venus)
+        n_fb = self._n_legs - 1
+        v_arr_con = (x[6 + n_fb * 8] * x[6 + n_fb * 8] + x[7 + n_fb * 8] * x[7 + n_fb * 8] + x[8 + n_fb * 8] * x[8 + n_fb * 8] -
+                     self._vinf_arr * self._vinf_arr) / (EARTH_VELOCITY * EARTH_VELOCITY)
+        ineq_c = ineq_c + [v_dep_con, v_arr_con]
 
-        # Assembling the constraints
-        constraints = list(self.__leg1.mismatch_constraints() + self.__leg2.mismatch_constraints()) + [DV_eq] + list(
-            self.__leg1.throttles_constraints() + self.__leg2.throttles_constraints()) + [v_dep_con] + [v_arr_con] + [alpha_ineq]
-
-        # We then scale all constraints to non-dimensional values
-        # leg 1
-        constraints[0] /= AU
-        constraints[1] /= AU
-        constraints[2] /= AU
-        constraints[3] /= EARTH_VELOCITY
-        constraints[4] /= EARTH_VELOCITY
-        constraints[5] /= EARTH_VELOCITY
-        constraints[6] /= self.__sc.mass
-        # leg 2
-        constraints[7] /= AU
-        constraints[8] /= AU
-        constraints[9] /= AU
-        constraints[10] /= EARTH_VELOCITY
-        constraints[11] /= EARTH_VELOCITY
-        constraints[12] /= EARTH_VELOCITY
-        constraints[13] /= self.__sc.mass
-        # fly-by at Venus
-        constraints[14] /= (EARTH_VELOCITY * EARTH_VELOCITY)
-
-        return retval + constraints
+        return objfun + eq_c + ineq_c
 
     # And this helps visualizing the trajectory
     def plot(self, x, ax=None):
