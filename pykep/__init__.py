@@ -2,7 +2,8 @@
 # We check what extensions are available
 ###########################################################
 __extensions__ = {'matplotlib': False, 'mplot3d': False,
-                  'pygmo': False, 'scikit-learn': False, 'scipy': False}
+                  'pygmo': False, 'scikit-learn': False, 'scipy': False, 
+                  'numba': False}
 # 1 - matplotlib
 try:
     from matplotlib import __version__ as matplotlib_ver
@@ -35,6 +36,13 @@ except ImportError:
 try:
     from scipy import __version__ as scipy_ver
     __extensions__['scipy'] = True
+except ImportError:
+    pass
+
+# 5 - numba is installed
+try:
+    from numba import __version__ as numba_ver
+    __extensions__['numba'] = True
 except ImportError:
     pass
 

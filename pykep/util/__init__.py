@@ -6,6 +6,11 @@ transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
 from pykep.util._util import *
+from pykep import __extensions__
+
+if __extensions__['numba']:
+    from pykep.util.gravity_spherical_harmonic import gravity_spherical_harmonic
+    from pykep.util.load_gravity_model import load_gravity_model
 
 
 def read_satcat(satcatfilename=None):

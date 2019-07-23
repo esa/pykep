@@ -30,11 +30,6 @@ def gravity_spherical_harmonic(x, *args):
 
     .. note::
 
-       The name of each of the instantiated planets will be its international designator and
-       thus a valid key to the satcat dictionary
-
-    .. note::
-
         This model was taken from a report by NASA:
         https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
         This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.

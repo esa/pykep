@@ -197,6 +197,62 @@ class gym_test_case(_ut.TestCase):
         self.assertAlmostEqual(udp.fitness(x)[0], 5855.8143406005165)
 
 
+class spherical_harmonics_loader_test_case(_ut.TestCase):
+    """Test case for the spherical harmonic gravity file loader function.
+
+    """
+
+    def runTest(self):
+        self.run_egm96_test()
+        self.run_ggm02c_test()
+
+    def run_egm96_test(self):
+        from .util import load_gravity_model
+
+        req_r = 6378.137
+        req_mu = 398600.4418
+
+        c20_20 = 4.01448327968e-09
+        c100_100 = 1.10930637955e-09
+
+        s100_50 = -1.06362863541e-09
+        s250_125 = -8.34356616626e-11
+
+        r, mu, c, s, n, m = load_gravity_model("util/gravity_models/Earth/egm96.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, mu_req)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[250, 125], s250_125)
+
+    def run_ggm02c_test(self):
+        from .util import load_gravity_model
+
+        req_r = 6378.1363
+        req_mu = 398600.4415
+
+        c20_20 = 3.734698472368e-09
+        c100_100 = 8.8043569591782e-10
+
+        s100_50 = -8.2691933615552e-10
+        s200_100 = -1.3266576400742e-12
+
+        r, mu, c, s, n, m = load_gravity_model("util/gravity_models/Earth/ggm02c.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, mu_req)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[200, 100], s200_100)
+
+
 def run_test_suite(level=0):
     """Run the full test suite.
 
@@ -212,6 +268,7 @@ def run_test_suite(level=0):
     suite.addTest(lambert_test_case())
     suite.addTest(mga_1dsm_test_case())
     suite.addTest(gym_test_case())
+    suite.addTest(spherical_harmonics_loader_test_case())
 
 
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
