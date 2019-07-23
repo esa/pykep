@@ -1,8 +1,7 @@
 import pykep as pk
 
 
-class mr_lt_nep(object):
-
+class mr_lt_nep:
     """
     This class represents, as a global optimization problem (linearly constrained,
     high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
@@ -21,7 +20,6 @@ class mr_lt_nep(object):
 
        The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.
     """
-
     def __init__(
             self,
             seq=[pk.planet.gtoc7(3413), pk.planet.gtoc7(

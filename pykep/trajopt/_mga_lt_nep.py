@@ -24,7 +24,7 @@ class mga_lt_nep:
 
     .. note::
 
-      The resulting problem is non linearly constrained. 
+      The resulting optimization problem is non linearly constrained and unfeasible a.e. (almost everywhere)
     """
 
     def __init__(self,
@@ -41,8 +41,7 @@ class mga_lt_nep:
                  multi_objective = False,
                  high_fidelity = False):
         """
-        Args::
-
+        Args:
             - seq (```list of pykep.planet```): defines the encounter sequence for the trajectoty (including the initial planet).
             - n_seg (```list``` of ```int```): the number of segments to be used for each leg.
             - t0 (```list``` of ```floats```): the launch window (in mjd2000).
@@ -88,7 +87,7 @@ class mga_lt_nep:
         tof = self._tof
 
         # Basic bounds
-        lb = [t0[0]] + [0., mass / 2., -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
+        lb = [t0[0]] + [0., mass / 3., -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
                                 fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * n_legs + [-1, -1, -1] * sum(n_seg)
         ub = [t0[1]] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel,
                                 fb_rel_vel, fb_rel_vel] * n_legs + [1, 1, 1] * sum(n_seg)
@@ -105,7 +104,7 @@ class mga_lt_nep:
 
     def fitness(self, x):
         # The final mass is the fitness
-        objfun = [x[2 + 8 * (self._n_legs - 1)]]
+        objfun = [-x[2 + 8 * (self._n_legs - 1)]]
         eq_c = []
         ineq_c = []
         if self._multiobjective:
@@ -126,10 +125,12 @@ class mga_lt_nep:
                 m0 = self._mass
             else:
                 m0 = x[2 + 8 * (i-1)]
-            x0 = sc_state(r-P[i], v0, m0)
+            x0 = sc_state(r_P[i], v0, m0)
             vf = [a + b for a, b in zip(v_P[i+1], x[6 + 8 * i:9 + 8 * i])]
             xf = sc_state(r_P[i+1], vf, x[2 + 8 * i])
-            self._leg.set(t_P[i], x0, x[-3 * sum(self._n_seg[i:]):-sum(self._n_seg[i+1:]) * 3], tf, xf)
+            idx_start = 1 + 8 * self._n_legs + sum(self._n_seg[:i]) * 3
+            idx_end   = 1 + 8 * self._n_legs + sum(self._n_seg[:i+1]) * 3
+            self._leg.set(t_P[i], x0, x[idx_start:idx_end], t_P[i+1], xf)
             mismatch = list(self._leg.mismatch_constraints())
             # Making the mismatch non dimensional (assumes an heliocentric interplanetary trajectory)
             mismatch[0] /= AU
@@ -140,6 +141,7 @@ class mga_lt_nep:
             mismatch[5] /= EARTH_VELOCITY
             mismatch[6] /= self._mass
             eq_c = eq_c + mismatch
+            ineq_c = ineq_c + list(self._leg.throttles_constraints())
 
         # 2 - Fly-by constraints
         for i in range(self._n_legs - 1):
@@ -159,8 +161,15 @@ class mga_lt_nep:
 
         return objfun + eq_c + ineq_c
 
+    def get_nec(self):
+        return self._n_legs * 7 + (self._n_legs - 1)
+
+    def get_nic(self):
+        return sum(self._n_seg) + (self._n_legs - 1) + 2
+
+
     # And this helps visualizing the trajectory
-    def plot(self, x, ax=None):
+    def plot(self, x, axes=None):
         """
         ax = prob.plot(x, ax=None)
 
@@ -177,66 +186,51 @@ class mga_lt_nep:
         import matplotlib as mpl
         from mpl_toolkits.mplot3d import Axes3D
         import matplotlib.pyplot as plt
-        from pykep import epoch, AU
-        from pykep.sims_flanagan import sc_state
-        from pykep.orbit_plots import plot_planet, plot_sf_leg
+        from pykep.orbit_plots import plot_sf_leg, plot_planet
 
         # Creating the axis if necessary
-        if ax is None:
+        if axes is None:
             mpl.rcParams['legend.fontsize'] = 10
             fig = plt.figure()
-            axis = fig.gca(projection='3d')
+            ax = fig.gca(projection='3d')
         else:
-            axis = ax
+            ax = axes
 
         # Plotting the Sun ........
-        axis.scatter([0], [0], [0], color='y')
+        ax.scatter([0], [0], [0], color=['y'])
 
-        # Plotting the legs .......
-        # 1 - We decode the chromosome extracting the time of flights
-        T = list([0] * (self.__n_legs))
-        for i in range(self.__n_legs):
-            T[i] = x[1 + i * 8]
+         # We compute the epochs and ephemerides of the planetary encounters
+        t_P = list([None] * (self._n_legs + 1))
+        r_P = list([None] * (self._n_legs + 1))
+        v_P = list([None] * (self._n_legs + 1))
+        for i in range(len(self._seq)):
+            t_P[i] = epoch(x[0] + sum(x[1:i*8:8]))
+            r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
+            plot_planet(self._seq[i], t0 = t_P[i],
+                        units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, axes=ax)
 
-        # 2 - We compute the epochs and ephemerides of the planetary encounters
-        t_P = list([None] * (self.__n_legs + 1))
-        r_P = list([None] * (self.__n_legs + 1))
-        v_P = list([None] * (self.__n_legs + 1))
+        # We assemble the constraints. 
+        # 1 - Mismatch Constraints
+        for i in range(self._n_legs):
+            # Departure velocity of the spacecraft in the heliocentric frame
+            v0 = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
+            if i==0:
+                m0 = self._mass
+            else:
+                m0 = x[2 + 8 * (i-1)]
+            x0 = sc_state(r_P[i], v0, m0)
+            vf = [a + b for a, b in zip(v_P[i+1], x[6 + 8 * i:9 + 8 * i])]
+            xf = sc_state(r_P[i+1], vf, x[2 + 8 * i])
+            idx_start = 1 + 8 * self._n_legs + sum(self._n_seg[:i]) * 3
+            idx_end   = 1 + 8 * self._n_legs + sum(self._n_seg[:i+1]) * 3
+            self._leg.set(t_P[i], x0, x[idx_start:idx_end], t_P[i+1], xf)
+            plot_sf_leg(self._leg, units=AU, N=10, axes=ax, legend=False)
 
-        for i, planet in enumerate(self.seq):
-            t_P[i] = epoch(x[0] + sum(T[0:i]))
-            r_P[i], v_P[i] = self.seq[i].eph(t_P[i])
+        return axes
 
-        # 3 - We iterate through legs to compute mismatches and throttles
-        # constraints
-        ceq = list()
-        cineq = list()
-        m0 = self.__sc.mass
-        for i in range(self.__n_legs):
-            # First Leg
-            v = [a + b for a, b in zip(v_P[i], x[(3 + i * 8):(6 + i * 8)])]
-            x0 = sc_state(r_P[i], v, m0)
-            v = [a + b for a,
-                 b in zip(v_P[i + 1], x[(6 + i * 8):(11 + i * 8)])]
-            xe = sc_state(r_P[i + 1], v, x[2 + i * 8])
-            throttles = x[(1 + 8 * self.__n_legs + 3 * sum(self.__n_seg[:i])):(
-                1 + 8 * self.__n_legs + 3 * sum(self.__n_seg[:i]) + 3 * self.__n_seg[i])]
-            self.__leg.set(t_P[i], x0, throttles, t_P[i + 1], xe)
-            # update mass!
-            m0 = x[2 + 8 * i]
-            plot_sf_leg(self.__leg, units=AU, N=10, axes=axis)
-
-        # Plotting planets
-        for i, planet in enumerate(self.seq):
-            plot_planet(planet, t_P[i], units=AU,
-                        legend=True, color=(0.7, 0.7, 1), axes=axis)
-
-        plt.show()
-        return axis
-
-    def high_fidelity(self, boolean):
+    def high_fidelity(self, status = False):
         """
-        prob.high_fidelity(status)
+        prob.high_fidelity(status = True)
 
         - status: either True or False (True sets high fidelity on)
 
@@ -246,123 +240,5 @@ class mga_lt_nep:
 
           prob.high_fidelity(True)
         """
-        # We avoid here that objfun and constraint are kept that have been
-        # evaluated wrt a different fidelity
-        self.reset_caches()
         # We set the propagation fidelity
-        self.__leg.high_fidelity = boolean
-
-    def ic_from_mga_1dsm(self, x):
-        """
-        x_lt = prob.ic_from_mga_1dsm(x_mga)
-
-        - x_mga: compatible trajectory as encoded by an mga_1dsm problem
-
-        Returns an initial guess for the low-thrust trajectory, converting the mga_1dsm solution x_dsm. The user
-        is responsible that x_mga makes sense (i.e. it is a viable mga_1dsm representation). The conversion is done by importing in the
-        low-thrust encoding a) the launch date b) all the legs durations, c) the in and out relative velocities at each planet.
-        All throttles are put to zero.
-
-        Example::
-
-          x_lt= prob.ic_from_mga_1dsm(x_mga)
-        """
-        from math import pi, cos, sin, acos
-        from scipy.linalg import norm
-        from pykep import propagate_lagrangian, lambert_problem, DAY2SEC, fb_prop
-
-        retval = list([0.0] * self.dimension)
-        # 1 -  we 'decode' the chromosome recording the various times of flight
-        # (days) in the list T
-        T = list([0] * (self.__n_legs))
-
-        for i in range(len(T)):
-            T[i] = log(x[2 + 4 * i])
-        total = sum(T)
-        T = [x[1] * time / total for time in T]
-
-        retval[0] = x[0]
-        for i in range(self.__n_legs):
-            retval[1 + 8 * i] = T[i]
-            retval[2 + 8 * i] = self.__sc.mass
-
-        # 2 - We compute the epochs and ephemerides of the planetary encounters
-        t_P = list([None] * (self.__n_legs + 1))
-        r_P = list([None] * (self.__n_legs + 1))
-        v_P = list([None] * (self.__n_legs + 1))
-        DV = list([None] * (self.__n_legs + 1))
-
-        for i, planet in enumerate(self.seq):
-            t_P[i] = epoch(x[0] + sum(T[0:i]))
-            r_P[i], v_P[i] = self.seq[i].eph(t_P[i])
-
-        # 3 - We start with the first leg
-        theta = 2 * pi * x[1]
-        phi = acos(2 * x[2] - 1) - pi / 2
-
-        Vinfx = x[3] * cos(phi) * cos(theta)
-        Vinfy = x[3] * cos(phi) * sin(theta)
-        Vinfz = x[3] * sin(phi)
-
-        retval[3:6] = [Vinfx, Vinfy, Vinfz]
-
-        v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = propagate_lagrangian(r_P[0], v0, x[4] * T[0] * DAY2SEC, MU_SUN)
-
-        # Lambert arc to reach seq[1]
-        dt = (1 - x[4]) * T[0] * DAY2SEC
-        l = lambert_problem(r, r_P[1], dt, MU_SUN)
-        v_end_l = l.get_v2()[0]
-        v_beg_l = l.get_v1()[0]
-
-        retval[6:9] = [a - b for a, b in zip(v_end_l, v_P[1])]
-
-        # 4 - And we proceed with each successive leg
-        for i in range(1, self.__n_legs):
-            # Fly-by
-            v_out = fb_prop(v_end_l, v_P[i], x[
-                            7 + (i - 1) * 4] * self.seq[i].radius, x[6 + (i - 1) * 4], self.seq[i].mu_self)
-            retval[3 + i * 8:6 + i * 8] = [a -
-                                           b for a, b in zip(v_out, v_P[i])]
-            # s/c propagation before the DSM
-            r, v = propagate_lagrangian(
-                r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, MU_SUN)
-            # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
-            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt, MU_SUN)
-            v_end_l = l.get_v2()[0]
-            v_beg_l = l.get_v1()[0]
-            # DSM occuring at time nu2*T2
-            DV[i] = norm([a - b for a, b in zip(v_beg_l, v)])
-            retval[6 + i * 8:9 + i * 8] = [a -
-                                           b for a, b in zip(v_end_l, v_P[i + 1])]
-        return retval
-
-    def double_segments(self, x):
-        """
-        x_doubled = prob.double_segments(x)
-
-        - x: compatible trajectory as encoded by an mga_1dsm mga_lt_nep
-
-        Returns the decision vector encoding a low trust trajectory having double the number of segments with respect to x
-        and a 'similar' throttle history. In case high fidelity is True, and x is a feasible trajectory, the returned decision vector
-        also encodes a feasible trajectory that can be further optimized
-
-        Example::
-
-          prob = traj.mga_lt_nep(nseg=[[10],[20]])
-          pop = population(prob,1)
-          .......OPTIMIZE.......
-          x = prob.double_segments(pop.champion.x)
-          prob = traj.mga_lt_nep(nseg=[[20],[40]])
-          pop = population(prob)
-          pop.push_back(x)
-          .......OPTIMIZE AGAIN......
-        """
-        y = list()
-        y.extend(x[:-sum(self.__n_seg) * 3])
-        for i in range(sum(self.__n_seg)):
-            y.extend(x[-(sum(self.__n_seg) - i) * 3:-
-                       (sum(self.__n_seg) - 1 - i) * 3] * 2)
-        y.extend(x[-3:] * 2)
-        return y
+        self._leg.high_fidelity = status
