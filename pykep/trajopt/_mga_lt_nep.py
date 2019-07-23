@@ -34,7 +34,7 @@ class mga_lt_nep:
                  tof = [[100, 1000], [200, 2000]],
                  vinf_dep = 3,
                  vinf_arr = 2,
-                 mass = 2000.0,
+                 mass = [1200., 2000.0],
                  Tmax = 0.5,
                  Isp = 3500.0,
                  fb_rel_vel = 6,
@@ -70,7 +70,7 @@ class mga_lt_nep:
         self._high_fidelity = high_fidelity
 
         self._n_legs = len(seq) - 1
-        self._sc = spacecraft(mass, Tmax, Isp)
+        self._sc = spacecraft(mass[1], Tmax, Isp)
         self._leg = leg()
         self._leg.set_mu(MU_SUN)
         self._leg.set_spacecraft(self._sc)
@@ -87,9 +87,9 @@ class mga_lt_nep:
         tof = self._tof
 
         # Basic bounds
-        lb = [t0[0]] + [0., mass / 3., -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
+        lb = [t0[0]] + [0., mass[0], -fb_rel_vel, -fb_rel_vel, -fb_rel_vel, -
                                 fb_rel_vel, -fb_rel_vel, -fb_rel_vel] * n_legs + [-1, -1, -1] * sum(n_seg)
-        ub = [t0[1]] + [1, mass, fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel,
+        ub = [t0[1]] + [1, mass[1], fb_rel_vel, fb_rel_vel, fb_rel_vel, fb_rel_vel,
                                 fb_rel_vel, fb_rel_vel] * n_legs + [1, 1, 1] * sum(n_seg)
         # bounds on the vinfs......
         lb[3:6] = [-vinf_dep] * 3
@@ -122,7 +122,7 @@ class mga_lt_nep:
             # Departure velocity of the spacecraft in the heliocentric frame
             v0 = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
             if i==0:
-                m0 = self._mass
+                m0 = self._mass[1]
             else:
                 m0 = x[2 + 8 * (i-1)]
             x0 = sc_state(r_P[i], v0, m0)
@@ -139,7 +139,7 @@ class mga_lt_nep:
             mismatch[3] /= EARTH_VELOCITY
             mismatch[4] /= EARTH_VELOCITY
             mismatch[5] /= EARTH_VELOCITY
-            mismatch[6] /= self._mass
+            mismatch[6] /= self._mass[1]
             eq_c = eq_c + mismatch
             ineq_c = ineq_c + list(self._leg.throttles_constraints())
 
@@ -215,7 +215,7 @@ class mga_lt_nep:
             # Departure velocity of the spacecraft in the heliocentric frame
             v0 = [a + b for a, b in zip(v_P[i], x[3 + 8 * i:6 + 8 * i])]
             if i==0:
-                m0 = self._mass
+                m0 = self._mass[1]
             else:
                 m0 = x[2 + 8 * (i-1)]
             x0 = sc_state(r_P[i], v0, m0)
