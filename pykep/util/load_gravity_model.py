@@ -8,8 +8,8 @@ def load_gravity_model(fp):
         - fp (``str``): path to model file.
 
     Returns:
-        - planet_radius (``float``): Radius of central body (km)
-        - gravity_param (``float``): Gravitational parameter of central body (km3/s2)
+        - planet_radius (``float``): Radius of central body (m)
+        - gravity_param (``float``): Gravitational parameter of central body (m3/s2)
         - c_coefficients (``array-like``): Array of C_(n, m) coefficients.
         - s_coefficients (``array-like``): Array of S_(n, m) coefficients.
         - degree (``int``): Maximum degree of model.
@@ -49,8 +49,8 @@ def _read_model_file(fp):
             raise IndexError("file header needs at least 4 values: radius, mu, degree, order. " +
                              f"Header contains ({len(header)}) values.")
 
-        radius = float(header[0])
-        gravity_const = float(header[1])
+        radius = float(header[0]) * 10**3
+        gravity_const = float(header[1]) * 10**9
         degree = int(header[2])
         order = int(header[3])
 

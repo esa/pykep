@@ -3,7 +3,7 @@ from numba import jit
 
 
 @jit
-def gravity_spherical_harmonic(x, *args):
+def gravity_spherical_harmonic(x, r_planet, mu, c, s, n_max, m_max):
     """
     Calculate the gravitational acceleration due to the spherical harmonics gravity model supplied.
 
@@ -34,74 +34,49 @@ def gravity_spherical_harmonic(x, *args):
         https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
         This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
     """
-    acc = np.zeros(x.shape)
-    for i in range(len(x[0])):
-        acc[i] = _gottlieb(x[i], *args)
 
-    return acc
+    #if (x.ndim != 2) or (x.shape[1] != 3):
+    #    raise ValueError("'x' is not an N x 3 array")
 
-
-@jit
-def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
-    """
-    Calculate the gravitational acceleration on one set of coordinates due to
-    the spherical harmonics gravity model supplied.
-
-    Args:
-        - x (``array-like``): Cartesian coordinates of satellite in frame defined by gravity model.
-        - r_planet (``float``): Equatorial radius of planet.
-        - mu (``float``): Gravitational parameter of planet.
-        - c (``array-like``): Two-dimensional normalised C coefficient array: C[degree, order] = Cnm
-        - s (``array-like``): Two-dimensional normalised S coefficient array: S[degree, order] = Snm
-        - n_max (``int``): Degree up to which to calculate the gravitational acceleration.
-        - m_max (``int``): Order up to which to calculate the gravitational acceleration. Cannot be higher than n_max.
-    
-    Returns:
-        - acceleration (``array-like``): Vector of the gravitational acceleration in a cartesian coordinate frame defined by the gravity model.
-
-    .. Source:
-        This model was taken from a report by NASA:
-        https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
-        This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
-    """
     norm1, norm2, norm11, normn10, norm1m, norm2m, normn1 = _calculate_normalisation_parameters(n_max)
 
-    r = np.linalg.norm(x)
+    n_coor = x.shape[0]
+
+    r = np.sqrt(x[:, 0]**2 + x[:, 1]**2 + x[:, 2]**2)
 
     r_inverted = 1 / r
 
-    x_r = x[0] * r_inverted
-    y_r = x[1] * r_inverted
-    z_r = x[2] * r_inverted
-
-    ep = z_r
+    x_r = x[:, 0] * r_inverted
+    y_r = x[:, 1] * r_inverted
+    z_r = x[:, 2] * r_inverted
 
     rp_r = r_planet * r_inverted
-    rp_rn = rp_r
+    rp_rn = np.copy(rp_r)
 
     mu_r2 = mu * r_inverted * r_inverted
 
-    p = np.zeros((max(2, n_max + 1), max(2, n_max + 2)))
+    shape = (max(2, n_max + 1), max(2, n_max + 2), n_coor)
+    p = np.zeros(shape)
 
     p[0, 0] = 1
-    p[1, 0] = np.sqrt(3) * ep
+    p[1, 0, :] = np.sqrt(3) * z_r
     p[1, 1] = np.sqrt(3)
 
     # sectorial ALFs
     for n in range(2, n_max + 1):
         p[n, n] = norm11[n] * p[n - 1, n - 1] * (2 * n - 1)
 
-    ctil = np.zeros(max(3, n_max + 1))
-    stil = np.zeros(max(3, n_max + 1))
+    shape = (max(3, n_max + 1), n_coor)
+    ctil = np.ones(shape)
+    stil = np.zeros(shape)
 
-    ctil[0] = 1
     ctil[1] = x_r
     stil[1] = y_r
 
-    sumh = 0
-    sumgm = 1
-    sumj = 0
-    sumk = 0
+    sumh = np.zeros(n_coor)
+    sumgm = np.ones(n_coor)
+    sumj = np.zeros(n_coor)
+    sumk = np.zeros(n_coor)
 
     for n in range(2, n_max + 1):
         rp_rn *= rp_r
@@ -112,22 +87,22 @@ def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
         np1 = n + 1
 
         # tesseral ALFs
-        p[n, nm1] = normn1[n, nm1] * ep * p[n, n]
+        p[n, nm1] = normn1[n, nm1] * z_r * p[n, n]
 
         # zonal ALFs
-        p[n, 0] = (n2m1 * ep * norm1[n] * p[nm1, 0] - nm1 * norm2[n] * p[nm2, 0]) / n
-        p[n, 1] = (n2m1 * ep * norm1m[n, 1] * p[nm1, 1] - n * norm2m[n, 1] * p[nm2, 1]) / nm1
+        p[n, 0] = (n2m1 * z_r * norm1[n] * p[nm1, 0] - nm1 * norm2[n] * p[nm2, 0]) / n
+        p[n, 1] = (n2m1 * z_r * norm1m[n, 1] * p[nm1, 1] - n * norm2m[n, 1] * p[nm2, 1]) / nm1
 
         sumhn = normn10[n] * p[n, 1] * c[n, 0]
         sumgmn = p[n, 0] * c[n, 0] * np1
 
         if m_max > 0:
             for m in range(2, n - 1):
-                p[n, m] = (n2m1 * ep * norm1m[n, m] * p[nm1, m] -
+                p[n, m] = (n2m1 * z_r * norm1m[n, m] * p[nm1, m] -
                            (nm1 + m) * norm2m[n, m] * p[nm2, m]) / (n - m)
 
-            sumjn = 0
-            sumkn = 0
+            sumjn = np.zeros(n_coor)
+            sumkn = np.zeros(n_coor)
 
             ctil[n] = ctil[1] * ctil[nm1] - stil[1] * stil[nm1]
             stil[n] = stil[1] * ctil[nm1] + ctil[1] * stil[nm1]
@@ -154,15 +129,15 @@ def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
         sumh += rp_rn * sumhn
         sumgm += rp_rn * sumgmn
 
-    _lambda = sumgm + ep * sumh
+    _lambda = sumgm + z_r * sumh
 
-    acceleration = np.zeros(3)
+    acc = np.zeros(x.shape)
 
-    acceleration[0] = - mu_r2 * (_lambda * x_r - sumj)
-    acceleration[1] = - mu_r2 * (_lambda * y_r - sumk)
-    acceleration[2] = - mu_r2 * (_lambda * z_r - sumh)
+    acc[:, 0] = - mu_r2 * (_lambda * x_r - sumj)
+    acc[:, 1] = - mu_r2 * (_lambda * y_r - sumk)
+    acc[:, 2] = - mu_r2 * (_lambda * z_r - sumh)
 
-    return acceleration
+    return acc
 
 
 @jit
