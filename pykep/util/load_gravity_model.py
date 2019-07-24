@@ -75,7 +75,3 @@ def _convert_data(array, max_degree, max_order):
         s_array[degree, order] = s
 
     return c_array, s_array
-
-
-if __name__ == "__main__":
-    load_coefficients("C:/Users/Bert van den Abbeele/Documents/Python/HarmonicsPropagator/tests/jgl150q1.txt")

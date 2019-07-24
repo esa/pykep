@@ -2,7 +2,7 @@ import numpy as np
 from numba import jit
 
 
-@jit
+#@jit
 def gravity_spherical_harmonic(x, r_planet, mu, c, s, n_max, m_max):
     """
     Calculate the gravitational acceleration due to the spherical harmonics gravity model supplied.
@@ -34,10 +34,19 @@ def gravity_spherical_harmonic(x, r_planet, mu, c, s, n_max, m_max):
         https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20160011252.pdf
         This is the normalised gottlieb algorithm, as coded in MATLAB in the report and transferred to Python.
     """
+    if not (len(x[0]) == 3):
+        raise ValueError(f"Position must be an (N x 3) array. Shape of position is ({len(x)} x {len(x[0])}).")
 
-    #if (x.ndim != 2) or (x.shape[1] != 3):
-    #    raise ValueError("'x' is not an N x 3 array")
+    r = np.min(np.linalg.norm(x, axis=1))
+    if r < r_planet:
+        raise ValueError(f"Radial position is less than defined radius of central body ({np.minr}<{r_planet}).")
 
+    acc = _gottlieb(x, r_planet, mu, c, s, n_max, m_max)
+
+    return acc
+
+
+def _gottlieb(x, r_planet, mu, c, s, n_max, m_max):
     norm1, norm2, norm11, normn10, norm1m, norm2m, normn1 = _calculate_normalisation_parameters(n_max)
 
     n_coor = x.shape[0]

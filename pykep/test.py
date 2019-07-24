@@ -33,6 +33,8 @@ from __future__ import absolute_import as _ai
 import unittest as _ut
 import numpy as np
 
+from pykep import __extensions__
+
 
 class core_functions_test_case(_ut.TestCase):
     """Test case for the core functions
@@ -417,8 +419,10 @@ def run_test_suite(level=0):
     suite.addTest(lambert_test_case())
     suite.addTest(mga_1dsm_test_case())
     suite.addTest(gym_test_case())
-    suite.addTest(spherical_harmonics_loader_test_case())
-    suite.addTest(gravity_spherical_harmonic_test_case())
+
+    if __extensions__[numba]:
+        suite.addTest(spherical_harmonics_loader_test_case())
+        suite.addTest(gravity_spherical_harmonic_test_case())
 
 
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
