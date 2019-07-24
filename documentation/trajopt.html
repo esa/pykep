@@ -15,6 +15,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
@@ -1144,8 +1146,8 @@ cannot thus not be compared to those posted in GTOP.</p>
 the presence of a time constraint.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><ul class="simple">
-<li><p>prob_id (int): The problem id defines the fly-by sequence.</p></li>
-<li><p>constrained (bool): Activates the constraint on the time of flight 
+<li><p>prob_id (<code class="docutils literal notranslate"><span class="pre">int</span></code>): The problem id defines the fly-by sequence.</p></li>
+<li><p>constrained (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): Activates the constraint on the time of flight 
 (fitness will thus return two numbers, the objectove function and the inequality constraint violation)</p></li>
 </ul>
 </dd>
