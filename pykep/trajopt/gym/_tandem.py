@@ -36,8 +36,8 @@ class _tandem_udp(mga_1dsm):
         the presence of a time constraint.
 
         Args:
-            - prob_id (int): The problem id defines the fly-by sequence.
-            - constrained (bool): Activates the constraint on the time of flight 
+            - prob_id (``int``): The problem id defines the fly-by sequence.
+            - constrained (``bool``): Activates the constraint on the time of flight 
               (fitness will thus return two numbers, the objectove function and the inequality constraint violation)
         """
         # Redefining the planets as to change their safe radius

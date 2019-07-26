@@ -22,14 +22,17 @@ def load_gravity_model(fp):
     File format:
         The input file must follow a specific format. The first row contains planetary radius in km and
         gravitational parameter in km3/s2. The second row until the end contains normalised C and S 
-        coefficients for every degree and order. The file is delimited using ';'.
+        coefficients for every degree and order. The file is delimited using ';'. Gravity models can be downloaded
+        from http://pds-geosciences.wustl.edu/dataserv/gravity_models.htm (NASA)
+        and https://earth.esa.int/web/guest/data_access/browse-data-products (ESA).
+
     
     File::
 
           1| radius;mu;degree;order
           2| 0;0;C(0,0);S(0,0)
           3| 1;0;C(1,0);S(1,0)
-          4| ...
+          4| ...        
     """
     # todo: check file
 
