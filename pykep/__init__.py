@@ -2,7 +2,7 @@
 # We check what extensions are available
 ###########################################################
 __extensions__ = {'matplotlib': False, 'mplot3d': False,
-                  'pygmo': False, 'scikit-learn': False, 'scipy': False, 
+                  'pygmo': False, 'scikit-learn': False, 'scipy': False,
                   'numba': False}
 # 1 - matplotlib
 try:

@@ -420,7 +420,7 @@ def run_test_suite(level=0):
     suite.addTest(mga_1dsm_test_case())
     suite.addTest(gym_test_case())
 
-    if __extensions__[numba]:
+    if __extensions__['numba']:
         suite.addTest(spherical_harmonics_loader_test_case())
         suite.addTest(gravity_spherical_harmonic_test_case())
 
