@@ -7,7 +7,7 @@ are implemented in c++)
 from pykep.trajopt._lt_margo import lt_margo
 from pykep.trajopt._mga_1dsm import mga_1dsm
 from pykep.trajopt._mga import mga
-#from pykep.trajopt._mga_lt_nep import mga_lt_nep
+from pykep.trajopt._mga_lt_nep import mga_lt_nep
 from pykep.trajopt._mr_lt_nep import mr_lt_nep
 from pykep.trajopt._pl2pl_N_impulses import pl2pl_N_impulses
 # The launchers models

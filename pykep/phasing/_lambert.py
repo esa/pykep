@@ -111,8 +111,8 @@ Example::
         else:
             axis = ax
 
-        plot_planet(A1, ax=axis, s=10, t0=epoch(self.lb[0]))
-        plot_planet(A2, ax=axis, s=10, t0=epoch(self.ub[0]))
+        plot_planet(A1, axes=axis, s=10, t0=epoch(self.lb[0]))
+        plot_planet(A2, axes=axis, s=10, t0=epoch(self.ub[0]))
         for ind in pop:
             if ind.cur_f[0] == self._UNFEASIBLE:
                 continue
@@ -121,7 +121,7 @@ Example::
             rarr, varr = A2.eph(epoch(arr))
             l = lambert_problem(rdep, rarr, (arr - dep) *
                                 DAY2SEC, A1.mu_central_body, False, 1)
-            axis = plot_lambert(l, ax=axis, alpha=0.8, color='k')
+            axis = plot_lambert(l, axes=axis, alpha=0.8, color='k')
 
         if ax is None:
             plt.show()

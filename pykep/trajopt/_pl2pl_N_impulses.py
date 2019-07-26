@@ -185,9 +185,9 @@ class pl2pl_N_impulses(object):
         else:
             r_target, v_target = self.target.eph(epoch(x[0] + x[1]))
         plot_planet(self.start, t0=epoch(x[0]), color=(
-            0.8, 0.6, 0.8), legend=True, units=AU, ax=axes, s=0)
+            0.8, 0.6, 0.8), legend=True, units=AU, axes=axes, s=0)
         plot_planet(self.target, t0=epoch(
-            x[0] + x[1]), color=(0.8, 0.6, 0.8), legend=True, units=AU, ax=axes, s=0)
+            x[0] + x[1]), color=(0.8, 0.6, 0.8), legend=True, units=AU, axes=axes, s=0)
 
         DV_list = x[5::4]
         maxDV = max(DV_list)
@@ -210,7 +210,7 @@ class pl2pl_N_impulses(object):
             axes.scatter(rsc[0] / AU, rsc[1] / AU, rsc[2] /
                          AU, color='k', s=DV_list[i])
             plot_kepler(rsc, vsc, T[i] * DAY2SEC, self.__common_mu,
-                        N=200, color=colors[i], legend=False, units=AU, ax=axes)
+                        N=200, color=colors[i], legend=False, units=AU, axes=axes)
             rsc, vsc = propagate_lagrangian(
                 rsc, vsc, T[i] * DAY2SEC, self.__common_mu)
 
@@ -220,7 +220,7 @@ class pl2pl_N_impulses(object):
         dt = T[-1] * DAY2SEC
         l = lambert_problem(rsc, r_target, dt, self.__common_mu, cw, False)
         plot_lambert(l, sol=0, color=colors[
-                     i + 1], legend=False, units=AU, ax=axes, N=200)
+                     i + 1], legend=False, units=AU, axes=axes, N=200)
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
         DV1 = norm([a - b for a, b in zip(v_beg_l, vsc)])
@@ -280,5 +280,6 @@ class pl2pl_N_impulses(object):
         DV_others = list(x[5::4])
         DV_others.extend([DV1, DV2])
 
+        print("Total DV (m/s): ", sum(DV_others))
         print("Dvs (m/s): ", DV_others)
         print("Tofs (days): ", T)
