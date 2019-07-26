@@ -258,9 +258,9 @@ class indirect_pt2pt(_indirect_base):
 
         # Plots the departure and arrival osculating orbits
         pk.orbit_plots.plot_planet(
-            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), axes=axes)
         pk.orbit_plots.plot_planet(
-            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), axes=axes)
 
     def _pretty(self, z):
         print("\nPoint to point transfer: ")
@@ -419,9 +419,9 @@ class indirect_or2or(_indirect_base):
 
         # planets
         pk.orbit_plots.plot_planet(
-            kep0, t0=t0, units=units, ax=axes, color=(0.8, 0.8, 0.8))
+            kep0, t0=t0, units=units, axes=axes, color=(0.8, 0.8, 0.8))
         pk.orbit_plots.plot_planet(
-            kepf, t0=tf, units=units, ax=axes, color=(0.8, 0.8, 0.8))
+            kepf, t0=tf, units=units, axes=axes, color=(0.8, 0.8, 0.8))
 
     def _pretty(self, z):
         print("\nOrbit to orbit transfer: ")
@@ -555,9 +555,9 @@ class indirect_pt2or(_indirect_base):
 
         # plot departure and arrival
         pk.orbit_plots.plot_planet(
-            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), axes=axes)
         pk.orbit_plots.plot_planet(
-            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), axes=axes)
 
     def _pretty(self, z):
         """
@@ -701,9 +701,9 @@ class indirect_pt2pl(_indirect_base):
 
         # Plots the departure and arrival osculating orbits
         pk.orbit_plots.plot_planet(
-            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), axes=axes)
         pk.orbit_plots.plot_planet(
-            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axes)
+            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), axes=axes)
 
     def _pretty(self, z):
         print("\nPlanet to orbit transfer, alpha is: ",  self._alpha)

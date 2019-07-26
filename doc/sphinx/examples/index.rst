@@ -17,7 +17,7 @@ Generic
 
   ex1.ipynb
   ex2.ipynb
-  ex12
+  ex12.ipynb
   gravity_spherical_harmonic.ipynb
 
 Advanced Research Topics (requires pygmo)
@@ -25,7 +25,7 @@ Advanced Research Topics (requires pygmo)
 .. toctree::
   :maxdepth: 2
 
-  ex3
+  ex3.ipynb
   ex4
   ex5
   ex6

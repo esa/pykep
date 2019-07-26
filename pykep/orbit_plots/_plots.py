@@ -1,8 +1,8 @@
-def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=False, ax=None):
+def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=False, axes=None):
     """
-    ax = plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, ax=None)
+    ax = plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, axes=None)
 
-    - ax:        3D axis object created using fig.gca(projection='3d')
+    - axes:      3D axis object created using fig.gca(projection='3d')
     - plnt:      pykep.planet object we want to plot
     - t0:        pykep.epoch object indicating when we want to plot the planet position
     - units:     the length unit to be used in the plot
@@ -20,7 +20,7 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
       fig = plt.figure()
       ax = fig.gca(projection='3d')
       pl = planet_ss('earth')
-      plot_planet(pl, ax=ax)
+      plot_planet(pl, axes=ax)
       plt.show()
     """
     from pykep import MU_SUN, SEC2DAY, epoch, AU, RAD2DEG
@@ -30,11 +30,11 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     if t0 == 'pykep.epoch(0)':
         t0 = epoch(0)
@@ -67,19 +67,19 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
         label = plnt.name + " " + t0.__repr__()[0:11]
     else:
         label = None
-    axis.plot(x, y, z, label=label, c=color, alpha=alpha)
-    axis.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=[color])
+    ax.plot(x, y, z, label=label, c=color, alpha=alpha)
+    ax.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=[color])
 
     if legend:
-        axis.legend()
-    return axis
+        ax.legend()
+    return ax
 
 
-def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, alpha=1.):
+def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, alpha=1.):
     """
-    ax = plot_lambert(l, N=60, sol=0, units='pykep.AU', legend='False', ax=None, alpha=1.)
+    ax = plot_lambert(l, N=60, sol=0, units='pykep.AU', legend='False', axes=None, alpha=1.)
 
-    - ax:       3D axis object created using fig.gca(projection='3d')
+    - axes:       3D axis object created using fig.gca(projection='3d')
     - l:        pykep.lambert_problem object
     - N:		number of points to be plotted along one arc
     - sol:      solution to the Lambert's problem we want to plot (must be in 0..Nmax*2)
@@ -103,17 +103,17 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
       dt = (t2.mjd2000 - t1.mjd2000) * DAY2SEC
 
       pl = planet_ss('earth')
-      plot_planet(pl, t0=t1, ax=ax, color='k')
+      plot_planet(pl, t0=t1, axes=ax, color='k')
       rE,vE = pl.eph(t1)
 
       pl = planet_ss('mars')
-      plot_planet(pl, t0=t2, ax=ax, color='r')
+      plot_planet(pl, t0=t2, axes=ax, color='r')
       rM, vM = pl.eph(t2)
 
       l = lambert_problem(rE,rM,dt,MU_SUN)
       plot_lambert(l, ax=ax, color='b')
-      plot_lambert(l, sol=1, ax=ax, color='g')
-      plot_lambert(l, sol=2, ax=ax, color='g')
+      plot_lambert(l, sol=1, axes=ax, color='g')
+      plot_lambert(l, sol=2, axes=ax, color='g')
 
       plt.show()
     """
@@ -122,11 +122,11 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     if sol > l.get_Nmax() * 2:
         raise ValueError("sol must be in 0 .. NMax*2 \n * Nmax is the maximum number of revolutions for which there exist a solution to the Lambert's problem \n * You can compute Nmax calling the get_Nmax() method of the lambert_problem object")
@@ -157,22 +157,22 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, ax=None, al
         label = 'Lambert solution (' + str((sol + 1) // 2) + ' revs.)'
     else:
         label = None
-    axis.plot(x, y, z, c=color, label=label, alpha=alpha)
+    ax.plot(x, y, z, c=color, label=label, alpha=alpha)
 
     if legend:
-        axis.legend()
+        ax.legend()
 
-    if ax is None:  # show only if axis is not set
+    if axes is None:  # show only if axis is not set
         plt.show()
-    return axis
+    return ax
 
 
-def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
+def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
     """
-    ax = plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
+    ax = plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
 
-    - ax:		3D axis object created using fig.gca(projection='3d')
-    - r:		initial position (cartesian coordinates)
+    - axes:     3D axis object created using fig.gca(projection='3d')
+    - r:        initial position (cartesian coordinates)
     - v:		initial velocity (cartesian coordinates)
     - t:		propagation time
     - mu:		gravitational parameter
@@ -188,11 +188,11 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     # We define the integration time ...
     dt = t / (N - 1)
@@ -214,21 +214,21 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, ax=None):
         label = 'ballistic arc'
     else:
         label = None
-    axis.plot(x, y, z, c=color, label=label)
+    ax.plot(x, y, z, c=color, label=label)
 
     if legend:
-        axis.legend()
+        ax.legend()
 
-    if ax is None:  # show only if axis is not set
+    if axes is None:  # show only if axis is not set
         plt.show()
-    return axis
+    return ax
 
 
-def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
     """
-    ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+    ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - ax:		3D axis object created using fig.gca(projection='3d')
+    - axes:		3D axis object created using fig.gca(projection='3d')
     - r:		initial position (cartesian coordinates)
     - v:		initial velocity (cartesian coordinates)
     - m: 		initial mass
@@ -247,11 +247,11 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     from pykep import propagate_taylor
     import matplotlib.pyplot as plt
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     # We define the integration time ...
     dt = t / (N - 1)
@@ -273,21 +273,21 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
         label = 'constant thrust arc'
     else:
         label = None
-    axis.plot(x, y, z, c=color, label=label)
+    ax.plot(x, y, z, c=color, label=label)
 
     if legend:
-        axis.legend()
+        ax.legend()
 
-    if ax is None:  # show only if axis is not set
+    if axes is None:  # show only if axis is not set
         plt.show()
-    return axis
+    return ax
 
 
-def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
     """
-    ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, ax=None):
+    ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - ax:			3D axis object created using fig.gca(projection='3d')
+    - axes:			3D axis object created using fig.gca(projection='3d')
     - r:			initial position (cartesian coordinates)
     - v:			initial velocity (cartesian coordinates)
     - m: 			initial mass
@@ -307,11 +307,11 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
     from pykep import propagate_taylor_disturbance
     import matplotlib.pyplot as plt
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     # We define the integration time ...
     dt = t / (N - 1)
@@ -334,26 +334,26 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
         label = 'constant thrust arc'
     else:
         label = None
-    axis.plot(x, y, z, c=color, label=label)
+    ax.plot(x, y, z, c=color, label=label)
 
     if legend:
-        axis.legend()
+        ax.legend()
 
-    if ax is None:  # show only if axis is not set
+    if axes is None:  # show only if axis is not set
         plt.show()
-    return axis
+    return ax
 
 
-def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=False, ax=None):
+def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot_segments=False, axes=None):
     """
-    ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, ax=None):
+    ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, axes=None):
 
-    - ax:		3D axis object created using fig.gca(projection='3d')
-    - leg:	a pykep.sims_flanagan.leg
-    - N:		number of points to be plotted along one arc
-    - units:	the length unit to be used in the plot
-    - color:	matplotlib color to use to plot the trajectory and the grid points
-    - legend	when True it plots also the legend
+    - axes:		    3D axis object created using fig.gca(projection='3d')
+    - leg:	        a pykep.sims_flanagan.leg
+    - N:		    number of points to be plotted along one arc
+    - units:	    the length unit to be used in the plot
+    - color:	    matplotlib color to use to plot the trajectory and the grid points
+    - legend	    when True it plots also the legend
     - plot_line: 	when True plots also the trajectory (between mid-points and grid points)
 
     Plots a Sims-Flanagan leg
@@ -368,19 +368,19 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         t1 = epoch(0)
         pl = planet_ss('earth')
         rE,vE = pl.eph(t1)
-        plot_planet(pl,t0=t1, units=AU, ax=ax)
+        plot_planet(pl,t0=t1, units=AU, axes=ax)
 
         t2 = epoch(440)
         pl = planet_ss('mars')
         rM, vM = pl.eph(t2)
-        plot_planet(pl,t0=t2, units=AU, ax=ax)
+        plot_planet(pl,t0=t2, units=AU, axes=ax)
 
         sc = sims_flanagan.spacecraft(4500,0.5,2500)
         x0 = sims_flanagan.sc_state(rE,vE,sc.mass)
         xe = sims_flanagan.sc_state(rM,vM,sc.mass)
         l = sims_flanagan.leg(t1,x0,[1,0,0]*5,t2,xe,sc,MU_SUN)
 
-        plot_sf_leg(l, units=AU, ax=ax)
+        plot_sf_leg(l, units=AU, axes=ax)
     """
     from pykep import propagate_lagrangian, AU, DAY2SEC, G0, propagate_taylor
     import numpy as np
@@ -389,11 +389,11 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
 
-    if ax is None:
+    if axes is None:
         fig = plt.figure()
-        axis = fig.gca(projection='3d')
+        ax = fig.gca(projection='3d')
     else:
-        axis = ax
+        ax = axes
 
     # We compute the number of segments for forward and backward propagation
     n_seg = len(leg.get_throttles())
@@ -435,7 +435,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             dV = [max_thrust / m * dt * dumb for dumb in t.value]
             if plot_line:
                 plot_kepler(r, v, dt / 2, mu, N=N, units=units,
-                            color=(alpha, 0, 1 - alpha), ax=axis)
+                            color=(alpha, 0, 1 - alpha), axes=ax)
             r, v = propagate_lagrangian(r, v, dt / 2, mu)
             x[2 * i + 1] = r[0] / units
             y[2 * i + 1] = r[1] / units
@@ -444,7 +444,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             v = [a + b for a, b in zip(v, dV)]
             if plot_line:
                 plot_kepler(r, v, dt / 2, mu, N=N, units=units,
-                            color=(alpha, 0, 1 - alpha), ax=axis)
+                            color=(alpha, 0, 1 - alpha), axes=ax)
             r, v = propagate_lagrangian(r, v, dt / 2, mu)
             x[2 * i + 2] = r[0] / units
             y[2 * i + 2] = r[1] / units
@@ -455,7 +455,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N,
-                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                            units=units, color=(alpha, 0, 1 - alpha), axes=ax)
             r, v, m = propagate_taylor(
                 r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 1] = r[0] / units
@@ -463,7 +463,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             z[2 * i + 1] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, dt / 2, mu, isp * G0, N=N,
-                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                            units=units, color=(alpha, 0, 1 - alpha), axes=ax)
             r, v, m = propagate_taylor(
                 r, v, m, u, dt / 2, mu, isp * G0, -12, -12)
             x[2 * i + 2] = r[0] / units
@@ -477,11 +477,11 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     y_midpoint = y[1::2]
     z_midpoint = z[1::2]
     if plot_segments:
-        axis.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1],
+        ax.scatter(x_grid[:-1], y_grid[:-1], z_grid[:-1],
                      label='nodes', marker='o')
-        axis.scatter(x_midpoint, y_midpoint, z_midpoint,
+        ax.scatter(x_midpoint, y_midpoint, z_midpoint,
                      label='mid-points', marker='x')
-        axis.scatter(x_grid[-1], y_grid[-1], z_grid[-1],
+        ax.scatter(x_grid[-1], y_grid[-1], z_grid[-1],
                      marker='^', c='y', label='mismatch point')
 
     # Backward propagation
@@ -508,7 +508,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             dV = [max_thrust / m * dt * dumb for dumb in t.value]
             if plot_line:
                 plot_kepler(r, v, -dt / 2, mu, N=N, units=units,
-                            color=(alpha, 0, 1 - alpha), ax=axis)
+                            color=(alpha, 0, 1 - alpha), axes=ax)
             r, v = propagate_lagrangian(r, v, -dt / 2, mu)
             x[-2 * i - 2] = r[0] / units
             y[-2 * i - 2] = r[1] / units
@@ -517,7 +517,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             v = [a - b for a, b in zip(v, dV)]
             if plot_line:
                 plot_kepler(r, v, -dt / 2, mu, N=N, units=units,
-                            color=(alpha, 0, 1 - alpha), ax=axis)
+                            color=(alpha, 0, 1 - alpha), axes=ax)
             r, v = propagate_lagrangian(r, v, -dt / 2, mu)
             x[-2 * i - 3] = r[0] / units
             y[-2 * i - 3] = r[1] / units
@@ -527,7 +527,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             u = [max_thrust * dumb for dumb in t.value]
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N,
-                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                            units=units, color=(alpha, 0, 1 - alpha), axes=ax)
             r, v, m = propagate_taylor(
                 r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 2] = r[0] / units
@@ -535,7 +535,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
             z[-2 * i - 2] = r[2] / units
             if plot_line:
                 plot_taylor(r, v, m, u, -dt / 2, mu, isp * G0, N=N,
-                            units=units, color=(alpha, 0, 1 - alpha), ax=axis)
+                            units=units, color=(alpha, 0, 1 - alpha), axes=ax)
             r, v, m = propagate_taylor(
                 r, v, m, u, -dt / 2, mu, isp * G0, -12, -12)
             x[-2 * i - 3] = r[0] / units
@@ -550,16 +550,16 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     z_midpoint = z[1::2]
 
     if plot_segments:
-        axis.scatter(x_grid[1:], y_grid[1:], z_grid[
+        ax.scatter(x_grid[1:], y_grid[1:], z_grid[
                      1:], marker='o', label='nodes')
-        axis.scatter(x_midpoint, y_midpoint, z_midpoint,
+        ax.scatter(x_midpoint, y_midpoint, z_midpoint,
                      marker='x', label='mid-points')
-        axis.scatter(x_grid[0], y_grid[0], z_grid[0],
+        ax.scatter(x_grid[0], y_grid[0], z_grid[0],
                      marker='^', c='y', label='mismatch point')
 
     if legend:
-        axis.legend()
+        ax.legend()
 
-    if ax is None:  # show only if axis is not set
+    if axes is None:  # show only if axis is not set
         plt.show()
-    return axis
+    return ax

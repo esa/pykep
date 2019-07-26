@@ -55,7 +55,7 @@ class _direct_base(object):
         axes.scatter([0], [0], [0], color='y')
 
         # plots the leg
-        pk.orbit_plots.plot_sf_leg(self.leg, units=units, N=20, ax=axes)
+        pk.orbit_plots.plot_sf_leg(self.leg, units=units, N=20, axes=axes)
 
         # plots problem specifics
         self._plot_traj(z, axes, units)
@@ -316,9 +316,9 @@ class direct_pl2pl(_direct_base):
 
         # plot Keplerian
         pk.orbit_plots.plot_planet(
-            self.p0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+            self.p0, t0, units=units, color=(0.8, 0.8, 0.8), axes=axis)
         pk.orbit_plots.plot_planet(
-            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+            self.pf, tf, units=units, color=(0.8, 0.8, 0.8), axes=axis)
 
     def _pretty(self, z):
         print("\nLow-thrust NEP transfer from " +
@@ -462,9 +462,9 @@ class direct_or2or(_direct_base):
 
         # plot Keplerian
         pk.orbit_plots.plot_planet(
-            kep0, t0, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+            kep0, t0, units=units, color=(0.8, 0.8, 0.8), axes=axis)
         pk.orbit_plots.plot_planet(
-            kepf, tf, units=units, color=(0.8, 0.8, 0.8), ax=axis)
+            kepf, tf, units=units, color=(0.8, 0.8, 0.8), axes=axis)
 
     @staticmethod
     def _get_controls(z):

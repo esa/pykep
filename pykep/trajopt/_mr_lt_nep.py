@@ -1,8 +1,7 @@
 import pykep as pk
 
 
-class mr_lt_nep(object):
-
+class mr_lt_nep:
     """
     This class represents, as a global optimization problem (linearly constrained,
     high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
@@ -21,7 +20,6 @@ class mr_lt_nep(object):
 
        The resulting problem is non linearly constrained. The resulting trajectory is not time-bounded.
     """
-
     def __init__(
             self,
             seq=[pk.planet.gtoc7(3413), pk.planet.gtoc7(
@@ -217,15 +215,15 @@ class mr_lt_nep(object):
         for i in range(self.__num_legs):
             idx = i * self.__dim_leg
             plot_planet(self.__seq[i], epoch(x[idx]), units=AU, legend=True, color=(
-                0.7, 0.7, 0.7), s=30, ax=axis)
+                0.7, 0.7, 0.7), s=30, axes=axis)
             plot_planet(self.__seq[i + 1], epoch(x[idx] + x[idx + 1]),
-                        units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, ax=axis)
+                        units=AU, legend=False, color=(0.7, 0.7, 0.7), s=30, axes=axis)
 
         # Computing the legs
         self.fitness(x)
 
         # Plotting the legs
         for leg in self.__legs:
-            plot_sf_leg(leg, units=AU, N=10, ax=axis, legend=False)
+            plot_sf_leg(leg, units=AU, N=10, axes=axis, legend=False)
 
         return axis

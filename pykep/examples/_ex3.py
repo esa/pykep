@@ -153,15 +153,15 @@ class mga_lt_EVMe(object):
         # The Sun
         axis.scatter([0], [0], [0], color='y')
         # The legs
-        plot_sf_leg(self.__leg1, units=AU, N=10, ax=axis)
-        plot_sf_leg(self.__leg2, units=AU, N=10, ax=axis)
+        plot_sf_leg(self.__leg1, units=AU, N=10, axes=axis)
+        plot_sf_leg(self.__leg2, units=AU, N=10, axes=axis)
         # The planets
         plot_planet(
-            self.__earth, t_E, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
+            self.__earth, t_E, units=AU, legend=True, color=(0.7, 0.7, 1), axes=axis)
         plot_planet(
-            self.__venus, t_V, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
+            self.__venus, t_V, units=AU, legend=True, color=(0.7, 0.7, 1), axes=axis)
         plot_planet(
-            self.__mercury, t_M, units=AU, legend=True, color=(0.7, 0.7, 1), ax=axis)
+            self.__mercury, t_M, units=AU, legend=True, color=(0.7, 0.7, 1), axes=axis)
         plt.show()
 
 """
