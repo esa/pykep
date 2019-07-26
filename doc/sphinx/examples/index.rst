@@ -18,6 +18,7 @@ Generic
   ex1.ipynb
   ex2.ipynb
   ex12
+  gravity_spherical_harmonic.ipynb
 
 Advanced Research Topics (requires pygmo)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
