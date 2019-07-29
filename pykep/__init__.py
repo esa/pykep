@@ -46,8 +46,6 @@ try:
 except ImportError:
     pass
 
-print(f"__init__.py: {__extensions__}")
-
 ###########################################################
 # We import the submodules
 ###########################################################
