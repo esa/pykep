@@ -8,6 +8,10 @@ for preliminary interplanetary trajectory design.
 from pykep.util._util import *
 from pykep import __extensions__
 
+print(f"util/__init__.py: {__extensions__}")
+import pykep
+print(pykep.__file__)
+
 
 if __extensions__['numba']:
     from pykep.util.gravity_spherical_harmonic import gravity_spherical_harmonic
