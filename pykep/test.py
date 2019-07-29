@@ -32,6 +32,7 @@ from __future__ import absolute_import as _ai
 
 import unittest as _ut
 import numpy as np
+import pathlib
 
 from pykep import __extensions__
 
@@ -226,7 +227,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = -1.06362863541e-09
         s250_125 = -8.34356616626e-11
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Earth/egm96.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/egm96.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -249,7 +250,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = -8.2691933615552e-10
         s200_100 = -1.3266576400742e-12
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Earth/ggm02c.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/ggm02c.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -272,7 +273,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = -8.3581312522994e-10
         s160_80 = -2.327147027496e-09
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Earth/ggm02s.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/ggm02s.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -295,7 +296,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = -1.191278972881e-08
         s120_60 = 5.598027946471e-10
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Mars/jgmro_120d.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Mars/jgmro_120d.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -318,7 +319,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = 1.7233711523911e-10
         s120_60 = -5.3052488170131e-09
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Moon/glgm3_150.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/glgm3_150.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -341,7 +342,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = 5.1145625569e-09
         s120_60 = -1.05725130139e-09
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Moon/jgl_150q1.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/jgl_150q1.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -364,7 +365,7 @@ class spherical_harmonics_loader_test_case(_ut.TestCase):
         s100_50 = -1.53194061215089e-09
         s200_100 = 4.25825545837e-09
 
-        r, mu, c, s, n, m = load_gravity_model("pykep/util/gravity_models/Moon/lpe_200.txt")
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/lpe_200.txt")
 
         self.assertEqual(r, req_r)
         self.assertEqual(mu, req_mu)
@@ -383,7 +384,7 @@ class gravity_spherical_harmonic_test_case(_ut.TestCase):
     def runTest(self):
         from .util import load_gravity_model, gravity_spherical_harmonic
 
-        r, mu, c, s, n_max, m_max = load_gravity_model("pykep/util/gravity_models/Earth/egm96.txt")
+        r, mu, c, s, n_max, m_max = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/egm96.txt")
 
         x = np.array([[6.07303362e+06, -1.63535914e-9, -3.22908926e+06],
                       [-5874145.34596, 1745831.60905, 3123338.4834],
