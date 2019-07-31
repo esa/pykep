@@ -39,7 +39,7 @@ def gravity_spherical_harmonic(x, r_planet, mu, c, s, n_max, m_max):
 
     r = np.min(np.linalg.norm(x, axis=1))
     if r < r_planet:
-        raise ValueError(f"Radial position is less than defined radius of central body ({np.minr}<{r_planet}).")
+        raise ValueError(f"Radial position is less than defined radius of central body ({r}<{r_planet}).")
 
     acc = _gottlieb(x, r_planet, mu, c, s, n_max, m_max)
 
