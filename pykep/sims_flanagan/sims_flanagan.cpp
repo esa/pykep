@@ -265,7 +265,7 @@ BOOST_PYTHON_MODULE(_sims_flanagan)
                       &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
                       "If True propagation is not impulsive, but continuous\n\n"
                       "Example::\n\n"
-                      " l.high_fidelity(True)\n")
+                      " l.high_fidelity = True\n")
         .def("mismatch_constraints", &get_mismatch_wrapper, "Returns a tuple containing the state mismatch of the leg "
                                                             "x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be "
                                                             "feasible)\n\n"
