@@ -205,17 +205,18 @@ BOOST_PYTHON_MODULE(_sims_flanagan)
             "- spacecarft: spacecraft\n"
             "- mu: central body gravity parameter\n\n"
             "Example::\n\n"
-            " start = pykep.epoch(0)\n"
-            " end = pykep.epoch(340)\n"
-            " earth = pykep.planet.jpl_lp('earth')\n"
-            " mars = pykep.planet.jpl_lp('mars')\n"
-            " sc = pykep.sims_flanagan.spacecraft(4500,0.05,2500)\n"
+            " import pykep as pk"
+            " start = pk.epoch(0)\n"
+            " end = pk.epoch(340)\n"
+            " earth = pk.planet.jpl_lp('earth')\n"
+            " mars = pk.planet.jpl_lp('mars')\n"
+            " sc = pk.sims_flanagan.spacecraft(4500,0.05,2500)\n"
             " r,v = earth.eph(start)\n"
-            " x0 = pykep.sims_flanagan.sc_state(r,v,sc.mass)\n"
+            " x0 = pk.sims_flanagan.sc_state(r,v,sc.mass)\n"
             " r,v = mars.eph(start)\n"
-            " xe = pykep.sims_flanagan.sc_state(r, v ,sc.mass)\n"
-            " mu = pykep.MU_SUN\n"
-            " l = pykep.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"))
+            " xe = pk.sims_flanagan.sc_state(r, v ,sc.mass)\n"
+            " mu = pk.MU_SUN\n"
+            " l = pk.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"))
         .def(init<>())
         .def("set", leg_setter(&kep_toolbox::sims_flanagan::leg::set_leg),
              "Sets leg's data, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
