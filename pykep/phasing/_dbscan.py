@@ -125,7 +125,7 @@ class dbscan():
             for label in members if clusters is None else clusters:
                 for planet in members[label]:
                     plot_planet(
-                        self._asteroids[planet], t0=self._epoch, s=0, ax=axis)
+                        self._asteroids[planet], t0=self._epoch, s=0, axes=axis)
 
         X, labels = list(zip(*[(x, label) for (x, label) in zip(self._X, self.labels)
                                if label > -.5 and (clusters is None or label in clusters)]))
@@ -172,9 +172,9 @@ class dbscan():
             plt.axis('off')
             plt.title(epoch(ep).__repr__()[:11])
             for pl in self._asteroids[::skip]:
-                axis = plot_planet(pl, ax=axis, alpha=0.05, s=0)
+                axis = plot_planet(pl, axes=axis, alpha=0.05, s=0)
             for cluster_member in ids:
-                r, v = self._asteroids[cluster_member].eph(epoch(ep))
+                r, _ = self._asteroids[cluster_member].eph(epoch(ep))
                 axis.scatter([r[0]], [r[1]], [r[2]], marker='o', alpha=alpha)
 
         plt.draw()

@@ -397,7 +397,7 @@ class mga_1dsm:
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = planet.eph(t_P[i])
             plot_planet(planet, t0=t_P[i], color=(
-                0.8, 0.6, 0.8), legend=True, units=AU, ax=axis, N=150)
+                0.8, 0.6, 0.8), legend=True, units=AU, axes=axis, N=150)
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
@@ -405,12 +405,12 @@ class mga_1dsm:
             r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu)
 
         plot_kepler(r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu,
-                    N=100, color='b', legend=False, units=AU, ax=axis)
+                    N=100, color='b', legend=False, units=AU, axes=axis)
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[4]) * T[0] * DAY2SEC
         l = lambert_problem(r, r_P[1], dt, self.common_mu, False, False)
-        plot_lambert(l, sol=0, color='r', legend=False, units=AU, ax=axis)
+        plot_lambert(l, sol=0, color='r', legend=False, units=AU, axes=axis)
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
 
@@ -426,14 +426,14 @@ class mga_1dsm:
             r, v = propagate_lagrangian(
                 r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             plot_kepler(r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC,
-                        self.common_mu, N=100, color='b', legend=False, units=AU, ax=axis)
+                        self.common_mu, N=100, color='b', legend=False, units=AU, axes=axis)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
 
             l = lambert_problem(r, r_P[i + 1], dt,
                                 self.common_mu, False, False)
             plot_lambert(l, sol=0, color='r', legend=False,
-                         units=AU, N=1000, ax=axis)
+                         units=AU, N=1000, axes=axis)
 
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
