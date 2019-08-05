@@ -182,6 +182,12 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
     - legend	when True it plots also the legend
 
     Plots the result of a keplerian propagation
+
+    Example::
+
+    import pykep as pk
+    pi = 3.14
+    pk.orbit_plots.plot_kepler([1,0,0],[0,1,0],pi/3,1)
     """
 
     from pykep import propagate_lagrangian
@@ -242,6 +248,17 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     - legend:	when True it plots also the legend
 
     Plots the result of a taylor propagation of constant thrust
+
+    Example::
+
+	import pykep as pk
+	import matplotlib.pyplot as plt
+	pi = 3.14
+
+	fig = plt.figure()
+	ax = fig.gca(projection = '3d')
+	pk.orbit_plots.plot_taylor([1,0,0],[0,1,0],100,[1,1,0],40, 1, 1, N = 1000, axes = ax)
+	plt.show()
     """
 
     from pykep import propagate_taylor
