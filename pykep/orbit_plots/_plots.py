@@ -13,6 +13,7 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     Plots the planet position and its orbit
 
     Example::
+
 	import pykep as pk
 	import matplotlib.pyplot as plt
 
