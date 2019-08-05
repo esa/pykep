@@ -13,15 +13,14 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     Plots the planet position and its orbit
 
     Example::
+	import pykep as pk
+	import matplotlib.pyplot as plt
 
-      from mpl_toolkits.mplot3d import Axes3D
-      import matplotlib.pyplot as plt
-
-      fig = plt.figure()
-      ax = fig.gca(projection='3d')
-      pl = planet_ss('earth')
-      plot_planet(pl, axes=ax)
-      plt.show()
+	fig = plt.figure()
+	ax = fig.gca(projection = '3d')
+	pl = pk.planet.jpl_lp('earth')
+	t_plot = pk.epoch(219)
+	ax = pk.orbit_plots.plot_planet(pl, ax = ax, color='b')
     """
     from pykep import MU_SUN, SEC2DAY, epoch, AU, RAD2DEG
     from pykep.planet import keplerian
