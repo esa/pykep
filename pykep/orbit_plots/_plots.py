@@ -91,28 +91,28 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
 
     Example::
 
-      from mpl_toolkits.mplot3d import Axes3D
+      import pykep as pk
       import matplotlib.pyplot as plt
 
       fig = plt.figure()
       ax = fig.gca(projection='3d')
 
-      t1 = epoch(0)
-      t2 = epoch(640)
-      dt = (t2.mjd2000 - t1.mjd2000) * DAY2SEC
+      t1 = pk.epoch(0)
+      t2 = pk.epoch(640)
+      dt = (t2.mjd2000 - t1.mjd2000) * pk.DAY2SEC
 
-      pl = planet_ss('earth')
-      plot_planet(pl, t0=t1, axes=ax, color='k')
+      pl = pk.planet.jpl_lp('earth')
+      pk.orbit_plots.plot_planet(pl, t0=t1, axes=ax, color='k')
       rE,vE = pl.eph(t1)
 
-      pl = planet_ss('mars')
-      plot_planet(pl, t0=t2, axes=ax, color='r')
+      pl = pk.planet.jpl_lp('mars')
+      pk.orbit_plots.plot_planet(pl, t0=t2, axes=ax, color='r')
       rM, vM = pl.eph(t2)
 
-      l = lambert_problem(rE,rM,dt,MU_SUN)
-      plot_lambert(l, ax=ax, color='b')
-      plot_lambert(l, sol=1, axes=ax, color='g')
-      plot_lambert(l, sol=2, axes=ax, color='g')
+      l = lambert_problem(rE,rM,dt,pk.MU_SUN)
+      pk.orbit_plots.plot_lambert(l, ax=ax, color='b')
+      pk.orbit_plots.plot_lambert(l, sol=1, axes=ax, color='g')
+      pk.orbit_plots.plot_lambert(l, sol=2, axes=ax, color='g', legend = True)
 
       plt.show()
     """
