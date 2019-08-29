@@ -66,17 +66,24 @@ class _juice_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV, T = super().fitness(x)
+
+        if self._multi_objective:
+            DV, T = super().fitness(x)
+        else:
+            DV, = super().fitness(x)
+
         DV = DV + 275.  # losses for 5 swingbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         # Numerical guard for the exponential
         if m_final == 0:
             m_final = 1e-320
 
-        if self._multi_objective:
-            return (-log(m_final), T)
+        encoded_m_final = -log(m_final)
 
-        return (-log(m_final),)
+        if self._multi_objective:
+            return (encoded_m_final, T)
+
+        return (encoded_m_final,)
 
     def get_name(self):
         return "Juice (Trajectory Optimization Gym P13-14)"
