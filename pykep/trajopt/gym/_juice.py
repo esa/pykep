@@ -1,26 +1,27 @@
 from pykep.trajopt import mga_1dsm, launchers
 from pykep.planet import jpl_lp
-from pykep import epoch_from_string
 
 import numpy as np
 from numpy.linalg import norm
 from math import log, acos, cos, sin, asin, exp
 from copy import deepcopy
 
+
 class _juice_udp(mga_1dsm):
     """
     This class represents a rendezvous mission to Jupiter modelled as an MGA-1DSM transfer. The selected fly-by sequence,
-    E-EVEME-J, and other parameters are inspired to the ESA Juice mission. A luncher model is included, namely an Ariane5 
-    launch from Kourou. 
-    JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA's Cosmic Vision 2015-2025 programme. 
+    E-EVEME-J, and other parameters are inspired to the ESA Juice mission. A luncher model is included, namely an Ariane5
+    launch from Kourou.
+    JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA's Cosmic Vision 2015-2025 programme.
     Planned for launch in 2022 and arrival at Jupiter in 2029, it will spend at least three years making detailed
     observations of the giant gaseous planet Jupiter and three of its largest moons, Ganymede, Callisto and Europa.
     """
+
     def __init__(self, multi_objective, tof_encoding, tof):
         """
         Args:
-            - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objectove
-            - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selecst the encoding for the time of flights
+            - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objective
+            - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selects the encoding for the time of flights
             - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
 
         """
@@ -48,12 +49,11 @@ class _juice_udp(mga_1dsm):
             rp_target=1070400000,
             eta_lb=0.01,
             eta_ub=0.99,
-            rp_ub=10
-        )
+            rp_ub=10)
 
     def fitness(self, x):
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
-        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # We transform it (only the needed component) to an equatorial system rotating along x
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
         earth_axis_inclination = 0.409072975
         # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
@@ -66,16 +66,20 @@ class _juice_udp(mga_1dsm):
         # And we can evaluate the final mass via Tsiolkowsky
         Isp = 312.
         g0 = 9.80665
-        DV = super().fitness(x)[0]
+        DV, T = super().fitness(x)
         DV = DV + 275.  # losses for 5 swingbys + insertion
         m_final = m_initial * exp(-DV / Isp / g0)
         # Numerical guard for the exponential
         if m_final == 0:
             m_final = 1e-320
-        return [-log(m_final), ]
+
+        if self._multi_objective:
+            return (-log(m_final), T)
+
+        return (-log(m_final),)
 
     def get_name(self):
-        return "Juice (Trajectory Optimisation Gym P13-14)"
+        return "Juice (Trajectory Optimization Gym P13-14)"
 
     def __repr__(self):
         return self.get_name()
@@ -99,7 +103,7 @@ class _juice_udp(mga_1dsm):
         """
         super().pretty(x)
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
-        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # We transform it (only the needed component) to an equatorial system rotating along x
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
         earth_axis_inclination = 0.409072975
         # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
@@ -120,6 +124,13 @@ class _juice_udp(mga_1dsm):
 
 
 # Problem P13: JUICE mission MGA1DSM, single objective, direct encoding
-juice = _juice_udp(multi_objective = False, tof_encoding = 'direct', tof = [[200, 500], [30, 300], [200, 500], [30, 300], [500, 800], [900, 1200]])
+juice = _juice_udp(
+    multi_objective=False,
+    tof_encoding='direct',
+    tof=[[200, 500], [30, 300], [200, 500], [30, 300], [500, 800], [900, 1200]])
+
 # Problem P14: JUICE mission MGA1DSM, multiple objective, alpha encoding
-juice_mo = _juice_udp(multi_objective = True, tof_encoding = 'alpha', tof = [2000, 3000])
+juice_mo = _juice_udp(
+    multi_objective=True,
+    tof_encoding='alpha',
+    tof=[2000, 3000])
