@@ -10,3 +10,6 @@ LIBRARY DESTINATION ${PYKEP_INSTALL_PATH}/util
 )
 
 install(FILES __init__.py DESTINATION ${PYKEP_INSTALL_PATH}/util)
+install(FILES gravity_spherical_harmonic.py DESTINATION ${PYKEP_INSTALL_PATH}/util)
+install(FILES load_gravity_model.py DESTINATION ${PYKEP_INSTALL_PATH}/util)
+install(DIRECTORY gravity_models DESTINATION ${PYKEP_INSTALL_PATH}/util)

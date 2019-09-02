@@ -31,6 +31,10 @@
 from __future__ import absolute_import as _ai
 
 import unittest as _ut
+import numpy as np
+import pathlib
+
+from pykep import __extensions__
 
 
 class core_functions_test_case(_ut.TestCase):
@@ -197,6 +201,210 @@ class gym_test_case(_ut.TestCase):
         self.assertAlmostEqual(udp.fitness(x)[0], 5855.8143406005165)
 
 
+class spherical_harmonics_loader_test_case(_ut.TestCase):
+    """Test case for the spherical harmonic gravity file loader function.
+
+    """
+
+    def runTest(self):
+        self.run_egm96_test()
+        self.run_ggm02c_test()
+        self.run_ggm02s_test()
+        self.run_jgmro120d_test()
+        self.run_glgm3150_test()
+        self.run_jgl150q1_test()
+        self.run_lpe200_test()
+        
+    def run_egm96_test(self):
+        from .util import load_gravity_model
+
+        req_r = 6378137
+        req_mu = 3.986004418e+14
+
+        c20_20 = 4.01448327968e-09
+        c100_100 = 1.10930637955e-09
+
+        s100_50 = -1.06362863541e-09
+        s250_125 = -8.34356616626e-11
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/egm96.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[250, 125], s250_125)
+
+    def run_ggm02c_test(self):
+        from .util import load_gravity_model
+
+        req_r = 6378136.3
+        req_mu = 3.986004415e+14
+
+        c20_20 = 3.734698472368e-09
+        c100_100 = 8.8043569591782e-10
+
+        s100_50 = -8.2691933615552e-10
+        s200_100 = -1.3266576400742e-12
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/ggm02c.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[200, 100], s200_100)
+
+    def run_ggm02s_test(self):
+        from .util import load_gravity_model
+
+        req_r = 6378136.3
+        req_mu = 3.986004415e+14
+
+        c20_20 = 3.7323168217059e-09
+        c100_100 = 1.0356187365035e-09
+
+        s100_50 = -8.3581312522994e-10
+        s160_80 = -2.327147027496e-09
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/ggm02s.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[160, 80], s160_80)
+
+    def run_jgmro120d_test(self):
+        from .util import load_gravity_model
+
+        req_r = 3396000.0
+        req_mu = 4.28283758157561e+13
+
+        c20_20 = -4.767064931643e-07
+        c100_100 = -6.238892373683e-09
+
+        s100_50 = -1.191278972881e-08
+        s120_60 = 5.598027946471e-10
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Mars/jgmro_120d.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[120, 60], s120_60)
+
+    def run_glgm3150_test(self):
+        from .util import load_gravity_model
+
+        req_r = 1738000.0
+        req_mu = 4.9002800238e+12
+
+        c20_20 = -1.4913227206107e-08
+        c100_100 = -3.0367607155944e-08
+
+        s100_50 = 1.7233711523911e-10
+        s120_60 = -5.3052488170131e-09
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/glgm3_150.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[120, 60], s120_60)
+
+    def run_jgl150q1_test(self):
+        from .util import load_gravity_model
+
+        req_r = 1738000.0
+        req_mu = 4.902801076e+12
+
+        c20_20 = 1.17705963027e-07
+        c100_100 = -1.5618538762e-08
+
+        s100_50 = 5.1145625569e-09
+        s120_60 = -1.05725130139e-09
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/jgl_150q1.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[120, 60], s120_60)
+
+    def run_lpe200_test(self):
+        from .util import load_gravity_model
+
+        req_r = 1738000.0
+        req_mu = 4.902800238e+12
+
+        c20_20 = -1.5489032082686e-08
+        c100_100 = -3.0841142975112e-08
+
+        s100_50 = -1.53194061215089e-09
+        s200_100 = 4.25825545837e-09
+
+        r, mu, c, s, n, m = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Moon/lpe_200.txt")
+
+        self.assertEqual(r, req_r)
+        self.assertEqual(mu, req_mu)
+        
+        self.assertEqual(c[20, 20], c20_20)
+        self.assertEqual(c[100, 100], c100_100)
+
+        self.assertEqual(s[100, 50], s100_50)
+        self.assertEqual(s[200, 100], s200_100)
+
+class gravity_spherical_harmonic_test_case(_ut.TestCase):
+    """Test case for the spherical harmonic gravity calculator function.
+
+    """
+
+    def runTest(self):
+        from .util import load_gravity_model, gravity_spherical_harmonic
+
+        r, mu, c, s, n_max, m_max = load_gravity_model(pathlib.Path(__file__).parent / "util/gravity_models/Earth/egm96.txt")
+
+        x = np.array([[6.07303362e+06, -1.63535914e-9, -3.22908926e+06],
+                      [-5874145.34596, 1745831.60905, 3123338.4834],
+                      [5290507.45841, -3377313.30177, -2813012.71391],
+                      [-4360347.55688, 4787584.94679, 2318437.92131],
+                      [3144590.02052, -5884275.41062, -1672008.17262]])
+
+        acc = gravity_spherical_harmonic(x, r, mu, c, s, n_max, m_max)
+
+        req_acc = np.array([[-7.438268885207450, 4.174587578722027e-05, 3.966055730251360],
+                            [7.195259383674340, -2.138389507954604, -3.836583575161607],
+                            [-6.482132055071062, 4.138055191303929, 3.456233485081509],
+                            [5.344543324379746, -5.868302782861193, -2.849822685569829],
+                            [-3.855999728216701, 7.215225587047862, 2.055872629061049]])
+
+        for a, req_a in zip(acc, req_acc):
+            for ax, req_ax in zip(a, req_a):
+                self.assertAlmostEqual(ax, req_ax, 13)
+
+
 def run_test_suite(level=0):
     """Run the full test suite.
 
@@ -212,6 +420,10 @@ def run_test_suite(level=0):
     suite.addTest(lambert_test_case())
     suite.addTest(mga_1dsm_test_case())
     suite.addTest(gym_test_case())
+
+    if __extensions__['numba']:
+        suite.addTest(spherical_harmonics_loader_test_case())
+        suite.addTest(gravity_spherical_harmonic_test_case())
 
 
     test_result = _ut.TextTestRunner(verbosity=2).run(suite)
