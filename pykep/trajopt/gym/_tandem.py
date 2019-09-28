@@ -8,14 +8,14 @@ from math import log, acos, cos, sin, asin, exp
 from copy import deepcopy
 
 class _tandem_udp(mga_1dsm):
-    """ 
+    """
     This class represents a rendezvous mission to Saturn modelled as an MGA-1DSM transfer. Mission parameters are
     inspired to the TandEM mission. A launcher model (i.e. Atlas 501) is also used, so that the final mass delivered
     at Saturn is the main objective of this optimization problem.
 
     The problem draws inspiration from the work performed in April 2008 by the
     European Space Agency working group on mission analysis on the mission named TandEM. TandEM is an interplanetary
-    mission aimed at reaching Titan and Enceladus (two moons of Saturn). 
+    mission aimed at reaching Titan and Enceladus (two moons of Saturn).
 
     .. note::
 
@@ -26,18 +26,18 @@ class _tandem_udp(mga_1dsm):
 
     .. note::
 
-       A significantly similar version of this problem was part of the no longer maintained GTOP database, 
+       A significantly similar version of this problem was part of the no longer maintained GTOP database,
        https://www.esa.int/gsp/ACT/projects/gtop/gtop.html. The exact definition is, though, different and results
        cannot thus not be compared to those posted in GTOP.
     """
     def __init__(self, prob_id = 1, constrained = True):
-        """ 
+        """
         The TandEM problem of the trajectory gym consists in 48 different instances varying in fly-by sequence and
         the presence of a time constraint.
 
         Args:
             - prob_id (``int``): The problem id defines the fly-by sequence.
-            - constrained (``bool``): Activates the constraint on the time of flight 
+            - constrained (``bool``): Activates the constraint on the time of flight
               (fitness will thus return two numbers, the objectove function and the inequality constraint violation)
         """
         # Redefining the planets as to change their safe radius
@@ -109,7 +109,7 @@ class _tandem_udp(mga_1dsm):
 
     def fitness(self, x):
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
-        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # We transform it (only the needed component) to an equatorial system rotating along x
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
         earth_axis_inclination = 0.409072975
         # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
@@ -145,7 +145,7 @@ class _tandem_udp(mga_1dsm):
             [pl.name for pl in self._seq].__repr__() + "\n\t Constrained: " + \
             str(self.constrained)
         return retval
-    
+
     def pretty(self, x):
         """
         prob.plot(x)
@@ -160,7 +160,7 @@ class _tandem_udp(mga_1dsm):
         """
         super().pretty(x)
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
-        # We transform it (only the needed component) to an equatorial system rotating along x 
+        # We transform it (only the needed component) to an equatorial system rotating along x
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
         earth_axis_inclination = 0.409072975
         # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
@@ -183,4 +183,4 @@ class _tandem_udp(mga_1dsm):
         return "TandEM (Trajectory Optimisation Gym P12, multiple instances)"
 
 # Problem P12: TandEM mission MGA1DSM, single objective, direct encoding, time constrained
-tandem = _tandem_udp
+tandem = _tandem_udp()
