@@ -19,7 +19,7 @@ matrix:
     services:
     - docker
   include:
-  - env: PYKEP_BUILD="manylinux64Py37" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
+  - env: PYKEP_BUILD="manylinux64Py67" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
     sudo: required
     services:
     - docker
