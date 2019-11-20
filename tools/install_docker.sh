@@ -6,7 +6,11 @@ set -x
 # Exit on error.
 set -e
 
-if [[ ${PYKEP_BUILD} == *37 ]]; then
+if [[ ${PYKEP_BUILD} == *38 ]]; then
+	PYTHON_DIR="cp38-cp38"
+	BOOST_PYTHON_LIBRARY_NAME="libboost_python38.so"
+	PYTHON_VERSION="37"
+elif [[ ${PYKEP_BUILD} == *37 ]]; then
 	PYTHON_DIR="cp37-cp37m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python37.so"
 	PYTHON_VERSION="37"
@@ -14,14 +18,6 @@ elif [[ ${PYKEP_BUILD} == *36 ]]; then
 	PYTHON_DIR="cp36-cp36m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python36.so"
 	PYTHON_VERSION="36"
-elif [[ ${PYKEP_BUILD} == *27mu ]]; then
-	PYTHON_DIR="cp27-cp27mu"
-	BOOST_PYTHON_LIBRARY_NAME="libboost_python27mu.so"
-	PYTHON_VERSION="27"
-elif [[ ${PYKEP_BUILD} == *27 ]]; then
-	PYTHON_DIR="cp27-cp27m"
-	BOOST_PYTHON_LIBRARY_NAME="libboost_python27.so"
-	PYTHON_VERSION="27"
 else
 	echo "Invalid build type: ${PYKEP_BUILD}"
 	exit 1
