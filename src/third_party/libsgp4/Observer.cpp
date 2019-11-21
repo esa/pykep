@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-#include "Observer.h"
-
-#include "CoordTopocentric.h"
+#include <keplerian_toolbox/third_party/libsgp4/Observer.h>
+#include <keplerian_toolbox/third_party/libsgp4/CoordTopocentric.h>
 
 /*
  * calculate lookangle between the observer and the passed in Eci object

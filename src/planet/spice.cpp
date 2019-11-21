@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 #include <keplerian_toolbox/planet/spice.hpp>
-#include <keplerian_toolbox/exeptions.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

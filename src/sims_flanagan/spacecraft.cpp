@@ -25,7 +25,7 @@
 
 #include <sstream>
 
-#include "spacecraft.h"
+#include <keplerian_toolbox/sims_flanagan/spacecraft.hpp>
 
 namespace kep_toolbox
 {

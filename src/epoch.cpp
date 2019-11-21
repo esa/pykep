@@ -27,9 +27,9 @@
 #include <iomanip>
 #include <iostream>
 
-#include "astro_constants.h"
-#include "core_functions/convert_dates.h"
-#include "epoch.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/core_functions/convert_dates.hpp>
+#include <keplerian_toolbox/epoch.hpp>
 
 namespace kep_toolbox
 {

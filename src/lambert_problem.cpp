@@ -26,9 +26,9 @@
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 
-#include "core_functions/array3D_operations.h"
-#include "exceptions.h"
-#include "lambert_problem.h"
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/lambert_problem.hpp>
 
 namespace kep_toolbox
 {

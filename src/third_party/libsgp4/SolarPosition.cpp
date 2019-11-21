@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-#include "SolarPosition.h"
-
-#include "Globals.h"
-#include "Util.h"
+#include <keplerian_toolbox/third_party/libsgp4/SolarPosition.h>
+#include <keplerian_toolbox/third_party/libsgp4/Globals.h>
+#include <keplerian_toolbox/third_party/libsgp4/Util.h>
 
 #include <cmath>
 

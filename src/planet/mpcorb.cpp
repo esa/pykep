@@ -28,7 +28,7 @@
 #include <fstream>
 
 #include <keplerian_toolbox/exceptions.hpp>
-#include "mpcorb.h"
+#include <keplerian_toolbox/planet/mpcorb.hpp>
 
 static const int mpcorb_format[12][2] = {
     {92, 11},  // a (AU)

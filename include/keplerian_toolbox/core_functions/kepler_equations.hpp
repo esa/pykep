@@ -26,7 +26,7 @@
 #ifndef KEP_TOOLBOX_KEPLER_EQUATIONS_H
 #define KEP_TOOLBOX_KEPLER_EQUATIONS_H
 
-#include <keplerian_toolbox/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
 #include <keplerian_toolbox/core_functions/stumpff.hpp>
 #include <cmath>
 

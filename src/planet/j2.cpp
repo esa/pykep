@@ -28,11 +28,11 @@
 #include <boost/none.hpp>
 
 #include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
-#include "../core_functions/ic2par.h"
-#include "../core_functions/par2ic.h"
-#include "../core_functions/propagate_lagrangian.h"
+#include <keplerian_toolbox/core_functions/ic2par.hpp>
+#include <keplerian_toolbox/core_functions/par2ic.hpp>
+#include <keplerian_toolbox/core_functions/propagate_lagrangian.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
-#include "j2.h"
+#include <keplerian_toolbox/planet/j2.hpp>
 
 namespace kep_toolbox
 {

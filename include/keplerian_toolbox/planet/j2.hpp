@@ -33,7 +33,7 @@
 #include <keplerian_toolbox/epoch.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
 #include <keplerian_toolbox/serialization.hpp>
-#include <keplerian_toolbox/base.hpp>
+#include <keplerian_toolbox/planet/base.hpp>
 
 namespace kep_toolbox
 {

@@ -28,7 +28,7 @@
 
 #include <keplerian_toolbox/detail/visibility.hpp>
 #include <keplerian_toolbox/serialization.hpp>
-#include <keplerian_toolbox/keplerian.hpp>
+#include <keplerian_toolbox/planet/keplerian.hpp>
 
 namespace kep_toolbox
 {

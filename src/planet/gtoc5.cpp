@@ -23,9 +23,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "gtoc5.h"
+#include <keplerian_toolbox/planet/gtoc5.hpp>
 #include <keplerian_toolbox/astro_constants.hpp>
-#include "../core_functions/par2ic.h"
+#include <keplerian_toolbox/core_functions/par2ic.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox

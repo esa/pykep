@@ -28,7 +28,7 @@
 
 #include <cmath>
 
-#include <keplerian_toolbox/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
 
 namespace kep_toolbox
 {

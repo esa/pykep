@@ -29,9 +29,9 @@
 #include <cmath>
 #include <vector>
 
-#include "astro_constants.h"
-#include "config.h"
-#include "serialization.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/detail/visibility.hpp>
+#include <keplerian_toolbox/serialization.hpp>
 
 namespace kep_toolbox
 {

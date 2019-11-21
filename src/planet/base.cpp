@@ -27,9 +27,9 @@
 #include <boost/math/constants/constants.hpp>
 
 #include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
-#include "../core_functions/ic2par.h"
+#include <keplerian_toolbox/core_functions/ic2par.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
-#include <keplerian_toolbox/base.hpp>
+#include <keplerian_toolbox/planet/base.hpp>
 
 namespace kep_toolbox
 {

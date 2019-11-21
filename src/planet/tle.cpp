@@ -27,15 +27,15 @@
 #include <string>
 
 #include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
-#include "../core_functions/par2ic.h"
+#include <keplerian_toolbox/core_functions/par2ic.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
-#include "../third_party/libsgp4/Eci.h"
-#include "../third_party/libsgp4/Globals.h"
-#include "../third_party/libsgp4/SGP4.h"
-#include "../third_party/libsgp4/SatelliteException.h"
-#include "../third_party/libsgp4/Tle.h"
-#include "../third_party/libsgp4/TleException.h"
-#include "tle.h"
+#include <keplerian_toolbox/planet/tle.hpp>
+#include <keplerian_toolbox/third_party/libsgp4/Eci.h>
+#include <keplerian_toolbox/third_party/libsgp4/Globals.h>
+#include <keplerian_toolbox/third_party/libsgp4/SGP4.h>
+#include <keplerian_toolbox/third_party/libsgp4/SatelliteException.h>
+#include <keplerian_toolbox/third_party/libsgp4/Tle.h>
+#include <keplerian_toolbox/third_party/libsgp4/TleException.h>
 
 namespace kep_toolbox
 {
@@ -47,11 +47,12 @@ namespace planet
  * \param[in] line1 first line
  * \param[in] line2 second line
  */
-tle::tle(const std::string &line1, const std::string &line2) try : base(),
-                                                                   m_line1(line1),
-                                                                   m_line2(line2),
-                                                                   m_tle(Tle("TLE satellite", line1, line2)),
-                                                                   m_sgp4_propagator(SGP4(m_tle)) {
+tle::tle(const std::string &line1, const std::string &line2)
+try : base(),
+      m_line1(line1),
+      m_line2(line2),
+      m_tle(Tle("TLE satellite", line1, line2)),
+      m_sgp4_propagator(SGP4(m_tle)) {
     // We read the osculating elements of the satellite
     array6D keplerian_elements;
     double mu_central_body = kMU * 1E09;                                                     // (m^3/s^2)
@@ -148,7 +149,7 @@ std::string tle::human_readable_extra() const
     s << "TLE 2: " << m_line2 << std::endl;
     return s.str();
 }
-}
-} // namespace
+} // namespace planet
+} // namespace kep_toolbox
 
 BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::tle)
