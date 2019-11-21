@@ -26,9 +26,9 @@
 #include <cmath>
 #include <string>
 
-#include "../core_functions/convert_anomalies.h"
+#include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
 #include "../core_functions/par2ic.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/exceptions.hpp>
 #include "../third_party/libsgp4/Eci.h"
 #include "../third_party/libsgp4/Globals.h"
 #include "../third_party/libsgp4/SGP4.h"

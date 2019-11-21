@@ -16,14 +16,14 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-# Main build options: build dcgp or dcgpy. They cannot be on at the same time,
+# Main build options: build keplerian_toolbox or pykep. They cannot be on at the same time,
 # and only one must be chosen.
 option(PYKEP_BUILD_KEP_TOOLBOX "Build the cpp project." ON)
 option(PYKEP_BUILD_PYKEP "Build pykep." OFF)
 
 # Check consistency.
 if(PYKEP_BUILD_KEP_TOOLBOX AND PYKEP_BUILD_PYKEP)
-    message(FATAL_ERROR "Please select whether to build dcgp or dcgpy: you cannot build them both at the same time.")
+    message(FATAL_ERROR "Please select whether to build keplerian_toolbox or pykep: you cannot build them both at the same time.")
 endif()
 
 if((NOT PYKEP_BUILD_KEP_TOOLBOX) AND (NOT PYKEP_BUILD_PYKEP))
@@ -39,7 +39,7 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     option(PYKEP_BUILD_TESTS "Build test set." ON)
 
     # Build option: enable examples
-    option(PYKEP_BUILD_SPICE "Build also the spice tools." OFF)
+    option(PYKEP_BUILD_SPICE "Build also the spice tools." ON)
 else()
     # Initial setup of a pykep build.
     project(pykep VERSION ${PYKEP_PROJECT_VERSION})
@@ -54,37 +54,37 @@ include(YACMACompilerLinkerSettings)
 include(YACMAThreadingSetup)
 
 # Assemble the flags.
-set(DCGP_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
-set(DCGP_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
+set(KEP_TOOLBOX_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
+set(KEP_TOOLBOX_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
   message(STATUS "Clang compiler on OSX detected, setting the standard library to 'libc++'.")
-  list(APPEND DCGP_CXX_FLAGS_DEBUG "-stdlib=libc++")
-  list(APPEND DCGP_CXX_FLAGS_RELEASE "-stdlib=libc++")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-stdlib=libc++")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-stdlib=libc++")
 endif()
 if(YACMA_COMPILER_IS_MSVC)
   include(CheckCXXCompilerFlag)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
   # and enable the bigobj option.
   # Also, enable the WIN32_LEAN_AND_MEAN definition.
-  list(APPEND DCGP_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
-  list(APPEND DCGP_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
   # Enable strict conformance mode, if supported.
   set(CMAKE_REQUIRED_QUIET TRUE)
-  check_cxx_compiler_flag("/permissive-" _DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  check_cxx_compiler_flag("/permissive-" _KEP_TOOLBOX_MSVC_SUPPORTS_STRICT_CONFORMANCE)
   unset(CMAKE_REQUIRED_QUIET)
-  if(_DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  if(_KEP_TOOLBOX_MSVC_SUPPORTS_STRICT_CONFORMANCE)
     message(STATUS "The '/permissive-' flag is supported, enabling it.")
-    list(APPEND DCGP_CXX_FLAGS_DEBUG "/permissive-")
-    list(APPEND DCGP_CXX_FLAGS_RELEASE "/permissive-")
+    list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "/permissive-")
+    list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "/permissive-")
   endif()
-  unset(_DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  unset(_KEP_TOOLBOX_MSVC_SUPPORTS_STRICT_CONFORMANCE)
   if(YACMA_COMPILER_IS_CLANGXX)
     # clang-cl emits various warnings from GMP/MPFR, let's just silence them.
     # NOTE: at one point in the recent past, MSVC added an options similar to GCC's isystem:
     # https://blogs.msdn.microsoft.com/vcblog/2017/12/13/broken-warnings-theory/
     # We probably just need to wait for this to be picked up by CMake/clang-cl. Let's
     # revisit the issue in the future.
-    list(APPEND _DCGP_CLANG_CL_DISABLED_WARNINGS
+    list(APPEND _KEP_TOOLBOX_CLANG_CL_DISABLED_WARNINGS
       "-Wno-unused-variable"
       "-Wno-inconsistent-dllimport"
       "-Wno-unknown-pragmas"
@@ -128,9 +128,9 @@ if(YACMA_COMPILER_IS_MSVC)
       "-Wno-unused-macros"
       "-Wno-extra-semi-stmt"
       "-Wno-c++98-compat")
-    list(APPEND DCGP_CXX_FLAGS_DEBUG ${_DCGP_CLANG_CL_DISABLED_WARNINGS})
-    list(APPEND DCGP_CXX_FLAGS_RELEASE ${_DCGP_CLANG_CL_DISABLED_WARNINGS})
-    unset(_DCGP_CLANG_CL_DISABLED_WARNINGS)
+    list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG ${_KEP_TOOLBOX_CLANG_CL_DISABLED_WARNINGS})
+    list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE ${_KEP_TOOLBOX_CLANG_CL_DISABLED_WARNINGS})
+    unset(_KEP_TOOLBOX_CLANG_CL_DISABLED_WARNINGS)
   endif()
 endif()
 if(YACMA_COMPILER_IS_INTELXX)
@@ -138,22 +138,22 @@ if(YACMA_COMPILER_IS_INTELXX)
   # in icc influence the behaviour at instantiation point, not at definition point).
   # These warnings are useful in principle, but they are generated a lot from cereal and we have no
   # way of disabling them selectively. Just rely on the other compilers to provde good diagnostic.
-  list(APPEND DCGP_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
-  list(APPEND DCGP_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
+  list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
 endif()
 if(MINGW)
 	# Flag needed to deal with big binaries in MinGW.
 	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
-	list(APPEND DCGP_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
-	list(APPEND DCGP_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+	list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
+	list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
 endif()
 
 # Some flags that generate warnings due to Eigen obsolete versions
-list(REMOVE_ITEM DCGP_CXX_FLAGS_DEBUG "-Wduplicated-branches")
-list(REMOVE_ITEM DCGP_CXX_FLAGS_DEBUG "-Wold-style-cast")
+list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wduplicated-branches")
+list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wold-style-cast")
 
 # Creates the file config.hpp
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/dcgp/config.hpp" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/keplerian_toolbox/config.hpp" @ONLY)
 
 if(BUILD_PYKEP)
     # pygmo dependencies.
@@ -201,29 +201,30 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Observer.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Eci.cpp"
     )
+    # We cannot use c++ strict compiling flags on a c file. The following ad hoc property is thus set to silence resulting warnings
+    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c" PROPERTIES COMPILE_OPTIONS -w)
 
     if(PYKEP_BUILD_SPICE)
-        # Add files to the keplerian toolbox
+        # Add cpp files to the keplerian toolbox
         set(KEP_TOOLBOX_SRC_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/spice.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/src/util/spice_utils.cpp"
             "${KEP_TOOLBOX_SRC_FILES}")
-        # Make the cspice library
-        add_subdirectory("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
+        # Add c files to the keplerian toolbox
+        file(GLOB CSPICE_LIB_SRC_LIST "src/third_party/cspice/*.c")
+        set(KEP_TOOLBOX_SRC_FILES
+                    "${CSPICE_LIB_SRC_LIST}"
+                    "${KEP_TOOLBOX_SRC_FILES}")
+        # Silence warnings
+        set_source_files_properties(${CSPICE_LIB_SRC_LIST} PROPERTIES COMPILE_OPTIONS -w)
         add_definitions(-DPYKEP_USING_SPICE)
-        # Installation of the library.
-        install(TARGETS cspice 
-            EXPORT keplerian_toolbox
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib
-            RUNTIME DESTINATION bin)
     endif(PYKEP_BUILD_SPICE)
 
     # Setup of the keplerian_toolbox library.
     add_library(keplerian_toolbox SHARED "${KEP_TOOLBOX_SRC_FILES}")
     set_property(TARGET keplerian_toolbox PROPERTY VERSION "1.0")
     set_property(TARGET keplerian_toolbox PROPERTY SOVERSION 1)
-    target_compile_options(keplerian_toolbox PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    target_compile_options(keplerian_toolbox PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")
     set_target_properties(keplerian_toolbox PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(keplerian_toolbox PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
@@ -244,11 +245,6 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
      # Boost.
     target_link_libraries(keplerian_toolbox PUBLIC Boost::boost Boost::serialization Boost::date_time)
 
-    # Link to cspice if requested
-    if(PYKEP_BUILD_SPICE)
-    target_link_libraries(keplerian_toolbox PUBLIC cspice)
-    endif(PYKEP_BUILD_SPICE)
-
     # Build Tests and link them to static library.
     if(PYKEP_BUILD_TESTS)
         add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
@@ -264,12 +260,29 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py" @ONLY)
 endif()
 
+# Build pykep and link it to dynamic library.
+if(PYKEP_BUILD_PYKEP)
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)
+	add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
+    if(MINGW OR ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        message(STATUS "Creating the files for the generation of a binary wheel.")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py" @ONLY)
+        if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+            # NOTE: this is necessary on linux but harmful on mingw.
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
+        endif()
+        if(MINGW)
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" @ONLY)
+        endif()
+    endif()
+endif()
+
+
 # Library installation.
 if(PYKEP_BUILD_KEP_TOOLBOX)
     # Installation of the header files.
     install(DIRECTORY include/ DESTINATION include)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/keplerian_toolbox/config.hpp" DESTINATION include/keplerian_toolbox)
-
     # Installation of the library.
     install(TARGETS keplerian_toolbox
         EXPORT keplerian_toolbox
@@ -277,7 +290,6 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
     )
-
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/keplerian_toolbox-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" @ONLY)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PykepFindBoost.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
@@ -295,7 +307,6 @@ if(NOT TARGET uninstall)
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/cmake_uninstall.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
         IMMEDIATE @ONLY)
-
     add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
@@ -305,27 +316,4 @@ endif()
 
 
 
-# Build pykep and link it to dynamic library.
-if(BUILD_PYKEP)
-	add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
-    if(MINGW OR ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        message(STATUS "Creating the files for the generation of a binary wheel.")
-        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py" @ONLY)
-        if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-            # NOTE: this is necessary on linux but harmful on mingw.
-            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
-        endif()
-        if(MINGW)
-            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" "${CMAKE_CURRENT_BINARY_DIR}/wheel/mingw_wheel_libs_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.txt" @ONLY)
-        endif()
-    endif()
-endif()
 
-
-
-
-#######################################LEFT OVERS ##############################
-
-# Writing some configuration files with version update ...
-
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)

@@ -27,7 +27,7 @@
 #include <cmath>
 #include <fstream>
 
-#include "../exceptions.h"
+#include <keplerian_toolbox/exceptions.hpp>
 #include "mpcorb.h"
 
 static const int mpcorb_format[12][2] = {

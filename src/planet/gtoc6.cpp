@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 #include "gtoc6.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

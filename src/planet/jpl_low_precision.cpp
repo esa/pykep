@@ -24,10 +24,10 @@
  *****************************************************************************/
 
 #include "jpl_low_precision.h"
-#include "../core_functions/convert_anomalies.h"
+#include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
 #include "../core_functions/par2ic.h"
-#include "../epoch.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/epoch.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

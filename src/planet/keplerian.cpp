@@ -27,12 +27,12 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/none.hpp>
 
-#include "../core_functions/convert_anomalies.h"
+#include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
 #include "../core_functions/ic2par.h"
 #include "../core_functions/par2ic.h"
 #include "../core_functions/propagate_lagrangian.h"
-#include "../exceptions.h"
-#include "keplerian.h"
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/keplerian.hpp>
 
 namespace kep_toolbox
 {

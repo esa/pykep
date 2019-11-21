@@ -26,10 +26,10 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/math/constants/constants.hpp>
 
-#include "../core_functions/convert_anomalies.h"
+#include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
 #include "../core_functions/ic2par.h"
-#include "../exceptions.h"
-#include "base.h"
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/base.hpp>
 
 namespace kep_toolbox
 {

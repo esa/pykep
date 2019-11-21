@@ -24,8 +24,8 @@
  *****************************************************************************/
 
 #include "gtoc2.h"
-#include "../astro_constants.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "jorba.h"
+#include <keplerian_toolbox/core_functions/jorba.h>
 
 #define _N_DIM_ 7
 

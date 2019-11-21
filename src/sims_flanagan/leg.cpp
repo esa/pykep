@@ -26,10 +26,10 @@
 #include <numeric>
 #include <vector>
 
-#include "../astro_constants.h"
+#include <keplerian_toolbox/astro_constants.hpp>
 #include "../core_functions/array3D_operations.h"
 #include "../core_functions/propagate_lagrangian.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/exceptions.hpp>
 #include "leg.h"
 #include "sc_state.h"
 
