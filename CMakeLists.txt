@@ -1,10 +1,8 @@
-# CMake version check.
-cmake_minimum_required(VERSION 3.2)
-
 # Main pykep project version.
 set(PYKEP_PROJECT_VERSION 2.4)
-project(pykep VERSION ${PYKEP_PROJECT_VERSION})
-enable_testing()
+
+# CMake version check.
+cmake_minimum_required(VERSION 3.2)
 
 # Module path setup.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
@@ -18,58 +16,144 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-# Writing some configuration files with version update ...
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py" @ONLY)
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)
+# Main build options: build dcgp or dcgpy. They cannot be on at the same time,
+# and only one must be chosen.
+option(PYKEP_BUILD_KEP_TOOLBOX "Build the cpp project." ON)
+option(PYKEP_BUILD_PYKEP "Build pykep." OFF)
+
+# Check consistency.
+if(PYKEP_BUILD_KEP_TOOLBOX AND PYKEP_BUILD_PYKEP)
+    message(FATAL_ERROR "Please select whether to build dcgp or dcgpy: you cannot build them both at the same time.")
+endif()
+
+if((NOT PYKEP_BUILD_KEP_TOOLBOX) AND (NOT PYKEP_BUILD_PYKEP))
+    message(FATAL_ERROR "Please select if you want to build the cpp project or pykep")
+endif()
+
+if(PYKEP_BUILD_KEP_TOOLBOX)
+    # Initial setup of a keplerian_toolbox build.
+    project(keplerian_toolbox VERSION ${PYKEP_PROJECT_VERSION})
+    enable_testing()
+
+    # Build option: enable test set.
+    option(PYKEP_BUILD_TESTS "Build test set." ON)
+
+    # Build option: enable examples
+    option(PYKEP_BUILD_SPICE "Build also the spice tools." OFF)
+else()
+    # Initial setup of a pykep build.
+    project(pykep VERSION ${PYKEP_PROJECT_VERSION})
+endif()
+
+# Common general bits.
 
 # Initial setup of compiler flags.
 include(YACMACompilerLinkerSettings)
 
-# Provides build options to CMake
-# Build Option: when active the file main.cpp is built and linked to the PYKEP static library
-OPTION(BUILD_MAIN "Build 'main.cpp'." ON)
-
-# Build Option: when active builds Python bindings called pykep
-OPTION(BUILD_PYKEP "Build pykep." OFF)
-
-# Build Option: when active the examples in the folder example are compiled into executables
-OPTION(BUILD_TESTS "Build tests'." ON)
-
-# Build Option: when active the JPL SPICE toolbox is used to extend pykep. You can choose
-# to build the library or use a pre-build library
-OPTION(BUILD_SPICE "Interface pykep to JPL SPICE toolbox'." OFF)
-
-# Build Option: when active headers will be installed in the CMAKE_INSTALL_PREFIX/include directory
-OPTION(INSTALL_HEADERS "Installs the header files" OFF)
+# Threading setup.
+include(YACMAThreadingSetup)
 
 # Assemble the flags.
-set(PYKEP_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
-set(PYKEP_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
+set(DCGP_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
+set(DCGP_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND YACMA_COMPILER_IS_CLANGXX)
   message(STATUS "Clang compiler on OSX detected, setting the standard library to 'libc++'.")
-  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-stdlib=libc++")
-  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-stdlib=libc++")
+  list(APPEND DCGP_CXX_FLAGS_DEBUG "-stdlib=libc++")
+  list(APPEND DCGP_CXX_FLAGS_RELEASE "-stdlib=libc++")
 endif()
 if(YACMA_COMPILER_IS_MSVC)
+  include(CheckCXXCompilerFlag)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
   # and enable the bigobj option.
-  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
-  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj")
+  # Also, enable the WIN32_LEAN_AND_MEAN definition.
+  list(APPEND DCGP_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND DCGP_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  # Enable strict conformance mode, if supported.
+  set(CMAKE_REQUIRED_QUIET TRUE)
+  check_cxx_compiler_flag("/permissive-" _DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  unset(CMAKE_REQUIRED_QUIET)
+  if(_DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+    message(STATUS "The '/permissive-' flag is supported, enabling it.")
+    list(APPEND DCGP_CXX_FLAGS_DEBUG "/permissive-")
+    list(APPEND DCGP_CXX_FLAGS_RELEASE "/permissive-")
+  endif()
+  unset(_DCGP_MSVC_SUPPORTS_STRICT_CONFORMANCE)
+  if(YACMA_COMPILER_IS_CLANGXX)
+    # clang-cl emits various warnings from GMP/MPFR, let's just silence them.
+    # NOTE: at one point in the recent past, MSVC added an options similar to GCC's isystem:
+    # https://blogs.msdn.microsoft.com/vcblog/2017/12/13/broken-warnings-theory/
+    # We probably just need to wait for this to be picked up by CMake/clang-cl. Let's
+    # revisit the issue in the future.
+    list(APPEND _DCGP_CLANG_CL_DISABLED_WARNINGS
+      "-Wno-unused-variable"
+      "-Wno-inconsistent-dllimport"
+      "-Wno-unknown-pragmas"
+      "-Wno-unused-parameter"
+      "-Wno-sign-compare"
+      "-Wno-deprecated-declarations"
+      "-Wno-deprecated-dynamic-exception-spec"
+      "-Wno-old-style-cast"
+      "-Wno-sign-conversion"
+      "-Wno-non-virtual-dtor"
+      "-Wno-deprecated"
+      "-Wno-shadow"
+      "-Wno-shorten-64-to-32"
+      "-Wno-reserved-id-macro"
+      "-Wno-undef"
+      "-Wno-c++98-compat-pedantic"
+      "-Wno-documentation-unknown-command"
+      "-Wno-zero-as-null-pointer-constant"
+      "-Wno-language-extension-token"
+      "-Wno-gnu-anonymous-struct"
+      "-Wno-nested-anon-types"
+      "-Wno-documentation"
+      "-Wno-comma"
+      "-Wno-nonportable-system-include-path"
+      "-Wno-global-constructors"
+      "-Wno-redundant-parens"
+      "-Wno-exit-time-destructors"
+      "-Wno-missing-noreturn"
+      "-Wno-switch-enum"
+      "-Wno-covered-switch-default"
+      "-Wno-float-equal"
+      "-Wno-double-promotion"
+      "-Wno-microsoft-enum-value"
+      "-Wno-missing-prototypes"
+      "-Wno-implicit-fallthrough"
+      "-Wno-format-nonliteral"
+      "-Wno-cast-qual"
+      "-Wno-disabled-macro-expansion"
+      "-Wno-unused-private-field"
+      "-Wno-unused-template"
+      "-Wno-unused-macros"
+      "-Wno-extra-semi-stmt"
+      "-Wno-c++98-compat")
+    list(APPEND DCGP_CXX_FLAGS_DEBUG ${_DCGP_CLANG_CL_DISABLED_WARNINGS})
+    list(APPEND DCGP_CXX_FLAGS_RELEASE ${_DCGP_CLANG_CL_DISABLED_WARNINGS})
+    unset(_DCGP_CLANG_CL_DISABLED_WARNINGS)
+  endif()
 endif()
 if(YACMA_COMPILER_IS_INTELXX)
   # NOTE: on MSVC we use the push/pop pragmas, but they do not seem to work on Intel (the pragmas
   # in icc influence the behaviour at instantiation point, not at definition point).
   # These warnings are useful in principle, but they are generated a lot from cereal and we have no
   # way of disabling them selectively. Just rely on the other compilers to provde good diagnostic.
-  list(APPEND PYKEP_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
-  list(APPEND PYKEP_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
+  list(APPEND DCGP_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
+  list(APPEND DCGP_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
 endif()
 if(MINGW)
 	# Flag needed to deal with big binaries in MinGW.
 	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
-	list(APPEND PYKEP_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
-	list(APPEND PYKEP_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+	list(APPEND DCGP_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
+	list(APPEND DCGP_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
 endif()
+
+# Some flags that generate warnings due to Eigen obsolete versions
+list(REMOVE_ITEM DCGP_CXX_FLAGS_DEBUG "-Wduplicated-branches")
+list(REMOVE_ITEM DCGP_CXX_FLAGS_DEBUG "-Wold-style-cast")
+
+# Creates the file config.hpp
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/dcgp/config.hpp" @ONLY)
 
 if(BUILD_PYKEP)
     # pygmo dependencies.
@@ -87,32 +171,139 @@ endif()
 # Boost setup. Will allow using Boost::library_name for the needed components
 include(PykepFindBoost)
 
-# We build cspice static library and link it in pykep libraries
-if(BUILD_SPICE)
-add_subdirectory("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
-    add_definitions(-DPYKEP_USING_SPICE)
-endif(BUILD_SPICE)
+if(PYKEP_BUILD_KEP_TOOLBOX)
+    # List of source files.
+    SET(KEP_TOOLBOX_SRC_FILES
+        # Core
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/leg_s.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/sims_flanagan/spacecraft.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c"
+        # Planet
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/base.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/keplerian.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/j2.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/jpl_low_precision.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/mpcorb.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/tle.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc2.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc5.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc6.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc7.cpp"
+        # SGP4
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Util.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Tle.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SolarPosition.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SGP4.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/OrbitalElements.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Observer.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Eci.cpp"
+    )
 
-# Here we define the file list and make the static and dynamic library
-add_subdirectory("${CMAKE_SOURCE_DIR}/src")
+    if(PYKEP_BUILD_SPICE)
+        # Add files to the keplerian toolbox
+        set(KEP_TOOLBOX_SRC_FILES
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/spice.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/util/spice_utils.cpp"
+            "${KEP_TOOLBOX_SRC_FILES}")
+        # Make the cspice library
+        add_subdirectory("${CMAKE_SOURCE_DIR}/src/third_party/cspice")
+        add_definitions(-DPYKEP_USING_SPICE)
+        # Installation of the library.
+        install(TARGETS cspice 
+            EXPORT keplerian_toolbox
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
+            RUNTIME DESTINATION bin)
+    endif(PYKEP_BUILD_SPICE)
 
-# Build main and link it to static library.
-if(BUILD_MAIN)
-	add_executable(main main.cpp)
-	target_link_libraries(main keplerian_toolbox_static Boost::boost Boost::serialization Boost::date_time)
-    set_property(TARGET main PROPERTY CXX_STANDARD 11)
-    set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED YES)
-    set_property(TARGET main PROPERTY CXX_EXTENSIONS NO)
-endif(BUILD_MAIN)
+    # Setup of the keplerian_toolbox library.
+    add_library(keplerian_toolbox SHARED "${KEP_TOOLBOX_SRC_FILES}")
+    set_property(TARGET keplerian_toolbox PROPERTY VERSION "1.0")
+    set_property(TARGET keplerian_toolbox PROPERTY SOVERSION 1)
+    target_compile_options(keplerian_toolbox PRIVATE "$<$<CONFIG:DEBUG>:${PAGMO_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${PAGMO_CXX_FLAGS_RELEASE}>")
+    set_target_properties(keplerian_toolbox PROPERTIES CXX_VISIBILITY_PRESET hidden)
+    set_target_properties(keplerian_toolbox PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
+    # Let's setup the target C++ standard, but only if the user did not provide it manually.
+    if(NOT CMAKE_CXX_STANDARD)
+        set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD 11)
+    endif()
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD_REQUIRED YES)
+    set_property(TARGET keplerian_toolbox PROPERTY CXX_EXTENSIONS NO)
+    # NOTE: make sure the include directories from the current build
+    # are included first, so that if there is already a pagmo installation
+    # in the prefix path we don't risk including the headers from that
+    # one instead.
+    target_include_directories(keplerian_toolbox PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
 
-# Build Tests and link them to static library.
-if(BUILD_TESTS)
-	add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
-	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	file(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-	FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
-endif(BUILD_TESTS)
+     # Boost.
+    target_link_libraries(keplerian_toolbox PUBLIC Boost::boost Boost::serialization Boost::date_time)
+
+    # Link to cspice if requested
+    if(PYKEP_BUILD_SPICE)
+    target_link_libraries(keplerian_toolbox PUBLIC cspice)
+    endif(PYKEP_BUILD_SPICE)
+
+    # Build Tests and link them to static library.
+    if(PYKEP_BUILD_TESTS)
+        add_subdirectory("${CMAKE_SOURCE_DIR}/tests")
+        file(COPY "${CMAKE_SOURCE_DIR}/tests/data/sgp4_test.txt" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+        file(COPY "${CMAKE_SOURCE_DIR}/tests/data/C_G_1000012_2012_2017.bsp" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+        file(COPY "${CMAKE_SOURCE_DIR}/tests/data/pck00010.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+        FILE(COPY "${CMAKE_SOURCE_DIR}/tests/data/gm_de431.tpc" DESTINATION "${CMAKE_BINARY_DIR}/tests")
+    endif(PYKEP_BUILD_TESTS)
+
+    # Configure config.hpp.
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_BINARY_DIR}/include/keplerian_toolbox/config.hpp" @ONLY)
+    # Configure the doc files.
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/doc/sphinx/conf.py" @ONLY)
+endif()
+
+# Library installation.
+if(PYKEP_BUILD_KEP_TOOLBOX)
+    # Installation of the header files.
+    install(DIRECTORY include/ DESTINATION include)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/keplerian_toolbox/config.hpp" DESTINATION include/keplerian_toolbox)
+
+    # Installation of the library.
+    install(TARGETS keplerian_toolbox
+        EXPORT keplerian_toolbox
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
+
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/keplerian_toolbox-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" @ONLY)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PykepFindBoost.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
+    install(EXPORT keplerian_toolbox NAMESPACE keplerian_toolbox:: DESTINATION lib/cmake/keplerian_toolbox)
+    # Take care of versioning.
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config-version.cmake" VERSION ${keplerian_toolbox_VERSION}
+        COMPATIBILITY ExactVersion)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config-version.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
+endif()
+
+# Uninstall target
+if(NOT TARGET uninstall)
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
+
+    add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
+
+
+
+
+
 
 # Build pykep and link it to dynamic library.
 if(BUILD_PYKEP)
@@ -130,3 +321,11 @@ if(BUILD_PYKEP)
     endif()
 endif()
 
+
+
+
+#######################################LEFT OVERS ##############################
+
+# Writing some configuration files with version update ...
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py.in" "${CMAKE_CURRENT_SOURCE_DIR}/pykep/__init__.py" @ONLY)

@@ -14,16 +14,54 @@ env:
 
 matrix:
   include:
-  - env: PYKEP_BUILD="manylinux64Py36" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
-    sudo: required
-    services:
-    - docker
-  include:
+    - env: DCGP_BUILD="DebugGCC"
+      dist: bionic
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - binutils-gold
+    - env: DCGP_BUILD="ReleaseGCC"
+      dist: bionic
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packages:
+          - binutils-gold
+    - env: DCGP_BUILD="CoverageGCC"
+      dist: bionic
+      compiler: gcc 
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+          packa1ges:
+          - binutils-gold
+    - env: DCGP_BUILD="Python38"
+      dist: bionic
+      compiler: gcc
+      os: linux
+      addons:
+        apt:
+          sources:
+          - ubuntu-toolchain-r-test
+  # Activate if matplotlib is available in py38 via the PyPi
+  #- env: PYKEP_BUILD="manylinux64Py38" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
+  #  sudo: required
+  #  services:
+  #  - docker
   - env: PYKEP_BUILD="manylinux64Py37" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
     sudo: required
     services:
     - docker
-  - env: PYKEP_BUILD="manylinux64Py38" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
+  - env: PYKEP_BUILD="manylinux64Py36" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
     sudo: required
     services:
     - docker
@@ -32,7 +70,11 @@ install:
 script:
 - mkdir build
 - cd build
-- bash ../tools/install_travis.sh
+# NOTE: currently, travis does not stop automatically if one of these
+# 2 scripts returns an error code. Thus, we run them together as a single
+# command, so that if install_deps.sh fails the whole build fails immediately
+# rather than executing install_travis.sh as well. See
+# https://github.com/travis-ci/travis-ci/issues/1066
+- ../tools/install_deps.sh && ../tools/install_travis.sh
 notifications:
   email: false
-  

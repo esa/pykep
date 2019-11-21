@@ -1,11 +1,7 @@
 # Macro used to add a test
 macro(ADD_PYKEP_TEST arg1)
     add_executable(${arg1} ${arg1}.cpp)
-    IF(BUILD_SPICE)
-        target_link_libraries(${arg1} keplerian_toolbox_static cspice Boost::boost Boost::serialization Boost::date_time)
-    else()
-        target_link_libraries(${arg1} keplerian_toolbox_static Boost::boost Boost::serialization Boost::date_time)
-    endif()
+    target_link_libraries(${arg1} keplerian_toolbox)
     add_test(${arg1} ${arg1})
     set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${arg1} PROPERTY CXX_STANDARD_REQUIRED YES)
@@ -22,7 +18,6 @@ ADD_PYKEP_TEST(propagate_taylor_s_test)
 ADD_PYKEP_TEST(leg_s_test)
 ADD_PYKEP_TEST(sgp4_test)
 ADD_PYKEP_TEST(anomalies_test)
-
 
 IF(BUILD_SPICE)
     ADD_PYKEP_TEST(load_spice_kernel_test)
