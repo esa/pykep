@@ -23,8 +23,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "../src/core_functions/array3D_operations.h"
-#include "../src/planet/tle.h"
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
+#include <keplerian_toolbox/planet/tle.hpp>
 #include <algorithm>
 #include <fstream>
 #include <iostream>

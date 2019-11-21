@@ -27,7 +27,7 @@
 #define KEP_TOOLBOX_PROPAGATE_TAYLOR_JORBA_H
 
 extern "C" {
-#include <keplerian_toolbox/core_functions/jorba.hpp>
+#include <keplerian_toolbox/core_functions/jorba.h>
 }
 
 namespace kep_toolbox

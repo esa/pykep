@@ -27,8 +27,8 @@
 #include <iostream>
 #include <string>
 
-#include "../src/epoch.h"
-#include "../src/util/spice_utils.h"
+#include <keplerian_toolbox/epoch.hpp>
+#include <keplerian_toolbox/util/spice_utils.hpp>
 
 // In this test we test the functionality of loading spice kernels
 // Summary for: C_G_1000012_2012_2017.bsp

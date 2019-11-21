@@ -30,10 +30,10 @@
 #include <iomanip>
 #include <iostream>
 
-#include "../src/astro_constants.h"
-#include "../src/core_functions/array3D_operations.h"
-#include "../src/core_functions/propagate_lagrangian.h"
-#include "../src/lambert_problem.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/propagate_lagrangian.hpp>
+#include <keplerian_toolbox/lambert_problem.hpp>
 
 using namespace std;
 using namespace kep_toolbox;

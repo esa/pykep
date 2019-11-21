@@ -14,4 +14,31 @@
  * limitations under the License.
  */
 
-#include <keplerian_toolbox/third_party/libsgp4/TimeSpan.h>
+#ifndef SOLARPOSITION_H_
+#define SOLARPOSITION_H_
+
+#include <keplerian_toolbox/detail/visibility.hpp>
+#include "DateTime.h"
+#include "Eci.h"
+
+/**
+ * @brief Find the position of the sun
+ */
+class __KEP_TOOL_VISIBLE SolarPosition
+{
+public:
+    SolarPosition()
+    {
+    }
+
+    virtual ~SolarPosition()
+    {
+    }
+
+    Eci FindPosition(const DateTime &dt);
+
+private:
+    double Delta_ET(double year) const;
+};
+
+#endif

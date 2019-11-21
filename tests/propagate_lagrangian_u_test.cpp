@@ -30,8 +30,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "../src/core_functions/array3D_operations.h"
-#include "../src/core_functions/propagate_lagrangian_u.h"
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/propagate_lagrangian_u.hpp>
 
 using namespace std;
 using namespace kep_toolbox;
