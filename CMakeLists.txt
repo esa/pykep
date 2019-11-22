@@ -202,7 +202,13 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Observer.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Eci.cpp"
     )
-    # We cannot use c++ strict compiling flags on a c file. The following ad hoc property is thus set to silence resulting warnings
+    # We cannot use c++ strict compiling flags on a c file. The following ad hoc property is thus set to 
+    # silence resulting warnings
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        set_source_files_properties(${KEP_TOOLBOX_SRC_FILES} PROPERTIES COMPILE_OPTIONS "${KEP_TOOLBOX_CXX_FLAGS_RELEASE}")
+    elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        set_source_files_properties(${KEP_TOOLBOX_SRC_FILES} PROPERTIES COMPILE_OPTIONS "${KEP_TOOLBOX_CXX_FLAGS_DEBUG}")
+    endif()
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/src/core_functions/jorba.c" PROPERTIES COMPILE_OPTIONS -w)
 
     if(PYKEP_BUILD_SPICE)
@@ -225,7 +231,6 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     add_library(keplerian_toolbox SHARED "${KEP_TOOLBOX_SRC_FILES}")
     set_property(TARGET keplerian_toolbox PROPERTY VERSION "1.0")
     set_property(TARGET keplerian_toolbox PROPERTY SOVERSION 1)
-    target_compile_options(keplerian_toolbox PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")
     set_target_properties(keplerian_toolbox PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(keplerian_toolbox PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
     # Let's setup the target C++ standard, but only if the user did not provide it manually.

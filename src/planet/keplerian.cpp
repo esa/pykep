@@ -181,4 +181,4 @@ std::string keplerian::human_readable_extra() const
 }
 }
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::keplerian);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::keplerian)

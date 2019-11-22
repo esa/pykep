@@ -21,9 +21,9 @@ if [[ "${PYKEP_BUILD}" != manylinux* ]]; then
     conda_pkgs="cmake boost boost-cpp"
 
     if [[ "${PYKEP_BUILD}" == "Python37" || "${PYKEP_BUILD}" == "OSXPython37" ]]; then
-        conda_pkgs="$conda_pkgs python=3.7 numpy matplotlib sklearn pygmo scipy numba"
+        conda_pkgs="$conda_pkgs python=3.7 numpy matplotlib scikit-learn pygmo scipy numba"
     elif [[ "${PYKEP_BUILD}" == "Python27" || "${PYKEP_BUILD}" == "OSXPython27" ]]; then
-        conda_pkgs="$conda_pkgs python=2.7 pyaudi pygmo"
+        conda_pkgs="$conda_pkgs python=2.7 numpy matplotlib scikit-learn pygmo scipy numba"
     fi
 
     # We create the conda environment and activate it

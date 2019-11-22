@@ -189,4 +189,4 @@ std::string j2::human_readable_extra() const
 }
 }
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::j2);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::j2)
