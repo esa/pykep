@@ -36,17 +36,17 @@
 #include <boost/python/register_ptr_to_python.hpp>
 #include <boost/python/self.hpp>
 
-#include "../../src/planet/base.h"
-#include "../../src/planet/gtoc2.h"
-#include "../../src/planet/gtoc5.h"
-#include "../../src/planet/gtoc6.h"
-#include "../../src/planet/gtoc7.h"
-#include "../../src/planet/j2.h"
-#include "../../src/planet/jpl_low_precision.h"
-#include "../../src/planet/keplerian.h"
-#include "../../src/planet/mpcorb.h"
-#include "../../src/planet/spice.h"
-#include "../../src/planet/tle.h"
+#include <keplerian_toolbox/planet/base.hpp>
+#include <keplerian_toolbox/planet/gtoc2.hpp>
+#include <keplerian_toolbox/planet/gtoc5.hpp>
+#include <keplerian_toolbox/planet/gtoc6.hpp>
+#include <keplerian_toolbox/planet/gtoc7.hpp>
+#include <keplerian_toolbox/planet/j2.hpp>
+#include <keplerian_toolbox/planet/jpl_low_precision.hpp>
+#include <keplerian_toolbox/planet/keplerian.hpp>
+#include <keplerian_toolbox/planet/mpcorb.hpp>
+#include <keplerian_toolbox/planet/spice.hpp>
+#include <keplerian_toolbox/planet/tle.hpp>
 #include "../utils.h"
 #include "python_base.h"
 
@@ -93,7 +93,7 @@ static inline class_<Planet, bases<planet::base>, bases<planet::keplerian>> plan
     return retval;
 }
 
-BOOST_PYTHON_MODULE(_planet)
+BOOST_PYTHON_MODULE(planet)
 {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;

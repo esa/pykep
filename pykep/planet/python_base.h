@@ -29,10 +29,10 @@
 #include <boost/python/wrapper.hpp>
 #include <string>
 
-#include "../../src/config.h"
-#include "../../src/exceptions.h"
-#include "../../src/planet/base.h"
-#include "../../src/serialization.h"
+#include <keplerian_toolbox/detail/visibility.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/planet/base.hpp>
+#include <keplerian_toolbox/serialization.hpp>
 
 namespace kep_toolbox
 {

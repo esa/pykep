@@ -53,7 +53,7 @@
 #include <boost/python/self.hpp>
 #include <boost/utility.hpp>
 
-#include "../../src/keplerian_toolbox.h"
+#include <keplerian_toolbox/keplerian_toolbox.h>
 #include "../boost_python_container_conversions.h"
 #include "../utils.h"
 
@@ -238,7 +238,7 @@ get_constant(G0);
 typedef std::array<double, 8> array8D;
 typedef std::array<double, 11> array11D;
 
-BOOST_PYTHON_MODULE(_core)
+BOOST_PYTHON_MODULE(core)
 {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;

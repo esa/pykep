@@ -40,7 +40,7 @@
 #include <boost/python/self.hpp>
 #include <boost/utility.hpp>
 
-#include "../../src/keplerian_toolbox.h"
+#include <keplerian_toolbox/keplerian_toolbox.hpp>
 #include "../boost_python_container_conversions.h"
 #include "../utils.h"
 
@@ -60,7 +60,7 @@ static inline std::vector<double> get_throttles_con_wrapper(const kep_toolbox::s
     return ceq;
 }
 
-BOOST_PYTHON_MODULE(_sims_flanagan)
+BOOST_PYTHON_MODULE(sims_flanagan)
 {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;

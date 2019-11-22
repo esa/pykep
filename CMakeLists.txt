@@ -155,16 +155,17 @@ list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wold-style-cast")
 # Creates the file config.hpp
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/keplerian_toolbox/config.hpp" @ONLY)
 
-if(BUILD_PYKEP)
-    # pygmo dependencies.
+if(PYKEP_BUILD_PYKEP)
     include(YACMAPythonSetup)
-
     # Python version check.
     if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
         message(FATAL_ERROR "Minimum supported Python version is 2.7.")
     endif()
 
-    # Internal variable that will be used to tell PYKEPFindBoost to locate Boost.Python.
+    # NOTE: for the time being, require that dcgp/dcgpy versions are matching exactly.
+    find_package(keplerian_toolbox ${PYKEP_PROJECT_VERSION} EXACT REQUIRED)
+
+    # Internal variable that will be used to tell PykepFindBoost to locate Boost.Python.
     set(_PYKEP_FIND_BOOST_PYTHON TRUE)
 endif()
 
@@ -285,7 +286,7 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/keplerian_toolbox/config.hpp" DESTINATION include/keplerian_toolbox)
     # Installation of the library.
     install(TARGETS keplerian_toolbox
-        EXPORT keplerian_toolbox
+        EXPORT keplerian_toolbox_export
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
@@ -293,7 +294,7 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/keplerian_toolbox-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" @ONLY)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PykepFindBoost.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
-    install(EXPORT keplerian_toolbox NAMESPACE keplerian_toolbox:: DESTINATION lib/cmake/keplerian_toolbox)
+    install(EXPORT keplerian_toolbox_export NAMESPACE Keplerian_toolbox:: DESTINATION lib/cmake/keplerian_toolbox)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config-version.cmake" VERSION ${keplerian_toolbox_VERSION}
