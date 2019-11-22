@@ -14,7 +14,7 @@ env:
 
 matrix:
   include:
-    - env: DCGP_BUILD="DebugGCC"
+    - env: PYKEP_BUILD="DebugGCC"
       dist: bionic
       compiler: gcc
       os: linux
@@ -24,7 +24,7 @@ matrix:
           - ubuntu-toolchain-r-test
           packages:
           - binutils-gold
-    - env: DCGP_BUILD="ReleaseGCC"
+    - env: PYKEP_BUILD="ReleaseGCC"
       dist: bionic
       compiler: gcc
       os: linux
@@ -34,7 +34,7 @@ matrix:
           - ubuntu-toolchain-r-test
           packages:
           - binutils-gold
-    - env: DCGP_BUILD="CoverageGCC"
+    - env: PYKEP_BUILD="CoverageGCC"
       dist: bionic
       compiler: gcc 
       os: linux
@@ -44,7 +44,7 @@ matrix:
           - ubuntu-toolchain-r-test
           packa1ges:
           - binutils-gold
-    - env: DCGP_BUILD="Python38"
+    - env: PYKEP_BUILD="Python38"
       dist: bionic
       compiler: gcc
       os: linux
