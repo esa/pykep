@@ -41,6 +41,6 @@ elif [[ "${PYKEP_BUILD}" == manylinux* ]]; then
     docker pull ${DOCKER_IMAGE};
     docker run --rm -e TWINE_PASSWORD -e PYKEP_BUILD -e TRAVIS_TAG -v `pwd`:/pykep $DOCKER_IMAGE bash /pykep/tools/install_docker.sh
 fi
-
+ 
 set +e
 set +x
