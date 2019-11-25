@@ -188,12 +188,16 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/j2.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/jpl_low_precision.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/mpcorb.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/tle.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc2.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc5.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc6.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/gtoc7.cpp"
-        # SGP4
+    )
+    # We keep these in a separate list as to be able to have different compile flags
+    SET(LIBSGP4_SRC_FILES
+        # PYKEP FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/planet/tle.cpp"
+        # SGP4 FILES
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Util.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/Tle.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/libsgp4/SolarPosition.cpp"
@@ -219,16 +223,14 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
             "${KEP_TOOLBOX_SRC_FILES}")
         # Add c files to the keplerian toolbox
         file(GLOB CSPICE_LIB_SRC_LIST "src/third_party/cspice/*.c")
-        set(KEP_TOOLBOX_SRC_FILES
-                    "${CSPICE_LIB_SRC_LIST}"
-                    "${KEP_TOOLBOX_SRC_FILES}")
         # Silence warnings
         set_source_files_properties(${CSPICE_LIB_SRC_LIST} PROPERTIES COMPILE_OPTIONS -w)
         add_definitions(-DPYKEP_USING_SPICE)
     endif(PYKEP_BUILD_SPICE)
 
+
     # Setup of the keplerian_toolbox library.
-    add_library(keplerian_toolbox SHARED "${KEP_TOOLBOX_SRC_FILES}")
+    add_library(keplerian_toolbox SHARED "${CSPICE_LIB_SRC_LIST}" "${KEP_TOOLBOX_SRC_FILES}" "${LIBSGP4_SRC_FILES}" )
     set_property(TARGET keplerian_toolbox PROPERTY VERSION "1.0")
     set_property(TARGET keplerian_toolbox PROPERTY SOVERSION 1)
     set_target_properties(keplerian_toolbox PROPERTIES CXX_VISIBILITY_PRESET hidden)

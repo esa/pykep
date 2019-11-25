@@ -63,8 +63,8 @@ public:
      */
     tle(const std::string & = "1 23177U 94040C   06175.45752052  .00000386  00000-0  76590-3 0    95",
         const std::string & = "2 23177   7.0496 179.8238 7258491 296.0482   8.3061  2.25906668 97438");
-    planet_ptr clone() const;
-    std::string human_readable_extra() const;
+    planet_ptr clone() const override;
+    std::string human_readable_extra() const override;
 
     double get_ref_mjd2000() const;
     std::string get_line1() const;
@@ -73,7 +73,7 @@ public:
     void set_epoch(const unsigned int year, const double day);
 
 private:
-    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const override;
 
     friend class boost::serialization::access;
     template <class Archive>

@@ -49,7 +49,7 @@ class __KEP_TOOL_VISIBLE gtoc5 : public keplerian
 {
 public:
     gtoc5(int = 7076);
-    planet_ptr clone() const;
+    planet_ptr clone() const override;
 
 private:
     friend class boost::serialization::access;
@@ -62,6 +62,6 @@ private:
 }
 } /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc5);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc5)
 
 #endif // KEP_TOOLBOX_PLANET_GTOC5_H

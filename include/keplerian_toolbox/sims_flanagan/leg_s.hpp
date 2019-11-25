@@ -92,7 +92,7 @@ public:
     /**
      * Constructs an empty leg allocating memory for a given number of segments.
      */
-    leg_s(const unsigned int &n_seg, const double &c, const double &alpha, const double &tol = -10)
+    leg_s(unsigned n_seg, double c, double alpha, int tol = -10)
         : m_ti(), m_xi(), m_throttles(n_seg), m_tf(), m_xf(), m_sf(0), m_sc(), m_mu(), m_c(c), m_alpha(alpha),
           m_tol(tol), m_states(n_seg + 2), m_ceq(), m_cineq(n_seg), m_dv(n_seg)
     {
@@ -162,10 +162,10 @@ public:
 
         // note: the epochs of the throttles are meaningless at this point as
         // pseudo-time is used
-        for (size_t i = 0; i < m_throttles.size(); ++i) {
+        for (decltype(m_throttles.size()) i = 0; i < m_throttles.size(); ++i) {
             kep_toolbox::array3D tmp
                 = {{*(throttles_start + 3 * i), *(throttles_start + 3 * i + 1), *(throttles_start + 3 * i + 2)}};
-            m_throttles[i] = throttle(epoch(i), epoch(i + 1), tmp);
+            m_throttles[i] = throttle(epoch(0.), epoch(1.), tmp);
         }
     }
 
@@ -312,14 +312,14 @@ public:
 
     const std::array<double, 8> &compute_mismatch_con() const
     {
-        size_t n_seg = m_throttles.size();
-        const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+        auto n_seg = m_throttles.size();
+        auto n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
         // Aux variables
         double max_thrust = m_sc.get_thrust();
         double veff = m_sc.get_isp() * ASTRO_G0;
         array3D thrust;
-        double ds = m_sf / n_seg;                                      // pseudo-time interval for each segment
+        double ds = m_sf / static_cast<double>(n_seg);                 // pseudo-time interval for each segment
         double dt = (m_tf.mjd2000() - m_ti.mjd2000()) * ASTRO_DAY2SEC; // length of the leg in seconds
 
         // Initial state
@@ -329,7 +329,7 @@ public:
         double tfwd = 0;
 
         // Forward Propagation
-        for (int i = 0; i < n_seg_fwd; i++) {
+        for (decltype(n_seg_fwd) i = 0u; i < n_seg_fwd; i++) {
             for (int j = 0; j < 3; j++) {
                 thrust[j] = max_thrust * m_throttles[i].get_value()[j];
             }
@@ -343,8 +343,8 @@ public:
         double tback = 0;
 
         // Backward Propagation
-        for (int i = 0; i < n_seg_back; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (decltype(n_seg_back) i = 0u; i < n_seg_back; ++i) {
+            for (unsigned j = 0u; j < 3u; ++j) {
                 thrust[j] = max_thrust * m_throttles[m_throttles.size() - i - 1].get_value()[j];
             }
             propagate_taylor_s(rback, vback, mback, tback, thrust, -ds, m_mu, veff, m_c, m_alpha, m_tol, m_tol);
@@ -391,14 +391,14 @@ public:
     const std::vector<std::array<double, 11>> &compute_states() const
     {
         size_t n_seg = m_throttles.size();
-        const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+        auto n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
         // Aux variables
         double max_thrust = m_sc.get_thrust();
         double veff = m_sc.get_isp() * ASTRO_G0;
         array3D thrust = {{0, 0, 0}};
         array3D zeros = {{0, 0, 0}};
-        double ds = m_sf / n_seg;                                      // pseudo-time interval for each segment
+        double ds = m_sf / static_cast<double>(n_seg);                                      // pseudo-time interval for each segment
         double dt = (m_tf.mjd2000() - m_ti.mjd2000()) * ASTRO_DAY2SEC; // length of the leg in seconds
 
         // Initial state
@@ -410,8 +410,8 @@ public:
         record_states(tfwd, rfwd, vfwd, mfwd, zeros, 0);
 
         // Forward Propagation
-        for (int i = 0; i < n_seg_fwd; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (decltype(n_seg_fwd) i = 0u; i < n_seg_fwd; ++i) {
+            for (unsigned j = 0u; j < 3u; ++j) {
                 thrust[j] = max_thrust * m_throttles[i].get_value()[j];
             }
             try {
@@ -431,8 +431,8 @@ public:
         record_states(dt + tback, rback, vback, mback, zeros, n_seg + 1);
 
         // Backward Propagation
-        for (int i = 0; i < n_seg_back; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (decltype(n_seg_back) i = 0u; i < n_seg_back; ++i) {
+            for (unsigned j = 0u; j < 3u; ++j) {
                 thrust[j] = max_thrust * m_throttles[m_throttles.size() - i - 1].get_value()[j];
             }
             try {
@@ -467,8 +467,8 @@ public:
     //@}
 
 protected:
-    void record_states(const double &t, const array3D &r, const array3D &v, const double &m, const array3D &thrust,
-                       const unsigned int &idx) const
+    void record_states(double t, const array3D &r, const array3D &v, double m, const array3D &thrust,
+                       size_t idx) const
     {
         assert((idx + 1) < m_states.size());
         m_states[idx][0] = t;

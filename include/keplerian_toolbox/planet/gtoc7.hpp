@@ -48,7 +48,7 @@ class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
 {
 public:
     gtoc7(int = 0);
-    planet_ptr clone() const;
+    planet_ptr clone() const override;
 
 private:
     friend class boost::serialization::access;
@@ -61,6 +61,6 @@ private:
 }
 } /// namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc7);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc7)
 
 #endif // KEP_TOOLBOX_PLANET_GTOC7_H

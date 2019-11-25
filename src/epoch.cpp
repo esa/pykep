@@ -81,8 +81,8 @@ epoch::epoch(const boost::posix_time::ptime &posix_time)
         flag = true;
         dt = dt.invert_sign();
     }
-    double fr_secs = dt.fractional_seconds() * BOOST_DATE_PRECISION;
-    mjd2000_m = dt.hours() / 24.0 + dt.minutes() / 1440.0 + (dt.seconds() + fr_secs) / 86400.0;
+    double fr_secs = static_cast<double>(dt.fractional_seconds()) * BOOST_DATE_PRECISION;
+    mjd2000_m = static_cast<double>(dt.hours()) / 24.0 + static_cast<double>(dt.minutes()) / 1440.0 + (static_cast<double>(dt.seconds()) + fr_secs) / 86400.0;
     if (flag) mjd2000_m = -mjd2000_m;
 }
 
@@ -139,10 +139,10 @@ ptime epoch::get_posix_time() const
         copy = -copy;
         flag = true;
     }
-    hrs = (long)(copy * 24);
-    min = (long)((copy * 24 - hrs) * 60);
-    sec = (long)((((copy * 24 - hrs) * 60) - min) * 60);
-    double dblfsec = ((((copy * 24 - hrs) * 60) - min) * 60) - sec;
+    hrs = static_cast<long>(copy * 24);
+    min = static_cast<long>((copy * 24 - static_cast<double>(hrs)) * 60);
+    sec = static_cast<long>((((copy * 24 - static_cast<double>(hrs)) * 60) - static_cast<double>(min)) * 60);
+    double dblfsec = ((((copy * 24 - static_cast<double>(hrs)) * 60) - static_cast<double>(min)) * 60) - static_cast<double>(sec);
     std::ostringstream fsecstr;
     fsecstr << std::setiosflags(std::ios::fixed) << std::setprecision(-log10(BOOST_DATE_PRECISION)) << dblfsec;
     fsec = boost::lexical_cast<long>(fsecstr.str().substr(2, -log10(BOOST_DATE_PRECISION) + 1));

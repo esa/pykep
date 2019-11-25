@@ -282,12 +282,12 @@ BOOST_PYTHON_MODULE(sims_flanagan)
         const kep_toolbox::epoch &, const kep_toolbox::sims_flanagan::sc_state &, const double &);
     class_<kep_toolbox::sims_flanagan::leg_s>(
         "leg_s", "Represents an interplanetary leg (using the Sundmann variable)",
-        init<const unsigned int &, const double &, const double &, optional<const double &>>(
-            "pykep.sims_flanagan.leg_s(n_seg, c, alpha, [tol])\n\n"
+        init<unsigned, double , double , optional<double >>(
+            "pykep.sims_flanagan.leg_s(n_seg, c, alpha, tol = -10)\n\n"
             "- n_seg: number of segments\n"
             "- c: constant in the SUndmann transformation dt = cr^(alpha ds)\n"
             "- alpha: exponent in the SUndmann transformation dt = cr^(alpha ds)\n"
-            "- tol: tolerance set in the Taylor integration of the leg\n\n"
+            "- tol: log 10 tolerance set in the Taylor integration of the leg\n\n"
             "Example::\n\n"
             " from pykep import *\n"
             " l = sims_flanagan.leg_s(25,1.0/AU,1.0)\n"))

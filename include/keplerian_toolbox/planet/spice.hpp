@@ -62,11 +62,11 @@ public:
           double = 0, // radius
           double = 0  // safe_radius
     );
-    planet_ptr clone() const;
-    std::string human_readable_extra() const;
+    planet_ptr clone() const override;
+    std::string human_readable_extra() const override;
 
 private:
-    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const override;
 
     friend class boost::serialization::access;
     template <class Archive>

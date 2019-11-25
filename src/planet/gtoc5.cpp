@@ -7146,4 +7146,4 @@ planet_ptr gtoc5::clone() const
 }
 } // namespace
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc5);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc5)

@@ -48,7 +48,7 @@ class __KEP_TOOL_VISIBLE gtoc6 : public keplerian
 {
 public:
     gtoc6(const std::string & = "io");
-    planet_ptr clone() const;
+    planet_ptr clone() const override;
 
 private:
     friend class boost::serialization::access;
@@ -61,6 +61,6 @@ private:
 }
 } /// End of namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc6);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc6)
 
 #endif // KEP_TOOLBOX_PLANET_GTOC_6_H

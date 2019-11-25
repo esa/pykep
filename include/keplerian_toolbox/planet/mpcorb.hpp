@@ -50,7 +50,7 @@ public:
     mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  "
                                  "0.21432817   2.7653485  0 MPO110568  6063  94 1802-2006 0.61 M-v 30h MPCW       0000 "
                                  "     (1) Ceres              20061025");
-    planet_ptr clone() const;
+    planet_ptr clone() const override;
 
     static epoch packed_date2epoch(std::string);
     double get_H() const
@@ -82,19 +82,19 @@ private:
         ar &m_year_of_discovery;
     }
 
-    static int packed_date2number(char c);
+    static short unsigned packed_date2number(char c);
     // Absolute Magnitude
     double m_H;
     // Number of observations
-    unsigned int m_n_observations;
+    unsigned m_n_observations;
     // Number of oppositions
-    unsigned int m_n_oppositions;
+    unsigned m_n_oppositions;
     // Year the asteroid was first discovered
-    unsigned int m_year_of_discovery;
+    unsigned m_year_of_discovery;
 };
 }
 } /// End of namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::mpcorb);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::mpcorb)
 
 #endif // KEP_TOOLBOX_PLANET_MPCORB_H

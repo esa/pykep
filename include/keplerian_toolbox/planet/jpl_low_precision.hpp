@@ -49,11 +49,11 @@ class __KEP_TOOL_VISIBLE jpl_lp : public base
 {
 public:
     jpl_lp(const std::string & = "earth");
-    planet_ptr clone() const;
-    std::string human_readable_extra() const;
+    planet_ptr clone() const override;
+    std::string human_readable_extra() const override;
 
 private:
-    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const override;
 
     friend class boost::serialization::access;
     template <class Archive>

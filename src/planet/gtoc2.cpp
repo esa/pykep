@@ -995,5 +995,5 @@ int gtoc2::get_group() const
 } // namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc2);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc2)
 // Serialization code (END)

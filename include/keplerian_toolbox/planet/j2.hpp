@@ -59,8 +59,8 @@ public:
     j2(const epoch &ref_epoch, const array3D &r0, const array3D &v0, double mu_central_body, double mu_self,
        double radius, double safe_radius, double J2RG2 = 0., const std::string &name = "Unknown");
 
-    virtual planet_ptr clone() const;
-    std::string human_readable_extra() const;
+    planet_ptr clone() const override;
+    std::string human_readable_extra() const override;
 
     /** @name Getters */
     //@{
@@ -78,7 +78,7 @@ public:
     //@}
 
 private:
-    void eph_impl(double mjd2000, array3D &r, array3D &v) const;
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const override;
 
     friend class boost::serialization::access;
     template <class Archive>

@@ -51,7 +51,7 @@ public:
     gtoc2(int = 0);
 
     int get_group() const;
-    planet_ptr clone() const;
+    planet_ptr clone() const override;
 
 private:
     friend class boost::serialization::access;
@@ -66,6 +66,6 @@ private:
 }
 } // Namespaces
 
-BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc2);
+BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::gtoc2)
 
 #endif // KEP_TOOLBOX_ASTEROID_GTOC2_H

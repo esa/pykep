@@ -183,14 +183,14 @@ public:
         t_f = epoch_f;
         x_f = state_f;
 
-        const int throttles_vector_size = (throttles_end - throttles_start) / 3;
+        auto throttles_vector_size = (throttles_end - throttles_start) / 3;
         throttles.resize(throttles_vector_size);
-        const double seg_duration = (epoch_f.mjd() - epoch_i.mjd()) / throttles_vector_size;
-        for (int i = 0; i < throttles_vector_size; ++i) {
+        const double seg_duration = (epoch_f.mjd() - epoch_i.mjd()) / static_cast<double>(throttles_vector_size);
+        for (decltype(throttles_vector_size) i = 0u; i < throttles_vector_size; ++i) {
             kep_toolbox::array3D tmp
                 = {{*(throttles_start + 3 * i), *(throttles_start + 3 * i + 1), *(throttles_start + 3 * i + 2)}};
-            throttles[i] = throttle(epoch(epoch_i.mjd() + seg_duration * i, epoch::MJD),
-                                    epoch(epoch_i.mjd() + seg_duration * (i + 1), epoch::MJD), tmp);
+            throttles[i] = throttle(epoch(epoch_i.mjd() + seg_duration * static_cast<double>(i), epoch::MJD),
+                                    epoch(epoch_i.mjd() + seg_duration * (static_cast<double>(i) + 1), epoch::MJD), tmp);
         }
     }
 
@@ -463,7 +463,7 @@ protected:
         assert(end - begin == 7);
         (void)end;
         size_t n_seg = throttles.size();
-        const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+        auto n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
         // Aux variables
         double max_thrust = m_sc.get_thrust();
@@ -478,7 +478,7 @@ protected:
 
         // Forward Propagation
         double current_time_fwd = t_i.mjd2000() * ASTRO_DAY2SEC;
-        for (int i = 0; i < n_seg_fwd; i++) {
+        for (decltype(n_seg_fwd) i = 0u; i < n_seg_fwd; ++i) {
             double thrust_duration
                 = (throttles[i].get_end().mjd2000() - throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
             double manouver_time
@@ -486,7 +486,7 @@ protected:
             propagate_lagrangian(rfwd, vfwd, manouver_time - current_time_fwd, m_mu);
             current_time_fwd = manouver_time;
 
-            for (int j = 0; j < 3; j++) {
+            for (unsigned j = 0u; j < 3; j++) {
                 dv[j] = max_thrust / mfwd * thrust_duration * throttles[i].get_value()[j];
             }
 
@@ -504,7 +504,7 @@ protected:
 
         // Backward Propagation
         double current_time_back = t_f.mjd2000() * ASTRO_DAY2SEC;
-        for (int i = 0; i < n_seg_back; i++) {
+        for (decltype(n_seg_back) i = 0; i < n_seg_back; i++) {
             double thrust_duration = (throttles[throttles.size() - i - 1].get_end().mjd2000()
                                       - throttles[throttles.size() - i - 1].get_start().mjd2000())
                                      * ASTRO_DAY2SEC;
@@ -540,8 +540,8 @@ protected:
     {
         assert(end - begin == 7);
         (void)end;
-        size_t n_seg = throttles.size();
-        const int n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
+        auto n_seg = throttles.size();
+        auto n_seg_fwd = (n_seg + 1) / 2, n_seg_back = n_seg / 2;
 
         // Aux variables
         double max_thrust = m_sc.get_thrust();
@@ -554,11 +554,11 @@ protected:
         double mfwd = x_i.get_mass();
 
         // Forward Propagation
-        for (int i = 0; i < n_seg_fwd; i++) {
+        for (decltype(n_seg_fwd) i = 0; i < n_seg_fwd; ++i) {
             double thrust_duration
                 = (throttles[i].get_end().mjd2000() - throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
 
-            for (int j = 0; j < 3; j++) {
+            for (unsigned j = 0u; j < 3; j++) {
                 thrust[j] = max_thrust * throttles[i].get_value()[j];
             }
             propagate_taylor(rfwd, vfwd, mfwd, thrust, thrust_duration, m_mu, veff, m_tol, m_tol);
@@ -570,11 +570,11 @@ protected:
         double mback = x_f.get_mass();
 
         // Backward Propagation
-        for (int i = 0; i < n_seg_back; i++) {
+        for (decltype(n_seg_back) i = 0; i < n_seg_back; i++) {
             double thrust_duration = (throttles[throttles.size() - i - 1].get_end().mjd2000()
                                       - throttles[throttles.size() - i - 1].get_start().mjd2000())
                                      * ASTRO_DAY2SEC;
-            for (int j = 0; j < 3; j++) {
+            for (unsigned j = 0u; j < 3; j++) {
                 thrust[j] = max_thrust * throttles[throttles.size() - i - 1].get_value()[j];
             }
             propagate_taylor(rback, vback, mback, thrust, -thrust_duration, m_mu, veff, m_tol, m_tol);
