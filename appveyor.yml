@@ -11,9 +11,7 @@ environment:
 
 
 install:
-- if [%BUILD_TYPE%]==[Python37-x64] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
-- if [%BUILD_TYPE%]==[Python36-x64] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
-- if [%BUILD_TYPE%]==[Python27-x64] rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
+- rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
 # Get a Python version to run the script.
 # - call tools\appveyor-download.cmd "https://github.com/bluescarni/binary_deps/raw/master/python35_mingw_64.7z" -FileName python.7z
