@@ -121,7 +121,7 @@ if is_python_build:
         r'-DPYTHON_LIBRARY=' + python_library + r' ' + \
         r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
         # Build+install step.
-        run_command(r'mingw32-make install VERBOSE=1')
+    run_command(r'mingw32-make install VERBOSE=1')
 elif BUILD_TYPE in ['Release', 'Debug']:
     cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
         r' -DPYKEP_BUILD_TESTS=yes ' + common_cmake_opts
@@ -131,9 +131,9 @@ elif BUILD_TYPE in ['Release', 'Debug']:
         r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
         r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
         r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ')
-        # Build+install step.
-        run_command(r'mingw32-make install VERBOSE=1')
-        run_command(r'ctest -VV')
+    # Build+install step.
+    run_command(r'mingw32-make install VERBOSE=1')
+    run_command(r'ctest -VV')
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
 
@@ -163,4 +163,4 @@ if is_python_build:
         os.chdir('C:/projects/pykep/build/wheel')
         run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
-                    
+
