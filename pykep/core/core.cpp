@@ -53,7 +53,7 @@
 #include <boost/python/self.hpp>
 #include <boost/utility.hpp>
 
-#include <keplerian_toolbox/keplerian_toolbox.h>
+#include <keplerian_toolbox/keplerian_toolbox.hpp>
 #include "../boost_python_container_conversions.h"
 #include "../utils.h"
 

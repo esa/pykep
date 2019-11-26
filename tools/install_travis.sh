@@ -19,7 +19,7 @@ if [[ "${PYKEP_BUILD}" == "ReleaseGCC" ]]; then
 elif [[ "${PYKEP_BUILD}" == "DebugGCC" ]]; then
     cmake -DCMAKE_PREFIX_PATH=$deps_dir -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_BUILD_TYPE=Debug -DPYKEP_BUILD_KEP_TOOLBOX=yes -DPYKEP_BUILD_TESTS=yes -DCMAKE_CXX_FLAGS="-fsanitize=address -fuse-ld=gold" ../;
     make -j2 VERBOSE=1;
-    LSAN_OPTIONS=suppressions=/home/travis/build/esa/keplerian_toolbox/tools/lsan.supp ctest -VV;
+    LSAN_OPTIONS=suppressions=/home/travis/build/esa/pykep/tools/lsan.supp ctest -VV;
 elif [[ "${PYKEP_BUILD}" == "CoverageGCC" ]]; then
     cmake -DCMAKE_PREFIX_PATH=$deps_dir -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_BUILD_TYPE=Debug -DPYKEP_BUILD_KEP_TOOLBOX=yes -DPYKEP_BUILD_TESTS=yes -DCMAKE_CXX_FLAGS="--coverage -fuse-ld=gold" ../;
     make -j2 VERBOSE=1;

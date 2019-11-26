@@ -9,7 +9,7 @@ set -e
 if [[ ${PYKEP_BUILD} == *38 ]]; then
 	PYTHON_DIR="cp38-cp38"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python38.so"
-	PYTHON_VERSION="37"
+	PYTHON_VERSION="38"
 elif [[ ${PYKEP_BUILD} == *37 ]]; then
 	PYTHON_DIR="cp37-cp37m"
 	BOOST_PYTHON_LIBRARY_NAME="libboost_python37.so"
@@ -26,14 +26,24 @@ fi
 cd
 cd install
 
+# Install and compile the keplerian_toolbox
+cd /pykep
+cd build_kep_toolbox
+cmake -DBoost_NO_BOOST_CMAKE=ON \
+	  -DPYKEP_BUILD_KEP_TOOLBOX=yes \
+	  -DPYKEP_BUILD_PYKEP=no \
+	  -DPYKEP_BUILD_SPICE=yes \
+	  -DPYKEP_BUILD_TESTS=no \
+	  -DCMAKE_BUILD_TYPE=Release \
+make -j2 install
+
 # Install and compile pykep
 cd /pykep
-cd build
+cd build_pykep
 cmake -DBoost_NO_BOOST_CMAKE=ON \
-      -DBUILD_MAIN=no \
-	  -DBUILD_PYKEP=yes \
-	  -DBUILD_SPICE=yes \
-	  -DBUILD_TESTS=no \
+	  -DPYKEP_BUILD_KEP_TOOLBOX=no \
+	  -DPYKEP_BUILD_PYKEP=yes \
+	  -DPYKEP_BUILD_TESTS=no \
 	  -DCMAKE_BUILD_TYPE=Release \
 	  -DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} \
 	  -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
