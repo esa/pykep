@@ -170,7 +170,7 @@ private:
     double mass;
 };
 
-KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const sc_state &in)
+inline std::ostream &operator<<(std::ostream &s, const sc_state &in)
 {
     for (int i = 0; i < 3; i++)
         s << boost::lexical_cast<std::string>(in.get_position()[i]) << " ";
