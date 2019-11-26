@@ -145,7 +145,9 @@ if(MINGW)
 	# Flag needed to deal with big binaries in MinGW.
 	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
 	list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
-	list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+    list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
+    # Necessary for cspice to compile and link correctly
+    add_definitions(-DMSDOS)
 endif()
 
 # Some flags that generate warnings due to Eigen obsolete versions
