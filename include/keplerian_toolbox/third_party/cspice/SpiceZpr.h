@@ -701,7 +701,7 @@ void bodvar_c(SpiceInt body, ConstSpiceChar *item, SpiceInt *dim, SpiceDouble *v
 
 void bodvcd_c(SpiceInt body, ConstSpiceChar *item, SpiceInt maxn, SpiceInt *dim, SpiceDouble *values);
 
-void bodvrd_c(ConstSpiceChar *body, ConstSpiceChar *item, SpiceInt maxn, SpiceInt *dim, SpiceDouble *values);
+KEP_TOOLBOX_DLL_PUBLIC void bodvrd_c(ConstSpiceChar *body, ConstSpiceChar *item, SpiceInt maxn, SpiceInt *dim, SpiceDouble *values);
 
 SpiceDouble brcktd_c(SpiceDouble number, SpiceDouble end1, SpiceDouble end2);
 
@@ -1018,7 +1018,7 @@ SpiceBoolean eqstr_c(ConstSpiceChar *a, ConstSpiceChar *b);
 
 void el2cgv_c(ConstSpiceEllipse *ellipse, SpiceDouble center[3], SpiceDouble smajor[3], SpiceDouble sminor[3]);
 
-void erract_c(ConstSpiceChar *operation, SpiceInt lenout, SpiceChar *action);
+KEP_TOOLBOX_DLL_PUBLIC void erract_c(ConstSpiceChar *operation, SpiceInt lenout, SpiceChar *action);
 
 void errch_c(ConstSpiceChar *marker, ConstSpiceChar *string);
 
@@ -1048,7 +1048,7 @@ SpiceBoolean exists_c(ConstSpiceChar *name);
 
 void expool_c(ConstSpiceChar *name, SpiceBoolean *found);
 
-SpiceBoolean failed_c(void);
+KEP_TOOLBOX_DLL_PUBLIC SpiceBoolean failed_c(void);
 
 void fovray_c(ConstSpiceChar *inst, ConstSpiceDouble raydir[3], ConstSpiceChar *rframe, ConstSpiceChar *abcorr,
               ConstSpiceChar *obsrvr, SpiceDouble *et, SpiceBoolean *visible);
