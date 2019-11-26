@@ -152,9 +152,6 @@ endif()
 list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wduplicated-branches")
 list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wold-style-cast")
 
-# Creates the file config.hpp
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/keplerian_toolbox/config.hpp" @ONLY)
-
 if(PYKEP_BUILD_PYKEP)
     include(YACMAPythonSetup)
     # Python version check.
@@ -225,9 +222,11 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         file(GLOB CSPICE_LIB_SRC_LIST "src/third_party/cspice/*.c")
         # Silence warnings
         set_source_files_properties(${CSPICE_LIB_SRC_LIST} PROPERTIES COMPILE_OPTIONS -w)
-        add_definitions(-DPYKEP_USING_SPICE)
+        set(PYKEP_USING_SPICE "#define PYKEP_USING_SPICE")
     endif(PYKEP_BUILD_SPICE)
 
+    # Creates the file config.hpp
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/include/keplerian_toolbox/config.hpp" @ONLY)
 
     # Setup of the keplerian_toolbox library.
     add_library(keplerian_toolbox SHARED "${CSPICE_LIB_SRC_LIST}" "${KEP_TOOLBOX_SRC_FILES}" "${LIBSGP4_SRC_FILES}" )

@@ -29,7 +29,7 @@
 #include <cmath>
 
 #include <keplerian_toolbox/astro_constants.hpp>
-#include <keplerian_toolbox/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
 #include <keplerian_toolbox/core_functions/lambert_2d.hpp>
 
 namespace kep_toolbox

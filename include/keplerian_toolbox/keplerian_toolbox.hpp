@@ -72,7 +72,7 @@
 #include <keplerian_toolbox/sims_flanagan/spacecraft.hpp>
 #include <keplerian_toolbox/sims_flanagan/throttle.hpp>
 
-#if defined(PYKEP_BUILD_SPICE)
+#if defined(PYKEP_USING_SPICE)
 #include <keplerian_toolbox/planet/spice.hpp>
 #include <keplerian_toolbox/util/spice_utils.hpp>
 #endif

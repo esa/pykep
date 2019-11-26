@@ -6,7 +6,7 @@
 #define KEP_TOOLBOX_VERSION_STRING "@keplerian_toolbox_VERSION@"
 #define KEP_TOOLBOX_VERSION_MAJOR @keplerian_toolbox_VERSION_MAJOR@
 #define KEP_TOOLBOX_VERSION_MINOR @keplerian_toolbox_VERSION_MINOR@
-@PYKEP_BUILD_SPICE@
+@PYKEP_USING_SPICE@
 
 
 #endif
