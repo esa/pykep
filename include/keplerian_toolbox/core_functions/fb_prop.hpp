@@ -29,7 +29,7 @@
 #include <cmath>
 
 #include <keplerian_toolbox/astro_constants.hpp>
-#include "../core_functions/array3D_operations.h"
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
 
 /// Propagate a fly-by hyperbola
 /**

@@ -165,4 +165,6 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
 }
 } // namespaces
 
+#undef D_ALP
+
 #endif // KEP_TOOLBOX_LAMBERT_2D_H
