@@ -48,7 +48,7 @@ static const long long GregorianStart = 49916304000000000LL;
  * or negative number of days, hours, minutes, seconds, and fractions
  * of a second.
  */
-class __KEP_TOOL_VISIBLE TimeSpan
+class KEP_TOOLBOX_DLL_PUBLIC TimeSpan
 {
 public:
     TimeSpan(long long ticks) : m_ticks(ticks)

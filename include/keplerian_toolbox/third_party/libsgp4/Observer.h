@@ -27,7 +27,7 @@ struct CoordTopocentric;
 /**
  * @brief Stores an observers location in Eci coordinates.
  */
-class __KEP_TOOL_VISIBLE Observer
+class KEP_TOOLBOX_DLL_PUBLIC Observer
 {
 public:
     /**

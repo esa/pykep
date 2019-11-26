@@ -47,7 +47,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE j2 : public base
+class KEP_TOOLBOX_DLL_PUBLIC j2 : public base
 {
 
     static const array6D default_elements;

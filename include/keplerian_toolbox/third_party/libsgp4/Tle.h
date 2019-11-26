@@ -27,7 +27,7 @@
  *
  * Used to extract the various raw fields from a two-line element set.
  */
-class __KEP_TOOL_VISIBLE Tle
+class KEP_TOOLBOX_DLL_PUBLIC Tle
 {
 public:
     /**

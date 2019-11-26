@@ -44,7 +44,7 @@ static int cumulDaysInMonth[2][13] = {
 /**
  * @brief Represents an instance in time.
  */
-class __KEP_TOOL_VISIBLE DateTime
+class KEP_TOOLBOX_DLL_PUBLIC DateTime
 {
 public:
     /**

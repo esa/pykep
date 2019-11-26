@@ -47,7 +47,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE keplerian : public base
+class KEP_TOOLBOX_DLL_PUBLIC keplerian : public base
 {
 
     static const array6D default_elements;

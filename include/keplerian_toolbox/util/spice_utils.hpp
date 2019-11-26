@@ -41,9 +41,9 @@ namespace kep_toolbox
 namespace util
 {
 
-__KEP_TOOL_VISIBLE void load_spice_kernel(std::string file_name);
-__KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);
-__KEP_TOOL_VISIBLE SpiceDouble epoch_to_spice(double mjd2000);
+KEP_TOOLBOX_DLL_PUBLIC void load_spice_kernel(std::string file_name);
+KEP_TOOLBOX_DLL_PUBLIC SpiceDouble epoch_to_spice(kep_toolbox::epoch ep);
+KEP_TOOLBOX_DLL_PUBLIC SpiceDouble epoch_to_spice(double mjd2000);
 } // namespace util
 } // namespace kep_toolbox
 #endif // KEP_TOOLBOX_SPICE_UTILS_H

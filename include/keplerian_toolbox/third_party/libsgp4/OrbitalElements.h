@@ -26,7 +26,7 @@ class Tle;
 /**
  * @brief The extracted orbital elements used by the SGP4 propagator.
  */
-class __KEP_TOOL_VISIBLE OrbitalElements
+class KEP_TOOLBOX_DLL_PUBLIC OrbitalElements
 {
 public:
     OrbitalElements(const Tle &tle);

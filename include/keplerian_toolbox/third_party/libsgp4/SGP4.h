@@ -33,7 +33,7 @@
 /**
  * @brief The simplified perturbations model 4 propagater.
  */
-class __KEP_TOOL_VISIBLE SGP4
+class KEP_TOOLBOX_DLL_PUBLIC SGP4
 {
 public:
     SGP4(const Tle &tle) : elements_(tle)

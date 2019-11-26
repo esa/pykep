@@ -53,7 +53,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE tle : public base
+class KEP_TOOLBOX_DLL_PUBLIC tle : public base
 {
 public:
     /**

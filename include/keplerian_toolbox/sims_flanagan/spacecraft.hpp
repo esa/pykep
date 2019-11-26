@@ -43,7 +43,7 @@ namespace sims_flanagan
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE spacecraft
+class KEP_TOOLBOX_DLL_PUBLIC spacecraft
 {
     friend std::ostream &operator<<(std::ostream &s, const spacecraft &in);
 
@@ -95,7 +95,7 @@ private:
     double m_isp;
 };
 
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const spacecraft &in);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const spacecraft &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 

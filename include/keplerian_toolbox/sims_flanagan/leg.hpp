@@ -68,7 +68,7 @@ namespace sims_flanagan
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class __KEP_TOOL_VISIBLE leg
+class KEP_TOOLBOX_DLL_PUBLIC leg
 {
     friend std::ostream &operator<<(std::ostream &s, const leg &in);
 
@@ -675,7 +675,7 @@ private:
     int m_tol;
 };
 
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const leg &in);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const leg &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 #endif // KEP_TOOLBOX_LEG_H

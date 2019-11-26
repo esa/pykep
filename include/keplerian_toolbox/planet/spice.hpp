@@ -52,7 +52,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE spice : public base
+class KEP_TOOLBOX_DLL_PUBLIC spice : public base
 {
 public:
     spice(const std::string & = "CHURYUMOV-GERASIMENKO", const std::string & = "SUN",

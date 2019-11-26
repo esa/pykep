@@ -45,7 +45,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE jpl_lp : public base
+class KEP_TOOLBOX_DLL_PUBLIC jpl_lp : public base
 {
 public:
     jpl_lp(const std::string & = "earth");

@@ -51,7 +51,7 @@ namespace kep_toolbox
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE lambert_problem
+class KEP_TOOLBOX_DLL_PUBLIC lambert_problem
 {
     static const array3D default_r1;
     static const array3D default_r2;
@@ -110,7 +110,7 @@ private:
     bool m_has_converged;
     int m_multi_revs;
 };
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &, const lambert_problem &);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const lambert_problem &);
 } // namespaces
 
 #endif // KEP_TOOLBOX_LAMBERT_PROBLEM_H

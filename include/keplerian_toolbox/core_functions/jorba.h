@@ -129,6 +129,6 @@ MY_FLOAT **taylor_coefficients_fixed_thrust(MY_FLOAT t, MY_FLOAT *x, int order, 
 MY_FLOAT **taylor_coefficients_fixed_thrustA(MY_FLOAT t, MY_FLOAT *x, int order, int reuse_last_computation, double mu,
                                              double veff, double ux, double uy, double uz);
 
-__KEP_TOOL_VISIBLE int taylor_step_fixed_thrust(MY_FLOAT *ti, MY_FLOAT *x, int dir, int step_ctl, double log10abserr,
+KEP_TOOLBOX_DLL_PUBLIC int taylor_step_fixed_thrust(MY_FLOAT *ti, MY_FLOAT *x, int dir, int step_ctl, double log10abserr,
                                                 double log10relerr, MY_FLOAT *endtime, MY_FLOAT *ht, int *order,
                                                 double mu, double veff, double ux, double uy, double uz);

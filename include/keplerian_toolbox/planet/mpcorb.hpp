@@ -44,7 +44,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE mpcorb : public keplerian
+class KEP_TOOLBOX_DLL_PUBLIC mpcorb : public keplerian
 {
 public:
     mpcorb(const std::string & = "00001    3.34  0.12 K107N 113.41048   72.58976   80.39321   10.58682  0.0791382  "

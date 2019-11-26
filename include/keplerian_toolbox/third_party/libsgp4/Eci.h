@@ -25,7 +25,7 @@
 /**
  * @brief Stores an Earth-centered inertial position for a particular time.
  */
-class __KEP_TOOL_VISIBLE Eci
+class KEP_TOOLBOX_DLL_PUBLIC Eci
 {
 public:
     /**

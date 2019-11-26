@@ -41,7 +41,7 @@ namespace planet
 {
 
 // Forward declaration.
-class __KEP_TOOL_VISIBLE base;
+class KEP_TOOLBOX_DLL_PUBLIC base;
 typedef boost::shared_ptr<base> planet_ptr;
 
 /// Base class for planet
@@ -54,7 +54,7 @@ typedef boost::shared_ptr<base> planet_ptr;
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE base
+class KEP_TOOLBOX_DLL_PUBLIC base
 {
 public:
     base(double mu_central_body = 0.1, double mu_self = 0.1, double radius = 0.1, double safe_radius = 0.1,
@@ -117,7 +117,7 @@ private:
     std::string m_name;
 };
 
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const base &body);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const base &body);
 }
 } /// End of namespace kep_toolbox planet
 

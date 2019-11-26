@@ -409,4 +409,4 @@ std::ostream &operator<<(std::ostream &s, const lambert_problem &lp)
     return s;
 }
 
-} // namespaces
+} // namespace kep_toolbox

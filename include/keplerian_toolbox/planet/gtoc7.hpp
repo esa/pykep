@@ -44,7 +44,7 @@ namespace planet
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE gtoc7 : public keplerian
+class KEP_TOOLBOX_DLL_PUBLIC gtoc7 : public keplerian
 {
 public:
     gtoc7(int = 0);

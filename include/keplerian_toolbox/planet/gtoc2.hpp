@@ -45,7 +45,7 @@ namespace planet
  * @author Francesco Biscani (bluescarni@gmail.com)
  */
 
-class __KEP_TOOL_VISIBLE gtoc2 : public keplerian
+class KEP_TOOLBOX_DLL_PUBLIC gtoc2 : public keplerian
 {
 public:
     gtoc2(int = 0);

@@ -45,7 +45,7 @@ namespace sims_flanagan
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class __KEP_TOOL_VISIBLE sc_state
+class KEP_TOOLBOX_DLL_PUBLIC sc_state
 {
 
     friend std::ostream &operator<<(std::ostream &s, const sc_state &in);
@@ -170,7 +170,7 @@ private:
     double mass;
 };
 
-__KEP_TOOL_VISIBLE inline std::ostream &operator<<(std::ostream &s, const sc_state &in)
+KEP_TOOLBOX_DLL_PUBLIC inline std::ostream &operator<<(std::ostream &s, const sc_state &in)
 {
     for (int i = 0; i < 3; i++)
         s << boost::lexical_cast<std::string>(in.get_position()[i]) << " ";

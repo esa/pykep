@@ -24,7 +24,7 @@
 /**
  * @brief Find the position of the sun
  */
-class __KEP_TOOL_VISIBLE SolarPosition
+class KEP_TOOLBOX_DLL_PUBLIC SolarPosition
 {
 public:
     SolarPosition()

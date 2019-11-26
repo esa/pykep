@@ -72,7 +72,7 @@ namespace sims_flanagan
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
-class __KEP_TOOL_VISIBLE leg_s
+class KEP_TOOLBOX_DLL_PUBLIC leg_s
 {
     friend std::ostream &operator<<(std::ostream &s, const leg_s &in);
 
@@ -518,7 +518,7 @@ private:
     mutable std::vector<double> m_dv;
 };
 
-__KEP_TOOL_VISIBLE std::ostream &operator<<(std::ostream &s, const leg_s &in);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const leg_s &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 #endif // KEP_TOOLBOX_LEG_S_H

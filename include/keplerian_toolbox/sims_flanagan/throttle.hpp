@@ -48,7 +48,7 @@ namespace sims_flanagan
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
-class __KEP_TOOL_VISIBLE throttle
+class KEP_TOOLBOX_DLL_PUBLIC throttle
 {
 public:
     throttle() : m_start(), m_end()

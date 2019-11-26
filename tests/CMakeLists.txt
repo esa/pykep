@@ -19,7 +19,7 @@ ADD_PYKEP_TEST(leg_s_test)
 ADD_PYKEP_TEST(sgp4_test)
 ADD_PYKEP_TEST(anomalies_test)
 
-IF(BUILD_SPICE)
+IF(PYKEP_BUILD_SPICE)
     ADD_PYKEP_TEST(load_spice_kernel_test)
     ADD_PYKEP_TEST(spice_planet_test)
 ENDIF()
