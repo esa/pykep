@@ -28,7 +28,8 @@ cd install
 
 # Install and compile the keplerian_toolbox
 cd /pykep
-cd build_kep_toolbox
+# build dir is made in travis.yml (script)
+cd build
 cmake -DBoost_NO_BOOST_CMAKE=ON \
       -DPYKEP_BUILD_KEP_TOOLBOX=yes \
       -DPYKEP_BUILD_PYKEP=no \
@@ -39,6 +40,7 @@ make -j2 install
 
 # Install and compile pykep
 cd /pykep
+mkdir build_pykep
 cd build_pykep
 cmake -DBoost_NO_BOOST_CMAKE=ON \
       -DPYKEP_BUILD_KEP_TOOLBOX=no \
