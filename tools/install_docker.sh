@@ -61,7 +61,7 @@ cp -a `find /usr/local/lib -type d -iname 'pykep'` ./
 auditwheel repair dist/pykep* -w ./dist2
 # Try to install it and run the tests.
 cd /
-/opt/python/${PYTHON_DIR}/bin/pip install /pykep/build/wheel/dist2/pykep*
+/opt/python/${PYTHON_DIR}/bin/pip install /pykep/build_pykep/wheel/dist2/pykep*
 /opt/python/${PYTHON_DIR}/bin/python -c "from pykep import test; test.run_test_suite();"
 
 # Upload in PyPi
@@ -70,7 +70,7 @@ export PYKEP_RELEASE_VERSION=`echo "${TRAVIS_TAG}"|grep -E 'v[0-9]+\.[0-9]+.*'|c
 if [[ "${PYKEP_RELEASE_VERSION}" != "" ]]; then
     echo "Release build detected, uploading to PyPi."
     /opt/python/${PYTHON_DIR}/bin/pip install twine
-    /opt/python/${PYTHON_DIR}/bin/twine upload -u darioizzo /pykep/build/wheel/dist2/pykep*
+    /opt/python/${PYTHON_DIR}/bin/twine upload -u darioizzo /pykep/build_pykep/wheel/dist2/pykep*
 fi
 
 
