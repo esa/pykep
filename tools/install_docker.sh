@@ -35,7 +35,7 @@ cmake -DBoost_NO_BOOST_CMAKE=ON \
       -DPYKEP_BUILD_PYKEP=no \
       -DPYKEP_BUILD_SPICE=yes \
       -DPYKEP_BUILD_TESTS=no \
-      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_BUILD_TYPE=Release ../;
 make -j2 install
 
 # Install and compile pykep
