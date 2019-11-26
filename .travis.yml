@@ -53,10 +53,10 @@ matrix:
           sources:
           - ubuntu-toolchain-r-test
     # Activate if matplotlib is available in py38 via the PyPi
-    #- env: PYKEP_BUILD="manylinux64Py38" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
-    #  sudo: required
-    #  services:
-    #  - docker
+    - env: PYKEP_BUILD="manylinux64Py38" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
+      sudo: required
+      services:
+      - docker
     - env: PYKEP_BUILD="manylinux64Py37" DOCKER_IMAGE="pagmo2/manylinux2010_x86_64_with_deps"
       sudo: required
       services:
