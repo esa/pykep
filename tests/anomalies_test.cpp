@@ -58,7 +58,6 @@ int main()
         std::vector<double> EQ(6);
         std::vector<double> EINV(6);
 
-        auto mu = dis(gen);
         // 1 - direct
         par2eq(EQ, E, false);
         eq2par(EINV, EQ, false);

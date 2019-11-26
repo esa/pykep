@@ -70,10 +70,10 @@ int main()
         line2 = line22;
     }
     double sum = std::accumulate(errors_r.begin(), errors_r.end(), 0.0);
-    double mean_r = sum / errors_r.size();
+    double mean_r = sum / static_cast<double>(errors_r.size());
 
     sum = std::accumulate(errors_v.begin(), errors_v.end(), 0.0);
-    double mean_v = sum / errors_v.size();
+    double mean_v = sum / static_cast<double>(errors_v.size());
     double max_r = *std::max_element(errors_r.begin(), errors_r.end());
     double max_v = *std::max_element(errors_v.begin(), errors_v.end());
 

@@ -61,15 +61,14 @@ int main()
     // Some definitions
     SpiceDouble radii[3];
     SpiceDouble mu_mars[1];
-    SpiceDouble state[6];
-    double lt;
 
     // We define the epoch to compute ephemeridess
     kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
-    SpiceDouble spice_epoch = epoch_to_spice(when);
+
+    char stringa[] = "RETURN";
 
     // We set SPICE to allow error handling
-    erract_c("SET", 0, "RETURN");
+    erract_c("SET", 0, stringa);
 
     // We check if the kernels have been loaded correctly by extracting a few
     // properties of mars

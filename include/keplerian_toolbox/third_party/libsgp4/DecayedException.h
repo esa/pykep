@@ -48,7 +48,7 @@ public:
     /**
      * @returns the error string
      */
-    virtual const char *what() const throw()
+    virtual const char *what() const throw() override
     {
         return "Error: Satellite decayed";
     }

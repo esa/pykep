@@ -33,7 +33,7 @@ public:
     {
     }
 
-    virtual const char *what() const throw()
+    virtual const char *what() const throw() override
     {
         return message_.c_str();
     }

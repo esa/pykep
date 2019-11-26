@@ -74,12 +74,7 @@ void eq2ic(const vettore6D &EQ, const double &mu, vettore3D &r, vettore3D &v, co
     auto gy = (1 + k * k - h * h) * I / den;
     auto gz = (2 * h) / den;
 
-    auto wx = (2 * k) / den;
-    auto wy = (-2 * h) / den;
-    auto wz = (1 - k * k - h * h) * I / den;
-
     // Auxiliary
-    auto b = std::sqrt(1 - g * g - f * f);
     auto radius = par / (1 + g * std::sin(L) + f * std::cos(L));
     // In the equinoctial reference frame
     auto X = radius * std::cos(L);

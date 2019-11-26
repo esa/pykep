@@ -2,6 +2,7 @@
 macro(ADD_PYKEP_TEST arg1)
     add_executable(${arg1} ${arg1}.cpp)
     target_link_libraries(${arg1} keplerian_toolbox)
+    target_compile_options(${arg1} PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")
     add_test(${arg1} ${arg1})
     set_property(TARGET ${arg1} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${arg1} PROPERTY CXX_STANDARD_REQUIRED YES)

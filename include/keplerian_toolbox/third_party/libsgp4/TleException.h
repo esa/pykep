@@ -46,7 +46,7 @@ public:
      * Get the exception message
      * @returns the exception message
      */
-    virtual const char *what() const throw()
+    virtual const char *what() const throw() override
     {
         return m_message.c_str();
     }
