@@ -130,10 +130,12 @@ elif BUILD_TYPE in ['Release', 'Debug']:
         r'-DPYKEP_BUILD_PYKEP=no ' + \
         r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
         r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
-        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ')
-    # Build+install step.
-    run_command(r'mingw32-make install VERBOSE=1')
-    run_command(r'ctest -VV')
+        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
+        r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
+    run_command(r'mingw32-make install VERBOSE=1 -j2')
+    # Alter the path to find the keplerian_toolbox dll.
+    os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
+    run_command(r'ctest')
 else:
     raise RuntimeError('Unsupported build type: ' + BUILD_TYPE)
 
