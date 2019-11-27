@@ -34,13 +34,21 @@
 #include <keplerian_toolbox/planet/base.hpp>
 #include <keplerian_toolbox/serialization.hpp>
 
+// The fact we have multiple libarries core.pyd, planet.pyd etc. makes it
+// necessary to have this visibility rule.
+#if defined(_WIN32) || defined(__CYGWIN__)
+
+#define PYKEP_DLL_PUBLIC __declspec(dllexport)
+
+#endif
+
 namespace kep_toolbox
 {
 namespace planet
 {
 
 // Wrapper for exporting the planet::base into python
-class KEP_TOOLBOX_DLL_PUBLIC python_base : public base, public boost::python::wrapper<base>
+class PYKEP_DLL_PUBLIC python_base : public base, public boost::python::wrapper<base>
 {
 public:
     /// Same constructor as plates::base
