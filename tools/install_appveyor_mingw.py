@@ -127,6 +127,7 @@ if is_python_build:
         r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
         r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
         r'-DPYTHON_LIBRARY=' + python_library + r' ' + \
+        r'-DPYTHON_LIBRARIES=' + python_library + r' ' + \
         r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
         # Build+install step.
     run_command(r'mingw32-make install VERBOSE=1')
