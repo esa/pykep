@@ -100,21 +100,36 @@ if is_python_build:
     if is_release_build:
         run_command(pip + ' install twine')
 
-# Proceed to the build.
-os.makedirs('build')
-os.chdir('build')
-common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local -DCMAKE_INSTALL_PREFIX=c:\\local -DPYKEP_BUILD_SPICE=yes '
+# Common for all builds
+common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
+                    r'-DCMAKE_INSTALL_PREFIX=c:\\local ' + \
+                    r'-DPYKEP_BUILD_SPICE=yes ' + \
+                    r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
+                    r'-DBoost_INCLUDE_DIR=c:\\local\\include' + \
+                    r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll'
 
 # Configuration step.
 if is_python_build:
-    run_command(r'cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release ' + \
-        common_cmake_opts + \
+    os.makedirs('build_keplerian_toolbox')
+    os.chdir('build_keplerian_toolbox')
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + common_cmake_opts + \
+        r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
+        r'-DPYKEP_BUILD_TESTS=no ' \
         r'-DPYKEP_BUILD_KEP_TOOLBOX=yes ' + \
         r'-DPYKEP_BUILD_PYKEP=no ' + \
+        r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
+    run_command(r'mingw32-make install VERBOSE=1 -j2')
+    # Alter the path to find the keplerian_toolbox dll.
+    os.environ['PATH'] = os.getcwd() + ";" + os.environ['PATH']
+    os.chdir('..')
+    os.makedirs('build_pykep')
+    os.chdir('build_pykep')
+
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + common_cmake_opts + \
+        r'-DCMAKE_BUILD_TYPE=Release ' + \
+        r'-DPYKEP_BUILD_KEP_TOOLBOX=no ' + \
+        r'-DPYKEP_BUILD_PYKEP=yes ' + \
         r'-DPYKEP_BUILD_TESTS=no ' + \
-        r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
-        r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
-        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
         r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
         r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
         r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
@@ -123,14 +138,13 @@ if is_python_build:
         # Build+install step.
     run_command(r'mingw32-make install VERBOSE=1')
 elif BUILD_TYPE in ['Release', 'Debug']:
-    cmake_opts = r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
-        r' -DPYKEP_BUILD_TESTS=yes ' + common_cmake_opts
-    run_command(r'cmake -G "MinGW Makefiles" .. ' + cmake_opts + \
+    os.makedirs('build')
+    os.chdir('build')
+    run_command(r'cmake -G "MinGW Makefiles" .. ' + common_cmake_opts + \
+        r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
+        r'-DPYKEP_BUILD_TESTS=yes ' \
         r'-DPYKEP_BUILD_KEP_TOOLBOX=yes ' + \
         r'-DPYKEP_BUILD_PYKEP=no ' + \
-        r'-DBoost_INCLUDE_DIR=c:\\local\\include ' + \
-        r'-DBoost_SERIALIZATION_LIBRARY_RELEASE=c:\\local\\lib\\libboost_serialization-mgw81-mt-x64-1_70.dll ' + \
-        r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll ' + \
         r'-DCMAKE_CXX_FLAGS_DEBUG="-g0 -Os"')
     run_command(r'mingw32-make install VERBOSE=1 -j2')
     # Alter the path to find the keplerian_toolbox dll.
