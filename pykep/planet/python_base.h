@@ -40,6 +40,10 @@
 
 #define PYKEP_DLL_PUBLIC __declspec(dllexport)
 
+#elif defined(__clang__) || defined(__GNUC__) || defined(__INTEL_COMPILER)
+
+#define PYKEP_DLL_PUBLIC __attribute__((visibility("default")))
+
 #endif
 
 namespace kep_toolbox
