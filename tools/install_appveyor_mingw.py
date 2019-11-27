@@ -107,7 +107,7 @@ if is_python_build:
     os.makedirs('build_keplerian_toolbox')
     os.chdir('build_keplerian_toolbox')
     run_command(r'cmake -G "MinGW Makefiles" .. ' + common_cmake_opts + \
-        r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + \
+        r'-DCMAKE_BUILD_TYPE=' + BUILD_TYPE + ' '\
         r'-DPYKEP_BUILD_TESTS=no ' \
         r'-DPYKEP_BUILD_KEP_TOOLBOX=yes ' + \
         r'-DPYKEP_BUILD_PYKEP=no ' + \
@@ -127,7 +127,6 @@ if is_python_build:
         r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
         r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
         r'-DPYTHON_LIBRARY=' + python_library + r' ' + \
-        r'-DPYTHON_LIBRARIES=' + python_library + r' ' + \
         r'-DCMAKE_CXX_FLAGS="-D_hypot=hypot"')
         # Build+install step.
     run_command(r'mingw32-make install VERBOSE=1')
