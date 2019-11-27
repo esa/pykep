@@ -123,7 +123,6 @@ if is_python_build:
         r'-DCMAKE_BUILD_TYPE=Release ' + \
         r'-DPYKEP_BUILD_KEP_TOOLBOX=no ' + \
         r'-DPYKEP_BUILD_PYKEP=yes ' + \
-        r'-DPYKEP_BUILD_TESTS=no ' + \
         r'-DBoost_PYTHON' + python_version + r'_LIBRARY_RELEASE=c:\\local\\lib\\libboost_python' + python_version + r'-mgw81-mt-x64-1_70.dll ' + \
         r'-DPYTHON_INCLUDE_DIR=C:\\' + python_folder + r'\\include ' + \
         r'-DPYTHON_EXECUTABLE=C:\\' + python_folder + r'\\python.exe ' + \
