@@ -48,14 +48,8 @@ endif()
 message(STATUS "Python include dir: ${YACMA_PYTHON_INCLUDE_DIR}")
 
 # An imported target to be used when building extension modules.
-if(_YACMA_PYTHON_MODULE_NEED_LINK)
-  add_library(YACMA::PythonModule UNKNOWN IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}"
-    IMPORTED_LOCATION "${PYTHON_LIBRARIES}" IMPORTED_LINK_INTERFACE_LANGUAGES "C")
-else()
-  add_library(YACMA::PythonModule INTERFACE IMPORTED)
-  set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
-endif()
+add_library(YACMA::PythonModule INTERFACE IMPORTED)
+set_target_properties(YACMA::PythonModule PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${YACMA_PYTHON_INCLUDE_DIR}")
 
 # This flag is used to signal the need to override the default extension of the Python modules
 # depending on the architecture. Under Windows, for instance, CMake produces shared objects as
@@ -123,11 +117,9 @@ function(YACMA_PYTHON_MODULE name)
     # with clang and gcc. See:
     # https://bugs.python.org/issue11149
     # http://www.python.org/dev/peps/pep-3123/
-    # NOTE: not sure here how we should set flags up for MSVC or clang on windows, need
-    # to check in the future.
     # NOTE: do not use the yacma compiler linker settings bits, so this module
     # can be used stand-alone.
-    if(CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    if(CMAKE_COMPILER_IS_GNUCXX OR (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND NOT MSVC))
         message(STATUS "Setting up extra compiler flag '-fwrapv' for the Python module '${name}'.")
         target_compile_options(${name} PRIVATE "-fwrapv")
         if(${PYTHON_VERSION_MAJOR} LESS 3)
@@ -144,6 +136,9 @@ function(YACMA_PYTHON_MODULE name)
       set_target_properties(${name} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
     endif()
     target_link_libraries("${name}" PRIVATE YACMA::PythonModule)
+    if(_YACMA_PYTHON_MODULE_NEED_LINK)
+      target_link_libraries("${name}" PRIVATE ${PYTHON_LIBRARIES})
+    endif()
 endfunction()
 
 # Mark as included.
