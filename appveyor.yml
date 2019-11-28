@@ -7,8 +7,8 @@ environment:
   matrix:
     #- BUILD_TYPE: "Release"
     #- BUILD_TYPE: "Debug"
-    - BUILD_TYPE: "Python38-x64"
-    #- BUILD_TYPE: "Python37-x64"
+    #- BUILD_TYPE: "Python38-x64"
+    - BUILD_TYPE: "Python37-x64"
     #- BUILD_TYPE: "Python36-x64"
 
 
