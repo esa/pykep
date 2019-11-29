@@ -45,7 +45,6 @@ jobs:
       # Note: conda activate doesn't work here, because it creates a new shell!
       - script: |
           conda install cmake ^
-                        clangdev ^
                         ninja ^
                         boost-cpp ^
                         boost ^
@@ -60,7 +59,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
           mkdir build
           cd build
-          cmake .. -G Ninja ^
+          cmake .. -G "Visual Studio 16 2019" ^
                 -DCMAKE_BUILD_TYPE=Release ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
@@ -76,7 +75,7 @@ jobs:
           cd ..
           mkdir build_pykep
           cd build_pykep
-          cmake .. -G Ninja ^
+          cmake .. -G "Visual Studio 16 2019" ^
                 -DCMAKE_BUILD_TYPE=Release ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
