@@ -72,8 +72,9 @@ jobs:
                 -DPYKEP_BUILD_SPICE=yes ^
                 -DPYKEP_BUILD_TESTS=yes
           cmake --build . -- -v
-          ctest -V .
           cmake --build . --target install
+          ctest -V .
+
           cd ..
           mkdir build_pykep
           cd build_pykep

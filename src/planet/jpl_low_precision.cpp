@@ -73,7 +73,7 @@ jpl_lp::jpl_lp(const std::string &name) : ref_mjd2000(epoch(2451545.0, epoch::JD
     mapped_planets["neptune"] = 8;
     mapped_planets["pluto"] = 9;
 
-    double mu_central_body;
+    double mu_central_body = ASTRO_MU_SUN;
     double mu_self;
     double radius;
     double safe_radius;
