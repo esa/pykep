@@ -11,7 +11,7 @@ jobs:
       # related to dbgeng, which *I think* are due to the
       # fact that the vs2015 image is using an older version of
       # the OS.
-      vmImage: 'vs2017-win2016'
+      vmImage: 'windows-2019'
     timeoutInMinutes: 360
     steps:
 
