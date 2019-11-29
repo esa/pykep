@@ -53,7 +53,7 @@ jobs:
           conda list
         displayName: "Install conda packages"
 
-      # Configure, build and test.
+      # Configure, build and test (kep_toolbox)
       - script: |
           setlocal EnableDelayedExpansion
           mkdir build
@@ -64,14 +64,18 @@ jobs:
                 -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
                 -DPYKEP_BUILD_KEP_TOOLBOX=yes ^
                 -DPYKEP_BUILD_PYKEP=no ^
-                -DPYKEP_BUILD_SPICE=yes ^
+                -DPYKEP_BUILD_SPICE=no ^
                 -DPYKEP_BUILD_TESTS=yes
           cmake --build . --config RelWithDebInfo
           cmake --build . --config RelWithDebInfo --target install
           set PATH=%PATH%;%CD%\RelWithDebInfo
           ctest -j4 -V -C RelWithDebInfo
-
           cd ..
+        displayName: "Configure, build and test keplerian_toolbox"
+
+      # Configure, build and test (pykep)
+      - script: |
+          setlocal EnableDelayedExpansion
           mkdir build_pykep
           cd build_pykep
           cmake .. -G "Visual Studio 15 2017" ^
@@ -82,7 +86,7 @@ jobs:
                 -DPYKEP_BUILD_KEP_TOOLBOX=no ^
                 -DPYKEP_BUILD_PYKEP=yes ^
                 -DPYKEP_BUILD_SPICE=yes
-          cmake --build . -- -v
-          cmake --build . --target install
+          cmake --build . --config RelWithDebInfo
+          cmake --build . --config RelWithDebInfo --target install
           python -c "import pykep.test; pykep.test.run_test_suite()"
-        displayName: "Configure, build and test"
+        displayName: "Configure, build and test pykep"
