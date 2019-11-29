@@ -1,6 +1,7 @@
 # Setup of the dcgpy core module.
 YACMA_PYTHON_MODULE(core 
     core.cpp 
+    docstrings.cpp
 )
 target_link_libraries(core PRIVATE ${PYKEP_BP_TARGET} pykep)
 target_compile_options(core PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")

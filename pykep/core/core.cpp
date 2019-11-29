@@ -34,7 +34,7 @@
 #include <cmath>
 #endif
 
-#if PY_MAJOR_VERSION < 2 || (PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION < 6)
+#if PY_MAJOR_VERSION < 3
 #error Minimum supported Python version is 2.6.
 #endif
 
@@ -53,9 +53,10 @@
 #include <boost/python/self.hpp>
 #include <boost/utility.hpp>
 
-#include <keplerian_toolbox/keplerian_toolbox.hpp>
 #include "../boost_python_container_conversions.h"
 #include "../utils.h"
+#include "docstrings.hpp"
+#include <keplerian_toolbox/keplerian_toolbox.hpp>
 
 using namespace boost::python;
 
@@ -233,7 +234,7 @@ get_constant(G0);
         }                                                                                                              \
     }
 
-#define EXPOSE_CONSTANT(arg) def("_get_" #arg, &get_##arg);
+#define PYKEP_EXPOSE_CONSTANT(arg) def("_get_" #arg, &get_##arg);
 
 typedef std::array<double, 8> array8D;
 typedef std::array<double, 11> array11D;
@@ -257,19 +258,19 @@ BOOST_PYTHON_MODULE(core)
     PYKEP_REGISTER_CONVERTER(std::vector<array11D>, variable_capacity_policy)
 
     // Expose the astrodynamical constants.
-    EXPOSE_CONSTANT(AU);
-    EXPOSE_CONSTANT(JR);
-    EXPOSE_CONSTANT(MU_SUN);
-    EXPOSE_CONSTANT(MU_EARTH);
-    EXPOSE_CONSTANT(EARTH_VELOCITY);
-    EXPOSE_CONSTANT(EARTH_J2);
-    EXPOSE_CONSTANT(EARTH_RADIUS);
-    EXPOSE_CONSTANT(DEG2RAD);
-    EXPOSE_CONSTANT(RAD2DEG);
-    EXPOSE_CONSTANT(DAY2SEC);
-    EXPOSE_CONSTANT(SEC2DAY);
-    EXPOSE_CONSTANT(DAY2YEAR);
-    EXPOSE_CONSTANT(G0);
+    PYKEP_EXPOSE_CONSTANT(AU);
+    PYKEP_EXPOSE_CONSTANT(JR);
+    PYKEP_EXPOSE_CONSTANT(MU_SUN);
+    PYKEP_EXPOSE_CONSTANT(MU_EARTH);
+    PYKEP_EXPOSE_CONSTANT(EARTH_VELOCITY);
+    PYKEP_EXPOSE_CONSTANT(EARTH_J2);
+    PYKEP_EXPOSE_CONSTANT(EARTH_RADIUS);
+    PYKEP_EXPOSE_CONSTANT(DEG2RAD);
+    PYKEP_EXPOSE_CONSTANT(RAD2DEG);
+    PYKEP_EXPOSE_CONSTANT(DAY2SEC);
+    PYKEP_EXPOSE_CONSTANT(SEC2DAY);
+    PYKEP_EXPOSE_CONSTANT(DAY2YEAR);
+    PYKEP_EXPOSE_CONSTANT(G0);
 
     // Exposing enums
     enum_<kep_toolbox::epoch::type>("_epoch_type", "Defines a julian date type exposing the corresponding c++ enum\n\n"
@@ -282,10 +283,7 @@ BOOST_PYTHON_MODULE(core)
         .value("JD", kep_toolbox::epoch::JD);
 
     // Epoch class
-    class_<kep_toolbox::epoch>("epoch",
-                               "Represents a precise point in time. The "
-                               "boost::posix_time_ptime classes are used to handle the "
-                               "conversion to and from string",
+    class_<kep_toolbox::epoch>("epoch", pykep::expression_doc().c_str(),
                                init<optional<const double &, kep_toolbox::epoch::type>>())
         .add_property("jd", &kep_toolbox::epoch::jd,
                       "Returns the Julian Date\n\n"
@@ -335,24 +333,25 @@ BOOST_PYTHON_MODULE(core)
     class_<kep_toolbox::lambert_problem>(
         "lambert_problem", "Represents a multiple revolution Lambert's problem",
         init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &, const int &,
-             const int &>("lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)\n\n"
-                          "- r1: starting position (x1,y1,z1)\n"
-                          "- r2: final position    (x2,y2,z2)\n"
-                          "- tof: time of flight\n"
-                          "- mu: gravitational parameter (default is 1)\n"
-                          "- cw: True for retrograde motion (clockwise), False if "
-                          "counter-clock wise (default is False)\n"
-                          "- max_revs: Maximum number of multirevs to be computed (default "
-                          "is 5)\n\n"
-                          ".. note::\n"
-                          "   Units need to be consistent.\n"
-                          "   The multirev Lambert's problem will be solved upon construction "
-                          "and its solution stored in data members.\n\n"
-                          "Example (non-dimensional units used)::\n\n"
-                          "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )",
-                          (arg("r1") = kep_toolbox::array3D{1, 0, 0}, arg("r2") = kep_toolbox::array3D{0, 1, 0},
-                           arg("tof") = boost::math::constants::pi<double>() / 2., arg("mu") = 1., arg("cw") = false,
-                           arg("max_revs") = 0)))
+             const int &>(
+            "lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)\n\n"
+            "- r1: starting position (x1,y1,z1)\n"
+            "- r2: final position    (x2,y2,z2)\n"
+            "- tof: time of flight\n"
+            "- mu: gravitational parameter (default is 1)\n"
+            "- cw: True for retrograde motion (clockwise), False if "
+            "counter-clock wise (default is False)\n"
+            "- max_revs: Maximum number of multirevs to be computed (default "
+            "is 5)\n\n"
+            ".. note::\n"
+            "   Units need to be consistent.\n"
+            "   The multirev Lambert's problem will be solved upon construction "
+            "and its solution stored in data members.\n\n"
+            "Example (non-dimensional units used)::\n\n"
+            "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )",
+            (arg("r1") = kep_toolbox::array3D{1, 0, 0}, arg("r2") = kep_toolbox::array3D{0, 1, 0},
+             arg("tof") = boost::math::constants::pi<double>() / 2., arg("mu") = 1., arg("cw") = false,
+             arg("max_revs") = 0)))
         .def("get_v1", &kep_toolbox::lambert_problem::get_v1, return_value_policy<copy_const_reference>(),
              "Returns a sequence of vectors containing the velocities at r1 of "
              "all computed solutions to the Lambert's Problem\n\n"
