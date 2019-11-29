@@ -45,6 +45,7 @@ jobs:
       # Note: conda activate doesn't work here, because it creates a new shell!
       - script: |
           conda install cmake ^
+                        clangdev ^
                         ninja ^
                         boost-cpp ^
                         boost ^
@@ -53,39 +54,72 @@ jobs:
           conda list
         displayName: "Install conda packages"
 
-      # Configure, build and test (kep_toolbox)
       - script: |
           setlocal EnableDelayedExpansion
+          call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 15 2017" ^
+          cmake .. -G Ninja ^
+                -DCMAKE_BUILD_TYPE=Release ^
+                -DCMAKE_C_COMPILER=clang-cl ^
+                -DCMAKE_CXX_COMPILER=clang-cl ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
                 -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
-                -DPYKEP_BUILD_KEP_TOOLBOX=yes ^
-                -DPYKEP_BUILD_PYKEP=no ^
-                -DPYKEP_BUILD_SPICE=no ^
+                -DPYKEP_BUILD_SPICE=yes ^
                 -DPYKEP_BUILD_TESTS=yes
-          cmake --build . --config RelWithDebInfo
-          cmake --build . --config RelWithDebInfo --target install
-          set PATH=%PATH%;%CD%\RelWithDebInfo
-          ctest -j4 -V -C RelWithDebInfo
+          cmake --build . -- -v
+          ctest -V .
+          cmake --build . --target install
           cd ..
-        displayName: "Configure, build and test keplerian_toolbox"
-
-      # Configure, build and test (pykep)
-      - script: |
-          setlocal EnableDelayedExpansion
           mkdir build_pykep
           cd build_pykep
-          cmake .. -G "Visual Studio 15 2017" ^
+          cmake .. -G Ninja ^
                 -DCMAKE_BUILD_TYPE=Release ^
+                -DCMAKE_C_COMPILER=clang-cl ^
+                -DCMAKE_CXX_COMPILER=clang-cl ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
                 -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
                 -DPYKEP_BUILD_KEP_TOOLBOX=no ^
-                -DPYKEP_BUILD_PYKEP=yes ^
-          cmake --build . --config RelWithDebInfo
-          cmake --build . --config RelWithDebInfo --target install
+                -DPYKEP_BUILD_PYKEP=yes 
+          cmake --build . -- -v
+          cmake --build . --target install
           python -c "import pykep.test; pykep.test.run_test_suite()"
-        displayName: "Configure, build and test pykep"
+
+      ## Configure, build and test (kep_toolbox)
+      # script: |
+      #   setlocal EnableDelayedExpansion
+      #   mkdir build
+      #   cd build
+      #   cmake .. -G "Visual Studio 15 2017" ^
+      #         -DBoost_NO_BOOST_CMAKE=ON ^
+      #         -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
+      #         -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
+      #         -DPYKEP_BUILD_KEP_TOOLBOX=yes ^
+      #         -DPYKEP_BUILD_PYKEP=no ^
+      #         -DPYKEP_BUILD_SPICE=no ^
+      #         -DPYKEP_BUILD_TESTS=yes
+      #   cmake --build . --config RelWithDebInfo
+      #   cmake --build . --config RelWithDebInfo --target install
+      #   set PATH=%PATH%;%CD%\RelWithDebInfo
+      #   ctest -j4 -V -C RelWithDebInfo
+      #   cd ..
+      # displayName: "Configure, build and test keplerian_toolbox"
+
+      ## Configure, build and test (pykep)
+      # script: |
+      #   setlocal EnableDelayedExpansion
+      #   mkdir build_pykep
+      #   cd build_pykep
+      #   cmake .. -G "Visual Studio 15 2017" ^
+      #         -DCMAKE_BUILD_TYPE=Release ^
+      #         -DBoost_NO_BOOST_CMAKE=ON ^
+      #         -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
+      #         -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
+      #         -DPYKEP_BUILD_KEP_TOOLBOX=no ^
+      #         -DPYKEP_BUILD_PYKEP=yes ^
+      #   cmake --build . --config RelWithDebInfo
+      #   cmake --build . --config RelWithDebInfo --target install
+      #   python -c "import pykep.test; pykep.test.run_test_suite()"
+      # displayName: "Configure, build and test pykep"
