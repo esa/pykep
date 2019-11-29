@@ -47,8 +47,6 @@ jobs:
           conda install cmake ^
                         clangdev ^
                         ninja ^
-                        pagmo ^
-                        pygmo ^
                         boost-cpp ^
                         boost ^
                         matplotlib ^
@@ -92,7 +90,4 @@ jobs:
           cmake --build . -- -v
           cmake --build . --target install
           python -c "import pykep.test; pykep.test.run_test_suite()"
-          cd ..
-          cd tools
-          python tutorial1.py
         displayName: "Configure, build and test"
