@@ -14,14 +14,14 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
 
     Example::
 
-      from mpl_toolkits.mplot3d import Axes3D
-      import matplotlib.pyplot as plt
+	import pykep as pk
+	import matplotlib.pyplot as plt
 
-      fig = plt.figure()
-      ax = fig.gca(projection='3d')
-      pl = planet_ss('earth')
-      plot_planet(pl, axes=ax)
-      plt.show()
+	fig = plt.figure()
+	ax = fig.gca(projection = '3d')
+	pl = pk.planet.jpl_lp('earth')
+	t_plot = pk.epoch(219)
+	ax = pk.orbit_plots.plot_planet(pl, ax = ax, color='b')
     """
     from pykep import MU_SUN, SEC2DAY, epoch, AU, RAD2DEG
     from pykep.planet import keplerian
@@ -92,28 +92,28 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
 
     Example::
 
-      from mpl_toolkits.mplot3d import Axes3D
+      import pykep as pk
       import matplotlib.pyplot as plt
 
       fig = plt.figure()
       ax = fig.gca(projection='3d')
 
-      t1 = epoch(0)
-      t2 = epoch(640)
-      dt = (t2.mjd2000 - t1.mjd2000) * DAY2SEC
+      t1 = pk.epoch(0)
+      t2 = pk.epoch(640)
+      dt = (t2.mjd2000 - t1.mjd2000) * pk.DAY2SEC
 
-      pl = planet_ss('earth')
-      plot_planet(pl, t0=t1, axes=ax, color='k')
+      pl = pk.planet.jpl_lp('earth')
+      pk.orbit_plots.plot_planet(pl, t0=t1, axes=ax, color='k')
       rE,vE = pl.eph(t1)
 
-      pl = planet_ss('mars')
-      plot_planet(pl, t0=t2, axes=ax, color='r')
+      pl = pk.planet.jpl_lp('mars')
+      pk.orbit_plots.plot_planet(pl, t0=t2, axes=ax, color='r')
       rM, vM = pl.eph(t2)
 
-      l = lambert_problem(rE,rM,dt,MU_SUN)
-      plot_lambert(l, ax=ax, color='b')
-      plot_lambert(l, sol=1, axes=ax, color='g')
-      plot_lambert(l, sol=2, axes=ax, color='g')
+      l = lambert_problem(rE,rM,dt,pk.MU_SUN)
+      pk.orbit_plots.plot_lambert(l, ax=ax, color='b')
+      pk.orbit_plots.plot_lambert(l, sol=1, axes=ax, color='g')
+      pk.orbit_plots.plot_lambert(l, sol=2, axes=ax, color='g', legend = True)
 
       plt.show()
     """
@@ -182,6 +182,12 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
     - legend	when True it plots also the legend
 
     Plots the result of a keplerian propagation
+
+    Example::
+
+    import pykep as pk
+    pi = 3.14
+    pk.orbit_plots.plot_kepler([1,0,0],[0,1,0],pi/3,1)
     """
 
     from pykep import propagate_lagrangian
@@ -242,6 +248,17 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     - legend:	when True it plots also the legend
 
     Plots the result of a taylor propagation of constant thrust
+
+    Example::
+
+	import pykep as pk
+	import matplotlib.pyplot as plt
+	pi = 3.14
+
+	fig = plt.figure()
+	ax = fig.gca(projection = '3d')
+	pk.orbit_plots.plot_taylor([1,0,0],[0,1,0],100,[1,1,0],40, 1, 1, N = 1000, axes = ax)
+	plt.show()
     """
 
     from pykep import propagate_taylor
