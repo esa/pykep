@@ -675,7 +675,7 @@ private:
     int m_tol;
 };
 
-KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const leg &in);
+std::ostream &operator<<(std::ostream &s, const leg &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 #endif // KEP_TOOLBOX_LEG_H

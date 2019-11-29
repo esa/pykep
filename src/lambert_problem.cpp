@@ -150,7 +150,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
         m_x[0] = pow((T / T00), 0.69314718055994529 / log(T1 / T00)) - 1.0;
     }
     // 3.1.2 Householder iterations
-    m_iters[0] = householder(T, m_x[0], 0.0, 1e-5, 15);
+    m_iters[0] = householder(T, m_x[0], 0, 1e-5, 15);
     // 3.2 multi rev solutions
     double tmp;
     for (int i = 1; i < m_Nmax + 1; ++i) {

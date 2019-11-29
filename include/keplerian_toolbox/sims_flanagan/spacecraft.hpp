@@ -95,7 +95,7 @@ private:
     double m_isp;
 };
 
-KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const spacecraft &in);
+std::ostream &operator<<(std::ostream &s, const spacecraft &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 

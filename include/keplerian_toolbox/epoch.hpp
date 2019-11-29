@@ -98,7 +98,7 @@ private:
     double mjd2000_m;
 };
 
-KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const epoch &epoch_in);
+std::ostream &operator<<(std::ostream &s, const epoch &epoch_in);
 
 KEP_TOOLBOX_DLL_PUBLIC epoch epoch_from_string(const std::string date);
 
