@@ -31,6 +31,8 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/module.hpp>
 
+#include <keplerian_toolbox/config.hpp>
+
 #ifdef PYKEP_USING_SPICE
 #include <keplerian_toolbox/util/spice_utils.hpp>
 #endif

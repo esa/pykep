@@ -25,6 +25,7 @@
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <iomanip>
+#include <cmath>
 #include <iostream>
 
 #include <keplerian_toolbox/astro_constants.hpp>
@@ -144,8 +145,8 @@ ptime epoch::get_posix_time() const
     sec = static_cast<long>((((copy * 24 - static_cast<double>(hrs)) * 60) - static_cast<double>(min)) * 60);
     double dblfsec = ((((copy * 24 - static_cast<double>(hrs)) * 60) - static_cast<double>(min)) * 60) - static_cast<double>(sec);
     std::ostringstream fsecstr;
-    fsecstr << std::setiosflags(std::ios::fixed) << std::setprecision(-log10(BOOST_DATE_PRECISION)) << dblfsec;
-    fsec = boost::lexical_cast<long>(fsecstr.str().substr(2, -log10(BOOST_DATE_PRECISION) + 1));
+    fsecstr << std::setiosflags(std::ios::fixed) << std::setprecision(-std::log10(BOOST_DATE_PRECISION)) << dblfsec;
+    fsec = boost::lexical_cast<long>(fsecstr.str().substr(2, -std::log10(BOOST_DATE_PRECISION) + 1));
     ptime retval;
     if (flag)
         retval = ptime(date(2000, 1, 1), time_duration(-hrs, -min, -sec, -fsec));

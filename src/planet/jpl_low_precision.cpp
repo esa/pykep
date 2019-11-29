@@ -73,10 +73,10 @@ jpl_lp::jpl_lp(const std::string &name) : ref_mjd2000(epoch(2451545.0, epoch::JD
     mapped_planets["neptune"] = 8;
     mapped_planets["pluto"] = 9;
 
-    double mu_central_body;
-    double mu_self;
-    double radius;
-    double safe_radius;
+    double mu_central_body = 0.;
+    double mu_self = 0.;
+    double radius = 0.;
+    double safe_radius = 0.;
     std::string lower_case_name = name;
     boost::algorithm::to_lower(lower_case_name);
     switch (mapped_planets[lower_case_name]) {

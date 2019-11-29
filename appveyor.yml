@@ -5,11 +5,13 @@ environment:
     secure: M+qvYgRh05fEw6G9aglK4g==
     
   matrix:
-    #- BUILD_TYPE: "Release"
-    #- BUILD_TYPE: "Debug"
-    - BUILD_TYPE: "Python38-x64"
+    - BUILD_TYPE: "Release"
+    - BUILD_TYPE: "Debug"
+    # At the moment the build fails upon module import
+    # with a criptic "ImportError: DLL load failed while importing core: The specified module could not be found."
+    #- BUILD_TYPE: "Python38-x64"
     - BUILD_TYPE: "Python37-x64"
-    #- BUILD_TYPE: "Python36-x64"
+    - BUILD_TYPE: "Python36-x64"
 
 
 install:

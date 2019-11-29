@@ -146,8 +146,6 @@ if(MINGW)
 	message(STATUS "Enabling the '-Wa,-mbig-obj' flag in MinGW builds.")
 	list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wa,-mbig-obj")
     list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-Wa,-mbig-obj")
-    # Necessary for cspice to compile and link correctly
-    add_definitions(-DMSDOS)
 endif()
 
 # Some flags that generate warnings due to Eigen obsolete versions
@@ -225,6 +223,10 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         # Silence warnings
         set_source_files_properties(${CSPICE_LIB_SRC_LIST} PROPERTIES COMPILE_OPTIONS -w)
         set(PYKEP_USING_SPICE "#define PYKEP_USING_SPICE")
+        if(WIN32) 
+            # Necessary for cspice to compile and link correctly
+            add_definitions(-DMSDOS)
+        endif()
     endif(PYKEP_BUILD_SPICE)
 
     # Creates the file config.hpp
@@ -297,7 +299,7 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
         EXPORT keplerian_toolbox_export
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION lib
+        RUNTIME DESTINATION bin
     )
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/keplerian_toolbox-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" @ONLY)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
