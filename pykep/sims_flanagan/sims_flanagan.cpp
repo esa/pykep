@@ -205,17 +205,18 @@ BOOST_PYTHON_MODULE(sims_flanagan)
             "- spacecarft: spacecraft\n"
             "- mu: central body gravity parameter\n\n"
             "Example::\n\n"
-            " start = pykep.epoch(0)\n"
-            " end = pykep.epoch(340)\n"
-            " earth = pykep.planet_ss('earth')\n"
-            " mars = pykep.planet_ss('mars')\n"
-            " sc = pykep.sims_flanagan.spacecraft(4500,0.05,2500)\n"
+            " import pykep as pk"
+            " start = pk.epoch(0)\n"
+            " end = pk.epoch(340)\n"
+            " earth = pk.planet.jpl_lp('earth')\n"
+            " mars = pk.planet.jpl_lp('mars')\n"
+            " sc = pk.sims_flanagan.spacecraft(4500,0.05,2500)\n"
             " r,v = earth.eph(start)\n"
-            " x0 = pykep.sims_flanagan.sc_state(r,v,sc.mass)\n"
+            " x0 = pk.sims_flanagan.sc_state(r,v,sc.mass)\n"
             " r,v = mars.eph(start)\n"
-            " xe = pykep.sims_flanagan.sc_state(r, v ,sc.mass)\n"
-            " mu = pykep.MU_SUN\n"
-            " l = pykep.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"))
+            " xe = pk.sims_flanagan.sc_state(r, v ,sc.mass)\n"
+            " mu = pk.MU_SUN\n"
+            " l = pk.sims_flanagan.leg(start,x0,(1,0,0,0,0,1,0,0,0,0,1,0),end,xe,sc,mu)\n"))
         .def(init<>())
         .def("set", leg_setter(&kep_toolbox::sims_flanagan::leg::set_leg),
              "Sets leg's data, leaving the spacecraft and the central body gravitational parameter unchanged\n\n"
@@ -264,7 +265,7 @@ BOOST_PYTHON_MODULE(sims_flanagan)
                       &kep_toolbox::sims_flanagan::leg::set_high_fidelity,
                       "If True propagation is not impulsive, but continuous\n\n"
                       "Example::\n\n"
-                      " l.high_fidelity(True)\n")
+                      " l.high_fidelity = True\n")
         .def("mismatch_constraints", &get_mismatch_wrapper, "Returns a tuple containing the state mismatch of the leg "
                                                             "x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be "
                                                             "feasible)\n\n"
@@ -295,19 +296,19 @@ BOOST_PYTHON_MODULE(sims_flanagan)
         .def("set", leg_s_setter(&kep_toolbox::sims_flanagan::leg_s::set_leg),
              "Sets leg's data\n\n"
              "Example::\n\n"
-             " from pykep import *\n"
-             " l = sims_flanagan.leg_s(4,1.0/AU,1.0)\n"
-             " start = epoch(0)\n"
-             " end = epoch(340)\n"
-             " earth = planet_ss('earth')\n"
-             " mars = planet_ss('mars')\n"
-             " sc = sims_flanagan.spacecraft(4500,0.05,2500)\n"
+             " import pykep as pk\n"
+             " l = pk.sims_flanagan.leg_s(4,1.0/pk.AU,1.0)\n"
+             " start = pk.epoch(0)\n"
+             " end = pk.epoch(340)\n"
+             " earth = pk.planet.jpl_lp('earth')\n"
+             " mars = pk.planet.jpl_lp('mars')\n"
+             " sc = pk.sims_flanagan.spacecraft(4500,0.05,2500)\n"
              " r,v = earth.eph(start)\n"
-             " x0 = sims_flanagan.sc_state(r,v,sc.mass)\n"
+             " x0 = pk.sims_flanagan.sc_state(r,v,sc.mass)\n"
              " r,v = mars.eph(end)\n"
-             " xe = sims_flanagan.sc_state(r, v ,sc.mass)\n"
-             " ds = 1.2 * 365.25 * DAY2SEC\n"
-             " l.set_mu(MU_SUN)\n"
+             " xe = pk.sims_flanagan.sc_state(r, v ,sc.mass)\n"
+             " ds = 1.2 * 365.25 * pk.DAY2SEC\n"
+             " l.set_mu(pk.MU_SUN)\n"
              " l.set_spacecraft(sc)\n"
              " l.set(start, x0, (1,0,0,0,0,1,0,0,0,0,1,0), end, xe, ds)\n")
         .def("set_mu", &kep_toolbox::sims_flanagan::leg_s::set_mu,
