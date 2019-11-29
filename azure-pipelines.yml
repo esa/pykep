@@ -50,6 +50,8 @@ jobs:
                         boost-cpp ^
                         boost ^
                         matplotlib ^
+                        scipy ^
+                        numpy ^
                         python=3.8
           conda list
         displayName: "Install conda packages"
@@ -69,8 +71,8 @@ jobs:
                 -DPYKEP_BUILD_SPICE=yes ^
                 -DPYKEP_BUILD_TESTS=yes
           cmake --build . -- -v
-          ctest -V .
           cmake --build . --target install
+          ctest -V .
           cd ..
           mkdir build_pykep
           cd build_pykep
