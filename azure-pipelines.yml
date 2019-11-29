@@ -62,8 +62,6 @@ jobs:
           cd build
           cmake .. -G Ninja ^
                 -DCMAKE_BUILD_TYPE=Release ^
-                -DCMAKE_C_COMPILER=clang-cl ^
-                -DCMAKE_CXX_COMPILER=clang-cl ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
                 -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
@@ -80,14 +78,12 @@ jobs:
           cd build_pykep
           cmake .. -G Ninja ^
                 -DCMAKE_BUILD_TYPE=Release ^
-                -DCMAKE_C_COMPILER=clang-cl ^
-                -DCMAKE_CXX_COMPILER=clang-cl ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
                 -DCMAKE_INSTALL_PREFIX=C:\tools\miniconda3\Library ^
                 -DPYKEP_BUILD_KEP_TOOLBOX=no ^
                 -DPYKEP_BUILD_PYKEP=yes ^
-                -DPYKEP_BUILD_SPICE=yes ^
+                -DPYKEP_BUILD_SPICE=yes
           cmake --build . -- -v
           cmake --build . --target install
           python -c "import pykep.test; pykep.test.run_test_suite()"
