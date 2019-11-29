@@ -11,7 +11,7 @@ jobs:
       # related to dbgeng, which *I think* are due to the
       # fact that the vs2015 image is using an older version of
       # the OS.
-      vmImage: 'windows-2019'
+      vmImage: 'vs2017-win2016'
     timeoutInMinutes: 360
     steps:
 
@@ -59,7 +59,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 16 2019" ^
+          cmake .. -G "Visual Studio 15 2017" ^
                 -DCMAKE_BUILD_TYPE=Release ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
@@ -75,7 +75,7 @@ jobs:
           cd ..
           mkdir build_pykep
           cd build_pykep
-          cmake .. -G "Visual Studio 16 2019" ^
+          cmake .. -G "Visual Studio 15 2017" ^
                 -DCMAKE_BUILD_TYPE=Release ^
                 -DBoost_NO_BOOST_CMAKE=ON ^
                 -DCMAKE_PREFIX_PATH=C:\tools\miniconda3\Library ^
