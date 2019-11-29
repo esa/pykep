@@ -518,7 +518,7 @@ private:
     mutable std::vector<double> m_dv;
 };
 
-std::ostream &operator<<(std::ostream &s, const leg_s &in);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const leg_s &in);
 } // namespace sims_flanagan
 } // namespace kep_toolbox
 #endif // KEP_TOOLBOX_LEG_S_H

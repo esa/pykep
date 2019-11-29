@@ -110,7 +110,7 @@ private:
     bool m_has_converged;
     int m_multi_revs;
 };
-std::ostream &operator<<(std::ostream &, const lambert_problem &);
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const lambert_problem &);
 } // namespaces
 
 #endif // KEP_TOOLBOX_LAMBERT_PROBLEM_H
