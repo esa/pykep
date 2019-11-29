@@ -23,8 +23,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#ifndef PYKEP_IO_HPP
-#define PYKEP_IO_HPP
+#ifndef KEP_TOOLBOX_IO_HPP
+#define KEP_TOOLBOX_IO_HPP
 
 #include <algorithm>
 #include <initializer_list>
