@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-#include "Eci.h"
-
-#include "Globals.h"
-#include "Util.h"
+#include <keplerian_toolbox/third_party/libsgp4/Eci.h>
+#include <keplerian_toolbox/third_party/libsgp4/Globals.h>
+#include <keplerian_toolbox/third_party/libsgp4/Util.h>
 
 /**
  * Converts a DateTime and Geodetic position to Eci coordinates

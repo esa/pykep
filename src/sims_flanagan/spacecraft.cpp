@@ -25,7 +25,7 @@
 
 #include <sstream>
 
-#include "spacecraft.h"
+#include <keplerian_toolbox/sims_flanagan/spacecraft.hpp>
 
 namespace kep_toolbox
 {
@@ -40,7 +40,7 @@ std::string spacecraft::human_readable() const
     s << "thrust: " << get_thrust() << std::endl;
     s << "isp: " << get_isp() << std::endl;
     return s.str();
-};
+}
 
 std::ostream &operator<<(std::ostream &s, const spacecraft &in)
 {
@@ -48,6 +48,6 @@ std::ostream &operator<<(std::ostream &s, const spacecraft &in)
     s << "Spacecraft thrust: " << in.get_thrust() << std::endl;
     s << "Spacecraft isp: " << in.get_isp();
     return s;
-};
+}
 }
 } // end of namespaces

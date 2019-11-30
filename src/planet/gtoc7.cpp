@@ -23,9 +23,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "gtoc7.h"
-#include "../astro_constants.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/planet/gtoc7.hpp>
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {
@@ -16324,4 +16324,4 @@ planet_ptr gtoc7::clone() const
 }
 } // namespace
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc7);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc7)

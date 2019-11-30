@@ -7,3 +7,4 @@ doc/sphinx/conf.py
 pykep/__init__.py
 CMakeCache.txt
 CMakeFiles/
+include/keplerian_toolbox/config.hpp

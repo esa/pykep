@@ -23,8 +23,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "gtoc6.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/planet/gtoc6.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

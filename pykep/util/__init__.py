@@ -5,7 +5,7 @@ low-thrust tajectories using our own flavour of the Sims-Flanagan model: a traje
 transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
-from pykep.util._util import *
+from pykep.util.util import *
 from pykep import __extensions__
 
 

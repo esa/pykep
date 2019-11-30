@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "Util.h"
+#include <keplerian_toolbox/third_party/libsgp4/Util.h>
 
 #include <algorithm>
 #include <functional>

@@ -80,15 +80,15 @@ class mga:
             if (type(t0[i]) != type(epoch(0))):
                 t0[i] = epoch(t0[i])
         # 3 - Check the tof bounds
-        if tof_encoding is 'alpha':
+        if tof_encoding == 'alpha':
             if len(tof) != 2:
                 raise ValueError(
                     r'When the tof_encoding is \'alpha\', tof is expected to be something like [lb, ub]')
-        elif tof_encoding is 'direct':
+        elif tof_encoding == 'direct':
             if len(tof) != (len(seq) - 1):
                 raise ValueError(
                     'When tof_encoding is direct, the tof must be a float (upper bound on the time of flight)' + str(len(seq) - 1))
-        elif tof_encoding is 'eta':
+        elif tof_encoding == 'eta':
             try:
                 float(tof)
             except TypeError:
@@ -131,29 +131,29 @@ class mga:
         tof = self.tof
         n_legs = self._n_legs
 
-        if self.tof_encoding is 'alpha':
+        if self.tof_encoding == 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
             lb = [t0[0].mjd2000, tof[0]] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000, tof[1]] + [1.0 - 1e-3] * (n_legs)
-        elif self.tof_encoding is 'direct':
+        elif self.tof_encoding == 'direct':
             # decision vector is  [t0, T1, T2, T3, ... ]
             lb = [t0[0].mjd2000] + [it[0] for it in self.tof]
             ub = [t0[1].mjd2000] + [it[1] for it in self.tof]
-        elif self.tof_encoding is 'eta':
+        elif self.tof_encoding == 'eta':
             # decision vector is  [t0, n1, n2, ....]
             lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
         return (lb, ub)
 
     def _decode_tofs(self, x):
-        if self.tof_encoding is 'alpha':
+        if self.tof_encoding == 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
             T = np.log(x[2:])
             return T / sum(T) * x[1]
-        elif self.tof_encoding is 'direct':
+        elif self.tof_encoding == 'direct':
             # decision vector is  [t0, T1, T2, T3, ... ]
             return x[1:]
-        elif self.tof_encoding is 'eta':
+        elif self.tof_encoding == 'eta':
             # decision vector is  [t0, n1, n2, n3, ... ]
             dt = self.tof
             T = [0] * self._n_legs
@@ -202,7 +202,7 @@ class mga:
         Raises:
             - ValueError: when the tof_encoding is not 'eta'
         """
-        if self.tof_encoding is not 'eta':
+        if self.tof_encoding != 'eta':
             raise ValueError(
                 "cannot call this method if the tof_encoding is not 'eta'")
 
@@ -228,7 +228,7 @@ class mga:
         Raises:
             - ValueError: when the tof_encoding is not 'eta'
         """
-        if self.tof_encoding is not 'eta':
+        if self.tof_encoding != 'eta':
             raise ValueError(
                 "cannot call this method if the tof_encoding is not 'eta'")
         from copy import deepcopy
@@ -279,11 +279,11 @@ class mga:
     # Objective function
     def fitness(self, x):
         DVlaunch, DVfb, DVarrival, _, _ = self._compute_dvs(x)
-        if self.tof_encoding is 'direct':
+        if self.tof_encoding == 'direct':
             T = sum(x[1:])
-        elif self.tof_encoding is 'alpha':
+        elif self.tof_encoding == 'alpha':
             T = x[1]
-        elif self.tof_encoding is 'eta':
+        elif self.tof_encoding == 'eta':
             T = sum(self.eta2direct(x)[1:])
         if self.multi_objective:
             return [DVlaunch + np.sum(DVfb) + DVarrival, T]

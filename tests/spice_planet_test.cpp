@@ -27,7 +27,7 @@
 #include <iostream>
 #include <string>
 
-#include "../src/planet/spice.h"
+#include <keplerian_toolbox/planet/spice.hpp>
 
 // In this test we test the functionality of the SPICE planet
 using namespace kep_toolbox;

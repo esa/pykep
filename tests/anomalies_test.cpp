@@ -31,14 +31,14 @@
 #include <random>
 #include <vector>
 
-#include "../src/astro_constants.h"
-#include "../src/core_functions/eq2ic.h"
-#include "../src/core_functions/eq2par.h"
-#include "../src/core_functions/ic2eq.h"
-#include "../src/core_functions/ic2par.h"
-#include "../src/core_functions/par2eq.h"
-#include "../src/core_functions/par2ic.h"
-#include "../src/io.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/core_functions/eq2ic.hpp>
+#include <keplerian_toolbox/core_functions/eq2par.hpp>
+#include <keplerian_toolbox/core_functions/ic2eq.hpp>
+#include <keplerian_toolbox/core_functions/ic2par.hpp>
+#include <keplerian_toolbox/core_functions/par2eq.hpp>
+#include <keplerian_toolbox/core_functions/par2ic.hpp>
+#include <keplerian_toolbox/io.hpp>
 
 using namespace std;
 using namespace kep_toolbox;
@@ -58,7 +58,6 @@ int main()
         std::vector<double> EQ(6);
         std::vector<double> EINV(6);
 
-        auto mu = dis(gen);
         // 1 - direct
         par2eq(EQ, E, false);
         eq2par(EINV, EQ, false);
@@ -131,7 +130,6 @@ int main()
             if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
                 print("Fail in direct elements L\n");
-                
             }
         }
         ic2eq(r0, v0, mu, EQ, true);
@@ -139,7 +137,7 @@ int main()
         for (auto j = 0u; j < 5; ++j) {
             if (std::abs((EQ[j] - EQ2[j]) / std::max(std::abs(EQ[j]), 1.)) > tol) {
                 fail = true;
-                print("Fail in retrograde elements 1-5\n");                
+                print("Fail in retrograde elements 1-5\n");
             }
             if (std::abs(std::sin(EQ[5]) - std::sin(EQ2[5])) > tol) {
                 fail = true;
@@ -164,4 +162,3 @@ int main()
     }
     return fail;
 }
-

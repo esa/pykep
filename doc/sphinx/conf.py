@@ -12,9 +12,9 @@ project = u'pykep'
 copyright = u'2019, pykep Development Team'
 
 # The short X.Y version.
-version = '2.4'
+version = ''
 # The full version, including alpha/beta/rc tags.
-release = '2.4'
+release = ''
 
 
 # -- General configuration ---------------------------------------------------
@@ -29,7 +29,8 @@ release = '2.4'
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
-    'sphinx.ext.nbsphinx'
+    'sphinx.ext.nbsphinx',
+    'IPython.sphinxext.ipython_console_highlighting'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

@@ -27,8 +27,9 @@
 #include <cmath>
 #include <fstream>
 
-#include "../exceptions.h"
-#include "mpcorb.h"
+#include <keplerian_toolbox/epoch.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/planet/mpcorb.hpp>
 
 static const int mpcorb_format[12][2] = {
     {92, 11},  // a (AU)
@@ -136,30 +137,30 @@ mpcorb::mpcorb(const std::string &line)
     set_ref_epoch(epoch);
 }
 
-epoch mpcorb::packed_date2epoch(std::string in)
+kep_toolbox::epoch mpcorb::packed_date2epoch(std::string in)
 {
     if (in.size() != 5) {
         throw_value_error("mpcorb data format requires 5 characters.");
     }
     boost::algorithm::to_lower(in);
-    boost::gregorian::greg_year anno
-        = packed_date2number(in[0]) * 100 + boost::lexical_cast<int>(std::string(&in[1], &in[3]));
+    boost::gregorian::greg_year anno = static_cast<short unsigned>(
+        packed_date2number(in[0]) * 100 + boost::lexical_cast<short unsigned>(std::string(&in[1], &in[3])));
     boost::gregorian::greg_month mese = packed_date2number(in[3]);
     boost::gregorian::greg_day giorno = packed_date2number(in[4]);
     return epoch(anno, mese, giorno);
 }
 // Convert mpcorb packed dates convention into number. (lower case assumed)
 // TODO: check locale ASCII.
-int mpcorb::packed_date2number(char c)
+short unsigned mpcorb::packed_date2number(char c)
 {
-    return static_cast<int>(c) - (boost::algorithm::is_alpha()(c) ? 87 : 48);
+    return static_cast<short unsigned>(static_cast<short unsigned>(c) - (boost::algorithm::is_alpha()(c) ? 87 : 48));
 }
 
 planet_ptr mpcorb::clone() const
 {
     return planet_ptr(new mpcorb(*this));
 }
-}
-} // namespaces
+} // namespace planet
+} // namespace kep_toolbox
 
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::mpcorb);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::mpcorb)

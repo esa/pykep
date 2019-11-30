@@ -51,17 +51,17 @@ if os.name == 'nt':
     l = open(mingw_wheel_libs, 'r').readlines()
     DLL_LIST = [os.path.basename(_[:-1]) for _ in l]
     PACKAGE_DATA = {
-          'pykep.core': ['_core.pyd'] + DLL_LIST,
-          'pykep.planet': ['_planet.pyd'],
-          'pykep.sims_flanagan': ['_sims_flanagan.pyd'],
-          'pykep.util': ['_util.pyd']
+          'pykep.core': ['core.pyd'] + DLL_LIST,
+          'pykep.planet': ['planet.pyd'],
+          'pykep.sims_flanagan': ['sims_flanagan.pyd'],
+          'pykep.util': ['util.pyd']
       }
 else:
     PACKAGE_DATA = {
-          'pykep.core': ['_core.so'],
-          'pykep.planet': ['_planet.so'],
-          'pykep.sims_flanagan': ['_sims_flanagan.so'],
-          'pykep.util': ['_util.so']
+          'pykep.core': ['core.so'],
+          'pykep.planet': ['planet.so'],
+          'pykep.sims_flanagan': ['sims_flanagan.so'],
+          'pykep.util': ['util.so']
       }
 
 setup(name=NAME,

@@ -23,11 +23,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "jpl_low_precision.h"
-#include "../core_functions/convert_anomalies.h"
-#include "../core_functions/par2ic.h"
-#include "../epoch.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/planet/jpl_low_precision.hpp>
+#include <keplerian_toolbox/core_functions/convert_anomalies.hpp>
+#include <keplerian_toolbox/core_functions/par2ic.hpp>
+#include <keplerian_toolbox/epoch.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {
@@ -73,10 +73,10 @@ jpl_lp::jpl_lp(const std::string &name) : ref_mjd2000(epoch(2451545.0, epoch::JD
     mapped_planets["neptune"] = 8;
     mapped_planets["pluto"] = 9;
 
-    double mu_central_body;
-    double mu_self;
-    double radius;
-    double safe_radius;
+    double mu_central_body = 0.;
+    double mu_self = 0.;
+    double radius = 0.;
+    double safe_radius = 0.;
     std::string lower_case_name = name;
     boost::algorithm::to_lower(lower_case_name);
     switch (mapped_planets[lower_case_name]) {
