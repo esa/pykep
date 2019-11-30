@@ -31,13 +31,15 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/module.hpp>
 
+#include <keplerian_toolbox/config.hpp>
+
 #ifdef PYKEP_USING_SPICE
-#include "../../src/util/spice_utils.h"
+#include <keplerian_toolbox/util/spice_utils.hpp>
 #endif
 
 using namespace boost::python;
 
-BOOST_PYTHON_MODULE(_util)
+BOOST_PYTHON_MODULE(util)
 {
     // Disable docstring c++ signature to allow sphinx autodoc to work properly
     docstring_options doc_options;

@@ -26,12 +26,12 @@
 #include <numeric>
 #include <vector>
 
-#include "../astro_constants.h"
-#include "../core_functions/array3D_operations.h"
-#include "../core_functions/propagate_lagrangian.h"
-#include "../exceptions.h"
-#include "leg.h"
-#include "sc_state.h"
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/core_functions/array3D_operations.hpp>
+#include <keplerian_toolbox/core_functions/propagate_lagrangian.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
+#include <keplerian_toolbox/sims_flanagan/leg.hpp>
+#include <keplerian_toolbox/sims_flanagan/sc_state.hpp>
 
 namespace kep_toolbox
 {

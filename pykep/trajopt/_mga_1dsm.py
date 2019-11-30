@@ -86,15 +86,15 @@ class mga_1dsm:
             raise TypeError(
                 'tof encoding must be one of \'alpha\', \'eta\', \'direct\'')
         # 3 - tof is expected to have different content depending on the tof_encoding
-        if tof_encoding is 'direct':
+        if tof_encoding == 'direct':
             if np.shape(np.array(tof)) != (len(seq) - 1, 2):
                 raise TypeError(
                     'tof_encoding is ' + tof_encoding + ' and tof must be a list of two dimensional lists and with length equal to the number of legs')
-        if tof_encoding is 'alpha':
+        if tof_encoding == 'alpha':
             if np.shape(np.array(tof)) != (2,):
                 raise TypeError(
                     'tof_encoding is ' + tof_encoding + ' and tof must be a list of two floats')
-        if tof_encoding is 'eta':
+        if tof_encoding == 'eta':
             if np.shape(np.array(tof)) != ():
                 raise TypeError(
                     'tof_encoding is ' + tof_encoding + ' and tof must be a float')
@@ -151,10 +151,10 @@ class mga_1dsm:
         ub = [t0[1].mjd2000] + [1.0, 1.0, vinf[1] * 1000, self._eta_ub,
                                 1.0 - 1e-3] + [2 * pi, self._rp_ub, self._eta_ub, 1.0 - 1e-3] * (self.n_legs - 1)
         # Distinguishing among cases (only direct and alpha)
-        if self._tof_encoding is 'alpha':
+        if self._tof_encoding == 'alpha':
             lb = lb + [tof[0]]
             ub = ub + [tof[1]]
-        elif self._tof_encoding is 'direct':
+        elif self._tof_encoding == 'direct':
             for i in range(self.n_legs):
                 lb[5 + 4 * i] = tof[i][0]
                 ub[5 + 4 * i] = tof[i][1]
@@ -166,17 +166,17 @@ class mga_1dsm:
 
     def _decode_times_and_vinf(self, x):
         # 1 - we decode the times of flight
-        if self._tof_encoding is 'alpha':
+        if self._tof_encoding == 'alpha':
             # decision vector is  [t0] + [u, v, Vinf, eta1, a1] + [beta, rp/rV, eta2, a2] + ... + [T]
             T = list([0] * (self.n_legs))
             for i in range(len(T)):
                 T[i] = -log(x[5 + 4 * i])
             alpha_sum = sum(T)
             retval_T = [x[-1] * time / alpha_sum for time in T]
-        elif self._tof_encoding is 'direct':
+        elif self._tof_encoding == 'direct':
             # decision vector is  [t0] + [u, v, Vinf, eta1, T1] + [beta, rp/rV, eta2, T2] + ...
             retval_T = x[5::4]
-        elif self._tof_encoding is 'eta':
+        elif self._tof_encoding == 'eta':
             # decision vector is  [t0] + [u, v, Vinf, eta1, n1] + [beta, rp/rV, eta2, n2] + ...
             dt = self._tof
             T = [0] * self.n_legs

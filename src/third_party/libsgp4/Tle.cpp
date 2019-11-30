@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "Tle.h"
+#include <keplerian_toolbox/third_party/libsgp4/Tle.h>
 
 #include <locale>
 

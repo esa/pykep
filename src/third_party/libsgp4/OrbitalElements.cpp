@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-#include "OrbitalElements.h"
-
-#include "Tle.h"
+#include <keplerian_toolbox/third_party/libsgp4/OrbitalElements.h>
+#include <keplerian_toolbox/third_party/libsgp4/Tle.h>
 
 OrbitalElements::OrbitalElements(const Tle &tle)
 {

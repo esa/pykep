@@ -26,7 +26,7 @@
 #include <sstream>
 #include <string>
 
-#include "spice_utils.h"
+#include <keplerian_toolbox/util/spice_utils.hpp>
 
 namespace kep_toolbox
 {

@@ -2,7 +2,7 @@
 
 ftnlen f__typesize[] = { 0, 0, sizeof(shortint), sizeof(integer),
 			sizeof(real), sizeof(doublereal),
-			sizeof(complex), sizeof(doublecomplex),
+			sizeof(complex_type), sizeof(doublecomplex),
 			sizeof(logical), sizeof(char),
 			0, sizeof(integer1),
 			sizeof(logical1), sizeof(shortlogical),

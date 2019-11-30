@@ -5,8 +5,8 @@ low-thrust tajectories using our own flavour of the Sims-Flanagan model: a traje
 transcription method that forms the basis for MALTO, the software in use in JPL
 for preliminary interplanetary trajectory design.
 """
-from pykep.planet._planet import *
-from pykep.planet._planet import _base
+from pykep.planet.planet import *
+from pykep.planet.planet import _base
 
 
 def _keplerian_ctor(self, *args):

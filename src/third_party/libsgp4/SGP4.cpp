@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-#include "SGP4.h"
-
-#include "DecayedException.h"
-#include "SatelliteException.h"
-#include "Util.h"
-#include "Vector.h"
+#include <keplerian_toolbox/third_party/libsgp4/SGP4.h>
+#include <keplerian_toolbox/third_party/libsgp4/DecayedException.h>
+#include <keplerian_toolbox/third_party/libsgp4/SatelliteException.h>
+#include <keplerian_toolbox/third_party/libsgp4/Util.h>
+#include <keplerian_toolbox/third_party/libsgp4/Vector.h>
 
 #include <cmath>
 #include <iomanip>

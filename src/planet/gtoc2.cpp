@@ -23,9 +23,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "gtoc2.h"
-#include "../astro_constants.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/planet/gtoc2.hpp>
+#include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {
@@ -995,5 +995,5 @@ int gtoc2::get_group() const
 } // namespace
 
 // Serialization code
-BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc2);
+BOOST_CLASS_EXPORT_IMPLEMENT(kep_toolbox::planet::gtoc2)
 // Serialization code (END)

@@ -23,8 +23,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  *****************************************************************************/
 
-#include "spice.h"
-#include "../exceptions.h"
+#include <keplerian_toolbox/planet/spice.hpp>
+#include <keplerian_toolbox/exceptions.hpp>
 
 namespace kep_toolbox
 {

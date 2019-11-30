@@ -27,12 +27,11 @@
 #include <iomanip>
 #include <iostream>
 
-#include "../src/planet/jpl_low_precision.h"
-#include "../src/epoch.h"
-#include "../src/sims_flanagan/spacecraft.h"
-#include "../src/sims_flanagan/leg_s.h"
-
-#include "../src/epoch.h"
+#include <keplerian_toolbox/planet/jpl_low_precision.hpp>
+#include <keplerian_toolbox/epoch.hpp>
+#include <keplerian_toolbox/sims_flanagan/spacecraft.hpp>
+#include <keplerian_toolbox/sims_flanagan/leg_s.hpp>
+#include <keplerian_toolbox/epoch.hpp>
 
 
 using namespace std;
