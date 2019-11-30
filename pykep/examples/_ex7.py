@@ -49,7 +49,7 @@ def run_example7(solver="snopt7"):
         alpha=0,
         bound=True,
         mu=pk.MU_SUN),
-        with_grad=False)
+        with_grad=True)
 
     prob = pg.problem(udp)
     prob.c_tol = [1e-7] * 10
