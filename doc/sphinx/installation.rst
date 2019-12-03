@@ -8,8 +8,8 @@ Both PyPi and conda package mangers contain the binaries for pykep, but only for
 architectures. In case yours is not include, you will have to compile the code from source.
 
 
-Using Binaries (encouraged whenever possible)
-----------------------------------------------
+Using Binaries 
+--------------
 
 The Python module called ``pykep`` can be installed from conda or pip only for some architectures / python version combinations.
 
@@ -40,8 +40,8 @@ We also provide the pip packages (mainly for linux 64 bit architectures). Check 
 
    $ pip install pykep
 
-Compiling and Installing under Linux (degree of pain: low)
-------------------------------------------------------------------
+Compiling and Installing under Linux
+------------------------------------
 
 Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code
 following the instructions given, see :ref:`howtodownload`, you will have a directory pykep with the code, move there::
@@ -132,15 +132,11 @@ Now you need to compile and install the pykep module::
 Watch carefully the message in the terminal where the installation path is given to check
 that the correct python dist-packages or site-packages directory has been located
 
-Compiling and Installing under Windows (degree of pain: high)
+Compiling and Installing under Windows 
 ------------------------------------------------------------------
 
-Unsing minGW things should be roughly the same as under Unix, just make sure that
-
-* You have compiled the boost libraries correctly (i.e invoking bjam with the option toolset=gcc link=shared).
-* Place the whole boost directory where the CMake script can find it (e.g. in C:/boost). This may also require renaming the folder from boost_x_xx_xx to boost)
-* Check, when running CMake, that all libraries are found correctly
-* When running a make install, Windows will probably put your pykep directory under Program Files/kep_toolbox, move it to the correct place (e.g. C:/PythonXX/Lib/site-packages/)
-* Put all dll (boost and keplerian_toolbox) in pykep/core
-* Hope for the best (kidding its super easy ...)
-* No, really hope for the best
+We do not really support nor reccomend doing this, but in case you are really motivated, you can get inspired by our
+`azure CI script <https://github.com/esa/pykep/blob/master/azure-pipelines.yml>`_ that works using the
+`conda <https://conda.io/en/latest/>`_ package manager or our
+`appveyor CI script <https://github.com/esa/pykep/blob/master/tools/install_appveyor_mingw.py>`_  which
+makes use on minGW. 

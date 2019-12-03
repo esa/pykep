@@ -1,16 +1,18 @@
-def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=False, axes=None):
+def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=(False, False), axes=None):
     """
     ax = plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, axes=None)
 
     - axes:      3D axis object created using fig.gca(projection='3d')
     - plnt:      pykep.planet object we want to plot
-    - t0:        pykep.epoch object indicating when we want to plot the planet position
+    - t0:        a pykep.epoch or float (mjd2000) indicating when we want to plot the planet position
     - units:     the length unit to be used in the plot
-    - color:     matplotlib color to use to plot the line
-    - s:         planet size (pixel^2)
-    - legend     when True plots the legend with the planet name and the epoch
+    - color:     color to use to plot the orbit (passed to matplotlib)
+    - s:         planet size (passed to matplotlib)
+    - legend     tuple of two bool or string. The first element refers to the planet scatter plot, the second to the actual orbit.
+                 If a bool value is used, then an automated legend label is generated (if True), if its a string the exact string is
+                 used as a legend.
 
-    Plots the planet position and its orbit
+    Plots the planet position and its orbit.
 
     Example::
 
@@ -41,6 +43,10 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     if type(t0) is not epoch:
         t0 = epoch(t0)
 
+    # This is to make the tuple API compatible with the old API
+    if legend is bool:
+        legend = (legend, legend)
+
     # orbit period at epoch
     T = plnt.compute_period(t0) * SEC2DAY
 
@@ -63,14 +69,28 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
         z[i] = r[2] / units
 
     # Actual plot commands
-    if legend:
-        label = plnt.name + " " + t0.__repr__()[0:11]
+    if (legend[0] is True):
+        label1 = plnt.name + " " + t0.__repr__()[0:11]
+    elif (legend[0] is False):
+        label1 = None
+    elif (legend[0] is None):
+        label1 = None
     else:
-        label = None
-    ax.plot(x, y, z, label=label, c=color, alpha=alpha)
-    ax.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=[color])
+        label1 = legend[0]
 
-    if legend:
+    if (legend[1] is True):
+        label2 = plnt.name + " orbit"
+    elif (legend[1] is False):
+        label2 = None
+    elif (legend[1] is None):
+        label2 = None
+    else:
+        label2 = legend[1]
+
+    ax.plot(x, y, z, label=label2, c=color, alpha=alpha)
+    ax.scatter([x[0]], [y[0]], [z[0]], s=s, marker='o', alpha=0.8, c=[color], label=label1)
+
+    if legend[0] or legend[1]:
         ax.legend()
     return ax
 
@@ -162,32 +182,30 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
     if legend:
         ax.legend()
 
-    if axes is None:  # show only if axis is not set
-        plt.show()
     return ax
 
 
-def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
+def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
     """
-    ax = plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
+    ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', legend=False, axes=None):
 
     - axes:     3D axis object created using fig.gca(projection='3d')
-    - r:        initial position (cartesian coordinates)
-    - v:		initial velocity (cartesian coordinates)
-    - t:		propagation time
+    - r0:       initial position (cartesian coordinates)
+    - v0:		initial velocity (cartesian coordinates)
+    - tof:		propagation time
     - mu:		gravitational parameter
     - N:		number of points to be plotted along one arc
     - units:	the length unit to be used in the plot
     - color:	matplotlib color to use to plot the line
-    - legend	when True it plots also the legend
+    - label 	adds a label to the plotted arc.
 
     Plots the result of a keplerian propagation
 
     Example::
 
-    import pykep as pk
-    pi = 3.14
-    pk.orbit_plots.plot_kepler([1,0,0],[0,1,0],pi/3,1)
+        import pykep as pk
+        pi = 3.14
+        pk.orbit_plots.plot_kepler(r0 = [1,0,0], v0 = [0,1,0], tof = pi/3, mu = 1)
     """
 
     from pykep import propagate_lagrangian
@@ -201,7 +219,7 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
         ax = axes
 
     # We define the integration time ...
-    dt = t / (N - 1)
+    dt = tof / (N - 1)
 
     # ... and calculate the cartesian components for r
     x = [0.0] * N
@@ -213,33 +231,23 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v = propagate_lagrangian(r, v, dt, mu)
+        r, v = propagate_lagrangian(r0, v0, dt, mu)
 
     # And we plot
-    if legend:
-        label = 'ballistic arc'
-    else:
-        label = None
     ax.plot(x, y, z, c=color, label=label)
-
-    if legend:
-        ax.legend()
-
-    if axes is None:  # show only if axis is not set
-        plt.show()
     return ax
 
 
-def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
+def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
     """
-    ax = plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
+    ax = plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
     - axes:		3D axis object created using fig.gca(projection='3d')
-    - r:		initial position (cartesian coordinates)
-    - v:		initial velocity (cartesian coordinates)
-    - m: 		initial mass
+    - r0:		initial position (cartesian coordinates)
+    - v0:		initial velocity (cartesian coordinates)
+    - m0: 		initial mass
     - u:		cartesian components for the constant thrust
-    - t:		propagation time
+    - tof:		propagation time
     - mu:		gravitational parameter
     - veff:	the product Isp * g0
     - N:		number of points to be plotted along one arc
@@ -271,7 +279,7 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
         ax = axes
 
     # We define the integration time ...
-    dt = t / (N - 1)
+    dt = tof / (N - 1)
 
     # ... and calcuate the cartesian components for r
     x = [0.0] * N
@@ -283,7 +291,7 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v, m = propagate_taylor(r, v, m, u, dt, mu, veff, -10, -10)
+        r, v, m = propagate_taylor(r0, v0, m0, u, dt, mu, veff, -10, -10)
 
     # And we plot
     if legend:
@@ -300,17 +308,17 @@ def plot_taylor(r, v, m, u, t, mu, veff, N=60, units=1, color='b', legend=False,
     return ax
 
 
-def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
+def plot_taylor_disturbance(r0, v0, m0, thrust, disturbance, tof, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
     """
     ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
     - axes:			3D axis object created using fig.gca(projection='3d')
-    - r:			initial position (cartesian coordinates)
-    - v:			initial velocity (cartesian coordinates)
-    - m: 			initial mass
+    - r0:			initial position (cartesian coordinates)
+    - v0:			initial velocity (cartesian coordinates)
+    - m0: 			initial mass
     - thrust:		cartesian components for the constant thrust
-    - disturbance:	cartesian components for the constant disturbance
-    - t:			propagation time
+    - disturbance:	cartesian components for a constant disturbance (will not affect mass)
+    - tof:			propagation time
     - mu:			gravitational parameter
     - veff:			the product Isp * g0
     - N:			number of points to be plotted along one arc
@@ -331,7 +339,7 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
         ax = axes
 
     # We define the integration time ...
-    dt = t / (N - 1)
+    dt = tof / (N - 1)
 
     # ... and calcuate the cartesian components for r
     x = [0.0] * N
@@ -343,8 +351,8 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v, m = propagate_taylor_disturbance(
-            r, v, m, thrust, disturbance, dt, mu, veff, -10, -10)
+        r0, v0, m0 = propagate_taylor_disturbance(
+            r0, v0, m0, thrust, disturbance, dt, mu, veff, -10, -10)
 
     # And we plot
     if legend:
@@ -352,12 +360,6 @@ def plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, uni
     else:
         label = None
     ax.plot(x, y, z, c=color, label=label)
-
-    if legend:
-        ax.legend()
-
-    if axes is None:  # show only if axis is not set
-        plt.show()
     return ax
 
 
