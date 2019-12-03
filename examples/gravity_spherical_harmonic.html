@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Multiple impulses transfer between Earth and Venus &#8212; pykep  documentation</title>
+    <title>Lunar orbit propagation with degree 20 spherical harmonics gravity model &#8212; pykep  documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Multi revolutions Lambert Problem" href="ex2.html" />
-    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="next" title="Global optimization of an MGA low-thrust trajectory" href="ex3.html" />
+    <link rel="prev" title="Orbital parameters (osculating and modified equinoctial)" href="ex12.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -70,11 +70,11 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="index.html" title="Previous Chapter: Examples"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Examples</span>
+    <a href="ex12.html" title="Previous Chapter: Orbital parameters (osculating and modified equinoctial)"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Orbital parameters (osc...</span>
     </a>
   </li>
   <li>
-    <a href="ex2.html" title="Next Chapter: Multi revolutions Lambert Problem"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Multi revolutions Lambe... &raquo;</span>
+    <a href="ex3.html" title="Next Chapter: Global optimization of an MGA low-thrust trajectory"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Global optimization of ... &raquo;</span>
     </a>
   </li>
             </ul>
@@ -300,126 +300,116 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Multiple-impulses-transfer-between-Earth-and-Venus">
-<h1>Multiple impulses transfer between Earth and Venus<a class="headerlink" href="#Multiple-impulses-transfer-between-Earth-and-Venus" title="Permalink to this headline">¶</a></h1>
-<p>This example demonstrates the use of the class pl2pl_N_impulses available from the trajopt module to assemble an unconstrained optimization problem representing an impulsive transfer between the Earth and Venus. Multiple impulses are allowed (the optimal number is in this case 3) allowing to study the complexification of the objective function landscape as the number of impulses increase.</p>
+<div class="section" id="Lunar-orbit-propagation-with-degree-20-spherical-harmonics-gravity-model">
+<h1>Lunar orbit propagation with degree 20 spherical harmonics gravity model<a class="headerlink" href="#Lunar-orbit-propagation-with-degree-20-spherical-harmonics-gravity-model" title="Permalink to this headline">¶</a></h1>
+<p>In this example, the use of the gravity_sperical_harmonics functions will be demonstrated. Using Goddard Lunar Gravity Model 3, the orbit of a satellite in low Lunar orbit will be propagated. Due to time constraints, relatively low degree and order of the gravity model are used as well as relatively large tolerances in Scipy’s RK45 integrator.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span># Imports
-import pykep as pk
-import pygmo as pg
-import numpy as np
-
-# Plotting imports
-import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import pykep as pk
+import scipy as sp
+
+%matplotlib inline
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We define the optimization problem
-udp = pk.trajopt.pl2pl_N_impulses(
-    start=pk.planet.jpl_lp(&#39;earth&#39;),
-    target=pk.planet.jpl_lp(&#39;venus&#39;),
-    N_max=3,
-    tof=[100., 1000.],
-    vinf=[0., 4],
-    phase_free=False,
-    multi_objective=False,
-    t0=[pk.epoch(0), pk.epoch(1000)])
-# All pykep problems in the module trajopt are compatible with pygmo.
-# So we create a pygmo problem from the pykep udp (User Defined Problem)
-prob = pg.problem(udp)
-print(prob)
+<span></span># Load the gravity model
+r_m, mu_m, c, s, max_degree, max_order = pk.util.load_gravity_model(&quot;glgm3_150.txt&quot;)
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem name: &lt;class &#39;pykep.trajopt._pl2pl_N_impulses.pl2pl_N_impulses&#39;&gt;
-        Global dimension:                       7
-        Integer dimension:                      0
-        Fitness dimension:                      1
-        Number of objectives:                   1
-        Equality constraints dimension:         0
-        Inequality constraints dimension:       0
-        Lower bounds: [0, 100, 0.001, 0, 0, ... ]
-        Upper bounds: [1000, 1000, 0.999, 1, 1, ... ]
-        Has batch fitness evaluation: false
-
-        Has gradient: false
-        User implemented gradient sparsity: false
-        Has hessians: false
-        User implemented hessians sparsity: false
-
-        Fitness evaluations: 0
-
-        Thread safety: none
-
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Here we define the solution strategy, which in this simple case is to use
-# Covariance Matrix adaptation Evolutionary Strategy (CMA-ES)
-uda = pg.cmaes(gen=1000, force_bounds = True)
-algo = pg.algorithm(uda)
-# Here we activate some degree of screen output (will only show in the terminal)
-algo.set_verbosity(10)
-# We construct a random population of 20 individuals (the initial guess)
-pop = pg.population(prob, size = 20, seed = 123)
-# We solve the problem
-pop = algo.evolve(pop)
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Plot our trajectory
-fig = plt.figure(figsize = (16,5))
-ax1 = fig.add_subplot(1, 3, 1, projection=&#39;3d&#39;)
-ax2 = fig.add_subplot(1, 3, 2, projection=&#39;3d&#39;)
-ax3 = fig.add_subplot(1, 3, 3, projection=&#39;3d&#39;)
-ax1 = udp.plot(pop.champion_x, axes = ax1)
-ax2 = udp.plot(pop.champion_x, axes = ax2)
-ax2.view_init(elev=90, azim=0)
-ax3 = udp.plot(pop.champion_x, axes = ax3)
-ax3.view_init(elev=0, azim=0)
+<span></span># Define initial orbital parameters
 
+# a, e, i, RAAN, AOP, E
+kepl_init_state = sp.array([1.882105e06, 0.05, sp.radians(92), 0, 3*sp.pi/2, 0])
+
+# Convert to cartesian state
+cart_init_state = sp.concatenate(pk.par2ic(kepl_init_state, mu_m))
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/examples_ex1_4_0.png" src="../_images/examples_ex1_4_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Inspect
-udp.pretty(pop.champion_x)
+<span></span># Function to calculate the state derivative.
+def propagate(t, state):
+    # Rotational rate of the Moon
+    w_m = 2.661695728e-6  # rad/s
+
+    # Get the absolute rotation (assuming alpha(t0) = 0)
+    alpha = w_m * t
+
+    # Build the rotation matrix
+    sin = sp.sin(alpha)
+    cos = sp.cos(alpha)
+
+    transformation = sp.array([[cos, sin, 0],
+                               [-sin, cos, 0],
+                               [0, 0, 1]])
+
+    # Get the state in the inertial reference frame
+    rotated_pos = sp.dot(transformation, state[0:3])
+
+    # gravity_spherical_harmonic needs an (N x 3) input array
+    acc = pk.util.gravity_spherical_harmonic(sp.array([rotated_pos]), r_m, mu_m, c, s, 10, 0)[0]
+
+    delta_state = sp.array([state[3],
+                            state[4],
+                            state[5],
+                            acc[0],
+                            acc[1],
+                            acc[2]])
+
+    return delta_state
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span># Run the integration of the orbit for one day
+solution = sp.integrate.solve_ivp(propagate, (0, 3600*24), cart_init_state, rtol=1e-6, atol=1e-6)
+
+time_hist = solution[&#39;t&#39;]
+state_hist = sp.transpose(solution[&#39;y&#39;])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span># Transform cartesian to modified equinoctial
+eq_state_hist = sp.zeros(state_hist.shape)
+for i, state in enumerate(state_hist):
+    eq_state_hist[i] = pk.ic2eq(state[0:3], state[3:6], mu_m)
+
+labels = [r&quot;$a \cdot \left( 1 - e^2 \right)$&quot;, r&quot;$h$&quot;, r&quot;$k$&quot;, r&quot;$p$&quot;, r&quot;$q$&quot;, r&quot;$L$&quot;]
+# Plot the orbit
+plt.figure(1, figsize=(16, 3))
+for i in range(6):
+    plt.subplot(1, 6, i + 1)
+    plt.plot(time_hist, eq_state_hist[:, i] - eq_state_hist[0, i])
+    plt.xlabel(labels[i])
 </pre></div>
 </div>
 </div>
@@ -427,11 +417,8 @@ udp.pretty(pop.champion_x)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-Total DV (m/s):  5524.785829106961
-Dvs (m/s):  [2281.053546748252, 321.01198870269815, 2922.720293656011]
-Tofs (days):  [302.29924933023614, 148.9132409336402]
-</pre></div></div>
+<img alt="../_images/examples_gravity_spherical_harmonic_6_0.png" src="../_images/examples_gravity_spherical_harmonic_6_0.png" />
+</div>
 </div>
 </div>
 

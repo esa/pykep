@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Multiple impulses transfer between Earth and Venus &#8212; pykep  documentation</title>
+    <title>Global Optimization Algorithms Comparison on 6 Trajectory Gym Problems &#8212; pykep  documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Multi revolutions Lambert Problem" href="ex2.html" />
-    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="next" title="Credits" href="../credits.html" />
+    <link rel="prev" title="Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO" href="ex11.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -70,11 +70,11 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="index.html" title="Previous Chapter: Examples"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Examples</span>
+    <a href="ex11.html" title="Previous Chapter: Design of a Solar Electric Propulsion mission for the interplanetary cubesat MARGO"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Design of a Solar Elect...</span>
     </a>
   </li>
   <li>
-    <a href="ex2.html" title="Next Chapter: Multi revolutions Lambert Problem"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Multi revolutions Lambe... &raquo;</span>
+    <a href="../credits.html" title="Next Chapter: Credits"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Credits &raquo;</span>
     </a>
   </li>
             </ul>
@@ -300,45 +300,154 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Multiple-impulses-transfer-between-Earth-and-Venus">
-<h1>Multiple impulses transfer between Earth and Venus<a class="headerlink" href="#Multiple-impulses-transfer-between-Earth-and-Venus" title="Permalink to this headline">¶</a></h1>
-<p>This example demonstrates the use of the class pl2pl_N_impulses available from the trajopt module to assemble an unconstrained optimization problem representing an impulsive transfer between the Earth and Venus. Multiple impulses are allowed (the optimal number is in this case 3) allowing to study the complexification of the objective function landscape as the number of impulses increase.</p>
-<div class="nbinput nblast docutils container">
+<div class="section" id="Global-Optimization-Algorithms-Comparison-on-6-Trajectory-Gym-Problems">
+<h1>Global Optimization Algorithms Comparison on 6 Trajectory Gym Problems<a class="headerlink" href="#Global-Optimization-Algorithms-Comparison-on-6-Trajectory-Gym-Problems" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial, we will benchmark and compare three different global optimization algorithms taken from PyGMO (i.e., ACOmi, SGA, SADE, PSO) on six different global trajectory optimization problems (i.e., Cassini2, E-V-E 1 DSM, Messenger, Rosetta, E-M 5 imp, E-M 7 imp). All the problems are available in the Pykep’s trajectory gym, whereas all the algorithms are available from PyGMO.</p>
+<p>In the code, we will see two nested loops: one that ranges through the different problems and another one that executes multiple runs of the same problem with a different and controlled seed. In this way, we run each problem ten times and we average the fitness values before plotting them. Furthermore, the initial population of each algorithm is the same for each run: so that we make sure that the algorithms start from the same baseline.</p>
+<p>The final plots show the results in terms of fitness values as a function of function evaluations. In particular, the fitness values (i.e., the Delta-V required for the mission) is plotted in a semi-logarithmic scale.</p>
+<p>Note that it is necessary to wait a few minutes before reproducing the plots.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Imports
+<span></span>import pygmo as pg
 import pykep as pk
-import pygmo as pg
 import numpy as np
+import matplotlib as mlp
+import matplotlib.pyplot as plp
+%matplotlib inline
 
-# Plotting imports
-import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We define the optimization problem
-udp = pk.trajopt.pl2pl_N_impulses(
-    start=pk.planet.jpl_lp(&#39;earth&#39;),
-    target=pk.planet.jpl_lp(&#39;venus&#39;),
-    N_max=3,
-    tof=[100., 1000.],
-    vinf=[0., 4],
-    phase_free=False,
-    multi_objective=False,
-    t0=[pk.epoch(0), pk.epoch(1000)])
-# All pykep problems in the module trajopt are compatible with pygmo.
-# So we create a pygmo problem from the pykep udp (User Defined Problem)
-prob = pg.problem(udp)
-print(prob)
+fig, axes = plp.subplots(nrows=3, ncols=2, sharex=&#39;col&#39;, sharey=&#39;row&#39;, figsize=(15,15))
+problems=[pk.trajopt.gym.cassini2, pk.trajopt.gym.eve_mga1dsm, pk.trajopt.gym.messenger, pk.trajopt.gym.rosetta, pk.trajopt.gym.em5imp, pk.trajopt.gym.em7imp]
+
+#We now loop through the 6 problems:
+for prob_number in range(0,6):
+    vec=np.zeros(20)
+    vec_2=np.zeros(20)
+    vec_3=np.zeros(20)
+    vec_4=np.zeros(20)
+    #Now, we loop through 10 runs (each problem is run 10 times, and the results are averaged to remove the randomness)
+    for x in range(1,11):
+        udp = problems[prob_number]
+        #I define the problems to be handled:
+        prob=pg.problem(udp)
+        prob_2=pg.problem(udp)
+        prob_3=pg.problem(udp)
+        prob_4=pg.problem(udp)
+        #We define the algorithms (ACOmi, SGA, SADE and PSO):
+        uda=pg.gaco(gen=1000, ker=15, q=1.0, oracle=1e9, acc=0.01, threshold=500, n_gen_mark=7)
+        uda_2=pg.sga(gen=1000)
+        uda_3=pg.sade(gen=1000)
+        uda_4=pg.pso(gen=1000)
+
+        algo=pg.algorithm(uda)
+        algo_2=pg.algorithm(uda_2)
+        algo_3=pg.algorithm(uda_3)
+        algo_4=pg.algorithm(uda_4)
+        #We generate the first random population of 20 individuals, with controlled seed:
+        pop=pg.population(prob=prob, size=20, seed=x)
+        pop_2=pg.population(prob=prob_2, size=20, seed=x)
+        pop_3=pg.population(prob=prob_3, size=20, seed=x)
+        pop_4=pg.population(prob=prob_4, size=20, seed=x)
+        #We print the log every 50 generations:
+        algo.set_verbosity(50)
+        algo_2.set_verbosity(50)
+        algo_3.set_verbosity(50)
+        algo_4.set_verbosity(50)
+        #We evolve the populations:
+        pop=algo.evolve(pop)
+        pop_2=algo_2.evolve(pop_2)
+        pop_3=algo_3.evolve(pop_3)
+        pop_4=algo_4.evolve(pop_4)
+        #We extract the log:
+        uda_gaco=algo.extract(pg.gaco)
+        uda_sga=algo_2.extract(pg.sga)
+        uda_sade=algo_3.extract(pg.sade)
+        uda_pso=algo_4.extract(pg.pso)
+
+        log_gaco=uda_gaco.get_log()
+        log_sga=uda_sga.get_log()
+        log_sade=uda_sade.get_log()
+        log_pso=uda_pso.get_log()
+
+        #We store the results in a vector
+        i=0
+        for entry in log_gaco:
+            vec[i]+=entry[2]
+            i=i+1
+        i=0
+        for entry_2 in log_sga:
+            vec_2[i]+=entry_2[2]
+            i=i+1
+        i=0
+        for entry_3 in log_sade:
+            vec_3[i]+=entry_3[2]
+            i=i+1
+        i=0
+        for entry_4 in log_pso:
+            vec_4[i]+=entry_4[2]
+            i=i+1
+    #We average the stored results over the 10 runs:
+    vec=np.true_divide(vec,10)
+    vec_2=np.true_divide(vec_2,10)
+    vec_3=np.true_divide(vec_3,10)
+    vec_4=np.true_divide(vec_4,10)
+    #We finally plot the results in a semilog plot, for each problem:
+    if (prob_number==0):
+            axes[0,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[0,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[0,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[0,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            #axes[0,0].legend(loc=&#39;upper right&#39;)
+            axes[0,0].set_title(&#39;Cassini 2: gen=1000, pop=20&#39;)
+
+    elif (prob_number==1):
+            axes[0,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[0,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[0,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[0,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            #axes[0,1].legend(loc=&#39;upper right&#39;)
+            axes[0,1].set_title(&#39;E-V-E MGA 1DSM: gen=1000, pop=20&#39;)
+
+    elif (prob_number==2):
+            axes[1,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[1,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[1,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[1,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            #axes[1,0].legend(loc=&#39;upper right&#39;)
+            axes[1,0].set_title(&#39;Messenger: gen=1000, pop=20&#39;)
+
+    elif (prob_number==3):
+            axes[1,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[1,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[1,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[1,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            axes[1,1].legend(loc=&#39;upper right&#39;)
+            axes[1,1].set_title(&#39;Rosetta: gen=1000, pop=20&#39;)
+
+
+    elif (prob_number==4):
+            axes[2,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[2,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[2,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[2,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            #axes[2,0].legend(loc=&#39;upper right&#39;)
+            axes[2,0].set_title(&#39;E-M 5 imp: gen=1000, pop=20&#39;)
+
+    elif (prob_number==5):
+            axes[2,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
+            axes[2,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
+            axes[2,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
+            axes[2,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
+            #axes[2,1].legend(loc=&#39;upper right&#39;)
+            axes[2,1].set_title(&#39;E-M 7 imp: gen=1000, pop=20&#39;)
+
+for ax in axes.flat:
+    ax.set(xlabel=&#39;Fevals [-]&#39;, ylabel=&#39;Best [m/s]&#39;)
+    ax.grid()
+#We save the results to a .eps file:
+plp.savefig(&quot;GTOP_database_pop20.jpg&quot;)
 </pre></div>
 </div>
 </div>
@@ -346,92 +455,8 @@ print(prob)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem name: &lt;class &#39;pykep.trajopt._pl2pl_N_impulses.pl2pl_N_impulses&#39;&gt;
-        Global dimension:                       7
-        Integer dimension:                      0
-        Fitness dimension:                      1
-        Number of objectives:                   1
-        Equality constraints dimension:         0
-        Inequality constraints dimension:       0
-        Lower bounds: [0, 100, 0.001, 0, 0, ... ]
-        Upper bounds: [1000, 1000, 0.999, 1, 1, ... ]
-        Has batch fitness evaluation: false
-
-        Has gradient: false
-        User implemented gradient sparsity: false
-        Has hessians: false
-        User implemented hessians sparsity: false
-
-        Fitness evaluations: 0
-
-        Thread safety: none
-
-</pre></div></div>
+<img alt="../_images/examples_ex13_1_0.png" src="../_images/examples_ex13_1_0.png" />
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Here we define the solution strategy, which in this simple case is to use
-# Covariance Matrix adaptation Evolutionary Strategy (CMA-ES)
-uda = pg.cmaes(gen=1000, force_bounds = True)
-algo = pg.algorithm(uda)
-# Here we activate some degree of screen output (will only show in the terminal)
-algo.set_verbosity(10)
-# We construct a random population of 20 individuals (the initial guess)
-pop = pg.population(prob, size = 20, seed = 123)
-# We solve the problem
-pop = algo.evolve(pop)
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Plot our trajectory
-fig = plt.figure(figsize = (16,5))
-ax1 = fig.add_subplot(1, 3, 1, projection=&#39;3d&#39;)
-ax2 = fig.add_subplot(1, 3, 2, projection=&#39;3d&#39;)
-ax3 = fig.add_subplot(1, 3, 3, projection=&#39;3d&#39;)
-ax1 = udp.plot(pop.champion_x, axes = ax1)
-ax2 = udp.plot(pop.champion_x, axes = ax2)
-ax2.view_init(elev=90, azim=0)
-ax3 = udp.plot(pop.champion_x, axes = ax3)
-ax3.view_init(elev=0, azim=0)
-
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/examples_ex1_4_0.png" src="../_images/examples_ex1_4_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Inspect
-udp.pretty(pop.champion_x)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Total DV (m/s):  5524.785829106961
-Dvs (m/s):  [2281.053546748252, 321.01198870269815, 2922.720293656011]
-Tofs (days):  [302.29924933023614, 148.9132409336402]
-</pre></div></div>
 </div>
 </div>
 

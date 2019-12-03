@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>The phasing module &#8212; pykep 2.4 documentation</title>
+    <title>The phasing module &#8212; pykep  documentation</title>
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
@@ -43,7 +44,7 @@
       </button>
       <a class="navbar-brand" href="../index.html">
         pykep</a>
-      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+      <span class="navbar-text navbar-version pull-left"><b></b></span>
     </div>
 
       <div class="collapse navbar-collapse nav-collapse">
@@ -157,7 +158,7 @@ a linear model of the orbital transfer. The distance returned will thus be in m/
 <li><p>T             average transfer time (used in the definition of the ‘orbital’ metric)</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pykep</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pykep</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">pl_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">planet</span><span class="o">.</span><span class="n">gtoc7</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16257</span><span class="p">)]</span>
 <span class="n">knn</span> <span class="o">=</span> <span class="n">phasing</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">pl_list</span><span class="p">,</span> <span class="n">epoch</span><span class="p">(</span><span class="n">t0</span><span class="p">),</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;orbital&#39;</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
 <span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">dists</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">&#39;knn&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
@@ -276,8 +277,8 @@ The argument of perigee is not matched, so that this approximation is only good 
       
     </p>
     <p>
-        &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+        &copy; Copyright 2020, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
     </p>
   </div>
 </footer>

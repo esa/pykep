@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Preparing your system to compile pykep &#8212; pykep 2.4 documentation</title>
+    <title>Preparing your system to compile pykep &#8212; pykep  documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
@@ -15,6 +15,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
@@ -43,7 +44,7 @@
       </button>
       <a class="navbar-brand" href="index.html">
         pykep</a>
-      <span class="navbar-text navbar-version pull-left"><b>2.4</b></span>
+      <span class="navbar-text navbar-version pull-left"><b></b></span>
     </div>
 
       <div class="collapse navbar-collapse nav-collapse">
@@ -103,9 +104,8 @@
 <span id="prepareyoursystem"></span><h1>Preparing your system to compile pykep<a class="headerlink" href="#preparing-your-system-to-compile-pykep" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="compiling-under-a-unix-system">
 <h2>Compiling under a Unix System<a class="headerlink" href="#compiling-under-a-unix-system" title="Permalink to this headline">¶</a></h2>
-<p>We assume you have root access to your unix machine and a working python installation. As pykep has some dependencies,
-you will need to install a few packages before being able to install pykep on your machine. All are supported
-by most package managers, so that a simple pacman, apt-get, emerge should suffice to prepare your system.</p>
+<p>As pykep has some dependencies, you need to install a few packages before being able to install and compile pykep on your machine.
+All are supported by most package managers.</p>
 <ul class="simple">
 <li><p>Install <a class="reference external" href="http://git-scm.com">git</a></p></li>
 <li><p>Install <a class="reference external" href="http://www.cmake.org">CMake</a> with its ccmake utility</p></li>
@@ -121,6 +121,7 @@ by most package managers, so that a simple pacman, apt-get, emerge should suffic
 <li><p>Install <a class="reference external" href="http://www.cmake.org">CMake</a></p></li>
 <li><p>Install <a class="reference external" href="http://www.boost.org">boost libraries</a> both headers and compiled libraries</p></li>
 </ul>
+<p>Alternatively to minGW also clang-cl is tested in our CI.</p>
 </div>
 </div>
 
@@ -136,8 +137,8 @@ by most package managers, so that a simple pacman, apt-get, emerge should suffic
       
     </p>
     <p>
-        &copy; Copyright 2019, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.<br/>
+        &copy; Copyright 2020, pykep Development Team.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
     </p>
   </div>
 </footer>
