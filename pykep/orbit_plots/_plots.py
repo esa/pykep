@@ -184,10 +184,10 @@ def plot_kepler(r, v, t, mu, N=60, units=1, color='b', legend=False, axes=None):
     Plots the result of a keplerian propagation
 
     Example::
-
-    import pykep as pk
-    pi = 3.14
-    pk.orbit_plots.plot_kepler([1,0,0],[0,1,0],pi/3,1)
+    
+        import pykep as pk
+        pi = 3.14
+        pk.orbit_plots.plot_kepler([1,0,0],[0,1,0],pi/3,1)
     """
 
     from pykep import propagate_lagrangian

@@ -9,7 +9,7 @@
 
 # General information about the project.
 project = u'pykep'
-copyright = u'2019, pykep Development Team'
+copyright = u'2020, pykep Development Team'
 
 # The short X.Y version.
 version = '@pykep_VERSION@'

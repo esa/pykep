@@ -283,7 +283,7 @@ BOOST_PYTHON_MODULE(core)
         .value("JD", kep_toolbox::epoch::JD);
 
     // Epoch class
-    class_<kep_toolbox::epoch>("epoch", pykep::expression_doc().c_str(),
+    class_<kep_toolbox::epoch>("epoch", pykep::epoch_doc().c_str(),
                                init<optional<const double &, kep_toolbox::epoch::type>>())
         .add_property("jd", &kep_toolbox::epoch::jd,
                       "Returns the Julian Date\n\n"
@@ -301,57 +301,17 @@ BOOST_PYTHON_MODULE(core)
         .def_pickle(python_class_pickle_suite<kep_toolbox::epoch>());
 
     // Epoch constructors helpers
-    def("epoch_from_string", &kep_toolbox::epoch_from_string,
-        "pykep.epoch_from_string(s)\n\n"
-        "- s: string containing a date in the format 'YYYY-MM-DD HH:MM:SS'"
-        "Returns a :py:class:`pykep.epoch` object constructed from a from a "
-        "delimited string containing a date."
-        "Excess digits in fractional seconds will be dropped. Ex: "
-        "'1:02:03.123456999' => '1:02:03.123456'."
-        "This behavior depends on the precision defined in astro_constant.h used "
-        "to compile.\n\n"
-        "NOTE: The function is based on the corresponding `boost date_time "
-        "library function "
-        "<http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/"
-        "posix_time.html#ptime_from_string>`_\n\n"
-        "Example::\n\n"
-        "  e = pykep.epoch_from_string('2002-01-20 23:59:54.003')");
-
-    def("epoch_from_iso_string", &kep_toolbox::epoch_from_iso_string,
-        "pykep.epoch_from_iso_string(s)\n\n"
-        "- s: string containing a date in the iso format 'YYYYMMDDTHHMMSS'"
-        "Returns a :py:class:`pykep.epoch` object constructed from a from a non "
-        "delimited iso form string containing a date.\n\n"
-        "NOTE: The function is based on the corresponding `boost date_time "
-        "library function "
-        "<http://www.boost.org/doc/libs/1_44_0/doc/html/date_time/"
-        "posix_time.html#ptime_from_string>`_\n\n"
-        "Example::\n\n"
-        "  e = pykep.epoch_from_iso_string('20020120T235954')");
+    def("epoch_from_string", &kep_toolbox::epoch_from_string, pykep::epoch_from_string_doc().c_str());
+    def("epoch_from_iso_string", &kep_toolbox::epoch_from_iso_string, pykep::epoch_from_iso_string_doc().c_str());
 
     // Lambert.
     class_<kep_toolbox::lambert_problem>(
         "lambert_problem", "Represents a multiple revolution Lambert's problem",
         init<const kep_toolbox::array3D &, const kep_toolbox::array3D &, const double &, const double &, const int &,
-             const int &>(
-            "lambert_problem(r1 = [1,0,0], r2 = [0,1,0], tof = pi/2, mu = 1., cw = False, max_revs = 0)\n\n"
-            "- r1: starting position (x1,y1,z1)\n"
-            "- r2: final position    (x2,y2,z2)\n"
-            "- tof: time of flight\n"
-            "- mu: gravitational parameter (default is 1)\n"
-            "- cw: True for retrograde motion (clockwise), False if "
-            "counter-clock wise (default is False)\n"
-            "- max_revs: Maximum number of multirevs to be computed (default "
-            "is 5)\n\n"
-            ".. note::\n"
-            "   Units need to be consistent.\n"
-            "   The multirev Lambert's problem will be solved upon construction "
-            "and its solution stored in data members.\n\n"
-            "Example (non-dimensional units used)::\n\n"
-            "  l = lambert_problem([1,0,0],[0,1,0],5 * pi / 2. )",
-            (arg("r1") = kep_toolbox::array3D{1, 0, 0}, arg("r2") = kep_toolbox::array3D{0, 1, 0},
-             arg("tof") = boost::math::constants::pi<double>() / 2., arg("mu") = 1., arg("cw") = false,
-             arg("max_revs") = 0)))
+             const int &>(pykep::lambert_problem_doc().c_str(),
+                          (arg("r1") = kep_toolbox::array3D{1, 0, 0}, arg("r2") = kep_toolbox::array3D{0, 1, 0},
+                           arg("tof") = boost::math::constants::pi<double>() / 2., arg("mu") = 1., arg("cw") = false,
+                           arg("max_revs") = 0)))
         .def("get_v1", &kep_toolbox::lambert_problem::get_v1, return_value_policy<copy_const_reference>(),
              "Returns a sequence of vectors containing the velocities at r1 of "
              "all computed solutions to the Lambert's Problem\n\n"
@@ -407,37 +367,15 @@ BOOST_PYTHON_MODULE(core)
         .def_pickle(python_class_pickle_suite<kep_toolbox::lambert_problem>());
 
     // Lagrangian propagator for keplerian orbits
-    def("propagate_lagrangian", &propagate_lagrangian_wrapper,
-        "pykep.propagate_lagrangian(r,v,t,mu)\n\n"
-        "- r: start position, x,y,z\n"
-        "- v: start velocity, vx,vy,vz\n"
-        "- t: propagation time\n"
-        "- mu: central body gravity constant\n\n"
-        "Returns a tuple containing r and v, the final position and velocity "
-        "after the propagation.\n\n"
-        "Example::\n\n"
-        "  r,v = propagate_lagrangian([1,0,0],[0,1,0],pi/2,1)");
+    def("propagate_lagrangian", &propagate_lagrangian_wrapper, pykep::propagate_lagrangian_doc().c_str(),
+        (arg("r0") = kep_toolbox::array3D{1, 0, 0}, arg("v0") = kep_toolbox::array3D{0, 1, 0},
+         arg("tof") = boost::math::constants::pi<double>() / 2, arg("mu") = 1));
 
     // Taylor propagation of inertially constant thrust arcs
-    def("propagate_taylor", &propagate_taylor_wrapper,
-        "pykep.propagate_taylor(r,v,m,thrust,tof,mu,veff,log10tol,log10rtol)\n\n"
-        "- r: start position, x,y,z\n"
-        "- v: start velocity, vx,vy,vz\n"
-        "- m: starting mass\n"
-        "- thrust: fixed inertial thrust, ux,uy,uz\n"
-        "- tof: propagation time\n"
-        "- mu: central body gravity constant\n\n"
-        "- veff: the product (Isp g0) defining the engine efficiency \n\n"
-        "- log10tol: the logarithm of the absolute tolerance passed to taylor "
-        "propagator \n\n"
-        "- log10rtol: the logarithm of the relative tolerance passed to taylor "
-        "propagator \n\n"
-        "Returns a tuple containing r, v, and m the final position, velocity and "
-        "mass after the propagation.\n\n"
-        "Example::\n\n"
-        "  r,v,m = "
-        "propagate_taylor([1,0,0],[0,1,0],100,[0,0,0],pi/2,1,1,-15,-15)",
-        (arg("r"), arg("v"), arg("m"), arg("thrust"), arg("tof"), arg("mu"), arg("veff"), arg("log10tol") = 1e-15,
+    def("propagate_taylor", &propagate_taylor_wrapper, pykep::propagate_taylor_doc().c_str(),
+        (arg("r0") = kep_toolbox::array3D{1, 0, 0}, arg("v0") = arg("v0") = kep_toolbox::array3D{0, 1, 0},
+         arg("m0") = 100, arg("thrust") = kep_toolbox::array3D{0, 0, 0},
+         arg("tof") = boost::math::constants::pi<double>() / 2, arg("mu") = 1, arg("veff") = 1, arg("log10tol") = 1e-15,
          arg("log10rtol") = 1e-15));
 
     // Taylor propagation of inertially constant thrust arcs with an inertially constant disturbance
