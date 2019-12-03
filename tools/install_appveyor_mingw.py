@@ -169,7 +169,7 @@ if is_python_build:
     run_command(
         pinterp + r' -c "from pykep import test; test.run_test_suite();"')
     if is_release_build:
-        os.chdir('C:/projects/pykep/build/wheel')
+        os.chdir('C:/projects/pykep/build_pykep/wheel')
         run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 
