@@ -8,8 +8,8 @@
 /* Table of constant values */
 
 static integer c__0 = 0;
-static integer c__126 = 126;
 static integer c__127 = 127;
+static integer c__128 = 128;
 
 /* $Procedure BLTFRM ( Built-in frame IDs ) */
 /* Subroutine */ int bltfrm_(integer *frmcls, integer *idset)
@@ -25,20 +25,20 @@ static integer c__127 = 127;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, fcode[126];
+    static integer i__, j, fcode[127];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizei_(integer *);
     extern logical failed_(void);
-    static integer bidids[127], to, fclsid[126], bididx[127];
+    static integer bidids[128], to, fclsid[127], bididx[128];
     extern /* Subroutine */ int scardi_(integer *, integer *);
-    static char frname[32*126];
-    static integer bidpol[133], fclass[126], corder[126], center[126], bnmidx[
-	    127], bidlst[127];
+    static char frname[32*127];
+    static integer bidpol[134], fclass[127], corder[127], center[127], bnmidx[
+	    128], bidlst[128];
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    static integer bnmpol[133];
-    static char bnmnms[32*127];
+    static integer bnmpol[134];
+    static char bnmnms[32*128];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer ctrord[126], bnmlst[127];
+    static integer ctrord[127], bnmlst[128];
     extern /* Subroutine */ int chkout_(char *, ftnlen), zzfdat_(integer *, 
 	    integer *, char *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, integer *, integer *, 
@@ -308,6 +308,13 @@ static integer c__127 = 127;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
+
+/*        Increased the number of non-inertial frames from 105 to 106 */
+/*        in order to accomodate the following PCK based frame: */
+
+/*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
@@ -645,7 +652,7 @@ static integer c__127 = 127;
 /*     built-in frames. */
 
     if (pass1) {
-	zzfdat_(&c__126, &c__127, frname, fcode, center, fclass, fclsid, 
+	zzfdat_(&c__127, &c__128, frname, fcode, center, fclass, fclsid, 
 		ctrord, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -671,12 +678,12 @@ static integer c__127 = 127;
 /*     Make sure the set is large enough to hold all of */
 /*     the IDs of the built-in frames. */
 
-    if (sizei_(idset) < 126) {
+    if (sizei_(idset) < 127) {
 	setmsg_("Frame ID set argument IDSET has size #; required size is at"
 		" least #.", (ftnlen)68);
 	i__1 = sizei_(idset);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__126, (ftnlen)1);
+	errint_("#", &c__127, (ftnlen)1);
 	sigerr_("SPICE(SETTOOSMALL)", (ftnlen)18);
 	chkout_("BLTFRM", (ftnlen)6);
 	return 0;
@@ -686,16 +693,16 @@ static integer c__127 = 127;
 /*     to the output set. First, generate an order vector for */
 /*     the ID codes. */
 
-    orderi_(fcode, &c__126, corder);
+    orderi_(fcode, &c__127, corder);
     to = 0;
-    for (i__ = 1; i__ <= 126; ++i__) {
+    for (i__ = 1; i__ <= 127; ++i__) {
 
 /*        Get the index J in the parallel data arrays of */
 /*        the Ith frame, ordered by ID code. */
 
-	j = corder[(i__1 = i__ - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge("cord"
+	j = corder[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("cord"
 		"er", i__1, "bltfrm_", (ftnlen)451)];
-	if (fclass[(i__1 = j - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge("fclass",
+	if (fclass[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("fclass",
 		 i__1, "bltfrm_", (ftnlen)453)] == *frmcls || *frmcls == -1) {
 
 /*           The frame at index J belongs to the */
@@ -703,7 +710,7 @@ static integer c__127 = 127;
 /*           code to the set. */
 
 	    ++to;
-	    idset[to + 5] = fcode[(i__1 = j - 1) < 126 && 0 <= i__1 ? i__1 : 
+	    idset[to + 5] = fcode[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : 
 		    s_rnge("fcode", i__1, "bltfrm_", (ftnlen)461)];
 	}
     }

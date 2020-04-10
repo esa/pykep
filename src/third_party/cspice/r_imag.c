@@ -1,9 +1,9 @@
 #include "f2c.h"
 
 #ifdef KR_headers
-double r_imag(z) complex_type *z;
+double r_imag(z) complex *z;
 #else
-double r_imag(complex_type *z)
+double r_imag(complex *z)
 #endif
 {
 return(z->i);

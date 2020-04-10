@@ -22,20 +22,19 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
     doublereal dval[2];
     integer ival[2];
     logical null[2];
-    integer unit, i__;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer cvlen[2];
     logical found;
     integer cmplen[2], lhstyp, rhstyp;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errfnm_(char *, integer *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekrsc_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, char *, logical *, logical *, ftnlen), 
-	    zzekrsd_(integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, logical *, logical *), zzekrsi_(integer *, integer *
-	    , integer *, integer *, integer *, integer *, logical *, logical *
-	    );
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errhan_(char *, 
+	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen), zzekrsc_(integer *, 
+	    integer *, integer *, integer *, integer *, integer *, char *, 
+	    logical *, logical *, ftnlen), zzekrsd_(integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *), zzekrsi_(integer *, integer *, integer *, integer *, integer *
+	    , integer *, logical *, logical *);
 
 /* $ Abstract */
 
@@ -600,7 +599,7 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*         handle these errors. */
 
 /*     4)  If the data type code in the input column descriptor is not */
-/*         recognized, the error SPICE(INVALIDDATATYPE) is signalled. */
+/*         recognized, the error SPICE(INVALIDDATATYPE) is signaled. */
 /*         The function value is EQ in this case. */
 
 /* $ Files */
@@ -620,7 +619,7 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -642,6 +641,11 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    SPICELIB Version 1.1.0, 26-MAY-2010 (NJB) */
 
@@ -673,11 +677,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 
 	zzekrsi_(hans, sgdscs, cldscs, rows, elts, ival, null, &found);
 	if (! found) {
-	    dashlu_(hans, &unit);
 	    chkin_("ZZEKECMP", (ftnlen)8);
 	    setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry e"
 		    "lement was not found.", (ftnlen)76);
-	    errfnm_("#", &unit, (ftnlen)1);
+	    errhan_("#", hans, (ftnlen)1);
 	    errint_("#", &cldscs[8], (ftnlen)1);
 	    errint_("#", rows, (ftnlen)1);
 	    errint_("#", elts, (ftnlen)1);
@@ -689,11 +692,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsi_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
 		    ival[1], &null[1], &found);
 	    if (! found) {
-		dashlu_(&hans[1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[1], (ftnlen)1);
 		errint_("#", &cldscs[19], (ftnlen)1);
 		errint_("#", &rows[1], (ftnlen)1);
 		errint_("#", &elts[1], (ftnlen)1);
@@ -721,11 +723,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsd_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
 		    dval[1], &null[1], &found);
 	    if (! found) {
-		dashlu_(&hans[1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[1], (ftnlen)1);
 		errint_("#", &cldscs[19], (ftnlen)1);
 		errint_("#", &rows[1], (ftnlen)1);
 		errint_("#", &elts[1], (ftnlen)1);
@@ -765,11 +766,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 
 	zzekrsd_(hans, sgdscs, cldscs, rows, elts, dval, null, &found);
 	if (! found) {
-	    dashlu_(hans, &unit);
 	    chkin_("ZZEKECMP", (ftnlen)8);
 	    setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry e"
 		    "lement was not found.", (ftnlen)76);
-	    errfnm_("#", &unit, (ftnlen)1);
+	    errhan_("#", hans, (ftnlen)1);
 	    errint_("#", &cldscs[8], (ftnlen)1);
 	    errint_("#", rows, (ftnlen)1);
 	    errint_("#", elts, (ftnlen)1);
@@ -781,11 +781,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsi_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
 		    ival[1], &null[1], &found);
 	    if (! found) {
-		dashlu_(&hans[1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[1], (ftnlen)1);
 		errint_("#", &cldscs[19], (ftnlen)1);
 		errint_("#", &rows[1], (ftnlen)1);
 		errint_("#", &elts[1], (ftnlen)1);
@@ -813,11 +812,10 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsd_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
 		    dval[1], &null[1], &found);
 	    if (! found) {
-		dashlu_(&hans[1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[1], (ftnlen)1);
 		errint_("#", &cldscs[19], (ftnlen)1);
 		errint_("#", &rows[1], (ftnlen)1);
 		errint_("#", &elts[1], (ftnlen)1);
@@ -872,15 +870,14 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsd_(&hans[i__ - 1], &sgdscs[i__ * 24 - 24], &cldscs[i__ * 11 
 		    - 11], &rows[i__ - 1], &elts[i__ - 1], &dval[(i__1 = i__ 
 		    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dval", i__1, "zze"
-		    "kecmp_", (ftnlen)494)], &null[(i__2 = i__ - 1) < 2 && 0 <=
+		    "kecmp_", (ftnlen)486)], &null[(i__2 = i__ - 1) < 2 && 0 <=
 		     i__2 ? i__2 : s_rnge("null", i__2, "zzekecmp_", (ftnlen)
-		    494)], &found);
+		    486)], &found);
 	    if (! found) {
-		dashlu_(&hans[i__ - 1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[i__ - 1], (ftnlen)1);
 		errint_("#", &cldscs[i__ * 11 - 3], (ftnlen)1);
 		errint_("#", &rows[i__ - 1], (ftnlen)1);
 		errint_("#", &elts[i__ - 1], (ftnlen)1);
@@ -922,17 +919,16 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 	    zzekrsc_(&hans[i__ - 1], &sgdscs[i__ * 24 - 24], &cldscs[i__ * 11 
 		    - 11], &rows[i__ - 1], &elts[i__ - 1], &cvlen[(i__1 = i__ 
 		    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("cvlen", i__1, 
-		    "zzekecmp_", (ftnlen)558)], cval + (((i__2 = i__ - 1) < 2 
+		    "zzekecmp_", (ftnlen)548)], cval + (((i__2 = i__ - 1) < 2 
 		    && 0 <= i__2 ? i__2 : s_rnge("cval", i__2, "zzekecmp_", (
-		    ftnlen)558)) << 10), &null[(i__3 = i__ - 1) < 2 && 0 <= 
+		    ftnlen)548)) << 10), &null[(i__3 = i__ - 1) < 2 && 0 <= 
 		    i__3 ? i__3 : s_rnge("null", i__3, "zzekecmp_", (ftnlen)
-		    558)], &found, (ftnlen)1024);
+		    548)], &found, (ftnlen)1024);
 	    if (! found) {
-		dashlu_(&hans[i__ - 1], &unit);
 		chkin_("ZZEKECMP", (ftnlen)8);
 		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
 			"ry element was not found.", (ftnlen)76);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", &hans[i__ - 1], (ftnlen)1);
 		errint_("#", &cldscs[i__ * 11 - 3], (ftnlen)1);
 		errint_("#", &rows[i__ - 1], (ftnlen)1);
 		errint_("#", &elts[i__ - 1], (ftnlen)1);
@@ -945,9 +941,9 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 
 /* Computing MIN */
 	    i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cvlen", i__2, "zzekecmp_", (ftnlen)589)];
+		    "cvlen", i__2, "zzekecmp_", (ftnlen)577)];
 	    cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("cmplen",
-		     i__1, "zzekecmp_", (ftnlen)589)] = min(i__3,1024);
+		     i__1, "zzekecmp_", (ftnlen)577)] = min(i__3,1024);
 	}
 	if (null[0] || null[1]) {
 	    if (! null[1]) {

@@ -7,8 +7,7 @@
 
 /* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__2 = 2;
+static integer c__100 = 100;
 static integer c__3 = 3;
 static integer c__10 = 10;
 
@@ -20,12 +19,19 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static logical elipsd = TRUE_;
     static logical first = TRUE_;
     static logical near__ = TRUE_;
     static char prvcor[5] = "     ";
-    static char prvmth[80] = "Near point: Ellipsoid                         "
-	    "                                  ";
+    static char prvmth[500] = "                                             "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "       ";
+    static integer shape = 1;
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -38,83 +44,88 @@ static integer c__10 = 10;
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    ), zzbods2c_(integer *, char *, integer *, logical *, char *, 
 	    integer *, logical *, ftnlen, ftnlen);
-    doublereal sdir[3];
+    doublereal dvec[3];
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    ), vequ_(doublereal *, doublereal *);
-    integer type__;
     static logical xmit;
     doublereal spos[3], tpos[3];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
 	    , integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen)
 	    ;
     doublereal j2pos[3];
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
+	    integer *), zzctruin_(integer *);
     integer i__;
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen), zzsrftrk_(integer *, logical *);
     doublereal s, radii[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
     static logical usecn;
     extern doublereal vdist_(doublereal *, doublereal *);
     doublereal xform[9]	/* was [3][3] */;
+    static integer nsurf;
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     static logical uselt;
-    char words[32*2];
     doublereal sunst[6];
     static logical svfnd1, svfnd2;
     static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
-    integer refcde;
+    static integer svctr3[2], svctr4[2];
     doublereal lt, etdiff;
-    integer obscde;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    integer nw, nradii;
+    integer obscde, fixcid;
     doublereal ltdiff;
     extern doublereal clight_(void);
-    integer trgcde, center;
+    integer fixfid, nradii, trgcde;
     extern doublereal touchd_(doublereal *);
-    char locmth[80];
-    doublereal obsrng;
-    integer typeid;
-    logical attblk[15];
-    static integer svtcde;
-    doublereal altsun, obspos[3];
     extern logical return_(void);
-    doublereal prevet, prevlt, ssbost[6], ssbtst[6], sslrlt;
-    static char svtarg[36], svobsr[36];
+    char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
+    doublereal altsun, obspos[3], obsrng, prevet, prevlt, ssbost[6], ssbtst[6]
+	    , sslrlt, sslrst[6];
+    integer fixcls, fixctr;
+    static integer srflst[100];
+    logical attblk[15], fnd, surfup;
+    static logical usestl;
+    static char svtarg[36];
+    static integer svtcde;
+    static char svobsr[36];
     static integer svobsc;
-    doublereal sslrst[6];
     static char svfref[32];
     static integer svrefc;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), ljucrs_(integer *, char *, char *, ftnlen, ftnlen), 
-	    lparse_(char *, char *, integer *, integer *, char *, ftnlen, 
-	    ftnlen, ftnlen), spkezp_(integer *, doublereal *, char *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen, ftnlen), vminus_(
-	    doublereal *, doublereal *), nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), surfpt_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *), spkssb_(integer *, 
-	    doublereal *, char *, doublereal *, ftnlen), pxform_(char *, char 
-	    *, doublereal *, doublereal *, ftnlen, ftnlen), spkcpo_(char *, 
-	    doublereal *, char *, char *, char *, doublereal *, char *, char *
-	    , doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen), spkcpt_(doublereal *, char *, char *, doublereal 
-	    *, char *, char *, char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    logical fnd;
+	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
+	    *, doublereal *, doublereal *, ftnlen, ftnlen);
+    static logical pri;
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *), bodvcd_(
+	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
+	    nearpt_(doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *), surfpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    , spkssb_(integer *, doublereal *, char *, doublereal *, ftnlen);
     doublereal slt;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen), spkcpo_(char *, doublereal *, char 
+	    *, char *, char *, doublereal *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), 
+	    spkcpt_(doublereal *, char *, char *, doublereal *, char *, char *
+	    , char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen), mxv_(doublereal *, doublereal *, 
+	    doublereal *), zzsbfxr_(integer *, integer *, integer *, 
+	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	     logical *);
 
 /* $ Abstract */
 
 /*     Compute the rectangular coordinates of the sub-solar point on */
 /*     a target body at a specified epoch, optionally corrected for */
 /*     light time and stellar aberration. */
+
+/*     The surface of the target body may be represented by a triaxial */
+/*     ellipsoid or by topographic data provided by DSK files. */
 
 /*     This routine supersedes SUBSOL. */
 
@@ -145,6 +156,7 @@ static integer c__10 = 10;
 
 /* $ Required_Reading */
 
+/*     DSK */
 /*     FRAMES */
 /*     NAIF_IDS */
 /*     PCK */
@@ -156,6 +168,17 @@ static integer c__10 = 10;
 /*     GEOMETRY */
 
 /* $ Declarations */
+
+/*     File: dsk.inc */
+
+
+/*     Version 1.0.0 05-FEB-2016 (NJB) */
+
+/*     Maximum size of surface ID list. */
+
+
+/*     End of include file dsk.inc */
+
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
@@ -244,6 +267,175 @@ static integer c__10 = 10;
 /* -& */
 
 /*     End of INCLUDE file frmtyp.inc */
+
+/* $ Abstract */
+
+/*     This file contains public, global parameter declarations */
+/*     for the SPICELIB Geometry Finder (GF) subsystem. */
+
+/* $ Disclaimer */
+
+/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
+/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
+/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
+/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
+/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
+/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
+/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
+/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
+/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
+/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
+
+/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
+/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
+/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
+/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
+/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
+/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
+
+/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
+/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
+/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
+/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
+
+/* $ Required_Reading */
+
+/*     GF */
+
+/* $ Keywords */
+
+/*     GEOMETRY */
+/*     ROOT */
+
+/* $ Restrictions */
+
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman      (JPL) */
+/*     L.E. Elson        (JPL) */
+/*     E.D. Wright       (JPL) */
+
+/* $ Literature_References */
+
+/*     None. */
+
+/* $ Version */
+
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
+/* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
+
+/*       Added NWILUM parameter. */
+
+/* -    SPICELIB Version 1.2.0, 14-SEP-2010 (EDW) */
+
+/*       Added NWPA parameter. */
+
+/* -    SPICELIB Version 1.1.0, 08-SEP-2009 (EDW) */
+
+/*       Added NWRR parameter. */
+/*       Added NWUDS parameter. */
+
+/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (EDW) */
+
+/* -& */
+
+/*     Root finding parameters: */
+
+/*     CNVTOL is the default convergence tolerance used by the */
+/*     high-level GF search API routines. This tolerance is */
+/*     used to terminate searches for binary state transitions: */
+/*     when the time at which a transition occurs is bracketed */
+/*     by two times that differ by no more than CNVTOL, the */
+/*     transition time is considered to have been found. */
+
+/*     Units are TDB seconds. */
+
+
+/*     NWMAX is the maximum number of windows allowed for user-defined */
+/*     workspace array. */
+
+/*        DOUBLE PRECISION      WORK   ( LBCELL : MW, NWMAX ) */
+
+/*     Currently no more than twelve windows are required; the three */
+/*     extra windows are spares. */
+
+/*     Callers of GFEVNT can include this file and use the parameter */
+/*     NWMAX to declare the second dimension of the workspace array */
+/*     if necessary. */
+
+
+/*     Callers of GFIDST should declare their workspace window */
+/*     count using NWDIST. */
+
+
+/*     Callers of GFSEP should declare their workspace window */
+/*     count using NWSEP. */
+
+
+/*     Callers of GFRR should declare their workspace window */
+/*     count using NWRR. */
+
+
+/*     Callers of GFUDS should declare their workspace window */
+/*     count using NWUDS. */
+
+
+/*     Callers of GFPA should declare their workspace window */
+/*     count using NWPA. */
+
+
+/*     Callers of GFILUM should declare their workspace window */
+/*     count using NWILUM. */
+
+
+/*     ADDWIN is a parameter used to expand each interval of the search */
+/*     (confinement) window by a small amount at both ends in order to */
+/*     accommodate searches using equality constraints. The loaded */
+/*     kernel files must accommodate these expanded time intervals. */
+
+
+/*     FRMNLN is a string length for frame names. */
+
+
+/*     FOVTLN -- maximum length for FOV string. */
+
+
+/*     Specify the character strings that are allowed in the */
+/*     specification of field of view shapes. */
+
+
+/*     Character strings that are allowed in the */
+/*     specification of occultation types: */
+
+
+/*     Occultation target shape specifications: */
+
+
+/*     Specify the number of supported occultation types and occultation */
+/*     type string length: */
+
+
+/*     Instrument field-of-view (FOV) parameters */
+
+/*     Maximum number of FOV boundary vectors: */
+
+
+/*     FOV shape parameters: */
+
+/*        circle */
+/*        ellipse */
+/*        polygon */
+/*        rectangle */
+
+
+/*     End of file gf.inc. */
 
 /* $ Abstract */
 
@@ -409,6 +601,66 @@ static integer c__10 = 10;
 
 /*     End of include file. */
 
+
+/*     File: zzdsk.inc */
+
+
+/*     Version 4.0.0 13-NOV-2015 (NJB) */
+
+/*        Changed parameter LBTLEN to CVTLEN. */
+/*        Added parameter LMBCRV. */
+
+/*     Version 3.0.0 05-NOV-2015 (NJB) */
+
+/*        Added parameters */
+
+/*           CTRCOR */
+/*           ELLCOR */
+/*           GUIDED */
+/*           LBTLEN */
+/*           PNMBRL */
+/*           TANGNT */
+/*           TMTLEN */
+/*           UMBRAL */
+
+/*     Version 2.0.0 04-MAR-2015 (NJB) */
+
+/*        Removed declaration of parameter SHPLEN. */
+/*        This name is already in use in the include */
+/*        file gf.inc. */
+
+/*     Version 1.0.0 26-JAN-2015 (NJB) */
+
+
+/*     Parameters supporting METHOD string parsing: */
+
+
+/*     Local method length. */
+
+
+/*     Length of sub-point type string. */
+
+
+/*     Length of curve type string. */
+
+
+/*     Limb type parameter codes. */
+
+
+/*     Length of terminator type string. */
+
+
+/*     Terminator type and limb parameter codes. */
+
+
+/*     Length of aberration correction locus string. */
+
+
+/*     Aberration correction locus codes. */
+
+
+/*     End of include file zzdsk.inc */
+
 /* $ Brief_I/O */
 
 /*     Variable  I/O  Description */
@@ -425,40 +677,121 @@ static integer c__10 = 10;
 
 /* $ Detailed_Input */
 
-/*     METHOD      is a short string providing parameters defining */
-/*                 the computation method to be used. */
+/*     METHOD   is a short string providing parameters defining */
+/*              the computation method to be used. In the syntax */
+/*              descriptions below, items delimited by brackets */
+/*              are optional. */
 
-/*                 The supported values of METHOD are listed below. */
-/*                 Please note that the colon is a required delimiter; */
-/*                 using a blank will not work. */
+/*              METHOD may be assigned the following values: */
 
-/*                    'Near point: ellipsoid'   The sub-solar point */
-/*                                              computation uses a */
-/*                                              triaxial ellipsoid to */
-/*                                              model the surface of the */
-/*                                              target body. The */
-/*                                              sub-solar point is */
-/*                                              defined as the nearest */
-/*                                              point on the target */
-/*                                              relative to the Sun. */
+/*                 'NEAR POINT/ELLIPSOID' */
 
-/*                    'Intercept: ellipsoid'    The sub-solar point */
-/*                                              computation uses a */
-/*                                              triaxial ellipsoid to */
-/*                                              model the surface of the */
-/*                                              target body. The */
-/*                                              sub-solar point is */
-/*                                              defined as the target */
-/*                                              surface intercept of the */
-/*                                              line containing the Sun */
-/*                                              and the target's center. */
+/*                    The sub-solar point computation uses a triaxial */
+/*                    ellipsoid to model the surface of the target body. */
+/*                    The sub-solar point is defined as the nearest */
+/*                    point on the target relative to the sun. */
+
+/*                    The word "NADIR" may be substituted for the phrase */
+/*                    "NEAR POINT" in the string above. */
+
+/*                    For backwards compatibility, the older syntax */
+
+/*                       'Near point: ellipsoid' */
+
+/*                    is accepted as well. */
+
+
+/*                 'INTERCEPT/ELLIPSOID' */
+
+/*                    The sub-solar point computation uses a triaxial */
+/*                    ellipsoid to model the surface of the target body. */
+/*                    The sub-solar point is defined as the target */
+/*                    surface intercept of the line containing the sun */
+/*                    and the target's center. */
+
+/*                    For backwards compatibility, the older syntax */
+
+/*                       'Intercept: ellipsoid' */
+
+/*                    is accepted as well. */
+
+
+/*                 'NADIR/DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                    The sub-solar point computation uses DSK data to */
+/*                    model the surface of the target body. The */
+/*                    sub-solar point is defined as the intercept, on */
+/*                    the surface represented by the DSK data, of the */
+/*                    line containing the sun and the nearest point on */
+/*                    the target's reference ellipsoid. If multiple such */
+/*                    intercepts exist, the one closest to the sun is */
+/*                    selected. */
+
+/*                    Note that this definition of the sub-solar point */
+/*                    is not equivalent to the "nearest point on the */
+/*                    surface to the sun."  The phrase "NEAR POINT" may */
+/*                    NOT be substituted for "NADIR" in the string */
+/*                    above. */
+
+/*                    The surface list specification is optional. The */
+/*                    syntax of the list is */
+
+/*                       <surface 1> [, <surface 2>...] */
+
+/*                    If present, it indicates that data only for the */
+/*                    listed surfaces are to be used; however, data */
+/*                    need not be available for all surfaces in the */
+/*                    list. If absent, loaded DSK data for any surface */
+/*                    associated with the target body are used. */
+
+/*                    The surface list may contain surface names or */
+/*                    surface ID codes. Names containing blanks must */
+/*                    be delimited by double quotes, for example */
+
+/*                       SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                    If multiple surfaces are specified, their names */
+/*                    or IDs must be separated by commas. */
+
+/*                    See the Particulars section below for details */
+/*                    concerning use of DSK data. */
+
+
+/*                 'INTERCEPT/DSK/UNPRIORITIZED[/SURFACES = */
+/*                                              <surface list>]' */
+
+/*                    The sub-solar point computation uses DSK data to */
+/*                    model the surface of the target body. The */
+/*                    sub-solar point is defined as the target surface */
+/*                    intercept of the line containing the sun and the */
+/*                    target's center. */
+
+/*                    If multiple such intercepts exist, the one closest */
+/*                    to the sun is selected. */
+
+/*                    The surface list specification is optional. The */
+/*                    syntax of the list is identical to that for the */
+/*                    NADIR option described above. */
+
 
 /*                 Neither case nor white space are significant in */
-/*                 METHOD. For example, the string */
+/*                 METHOD, except within double-quoted strings. For */
+/*                 example, the string ' eLLipsoid/nearpoint ' is valid. */
 
-/*                   ' nearpoint:ELLIPSOID ' */
+/*                 Within double-quoted strings, blank characters are */
+/*                 significant, but multiple consecutive blanks are */
+/*                 considered equivalent to a single blank. Case is */
+/*                 not significant. So */
 
-/*                 is valid. */
+/*                    "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                 is equivalent to */
+
+/*                    " mars megdr  128  pixel/deg " */
+
+/*                 but not to */
+
+/*                    "MARS MEGDR128PIXEL/DEG" */
 
 
 /*     TARGET      is the name of the target body. The target body is */
@@ -497,12 +830,17 @@ static integer c__10 = 10;
 /*                 description of ABCORR below for details. */
 
 
-/*     FIXREF      is the name of the body-fixed, body-centered */
-/*                 reference frame associated with the target body. The */
-/*                 output sub-solar point SPOINT will be expressed */
-/*                 relative to this reference frame. The string FIXREF */
-/*                 is case-insensitive, and leading and trailing blanks */
-/*                 in FIXREF are not significant. */
+/*     FIXREF      is the name of a body-fixed reference frame centered */
+/*                 on the target body. FIXREF may be any such frame */
+/*                 supported by the SPICE system, including built-in */
+/*                 frames (documented in the Frames Required Reading) */
+/*                 and frames defined by a loaded frame kernel (FK). The */
+/*                 string FIXREF is case-insensitive, and leading and */
+/*                 trailing blanks in FIXREF are not significant. */
+
+/*                 The output sub-solar point SPOINT and the */
+/*                 observer-to-sub-solar point vector SRFVEC will be */
+/*                 expressed relative to this reference frame. */
 
 
 /*     ABCORR      indicates the aberration correction to be applied */
@@ -606,11 +944,22 @@ static integer c__10 = 10;
 
 /*     SPOINT      is the sub-solar point on the target body. */
 
-/*                 The sub-solar point is defined either as the point */
-/*                 on the target body that is closest to the Sun, */
-/*                 or the target surface intercept of the line from the */
-/*                 Sun to the target's center; the input argument */
-/*                 METHOD selects the definition to be used. */
+/*                 For target shapes modeled by ellipsoids, the */
+/*                 sub-solar point is defined either as the point on the */
+/*                 target body that is closest to the sun, or the target */
+/*                 surface intercept of the line from the sun to the */
+/*                 target's center. */
+
+/*                 For target shapes modeled by topographic data */
+/*                 provided by DSK files, the sub-solar point is defined */
+/*                 as the target surface intercept of the line from the */
+/*                 sun to either the nearest point on the reference */
+/*                 ellipsoid, or to the target's center. If multiple */
+/*                 such intercepts exist, the one closest to the sun is */
+/*                 selected. */
+
+/*                 The input argument METHOD selects the target shape */
+/*                 model and sub-solar point definition to be used. */
 
 /*                 SPOINT is expressed in Cartesian coordinates, */
 /*                 relative to the body-fixed target frame designated by */
@@ -687,6 +1036,9 @@ static integer c__10 = 10;
 /*         error will be diagnosed and signaled by a routine in the call */
 /*         tree of this routine. */
 
+/*         If transmission aberration corrections are specified, the */
+/*         error SPICE(NOTSUPPORTED) is signaled. */
+
 /*     2)  If either the target or observer input strings cannot be */
 /*         converted to an integer ID code, the error */
 /*         SPICE(IDCODENOTFOUND) is signaled. */
@@ -701,7 +1053,12 @@ static integer c__10 = 10;
 /*         the error SPICE(INVALIDFRAME) is signaled. */
 
 /*     5)  If the input argument METHOD is not recognized, the error */
-/*         SPICE(INVALIDMETHOD) is signaled. */
+/*         SPICE(INVALIDMETHOD) is signaled by this routine, or the */
+/*         error is diagnosed by a routine in the call tree of this */
+/*         routine. */
+
+/*         If the sub-solar point type is not specified or is not */
+/*         recognized, the error SPICE(INVALIDSUBTYPE) is signaled. */
 
 /*     6)  If insufficient ephemeris data have been loaded prior to */
 /*         calling SUBSLR, the error will be diagnosed and signaled by a */
@@ -716,15 +1073,42 @@ static integer c__10 = 10;
 /*         error will be diagnosed and signaled by a routine in the call */
 /*         tree of this routine. */
 
-/*     8)  The target must be an extended body: if any of the radii of */
-/*         the target body are non-positive, the error will be */
-/*         diagnosed and signaled by routines in the call tree of this */
-/*         routine. */
+/*     8)  The target must be an extended body, and must have a shape */
+/*         for which a sub-solar point can be defined. */
+
+/*         If the target body's shape is modeled as an ellipsoid, and if */
+/*         any of the radii of the target body are non-positive, the */
+/*         error will be diagnosed and signaled by routines in the call */
+/*         tree of this routine. */
+
+/*         If the target body's shape is modeled by DSK data, the shape */
+/*         must be such that the specified sub-solar point definition is */
+/*         applicable. For example, if the target shape is a torus, both */
+/*         the NADIR and INTERCEPT definitions might be inapplicable, */
+/*         depending on the relative locations of the sun and target. */
 
 /*     9)  If PCK data specifying the target body-fixed frame */
 /*         orientation have not been loaded prior to calling SUBSLR, */
 /*         the error will be diagnosed and signaled by a routine in the */
 /*         call tree of this routine. */
+
+/*     10) If METHOD specifies that the target surface is represented by */
+/*         DSK data, and no DSK files are loaded for the specified */
+/*         target, the error is signaled by a routine in the call tree */
+/*         of this routine. */
+
+/*     12) If METHOD specifies that the target surface is represented */
+/*         by DSK data, and the ray from the observer to the */
+/*         sub-observer point doesn't intersect the target body's */
+/*         surface, the error SPICE(SUBPOINTNOTFOUND) will be signaled. */
+
+/*     13) In some very rare cases, the surface intercept on the */
+/*         target body's reference ellipsoid of the observer to target */
+/*         center vector may not be computable. In these cases the */
+/*         error SPICE(DEGENERATECASE) is signaled. */
+
+/*     14) If the target body is the sun, the error SPICE(INVALIDTARGET) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -733,26 +1117,60 @@ static integer c__10 = 10;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target, observer, and */
-/*          Sun must be loaded. If aberration corrections are used, the */
-/*          states of target, observer, and the Sun relative to the */
-/*          solar system barycenter must be calculable from the */
-/*          available ephemeris data. Typically ephemeris data are made */
-/*          available by loading one or more SPK files via FURNSH. */
+/*        - SPK data: ephemeris data for target, observer, and Sun must */
+/*          be loaded. If aberration corrections are used, the states of */
+/*          target, observer, and the Sun relative to the solar system */
+/*          barycenter must be calculable from the available ephemeris */
+/*          data. Typically ephemeris data are made available by loading */
+/*          one or more SPK files via FURNSH. */
 
-/*        - PCK data: if the target body shape is modeled as an */
-/*          ellipsoid, triaxial radii for the target body must be loaded */
-/*          into the kernel pool. Typically this is done by loading a */
-/*          text PCK file via FURNSH. */
-
-/*        - Further PCK data: rotation data for the target body must be */
+/*        - PCK data: rotation data for the target body must be */
 /*          loaded. These may be provided in a text or binary PCK file. */
+
+/*        - Shape data for the target body: */
+
+/*            PCK data: */
+
+/*               If the target body shape is modeled as an ellipsoid, */
+/*               triaxial radii for the target body must be loaded into */
+/*               the kernel pool. Typically this is done by loading a */
+/*               text PCK file via FURNSH. */
+
+/*               Triaxial radii are also needed if the target shape is */
+/*               modeled by DSK data, but the DSK NADIR method is */
+/*               selected. */
+
+/*            DSK data: */
+
+/*               If the target shape is modeled by DSK data, DSK files */
+/*               containing topographic data for the target body must be */
+/*               loaded. If a surface list is specified, data for at */
+/*               least one of the listed surfaces must be loaded. */
+
+/*     The following data may be required: */
 
 /*        - Frame data: if a frame definition is required to convert the */
 /*          observer and target states to the body-fixed frame of the */
 /*          target, that definition must be available in the kernel */
 /*          pool. Typically the definition is supplied by loading a */
 /*          frame kernel via FURNSH. */
+
+/*        - Surface name-ID associations: if surface names are specified */
+/*          in METHOD, the association of these names with their */
+/*          corresponding surface ID codes must be established by */
+/*          assignments of the kernel variables */
+
+/*             NAIF_SURFACE_NAME */
+/*             NAIF_SURFACE_CODE */
+/*             NAIF_SURFACE_BODY */
+
+/*          Normally these associations are made by loading a text */
+/*          kernel containing the necessary assignments. An example */
+/*          of such an assignment is */
+
+/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*             NAIF_SURFACE_CODE += 1 */
+/*             NAIF_SURFACE_BODY += 499 */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -778,20 +1196,144 @@ static integer c__10 = 10;
 /*     point distance is much less than the observer to target center */
 /*     distance. */
 
-/*     The definition of the aberration-corrected sub-solar point is */
-/*     implicit: SPOINT is defined by an equation of the general form */
-
-/*        SPOINT = F ( SPOINT ) */
-
-/*     Because of the contraction properties of both light time and */
-/*     stellar aberration corrections---that is, the difference in the */
-/*     corrections for two vectors is much smaller than the difference */
-/*     between the vectors themselves---it's easy to solve this equation */
-/*     accurately and fairly quickly. */
-
 /*     When comparing sub-solar point computations with results from */
 /*     sources other than SPICE, it's essential to make sure the same */
 /*     geometric definitions are used. */
+
+
+/*     Using DSK data */
+/*     ============== */
+
+/*        DSK loading and unloading */
+/*        ------------------------- */
+
+/*        DSK files providing data used by this routine are loaded by */
+/*        calling FURNSH and can be unloaded by calling UNLOAD or */
+/*        KCLEAR. See the documentation of FURNSH for limits on numbers */
+/*        of loaded DSK files. */
+
+/*        For run-time efficiency, it's desirable to avoid frequent */
+/*        loading and unloading of DSK files. When there is a reason to */
+/*        use multiple versions of data for a given target body---for */
+/*        example, if topographic data at varying resolutions are to be */
+/*        used---the surface list can be used to select DSK data to be */
+/*        used for a given computation. It is not necessary to unload */
+/*        the data that are not to be used. This recommendation presumes */
+/*        that DSKs containing different versions of surface data for a */
+/*        given body have different surface ID codes. */
+
+
+/*        DSK data priority */
+/*        ----------------- */
+
+/*        A DSK coverage overlap occurs when two segments in loaded DSK */
+/*        files cover part or all of the same domain---for example, a */
+/*        given longitude-latitude rectangle---and when the time */
+/*        intervals of the segments overlap as well. */
+
+/*        When DSK data selection is prioritized, in case of a coverage */
+/*        overlap, if the two competing segments are in different DSK */
+/*        files, the segment in the DSK file loaded last takes */
+/*        precedence. If the two segments are in the same file, the */
+/*        segment located closer to the end of the file takes */
+/*        precedence. */
+
+/*        When DSK data selection is unprioritized, data from competing */
+/*        segments are combined. For example, if two competing segments */
+/*        both represent a surface as sets of triangular plates, the */
+/*        union of those sets of plates is considered to represent the */
+/*        surface. */
+
+/*        Currently only unprioritized data selection is supported. */
+/*        Because prioritized data selection may be the default behavior */
+/*        in a later version of the routine, the UNPRIORITIZED keyword is */
+/*        required in the METHOD argument. */
+
+
+/*        Syntax of the METHOD input argument */
+/*        ----------------------------------- */
+
+/*        The keywords and surface list in the METHOD argument */
+/*        are called "clauses." The clauses may appear in any */
+/*        order, for example */
+
+/*           NADIR/DSK/UNPRIORITIZED/<surface list> */
+/*           DSK/NADIR/<surface list>/UNPRIORITIZED */
+/*           UNPRIORITIZED/<surface list>/DSK/NADIR */
+
+/*        The simplest form of the METHOD argument specifying use of */
+/*        DSK data is one that lacks a surface list, for example: */
+
+/*           'NADIR/DSK/UNPRIORITIZED' */
+/*           'INTERCEPT/DSK/UNPRIORITIZED' */
+
+/*        For applications in which all loaded DSK data for the target */
+/*        body are for a single surface, and there are no competing */
+/*        segments, the above strings suffice. This is expected to be */
+/*        the usual case. */
+
+/*        When, for the specified target body, there are loaded DSK */
+/*        files providing data for multiple surfaces for that body, the */
+/*        surfaces to be used by this routine for a given call must be */
+/*        specified in a surface list, unless data from all of the */
+/*        surfaces are to be used together. */
+
+/*        The surface list consists of the string */
+
+/*           SURFACES = */
+
+/*        followed by a comma-separated list of one or more surface */
+/*        identifiers. The identifiers may be names or integer codes in */
+/*        string format. For example, suppose we have the surface */
+/*        names and corresponding ID codes shown below: */
+
+/*           Surface Name                              ID code */
+/*           ------------                              ------- */
+/*           'Mars MEGDR 128 PIXEL/DEG'                1 */
+/*           'Mars MEGDR 64 PIXEL/DEG'                 2 */
+/*           'Mars_MRO_HIRISE'                         3 */
+
+/*        If data for all of the above surfaces are loaded, then */
+/*        data for surface 1 can be specified by either */
+
+/*           'SURFACES = 1' */
+
+/*        or */
+
+/*           'SURFACES = "Mars MEGDR 128 PIXEL/DEG"' */
+
+/*        Double quotes are used to delimit the surface name because */
+/*        it contains blank characters. */
+
+/*        To use data for surfaces 2 and 3 together, any */
+/*        of the following surface lists could be used: */
+
+/*           'SURFACES = 2, 3' */
+
+/*           'SURFACES = "Mars MEGDR  64 PIXEL/DEG", 3' */
+
+/*           'SURFACES = 2, Mars_MRO_HIRISE' */
+
+/*           'SURFACES = "Mars MEGDR 64 PIXEL/DEG", Mars_MRO_HIRISE' */
+
+/*        An example of a METHOD argument that could be constructed */
+/*        using one of the surface lists above is */
+
+/*        'NADIR/DSK/UNPRIORITIZED/SURFACES= "Mars MEGDR 64 PIXEL/DEG",3' */
+
+
+/*        Aberration corrections */
+/*        ---------------------- */
+
+/*        For irregularly shaped target bodies, the distance between the */
+/*        observer and the nearest surface intercept need not be a */
+/*        continuous function of time; hence the one-way light time */
+/*        between the intercept and the observer may be discontinuous as */
+/*        well. In such cases, the computed light time, which is found */
+/*        using an iterative algorithm, may converge slowly or not at */
+/*        all. In all cases, the light time computation will terminate, */
+/*        but the result may be less accurate than expected. */
+
 
 /* $ Examples */
 
@@ -803,15 +1345,33 @@ static integer c__10 = 10;
 
 
 /*     1) Find the sub-solar point on Mars as seen from the Earth for a */
-/*        specified time. Perform the computation twice, using both the */
-/*        "intercept" and "near point" options. Display the locations of */
-/*        the Sun and the sub-solar point using both planetocentric */
-/*        and planetographic coordinates. */
+/*        specified time. */
+
+/*        Compute the sub-solar point using both triaxial ellipsoid */
+/*        and topographic surface models. Topography data are provided by */
+/*        a DSK file. For the ellipsoid model, use both the "intercept" */
+/*        and "near point" sub-observer point definitions; for the DSK */
+/*        case, use both the "intercept" and "nadir" definitions. */
+
+/*        Display the locations of both the sun and the sub-solar */
+/*        point relative to the center of Mars, in the IAU_MARS */
+/*        body-fixed reference frame, using both planetocentric and */
+/*        planetographic coordinates. */
+
+/*        The topographic model is based on data from the MGS MOLA DEM */
+/*        megr90n000cb, which has a resolution of 4 pixels/degree. A */
+/*        triangular plate model was produced by computing a 720 x 1440 */
+/*        grid of interpolated heights from this DEM, then tessellating */
+/*        the height grid. The plate model is stored in a type 2 segment */
+/*        in the referenced DSK file. */
 
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
+
 /*           KPL/MK */
+
+/*           File: subslr_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -822,14 +1382,29 @@ static integer c__10 = 10;
 /*           kernels referenced here must be present in the user's */
 /*           current working directory. */
 
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              de430.bsp                        Planetary ephemeris */
+/*              mar097.bsp                       Mars satellite ephemeris */
+/*              pck00010.tpc                     Planet orientation and */
+/*                                               radii */
+/*              naif0011.tls                     Leapseconds */
+/*              megr90n000cb_plate.bds           Plate model based on */
+/*                                               MEGDR DEM, resolution */
+/*                                               4 pixels/degree. */
 
 /*           \begindata */
 
-/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*              KERNELS_TO_LOAD = ( 'de430.bsp', */
+/*                                  'mar097.bsp', */
 /*                                  'pck00010.tpc', */
-/*                                  'naif0010.tls'  ) */
-
+/*                                  'naif0011.tls', */
+/*                                  'megr90n000cb_plate.bds' ) */
 /*           \begintext */
+
 
 
 /*       Example code begins here. */
@@ -845,17 +1420,21 @@ static integer c__10 = 10;
 /*     C     Local parameters */
 /*     C */
 /*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   = 'subslr.tm' ) */
+/*           PARAMETER           ( META   = 'subslr_ex1.tm' ) */
 
 /*           CHARACTER*(*)         FM */
 /*           PARAMETER           ( FM     =  '(A,F21.9)' ) */
 
 /*           INTEGER               MTHLEN */
 /*           PARAMETER           ( MTHLEN = 50 ) */
+
+/*           INTEGER               NMETH */
+/*           PARAMETER           ( NMETH  = 4 ) */
+
 /*     C */
 /*     C     Local variables */
 /*     C */
-/*           CHARACTER*(MTHLEN)    METHOD ( 2 ) */
+/*           CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
 
 /*           DOUBLE PRECISION      ET */
 /*           DOUBLE PRECISION      F */
@@ -890,8 +1469,10 @@ static integer c__10 = 10;
 /*     C */
 /*     C     Initial values */
 /*     C */
-/*           DATA                  METHOD / 'Intercept:  ellipsoid', */
-/*          .                               'Near point: ellipsoid' / */
+/*           DATA                  METHOD / 'Intercept/ellipsoid', */
+/*          .                               'Near point/ellipsoid', */
+/*          .                      'Intercept/DSK/Unprioritized', */
+/*          .                      'Nadir/DSK/Unprioritized'      / */
 /*     C */
 /*     C     Load kernel files via the meta-kernel. */
 /*     C */
@@ -927,10 +1508,10 @@ static integer c__10 = 10;
 /*     C     iteration, and use the "near point" definition on the */
 /*     C     second. */
 /*     C */
-/*           DO I = 1, 2 */
+/*           DO I = 1, NMETH */
 
 /*              CALL SUBSLR ( METHOD(I), */
-/*          .                'MARS',  ET,     'IAU_MARS', 'LT+S', */
+/*          .                'MARS',  ET,     'IAU_MARS', 'CN+S', */
 /*          .                'EARTH', SPOINT, TRGEPC,     SRFVEC ) */
 /*     C */
 /*     C        Convert the sub-solar point's rectangular coordinates */
@@ -962,7 +1543,7 @@ static integer c__10 = 10;
 /*     C        planetographic coordinates. */
 /*     C */
 /*              CALL SPKCPO ( 'SUN',  TRGEPC, 'IAU_MARS', 'OBSERVER', */
-/*          .                 'LT+S', SPOINT, 'MARS',     'IAU_MARS', */
+/*          .                 'CN+S', SPOINT, 'MARS',     'IAU_MARS', */
 /*          .                 SUNST,  SUNLT                            ) */
 
 /*              CALL VADD ( SUNST, SPOINT, SUNPOS ) */
@@ -1014,33 +1595,60 @@ static integer c__10 = 10;
 /*           END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran platform, */
-/*     the output was: */
+
+/*     When this program was executed on a PC/Linux/gfortran 64-bit */
+/*     platform, the output was: */
 
 
-/*      Computation method = Intercept:  ellipsoid */
+/*      Computation method = Intercept/ellipsoid */
 
 /*       Sub-solar point altitude            (km) =           0.000000000 */
-/*       Sub-solar planetographic longitude (deg) =         175.810675510 */
+/*       Sub-solar planetographic longitude (deg) =         175.810675508 */
 /*       Sun's planetographic longitude     (deg) =         175.810675508 */
 /*       Sub-solar planetographic latitude  (deg) =          23.668550281 */
 /*       Sun's planetographic latitude      (deg) =          23.420823362 */
-/*       Sub-solar planetocentric longitude (deg) =        -175.810675510 */
+/*       Sub-solar planetocentric longitude (deg) =        -175.810675508 */
 /*       Sun's planetocentric longitude     (deg) =        -175.810675508 */
 /*       Sub-solar planetocentric latitude  (deg) =          23.420819936 */
 /*       Sun's planetocentric latitude      (deg) =          23.420819936 */
 
 
-/*      Computation method = Near point: ellipsoid */
+/*      Computation method = Near point/ellipsoid */
 
-/*       Sub-solar point altitude            (km) =           0.000000000 */
-/*       Sub-solar planetographic longitude (deg) =         175.810675410 */
+/*       Sub-solar point altitude            (km) =          -0.000000000 */
+/*       Sub-solar planetographic longitude (deg) =         175.810675408 */
 /*       Sun's planetographic longitude     (deg) =         175.810675408 */
 /*       Sub-solar planetographic latitude  (deg) =          23.420823362 */
 /*       Sun's planetographic latitude      (deg) =          23.420823362 */
-/*       Sub-solar planetocentric longitude (deg) =        -175.810675410 */
+/*       Sub-solar planetocentric longitude (deg) =        -175.810675408 */
 /*       Sun's planetocentric longitude     (deg) =        -175.810675408 */
 /*       Sub-solar planetocentric latitude  (deg) =          23.175085578 */
+/*       Sun's planetocentric latitude      (deg) =          23.420819936 */
+
+
+/*      Computation method = Intercept/DSK/Unprioritized */
+
+/*       Sub-solar point altitude            (km) =          -4.052254284 */
+/*       Sub-solar planetographic longitude (deg) =         175.810675512 */
+/*       Sun's planetographic longitude     (deg) =         175.810675512 */
+/*       Sub-solar planetographic latitude  (deg) =          23.668848891 */
+/*       Sun's planetographic latitude      (deg) =          23.420823362 */
+/*       Sub-solar planetocentric longitude (deg) =        -175.810675512 */
+/*       Sun's planetocentric longitude     (deg) =        -175.810675512 */
+/*       Sub-solar planetocentric latitude  (deg) =          23.420819936 */
+/*       Sun's planetocentric latitude      (deg) =          23.420819936 */
+
+
+/*      Computation method = Nadir/DSK/Unprioritized */
+
+/*       Sub-solar point altitude            (km) =          -4.022302438 */
+/*       Sub-solar planetographic longitude (deg) =         175.810675412 */
+/*       Sun's planetographic longitude     (deg) =         175.810675412 */
+/*       Sub-solar planetographic latitude  (deg) =          23.420823362 */
+/*       Sun's planetographic latitude      (deg) =          23.420823362 */
+/*       Sub-solar planetocentric longitude (deg) =        -175.810675412 */
+/*       Sun's planetocentric longitude     (deg) =        -175.810675412 */
+/*       Sub-solar planetocentric latitude  (deg) =          23.174793924 */
 /*       Sun's planetocentric latitude      (deg) =          23.420819936 */
 
 
@@ -1059,6 +1667,24 @@ static integer c__10 = 10;
 /*     B.V. Semenov   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.0, 04-APR-2017 (NJB) */
+
+/*        Added FAILED tests. */
+
+/*       14-JUL-2016 (NJB) */
+
+/*        Now uses surface mapping tracking capability. */
+/*        Updated header. */
+
+/*       09-FEB-2015 (NJB) */
+
+/*        Support for surface specification was added. */
+/*        Header was updated to document DSK features. */
+
+/*       24-DEC-2014 (NJB) */
+
+/*        Updated to support DSK data. */
 
 /* -    SPICELIB Version 2.0.0, 31-MAR-2014 (NJB) (SCK) (BVS) */
 
@@ -1155,6 +1781,9 @@ static integer c__10 = 10;
 /*     Saved frame name/ID item declarations. */
 
 
+/*     Saved surface name/ID item declarations. */
+
+
 /*     Saved variables */
 
 
@@ -1162,6 +1791,9 @@ static integer c__10 = 10;
 
 
 /*     Saved frame name/ID items. */
+
+
+/*     Saved surface name/ID items. */
 
 
 /*     Initial values */
@@ -1186,6 +1818,11 @@ static integer c__10 = 10;
     }
     if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
 
+/*        Make sure the results of this block won't be reused */
+/*        if we bail out due to an error. */
+
+	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
@@ -1195,9 +1832,17 @@ static integer c__10 = 10;
 	    return 0;
 	}
 
-/*        The aberration correction flag is recognized; save it. */
+/*        Reject an aberration correction flag calling for transmission */
+/*        corrections. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	if (attblk[4]) {
+	    setmsg_("Aberration correction flag # calls for transmission-sty"
+		    "le corrections.", (ftnlen)70);
+	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
+	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -1216,19 +1861,11 @@ static integer c__10 = 10;
 	xmit = attblk[4];
 	uselt = attblk[1];
 	usecn = attblk[3];
+	usestl = attblk[2];
 
-/*        Reject an aberration correction flag calling for transmission */
-/*        corrections. */
+/*        The aberration correction flag is recognized; save it. */
 
-	if (xmit) {
-	    setmsg_("Aberration correction flag # calls for transmission-sty"
-		    "le corrections.", (ftnlen)70);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-	first = FALSE_;
+	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
@@ -1238,7 +1875,9 @@ static integer c__10 = 10;
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. ", (ftnlen)155);
+		"dated version of the SPICE Toolkit, or that you failed to lo"
+		"ad a kernel containing a name-ID mapping for this body.", (
+		ftnlen)234);
 	errch_("#", target, (ftnlen)1, target_len);
 	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
 	chkout_("SUBSLR", (ftnlen)6);
@@ -1249,18 +1888,30 @@ static integer c__10 = 10;
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
+		"updated version of the SPICE Toolkit, or that you failed to "
+		"load a kernel containing a name-ID mapping for this body.", (
+		ftnlen)236);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
 	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
     }
 
+/*     The target body may not be the sun. */
+
+    if (trgcde == 10) {
+	setmsg_("The target body is the sun; the sub-solar point is undefine"
+		"d for this case.", (ftnlen)75);
+	sigerr_("SPICE(INVALIDTARGET)", (ftnlen)20);
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
+    }
+
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr3, svfref, &svrefc, fixref, &refcde, (ftnlen)32, 
+    zznamfrm_(svctr3, svfref, &svrefc, fixref, &fixfid, (ftnlen)32, 
 	    fixref_len);
-    frinfo_(&refcde, &center, &type__, &typeid, &fnd);
+    frinfo_(&fixfid, &fixctr, &fixcls, &fixcid, &fnd);
     if (failed_()) {
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
@@ -1277,83 +1928,127 @@ static integer c__10 = 10;
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
-    if (center != trgcde) {
+    if (fixctr != trgcde) {
 	setmsg_("Reference frame # is not centered at the target body #. The"
 		" ID code of the frame center is #.", (ftnlen)93);
 	errch_("#", fixref, (ftnlen)1, fixref_len);
 	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &center, (ftnlen)1);
+	errint_("#", &fixctr, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
     }
 
+/*     Check whether the surface name/ID mapping has been updated. */
+
+    zzsrftrk_(svctr4, &surfup);
+
 /*     If necessary, parse the method specification. PRVMTH */
-/*     and the derived flags NEAR and ELIPSD start out with */
+/*     and the derived variables NEAR and SHAPE start out with */
 /*     valid values. PRVMTH records the last valid value of */
-/*     METHOD; NEAR and ELIPSD are the corresponding flags. */
+/*     METHOD; NEAR and SHAPE are the corresponding variables. */
 
-    if (s_cmp(method, prvmth, method_len, (ftnlen)80) != 0) {
+    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
+	    0) {
 
-/*        Parse the computation method specification. Work with a local */
-/*        copy of the method specification that contains no leading or */
-/*        embedded blanks. */
+/*        Set the previous method string to an invalid value, so it */
+/*        cannot match any future, valid input. This will force this */
+/*        routine to parse the input method on the next call if any */
+/*        failure occurs in this branch. Once success is assured, we can */
+/*        record the current method in the previous method string. */
 
-	ljucrs_(&c__0, method, locmth, method_len, (ftnlen)80);
-	lparse_(locmth, ":", &c__2, &nw, words, (ftnlen)80, (ftnlen)1, (
-		ftnlen)32);
-	if (nw != 2) {
-	    setmsg_("Computation method argument was <#>; this string must s"
-		    "pecify a supported shape model and computation type. See"
-		    " the header of SUBSLR for details.", (ftnlen)145);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
+	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+
+/*        Parse the method string. If the string is valid, the */
+/*        outputs SHAPE and SUBTYP will always be be set. However, */
+/*        SUBTYP is not used in this routine. */
+
+/*        For DSK shapes, the surface list array and count will be set */
+/*        if the method string contains a surface list. */
+
+	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
+		srflst, pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
+		ftnlen)20, (ftnlen)20);
+	if (failed_()) {
 	    chkout_("SUBSLR", (ftnlen)6);
 	    return 0;
 	}
-
-/*        The text preceding the first delimiter indicates the */
-/*        sub-observer point definition: "nearpoint" or "intercept." The */
-/*        second word designates the target shape model. Recall that */
-/*        we've removed all blanks from the input string, so we won't */
-/*        see the string "near point." */
-
-/*        Check the sub-observer point definition. */
-
-	if (s_cmp(words, "NEARPOINT", (ftnlen)32, (ftnlen)9) != 0 && s_cmp(
-		words, "INTERCEPT", (ftnlen)32, (ftnlen)9) != 0) {
-	    setmsg_("Computation method argument was <#>; this string must s"
-		    "pecify a supported shape model and computation type. See"
-		    " the header of SUBSLR for details.", (ftnlen)145);
+	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) == 0) {
+	    setmsg_("Sub-solar point type is required but was not found in t"
+		    "he method string #.", (ftnlen)74);
 	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
 	    chkout_("SUBSLR", (ftnlen)6);
 	    return 0;
 	}
+	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	    shape = 1;
+	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	    shape = 2;
+	} else {
 
-/*        Check the shape specification. */
+/*           This is a backstop check. */
 
-	if (s_cmp(words + 32, "ELLIPSOID", (ftnlen)32, (ftnlen)9) != 0) {
-	    setmsg_("Computation method argument was <#>; this string must s"
-		    "pecify a supported shape model and computation type. See"
-		    " the header of SUBSLR for details.", (ftnlen)145);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    setmsg_("Returned shape value from method string was <#>.", (
+		    ftnlen)48);
+	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("SUBSLR", (ftnlen)6);
 	    return 0;
 	}
+	if (shape == 1) {
 
-/*        At this point the method specification has passed our tests. */
-/*        Use the flag NEAR to indicate whether the computation type is */
-/*        "near point." Use the flag ELIPSD to indicate that the shape */
-/*        is modeled as an ellipsoid (which is true, for now). */
+/*           Allow both "near point" and "nadir" expressions */
+/*           the ellipsoid case, since these are equivalent. */
 
-	near__ = s_cmp(words, "NEARPOINT", (ftnlen)32, (ftnlen)9) == 0;
-	elipsd = TRUE_;
+	    near__ = eqstr_(subtyp, "NEAR POINT", (ftnlen)20, (ftnlen)10) || 
+		    eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
+	} else {
+
+/*           "near point" is not supported for DSKs. */
+
+	    near__ = eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
+	}
+	if (! near__) {
+	    if (! eqstr_(subtyp, "INTERCEPT", (ftnlen)20, (ftnlen)9)) {
+		setmsg_("Invalid sub-solar point type <#> was found in the m"
+			"ethod string #.", (ftnlen)66);
+		errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
+		errch_("#", method, (ftnlen)1, method_len);
+		sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	}
 
 /*        Save the current value of METHOD. */
 
-	s_copy(prvmth, method, (ftnlen)80, method_len);
+	s_copy(prvmth, method, (ftnlen)500, method_len);
+    }
+
+/*     At this point, the first pass actions were successful. */
+
+    first = FALSE_;
+    if (shape == 2) {
+
+/*        This is the DSK case. */
+
+/*        Initialize the intercept algorithm to use a DSK */
+/*        model for the surface of the target body. */
+
+	zzsudski_(&trgcde, &nsurf, srflst, &fixfid);
+    } else if (shape != 1) {
+	setmsg_("Computation method argument was <#>; this string must speci"
+		"fy a supported shape model and computation type. See the hea"
+		"der of SUBSLR for details.", (ftnlen)145);
+	errch_("#", method, (ftnlen)1, method_len);
+	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
+    }
+    if (failed_()) {
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
     }
 
 /*     Get the sign S prefixing LT in the expression for TRGEPC. */
@@ -1404,250 +2099,404 @@ static integer c__10 = 10;
 
     *trgepc = *et + s * lt;
 
-/*     Find the sub-solar point and distance from observer to */
-/*     sub-solar point using the specified geometric definition. */
+/*     Find the sub-solar point given the target epoch, observer-target */
+/*     position, and target body orientation we've already computed. If */
+/*     we're not using light time correction, this is all we need do. */
+/*     Otherwise, our result will give us an initial estimate of the */
+/*     target epoch, which we'll then improve. */
 
-    if (elipsd) {
+/*     Get the radii of the target body from the kernel pool. */
 
-/*        Find the sub-solar point given the target epoch, */
-/*        observer-target position, and target body orientation */
-/*        we've already computed. If we're not using light */
-/*        time correction, this is all we need do. Otherwise, */
-/*        our result will give us an initial estimate of the */
-/*        target epoch, which we'll then improve. */
+    bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
 
-/*        Get the radii of the target body from the kernel pool. */
+/*     Get the position of the Sun SPOS as seen from the target */
+/*     in the target body-fixed frame at TRGEPC. */
 
-	bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-
-/*        Get the position of the Sun SPOS as seen from the target */
-/*        in the target body-fixed frame at TRGEPC. */
-
-	spkezp_(&c__10, trgepc, fixref, abcorr, &trgcde, spos, &slt, 
-		fixref_len, abcorr_len);
-	if (failed_()) {
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-
-/*        Make a first estimate of the sub-solar point. The algorithm */
-/*        we use depends on the sub-solar point definition. */
-
-	if (near__) {
-
-/*           Locate the nearest point to the Sun on the target. */
-
-	    nearpt_(spos, radii, &radii[1], &radii[2], spoint, &altsun);
-	} else {
-
-/*           Locate the surface intercept of the ray from the */
-/*           Sun to the target center. */
-
-	    vminus_(spos, sdir);
-	    surfpt_(spos, sdir, radii, &radii[1], &radii[2], spoint, &fnd);
-	    if (! fnd) {
-
-/*              If there's no intercept, we have a numerical problem. */
-
-		setmsg_("No intercept of observer-target ray was found.", (
-			ftnlen)46);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("SUBSLR", (ftnlen)6);
-		return 0;
-	    }
-	}
-	if (failed_()) {
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-	obsrng = vdist_(obspos, spoint);
-
-/*        Compute the one-way light time and target epoch based on our */
-/*        first computation of SPOINT. The coefficient S has been */
-/*        set to give us the correct answer for each aberration */
-/*        correction case. */
-
-	lt = obsrng / clight_();
-	*trgepc = *et + s * lt;
-
-/*        If we're not using light time and stellar aberration */
-/*        corrections, we're almost done now. Note that we need only */
-/*        check for use of light time corrections, because use of */
-/*        stellar aberration corrections alone has been prevented by an */
-/*        earlier check. */
-
-	if (! uselt) {
-
-/*           The TRGEPC value we'll return comes from our value of */
-/*           OBSRNG computed above. The previous call to SPKEZP call */
-/*           yielded the vector OBSPOS. SPOINT was set immediately */
-/*           above. The only output left to compute is SRFVEC. */
-
-	    vsub_(spoint, obspos, srfvec);
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-
-/*        We'll now make an improved sub-solar point estimate using the */
-/*        previous estimate of the sub-solar point. The number of */
-/*        iterations depends on the light time correction type. */
-
-	if (usecn) {
-	    nitr = 10;
-	} else {
-	    nitr = 1;
-	}
-
-/*        Get the J2000-relative state of the observer relative to */
-/*        the solar system barycenter at ET. */
-
-	spkssb_(&obscde, et, "J2000", ssbost, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("SUBSLR", (ftnlen)6);
-	    return 0;
-	}
-
-/*        Initialize the variables required to evaluate the */
-/*        loop termination condition. */
-
-	i__ = 0;
-	ltdiff = 1.;
-	etdiff = 1.;
-	prevlt = lt;
-	prevet = *trgepc;
-	while(i__ < nitr && ltdiff > abs(lt) * 1e-17 && etdiff > 0.) {
-
-/*           Get the J2000-relative state of the target relative to */
-/*           the solar system barycenter at the target epoch. */
-
-	    spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-	    if (failed_()) {
-		chkout_("SUBSLR", (ftnlen)6);
-		return 0;
-	    }
-
-/*           Find the position of the observer relative to the target. */
-/*           Convert this vector from the J2000 frame to the target */
-/*           frame at TRGEPC. */
-
-	    vsub_(ssbost, ssbtst, j2pos);
-	    pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
-	    if (failed_()) {
-		chkout_("SUBSLR", (ftnlen)6);
-		return 0;
-	    }
-	    mxv_(xform, j2pos, obspos);
-
-/*           Note: if we're using stellar aberration correction, we do */
-/*           not apply the stellar aberration correction of the */
-/*           estimated sub-solar point as seen by the observer to the */
-/*           next estimate of the sun-solar point. The location of this */
-/*           point depends on the illumination of the target, which is a */
-/*           function of the observer-surface point light time. This is */
-/*           the only way in which the observer plays a role in */
-/*           determining the sub-solar point. */
-
-/*           Stellar aberration of the sun's position relative to the */
-/*           sub-solar point *is* used. */
-
-/*           First find the apparent position of the sun */
-/*           as seem from the estimated sub-solar point. */
-
-	    spkcpo_("SUN", trgepc, fixref, "OBSERVER", abcorr, spoint, target,
-		     fixref, sunst, &slt, (ftnlen)3, fixref_len, (ftnlen)8, 
-		    abcorr_len, target_len, fixref_len);
-
-/*           Create the target-center to sun vector. */
-
-	    vadd_(sunst, spoint, spos);
-	    if (failed_()) {
-		chkout_("SUBSLR", (ftnlen)6);
-		return 0;
-	    }
-
-/*           Find the sub-solar point using the current estimated */
-/*           geometry. */
-
-	    if (near__) {
-
-/*              Locate the nearest point to the observer on the target. */
-
-		nearpt_(spos, radii, &radii[1], &radii[2], spoint, &altsun);
-	    } else {
-
-/*              Locate the surface intercept of the ray from the */
-/*              Sun to the target center. */
-
-		vminus_(spos, sdir);
-		surfpt_(spos, sdir, radii, &radii[1], &radii[2], spoint, &fnd)
-			;
-		if (! fnd) {
-
-/*                 If there's no intercept, we have a numerical problem. */
-
-		    setmsg_("No intercept of observer-target ray was found.", 
-			    (ftnlen)46);
-		    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		    chkout_("SUBSLR", (ftnlen)6);
-		    return 0;
-		}
-	    }
-	    if (failed_()) {
-		chkout_("SUBSLR", (ftnlen)6);
-		return 0;
-	    }
-	    obsrng = vdist_(obspos, spoint);
-
-/*           Compute a new light time estimate and new target epoch. */
-
-	    lt = obsrng / clight_();
-	    *trgepc = *et + s * lt;
-
-/*           At this point, we have new estimates of the sub-solar point */
-/*           SPOINT, the observer altitude OBSRNG, the target epoch */
-/*           TRGEPC, and the position of the observer relative to the */
-/*           target OBSPOS. */
-
-/*           We use the d.p. identity function TOUCHD to force the */
-/*           compiler to create double precision arguments from the */
-/*           differences LT-PREVLT and TRGEPC-PREVET. Some compilers */
-/*           will perform extended-precision register arithmetic, which */
-/*           can prevent a difference from rounding to zero. Simply */
-/*           storing the result of the subtraction in a double precision */
-/*           variable doesn't solve the problem, because that variable */
-/*           can be optimized out of existence. */
-
-	    d__2 = lt - prevlt;
-	    ltdiff = (d__1 = touchd_(&d__2), abs(d__1));
-	    d__2 = *trgepc - prevet;
-	    etdiff = (d__1 = touchd_(&d__2), abs(d__1));
-	    prevlt = lt;
-	    prevet = *trgepc;
-	    ++i__;
-	}
-    } else {
-
-/*        We've already checked the computation method input argument, */
-/*        so we don't expect to arrive here. This code is present for */
-/*        safety. */
-
-	setmsg_("The computation method # was not recognized. ", (ftnlen)45);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
+    spkezp_(&c__10, trgepc, fixref, abcorr, &trgcde, spos, &slt, fixref_len, 
+	    abcorr_len);
+    if (failed_()) {
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
     }
 
-/*     SPOINT and TRGEPC have been set. Compute SRFVEC. */
+/*     Make a first estimate of the sub-solar point. The algorithm */
+/*     we use depends on the sub-solar point definition. */
 
-    spkcpt_(spoint, target, fixref, et, fixref, "TARGET", abcorr, obsrvr, 
-	    sslrst, &sslrlt, target_len, fixref_len, fixref_len, (ftnlen)6, 
-	    abcorr_len, obsrvr_len);
-    vequ_(sslrst, srfvec);
+    if (near__) {
+
+/*        Locate the nearest point to the Sun on the target's */
+/*        reference ellipsoid. */
+
+	nearpt_(spos, radii, &radii[1], &radii[2], spoint, &altsun);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+
+/*        If the target is an ellipsoid, the NEARPT call above does the */
+/*        trick. For DSKs, we define a ray emanating from the sun and */
+/*        passing through the near point on the reference ellipsoid. The */
+/*        closest ray-DSK surface intercept to the sun is the initial */
+/*        estimate of the sub-solar point. */
+
+	if (shape == 2) {
+
+/*           Generate the ray direction; find the DSK intercept. */
+
+	    vsub_(spoint, spos, dvec);
+	    zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec, 
+		    spoint, &fnd);
+	    if (failed_()) {
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	    if (! fnd) {
+		setmsg_("No sub-solar point was found on the surface defined"
+			" by DSK data. Observer is #; target is #. This probl"
+			"em can occur for bodies having shapes not well model"
+			"ed by ellipsoids. Consider using the \"Intercept: DSK"
+			"\" computation method.", (ftnlen)228);
+		errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
+		errch_("#", target, (ftnlen)1, target_len);
+		sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	}
+    } else {
+
+/*        This is the case for the "intercept" sub-solar point */
+/*        definition. */
+
+/*        Generate the ray direction. */
+
+	vminus_(spos, dvec);
+	if (shape == 1) {
+
+/*           Locate the surface intercept of the ray from the */
+/*           sun to the target center. */
+
+	    surfpt_(spos, dvec, radii, &radii[1], &radii[2], spoint, &fnd);
+	    if (failed_()) {
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	    if (! fnd) {
+
+/*              If there's no intercept, we have a numerical problem. */
+
+		setmsg_("No intercept of sun-target ray was found.", (ftnlen)
+			41);
+		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	} else {
+
+/*           Find the DSK intercept. */
+
+	    zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec, 
+		    spoint, &fnd);
+	    if (failed_()) {
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	    if (! fnd) {
+		setmsg_("No sub-solar point was found on the surface defined"
+			" by DSK data. Observer is #; target is #. This probl"
+			"em can occur for a body having an irregular shape su"
+			"ch that the origin of the body-fixed reference frame"
+			" is outside of the body. A torus is an example of su"
+			"ch a shape.", (ftnlen)270);
+		errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
+		errch_("#", target, (ftnlen)1, target_len);
+		sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+	}
+    }
+    if (failed_()) {
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
+    }
+
+/*     If we're not using light time and stellar aberration */
+/*     corrections, we're almost done now. Note that we need only */
+/*     check for use of light time corrections, because use of */
+/*     stellar aberration corrections alone has been prevented by an */
+/*     earlier check. */
+
+    if (! uselt) {
+
+/*        The TRGEPC value we'll return is simply the input time. The */
+/*        previous call to SPKEZP call yielded the vector OBSPOS. SPOINT */
+/*        was set immediately above. The only output left to compute is */
+/*        SRFVEC. */
+
+	*trgepc = *et;
+	vsub_(spoint, obspos, srfvec);
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
+    }
+
+/*     Compute the range from the observer to the sub-solar */
+/*     point. We'll use this range for a light time estimate. */
+
+    obsrng = vdist_(obspos, spoint);
+
+/*     Compute the one-way light time and target epoch based on our */
+/*     first computation of SPOINT. The coefficient S has been */
+/*     set to give us the correct answer for each aberration */
+/*     correction case. */
+
+    lt = obsrng / clight_();
+    *trgepc = *et + s * lt;
+
+/*     We'll now make an improved sub-solar point estimate using the */
+/*     previous estimate of the sub-solar point. The number of */
+/*     iterations depends on the light time correction type. */
+
+    if (usecn) {
+	nitr = 10;
+    } else {
+	nitr = 1;
+    }
+
+/*     Get the J2000-relative state of the observer relative to */
+/*     the solar system barycenter at ET. */
+
+    spkssb_(&obscde, et, "J2000", ssbost, (ftnlen)5);
+    if (failed_()) {
+	chkout_("SUBSLR", (ftnlen)6);
+	return 0;
+    }
+
+/*     Initialize the variables required to evaluate the */
+/*     loop termination condition. */
+
+    i__ = 0;
+    ltdiff = 1.;
+    etdiff = 1.;
+    prevlt = lt;
+    prevet = *trgepc;
+    while(i__ < nitr && ltdiff > abs(lt) * 1e-17 && etdiff > 0.) {
+
+/*        Get the J2000-relative state of the target relative to */
+/*        the solar system barycenter at the target epoch. */
+
+	spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Find the position of the observer relative to the target. */
+/*        Convert this vector from the J2000 frame to the target */
+/*        frame at TRGEPC. */
+
+	vsub_(ssbost, ssbtst, j2pos);
+	pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+	mxv_(xform, j2pos, obspos);
+
+/*        Note: if we're using stellar aberration correction, we do not */
+/*        apply the stellar aberration correction of the estimated */
+/*        sub-solar point as seen by the observer to the next estimate */
+/*        of the sun-solar point. The location of this point depends on */
+/*        the illumination of the target, which is a function of the */
+/*        observer-surface point light time. This is the only way in */
+/*        which the observer plays a role in determining the sub-solar */
+/*        point. */
+
+/*        Stellar aberration of the sun's position relative to the */
+/*        sub-solar point *is* used. */
+
+/*        First find the apparent position of the sun as seen from the */
+/*        estimated sub-solar point. */
+
+	spkcpo_("SUN", trgepc, fixref, "OBSERVER", abcorr, spoint, target, 
+		fixref, sunst, &slt, (ftnlen)3, fixref_len, (ftnlen)8, 
+		abcorr_len, target_len, fixref_len);
+
+/*        Create the target-center to sun vector. */
+
+	vadd_(sunst, spoint, spos);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Find the sub-solar point using the current estimated */
+/*        geometry. */
+
+	if (near__) {
+
+/*           Locate the nearest point to the sun on the target's */
+/*           reference ellipsoid. */
+
+	    nearpt_(spos, radii, &radii[1], &radii[2], spoint, &altsun);
+	    if (failed_()) {
+		chkout_("SUBSLR", (ftnlen)6);
+		return 0;
+	    }
+
+/*           If the target is an ellipsoid, the NEARPT call above does */
+/*           the trick. For DSKs, we define a ray emanating from the sun */
+/*           and passing through the near point on the reference */
+/*           ellipsoid. The closest ray-DSK surface intercept to the sun */
+/*           is the initial estimate of the sub-solar point. */
+
+	    if (shape == 2) {
+
+/*              Locate the surface intercept of the ray from the */
+/*              Sun to the target center. */
+
+		vsub_(spoint, spos, dvec);
+		zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec,
+			 spoint, &fnd);
+		if (failed_()) {
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+		if (! fnd) {
+		    setmsg_("No sub-solar point was found on the surface def"
+			    "ined by DSK data. Observer is #; target is #. Th"
+			    "is problem can occur for bodies having shapes no"
+			    "t well modeled by ellipsoids. Consider using the "
+			    "\"Intercept: DSK\" computation method.", (ftnlen)
+			    228);
+		    errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
+		    errch_("#", target, (ftnlen)1, target_len);
+		    sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+	    }
+	} else {
+/*           This is the "intercept" case. */
+
+/*           Generate the ray direction. */
+
+	    vminus_(spos, dvec);
+	    if (shape == 1) {
+
+/*              Locate the surface intercept of the ray from the */
+/*              sun to the target center. */
+
+		surfpt_(spos, dvec, radii, &radii[1], &radii[2], spoint, &fnd)
+			;
+		if (failed_()) {
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+		if (! fnd) {
+
+/*                 If there's no intercept, we have a numerical problem. */
+
+		    setmsg_("No intercept of sun-target ray was found.", (
+			    ftnlen)41);
+		    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+	    } else {
+
+/*              Find the DSK intercept. */
+
+		zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec,
+			 spoint, &fnd);
+		if (failed_()) {
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+		if (! fnd) {
+		    setmsg_("No sub-solar point was found on the surface def"
+			    "ined by DSK data. Observer is #; target is #. Th"
+			    "is problem can occur for a body having an irregu"
+			    "lar shape such that the origin of the body-fixed"
+			    " reference frame is outside of the body. A torus"
+			    " is an example of such a shape.", (ftnlen)270);
+		    errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
+		    errch_("#", target, (ftnlen)1, target_len);
+		    sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
+		    chkout_("SUBSLR", (ftnlen)6);
+		    return 0;
+		}
+	    }
+	}
+
+/*        Update the observer to sub-solar point range. */
+
+	obsrng = vdist_(obspos, spoint);
+
+/*        Compute a new light time estimate and new target epoch. */
+
+	lt = obsrng / clight_();
+	*trgepc = *et + s * lt;
+
+/*        At this point, we have new estimates of the sub-solar point */
+/*        SPOINT, the observer altitude OBSRNG, the target epoch */
+/*        TRGEPC, and the position of the observer relative to the */
+/*        target OBSPOS. */
+
+/*        We use the d.p. identity function TOUCHD to force the compiler */
+/*        to create double precision arguments from the differences */
+/*        LT-PREVLT and TRGEPC-PREVET. Some compilers will perform */
+/*        extended-precision register arithmetic, which can prevent a */
+/*        difference from rounding to zero. Simply storing the result of */
+/*        the subtraction in a double precision variable doesn't solve */
+/*        the problem, because that variable can be optimized out of */
+/*        existence. */
+
+	d__2 = lt - prevlt;
+	ltdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	d__2 = *trgepc - prevet;
+	etdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	prevlt = lt;
+	prevet = *trgepc;
+	++i__;
+	spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Find the position of the observer relative to the target. */
+/*        Convert this vector from the J2000 frame to the target */
+/*        frame at TRGEPC. */
+
+	vsub_(ssbost, ssbtst, j2pos);
+	pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+	mxv_(xform, j2pos, obspos);
+    }
+
+/*     SPOINT and TRGEPC have been set. Compute SRFVEC, using */
+/*     both light time and stellar aberration corrections if */
+/*     these have been requested by the caller. Note that */
+/*     the position of the target body was computed without */
+/*     stellar aberration corrections, so we may not be able */
+/*     to use it for this computation. */
+
+    if (usestl) {
+	spkcpt_(spoint, target, fixref, et, fixref, "TARGET", abcorr, obsrvr, 
+		sslrst, &sslrlt, target_len, fixref_len, fixref_len, (ftnlen)
+		6, abcorr_len, obsrvr_len);
+	if (failed_()) {
+	    chkout_("SUBSLR", (ftnlen)6);
+	    return 0;
+	}
+	vequ_(sslrst, srfvec);
+    } else {
+	vsub_(spoint, obspos, srfvec);
+    }
     chkout_("SUBSLR", (ftnlen)6);
     return 0;
 } /* subslr_ */

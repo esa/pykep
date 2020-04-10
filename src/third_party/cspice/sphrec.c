@@ -50,45 +50,54 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION,  COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      R          I   Distance of a point from the origin. */
-/*      COLAT      I   Angle of the point from the positive Z-axis. */
-/*      LONG       I   Angle of the point from the XZ plane in radians. */
-/*      RECTAN     O   Rectangular coordinates of the point. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     R          I   Distance of a point from the origin. */
+/*     COLAT      I   Angle of the point from the Z-axis in radians. */
+/*     LONG       I   Angle of the point from the XZ plane in radians. */
+/*     RECTAN     O   Rectangular coordinates of the point. */
 
 /* $ Detailed_Input */
 
-/*      R          Distance of the point from the origin. */
+/*     R          Distance of the point from the origin. */
 
-/*      COLAT      Angle between the point and the positive z-axis. */
+/*     COLAT      Angle between the point and the positive z-axis in */
+/*                radians. */
 
-/*      LONG       Angle of the projection of the point to the XY */
-/*                 plane from the positive X-axis.  The positive */
-/*                 Y-axis is at longitude PI/2 radians. */
+/*     LONG       Angle of the projection of the point to the XY plane */
+/*                from the positive X-axis in radians. The positive */
+/*                Y-axis is at longitude PI/2 radians. */
 
 /* $ Detailed_Output */
 
-/*      RECTAN     The rectangular coordinates of a point. */
+/*     RECTAN     The rectangular coordinates of a point. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine returns the rectangular coordinates of a point */
-/*      whose position is input in spherical coordinates. */
+/*     This routine returns the rectangular coordinates of a point */
+/*     whose position is input in spherical coordinates. */
 
-/*      Spherical coordinates are defined by a distance from a central */
-/*      reference point, an angle from a reference meridian, and an angle */
-/*      from the z-axis.  The co-latitude of the positive Z-axis is */
-/*      zero.  The longitude of the posive Y-axis is PI/2 radians. */
+/*     Spherical coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     from the z-axis.  The co-latitude of the positive Z-axis is */
+/*     zero.  The longitude of the posive Y-axis is PI/2 radians. */
 
 /* $ Examples */
 
@@ -129,25 +138,21 @@
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.4, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.3, 24-SEP-1997 (WLT) */
 
@@ -175,9 +180,9 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
 
-/*      Example section of header upgraded. */
+/*        Example section of header upgraded. */
 
 /* -& */
 

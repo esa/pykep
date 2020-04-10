@@ -17,16 +17,15 @@ static integer c__14 = 14;
 /* Subroutine */ int zzekpgch_(integer *handle, char *access, ftnlen 
 	access_len)
 {
-    integer topc, topd, topi, unit;
+    integer topc, topd, topi;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer lastc, lastd, lasti, id;
     extern logical failed_(void);
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
 	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
-	    dassih_(integer *, char *, ftnlen), dashlu_(integer *, integer *),
-	     errfnm_(char *, integer *, ftnlen), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+	    dassih_(integer *, char *, ftnlen), errhan_(char *, integer *, 
+	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
+	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
     integer npc, npd, npi;
 
 /* $ Abstract */
@@ -316,11 +315,11 @@ static integer c__14 = 14;
 /*         called by this routine. */
 
 /*     2)  If the EK architecture version is not current, the error */
-/*         SPICE(WRONGARCHITECTURE) is signalled. */
+/*         SPICE(WRONGARCHITECTURE) is signaled. */
 
 /*     3)  If the DAS logical address ranges occupied by the EK are */
 /*         not consistent with those recorded by the paging system, */
-/*         the error SPICE(INVALIDFORMAT) is signalled. */
+/*         the error SPICE(INVALIDFORMAT) is signaled. */
 
 /*     4)  If the EK is not open for the specified type of access, the */
 /*         error will be diagnosed by routines called by this routine. */
@@ -345,7 +344,7 @@ static integer c__14 = 14;
 /*        - Are the DAS address ranges in use consistent with those */
 /*          recorded in the file by the paging system? */
 
-/*     If the file fails any test, an error is signalled. */
+/*     If the file fails any test, an error is signaled. */
 
 /* $ Examples */
 
@@ -364,6 +363,11 @@ static integer c__14 = 14;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    Beta Version 1.0.0, 19-OCT-1995 (NJB) */
 
@@ -388,10 +392,9 @@ static integer c__14 = 14;
 
     dasrdi_(handle, &c__1, &c__1, &id);
     if (id != 8) {
-	dashlu_(handle, &unit);
 	setmsg_("File # has architecture #, which is invalid for paged acces"
 		"s.  You are using EK software version #.", (ftnlen)99);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &id, (ftnlen)1);
 	errint_("#", &c__8, (ftnlen)1);
 	sigerr_("SPICE(WRONGARCHITECTURE)", (ftnlen)24);
@@ -413,27 +416,24 @@ static integer c__14 = 14;
 
     daslla_(handle, &lastc, &lastd, &lasti);
     if (lastc > topc) {
-	dashlu_(handle, &unit);
 	setmsg_("File # has last char address #; `top' = #.", (ftnlen)42);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &lastc, (ftnlen)1);
 	errint_("#", &topc, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("ZZEKPGCH", (ftnlen)8);
 	return 0;
     } else if (lastd > topd) {
-	dashlu_(handle, &unit);
 	setmsg_("File # has last d.p. address #; `top' = #.", (ftnlen)42);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &lastd, (ftnlen)1);
 	errint_("#", &topd, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("ZZEKPGCH", (ftnlen)8);
 	return 0;
     } else if (lasti > topi) {
-	dashlu_(handle, &unit);
 	setmsg_("File # has last int. address #; `top' = #.", (ftnlen)42);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &lasti, (ftnlen)1);
 	errint_("#", &topi, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);

@@ -457,491 +457,103 @@
 /*     that it allows you to refer to ephemeris objects by name (via a */
 /*     character string). */
 
-
-/*     Aberration corrections */
-/*     ====================== */
-
-/*     In space science or engineering applications one frequently */
-/*     wishes to know where to point a remote sensing instrument, such */
-/*     as an optical camera or radio antenna, in order to observe or */
-/*     otherwise receive radiation from a target. This pointing problem */
-/*     is complicated by the finite speed of light:  one needs to point */
-/*     to where the target appears to be as opposed to where it actually */
-/*     is at the epoch of observation. We use the adjectives */
-/*     "geometric," "uncorrected," or "true" to refer to an actual */
-/*     position or state of a target at a specified epoch. When a */
-/*     geometric position or state vector is modified to reflect how it */
-/*     appears to an observer, we describe that vector by any of the */
-/*     terms "apparent," "corrected," "aberration corrected," or "light */
-/*     time and stellar aberration corrected." The SPICE Toolkit can */
-/*     correct for two phenomena affecting the apparent location of an */
-/*     object:  one-way light time (also called "planetary aberration") */
-/*     and stellar aberration. */
-
-/*     One-way light time */
-/*     ------------------ */
-
-/*     Correcting for one-way light time is done by computing, given an */
-/*     observer and observation epoch, where a target was when the */
-/*     observed photons departed the target's location. The vector from */
-/*     the observer to this computed target location is called a "light */
-/*     time corrected" vector. The light time correction depends on the */
-/*     motion of the target relative to the solar system barycenter, but */
-/*     it is independent of the velocity of the observer relative to the */
-/*     solar system barycenter. Relativistic effects such as light */
-/*     bending and gravitational delay are not accounted for in the */
-/*     light time correction performed by this routine. */
-
-/*     Stellar aberration */
-/*     ------------------ */
-
-/*     The velocity of the observer also affects the apparent location */
-/*     of a target:  photons arriving at the observer are subject to a */
-/*     "raindrop effect" whereby their velocity relative to the observer */
-/*     is, using a Newtonian approximation, the photons' velocity */
-/*     relative to the solar system barycenter minus the velocity of the */
-/*     observer relative to the solar system barycenter. This effect is */
-/*     called "stellar aberration."  Stellar aberration is independent */
-/*     of the velocity of the target. The stellar aberration formula */
-/*     used by this routine does not include (the much smaller) */
-/*     relativistic effects. */
-
-/*     Stellar aberration corrections are applied after light time */
-/*     corrections:  the light time corrected target position vector is */
-/*     used as an input to the stellar aberration correction. */
-
-/*     When light time and stellar aberration corrections are both */
-/*     applied to a geometric position vector, the resulting position */
-/*     vector indicates where the target "appears to be" from the */
-/*     observer's location. */
-
-/*     As opposed to computing the apparent position of a target, one */
-/*     may wish to compute the pointing direction required for */
-/*     transmission of photons to the target. This also requires */
-/*     correction of the geometric target position for the effects of */
-/*     light time and stellar aberration, but in this case the */
-/*     corrections are computed for radiation traveling *from* the */
-/*     observer to the target. */
-
-/*     The "transmission" light time correction yields the target's */
-/*     location as it will be when photons emitted from the observer's */
-/*     location at ET arrive at the target. The transmission stellar */
-/*     aberration correction is the inverse of the traditional stellar */
-/*     aberration correction:  it indicates the direction in which */
-/*     radiation should be emitted so that, using a Newtonian */
-/*     approximation, the sum of the velocity of the radiation relative */
-/*     to the observer and of the observer's velocity, relative to the */
-/*     solar system barycenter, yields a velocity vector that points in */
-/*     the direction of the light time corrected position of the target. */
-
-/*     One may object to using the term "observer" in the transmission */
-/*     case, in which radiation is emitted from the observer's location. */
-/*     The terminology was retained for consistency with earlier */
-/*     documentation. */
-
-/*     Below, we indicate the aberration corrections to use for some */
-/*     common applications: */
-
-/*        1) Find the apparent direction of a target for a remote-sensing */
-/*           observation. */
-
-/*              Use 'LT+S' or 'CN+S: apply both light time and stellar */
-/*              aberration corrections. */
-
-/*           Note that using light time corrections alone ('LT' or 'CN') */
-/*           is generally not a good way to obtain an approximation to */
-/*           an apparent target vector: since light time and stellar */
-/*           aberration corrections often partially cancel each other, */
-/*           it may be more accurate to use no correction at all than to */
-/*           use light time alone. */
-
-
-/*        2) Find the corrected pointing direction to radiate a signal */
-/*           to a target. This computation is often applicable for */
-/*           implementing communications sessions. */
-
-/*              Use 'XLT+S' or 'XCN+S: apply both light time and stellar */
-/*              aberration corrections for transmission. */
-
-
-/*        3) Compute the apparent position of a target body relative */
-/*           to a star or other distant object. */
-
-/*              Use 'LT', 'CN', 'LT+S', or 'CN+S' as needed to match the */
-/*              correction applied to the position of the distant */
-/*              object. For example, if a star position is obtained from */
-/*              a catalog, the position vector may not be corrected for */
-/*              stellar aberration. In this case, to find the angular */
-/*              separation of the star and the limb of a planet, the */
-/*              vector from the observer to the planet should be */
-/*              corrected for light time but not stellar aberration. */
-
-
-/*        4) Obtain an uncorrected state vector derived directly from */
-/*           data in an SPK file. */
-
-/*              Use 'NONE'. */
-
-
-/*        5) Use a geometric state vector as a low-accuracy estimate */
-/*           of the apparent state for an application where execution */
-/*           speed is critical. */
-
-/*              Use 'NONE'. */
-
-
-/*        6) While this routine cannot perform the relativistic */
-/*           aberration corrections required to compute states */
-/*           with the highest possible accuracy, it can supply the */
-/*           geometric states required as inputs to these computations. */
-
-/*              Use 'NONE', then apply relativistic aberration */
-/*              corrections (not available in the SPICE Toolkit). */
-
-
-/*     Below, we discuss in more detail how the aberration corrections */
-/*     applied by this routine are computed. */
-
-/*        Geometric case */
-/*        ============== */
-
-/*        SPKEZR begins by computing the geometric position T(ET) of the */
-/*        target body relative to the solar system barycenter (SSB). */
-/*        Subtracting the geometric position of the observer O(ET) gives */
-/*        the geometric position of the target body relative to the */
-/*        observer. The one-way light time, LT, is given by */
-
-/*                  | T(ET) - O(ET) | */
-/*           LT = ------------------- */
-/*                          c */
-
-/*        The geometric relationship between the observer, target, and */
-/*        solar system barycenter is as shown: */
-
-
-/*           SSB ---> O(ET) */
-/*            |      / */
-/*            |     / */
-/*            |    / */
-/*            |   /  T(ET) - O(ET) */
-/*            V  V */
-/*           T(ET) */
-
-
-/*        The returned state consists of the position vector */
-
-/*           T(ET) - O(ET) */
-
-/*        and a velocity obtained by taking the difference of the */
-/*        corresponding velocities. In the geometric case, the */
-/*        returned velocity is actually the time derivative of the */
-/*        position. */
-
-
-/*        Reception case */
-/*        ============== */
-
-/*        When any of the options 'LT', 'CN', 'LT+S', 'CN+S' is selected */
-/*        for ABCORR, SPKEZR computes the position of the target body at */
-/*        epoch ET-LT, where LT is the one-way light time. Let T(t) and */
-/*        O(t) represent the positions of the target and observer */
-/*        relative to the solar system barycenter at time t; then LT is */
-/*        the solution of the light-time equation */
-
-/*                  | T(ET-LT) - O(ET) | */
-/*           LT = ------------------------                            (1) */
-/*                           c */
-
-/*        The ratio */
-
-/*            | T(ET) - O(ET) | */
-/*          ---------------------                                     (2) */
-/*                    c */
-
-/*        is used as a first approximation to LT; inserting (2) into the */
-/*        right hand side of the light-time equation (1) yields the */
-/*        "one-iteration" estimate of the one-way light time ("LT"). */
-/*        Repeating the process until the estimates of LT converge */
-/*        yields the "converged Newtonian" light time estimate ("CN"). */
-
-/*        Subtracting the geometric position of the observer O(ET) gives */
-/*        the position of the target body relative to the observer: */
-/*        T(ET-LT) - O(ET). */
-
-/*           SSB ---> O(ET) */
-/*            | \     | */
-/*            |  \    | */
-/*            |   \   | T(ET-LT) - O(ET) */
-/*            |    \  | */
-/*            V     V V */
-/*           T(ET)  T(ET-LT) */
-
-/*        The position component of the light time corrected state */
-/*        is the vector */
-
-/*           T(ET-LT) - O(ET) */
-
-/*        The velocity component of the light time corrected state */
-/*        is the difference */
-
-/*           T_vel(ET-LT)*(1-dLT/dET) - O_vel(ET) */
-
-/*        where T_vel and O_vel are, respectively, the velocities of the */
-/*        target and observer relative to the solar system barycenter at */
-/*        the epochs ET-LT and ET. */
-
-/*        If correction for stellar aberration is requested, the target */
-/*        position is rotated toward the solar system barycenter- */
-/*        relative velocity vector of the observer. The rotation is */
-/*        computed as follows: */
-
-/*           Let r be the light time corrected vector from the observer */
-/*           to the object, and v be the velocity of the observer with */
-/*           respect to the solar system barycenter. Let w be the angle */
-/*           between them. The aberration angle phi is given by */
-
-/*              sin(phi) = v sin(w) / c */
-
-/*           Let h be the vector given by the cross product */
-
-/*              h = r X v */
-
-/*           Rotate r by phi radians about h to obtain the apparent */
-/*           position of the object. */
-
-/*        When stellar aberration corrections are used, the rate of */
-/*        change of the stellar aberration correction is accounted for */
-/*        in the computation of the output velocity. */
-
-
-/*        Transmission case */
-/*        ================== */
-
-/*        When any of the options 'XLT', 'XCN', 'XLT+S', 'XCN+S' is */
-/*        selected, SPKEZR computes the position of the target body T at */
-/*        epoch ET+LT, where LT is the one-way light time. LT is the */
-/*        solution of the light-time equation */
-
-/*                  | T(ET+LT) - O(ET) | */
-/*           LT = ------------------------                            (3) */
-/*                            c */
-
-/*        Subtracting the geometric position of the observer, O(ET), */
-/*        gives the position of the target body relative to the */
-/*        observer: T(ET-LT) - O(ET). */
-
-/*                   SSB --> O(ET) */
-/*                  / |    * */
-/*                 /  |  *  T(ET+LT) - O(ET) */
-/*                /   |* */
-/*               /   *| */
-/*              V  V  V */
-/*          T(ET+LT)  T(ET) */
-
-/*        The position component of the light-time corrected state */
-/*        is the vector */
-
-/*           T(ET+LT) - O(ET) */
-
-/*        The velocity component of the light-time corrected state */
-/*        consists of the difference */
-
-/*           T_vel(ET+LT)*(1+dLT/dET) - O_vel(ET) */
-
-/*        where T_vel and O_vel are, respectively, the velocities of the */
-/*        target and observer relative to the solar system barycenter at */
-/*        the epochs ET+LT and ET. */
-
-/*        If correction for stellar aberration is requested, the target */
-/*        position is rotated away from the solar system barycenter- */
-/*        relative velocity vector of the observer. The rotation is */
-/*        computed as in the reception case, but the sign of the */
-/*        rotation angle is negated. Velocities are adjusted to account */
-/*        for the rate of change of the stellar aberration correction. */
-
-
-/*     Precision of light time corrections */
-/*     =================================== */
-
-/*        Corrections using one iteration of the light time solution */
-/*        ---------------------------------------------------------- */
-
-/*        When the requested aberration correction is 'LT', 'LT+S', */
-/*        'XLT', or 'XLT+S', only one iteration is performed in the */
-/*        algorithm used to compute LT. */
-
-/*        The relative error in this computation */
-
-/*           | LT_ACTUAL - LT_COMPUTED |  /  LT_ACTUAL */
-
-/*        is at most */
-
-/*            (V/C)**2 */
-/*           ---------- */
-/*            1 - (V/C) */
-
-/*        which is well approximated by (V/C)**2, where V is the */
-/*        velocity of the target relative to an inertial frame and C is */
-/*        the speed of light. */
-
-/*        For nearly all objects in the solar system V is less than 60 */
-/*        km/sec. The value of C is ~300000 km/sec. Thus the */
-/*        one-iteration solution for LT has a potential relative error */
-/*        of not more than 4e-8. This is a potential light time error of */
-/*        approximately 2e-5 seconds per astronomical unit of distance */
-/*        separating the observer and target. Given the bound on V cited */
-/*        above: */
-
-/*           As long as the observer and target are separated by less */
-/*           than 50 astronomical units, the error in the light time */
-/*           returned using the one-iteration light time corrections is */
-/*           less than 1 millisecond. */
-
-/*           The magnitude of the corresponding position error, given */
-/*           the above assumptions, may be as large as (V/C)**2 * the */
-/*           distance between the observer and the uncorrected target */
-/*           position: 300 km or equivalently 6 km/AU. */
-
-/*        In practice, the difference between positions obtained using */
-/*        one-iteration and converged light time is usually much smaller */
-/*        than the value computed above and can be insignificant. For */
-/*        example, for the spacecraft Mars Reconnaissance Orbiter and */
-/*        Mars Express, the position error for the one-iteration light */
-/*        time correction, applied to the spacecraft-to-Mars center */
-/*        vector, is at the 1 cm level. */
-
-/*        Comparison of results obtained using the one-iteration and */
-/*        converged light time solutions is recommended when adequacy of */
-/*        the one-iteration solution is in doubt. */
-
-
-/*        Converged corrections */
-/*        --------------------- */
-
-/*        When the requested aberration correction is 'CN', 'CN+S', */
-/*        'XCN', or 'XCN+S', as many iterations as are required for */
-/*        convergence are performed in the computation of LT. Usually */
-/*        the solution is found after three iterations. The relative */
-/*        error present in this case is at most */
-
-/*            (V/C)**4 */
-/*           ---------- */
-/*            1 - (V/C) */
-
-/*        which is well approximated by (V/C)**4. */
-
-/*           The precision of this computation (ignoring round-off */
-/*           error) is better than 4e-11 seconds for any pair of objects */
-/*           less than 50 AU apart, and having speed relative to the */
-/*           solar system barycenter less than 60 km/s. */
-
-/*           The magnitude of the corresponding position error, given */
-/*           the above assumptions, may be as large as (V/C)**4 * the */
-/*           distance between the observer and the uncorrected target */
-/*           position: 1.2 cm at 50 AU or equivalently 0.24 mm/AU. */
-
-/*        However, to very accurately model the light time between */
-/*        target and observer one must take into account effects due to */
-/*        general relativity. These may be as high as a few hundredths */
-/*        of a millisecond for some objects. */
-
-
-/*     Relativistic Corrections */
-/*     ========================= */
-
-/*     This routine does not attempt to perform either general or */
-/*     special relativistic corrections in computing the various */
-/*     aberration corrections. For many applications relativistic */
-/*     corrections are not worth the expense of added computation */
-/*     cycles. If however, your application requires these additional */
-/*     corrections we suggest you consult the astronomical almanac (page */
-/*     B36) for a discussion of how to carry out these corrections. */
-
+/*     Please refer to the Aberation Corrections Required Reading */
+/*     (ABCORR.REQ) for detailed information describing the nature and */
+/*     calculation of the applied corrections. */
 
 /* $ Examples */
 
-/*     1)  Load a planetary ephemeris SPK, then look up a series of */
-/*         geometric states of the moon relative to the earth, */
-/*         referenced to the J2000 frame. */
+/*     1)  Load a planetary ephemeris SPK, then look up a */
+/*         state of the MARS BARYCENTER relative to EARTH */
+/*         in the J2000 frame with aberration correction LT+S. */
 
 
-/*               IMPLICIT NONE */
-/*         C */
-/*         C     Local constants */
-/*         C */
-/*               CHARACTER*(*)         FRAME */
-/*               PARAMETER           ( FRAME  = 'J2000' ) */
+/*           PROGRAM SPKEZR_T */
+/*           IMPLICIT NONE */
 
-/*               CHARACTER*(*)         ABCORR */
-/*               PARAMETER           ( ABCORR = 'NONE' ) */
+/*     C */
+/*     C     Local variables */
+/*     C */
+/*           CHARACTER*(32)        FRAME */
+/*           CHARACTER*(32)        ABCORR */
+/*           CHARACTER*(36)        OBS */
+/*           CHARACTER*(36)        TARGET */
+/*           CHARACTER*(36)        EPOCH */
 
-/*         C */
-/*         C     The name of the SPK file shown here is fictitious; */
-/*         C     you must supply the name of an SPK file available */
-/*         C     on your own computer system. */
-/*         C */
-/*               CHARACTER*(*)         SPK */
-/*               PARAMETER           ( SPK    = 'planet.bsp' ) */
+/*           DOUBLE PRECISION      ET */
+/*           DOUBLE PRECISION      LT */
+/*           DOUBLE PRECISION      STATE ( 6 ) */
 
-/*         C */
-/*         C     ET0 represents the date 2000 Jan 1 12:00:00 TDB. */
-/*         C */
-/*               DOUBLE PRECISION      ET0 */
-/*               PARAMETER           ( ET0    = 0.0D0 ) */
+/*           INTEGER               I */
 
-/*         C */
-/*         C     Use a time step of 1 hour; look up 100 states. */
-/*         C */
-/*               DOUBLE PRECISION      STEP */
-/*               PARAMETER           ( STEP   = 3600.0D0 ) */
+/*     C */
+/*     C     Load a set of kernels: an SPK file, a PCK */
+/*     C     file and a leapseconds file. */
+/*     C */
+/*           CALL FURNSH( 'naif0011.tls' ) */
+/*           CALL FURNSH( 'pck00010.tpc' ) */
+/*           CALL FURNSH( 'de430.bsp' ) */
 
-/*               INTEGER               MAXITR */
-/*               PARAMETER           ( MAXITR = 100 ) */
+/*     C */
+/*     C     Define parameters for a state lookup: */
+/*     C */
+/*     C     Return the state vector of Mars Barycenter (4) as seen */
+/*     C     from Earth (399) in the J2000 frame  using aberration */
+/*     C     correction LT+S (light time plus stellar aberration) */
+/*     C     at the epoch JAN 1 2015 12:00:00. */
+/*     C */
+/*           TARGET   = 'MARS BARYCENTER' */
+/*           EPOCH    = 'JAN 1 2015 12:00:00' */
+/*           FRAME    = 'J2000' */
+/*           ABCORR   = 'LT+S' */
+/*           OBS      = 'EARTH' */
 
-/*               CHARACTER*(*)         OBSRVR */
-/*               PARAMETER           ( OBSRVR = 'Earth' ) */
+/*     C */
+/*     C     Convert the epoch to ephemeris time. */
+/*     C */
+/*           CALL STR2ET( EPOCH, ET ) */
 
-/*               CHARACTER*(*)         TARGET */
-/*               PARAMETER           ( TARGET = 'Moon' ) */
+/*     C */
+/*     C     Look-up the state for the defined parameters. */
+/*     C */
+/*           CALL SPKEZR( TARGET, ET, FRAME, ABCORR, OBS, STATE, LT) */
 
-/*         C */
-/*         C     Local variables */
-/*         C */
-/*               DOUBLE PRECISION      ET */
-/*               DOUBLE PRECISION      LT */
-/*               DOUBLE PRECISION      STATE ( 6 ) */
+/*     C */
+/*     C     Output... */
+/*     C */
+/*           WRITE(*,*) 'The position of    : ', TARGET */
+/*           WRITE(*,*) 'As observed from   : ', OBS */
+/*           WRITE(*,*) 'In reference frame : ', FRAME */
+/*           WRITE(*,*) 'At epoch           : ', EPOCH */
+/*           WRITE(*,*) ' ' */
 
-/*               INTEGER               I */
+/*     C */
+/*     C     The first three entries of state contain the */
+/*     C     X, Y, Z position components. The final three contain */
+/*     C     the Vx, Vy, Vz velocity components. */
+/*     C */
+/*           WRITE(*,*) 'R (kilometers)     : ' */
+/*           WRITE(*,*) (STATE(I), I=1,3 ) */
 
-/*         C */
-/*         C     Load the SPK file. */
-/*         C */
-/*               CALL FURNSH ( SPK ) */
+/*           WRITE(*,*) 'V (kilometers/sec) : ' */
+/*           WRITE(*,*) (STATE(I), I=4,6 ) */
 
-/*         C */
-/*         C     Step through a series of epochs, looking up a */
-/*         C     state vector at each one. */
-/*         C */
-/*               DO I = 1, MAXITR */
+/*           WRITE(*,*) 'Light time (secs)  : ', LT */
 
-/*                  ET = ET0 + (I-1)*STEP */
+/*           END */
 
-/*                  CALL SPKEZR ( TARGET, ET, FRAME, ABCORR, OBSRVR, */
-/*              .                 STATE,  LT                        ) */
+/*   The program outputs: */
 
-/*                  WRITE (*,*) 'ET = ', ET */
-/*                  WRITE (*,*) 'J2000 x-position (km):   ', STATE(1) */
-/*                  WRITE (*,*) 'J2000 y-position (km):   ', STATE(2) */
-/*                  WRITE (*,*) 'J2000 z-position (km):   ', STATE(3) */
-/*                  WRITE (*,*) 'J2000 x-velocity (km/s): ', STATE(4) */
-/*                  WRITE (*,*) 'J2000 y-velocity (km/s): ', STATE(5) */
-/*                  WRITE (*,*) 'J2000 z-velocity (km/s): ', STATE(6) */
-/*                  WRITE (*,*) ' ' */
+/*      The position of    : MARS BARYCENTER */
+/*      As observed from   : EARTH */
+/*      In reference frame : J2000 */
+/*      At epoch           : JAN 1 2015 12:00:00 */
 
-/*               END DO */
-
-/*               END */
-
+/*      R (kilometers)     : */
+/*        229953013.74649832   -167125346.21158829   -78800343.963572651 */
+/*      V (kilometers/sec) : */
+/*        35.380861440845095    28.653401530093195    12.861523564981141 */
+/*      Light time (secs)  :    983.97882466162321 */
 
 /* $ Restrictions */
 
@@ -958,6 +570,14 @@
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.1, 19-JAN-2016 (EDW) */
+
+/*       Example code replaced with a complete program and */
+/*       the corresponding output. */
+
+/*       Particulars updated to refer to Aberration Corrections */
+/*       Required Reading document. */
 
 /* -    SPICELIB Version 4.1.0, 03-JUL-2014 (NJB) (BVS) */
 

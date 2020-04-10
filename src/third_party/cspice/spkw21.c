@@ -21,19 +21,26 @@ static integer c__1 = 1;
     integer dlines_dim1, dlines_offset, i__1, i__2, i__3;
     doublereal d__1;
 
+    /* Builtin functions */
+    integer i_dnnt(doublereal *);
+
     /* Local variables */
     integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafbna_(integer *, doublereal *, char *, ftnlen), 
-	    dafena_(void);
+	    integer *);
+    integer kqmax1;
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen), dafena_(void);
     extern logical failed_(void);
     integer chrcod, refcod, maxdim;
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    integer kqmloc;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen);
     doublereal prvepc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer maxdsz;
@@ -310,8 +317,12 @@ static integer c__1 = 1;
 /*        DLSIZE is less than 71, the error SPICE(DIFFLINETOOSMALL) */
 /*        will be signaled. */
 
-/*     9) If any value in the step size array of any difference */
-/*        line is zero, the error SPICE(ZEROSTEP) will be signaled. */
+/*     9) Let KQMAX1 be the maximum integration order for a given */
+/*        difference line. If any value at index KQMAX1-1 or greater */
+/*        in the step size array of that difference line is zero, the */
+/*        error SPICE(ZEROSTEP) will be signaled. The checked portion */
+/*        of the step size vector lies in the index range 2:KQMAX-1 */
+/*        of the difference line containing the vector. */
 
 /* $ Files */
 
@@ -360,6 +371,11 @@ static integer c__1 = 1;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 21-AUG-2015 (NJB) */
+
+/*        Relaxed step size error check to allow zero */
+/*        values in elements indexed greater than KQMAX1-2. */
 
 /* -    SPICELIB Version 1.0.0, 03-FEB-2014 (NJB) */
 
@@ -519,9 +535,15 @@ static integer c__1 = 1;
 /*     Check the step size vectors in the difference lines. */
 
     maxdim = (*dlsize - 11) / 4;
+    kqmloc = (maxdim << 2) + 8;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	i__2 = maxdim + 1;
+
+/*        Check only the first KQMAX1-2 elements of the step size */
+/*        vector. The higher-indexed elements are allowed to be zero. */
+
+	kqmax1 = i_dnnt(&dlines[kqmloc + i__ * dlines_dim1 - dlines_offset]);
+	i__2 = kqmax1 - 1;
 	for (j = 2; j <= i__2; ++j) {
 	    if (dlines[j + i__ * dlines_dim1 - dlines_offset] == 0.) {
 		setmsg_("Step size was zero at step size vector index # with"

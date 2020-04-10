@@ -92,13 +92,13 @@ static doublereal c_b130 = 2.;
     extern doublereal halfpi_(void);
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
 	    doublereal *);
-    doublereal fovrad[3], fvlimb[9];
+    doublereal fovrad[3];
     static char svinam[36];
     extern logical return_(void);
     static char svifrm[32], svishp[9], svtfrm[32], svtnam[36], svtshp[9], 
 	    svcorr[5];
-    doublereal ctrext, ettarg, insmat[9]	/* was [3][3] */, obspos[3], 
-	    semipt[6]	/* was [3][2] */;
+    doublereal ctrext, ettarg, fvlimb[9], insmat[9]	/* was [3][3] */, 
+	    obspos[3], semipt[6]	/* was [3][2] */;
     static doublereal svarad, svbnds[30000]	/* was [3][10000] */, svedct[
 	    3], svfaxi[3], svfovm[9]	/* was [3][3] */, svfpol[20000]	/* 
 	    was [2][10000] */, svfsmx[9]	/* was [3][3] */, svfvct[3], 
@@ -449,6 +449,12 @@ static doublereal c_b130 = 2.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
 /* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
 
 /*       Added NWILUM parameter. */
@@ -522,9 +528,6 @@ static doublereal c_b130 = 2.;
 
 
 /*     FRMNLN is a string length for frame names. */
-
-
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
 
 
 /*     FOVTLN -- maximum length for FOV string. */

@@ -134,8 +134,8 @@
    application. 
  
 -Parameters
- 
-   None. 
+
+   None.
  
 -Exceptions
  
@@ -178,6 +178,34 @@
    SPICE subsystem.  If the file is a meta-kernel, any kernels
    specified by the KERNELS_TO_LOAD keyword (and if present,
    the PATH_SYMBOLS and PATH_VALUES keywords) are loaded as well.
+
+   In this version of the toolkit the maximum number of kernels that
+   can loaded together is limited to 5300. Each time a kernel is loaded
+   via furnsh_c, an internal kernel database entry is created for that
+   kernel. If a meta-kernel is loaded, a database entry is created for
+   the meta-kernel itself and for all files referenced in the
+   meta-kernel's KERNELS_TO_LOAD specification. Unloading a kernel or
+   meta-kernel deletes database entries created when the file was
+   loaded.
+ 
+   The value above is an upper bound on number of SPICE kernels that
+   can be loaded at any time via the furnsh_c interface, but the number
+   of kernels that can be loaded may be smaller, since re-loading a
+   loaded kernel or meta-kernel results in creation of additional
+   database entries.
+ 
+   Kernels loaded via furnsh_c are subject to constraints imposed by
+   lower-level subsystems. The binary kernel systems (SPK, CK, binary
+   PCK, EK, and DSK) have their own limits on the maximum number of
+   kernels that may be loaded.
+ 
+   The total number of DAF-based files (this set includes SPKs, CKs,
+   and binary PCKs) and DAS-based files (this set includes EKs and
+   DSKs) that may be loaded at any time may not exceed 5000. This
+   limit applies whether the files are loaded via furnsh_c or
+   lower-level loaders such as spklef_c or dafopr_c. File access
+   performance normally will degrade slightly as the number of loaded
+   kernels increases.
  
 -Particulars
  
@@ -324,9 +352,15 @@
    
    C.H. Acton      (JPL)
    N.J. Bachman    (JPL)
+   B.V. Semenov    (JPL)
    W.L. Taber      (JPL) 
  
 -Version
+
+   -CSPICE Version 1.3.4, 01-FEB-2017 (BVS) 
+
+      Updated discussion in the Files section to mention the maximum 
+      number of kernels that can be loaded together.
 
    -CSPICE Version 1.3.3, 01-JUL-2014 (NJB) 
 

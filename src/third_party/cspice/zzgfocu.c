@@ -7,10 +7,11 @@
 
 /* Table of constant values */
 
+static integer c__100 = 100;
 static integer c__4 = 4;
 static integer c__0 = 0;
 static integer c__3 = 3;
-static doublereal c_b171 = 1e-12;
+static doublereal c_b199 = 1e-12;
 
 /* $Procedure ZZGFOCU ( GF, occultation utilities ) */
 /* Subroutine */ int zzgfocu_0_(int n__, char *occtyp, char *front, char *
@@ -22,6 +23,7 @@ static doublereal c_b171 = 1e-12;
 {
     /* Initialized data */
 
+    static integer ncalls = 0;
     static doublereal svorig[3] = { 0.,0.,0. };
     static char svtyps[7*4] = "ANNULAR" "ANY    " "PARTIAL" "FULL   ";
 
@@ -40,10 +42,17 @@ static doublereal c_b171 = 1e-12;
 	    );
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen), zzvalcor_(char *, logical *, ftnlen);
+	    ), zzminrad_(doublereal *), zzcorepc_(char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen), zzmaxrad_(doublereal *), 
+	    zzvalcor_(char *, logical *, ftnlen);
     doublereal t2sep;
-    integer i__, n;
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
+	    integer *);
+    integer i__;
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    integer n;
     doublereal radii[3];
     extern /* Subroutine */ int minad_(doublereal *, integer *, doublereal *, 
 	    integer *), maxad_(doublereal *, integer *, doublereal *, integer 
@@ -58,6 +67,8 @@ static doublereal c_b171 = 1e-12;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
 	    doublereal *, integer *, doublereal *);
     doublereal mtemp[9]	/* was [3][3] */, tdist;
+    integer nsurf;
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     static integer svobs;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
@@ -66,38 +77,35 @@ static doublereal c_b171 = 1e-12;
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer occode;
-    doublereal ltback;
     extern doublereal dasine_(doublereal *, doublereal *), halfpi_(void);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    doublereal bckfrt[3], bckobs[3], bckpos[3], etbcor;
-    static char svbnam[36];
+    doublereal bckfrt[3], bckobs[3];
     extern logical return_(void);
-    char fixfrm[32], posnam[10];
-    static char svbfrm[32], svbshp[9], svcorr[5], svffrm[32], svfnam[36], 
-	    svfshp[9], svonam[36], svtype[7];
-    doublereal bsmaxs[9]	/* was [3][3] */, etfcor, frtbck[3], frtobs[3]
-	    , frtpos[3], fsmaxs[9]	/* was [3][3] */, ltfrnt, maxang, 
-	    minang, spoint[3], srfvec[3];
+    char fixfrm[32], pntdef[20], posnam[10], shpstr[9], subtyp[20];
+    static char svbfrm[32], svbmth[500], svbnam[36], svbshp[9], svcorr[5], 
+	    svffrm[32], svfmth[500], svfnam[36], svfshp[9], svonam[36], 
+	    svtype[7];
+    char trmtyp[20];
+    doublereal bckpos[3], bsmaxs[9]	/* was [3][3] */, etbcor, etfcor, 
+	    frtbck[3], frtobs[3], frtpos[3], fsmaxs[9]	/* was [3][3] */, 
+	    ltback, ltfrnt, maxang, minang, spoint[3], srfvec[3];
     static doublereal svbrad[3], svfrad[3], svmnbr, svmnfr, svmxbr, svmxfr;
     doublereal trgepc, trgsep;
-    integer center, clssid, ffrmid, frclss, idfrnt, occnum;
+    integer center, clssid, ffrmid, frclss, idfrnt, loc, occnum, srflst[100];
     static integer svback, svfrnt;
-    logical attblk[15], pntocc;
+    logical attblk[15], pntocc, pri;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    integer loc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen), bodvcd_(integer *, char *, 
-	    integer *, integer *, doublereal *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *), spkezp_(
-	    integer *, doublereal *, char *, char *, integer *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), pxform_(char *, char *, doublereal 
-	    *, doublereal *, ftnlen, ftnlen), vminus_(doublereal *, 
-	    doublereal *), sincpt_(char *, char *, doublereal *, char *, char 
-	    *, char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
+	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 
+	    *, ftnlen, ftnlen), bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen), errint_(char *, integer *, ftnlen), 
+	    namfrm_(char *, integer *, ftnlen), frinfo_(integer *, integer *, 
+	    integer *, integer *, logical *), spkezp_(integer *, doublereal *,
+	     char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen), pxform_(char *, char *, doublereal *, doublereal *, 
+	    ftnlen, ftnlen), vminus_(doublereal *, doublereal *), sincpt_(
+	    char *, char *, doublereal *, char *, char *, char *, char *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
+	     ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     extern integer zzocced_(doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
 
@@ -151,6 +159,186 @@ static doublereal c_b171 = 1e-12;
 /*     OCCULTATION */
 
 /* $ Declarations */
+
+/*     File: dsk.inc */
+
+
+/*     Version 1.0.0 05-FEB-2016 (NJB) */
+
+/*     Maximum size of surface ID list. */
+
+
+/*     End of include file dsk.inc */
+
+/* $ Abstract */
+
+/*     This file contains public, global parameter declarations */
+/*     for the SPICELIB Geometry Finder (GF) subsystem. */
+
+/* $ Disclaimer */
+
+/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
+/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
+/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
+/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
+/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
+/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
+/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
+/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
+/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
+/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
+
+/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
+/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
+/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
+/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
+/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
+/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
+
+/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
+/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
+/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
+/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
+
+/* $ Required_Reading */
+
+/*     GF */
+
+/* $ Keywords */
+
+/*     GEOMETRY */
+/*     ROOT */
+
+/* $ Restrictions */
+
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman      (JPL) */
+/*     L.E. Elson        (JPL) */
+/*     E.D. Wright       (JPL) */
+
+/* $ Literature_References */
+
+/*     None. */
+
+/* $ Version */
+
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
+/* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
+
+/*       Added NWILUM parameter. */
+
+/* -    SPICELIB Version 1.2.0, 14-SEP-2010 (EDW) */
+
+/*       Added NWPA parameter. */
+
+/* -    SPICELIB Version 1.1.0, 08-SEP-2009 (EDW) */
+
+/*       Added NWRR parameter. */
+/*       Added NWUDS parameter. */
+
+/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (EDW) */
+
+/* -& */
+
+/*     Root finding parameters: */
+
+/*     CNVTOL is the default convergence tolerance used by the */
+/*     high-level GF search API routines. This tolerance is */
+/*     used to terminate searches for binary state transitions: */
+/*     when the time at which a transition occurs is bracketed */
+/*     by two times that differ by no more than CNVTOL, the */
+/*     transition time is considered to have been found. */
+
+/*     Units are TDB seconds. */
+
+
+/*     NWMAX is the maximum number of windows allowed for user-defined */
+/*     workspace array. */
+
+/*        DOUBLE PRECISION      WORK   ( LBCELL : MW, NWMAX ) */
+
+/*     Currently no more than twelve windows are required; the three */
+/*     extra windows are spares. */
+
+/*     Callers of GFEVNT can include this file and use the parameter */
+/*     NWMAX to declare the second dimension of the workspace array */
+/*     if necessary. */
+
+
+/*     Callers of GFIDST should declare their workspace window */
+/*     count using NWDIST. */
+
+
+/*     Callers of GFSEP should declare their workspace window */
+/*     count using NWSEP. */
+
+
+/*     Callers of GFRR should declare their workspace window */
+/*     count using NWRR. */
+
+
+/*     Callers of GFUDS should declare their workspace window */
+/*     count using NWUDS. */
+
+
+/*     Callers of GFPA should declare their workspace window */
+/*     count using NWPA. */
+
+
+/*     Callers of GFILUM should declare their workspace window */
+/*     count using NWILUM. */
+
+
+/*     ADDWIN is a parameter used to expand each interval of the search */
+/*     (confinement) window by a small amount at both ends in order to */
+/*     accommodate searches using equality constraints. The loaded */
+/*     kernel files must accommodate these expanded time intervals. */
+
+
+/*     FRMNLN is a string length for frame names. */
+
+
+/*     FOVTLN -- maximum length for FOV string. */
+
+
+/*     Specify the character strings that are allowed in the */
+/*     specification of field of view shapes. */
+
+
+/*     Character strings that are allowed in the */
+/*     specification of occultation types: */
+
+
+/*     Occultation target shape specifications: */
+
+
+/*     Specify the number of supported occultation types and occultation */
+/*     type string length: */
+
+
+/*     Instrument field-of-view (FOV) parameters */
+
+/*     Maximum number of FOV boundary vectors: */
+
+
+/*     FOV shape parameters: */
+
+/*        circle */
+/*        ellipse */
+/*        polygon */
+/*        rectangle */
+
+
+/*     End of file gf.inc. */
+
 /* $ Abstract */
 
 /*     Include file zzabcorr.inc */
@@ -262,6 +450,66 @@ static doublereal c_b171 = 1e-12;
 
 /*     End of include file zzabcorr.inc */
 
+
+/*     File: zzdsk.inc */
+
+
+/*     Version 4.0.0 13-NOV-2015 (NJB) */
+
+/*        Changed parameter LBTLEN to CVTLEN. */
+/*        Added parameter LMBCRV. */
+
+/*     Version 3.0.0 05-NOV-2015 (NJB) */
+
+/*        Added parameters */
+
+/*           CTRCOR */
+/*           ELLCOR */
+/*           GUIDED */
+/*           LBTLEN */
+/*           PNMBRL */
+/*           TANGNT */
+/*           TMTLEN */
+/*           UMBRAL */
+
+/*     Version 2.0.0 04-MAR-2015 (NJB) */
+
+/*        Removed declaration of parameter SHPLEN. */
+/*        This name is already in use in the include */
+/*        file gf.inc. */
+
+/*     Version 1.0.0 26-JAN-2015 (NJB) */
+
+
+/*     Parameters supporting METHOD string parsing: */
+
+
+/*     Local method length. */
+
+
+/*     Length of sub-point type string. */
+
+
+/*     Length of curve type string. */
+
+
+/*     Limb type parameter codes. */
+
+
+/*     Length of terminator type string. */
+
+
+/*     Terminator type and limb parameter codes. */
+
+
+/*     Length of aberration correction locus string. */
+
+
+/*     Aberration correction locus codes. */
+
+
+/*     End of include file zzdsk.inc */
+
 /* $ Abstract */
 
 /*     Declare ZZOCCED return code parameters, comparison strings */
@@ -356,172 +604,6 @@ static doublereal c_b171 = 1e-12;
 
 /*     End include file zzocced.inc */
 
-/* $ Abstract */
-
-/*     This file contains public, global parameter declarations */
-/*     for the SPICELIB Geometry Finder (GF) subsystem. */
-
-/* $ Disclaimer */
-
-/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
-/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
-/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
-/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
-/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
-/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
-/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
-/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
-/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
-/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
-
-/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
-/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
-/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
-/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
-/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
-/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
-
-/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
-/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
-/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
-/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
-
-/* $ Required_Reading */
-
-/*     GF */
-
-/* $ Keywords */
-
-/*     GEOMETRY */
-/*     ROOT */
-
-/* $ Restrictions */
-
-/*     None. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman      (JPL) */
-/*     L.E. Elson        (JPL) */
-/*     E.D. Wright       (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
-
-/* $ Version */
-
-/* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
-
-/*       Added NWILUM parameter. */
-
-/* -    SPICELIB Version 1.2.0, 14-SEP-2010 (EDW) */
-
-/*       Added NWPA parameter. */
-
-/* -    SPICELIB Version 1.1.0, 08-SEP-2009 (EDW) */
-
-/*       Added NWRR parameter. */
-/*       Added NWUDS parameter. */
-
-/* -    SPICELIB Version 1.0.0, 21-FEB-2009 (NJB) (LSE) (EDW) */
-
-/* -& */
-
-/*     Root finding parameters: */
-
-/*     CNVTOL is the default convergence tolerance used by the */
-/*     high-level GF search API routines. This tolerance is */
-/*     used to terminate searches for binary state transitions: */
-/*     when the time at which a transition occurs is bracketed */
-/*     by two times that differ by no more than CNVTOL, the */
-/*     transition time is considered to have been found. */
-
-/*     Units are TDB seconds. */
-
-
-/*     NWMAX is the maximum number of windows allowed for user-defined */
-/*     workspace array. */
-
-/*        DOUBLE PRECISION      WORK   ( LBCELL : MW, NWMAX ) */
-
-/*     Currently no more than twelve windows are required; the three */
-/*     extra windows are spares. */
-
-/*     Callers of GFEVNT can include this file and use the parameter */
-/*     NWMAX to declare the second dimension of the workspace array */
-/*     if necessary. */
-
-
-/*     Callers of GFIDST should declare their workspace window */
-/*     count using NWDIST. */
-
-
-/*     Callers of GFSEP should declare their workspace window */
-/*     count using NWSEP. */
-
-
-/*     Callers of GFRR should declare their workspace window */
-/*     count using NWRR. */
-
-
-/*     Callers of GFUDS should declare their workspace window */
-/*     count using NWUDS. */
-
-
-/*     Callers of GFPA should declare their workspace window */
-/*     count using NWPA. */
-
-
-/*     Callers of GFILUM should declare their workspace window */
-/*     count using NWILUM. */
-
-
-/*     ADDWIN is a parameter used to expand each interval of the search */
-/*     (confinement) window by a small amount at both ends in order to */
-/*     accommodate searches using equality constraints. The loaded */
-/*     kernel files must accommodate these expanded time intervals. */
-
-
-/*     FRMNLN is a string length for frame names. */
-
-
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
-
-
-/*     FOVTLN -- maximum length for FOV string. */
-
-
-/*     Specify the character strings that are allowed in the */
-/*     specification of field of view shapes. */
-
-
-/*     Character strings that are allowed in the */
-/*     specification of occultation types: */
-
-
-/*     Occultation target shape specifications: */
-
-
-/*     Specify the number of supported occultation types and occultation */
-/*     type string length: */
-
-
-/*     Instrument field-of-view (FOV) parameters */
-
-/*     Maximum number of FOV boundary vectors: */
-
-
-/*     FOV shape parameters: */
-
-/*        circle */
-/*        ellipse */
-/*        polygon */
-/*        rectangle */
-
-
-/*     End of file gf.inc. */
-
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  Entry points */
@@ -556,17 +638,19 @@ static doublereal c_b171 = 1e-12;
 
 /* $ Files */
 
-/*     Appropriate SPK and PCK kernels must be loaded by the calling */
-/*     program before the entry points of this routine are called. */
+
+/*     Appropriate SPICE kernels must be loaded by the calling program */
+/*     before this routine is called. */
 
 /*     The following data are required: */
 
 /*        - SPK data: the calling application must load ephemeris data */
 /*          for the target, source and observer that cover the time */
 /*          period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
+/*          corrections are used, the states of the target bodies and of */
+/*          the observer relative to the solar system barycenter must be */
+/*          calculable from the available ephemeris data. Typically */
+/*          ephemeris data */
 /*          are made available by loading one or more SPK files via */
 /*          FURNSH. */
 
@@ -575,14 +659,53 @@ static doublereal c_b171 = 1e-12;
 /*          Typically these data are made available by loading a text */
 /*          PCK file via FURNSH. */
 
-/*     In all cases, kernel data are normally loaded once per program */
-/*     run, NOT every time the entry points of this routine are called. */
+/*        - FK data: if either of the reference frames designated by */
+/*          BFRAME or FFRAME are not built in to the SPICE system, */
+/*          one or more FKs specifying these frames must be loaded. */
+
+/*     The following data may be required: */
+
+/*        - DSK data: if either FSHAPE or BSHAPE indicates that DSK */
+/*          data are to be used, DSK files containing topographic data */
+/*          for the target body must be loaded. If a surface list is */
+/*          specified, data for at least one of the listed surfaces must */
+/*          be loaded. */
+
+/*        - Surface name-ID associations: if surface names are specified */
+/*          in FSHAPE or BSHAPE, the association of these names with */
+/*          their corresponding surface ID codes must be established by */
+/*          assignments of the kernel variables */
+
+/*             NAIF_SURFACE_NAME */
+/*             NAIF_SURFACE_CODE */
+/*             NAIF_SURFACE_BODY */
+
+/*          Normally these associations are made by loading a text */
+/*          kernel containing the necessary assignments. An example */
+/*          of such a set of assignments is */
+
+/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*             NAIF_SURFACE_CODE += 1 */
+/*             NAIF_SURFACE_BODY += 499 */
+
+/*        - CK data: either of the body-fixed frames to which FFRAME or */
+/*          BFRAME refer might be a CK frame. If so, at least one CK */
+/*          file will be needed to permit transformation of vectors */
+/*          between that frame and the J2000 frame. */
+
+/*        - SCLK data: if a CK file is needed, an associated SCLK */
+/*          kernel is required to enable conversion between encoded SCLK */
+/*          (used to time-tag CK data) and barycentric dynamical time */
+/*          (TDB). */
+
+/*     Kernel data are normally loaded once per program run, NOT every */
+/*     time this routine is called. */
 
 /* $ Particulars */
 
 /*     This routine is designed to determine whether a specified */
 /*     type of occultation or transit is in progress at a specified */
-/*     epoch. Two methods of modeling the shapes of the target */
+/*     epoch. Three methods of modeling the shapes of the target */
 /*     bodies are supported: */
 
 /*        1)  Model both target bodies as triaxial ellipsoids. For this */
@@ -591,8 +714,13 @@ static doublereal c_b171 = 1e-12;
 /*            ZZGFOCIN for an explanation of these terms. */
 
 /*        2)  Treat one target body as a point object and the other */
-/*            target body is a triaxial ellipsoid. The only supported */
+/*            target body as a triaxial ellipsoid. The only supported */
 /*            occultation type is "ANY" for this case. */
+
+/*        3)  Treat one target body as a point object and the other */
+/*            target body as an extended shape modeled by DSK data. */
+/*            The only supported occultation type is "ANY" for this */
+/*            case. */
 
 /*     This routine contains two entry points that support searches */
 /*     for occultations performed using ZZGFSOLV: */
@@ -627,6 +755,27 @@ static doublereal c_b171 = 1e-12;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
+
+/*        Modified FAILED tests. */
+
+/*        31-DEC-2016 (NJB) */
+
+/*        Corrected long error message for blank frame string. */
+/*        Previously the order of ERRCH and SIGERR calls was */
+/*        inverted. */
+
+/*        Updated long error message for incorrect body-fixed */
+/*        frame center, so the ID of the target body is included. */
+
+/*        24-FEB-2016 (NJB) */
+
+/*        DSK capability was integrated. */
+
+/*        04-MAR-2015 (NJB) */
+
+/*        Initial updates to support surfaces represented by DSKs. */
+
 /* -    SPICELIB Version 1.1.0, 18-MAY-2014 (NJB) */
 
 /*        Bug fix: in entry point ZZGFOCIN, corrected long error message */
@@ -656,13 +805,13 @@ static doublereal c_b171 = 1e-12;
 
 /*     Saved variables */
 
-
-/*     Initial values */
-
     switch(n__) {
 	case 1: goto L_zzgfocin;
 	case 2: goto L_zzgfocst;
 	}
+
+
+/*     Initial values */
 
 
 /*     Below we initialize the list of occultation types. */
@@ -759,48 +908,39 @@ L_zzgfocin:
 /*                Supported values of OCCTYP and corresponding */
 /*                definitions are: */
 
-/*                   'FULL'               denotes the full occultation */
-/*                                        of the body designated by */
-/*                                        BACK by the body designated */
-/*                                        by FRONT, as seen from */
-/*                                        the location of the observer. */
-/*                                        In other words, the occulted */
-/*                                        body is completely invisible */
-/*                                        as seen from the observer's */
-/*                                        location. */
 
-/*                   'ANNULAR'            denotes an annular */
-/*                                        occultation: the body */
-/*                                        designated by FRONT blocks */
-/*                                        part of, but not the limb of, */
-/*                                        the body designated by BACK, */
-/*                                        as seen from the location of */
-/*                                        the observer. */
+/*                   'FULL'      denotes the full occultation of the */
+/*                               body designated by BACK by the body */
+/*                               designated by FRONT, as seen from the */
+/*                               location of the observer. In other */
+/*                               words, the occulted body is completely */
+/*                               invisible as seen from the observer's */
+/*                               location. */
 
-/*                   'PARTIAL'            denotes an partial, */
-/*                                        non-annular occultation: the */
-/*                                        body designated by FRONT */
-/*                                        blocks part, but not all, of */
-/*                                        the limb of the body */
-/*                                        designated by BACK, as seen */
-/*                                        from the location of the */
-/*                                        observer. */
+/*                   'ANNULAR'   denotes an annular occultation: the */
+/*                               body designated by FRONT blocks part */
+/*                               of, but not the limb of, the body */
+/*                               designated by BACK, as seen from the */
+/*                               location of the observer. */
 
-/*                   'ANY'                denotes any of the above three */
-/*                                        types of occultations: */
-/*                                        'PARTIAL', 'ANNULAR', or */
-/*                                        'FULL'. */
+/*                   'PARTIAL'   denotes a partial, non-annular */
+/*                               occultation: the body designated by */
+/*                               FRONT blocks part, but not all, of the */
+/*                               limb of the body designated by BACK, as */
+/*                               seen from the location of the observer. */
 
-/*                                        'ANY' should be used to search */
-/*                                        for times when the body */
-/*                                        designated by FRONT blocks */
-/*                                        any part of the body designated */
-/*                                        by BACK. */
+/*                   'ANY'       denotes any of the above three types of */
+/*                               occultations: 'PARTIAL', 'ANNULAR', or */
+/*                               'FULL'. */
 
-/*                                        The option 'ANY' MUST be used */
-/*                                        if either the front or back */
-/*                                        target body is modeled as */
-/*                                        a point. */
+/*                               'ANY' should be used to search for */
+/*                               times when the body designated by FRONT */
+/*                               blocks any part of the body designated */
+/*                               by BACK. */
+
+/*                               The option 'ANY' must be used if either */
+/*                               the front or back target body is */
+/*                               modeled as a point. */
 
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string OCCTYP. */
@@ -816,32 +956,67 @@ L_zzgfocin:
 /*                significant in the string FRONT. */
 
 
-/*     FSHAPE     is a string indicating the geometric model used */
-/*                to represent the shape of the front body. The */
+
+/*     FSHAPE     is a string indicating the geometric model used to */
+/*                represent the shape of the front target body. The */
 /*                supported options are: */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model, */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                   'ELLIPSOID' */
 
-/*                                      'BODYnnn_RADII' */
+/*                       Use a triaxial ellipsoid model with radius */
+/*                       values provided via the kernel pool. A kernel */
+/*                       variable having a name of the form */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*                          'BODYnnn_RADII' */
 
-/*                   'POINT'         Treat the body as a single point. */
-/*                                   When a point target is specified, */
-/*                                   the occultation type must be */
-/*                                   set to 'ANY'. */
+/*                       where nnn represents the NAIF integer code */
+/*                       associated with the body, must be present in */
+/*                       the kernel pool. This variable must be */
+/*                       associated with three numeric values giving the */
+/*                       lengths of the ellipsoid's X, Y, and Z */
+/*                       semi-axes. */
 
-/*                At least one of the target bodies FRONT and BACK must */
-/*                be modeled as an ellipsoid. */
+/*                   'POINT' */
+
+/*                       Treat the body as a single point. When a point */
+/*                       target is specified, the occultation type must */
+/*                       be set to 'ANY'. */
+
+/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                       Use topographic data provided by DSK files to */
+/*                       model the body's shape. These data must be */
+/*                       provided by loaded DSK files. */
+
+/*                       The surface list specification is optional. The */
+/*                       syntax of the list is */
+
+/*                          <surface 1> [, <surface 2>...] */
+
+/*                       If present, it indicates that data only for the */
+/*                       listed surfaces are to be used; however, data */
+/*                       need not be available for all surfaces in the */
+/*                       list. If absent, loaded DSK data for any surface */
+/*                       associated with the target body are used. */
+
+/*                       The surface list may contain surface names or */
+/*                       surface ID codes. Names containing blanks must */
+/*                       be delimited by double quotes, for example */
+
+/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                       If multiple surfaces are specified, their names */
+/*                       or IDs must be separated by commas. */
+
+/*                       See the Particulars section below for details */
+/*                       concerning use of DSK data. */
+
+/*                The combinations of the shapes of the target bodies */
+/*                FRONT and BACK must be one of: */
+
+/*                   One ELLIPSOID, one POINT */
+/*                   Two ELLIPSOIDs */
+/*                   One DSK, one POINT */
 
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string FSHAPE. */
@@ -952,33 +1127,47 @@ L_zzgfocin:
 /*         specify point targets, the error SPICE(INVALIDSHAPECOMBO) */
 /*         will be signaled. */
 
-/*     5)  If an unrecognized value of OCCTYP is seen, the error */
+/*     5)  If one of the target shape arguments FSHAPE and BSHAPE */
+/*         specifies a DSK model, and the other argument does not */
+/*         specify a point target, the error SPICE(INVALIDSHAPECOMBO) */
+/*         will be signaled. */
+
+/*     6)  If an unrecognized value of OCCTYP is seen, the error */
 /*         SPICE(INVALIDOCCTYPE) is signaled. */
 
-/*     6)  If one target body is modeled as a point and OCCTYP is not */
+/*     7)  If one target body is modeled as a point and OCCTYP is not */
 /*         set to 'ANY', the error SPICE(BADTYPESHAPECOMBO) is signaled. */
 
-/*     7)  If a target indicated to be an ellipsoid by its shape */
+/*     8)  If a target indicated to be an ellipsoid by its shape */
 /*         specification argument does not have three associated */
 /*         positive radii, the error SPICE(DEGENERATECASE) will be */
 /*         signaled. */
 
-/*     8)  If the number of radii associated with a target body is */
+/*     9)  If the number of radii associated with a target body is */
 /*         not three, the error SPICE(BADRADIUSCOUNT) will be */
 /*         signaled. */
 
-/*     9)  If a target body-fixed reference frame associated with a */
+/*     10) If a target body-fixed reference frame associated with a */
 /*         non-point target is not recognized, the error */
 /*         SPICE(INVALIDFRAME) will be signaled. */
 
-/*     10) If a target body-fixed reference frame is not centered at */
+/*     11) If a target body-fixed reference frame is not centered at */
 /*         the corresponding target body, the error */
 /*         SPICE(INVALIDFRAME) will be signaled. */
 
-/*     11) If the aberration correction string is invalid, the error */
+/*     12) If the aberration correction string is invalid, the error */
 /*         will be diagnosed by a routine in the call tree of this */
 /*         routine. */
 
+/*     13) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, and no DSK files are loaded for */
+/*         the specified target, the error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     14) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, but the shape specification is */
+/*         invalid, the error is signaled by a routine in the call tree */
+/*         of this routine. */
 /* $ Files */
 
 /*     See the header of the umbrella routine ZZGFOCU. */
@@ -1009,6 +1198,18 @@ L_zzgfocin:
 /*     E.D. Wright    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
+
+/*        Modified FAILED tests. */
+
+/*        20-FEB-2016 (NJB) */
+
+/*        DSK capability was integrated. */
+
+/*        04-MAR-2015 (NJB) */
+
+/*        Initial updates to support surfaces represented by DSKs. */
 
 /* -    SPICELIB Version 1.1.0, 18-MAY-2014 (NJB) */
 
@@ -1089,43 +1290,95 @@ L_zzgfocin:
 
 /*     Store the ID codes, shape specifications, and body-fixed, */
 /*     body-centered frame names of the objects involved in this event. */
+/*     The shape arguments must be parsed in case they contain */
+/*     DSK specifications. */
 
     svfrnt = idfrnt;
     s_copy(svffrm, fframe, (ftnlen)32, fframe_len);
-    ljust_(fshape, svfshp, fshape_len, (ftnlen)9);
-    ucase_(svfshp, svfshp, (ftnlen)9, (ftnlen)9);
     svback = idback;
     s_copy(svbfrm, bframe, (ftnlen)32, bframe_len);
-    ljust_(bshape, svbshp, bshape_len, (ftnlen)9);
-    ucase_(svbshp, svbshp, (ftnlen)9, (ftnlen)9);
     svobs = idobs;
 
-/*     Note for maintenance programmer: these checks will */
-/*     require modification to handle DSK-based shapes. */
+/*     Save the input shape strings. These will be examined later, */
+/*     but we need them in their original form for computations */
+/*     involving DSK data. In the variable names below, "MTH" */
+/*     stands for "method"---the name used in SPICE geometry */
+/*     APIs for this type of input string. */
 
-    if (s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 && s_cmp(svfshp, 
-	    "ELLIPSOID", (ftnlen)9, (ftnlen)9) != 0) {
-	setmsg_("The front target shape specification, '#', is not a recogni"
-		"zed.", (ftnlen)63);
-	errch_("#", fshape, (ftnlen)1, fshape_len);
-	sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-	chkout_("ZZGFOCIN", (ftnlen)8);
-	return 0;
+    s_copy(svfmth, fshape, (ftnlen)500, fshape_len);
+    s_copy(svbmth, bshape, (ftnlen)500, bshape_len);
+
+/*     Parse the front body shape string. */
+
+    if (eqstr_(fshape, "POINT", fshape_len, (ftnlen)5)) {
+	s_copy(svfshp, "POINT", (ftnlen)9, (ftnlen)5);
+    } else if (eqstr_(fshape, "ELLIPSOID", fshape_len, (ftnlen)9)) {
+	s_copy(svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
+    } else {
+	zzprsmet_(&idfrnt, svfmth, &c__100, shpstr, subtyp, &pri, &nsurf, 
+		srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
+		ftnlen)20, (ftnlen)20);
+	if (failed_()) {
+	    chkout_("ZZGFOCIN", (ftnlen)8);
+	    return 0;
+	}
+	if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	    s_copy(svfshp, "DSK", (ftnlen)9, (ftnlen)3);
+	} else {
+	    setmsg_("Front target shape from FSHAPE string was <#>. Valid sh"
+		    "apes are ELLIPSOID, POINT, and DSK.", (ftnlen)90);
+	    errch_("#", fshape, (ftnlen)1, fshape_len);
+	    sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
+	    chkout_("ZZGFOCIN", (ftnlen)8);
+	    return 0;
+	}
     }
-    if (s_cmp(svbshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 && s_cmp(svbshp, 
-	    "ELLIPSOID", (ftnlen)9, (ftnlen)9) != 0) {
-	setmsg_("The back target shape specification, '#', is not a recogniz"
-		"ed.", (ftnlen)62);
-	errch_("#", bshape, (ftnlen)1, bshape_len);
-	sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-	chkout_("ZZGFOCIN", (ftnlen)8);
-	return 0;
+
+/*     Parse the back body shape string. */
+
+    if (eqstr_(bshape, "POINT", bshape_len, (ftnlen)5)) {
+	s_copy(svbshp, "POINT", (ftnlen)9, (ftnlen)5);
+    } else if (eqstr_(bshape, "ELLIPSOID", bshape_len, (ftnlen)9)) {
+	s_copy(svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
+    } else {
+	zzprsmet_(&idfrnt, svbmth, &c__100, shpstr, subtyp, &pri, &nsurf, 
+		srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
+		ftnlen)20, (ftnlen)20);
+	if (failed_()) {
+	    chkout_("ZZGFOCIN", (ftnlen)8);
+	    return 0;
+	}
+	if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	    s_copy(svbshp, "DSK", (ftnlen)9, (ftnlen)3);
+	} else {
+	    setmsg_("Back target shape from BSHAPE string was <#>. Valid sha"
+		    "pes are ELLIPSOID, POINT, and DSK.", (ftnlen)89);
+	    errch_("#", bshape, (ftnlen)1, bshape_len);
+	    sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
+	    chkout_("ZZGFOCIN", (ftnlen)8);
+	    return 0;
+	}
     }
+
+/*     Check for invalid shape combinations. */
+
     if (s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(svbshp, 
 	    "POINT", (ftnlen)9, (ftnlen)5) == 0) {
-	setmsg_("The front and back target shape specifications are both PTS"
-		"HAP; at least one of these targets must be an extended objec"
-		"t.", (ftnlen)121);
+	setmsg_("Both front and back objects have POINT shape specifications"
+		"; only one point shape is allowed. The other shape must be E"
+		"LLIPSOID or DSK.", (ftnlen)135);
+	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
+	chkout_("ZZGFOCIN", (ftnlen)8);
+	return 0;
+    } else if (s_cmp(svfshp, "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(
+	    svbshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 || s_cmp(svbshp, 
+	    "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(svfshp, "POINT", (
+	    ftnlen)9, (ftnlen)5) != 0) {
+	setmsg_("Front target shape from FSHAPE string was <#>; back target "
+		"shape from BSHAPE was <#>. When one shape is DSK, the other "
+		"must be POINT.", (ftnlen)133);
+	errch_("#", svfshp, (ftnlen)1, (ftnlen)9);
+	errch_("#", svbshp, (ftnlen)1, (ftnlen)9);
 	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
 	chkout_("ZZGFOCIN", (ftnlen)8);
 	return 0;
@@ -1146,7 +1399,7 @@ L_zzgfocin:
 	errch_("#", occtyp, (ftnlen)1, occtyp_len);
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    errch_("#", svtyps + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)877)) * 7, (
+		    s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)1095)) * 7, (
 		    ftnlen)1, (ftnlen)7);
 	}
 	sigerr_("SPICE(INVALIDOCCTYPE)", (ftnlen)21);
@@ -1221,6 +1474,10 @@ L_zzgfocin:
 /*           Fetch and check the radii. */
 
 	    bodvcd_(&trgid, "RADII", &c__3, &n, radii, (ftnlen)5);
+	    if (failed_()) {
+		chkout_("ZZGFOCIN", (ftnlen)8);
+		return 0;
+	    }
 
 /*           Check the count of the radii. */
 
@@ -1269,17 +1526,28 @@ L_zzgfocin:
 		chkout_("ZZGFOCIN", (ftnlen)8);
 		return 0;
 	    }
+	}
 
-/*           The target is ellipsoidal; there must be */
-/*           a target body-fixed frame associated with this */
-/*           body. */
+/*        We've performed radii checks for an ellipsoidal target. */
+/*        Minimum and maximum bounding radii are set, if the target */
+/*        shape is modeled as an ellipsoid. */
+
+
+/*        Check body-fixed frame for extended targets. */
+
+	if (s_cmp(shape, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 || s_cmp(
+		shape, "DSK", (ftnlen)9, (ftnlen)3) == 0) {
+
+/*           The target is ellipsoidal or is modeled using DSK data; */
+/*           there must be a target body-fixed frame associated with */
+/*           this body. */
 
 	    if (s_cmp(fixfrm, " ", (ftnlen)32, (ftnlen)1) == 0) {
-		setmsg_("The # target is modeled as an ellipsoid, but the as"
-			"sociated body-fixed frame name is blank.", (ftnlen)91)
-			;
-		sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
+		setmsg_("The # target shape is represented by an ellipsoid o"
+			"r by DSK data, but the associated body-fixed frame n"
+			"ame is blank.", (ftnlen)116);
 		errch_("#", posnam, (ftnlen)1, (ftnlen)10);
+		sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
 		chkout_("ZZGFOCIN", (ftnlen)8);
 		return 0;
 	    } else {
@@ -1287,6 +1555,10 @@ L_zzgfocin:
 /*              Look up the target's body-fixed frame ID code. */
 
 		namfrm_(fixfrm, &ffrmid, (ftnlen)32);
+		if (failed_()) {
+		    chkout_("ZZGFOCIN", (ftnlen)8);
+		    return 0;
+		}
 		if (ffrmid == 0) {
 		    setmsg_("The # target's body-fixed frame name # is not r"
 			    "ecognized.", (ftnlen)57);
@@ -1301,6 +1573,10 @@ L_zzgfocin:
 /*              Ith target. */
 
 		frinfo_(&ffrmid, &center, &frclss, &clssid, &found);
+		if (failed_()) {
+		    chkout_("ZZGFOCIN", (ftnlen)8);
+		    return 0;
+		}
 		if (! found) {
 
 /*                 Since we mapped the frame name to an ID code, we */
@@ -1320,21 +1596,48 @@ L_zzgfocin:
 /*                 The body-fixed frame for the current target */
 /*                 isn't actually centered on the body. */
 
-		    setmsg_("Supposed body-fixed frame # for # target is act"
-			    "ually centered on body #.", (ftnlen)72);
+		    setmsg_("Supposed body-fixed frame # for # target # is a"
+			    "ctually centered on body #.", (ftnlen)74);
 		    errch_("#", fixfrm, (ftnlen)1, (ftnlen)32);
 		    errch_("#", posnam, (ftnlen)1, (ftnlen)10);
+		    errint_("#", &trgid, (ftnlen)1);
 		    errint_("#", &center, (ftnlen)1);
 		    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
 		    chkout_("ZZGFOCIN", (ftnlen)8);
 		    return 0;
 		}
 	    }
+	}
 
-/*           We've performed radii and frame checks for an ellipsoidal */
-/*           target. */
+/*        We've performed frame checks for an extended target. */
 
-	} else if (s_cmp(shape, "POINT", (ftnlen)9, (ftnlen)5) == 0) {
+
+/*        Obtain radii of inner and outer bounding spheres for */
+/*        DSK targets. */
+
+	if (s_cmp(shape, "DSK", (ftnlen)9, (ftnlen)3) == 0) {
+
+/*           Note that TRGID and FFRMID refer to the current */
+/*           target (out of two); "FFRMID" means "fixed frame ID." */
+
+	    zzsudski_(&trgid, &nsurf, srflst, &ffrmid);
+	    if (failed_()) {
+		chkout_("ZZGFOCIN", (ftnlen)8);
+		return 0;
+	    }
+	    if (i__ == 1) {
+		zzminrad_(&svmnfr);
+		zzmaxrad_(&svmxfr);
+	    } else {
+		zzminrad_(&svmnbr);
+		zzmaxrad_(&svmxbr);
+	    }
+	}
+
+/*        Initialize bounding radii and body-fixed frame */
+/*        names for point targets. */
+
+	if (s_cmp(shape, "POINT", (ftnlen)9, (ftnlen)5) == 0) {
 
 /*           Zero out radius values for this target; set the */
 /*           frame to blank. */
@@ -1350,21 +1653,11 @@ L_zzgfocin:
 		svmxbr = 0.;
 		s_copy(svbfrm, " ", (ftnlen)32, (ftnlen)1);
 	    }
-	} else {
-
-/*           We have an unsupported target shape. */
-
-	    setmsg_("The # target body has shape #; the only supported shape"
-		    "s are ELLIPSOID and POINT.", (ftnlen)81);
-	    errch_("#", posnam, (ftnlen)1, (ftnlen)10);
-	    errch_("#", shape, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-	    chkout_("ZZGFOCIN", (ftnlen)8);
-	    return 0;
 	}
 
 /*        We've performed shape, and if applicable, frame and radii */
-/*        checks for the Ith target. */
+/*        checks for the Ith target. Bounding radii have been obtained */
+/*        for extended targets. */
 
     }
 
@@ -1501,6 +1794,18 @@ L_zzgfocst:
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
+
+/*        Modified FAILED tests. */
+
+/*        20-FEB-2016 (NJB) */
+
+/*        DSK capability was integrated. */
+
+/*        04-MAR-2015 (NJB) */
+
+/*        Initial updates to support surfaces represented by DSKs. */
+
 /* -    SPICELIB Version 1.0.0, 30-DEC-2008 (NJB) (LSE) (WLT) (EDW) */
 
 /* -& */
@@ -1552,11 +1857,11 @@ L_zzgfocst:
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    vscl_(&svbrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svbrad", i__1, "zzgfocu_", (ftnlen)1358)], &mtemp[(i__2 =
+		    "svbrad", i__1, "zzgfocu_", (ftnlen)1633)], &mtemp[(i__2 =
 		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1358)], &bsmaxs[(i__3 = i__ * 3 
+		    i__2, "zzgfocu_", (ftnlen)1633)], &bsmaxs[(i__3 = i__ * 3 
 		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("bsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1358)]);
+		    "zzgfocu_", (ftnlen)1633)]);
 	}
 	zzcorepc_(svcorr, time, &ltfrnt, &etfcor, (ftnlen)5);
 	pxform_(svffrm, "J2000", &etfcor, mtemp, (ftnlen)32, (ftnlen)5);
@@ -1570,11 +1875,11 @@ L_zzgfocst:
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    vscl_(&svfrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfrad", i__1, "zzgfocu_", (ftnlen)1374)], &mtemp[(i__2 =
+		    "svfrad", i__1, "zzgfocu_", (ftnlen)1649)], &mtemp[(i__2 =
 		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1374)], &fsmaxs[(i__3 = i__ * 3 
+		    i__2, "zzgfocu_", (ftnlen)1649)], &fsmaxs[(i__3 = i__ * 3 
 		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("fsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1374)]);
+		    "zzgfocu_", (ftnlen)1649)]);
 	}
 
 /*        Classify the occultation state of BACK by FRONT as seen from */
@@ -1625,17 +1930,20 @@ L_zzgfocst:
 	return 0;
     } else if (s_cmp(svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 && s_cmp(
 	    svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || s_cmp(svfshp, 
-	    "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(svbshp, "ELLIPSOID", 
-	    (ftnlen)9, (ftnlen)9) == 0) {
+	    "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(svbshp, "POINT", (
+	    ftnlen)9, (ftnlen)5) == 0 || s_cmp(svfshp, "POINT", (ftnlen)9, (
+	    ftnlen)5) == 0 && s_cmp(svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9)
+	     == 0 || s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && 
+	    s_cmp(svbshp, "DSK", (ftnlen)9, (ftnlen)3) == 0) {
 
 /*        One of the targets is modeled as a point; the other is */
-/*        modeled as an ellipsoid. */
+/*        modeled as an ellipsoid or a DSK shape. */
 
-/*        If the front target is an ellipsoid and the back target */
-/*        is a point, we'll classify the geometry as a "point */
-/*        occultation." Otherwise we have a "point transit" case. */
-/*        We'll set the logical flag PNTOCC to .TRUE. to indicate */
-/*        a point occultation. */
+/*        If the front target is an ellipsoid or a DSK shape and the */
+/*        back target is a point, we'll classify the geometry as a */
+/*        "point occultation." Otherwise we have a "point transit" case. */
+/*        We'll set the logical flag PNTOCC to .TRUE. to indicate a */
+/*        point occultation. */
 
 	pntocc = s_cmp(svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0;
 
@@ -1656,7 +1964,7 @@ L_zzgfocst:
 	vsub_(frtpos, bckpos, bckfrt);
 	if (pntocc) {
 
-/*           The front target is an ellipsoid. */
+/*           The front target is an extended shape. */
 
 	    if (fdist <= svmnfr) {
 
@@ -1680,7 +1988,7 @@ L_zzgfocst:
 	    }
 	} else {
 
-/*           The back target is an ellipsoid. */
+/*           The back target is an extended shape. */
 
 	    if (bdist <= svmnbr) {
 
@@ -1710,7 +2018,7 @@ L_zzgfocst:
 	trgsep = vsep_(bckpos, frtpos);
 
 /*        Find angular radius of the outer bounding sphere of the */
-/*        ellipsoid, as seen by the observer. */
+/*        extended target, as seen by the observer. */
 
 /*        In computing this angular radius, scale up the bounding */
 /*        sphere to compensate for the light time error we've made */
@@ -1718,19 +2026,19 @@ L_zzgfocst:
 /*        correct value to use is light time to the limb point having */
 /*        minimum angular separation from the point target. */
 
-/*        Presuming the ellipsoidal target can move no faster than */
+/*        Presuming the extended target can move no faster than */
 /*        alpha*c (where c represents the speed of light in a vacuum), */
 /*        and considering the fact that the light time error cannot */
 /*        exceed r/c, where r is the radius of the outer bounding sphere */
 /*        of the ellipsoid, we find that the magnitude of the position */
-/*        error of the ellipsoid cannot exceed alpha*r. Then the */
-/*        correctly positioned ellipsoid---that is, located at */
+/*        error of the extended target cannot exceed alpha*r. Then the */
+/*        correctly positioned target---that is, located at */
 /*        the position corresponding to the correct light time */
 /*        correction---must be contained in the outer bounding */
 /*        sphere we've found, if we scale the sphere up by 1+alpha. */
 
 /*        Perform the test only if the observer is outside the */
-/*        outer bounding sphere of the ellipsoidal target. */
+/*        outer bounding sphere of the extended target. */
 
 	if (pntocc) {
 	    srad = svmxfr * 1.01;
@@ -1741,7 +2049,11 @@ L_zzgfocst:
 	}
 	if (srad < tdist) {
 	    d__1 = srad / tdist;
-	    maxang = dasine_(&d__1, &c_b171);
+	    maxang = dasine_(&d__1, &c_b199);
+	    if (failed_()) {
+		chkout_("ZZGFOCST", (ftnlen)8);
+		return 0;
+	    }
 	    if (trgsep > maxang) {
 
 /*              No occultation is possible. */
@@ -1750,10 +2062,6 @@ L_zzgfocst:
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
 	    }
-	}
-	if (failed_()) {
-	    chkout_("ZZGFOCST", (ftnlen)8);
-	    return 0;
 	}
 
 /*        We'll need the negatives of the observer-target vectors in */
@@ -1768,10 +2076,10 @@ L_zzgfocst:
 
 	if (pntocc) {
 	    d__1 = svmnfr * .98999999999999999 / fdist;
-	    minang = dasine_(&d__1, &c_b171);
+	    minang = dasine_(&d__1, &c_b199);
 	} else {
 	    d__1 = svmnbr * .98999999999999999 / bdist;
-	    minang = dasine_(&d__1, &c_b171);
+	    minang = dasine_(&d__1, &c_b199);
 	}
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);
@@ -1832,14 +2140,15 @@ L_zzgfocst:
 /*        If we've reached this point, we have a situation where we */
 /*        can't classify the geometry using bounding spheres. Instead, */
 /*        we'll see whether the observer-point target vector intersects */
-/*        the ellipsoidal body. */
+/*        the extended body. */
 
 	if (pntocc) {
 
-/*           The front body is the ellipsoid. */
+/*           The front body is the extended one. */
 
-	    sincpt_("Ellipsoid", svfnam, time, svffrm, svcorr, svonam, "J2000"
-		    , bckpos, spoint, &trgepc, srfvec, &found, (ftnlen)9, (
+	    ++ncalls;
+	    sincpt_(svfmth, svfnam, time, svffrm, svcorr, svonam, "J2000", 
+		    bckpos, spoint, &trgepc, srfvec, &found, (ftnlen)500, (
 		    ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);
@@ -1862,10 +2171,10 @@ L_zzgfocst:
 	    }
 	} else {
 
-/*           The back body is the ellipsoid. */
+/*           The back body is the extended one. */
 
-	    sincpt_("Ellipsoid", svbnam, time, svbfrm, svcorr, svonam, "J2000"
-		    , frtpos, spoint, &trgepc, srfvec, &found, (ftnlen)9, (
+	    sincpt_(svbmth, svbnam, time, svbfrm, svcorr, svonam, "J2000", 
+		    frtpos, spoint, &trgepc, srfvec, &found, (ftnlen)500, (
 		    ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);

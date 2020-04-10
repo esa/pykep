@@ -77,11 +77,21 @@
  
    radius     Distance of a point from the origin 
  
-   lon        Angle of the point from the XZ plane in radians 
+   lon        Angle of the point from the XZ plane in radians. `lon'
+              is set equal to `lons'.
  
-   lat        Angle of the point from the XY plane in radians 
+   lat        Angle of the point from the XY plane in radians. `lat'
+              is computed as pi/2 - `colat'.
  
 -Parameters
+ 
+   None. 
+ 
+-Exceptions
+ 
+   Error free. 
+ 
+-Files
  
    None. 
  
@@ -120,11 +130,7 @@
  
    None. 
  
--Exceptions
- 
-   Error free. 
- 
--Files
+-Literature_References
  
    None. 
  
@@ -132,12 +138,12 @@
  
    W.L. Taber      (JPL) 
  
--Literature_References
- 
-   None. 
- 
 -Version
  
+   -CSPICE Version 1.0.1, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
+
    -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
 
 -Index_Entries

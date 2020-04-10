@@ -3,13 +3,13 @@
 #ifdef KR_headers
 extern double sqrt(), f__cabs();
 
-VOID c_sqrt(r, z) complex_type *r, *z;
+VOID c_sqrt(r, z) complex *r, *z;
 #else
 #undef abs
 #include "math.h"
 extern double f__cabs(double, double);
 
-void c_sqrt(complex_type *r, complex_type *z)
+void c_sqrt(complex *r, complex *z)
 #endif
 {
 	double mag, t;

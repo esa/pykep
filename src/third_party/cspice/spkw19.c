@@ -22,7 +22,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer pktszs[2] = { 12,6 };
+    static integer pktszs[3] = { 12,6,6 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -153,6 +153,10 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
+
 /* -    SPICELIB Version 1.0.0, 07-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -177,6 +181,9 @@ static integer c__1 = 1;
 
 
 /*     Subtype 1:  Lagrange interpolation, 6-element packets. */
+
+
+/*     Subtype 2:  Hermite interpolation, 6-element packets. */
 
 
 /*     Packet sizes associated with the various subtypes: */
@@ -409,6 +416,12 @@ static integer c__1 = 1;
 /*                       components and  vx, vy, vz represent Cartesian */
 /*                       velocity components. */
 
+
+/*                       Type 2 (indicated by code S19TP2): */
+
+/*                           Data are identical to type 1; only the */
+/*                           interpolation algorithm is different. */
+
 /*                    Position units are kilometers, velocity units */
 /*                    are kilometers per second, and acceleration units */
 /*                    are kilometers per second per second. */
@@ -589,6 +602,10 @@ static integer c__1 = 1;
 /*     B.V. Semenov   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 21-DEC-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
 
 /* -    SPICELIB Version 1.0.0, 05-FEB-2014 (NJB) (BVS) */
 
@@ -773,7 +790,7 @@ static integer c__1 = 1;
 /*        used as an array index. */
 
 	subtyp = subtps[i__ - 1];
-	if (subtyp < 0 || subtyp > 1) {
+	if (subtyp < 0 || subtyp > 2) {
 	    setmsg_("Unexpected SPK type 19 subtype # found in mini-segment "
 		    "#.", (ftnlen)57);
 	    errint_("#", &subtyp, (ftnlen)1);
@@ -782,12 +799,18 @@ static integer c__1 = 1;
 	    chkout_("SPKW19", (ftnlen)6);
 	    return 0;
 	}
-	pktsiz = pktszs[(i__2 = subtyp) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)689)];
-	if (odd_(&subtyp)) {
-	    winsiz = degres[i__ - 1] + 1;
-	} else {
+	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"pktszs", i__2, "spkw19_", (ftnlen)699)];
+	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
+	} else if (subtyp == 1) {
+	    winsiz = degres[i__ - 1] + 1;
+	} else if (subtyp == 2) {
+	    winsiz = (degres[i__ - 1] + 1) / 2;
+	} else {
+	    setmsg_("Subtype = #; not expected.", (ftnlen)26);
+	    errint_("#", &subtyp, (ftnlen)1);
+	    sigerr_("SPICE(BUG1)", (ftnlen)11);
 	}
 
 /*        Make sure that the degree of the interpolating polynomials is */
@@ -990,12 +1013,18 @@ static integer c__1 = 1;
 /*        Set the packet size, which is a function of the subtype. */
 
 	subtyp = subtps[i__ - 1];
-	pktsiz = pktszs[(i__2 = subtyp) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)931)];
-	if (odd_(&subtyp)) {
-	    winsiz = degres[i__ - 1] + 1;
-	} else {
+	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"pktszs", i__2, "spkw19_", (ftnlen)952)];
+	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
+	} else if (subtyp == 1) {
+	    winsiz = degres[i__ - 1] + 1;
+	} else if (subtyp == 2) {
+	    winsiz = (degres[i__ - 1] + 1) / 2;
+	} else {
+	    setmsg_("Subtype = #; not expected.", (ftnlen)26);
+	    errint_("#", &subtyp, (ftnlen)1);
+	    sigerr_("SPICE(BUG2)", (ftnlen)11);
 	}
 
 /*        Now that we have the packet size, we can compute */
@@ -1080,8 +1109,8 @@ static integer c__1 = 1;
 
 /*        Set the packet size, which is a function of the subtype. */
 
-	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 2 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1033)];
+	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1065)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */

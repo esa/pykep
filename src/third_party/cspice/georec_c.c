@@ -87,12 +87,14 @@
 
 
    alt        Altitude of point above the reference spheroid.
+              `alt' must be in the same units as `re'.
 
 
    re         Equatorial radius of a reference spheroid.  This spheroid
               is a volume of revolution:  its horizontal cross sections
               are circular.  The shape of the spheroid is defined by
-              an equatorial radius `re' and a polar radius `rp'.
+              an equatorial radius `re' and a polar radius `rp'. `re' 
+              must be in the same units as `alt'.
 
 
    f          Flattening coefficient = (re-rp) / re,  where `rp' is
@@ -103,7 +105,7 @@
    rectan     Rectangular coordinates of the input point. 
 
               The units associated with `rectan' are those associated
-              with the input `alt'.
+              with the inputs `alt' and `re'.
 
 -Parameters
 
@@ -198,6 +200,11 @@
 
    None.
 
+-Literature_References
+
+   See FUNDAMENTALS OF ASTRODYNAMICS, Bate, Mueller, White
+   published by Dover for a description of geodetic coordinates.
+
 -Author_and_Institution
 
    C.H. Acton      (JPL)
@@ -206,12 +213,11 @@
    W.L. Taber      (JPL)
    E.D. Wright     (JPL)
 
--Literature_References
-
-   See FUNDAMENTALS OF ASTRODYNAMICS, Bate, Mueller, White
-   published by Dover for a description of geodetic coordinates.
-
 -Version
+
+   -CSPICE Version 1.0.3, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
 
    -CSPICE Version 1.0.2, 30-JUL-2003 (NJB)
 

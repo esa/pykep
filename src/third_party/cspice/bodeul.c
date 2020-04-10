@@ -9,6 +9,7 @@
 
 static integer c__1 = 1;
 static integer c__3 = 3;
+static integer c__200 = 200;
 static integer c__100 = 100;
 
 /* $Procedure      BODEUL ( Return Euler angles for a body ) */
@@ -174,6 +175,10 @@ static integer c__100 = 100;
 /*     1) If the number of phase terms is insufficient, the error */
 /*        SPICE(KERNELVARNOTFOUND) is signaled. */
 
+/*     2) If any of the PCK keywords required to compute the angles are */
+/*        not available in the kernel pool, the error will be signaled */
+/*        by routines in the call tree of this routine. */
+
 /* $ Files */
 
 /*     1) A text or binary PCK containing orientation data for the */
@@ -259,84 +264,90 @@ static integer c__100 = 100;
 
 /* $ Examples */
 
-/*      In the following code fragment, BODEUL is used to get the unit */
-/*      vector (POLE) parallel to the north pole of a target body (BODY) */
-/*      at a specific epoch (ET). */
+/*     In the following code fragment, BODEUL is used to get the unit */
+/*     vector (POLE) parallel to the north pole of a target body (BODY) */
+/*     at a specific epoch (ET). */
 
-/*         CALL BODEUL ( BODY, ET, RA, DEC, W, LAMBDA ) */
-/*         CALL RADREC ( 1.D0, RA,  DEC, POLE ) */
+/*        CALL BODEUL ( BODY, ET, RA, DEC, W, LAMBDA ) */
+/*        CALL RADREC ( 1.D0, RA,  DEC, POLE ) */
 
-/*      Note that the items necessary to compute the Euler angles */
-/*      must have been loaded into the kernel pool (by one or more */
-/*      previous calls to LDPOOL). */
+/*     Note that the items necessary to compute the Euler angles */
+/*     must have been loaded into the kernel pool (by one or more */
+/*     previous calls to LDPOOL). */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      1)  Refer to the NAIF_IDS required reading file for a complete */
-/*          list of the NAIF integer ID codes for bodies. */
+/*     1)  Refer to the NAIF_IDS required reading file for a complete */
+/*         list of the NAIF integer ID codes for bodies. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
-/*      K.S. Zukor      (JPL) */
+/*     N.J. Bachman    (JPL) */
+/*     H.A. Neilan     (JPL) */
+/*     B.V. Semenov    (JPL) */
+/*     W.L. Taber      (JPL) */
+/*     I.M. Underwood  (JPL) */
+/*     K.S. Zukor      (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 4.1.1, 02-JUL-2014 (NJB) */
+/* -    SPICELIB Version 4.2.0, 02-MAR-2016 (BVS) */
 
-/*         Discussion of LAMBDA was updated. Other minor header */
-/*         updates were made. */
+/*        BUG FIX: changed available room in the BODVCD call */
+/*        fetching 'NUT_PREC_ANGLES' from MAXANG to MAXANG*2. */
 
-/*      Last update was 24-APR-2014 (NJB) */
+/*        Fixed indention in some header sections. */
 
-/*         Corrected the brief and detailed descriptions of W. */
+/*        Removed BODEUL: prefix from the text of the long */
+/*        error for insufficient angles. */
 
-/* -     SPICELIB Version 4.1.0, 24-OCT-2005 (NJB) */
+/*     Last update was 24-APR-2014 (NJB) */
 
-/*         Calls to ZZBODVCD have been replaced with calls to */
-/*         BODVCD. */
+/*        Corrected the brief and detailed descriptions of W. */
 
-/* -     SPICELIB Version 4.0.0, 13-FEB-2004 (NJB) */
+/* -    SPICELIB Version 4.1.0, 24-OCT-2005 (NJB) */
 
-/*         Code has been updated to support satellite ID codes in the */
-/*         range 10000 to 99999 and to allow nutation precession angles */
-/*         to be associated with any object. */
+/*        Calls to ZZBODVCD have been replaced with calls to */
+/*        BODVCD. */
 
-/*         Implementation changes were made to improve robustness */
-/*         of the code. */
+/* -    SPICELIB Version 4.0.0, 13-FEB-2004 (NJB) */
 
-/* -     SPICELIB Version 3.1.0, 21-MAR-1995 (KSZ) */
+/*        Code has been updated to support satellite ID codes in the */
+/*        range 10000 to 99999 and to allow nutation precession angles */
+/*        to be associated with any object. */
 
-/*         REF frame is now passed correctly as a character string. */
+/*        Implementation changes were made to improve robustness */
+/*        of the code. */
 
-/* -     SPICELIB Version 3.0.0, 10-MAR-1994 (KSZ) */
+/* -    SPICELIB Version 3.1.0, 21-MAR-1995 (KSZ) */
+
+/*        REF frame is now passed correctly as a character string. */
+
+/* -    SPICELIB Version 3.0.0, 10-MAR-1994 (KSZ) */
 
 /*        Ability to get Euler angles from binary PCK file added. */
 /*        This uses the new routine PCKEUL. */
 
-/* -     SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 2.0.0, 04-SEP-1991 (NJB) */
+/* -    SPICELIB Version 2.0.0, 04-SEP-1991 (NJB) */
 
-/*         Updated to handle P_constants referenced to different epochs */
-/*         and inertial reference frames. */
+/*        Updated to handle P_constants referenced to different epochs */
+/*        and inertial reference frames. */
 
-/* -     SPICELIB Version 1.1.0, 02-NOV-1990  (NJB) */
+/* -    SPICELIB Version 1.1.0, 02-NOV-1990  (NJB) */
 
-/*         Allowed number of nutation precession angles increased to */
-/*         100. */
+/*        Allowed number of nutation precession angles increased to */
+/*        100. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990  (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -347,28 +358,28 @@ static integer c__100 = 100;
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 4.1.0, 24-OCT-2005 (NJB) */
+/* -    SPICELIB Version 4.1.0, 24-OCT-2005 (NJB) */
 
-/*         Calls to ZZBODVCD have been replaced with calls to */
-/*         BODVCD. */
+/*        Calls to ZZBODVCD have been replaced with calls to */
+/*        BODVCD. */
 
-/* -     SPICELIB Version 4.0.0, 13-FEB-2004 (NJB) */
+/* -    SPICELIB Version 4.0.0, 13-FEB-2004 (NJB) */
 
-/*         Code has been updated to support satellite ID codes in the */
-/*         range 10000 to 99999 and to allow nutation precession angles */
-/*         to be associated with any object. */
+/*        Code has been updated to support satellite ID codes in the */
+/*        range 10000 to 99999 and to allow nutation precession angles */
+/*        to be associated with any object. */
 
-/*         Calls to deprecated kernel pool access routine RTPOOL */
-/*         were replaced by calls to GDPOOL. */
+/*        Calls to deprecated kernel pool access routine RTPOOL */
+/*        were replaced by calls to GDPOOL. */
 
-/*         Calls to BODVAR have been replaced with calls to */
-/*         ZZBODVCD. */
+/*        Calls to BODVAR have been replaced with calls to */
+/*        ZZBODVCD. */
 
-/* -     SPICELIB Version 3.1.0, 21-MAR-1995 (KSZ) */
+/* -    SPICELIB Version 3.1.0, 21-MAR-1995 (KSZ) */
 
-/*         REF frame is now passed correctly as a character string. */
+/*        REF frame is now passed correctly as a character string. */
 
-/* -     SPICELIB Version 3.0.0, 10-MAR-1994 (KSZ) */
+/* -    SPICELIB Version 3.0.0, 10-MAR-1994 (KSZ) */
 
 /*        BODEUL now uses new software to check for the */
 /*        existence of binary PCK files, search the for */
@@ -377,41 +388,40 @@ static integer c__100 = 100;
 /*        new routine PCKEUL.  Otherwise the code calculates */
 /*        the Euler angles from the P_constants kernel file. */
 
-/* -     SPICELIB Version 2.0.0, 04-SEP-1991 (NJB) */
+/* -    SPICELIB Version 2.0.0, 04-SEP-1991 (NJB) */
 
-/*         Updated to handle P_constants referenced to different epochs */
-/*         and inertial reference frames. */
+/*        Updated to handle P_constants referenced to different epochs */
+/*        and inertial reference frames. */
 
-/*         Updated to handle P_constants referenced to different epochs */
-/*         and inertial reference frames. */
+/*        Updated to handle P_constants referenced to different epochs */
+/*        and inertial reference frames. */
 
-/*         BODEUL now checks the kernel pool for presence of the */
-/*         variables */
+/*        BODEUL now checks the kernel pool for presence of the */
+/*        variables */
 
-/*            BODY#_CONSTANTS_REF_FRAME */
+/*           BODY#_CONSTANTS_REF_FRAME */
 
-/*         and */
+/*        and */
 
-/*            BODY#_CONSTANTS_JED_EPOCH */
+/*           BODY#_CONSTANTS_JED_EPOCH */
 
-/*         where # is the NAIF integer code of the barycenter of a */
-/*         planetary system or of a body other than a planet or */
-/*         satellite.  If either or both of these variables are */
-/*         present, the P_constants for BODY are presumed to be */
-/*         referenced to the specified inertial frame or epoch. */
-/*         If the epoch of the constants is not J2000, the input */
-/*         time ET is converted to seconds past the reference epoch. */
-/*         If the frame of the constants is not J2000, the Euler angles */
-/*         defining the rotation from the P_constants' frame to */
-/*         body-fixed coordinates are transformed so that they define */
-/*         the rotation from J2000 coordinates to body-fixed */
-/*         coordinates. */
+/*        where # is the NAIF integer code of the barycenter of a */
+/*        planetary system or of a body other than a planet or */
+/*        satellite.  If either or both of these variables are */
+/*        present, the P_constants for BODY are presumed to be */
+/*        referenced to the specified inertial frame or epoch. */
+/*        If the epoch of the constants is not J2000, the input */
+/*        time ET is converted to seconds past the reference epoch. */
+/*        If the frame of the constants is not J2000, the Euler angles */
+/*        defining the rotation from the P_constants' frame to */
+/*        body-fixed coordinates are transformed so that they define */
+/*        the rotation from J2000 coordinates to body-fixed */
+/*        coordinates. */
 
+/* -    SPICELIB Version 1.1.0, 02-NOV-1990  (NJB) */
 
-/* -     SPICELIB Version 1.1.0, 02-NOV-1990  (NJB) */
-
-/*         Allowed number of nutation precession angles increased to */
-/*         100. */
+/*        Allowed number of nutation precession angles increased to */
+/*        100. */
 
 /* -    Beta Version 2.0.0, 23-JUN-1989 (HAN) */
 
@@ -554,7 +564,7 @@ static integer c__100 = 100;
 	nw = 0;
 	s_copy(item, "NUT_PREC_ANGLES", (ftnlen)32, (ftnlen)15);
 	if (bodfnd_(&refid, item, (ftnlen)32)) {
-	    bodvcd_(&refid, item, &c__100, &ntheta, tcoef, (ftnlen)32);
+	    bodvcd_(&refid, item, &c__200, &ntheta, tcoef, (ftnlen)32);
 	    ntheta /= 2;
 	}
 	s_copy(item, "NUT_PREC_RA", (ftnlen)32, (ftnlen)11);
@@ -572,8 +582,8 @@ static integer c__100 = 100;
 /* Computing MAX */
 	i__1 = max(na,nd);
 	if (max(i__1,nw) > ntheta) {
-	    setmsg_("BODEUL: Insufficient number of nutation/precession angl"
-		    "es for body * at time #.", (ftnlen)79);
+	    setmsg_("Insufficient number of nutation/precession angles for b"
+		    "ody * at time #.", (ftnlen)71);
 	    errint_("*", body, (ftnlen)1);
 	    errdp_("#", et, (ftnlen)1);
 	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
@@ -594,13 +604,13 @@ static integer c__100 = 100;
 	i__1 = ntheta;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    theta = (tcoef[(i__2 = (i__ << 1) - 2) < 200 && 0 <= i__2 ? i__2 :
-		     s_rnge("tcoef", i__2, "bodeul_", (ftnlen)636)] + t * 
+		     s_rnge("tcoef", i__2, "bodeul_", (ftnlen)645)] + t * 
 		    tcoef[(i__3 = (i__ << 1) - 1) < 200 && 0 <= i__3 ? i__3 : 
-		    s_rnge("tcoef", i__3, "bodeul_", (ftnlen)636)]) * rpd_();
+		    s_rnge("tcoef", i__3, "bodeul_", (ftnlen)645)]) * rpd_();
 	    sinth[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("sinth",
-		     i__2, "bodeul_", (ftnlen)638)] = sin(theta);
+		     i__2, "bodeul_", (ftnlen)647)] = sin(theta);
 	    costh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("costh",
-		     i__2, "bodeul_", (ftnlen)639)] = cos(theta);
+		     i__2, "bodeul_", (ftnlen)648)] = cos(theta);
 	}
 	*ra += vdotg_(ac, sinth, &na);
 	*dec += vdotg_(dc, costh, &nd);

@@ -7,7 +7,8 @@
 
 /* Table of constant values */
 
-static integer c__21 = 21;
+static integer c__5000 = 5000;
+static logical c_false = FALSE_;
 
 /* $Procedure      DASCLS ( DAS, close file ) */
 /* Subroutine */ int dascls_(integer *handle)
@@ -24,16 +25,18 @@ static integer c__21 = 21;
 
     /* Local variables */
     integer unit;
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer fhset[27];
+    static integer fhset[5006];
     extern logical failed_(void);
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen), dasllc_(
 	    integer *), dashof_(integer *);
     char method[10];
-    extern /* Subroutine */ int dashlu_(integer *, integer *), daswbr_(
-	    integer *), dassdr_(integer *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dassdr_(integer *), daswbr_(integer *), 
+	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, 
+	    ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ssizei_(
 	    integer *, integer *);
@@ -79,6 +82,39 @@ static integer c__21 = 21;
 /*     FILES */
 
 /* $ Declarations */
+
+/*     Include file das.inc */
+
+/*     This include file declares public parameters for the DAS */
+/*     subsystem. */
+
+/*        Version 1.0.0 10-FEB-2017 (NJB) */
+
+/*     Parameter declarations follow. */
+
+
+/*     DAS file table size: */
+
+/*        The parameter name is FTSIZE. The value of the parameter is */
+/*        defined in the include file */
+
+/*           zzddhman.inc */
+
+/*        That value is duplicated here, since zzddhman.inc contains */
+/*        other declarations that conflict with some of those in DAS */
+/*        routines. */
+
+
+/*     Capacity of DAS data records: */
+
+/*        -- NWD double precision numbers. */
+/*        -- NWI integers. */
+/*        -- NWC characters. */
+/*     These parameters are named to enhance ease of maintenance of */
+/*     the code; the values should not be changed. */
+
+/*     End of include file das.inc */
+
 /* $ Brief_I/O */
 
 /*     Variable  I/O  Description */
@@ -105,7 +141,7 @@ static integer c__21 = 21;
 /*     Error free. */
 
 /*     1)  If HANDLE is not the handle of an open DAS file, no error */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -159,6 +195,10 @@ static integer c__21 = 21;
 /*     W.L. Taber     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 10-FEB-2017 (NJB) */
+
+/*        Updated to use DAF/DAS handle manager subsystem. */
 
 /* -    SPICELIB Version 1.3.3, 05-OCT-2006 (NJB) */
 
@@ -265,11 +305,10 @@ static integer c__21 = 21;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASCLS", (ftnlen)6);
     }
+    chkin_("DASCLS", (ftnlen)6);
     if (pass1) {
-	ssizei_(&c__21, fhset);
+	ssizei_(&c__5000, fhset);
 	pass1 = FALSE_;
     }
 
@@ -311,7 +350,7 @@ static integer c__21 = 21;
 /*        We cannot directly test the status of the file, but if */
 /*        the file is unnamed, it must be a scratch file. */
 
-	dashlu_(handle, &unit);
+	zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
 	if (failed_()) {
 	    chkout_("DASCLS", (ftnlen)6);
 	    return 0;

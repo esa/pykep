@@ -645,7 +645,7 @@
          {
             if ( i < NCORNR )
             {
-               sprintf ( title, "Corner vector %ld", i );
+               sprintf ( title, "Corner vector %d", (int)i );
 
                vequ_c ( bounds[i], dvec );
             }
@@ -901,6 +901,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.4, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.3, 19-MAY-2010 (BVS)
 
         Index line now states that this routine is deprecated.

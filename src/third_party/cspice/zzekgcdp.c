@@ -10,16 +10,14 @@
 	coldsc, integer *recptr, integer *datptr)
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno, ncols;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
     integer colidx, ptrloc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -528,6 +526,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 
 /* -& */
@@ -547,7 +550,6 @@
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKGCDP", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
 		"EK = #", (ftnlen)65);
@@ -555,7 +557,7 @@
 	errint_("#", &ncols, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKGCDP", (ftnlen)8);
 	return 0;

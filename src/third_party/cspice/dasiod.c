@@ -34,7 +34,8 @@ static integer c__128 = 128;
 
 /* $ Abstract */
 
-/*     Perform Fortran reads and writes of double precision records. */
+/*     Perform Fortran reads and writes of DAS double precision records. */
+/*     This routine operates on DAS files having native binary format. */
 
 /* $ Disclaimer */
 
@@ -97,7 +98,7 @@ static integer c__128 = 128;
 /*     UNIT           is the Fortran unit number connected to the DAS */
 /*                    file that is to be read or written.  Given the */
 /*                    handle of the DAS file, the unit number can be */
-/*                    obtained using DASHLU. */
+/*                    obtained using ZZDDHHLU. */
 
 /*     RECNO          is the Fortran record number of the record to be */
 /*                    read or written. */
@@ -119,13 +120,13 @@ static integer c__128 = 128;
 /* $ Exceptions */
 
 /*     1)  If the value of ACTION is not recognized, the error */
-/*         SPICE(UNRECOGNIZEDACTION) is signalled. */
+/*         SPICE(UNRECOGNIZEDACTION) is signaled. */
 
 /*     2)  If a Fortran read error occurs, the error */
-/*         SPICE(DASFILEREADFAILED) is signalled. */
+/*         SPICE(DASFILEREADFAILED) is signaled. */
 
 /*     3)  If a Fortran write error occurs, the error */
-/*         SPICE(DASFILEWRITEFAILED) is signalled. */
+/*         SPICE(DASFILEWRITEFAILED) is signaled. */
 
 /* $ Files */
 
@@ -133,20 +134,23 @@ static integer c__128 = 128;
 
 /* $ Particulars */
 
+/*     This routine may be used to write to and read from DAS files */
+/*     having the native binary file format of the host system. The */
+/*     routine ZZDASGDR should be used to read double precision records */
+/*     from DAS files that may have either native or non-native format. */
+
 /*     Normally, routines outside of SPICELIB will not need to call this */
-/*     routine directly.  Writes to DAS files should be performed using */
+/*     routine directly. Writes to DAS files should be performed using */
 /*     the DASADx and DASUDx routines; reads should be performed using */
 /*     the DASRDx routines. */
 
-/*     This routines centralizes I/O and the concommitant error handling */
-/*     for DAS character records. */
+/*     This routine centralizes I/O and the concomitant error handling */
+/*     for DAS double precision records. */
 
-/*     Although most DAS routines use file handles to indentify DAS */
+/*     Although most DAS routines use file handles to identify DAS */
 /*     files, this routine uses Fortran logical units for this purpose. */
 /*     Using unit numbers allows the DASIOx routines to be called from */
-/*     any DAS routine, including entry points of DASFM.  (DASFM */
-/*     contains as entry points the routines DASHLU and DASLUH, which */
-/*     map between handles and unit numbers.) */
+/*     any DAS routine, including entry points of DASFM. */
 
 /* $ Examples */
 
@@ -159,8 +163,8 @@ static integer c__128 = 128;
 /*                           . */
 /*                           . */
 
-/*            CALL DASHLU ( HANDLE, UNIT ) */
-/*            CALL DASHFN ( HANDLE, NAME ) */
+/*            CALL ZZDDHHLU ( HANDLE, 'DAS', .FALSE., UNIT ) */
+/*            CALL DASHFN   ( HANDLE, NAME ) */
 
 /*            DO I = 1, 20 */
 
@@ -189,13 +193,14 @@ static integer c__128 = 128;
 /*                           . */
 /*                           . */
 
-/*            CALL DASHLU (  HANDLE, UNIT              ) */
-/*            CALL DASIOD ( 'WRITE', UNIT, 10,  RECORD ) */
+/*            CALL ZZDDHHLU ( HANDLE,  'DAS', .FALSE., UNIT   ) */
+/*            CALL DASIOD   ( 'WRITE', UNIT,  10,      RECORD ) */
 
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1) This routine may be used only on DAS files having */
+/*        the native binary file format of the host system. */
 
 /* $ Literature_References */
 
@@ -207,6 +212,11 @@ static integer c__128 = 128;
 /*     W.L. Taber     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 05-FEB-2015 (NJB) */
+
+/*        Header was updated to refer to ZZDDHHLU. Restrictions section */
+/*        was updated. */
 
 /* -    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT) */
 

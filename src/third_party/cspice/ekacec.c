@@ -10,7 +10,6 @@
 	char *column, integer *nvals, char *cvals, logical *isnull, ftnlen 
 	column_len, ftnlen cvals_len)
 {
-    integer unit;
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
 	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
 	    zzektrdp_(integer *, integer *, integer *, integer *), chkin_(
@@ -18,14 +17,13 @@
     integer class__, dtype;
     extern logical failed_(void);
     integer coldsc[11], segdsc[24];
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekad03_(integer *, 
-	    integer *, integer *, integer *, char *, logical *, ftnlen), 
-	    zzekad06_(integer *, integer *, integer *, integer *, integer *, 
-	    char *, logical *, ftnlen);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), zzekad03_(integer *, integer *, integer *, integer *, 
+	    char *, logical *, ftnlen), zzekad06_(integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, ftnlen);
 
 /* $ Abstract */
 
@@ -412,7 +410,7 @@
 
 /*     4)  If COLUMN specifies a column of whose data type is not */
 /*         character, the error SPICE(WRONGDATATYPE) will be */
-/*         signalled. */
+/*         signaled. */
 
 /*     5)  If RECNO is out of range, the error will be diagnosed by */
 /*         routines called by this routine. */
@@ -431,7 +429,7 @@
 
 /*     9)  If COLUMN specifies a column of whose class is not */
 /*         an character class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signalled. */
+/*         SPICE(NOCLASS) will be signaled. */
 
 /*     10) If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -596,6 +594,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to use ERRHAN. */
+
 /* -    Beta Version 1.0.0, 26-SEP-1995 (NJB) */
 
 /* -& */
@@ -629,14 +631,13 @@
     dtype = coldsc[1];
     if (dtype != 1) {
 	chkin_("EKACEC", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Column # is of type #; EKACEC only works with character col"
 		"umns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)95);
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", &dtype, (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
 	chkout_("EKACEC", (ftnlen)6);
 	return 0;
@@ -665,7 +666,6 @@
 /*        This is an unsupported character column class. */
 
 	chkin_("EKACEC", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported cha"
 		"racter class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (
 		ftnlen)115);
@@ -673,7 +673,7 @@
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("EKACEC", (ftnlen)6);
 	return 0;

@@ -20,15 +20,14 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], node, unit;
+    integer page[256], node;
     extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *), 
 	    zzekpgri_(integer *, integer *, integer *), chkin_(char *, ftnlen)
 	    ;
     integer depth, level, nkids, stack[30]	/* was [3][10] */, first, 
 	    nkeys, kidbas, remain;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), errfnm_(char *,
-	     integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
@@ -482,7 +481,7 @@ static integer c__3 = 3;
 /*         routine. */
 
 /*     3)  If the input tree is deeper than the maximum allowed depth */
-/*         TRMXDP, the error SPICE(INVALIDFORMAT) is signalled. */
+/*         TRMXDP, the error SPICE(INVALIDFORMAT) is signaled. */
 
 /* $ Files */
 
@@ -522,6 +521,11 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.3.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    SPICELIB Version 1.2.0, 18-JUN-1999 (WLT) */
 
 /*        Removed a redundant call to CHKIN. */
@@ -560,9 +564,8 @@ static integer c__3 = 3;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKTRFR", (ftnlen)8);
     }
+    chkin_("ZZEKTRFR", (ftnlen)8);
 
 /*     Read in the root node. */
 
@@ -573,12 +576,11 @@ static integer c__3 = 3;
 
     depth = page[3];
     if (depth > 10) {
-	dashlu_(handle, &unit);
 	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
 		, (ftnlen)60);
 	errint_("#", &depth, (ftnlen)1);
 	errint_("#", &c__10, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("ZZEKTRFR", (ftnlen)8);
@@ -628,17 +630,17 @@ static integer c__3 = 3;
 		kidbas = 64;
 	    }
 	    stack[(i__1 = level * 3 - 3) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)271)] = node;
+		    "stack", i__1, "zzektrfr_", (ftnlen)273)] = node;
 	    stack[(i__1 = level * 3 - 2) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)272)] = nkids;
+		    "stack", i__1, "zzektrfr_", (ftnlen)274)] = nkids;
 	    stack[(i__1 = level * 3 - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)273)] = first;
+		    "stack", i__1, "zzektrfr_", (ftnlen)275)] = first;
 	    ++level;
 
 /*           Read in the first child node. */
 
 	    node = page[(i__1 = kidbas + first - 1) < 256 && 0 <= i__1 ? i__1 
-		    : s_rnge("page", i__1, "zzektrfr_", (ftnlen)279)];
+		    : s_rnge("page", i__1, "zzektrfr_", (ftnlen)281)];
 	    zzekpgri_(handle, &node, page);
 
 /*           We've never visited this node before, so the node's */
@@ -664,11 +666,11 @@ static integer c__3 = 3;
 	    --level;
 	    if (level > 0) {
 		node = stack[(i__1 = level * 3 - 3) < 30 && 0 <= i__1 ? i__1 :
-			 s_rnge("stack", i__1, "zzektrfr_", (ftnlen)314)];
+			 s_rnge("stack", i__1, "zzektrfr_", (ftnlen)316)];
 		first = stack[(i__1 = level * 3 - 1) < 30 && 0 <= i__1 ? i__1 
-			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)315)];
+			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)317)];
 		nkids = stack[(i__1 = level * 3 - 2) < 30 && 0 <= i__1 ? i__1 
-			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)316)];
+			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)318)];
 
 /*              The parent has one less child, and the location of the */
 /*              first child is the successor of the stored location. */

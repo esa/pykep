@@ -128,27 +128,21 @@
  
 -Particulars
  
-   This entry point allows you to request information directly 
+   This routine allows you to request information directly 
    for a specific SPICE kernel. 
  
 -Examples
  
-   Suppose you wish to determine the type of a loaded kernel 
-   so that you can call the correct summarizing routines 
-   for the kernel.  The following bit of pseudo code shows 
-   how you might use this entry point together with summarizing 
-   code to produce a report on the file.  (Note that the 
-   routines spk_summry, ck_summry, pck_summry and ek_summry 
-   are simply names to indicate what you might do with the 
-   information returned by kinfo_c.  They are not routines that 
-   are part of the SPICE Toolkit.) 
+   Suppose you wish to determine the types of kernels loaded
+   by a given meta-kernel. The following program shows 
+   how you might use this routine to do this.
 
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      #define  FILLEN   128
-      #define  TYPLEN   32
-      #define  SRCLEN   128
+      #define  FILLEN   256
+      #define  TYPLEN   33
+      #define  SRCLEN   256
 
       SpiceInt        which;
       SpiceInt        count;
@@ -162,7 +156,7 @@
 
       int main()
          { 
-         furnsh_c( "/kernels/standard.tm" );
+         furnsh_c( "standard.tm" );
    
          ktotal_c ( "all", &count );
     
@@ -195,6 +189,10 @@
                   {
                   printf ( "%s is a PCK file.\n", file );
                   }
+               else if (  eqstr_c ( filtyp, "DSK" )  )
+                  {
+                  printf ( "%s is a DSK file.\n", file );
+                  }
                else if (  eqstr_c ( filtyp, "EK" )  )
                   {
                   printf ( "%s is an EK file.\n", file );
@@ -206,10 +204,9 @@
                else 
                 {
                 printf ( "%s is a text kernel.\n", file );
-                }
-                
+                }                
              }
-
+             return(0);
           }
       
  
@@ -225,8 +222,16 @@
  
    N.J. Bachman    (JPL)
    W.L. Taber      (JPL) 
- 
+   E.D. Wright     (JPL)
+
 -Version
+
+   -CSPICE Version 1.2.0, 20-JAN-2016 (NJB)
+
+      Updated header example program to support DSKs.
+      Updated description of example program. Removed
+      references to the term "entry point." Added
+      Ed Wright as an author of this routine.
 
    -CSPICE Version 1.1.2, 02-MAY-2008 (EDW)
 

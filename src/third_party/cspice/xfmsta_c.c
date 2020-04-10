@@ -171,6 +171,9 @@
        may lead to numeric overflow, the error 'SPICE(NUMERICOVERFLOW)'
        is signaled.
    
+   7)  If body's equatorial radii are not equal and either the 
+       input or output coordinate system is geodetic or 
+       planetographic, the error 'SPICE(NOTSUPPORTED)' is signaled.
 
 -Files
 
@@ -515,10 +518,19 @@
  
 -Author_and_Institution
  
-   S.C. Krening   (JPL) 
+   S.C. Krening   (JPL)
+   B.V. Semenov   (JPL)
  
 -Version
  
+   -CSPICE Version 1.1.0, 09-FEB-2017 (BVS)
+
+      BUG FIX: the routine no longer allows converting to and from
+      geodetic and planetographic coordinates for bodies with
+      unequal equatorial radii. Previously it arbitrarily picked the
+      first and the third radii to compute body's flattening
+      coefficient.
+
    -CSPICE Version 1.0.0, 30-JAN-2011 (SCK)
 
 -Index_Entries

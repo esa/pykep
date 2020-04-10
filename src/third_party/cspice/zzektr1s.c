@@ -22,7 +22,7 @@ static integer c__256 = 256;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, page[256], nbig, node, subd, next, unit;
+    integer base, page[256], nbig, node, subd, next;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
 	    integer *), zzekpgri_(integer *, integer *, integer *), zzekpgwi_(
 	    integer *, integer *, integer *);
@@ -34,15 +34,14 @@ static integer c__256 = 256;
     extern /* Subroutine */ int cleari_(integer *, integer *), dasudi_(
 	    integer *, integer *, integer *, integer *);
     integer basidx;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer bigsiz, nnodes, nsmall, stnbig[10], stnbas[10], stnode[10];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern logical return_(void);
-    integer maxsiz, reqsiz, stlsiz[10], stnext[10], stnkey[10], stsbsz[10], 
-	    subsiz, totnod;
+    integer maxsiz, reqsiz, stlsiz[10], stnext[10], stnkey[10], subsiz, 
+	    totnod;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+	    integer *, ftnlen), chkout_(char *, ftnlen);
     integer div, key;
 
 /* $ Abstract */
@@ -505,11 +504,11 @@ static integer c__256 = 256;
 /*         routine. */
 
 /*     3)  If the input tree is not empty, the error SPICE(NONEMPTYTREE) */
-/*         is signalled. */
+/*         is signaled. */
 
 /*     4)  If the depth of the tree needed to hold the number of values */
 /*         indicated by SIZE exceeds the maximum depth limit, the error */
-/*         SPICE(COUNTTOOLARGE) is signalled. */
+/*         SPICE(COUNTTOOLARGE) is signaled. */
 
 /* $ Files */
 
@@ -552,6 +551,13 @@ static integer c__256 = 256;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN */
+
+/*        Cleaned up use of unnecessary variables and unneeded */
+/*        declarations. */
+
 /* -    Beta Version 1.1.0, 18-JUN-1999 (WLT) */
 
 /*        Removed redundant calls to CHKIN */
@@ -573,19 +579,17 @@ static integer c__256 = 256;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKTR1S", (ftnlen)8);
     }
+    chkin_("ZZEKTR1S", (ftnlen)8);
 
 /*     Make sure the input tree is empty. */
 
     tsize = zzektrsz_(handle, tree);
     if (tsize > 0) {
-	dashlu_(handle, &unit);
 	setmsg_("Tree has size #; should be empty.EK = #; TREE = #.", (ftnlen)
 		50);
 	errint_("#", &tsize, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	sigerr_("SPICE(NONEMPTYTREE)", (ftnlen)19);
 	chkout_("ZZEKTR1S", (ftnlen)8);
@@ -654,12 +658,11 @@ static integer c__256 = 256;
 /*     If the tree must be deeper than we expected, we've a problem. */
 
     if (d__ > 10) {
-	dashlu_(handle, &unit);
 	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
 		, (ftnlen)60);
 	errint_("#", &d__, (ftnlen)1);
 	errint_("#", &c__10, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	sigerr_("SPICE(COUNTTOOLARGE)", (ftnlen)20);
 	chkout_("ZZEKTR1S", (ftnlen)8);
@@ -684,9 +687,6 @@ static integer c__256 = 256;
 /*        Item                                 Stack Variable */
 /*        ----                                 --------------- */
 /*        Node number                          STNODE */
-
-/*        Size, in keys, of the */
-/*        subtree headed by node               STSBSZ */
 
 /*        Number of keys in node               STNKEY */
 
@@ -1010,18 +1010,16 @@ static integer c__256 = 256;
 
 		stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
 			"stnode", i__1, "zzektr1s_", (ftnlen)696)] = node;
-		stsbsz[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stsbsz", i__1, "zzektr1s_", (ftnlen)697)] = subsiz;
 		stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnkey", i__1, "zzektr1s_", (ftnlen)698)] = nkeys;
+			"stnkey", i__1, "zzektr1s_", (ftnlen)697)] = nkeys;
 		stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stlsiz", i__1, "zzektr1s_", (ftnlen)699)] = bigsiz;
+			"stlsiz", i__1, "zzektr1s_", (ftnlen)698)] = bigsiz;
 		stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnbig", i__1, "zzektr1s_", (ftnlen)700)] = nbig;
+			"stnbig", i__1, "zzektr1s_", (ftnlen)699)] = nbig;
 		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnext", i__1, "zzektr1s_", (ftnlen)701)] = 2;
+			"stnext", i__1, "zzektr1s_", (ftnlen)700)] = 2;
 		stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnbas", i__1, "zzektr1s_", (ftnlen)702)] = basidx;
+			"stnbas", i__1, "zzektr1s_", (ftnlen)701)] = basidx;
 
 /*              NEXT is already set to 1.  BASIDX is set, since the */
 /*              base index of the first child is that of the parent. */
@@ -1033,7 +1031,7 @@ static integer c__256 = 256;
 		}
 		++level;
 		node = page[(i__1 = kidbas) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektr1s_", (ftnlen)715)];
+			s_rnge("page", i__1, "zzektr1s_", (ftnlen)714)];
 		subsiz = bigsiz;
 	    } else if (level > 1) {
 
@@ -1046,9 +1044,9 @@ static integer c__256 = 256;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    key = basidx + i__;
 		    page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)730)] = i__;
+			    "page", i__2, "zzektr1s_", (ftnlen)729)] = i__;
 		    page[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("page", i__2, "zzektr1s_", (ftnlen)731)] = 
+			    s_rnge("page", i__2, "zzektr1s_", (ftnlen)730)] = 
 			    values[key - 1];
 		}
 
@@ -1063,23 +1061,23 @@ static integer c__256 = 256;
 		--level;
 		if (level >= 1) {
 		    node = stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)750)
+			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)749)
 			    ];
 		    nkeys = stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnkey", i__1, "zzektr1s_", (
-			    ftnlen)751)];
+			    ftnlen)750)];
 		    bigsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)752)];
+			    ftnlen)751)];
 		    nbig = stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)753)
+			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)752)
 			    ];
 		    next = stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)754)
+			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)753)
 			    ];
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)755)];
+			    ftnlen)754)];
 		    nkids = nkeys + 1;
 
 /*                 Read in the current node. */
@@ -1106,39 +1104,39 @@ static integer c__256 = 256;
 /*              Prepare to visit the next child of the current node. */
 
 		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnext", i__1, "zzektr1s_", (ftnlen)787)] = next + 1;
+			"stnext", i__1, "zzektr1s_", (ftnlen)786)] = next + 1;
 		if (level == 1) {
 		    kidbas = 88;
 		} else {
 		    kidbas = 64;
 		}
 		node = page[(i__1 = kidbas + next - 1) < 256 && 0 <= i__1 ? 
-			i__1 : s_rnge("page", i__1, "zzektr1s_", (ftnlen)797)]
+			i__1 : s_rnge("page", i__1, "zzektr1s_", (ftnlen)796)]
 			;
 		if (next <= nbig) {
 		    subsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)801)];
+			    ftnlen)800)];
 		} else {
 		    subsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)803)] - 1;
+			    ftnlen)802)] - 1;
 		}
 		if (next <= nbig + 1) {
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)809)] + (next - 1) * stlsiz[(i__2 = level 
+			    ftnlen)808)] + (next - 1) * stlsiz[(i__2 = level 
 			    - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("stlsiz", 
-			    i__2, "zzektr1s_", (ftnlen)809)] + (next - 1);
+			    i__2, "zzektr1s_", (ftnlen)808)] + (next - 1);
 		} else {
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)815)] + nbig * stlsiz[(i__2 = level - 1) < 
+			    ftnlen)814)] + nbig * stlsiz[(i__2 = level - 1) < 
 			    10 && 0 <= i__2 ? i__2 : s_rnge("stlsiz", i__2, 
-			    "zzektr1s_", (ftnlen)815)] + (next - nbig - 1) * (
+			    "zzektr1s_", (ftnlen)814)] + (next - nbig - 1) * (
 			    stlsiz[(i__3 = level - 1) < 10 && 0 <= i__3 ? 
 			    i__3 : s_rnge("stlsiz", i__3, "zzektr1s_", (
-			    ftnlen)815)] - 1) + (next - 1);
+			    ftnlen)814)] - 1) + (next - 1);
 		}
 		++level;
 		next = 1;
@@ -1152,23 +1150,23 @@ static integer c__256 = 256;
 		--level;
 		if (level >= 1) {
 		    node = stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)836)
+			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)835)
 			    ];
 		    nkeys = stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnkey", i__1, "zzektr1s_", (
-			    ftnlen)837)];
+			    ftnlen)836)];
 		    bigsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)838)];
+			    ftnlen)837)];
 		    nbig = stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)839)
+			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)838)
 			    ];
 		    next = stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)840)
+			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)839)
 			    ];
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)841)];
+			    ftnlen)840)];
 		    nkids = nkeys + 1;
 
 /*                 Read in the current node. */

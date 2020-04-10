@@ -5,7 +5,7 @@
 -Abstract
 
    Perform CSPICE definitions for error handling APIs.
-
+            
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,19 +34,19 @@
 -Required_Reading
 
    None.
-
+   
 -Particulars
 
-   This header defines constants that may be referenced in
+   This header defines constants that may be referenced in 
    application code that calls CSPICE error handling functions.
-
+   
 
       CONSTANTS
       ==========
-
+   
          Name                  Description
          ----                  ----------
-
+   
          SPICE_ERROR_LMSGLN    Maximum length of a long error message,
                                including the null terminator.
 
@@ -60,14 +60,14 @@
          SPICE_ERROR_MODLEN    Maximum length of a module name
                                appearing in the traceback message,
                                including the null terminator.
-
+  
          SPICE_ERROR_MAXMOD    Maximum count of module names
                                appearing in the traceback message.
 
          SPICE_ERROR_TRCLEN    Maximum length of a traceback message,
                                including the null terminator.
-
-
+         
+         
 -Literature_References
 
    None.
@@ -75,61 +75,67 @@
 -Author_and_Institution
 
    N.J. Bachman       (JPL)
-
+   
 -Restrictions
 
    None.
-
+      
 -Version
 
-   -CSPICE Version 1.0.0, 05-NOV-2013 (NJB)
+   -CSPICE Version 1.0.0, 05-NOV-2013 (NJB)  
 
 */
 
 #ifndef HAVE_SPICE_ERROR_HANDLING
 
-#define HAVE_SPICE_ERROR_HANDLING
+   #define HAVE_SPICE_ERROR_HANDLING
+   
+   
+   /*
+   Local constants 
+   */
+   #define ARROWLEN                    5
 
-/*
-Local constants
-*/
-#define ARROWLEN 5
+   /*
+   Public constants 
+   */
 
-/*
-Public constants
-*/
+   /*
+   Long error message length, which is equal to
 
-/*
-Long error message length, which is equal to
+      ( 23 * 80 ) + 1
 
-   ( 23 * 80 ) + 1
+   */
+   #define SPICE_ERROR_LMSGLN         1841
 
-*/
-#define SPICE_ERROR_LMSGLN 1841
+   /*
+   Short error message length:
+   */
+   #define SPICE_ERROR_SMSGLN         26
 
-/*
-Short error message length:
-*/
-#define SPICE_ERROR_SMSGLN 26
+   /*
+   Short error message explanation length:
+   */
+   #define SPICE_ERROR_XMSGLN         81
 
-/*
-Short error message explanation length:
-*/
-#define SPICE_ERROR_XMSGLN 81
+   /*
+   Module name length for traceback entries:
+   */
+   #define SPICE_ERROR_MODLEN         33
 
-/*
-Module name length for traceback entries:
-*/
-#define SPICE_ERROR_MODLEN 33
+   /*
+   Maximum module count for traceback string: 
+   */
+   #define SPICE_ERROR_MAXMOD         100
 
-/*
-Maximum module count for traceback string:
-*/
-#define SPICE_ERROR_MAXMOD 100
-
-/*
-Maximum length of traceback string returned
-by qcktrc_c.
-*/
-#define SPICE_ERROR_TRCLEN ((SPICE_ERROR_MAXMOD * (SPICE_ERROR_MODLEN - 1)) + (ARROWLEN * (SPICE_ERROR_MAXMOD - 1)) + 1)
+   /*
+   Maximum length of traceback string returned
+   by qcktrc_c.
+   */
+   #define SPICE_ERROR_TRCLEN  (   (     SPICE_ERROR_MAXMOD          \
+                                     * ( SPICE_ERROR_MODLEN-1 ) )    \
+                                 + (     ARROWLEN                    \
+                                     * ( SPICE_ERROR_MAXMOD-1 ) )    \
+                                 + 1                                )
 #endif
+

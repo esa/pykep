@@ -165,9 +165,9 @@
                   bltfrm_c ( i, &idset );
 
                   sprintf ( outlin, 
-                            "Number of frames of class %ld: %ld",
-                            (long) i,
-                            (long) card_c(&idset)                );
+                            "Number of frames of class %d: %d",
+                            (int) i,
+                            (int) card_c(&idset)                );
                }
                else
                {
@@ -177,8 +177,8 @@
                   bltfrm_c ( SPICE_FRMTYP_ALL, &idset );
 
                   sprintf ( outlin, 
-                            "Number of built-in frames: %ld",
-                            (long) card_c(&idset)                );
+                            "Number of built-in frames: %d",
+                            (int) card_c(&idset)                );
                }
 
                /.
@@ -279,6 +279,11 @@
    N.J. Bachman    (JPL) 
  
 -Version
+
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
  
    -CSPICE Version 1.0.0, 22-MAY-2012 (NJB)
 

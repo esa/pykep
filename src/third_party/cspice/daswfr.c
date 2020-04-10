@@ -7,6 +7,7 @@
 
 /* Table of constant values */
 
+static logical c_false = FALSE_;
 static integer c__1 = 1;
 
 /* $Procedure DASWFR ( DAS write file record ) */
@@ -23,7 +24,8 @@ static integer c__1 = 1;
     integer free;
     char tail[932];
     integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen), chkin_(char *, ftnlen);
     extern logical failed_(void);
     integer oldcch, locncc, oldcrc;
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
@@ -36,12 +38,12 @@ static integer c__1 = 1;
     integer locncr, locnvc, oldrrc;
     char format[8];
     integer lastrc[3];
-    extern /* Subroutine */ int dashlu_(integer *, integer *), errfnm_(char *,
-	     integer *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
     integer lastwd[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), dasufs_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *),
+	     setmsg_(char *, ftnlen);
     integer iostat, locnvr;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
@@ -201,7 +203,8 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1) The DAS file must have a binary file format native to the host */
+/*        system. */
 
 /* $ Literature_References */
 
@@ -216,9 +219,14 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.1.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration with the handle */
+/*        manager subsystem. */
+
 /* -    SPICELIB Version 3.0.0, 11-DEC-2001 (FST) */
 
-/*        This routine was modified to accomodate the preservation */
+/*        This routine was modified to accommodate the preservation */
 /*        of the FTP validation and binary file format strings that */
 /*        are not part of the DAS file record. */
 
@@ -314,7 +322,7 @@ static integer c__1 = 1;
 /*          84 bytes - (All file records utilize this space.) */
 
 /*     So the size of the remaining portion (or tail) of the DAS */
-/*     file record for computing enviroments as described above */
+/*     file record for computing environments as described above */
 /*     would be: */
 
 /*        1024 bytes - DAS record size */
@@ -335,9 +343,8 @@ static integer c__1 = 1;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASWFR", (ftnlen)6);
     }
+    chkin_("DASWFR", (ftnlen)6);
 
 /*     Check to be sure that HANDLE is attached to a file that is open */
 /*     with write access.  If the call fails, check out and return. */
@@ -346,7 +353,7 @@ static integer c__1 = 1;
 
 /*     Get the logical unit for this DAS file. */
 
-    dashlu_(handle, &unit);
+    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASWFR", (ftnlen)6);
 	return 0;

@@ -2,13 +2,13 @@
 
 #ifdef KR_headers
 extern double log(), f__cabs(), atan2();
-VOID c_log(r, z) complex_type *r, *z;
+VOID c_log(r, z) complex *r, *z;
 #else
 #undef abs
 #include "math.h"
 extern double f__cabs(double, double);
 
-void c_log(complex_type *r, complex_type *z)
+void c_log(complex *r, complex *z)
 #endif
 {
 	double zi;

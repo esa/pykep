@@ -601,11 +601,11 @@
                    reclat_c ( trmpts[i], &radius, &lon, &lat );
 
                    printf ( "\n"
-                            "   Terminator point %ld:\n"
+                            "   Terminator point %d:\n"
                             "     Radius                     (km):  %18.9f\n"
                             "     Planetocentric longitude   (deg): %18.9f\n"
                             "     Planetocentric latitude    (deg): %18.9f\n",
-                            (long)i,
+                            (int)i,
                             radius,
                             lon * dpr_c(),
                             lat * dpr_c()                            );
@@ -715,6 +715,11 @@
    E.D. Wright     (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
 
    -CSPICE Version 1.0.0, 13-JUN-2012 (NJB) (EDW)
 

@@ -15,9 +15,10 @@
 
     /* Local variables */
     char arch[32];
-    extern /* Subroutine */ int zzbodkik_(void), eklef_(char *, integer *, 
-	    ftnlen), chkin_(char *, ftnlen), cklpf_(char *, integer *, ftnlen)
-	    , errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodkik_(void), zzdsklsf_(char *, integer *, 
+	    ftnlen), eklef_(char *, integer *, ftnlen), chkin_(char *, ftnlen)
+	    , cklpf_(char *, integer *, ftnlen), errch_(char *, char *, 
+	    ftnlen, ftnlen);
     char versn[32];
     extern logical failed_(void);
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
@@ -104,6 +105,7 @@
 /*                  SPK   | */
 /*                  CK    | */
 /*                  PCK   |---  if FILE is a binary PCK file. */
+/*                  DSK   | */
 /*                  EK    | */
 
 /*                If a failure occurs during the attempt to load */
@@ -170,11 +172,16 @@
 
 /* $ Author_and_Institution */
 
+/*     N.J. Bachman    (JPL) */
 /*     W.L. Taber      (JPL) */
 /*     E.D. Wright     (JPL) */
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 20-JAN-2016 (NJB) */
+
+/*        Added ability to load DSK files. */
 
 /* -    SPICELIB Version 1.17.0, 10-MAR-2014 (BVS) */
 
@@ -338,6 +345,8 @@
     } else if (s_cmp(arch, "DAS", (ftnlen)32, (ftnlen)3) == 0) {
 	if (s_cmp(mytype, "EK", (ftnlen)32, (ftnlen)2) == 0) {
 	    eklef_(file, handle, file_len);
+	} else if (s_cmp(mytype, "DSK", (ftnlen)32, (ftnlen)3) == 0) {
+	    zzdsklsf_(file, handle, file_len);
 	} else {
 	    tkvrsn_("TOOLKIT", versn, (ftnlen)7, (ftnlen)32);
 	    setmsg_(nofile, nofile_len);

@@ -1224,283 +1224,283 @@ static integer c__128 = 128;
 /*         is flagged. The difference information is written to a file. */
 
 
-/*                  PROGRAM CMPDAF */
+/*           PROGRAM CMPDAF */
+/*           IMPLICIT NONE */
+/*     C */
+/*     C     Compare data in two DAFs having identical structures. */
+/*     C     No array in either DAF is longer than ARRYSZ d.p. */
+/*     C     numbers. */
+/*     C */
 
-/*            C */
-/*            C     Compare data in two DAFs having identical structures. */
-/*            C     No array in either DAF is longer than ARRYSZ d.p. */
-/*            C     numbers. */
-/*            C */
+/*     C */
+/*     C     Local parameters */
+/*     C */
+/*           INTEGER               ARRYSZ */
+/*           PARAMETER           ( ARRYSZ = 10000000 ) */
 
-/*            C */
-/*            C     Local parameters */
-/*            C */
-/*                  INTEGER               ARRYSZ */
-/*                  PARAMETER           ( ARRYSZ = 1000 ) */
+/*           INTEGER               ERRLEN */
+/*           PARAMETER           ( ERRLEN =  240 ) */
 
-/*                  INTEGER               ERRLEN */
-/*                  PARAMETER           ( ERRLEN =  240 ) */
+/*           INTEGER               FILEN */
+/*           PARAMETER           ( FILEN  =  128 ) */
 
-/*                  INTEGER               FILEN */
-/*                  PARAMETER           ( FILEN  =  128 ) */
+/*           INTEGER               LINLEN */
+/*           PARAMETER           ( LINLEN =   80 ) */
 
-/*                  INTEGER               LINLEN */
-/*                  PARAMETER           ( LINLEN =   80 ) */
+/*           INTEGER               MAXND */
+/*           PARAMETER           ( MAXND  =  125 ) */
 
-/*                  INTEGER               MAXND */
-/*                  PARAMETER           ( MAXND  =  125 ) */
+/*           INTEGER               MAXNI */
+/*           PARAMETER           ( MAXNI  =  250 ) */
 
-/*                  INTEGER               MAXNI */
-/*                  PARAMETER           ( MAXNI  =  250 ) */
+/*           INTEGER               MAXSUM */
+/*           PARAMETER           ( MAXSUM =  128 ) */
 
-/*                  INTEGER               MAXSUM */
-/*                  PARAMETER           ( MAXSUM =  128 ) */
-
-/*                  INTEGER               RLEN */
-/*                  PARAMETER           ( RLEN   = 1000 ) */
+/*           INTEGER               RLEN */
+/*           PARAMETER           ( RLEN   = 1000 ) */
 
 
-/*            C */
-/*            C     Local variables */
-/*            C */
-/*                  CHARACTER*(RLEN)      ANAME1 */
-/*                  CHARACTER*(RLEN)      ANAME2 */
-/*                  CHARACTER*(FILEN)     DAF1 */
-/*                  CHARACTER*(FILEN)     DAF2 */
-/*                  CHARACTER*(FILEN)     LOG */
-/*                  CHARACTER*(ERRLEN)    PRSERR */
-/*                  CHARACTER*(LINLEN)    STR */
-/*                  CHARACTER*(LINLEN)    TOLCH */
+/*     C */
+/*     C     Local variables */
+/*     C */
+/*           CHARACTER*(RLEN)      ANAME1 */
+/*           CHARACTER*(RLEN)      ANAME2 */
+/*           CHARACTER*(FILEN)     DAF1 */
+/*           CHARACTER*(FILEN)     DAF2 */
+/*           CHARACTER*(FILEN)     LOG */
+/*           CHARACTER*(ERRLEN)    PRSERR */
+/*           CHARACTER*(LINLEN)    STR */
+/*           CHARACTER*(LINLEN)    TOLCH */
 
-/*                  DOUBLE PRECISION      ARRAY1 ( ARRYSZ ) */
-/*                  DOUBLE PRECISION      ARRAY2 ( ARRYSZ ) */
-/*                  DOUBLE PRECISION      DC1    ( MAXND ) */
-/*                  DOUBLE PRECISION      DC2    ( MAXND ) */
-/*                  DOUBLE PRECISION      TOL */
-/*                  DOUBLE PRECISION      DIFF */
-/*                  DOUBLE PRECISION      SUM1   ( MAXSUM ) */
-/*                  DOUBLE PRECISION      SUM2   ( MAXSUM ) */
+/*           DOUBLE PRECISION      ARRAY1 ( ARRYSZ ) */
+/*           DOUBLE PRECISION      ARRAY2 ( ARRYSZ ) */
+/*           DOUBLE PRECISION      DC1    ( MAXND ) */
+/*           DOUBLE PRECISION      DC2    ( MAXND ) */
+/*           DOUBLE PRECISION      TOL */
+/*           DOUBLE PRECISION      DIFF */
+/*           DOUBLE PRECISION      SUM1   ( MAXSUM ) */
+/*           DOUBLE PRECISION      SUM2   ( MAXSUM ) */
 
-/*                  INTEGER               FA1 */
-/*                  INTEGER               FA2 */
-/*                  INTEGER               I */
-/*                  INTEGER               IA1 */
-/*                  INTEGER               IA2 */
-/*                  INTEGER               IC1    ( MAXNI ) */
-/*                  INTEGER               IC2    ( MAXNI ) */
-/*                  INTEGER               FA */
-/*                  INTEGER               HANDL1 */
-/*                  INTEGER               HANDL2 */
-/*                  INTEGER               LEN1 */
-/*                  INTEGER               LEN2 */
-/*                  INTEGER               ND1 */
-/*                  INTEGER               ND2 */
-/*                  INTEGER               NI1 */
-/*                  INTEGER               NI2 */
-/*                  INTEGER               PTR */
+/*           INTEGER               FA1 */
+/*           INTEGER               FA2 */
+/*           INTEGER               I */
+/*           INTEGER               IA1 */
+/*           INTEGER               IA2 */
+/*           INTEGER               IC1    ( MAXNI ) */
+/*           INTEGER               IC2    ( MAXNI ) */
+/*           INTEGER               HANDL1 */
+/*           INTEGER               HANDL2 */
+/*           INTEGER               LEN1 */
+/*           INTEGER               LEN2 */
+/*           INTEGER               ND1 */
+/*           INTEGER               ND2 */
+/*           INTEGER               NI1 */
+/*           INTEGER               NI2 */
+/*           INTEGER               PTR */
 
-/*                  LOGICAL               FOUND */
+/*           LOGICAL               FOUND */
 
-/*            C */
-/*            C     Start out by obtaining the names of the DAFs to be */
-/*            C     compared. */
-/*            C */
-/*                  WRITE (*,*) 'Enter name of first DAF.' */
-/*                  READ  (*,FMT='(A)') DAF1 */
 
-/*                  WRITE (*,*) 'Enter name of second DAF.' */
-/*                  READ  (*,FMT='(A)') DAF2 */
+/*     C */
+/*     C     Start out by obtaining the names of the DAFs to be */
+/*     C     compared. */
+/*     C */
+/*           WRITE (*,*) 'Enter name of first DAF.' */
+/*           READ  (*,FMT='(A)') DAF1 */
 
-/*                  WRITE (*,*) 'Enter name of log file.' */
-/*                  READ  (*,FMT='(A)') LOG */
+/*           WRITE (*,*) 'Enter name of second DAF.' */
+/*           READ  (*,FMT='(A)') DAF2 */
 
-/*                  WRITE (*,*) 'Enter tolerance for data comparison.' */
-/*                  READ  (*,FMT='(A)') TOLCH */
+/*           WRITE (*,*) 'Enter name of log file.' */
+/*           READ  (*,FMT='(A)') LOG */
 
-/*                  CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
+/*           WRITE (*,*) 'Enter tolerance for data comparison.' */
+/*           READ  (*,FMT='(A)') TOLCH */
 
-/*                  DO WHILE ( PRSERR .NE. ' ' ) */
+/*           CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
 
-/*                     WRITE (*,*) PRSERR */
-/*                     WRITE (*,*) 'Enter tolerance for data comparison.' */
-/*                     READ  (*,FMT='(A)') TOLCH */
+/*           DO WHILE ( PRSERR .NE. ' ' ) */
 
-/*                     CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
+/*              WRITE (*,*) PRSERR */
+/*              WRITE (*,*) 'Enter tolerance for data comparison.' */
+/*              READ  (*,FMT='(A)') TOLCH */
 
-/*                  END DO */
+/*              CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
 
-/*            C */
-/*            C     Open both DAFs for reading. */
-/*            C */
-/*                  CALL DAFOPR ( DAF1, HANDL1 ) */
-/*                  CALL DAFOPR ( DAF2, HANDL2 ) */
+/*           END DO */
 
-/*            C */
-/*            C     Start forward searches in both DAFS. */
-/*            C */
-/*                  CALL DAFBFS ( HANDL1 ) */
-/*                  CALL DAFBFS ( HANDL2 ) */
+/*     C */
+/*     C     Open both DAFs for reading. */
+/*     C */
+/*           CALL DAFOPR ( DAF1, HANDL1 ) */
+/*           CALL DAFOPR ( DAF2, HANDL2 ) */
 
-/*            C */
-/*            C     Obtain the summary formats for each DAF. Stop now */
-/*            C     if the summary formats don't match. */
-/*            C */
-/*                  CALL DAFHSF ( HANDL1, ND1, NI1 ) */
-/*                  CALL DAFHSF ( HANDL2, ND2, NI2 ) */
+/*     C */
+/*     C     Start forward searches in both DAFS. */
+/*     C */
+/*           CALL DAFBFS ( HANDL1 ) */
+/*           CALL DAFBFS ( HANDL2 ) */
 
-/*                  IF (  ( ND1 .NE. ND2 ) .OR. ( NI1 .NE. NI2 )  ) THEN */
+/*     C */
+/*     C     Obtain the summary formats for each DAF. Stop now */
+/*     C     if the summary formats don't match. */
+/*     C */
+/*           CALL DAFHSF ( HANDL1, ND1, NI1 ) */
+/*           CALL DAFHSF ( HANDL2, ND2, NI2 ) */
 
-/*                     STR = 'Summary formats do not match.  NI1 = #, '// */
-/*                 .                      'NI2 = #, ND1 = #, ND2 = #.' */
+/*           IF (  ( ND1 .NE. ND2 ) .OR. ( NI1 .NE. NI2 )  ) THEN */
 
-/*                     CALL REPMI  ( STR, '#', NI1, STR ) */
-/*                     CALL REPMI  ( STR, '#', NI2, STR ) */
-/*                     CALL REPMI  ( STR, '#', ND1, STR ) */
-/*                     CALL REPMI  ( STR, '#', ND2, STR ) */
+/*              STR = 'Summary formats do not match.  NI1 = #, '// */
+/*          .                      'NI2 = #, ND1 = #, ND2 = #.' */
 
-/*                     CALL WRLINE ( LOG,  STR ) */
+/*              CALL REPMI  ( STR, '#', NI1, STR ) */
+/*              CALL REPMI  ( STR, '#', NI2, STR ) */
+/*              CALL REPMI  ( STR, '#', ND1, STR ) */
+/*              CALL REPMI  ( STR, '#', ND2, STR ) */
 
-/*                     CALL SIGERR ( 'Incompatible DAFs' ) */
+/*              CALL WRLINE ( LOG,  STR ) */
 
-/*                  END IF */
+/*              CALL SIGERR ( 'Incompatible DAFs' ) */
 
-/*            C */
-/*            C     Find the first array in each DAF. Use DAFCS */
-/*            C     (DAF, continue search) to set the handle of the DAF */
-/*            C     to search in before calling DAFFNA. */
-/*            C */
-/*                  CALL DAFCS  ( HANDL1 ) */
-/*                  CALL DAFFNA ( FOUND  ) */
+/*           END IF */
 
-/*                  IF ( FOUND ) THEN */
-/*                     CALL DAFCS  ( HANDL2 ) */
-/*                     CALL DAFFNA ( FOUND  ) */
-/*                  END IF */
+/*     C */
+/*     C     Find the first array in each DAF. Use DAFCS */
+/*     C     (DAF, continue search) to set the handle of the DAF */
+/*     C     to search in before calling DAFFNA. */
+/*     C */
+/*           CALL DAFCS  ( HANDL1 ) */
+/*           CALL DAFFNA ( FOUND  ) */
 
-/*                  DO WHILE ( FOUND ) */
+/*           IF ( FOUND ) THEN */
+/*              CALL DAFCS  ( HANDL2 ) */
+/*              CALL DAFFNA ( FOUND  ) */
+/*           END IF */
 
-/*            C */
-/*            C        Get the summary and name of each array, using */
-/*            C        DAFCS to select the DAF to get the information */
-/*            C        from. Unpack the summaries and find the beginning */
-/*            C        and ending addresses of the arrays. Read the */
-/*            C        arrays into the variables ARRAY1 and ARRAY2. */
-/*            C */
-/*                     CALL DAFCS ( HANDL1 ) */
-/*                     CALL DAFGN ( ANAME1 ) */
-/*                     CALL DAFGS ( SUM1   ) */
-/*                     CALL DAFUS ( SUM1, ND1, NI1, DC1, IC1 ) */
+/*           DO WHILE ( FOUND ) */
 
-/*                     IA1  = IC1 ( NI1 - 1 ) */
-/*                     FA1  = IC1 ( NI1     ) */
-/*                     LEN1 = FA1 - IA1  + 1 */
+/*     C */
+/*     C        Get the summary and name of each array, using */
+/*     C        DAFCS to select the DAF to get the information */
+/*     C        from. Unpack the summaries and find the beginning */
+/*     C        and ending addresses of the arrays. Read the */
+/*     C        arrays into the variables ARRAY1 and ARRAY2. */
+/*     C */
+/*              CALL DAFCS ( HANDL1 ) */
+/*              CALL DAFGN ( ANAME1 ) */
+/*              CALL DAFGS ( SUM1   ) */
+/*              CALL DAFUS ( SUM1, ND1, NI1, DC1, IC1 ) */
 
-/*                     IF (  LEN1  .GT.  ARRYSZ  ) THEN */
-/*                        CALL SETMSG ( 'Buffer too small; need # elts.') */
-/*                        CALL ERRINT ( '#', LEN1                       ) */
-/*                        CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
-/*                     ELSE */
-/*                        CALL DAFRDA ( HANDL1, IA1, FA1, ARRAY1 ) */
-/*                     END IF */
+/*              IA1  = IC1 ( NI1 - 1 ) */
+/*              FA1  = IC1 ( NI1     ) */
+/*              LEN1 = FA1 - IA1  + 1 */
 
-/*                     CALL DAFCS ( HANDL2 ) */
-/*                     CALL DAFGN ( ANAME2 ) */
-/*                     CALL DAFGS ( SUM2   ) */
-/*                     CALL DAFUS ( SUM2, ND2, NI2, DC2, IC2 ) */
+/*              IF (  LEN1  .GT.  ARRYSZ  ) THEN */
+/*                 CALL SETMSG ( 'Buffer too small; need # elts.') */
+/*                 CALL ERRINT ( '#', LEN1                       ) */
+/*                 CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
+/*              ELSE */
+/*                 CALL DAFGDA ( HANDL1, IA1, FA1, ARRAY1 ) */
+/*              END IF */
 
-/*                     IA2 = IC2 ( NI2 - 1 ) */
-/*                     FA2 = IC2 ( NI2     ) */
+/*              CALL DAFCS ( HANDL2 ) */
+/*              CALL DAFGN ( ANAME2 ) */
+/*              CALL DAFGS ( SUM2   ) */
+/*              CALL DAFUS ( SUM2, ND2, NI2, DC2, IC2 ) */
 
-/*                     LEN2 = FA2 - IA2  + 1 */
+/*              IA2 = IC2 ( NI2 - 1 ) */
+/*              FA2 = IC2 ( NI2     ) */
 
-/*                     IF (  LEN1  .GT.  ARRYSZ  ) THEN */
+/*              LEN2 = FA2 - IA2  + 1 */
 
-/*                        CALL SETMSG ( 'Buffer too small; need # elts.') */
-/*                        CALL ERRINT ( '#', LEN2                       ) */
-/*                        CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
+/*              IF (  LEN2  .GT.  ARRYSZ  ) THEN */
 
-/*                     ELSE IF ( LEN1 .NE. LEN2 ) THEN */
+/*                 CALL SETMSG ( 'Buffer too small; need # elts.') */
+/*                 CALL ERRINT ( '#', LEN2                       ) */
+/*                 CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
 
-/*                        CALL SETMSG ( 'DAF structures do not match. '// */
-/*                    .                 'LEN1 = #, LEN2 = #. ' ) */
-/*                        CALL ERRINT ( '#', LEN1              ) */
-/*                        CALL ERRINT ( '#', LEN2              ) */
-/*                        CALL SIGERR ( 'Incompatible DAFs' ) */
+/*              ELSE IF ( LEN1 .NE. LEN2 ) THEN */
 
-/*                     ELSE */
-/*                        CALL DAFRDA ( HANDL2, IA2, FA2, ARRAY2 ) */
-/*                     END IF */
-/*            C */
-/*            C */
-/*            C        Compare the data in the two arrays. Log a message */
-/*            C        for every instance of data that differs by more */
-/*            C        than the allowed tolerance. Use the array names */
-/*            C        to label the data sources. */
-/*            C */
-/*                     DO I = 1, LEN1 */
+/*                 CALL SETMSG ( 'DAF structures do not match. '// */
+/*          .                    'LEN1 = #, LEN2 = #. ' ) */
+/*                 CALL ERRINT ( '#', LEN1              ) */
+/*                 CALL ERRINT ( '#', LEN2              ) */
+/*                 CALL SIGERR ( 'Incompatible DAFs' ) */
 
-/*                        DIFF  =  ABS( ARRAY1(I) - ARRAY2(I) ) */
+/*              ELSE */
+/*                 CALL DAFGDA ( HANDL2, IA2, FA2, ARRAY2 ) */
+/*              END IF */
+/*     C */
+/*     C */
+/*     C        Compare the data in the two arrays. Log a message */
+/*     C        for every instance of data that differs by more */
+/*     C        than the allowed tolerance. Use the array names */
+/*     C        to label the data sources. */
+/*     C */
+/*              DO I = 1, LEN1 */
 
-/*                        IF (  DIFF  .GT.  TOL  ) THEN */
-/*            C */
-/*            C              Get the array names. */
-/*            C */
-/*                           CALL DAFCS ( HANDL1 ) */
-/*                           CALL DAFGN ( ANAME1 ) */
-/*                           CALL DAFCS ( HANDL2 ) */
-/*                           CALL DAFGN ( ANAME2 ) */
+/*                 DIFF  =  ABS( ARRAY1(I) - ARRAY2(I) ) */
 
-/*            C */
-/*            C              Construct the report strings. The number 14 */
-/*            C              below is the number of significant digits to */
-/*            C              show in the strings representing d.p. */
-/*            C              numbers. */
-/*            C */
+/*                 IF (  DIFF  .GT.  TOL  ) THEN */
+/*     C */
+/*     C              Get the array names. */
+/*     C */
+/*                    CALL DAFCS ( HANDL1 ) */
+/*                    CALL DAFGN ( ANAME1 ) */
+/*                    CALL DAFCS ( HANDL2 ) */
+/*                    CALL DAFGN ( ANAME2 ) */
 
-/*                           CALL WRLINE ( LOG, ' ' ) */
-/*                           CALL WRLINE ( LOG, 'Difference of array ' // */
-/*                    .                         'elements exceeded '   // */
-/*                    .                         'tolerance.'            ) */
-/*                           CALL WRLINE ( LOG, 'First array:  '//ANAME1) */
-/*                           CALL WRLINE ( LOG, 'Second array: '//ANAME2) */
+/*     C */
+/*     C              Construct the report strings. The number 14 */
+/*     C              below is the number of significant digits to */
+/*     C              show in the strings representing d.p. */
+/*     C              numbers. */
+/*     C */
 
-/*                           STR = 'First value:  #' */
-/*                           CALL REPMD  ( STR, '#', ARRAY1(I), 14, STR ) */
-/*                           CALL WRLINE ( LOG, STR                     ) */
+/*                    CALL WRLINE ( LOG, ' ' ) */
+/*                    CALL WRLINE ( LOG, 'Difference of array ' // */
+/*          .                            'elements exceeded '   // */
+/*          .                            'tolerance.'            ) */
+/*                    CALL WRLINE ( LOG, 'First array:  '//ANAME1) */
+/*                    CALL WRLINE ( LOG, 'Second array: '//ANAME2) */
 
-/*                           STR = 'Second value: #' */
-/*                           CALL REPMD  ( STR, '#', ARRAY2(I), 14, STR ) */
-/*                           CALL WRLINE ( LOG, STR                     ) */
+/*                    STR = 'First value:  #' */
+/*                    CALL REPMD  ( STR, '#', ARRAY1(I), 14, STR ) */
+/*                    CALL WRLINE ( LOG, STR                     ) */
 
-/*                           STR = 'Difference:   #' */
-/*                           CALL REPMD  ( STR, '#', DIFF,      14, STR ) */
-/*                           CALL WRLINE ( LOG, STR                     ) */
-/*                           CALL WRLINE ( LOG, ' '                     ) */
+/*                    STR = 'Second value: #' */
+/*                    CALL REPMD  ( STR, '#', ARRAY2(I), 14, STR ) */
+/*                    CALL WRLINE ( LOG, STR                     ) */
 
-/*                        END IF */
+/*                    STR = 'Difference:   #' */
+/*                    CALL REPMD  ( STR, '#', DIFF,      14, STR ) */
+/*                    CALL WRLINE ( LOG, STR                     ) */
+/*                    CALL WRLINE ( LOG, ' '                     ) */
 
-/*                     END DO */
+/*                 END IF */
 
-/*            C */
-/*            C        Find the next pair of arrays. */
-/*            C */
-/*                     CALL DAFCS  ( HANDL1 ) */
-/*                     CALL DAFFNA ( FOUND  ) */
+/*              END DO */
 
-/*                     IF ( FOUND ) THEN */
-/*                        CALL DAFCS  ( HANDL2 ) */
-/*                        CALL DAFFNA ( FOUND  ) */
-/*                     END IF */
+/*     C */
+/*     C        Find the next pair of arrays. */
+/*     C */
+/*              CALL DAFCS  ( HANDL1 ) */
+/*              CALL DAFFNA ( FOUND  ) */
 
-/*                  END DO */
+/*              IF ( FOUND ) THEN */
+/*                 CALL DAFCS  ( HANDL2 ) */
+/*                 CALL DAFFNA ( FOUND  ) */
+/*              END IF */
 
-/*            C */
-/*            C     Close the DAFs. */
-/*            C */
-/*                  CALL DAFCLS ( HANDL1 ) */
-/*                  CALL DAFCLS ( HANDL2 ) */
+/*           END DO */
 
-/*                  END */
+/*     C */
+/*     C     Close the DAFs. */
+/*     C */
+/*           CALL DAFCLS ( HANDL1 ) */
+/*           CALL DAFCLS ( HANDL2 ) */
+
+/*           END */
 
 
 /* $ Restrictions */
@@ -1520,6 +1520,17 @@ static integer c__128 = 128;
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 14-MAR-2017 (NJB) */
+
+/*        Updated second header code example in this routine: fixed */
+/*        error check for array overflow, corrected indentation of */
+/*        continuation characters, added IMPLICIT NONE, deleted unused */
+/*        declaration, increased buffer size, and changed DAFRDA call to */
+/*        DAFGDA call. */
+
+/*        Updated header example in entry point DAFGH: changed DAFRDA */
+/*        call to DAFGDA call. */
 
 /* -    SPICELIB Version 3.1.0, 10-FEB-2014 (EDW) (BVS) */
 
@@ -2049,7 +2060,7 @@ L_dafbfs:
 	ssizei_(&c__5000, opnset);
 	for (i__ = 1; i__ <= 4999; ++i__) {
 	    stpool[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stp"
-		    "ool", i__1, "daffa_", (ftnlen)1245)] = i__ + 1;
+		    "ool", i__1, "daffa_", (ftnlen)1256)] = i__ + 1;
 	}
 	stpool[4999] = -1;
 	stfptr = 1;
@@ -2064,12 +2075,12 @@ L_dafbfs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)1264)] == *handle) {
+		i__1, "daffa_", (ftnlen)1275)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)1268)];
+		    "stpool", i__1, "daffa_", (ftnlen)1279)];
 	}
     }
 
@@ -2106,11 +2117,11 @@ L_dafbfs:
 /*           the predecessor of P is not NIL. */
 
 	    stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)1306)] = stpool[(i__2 = 
+		    "stpool", i__1, "daffa_", (ftnlen)1317)] = stpool[(i__2 = 
 		    p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2,
-		     "daffa_", (ftnlen)1306)];
+		     "daffa_", (ftnlen)1317)];
 	    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool"
-		    , i__1, "daffa_", (ftnlen)1307)] = sthead;
+		    , i__1, "daffa_", (ftnlen)1318)] = sthead;
 	    sthead = p;
 	}
     } else {
@@ -2138,14 +2149,14 @@ L_dafbfs:
 
 	    while(p != -1) {
 		if (elemi_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)1339)], opnset)
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)1350)], opnset)
 			) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    prev = p;
 		    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("stpool", i__1, "daffa_", (ftnlen)1344)];
+			    s_rnge("stpool", i__1, "daffa_", (ftnlen)1355)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -2169,7 +2180,7 @@ L_dafbfs:
 
 
 		    nextp = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 :
-			     s_rnge("stpool", i__1, "daffa_", (ftnlen)1368)];
+			     s_rnge("stpool", i__1, "daffa_", (ftnlen)1379)];
 		    if (p == sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -2185,11 +2196,11 @@ L_dafbfs:
 /*                    pointer of node PREV. */
 
 			stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : 
-				s_rnge("stpool", i__1, "daffa_", (ftnlen)1386)
+				s_rnge("stpool", i__1, "daffa_", (ftnlen)1397)
 				] = nextp;
 		    }
 		    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			    "stpool", i__1, "daffa_", (ftnlen)1390)] = stfptr;
+			    "stpool", i__1, "daffa_", (ftnlen)1401)] = stfptr;
 		    stfptr = p;
 		    p = nextp;
 		}
@@ -2214,9 +2225,9 @@ L_dafbfs:
 /*        of the active list, and make P the head of the active list. */
 
 	stfptr = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stpool", i__1, "daffa_", (ftnlen)1418)];
+		"stpool", i__1, "daffa_", (ftnlen)1429)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)1419)] = sthead;
+		i__1, "daffa_", (ftnlen)1430)] = sthead;
 	sthead = p;
     }
 
@@ -2232,15 +2243,15 @@ L_dafbfs:
     dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
     dafgsr_(handle, &fward, &c__1, &c__128, &stsr[(i__1 = (p << 7) - 128) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)1436)], &fnd);
+	    ftnlen)1447)], &fnd);
     if (! fnd) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)1440)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)1451)], dafnam, (ftnlen)255);
 	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
 		"rd was not found. This condition may indicate a corrupted DA"
 		"F.", (ftnlen)121);
 	errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stnext", i__1, "daffa_", (ftnlen)1446)], (ftnlen)1);
+		s_rnge("stnext", i__1, "daffa_", (ftnlen)1457)], (ftnlen)1);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
 	chkout_("DAFBFS", (ftnlen)6);
@@ -2252,29 +2263,29 @@ L_dafbfs:
 /*     yet. */
 
     stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", i__1, 
-	    "daffa_", (ftnlen)1459)] = *handle;
+	    "daffa_", (ftnlen)1470)] = *handle;
     stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis", i__1, 
-	    "daffa_", (ftnlen)1460)] = fward;
+	    "daffa_", (ftnlen)1471)] = fward;
     stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, 
-	    "daffa_", (ftnlen)1461)] = (integer) stsr[(i__2 = (p << 7) - 128) 
+	    "daffa_", (ftnlen)1472)] = (integer) stsr[(i__2 = (p << 7) - 128) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1461)];
+	    ftnlen)1472)];
     stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev", i__1, 
-	    "daffa_", (ftnlen)1462)] = (integer) stsr[(i__2 = (p << 7) - 127) 
+	    "daffa_", (ftnlen)1473)] = (integer) stsr[(i__2 = (p << 7) - 127) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1462)];
+	    ftnlen)1473)];
     stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg", i__1, 
-	    "daffa_", (ftnlen)1463)] = (integer) stsr[(i__2 = (p << 7) - 126) 
+	    "daffa_", (ftnlen)1474)] = (integer) stsr[(i__2 = (p << 7) - 126) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1463)];
+	    ftnlen)1474)];
     sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", i__1, 
-	    "daffa_", (ftnlen)1464)] = FALSE_;
+	    "daffa_", (ftnlen)1475)] = FALSE_;
 
 /*     The arrays are returned in forward order within each summary */
 /*     record. */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)1470)] = 0;
+	    "daffa_", (ftnlen)1481)] = 0;
     chkout_("DAFBFS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFNA ( DAF, find next array ) */
@@ -2566,7 +2577,7 @@ L_daffna:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)1777)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)1788)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFFNA", (ftnlen)6);
 	    return 0;
@@ -2586,14 +2597,14 @@ L_daffna:
 /*     no more arrays to be found.) */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)1803)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)1803)] + 1;
+	    "daffa_", (ftnlen)1814)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)1814)] + 1;
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)1805)] > stnseg[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)1805)]
+	    i__1, "daffa_", (ftnlen)1816)] > stnseg[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)1816)]
 	    ) {
 	if (stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		, i__1, "daffa_", (ftnlen)1807)] == 0) {
+		, i__1, "daffa_", (ftnlen)1818)] == 0) {
 
 /*           There are no more arrays in the list. */
 
@@ -2605,9 +2616,9 @@ L_daffna:
 /*           the list. */
 
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)1818)] = stnseg[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)1829)] = stnseg[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daff"
-		    "a_", (ftnlen)1818)] + 1;
+		    "a_", (ftnlen)1829)] + 1;
 
 /*           The careful reader may note that we're not updating any */
 /*           of the pointers */
@@ -2622,20 +2633,20 @@ L_daffna:
 
 	} else {
 	    dafgsr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stfh", i__1, "daffa_", (ftnlen)1833)], &stnext[(i__2 = p 
+		    "stfh", i__1, "daffa_", (ftnlen)1844)], &stnext[(i__2 = p 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stnext", i__2, 
-		    "daffa_", (ftnlen)1833)], &c__1, &c__128, &stsr[(i__3 = (
+		    "daffa_", (ftnlen)1844)], &c__1, &c__128, &stsr[(i__3 = (
 		    p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-		    "stsr", i__3, "daffa_", (ftnlen)1833)], &fnd);
+		    "stsr", i__3, "daffa_", (ftnlen)1844)], &fnd);
 	    if (! fnd) {
 		dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)1837)], dafnam,
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)1848)], dafnam,
 			 (ftnlen)255);
 		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
 			"ed; record was not found. This condition may indicat"
 			"e a corrupted DAF.", (ftnlen)121);
 		errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1843)]
+			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1854)]
 			, (ftnlen)1);
 		errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
@@ -2648,27 +2659,27 @@ L_daffna:
 /*           the summary record, so the summary record remains valid. */
 
 	    sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr"
-		    , i__1, "daffa_", (ftnlen)1856)] = FALSE_;
+		    , i__1, "daffa_", (ftnlen)1867)] = FALSE_;
 	    stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis"
-		    , i__1, "daffa_", (ftnlen)1858)] = stnext[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)1869)] = stnext[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnext", i__2, "daff"
-		    "a_", (ftnlen)1858)];
+		    "a_", (ftnlen)1869)];
 	    stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		    , i__1, "daffa_", (ftnlen)1859)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)1870)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1859)];
+		    "stsr", i__2, "daffa_", (ftnlen)1870)];
 	    stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		    , i__1, "daffa_", (ftnlen)1860)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)1871)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1860)];
+		    "stsr", i__2, "daffa_", (ftnlen)1871)];
 	    stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg"
-		    , i__1, "daffa_", (ftnlen)1861)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)1872)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1861)];
+		    "stsr", i__2, "daffa_", (ftnlen)1872)];
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)1862)] = 1;
+		    , i__1, "daffa_", (ftnlen)1873)] = 1;
 	    *found = stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)1864)] > 0;
+		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)1875)] > 0;
 	}
     }
     chkout_("DAFFNA", (ftnlen)6);
@@ -2951,7 +2962,7 @@ L_dafbbs:
 	ssizei_(&c__5000, opnset);
 	for (i__ = 1; i__ <= 4999; ++i__) {
 	    stpool[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stp"
-		    "ool", i__1, "daffa_", (ftnlen)2161)] = i__ + 1;
+		    "ool", i__1, "daffa_", (ftnlen)2172)] = i__ + 1;
 	}
 	stpool[4999] = -1;
 	stfptr = 1;
@@ -2966,12 +2977,12 @@ L_dafbbs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)2180)] == *handle) {
+		i__1, "daffa_", (ftnlen)2191)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)2184)];
+		    "stpool", i__1, "daffa_", (ftnlen)2195)];
 	}
     }
 
@@ -3008,11 +3019,11 @@ L_dafbbs:
 /*           the predecessor of P is not NIL. */
 
 	    stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)2222)] = stpool[(i__2 = 
+		    "stpool", i__1, "daffa_", (ftnlen)2233)] = stpool[(i__2 = 
 		    p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2,
-		     "daffa_", (ftnlen)2222)];
+		     "daffa_", (ftnlen)2233)];
 	    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool"
-		    , i__1, "daffa_", (ftnlen)2223)] = sthead;
+		    , i__1, "daffa_", (ftnlen)2234)] = sthead;
 	    sthead = p;
 	}
     } else {
@@ -3040,14 +3051,14 @@ L_dafbbs:
 
 	    while(p != -1) {
 		if (elemi_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)2255)], opnset)
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)2266)], opnset)
 			) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    prev = p;
 		    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("stpool", i__1, "daffa_", (ftnlen)2260)];
+			    s_rnge("stpool", i__1, "daffa_", (ftnlen)2271)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -3071,7 +3082,7 @@ L_dafbbs:
 
 
 		    nextp = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 :
-			     s_rnge("stpool", i__1, "daffa_", (ftnlen)2284)];
+			     s_rnge("stpool", i__1, "daffa_", (ftnlen)2295)];
 		    if (p == sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -3087,11 +3098,11 @@ L_dafbbs:
 /*                    pointer of node PREV. */
 
 			stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : 
-				s_rnge("stpool", i__1, "daffa_", (ftnlen)2302)
+				s_rnge("stpool", i__1, "daffa_", (ftnlen)2313)
 				] = nextp;
 		    }
 		    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			    "stpool", i__1, "daffa_", (ftnlen)2307)] = stfptr;
+			    "stpool", i__1, "daffa_", (ftnlen)2318)] = stfptr;
 		    stfptr = p;
 		    p = nextp;
 		}
@@ -3116,9 +3127,9 @@ L_dafbbs:
 /*        of the active list, and make P the head of the active list. */
 
 	stfptr = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stpool", i__1, "daffa_", (ftnlen)2334)];
+		"stpool", i__1, "daffa_", (ftnlen)2345)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)2335)] = sthead;
+		i__1, "daffa_", (ftnlen)2346)] = sthead;
 	sthead = p;
     }
 
@@ -3134,45 +3145,45 @@ L_dafbbs:
     dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
     dafgsr_(handle, &bward, &c__1, &c__128, &stsr[(i__1 = (p << 7) - 128) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)2352)], &fnd);
+	    ftnlen)2363)], &fnd);
     if (! fnd) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)2356)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)2367)], dafnam, (ftnlen)255);
 	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
 		"rd was not found. This condition may indicate a corrupted DA"
 		"F.", (ftnlen)121);
 	errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stnext", i__1, "daffa_", (ftnlen)2362)], (ftnlen)1);
+		s_rnge("stnext", i__1, "daffa_", (ftnlen)2373)], (ftnlen)1);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
 	chkout_("DAFBBS", (ftnlen)6);
 	return 0;
     }
     stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", i__1, 
-	    "daffa_", (ftnlen)2370)] = *handle;
+	    "daffa_", (ftnlen)2381)] = *handle;
     stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis", i__1, 
-	    "daffa_", (ftnlen)2371)] = bward;
+	    "daffa_", (ftnlen)2382)] = bward;
     stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, 
-	    "daffa_", (ftnlen)2372)] = (integer) stsr[(i__2 = (p << 7) - 128) 
+	    "daffa_", (ftnlen)2383)] = (integer) stsr[(i__2 = (p << 7) - 128) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2372)];
+	    ftnlen)2383)];
     stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev", i__1, 
-	    "daffa_", (ftnlen)2373)] = (integer) stsr[(i__2 = (p << 7) - 127) 
+	    "daffa_", (ftnlen)2384)] = (integer) stsr[(i__2 = (p << 7) - 127) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2373)];
+	    ftnlen)2384)];
     stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg", i__1, 
-	    "daffa_", (ftnlen)2374)] = (integer) stsr[(i__2 = (p << 7) - 126) 
+	    "daffa_", (ftnlen)2385)] = (integer) stsr[(i__2 = (p << 7) - 126) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2374)];
+	    ftnlen)2385)];
     sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", i__1, 
-	    "daffa_", (ftnlen)2375)] = FALSE_;
+	    "daffa_", (ftnlen)2386)] = FALSE_;
 
 /*     The arrays are returned in backward order from each summary */
 /*     record. */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)2381)] = stnseg[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)2381)] + 1;
+	    "daffa_", (ftnlen)2392)] = stnseg[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)2392)] + 1;
     chkout_("DAFBBS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFPA ( DAF, find previous array ) */
@@ -3479,7 +3490,7 @@ L_daffpa:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)2703)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)2714)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFFPA", (ftnlen)6);
 	    return 0;
@@ -3499,12 +3510,12 @@ L_daffpa:
 /*     no more arrays to be found.) */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)2726)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)2726)] - 1;
+	    "daffa_", (ftnlen)2737)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)2737)] - 1;
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)2728)] <= 0) {
+	    i__1, "daffa_", (ftnlen)2739)] <= 0) {
 	if (stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		, i__1, "daffa_", (ftnlen)2730)] == 0) {
+		, i__1, "daffa_", (ftnlen)2741)] == 0) {
 
 /*           There is no predecessor of the current array in the list. */
 
@@ -3516,7 +3527,7 @@ L_daffpa:
 /*           the list. */
 
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)2741)] = 0;
+		    , i__1, "daffa_", (ftnlen)2752)] = 0;
 
 /*           The careful reader may note that we're not updating any */
 /*           of the pointers */
@@ -3531,20 +3542,20 @@ L_daffpa:
 
 	} else {
 	    dafgsr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stfh", i__1, "daffa_", (ftnlen)2756)], &stprev[(i__2 = p 
+		    "stfh", i__1, "daffa_", (ftnlen)2767)], &stprev[(i__2 = p 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stprev", i__2, 
-		    "daffa_", (ftnlen)2756)], &c__1, &c__128, &stsr[(i__3 = (
+		    "daffa_", (ftnlen)2767)], &c__1, &c__128, &stsr[(i__3 = (
 		    p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-		    "stsr", i__3, "daffa_", (ftnlen)2756)], &fnd);
+		    "stsr", i__3, "daffa_", (ftnlen)2767)], &fnd);
 	    if (! fnd) {
 		dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)2760)], dafnam,
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)2771)], dafnam,
 			 (ftnlen)255);
 		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
 			"ed; record was not found. This condition may indicat"
 			"e a corrupted DAF.", (ftnlen)121);
 		errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2766)]
+			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2777)]
 			, (ftnlen)1);
 		errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
@@ -3557,29 +3568,29 @@ L_daffpa:
 /*           the summary record, so the summary record remains valid. */
 
 	    sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr"
-		    , i__1, "daffa_", (ftnlen)2779)] = FALSE_;
+		    , i__1, "daffa_", (ftnlen)2790)] = FALSE_;
 	    stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis"
-		    , i__1, "daffa_", (ftnlen)2781)] = stprev[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)2792)] = stprev[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stprev", i__2, "daff"
-		    "a_", (ftnlen)2781)];
+		    "a_", (ftnlen)2792)];
 	    stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		    , i__1, "daffa_", (ftnlen)2782)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2793)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2782)];
+		    "stsr", i__2, "daffa_", (ftnlen)2793)];
 	    stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		    , i__1, "daffa_", (ftnlen)2783)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2794)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2783)];
+		    "stsr", i__2, "daffa_", (ftnlen)2794)];
 	    stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg"
-		    , i__1, "daffa_", (ftnlen)2784)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2795)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2784)];
+		    "stsr", i__2, "daffa_", (ftnlen)2795)];
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)2785)] = stnseg[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)2796)] = stnseg[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daff"
-		    "a_", (ftnlen)2785)];
+		    "a_", (ftnlen)2796)];
 	    *found = stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)2787)] > 0;
+		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)2798)] > 0;
 	}
     }
     chkout_("DAFFPA", (ftnlen)6);
@@ -3870,7 +3881,7 @@ L_dafgs:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3093)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3104)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGS", (ftnlen)5);
 	    return 0;
@@ -3884,9 +3895,9 @@ L_dafgs:
 /*     current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3109)] == 0) {
+	    i__1, "daffa_", (ftnlen)3120)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3111)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3122)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -3894,11 +3905,11 @@ L_dafgs:
 	chkout_("DAFGS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3120)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)3131)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3120)]) {
+	    ftnlen)3131)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3122)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3133)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -3911,12 +3922,12 @@ L_dafgs:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3137)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)3148)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3141)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)3152)] - 1) * sumsiz + 3;
     moved_(&stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3143)], &sumsiz, 
+	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3154)], &sumsiz, 
 	    sum);
     chkout_("DAFGS", (ftnlen)5);
     return 0;
@@ -4091,7 +4102,7 @@ L_dafgn:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3331)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3342)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGN", (ftnlen)5);
 	    return 0;
@@ -4105,9 +4116,9 @@ L_dafgn:
 /*     called when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3347)] == 0) {
+	    i__1, "daffa_", (ftnlen)3358)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3349)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3360)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4115,11 +4126,11 @@ L_dafgn:
 	chkout_("DAFGN", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3358)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)3369)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3358)]) {
+	    ftnlen)3369)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3360)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3371)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4132,29 +4143,29 @@ L_dafgn:
 /*     already. */
 
     if (! sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-	    i__1, "daffa_", (ftnlen)3376)]) {
+	    i__1, "daffa_", (ftnlen)3387)]) {
 	i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"stthis", i__2, "daffa_", (ftnlen)3378)] + 1;
+		"stthis", i__2, "daffa_", (ftnlen)3389)] + 1;
 	dafrcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3378)], &i__4, stnr + ((i__3 =
+		"stfh", i__1, "daffa_", (ftnlen)3389)], &i__4, stnr + ((i__3 =
 		 p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, 
-		"daffa_", (ftnlen)3378)) * 1000, (ftnlen)1000);
+		"daffa_", (ftnlen)3389)) * 1000, (ftnlen)1000);
 	sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-		i__1, "daffa_", (ftnlen)3380)] = TRUE_;
+		i__1, "daffa_", (ftnlen)3391)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3389)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)3400)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     namsiz = sumsiz << 3;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3395)] - 1) * namsiz;
+	    "urr", i__1, "daffa_", (ftnlen)3406)] - 1) * namsiz;
     i__2 = offset;
     s_copy(name__, stnr + (((i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnr", i__1, "daffa_", (ftnlen)3397)) * 1000 + i__2), 
+	    s_rnge("stnr", i__1, "daffa_", (ftnlen)3408)) * 1000 + i__2), 
 	    name_len, offset + namsiz - i__2);
     chkout_("DAFGN", (ftnlen)5);
     return 0;
@@ -4285,7 +4296,7 @@ L_dafgh:
 /*        CALL DAFGH ( HANDLE ) */
 /*        CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*        CALL DAFRDA ( HANDLE, BEGIN, END, DATA ) */
+/*        CALL DAFGDA ( HANDLE, BEGIN, END, DATA ) */
 /*         . */
 /*         . */
 
@@ -4306,6 +4317,10 @@ L_dafgh:
 /*     E.D. Wright     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.3, 14-MAR-2017 (NJB) */
+
+/*        Updated header example: changed DAFRDA call to DAFGDA call. */
 
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
@@ -4365,14 +4380,14 @@ L_dafgh:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3621)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3636)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGH", (ftnlen)5);
 	    return 0;
 	}
     }
     *handle = stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3630)];
+	    i__1, "daffa_", (ftnlen)3645)];
     chkout_("DAFGH", (ftnlen)5);
     return 0;
 /* $Procedure DAFRS ( DAF, replace summary ) */
@@ -4553,7 +4568,7 @@ L_dafrs:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3825)], "WRITE", (ftnlen)5);
+		"stfh", i__1, "daffa_", (ftnlen)3840)], "WRITE", (ftnlen)5);
 	if (failed_()) {
 	    chkout_("DAFRS", (ftnlen)5);
 	    return 0;
@@ -4567,9 +4582,9 @@ L_dafrs:
 /*     the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3841)] == 0) {
+	    i__1, "daffa_", (ftnlen)3856)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3843)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3858)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4577,11 +4592,11 @@ L_dafrs:
 	chkout_("DAFRS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3852)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)3867)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3852)]) {
+	    ftnlen)3867)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3854)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3869)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4594,17 +4609,17 @@ L_dafrs:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3869)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)3884)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3873)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)3888)] - 1) * sumsiz + 3;
 
 /*     Get the existing summary, and unpack it. Replace everything */
 /*     but the addresses (the final two integer components), and */
 /*     repack. Then replace the existing summary within the record. */
 
     moved_(&stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3880)], &sumsiz, 
+	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3895)], &sumsiz, 
 	    exsum);
     dafus_(exsum, &nd, &ni, exdc, exic);
     dafus_(sum, &nd, &ni, newdc, newic);
@@ -4614,15 +4629,15 @@ L_dafrs:
     dafps_(&nd, &ni, exdc, exic, exsum);
     moved_(exsum, &sumsiz, &stsr[(i__1 = offset + 1 + (p << 7) - 129) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)3889)]);
+	    ftnlen)3904)]);
 
 /*     Rewrite the modified summary record. */
 
     dafwdr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3894)], &stthis[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)3894)]
+	    i__1, "daffa_", (ftnlen)3909)], &stthis[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)3909)]
 	    , &stsr[(i__3 = (p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : 
-	    s_rnge("stsr", i__3, "daffa_", (ftnlen)3894)]);
+	    s_rnge("stsr", i__3, "daffa_", (ftnlen)3909)]);
     chkout_("DAFRS", (ftnlen)5);
     return 0;
 /* $Procedure DAFRN ( DAF, change array name ) */
@@ -4800,7 +4815,7 @@ L_dafrn:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4085)], "WRITE", (ftnlen)5);
+		"stfh", i__1, "daffa_", (ftnlen)4100)], "WRITE", (ftnlen)5);
 	if (failed_()) {
 	    chkout_("DAFRN", (ftnlen)5);
 	    return 0;
@@ -4814,9 +4829,9 @@ L_dafrn:
 /*     called when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)4101)] == 0) {
+	    i__1, "daffa_", (ftnlen)4116)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4103)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4118)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4824,11 +4839,11 @@ L_dafrn:
 	chkout_("DAFRN", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)4112)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)4127)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)4112)]) {
+	    ftnlen)4127)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4114)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4129)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4841,39 +4856,39 @@ L_dafrn:
 /*     already. */
 
     if (! sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-	    i__1, "daffa_", (ftnlen)4131)]) {
+	    i__1, "daffa_", (ftnlen)4146)]) {
 	i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"stthis", i__2, "daffa_", (ftnlen)4133)] + 1;
+		"stthis", i__2, "daffa_", (ftnlen)4148)] + 1;
 	dafrcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4133)], &i__4, stnr + ((i__3 =
+		"stfh", i__1, "daffa_", (ftnlen)4148)], &i__4, stnr + ((i__3 =
 		 p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, 
-		"daffa_", (ftnlen)4133)) * 1000, (ftnlen)1000);
+		"daffa_", (ftnlen)4148)) * 1000, (ftnlen)1000);
 	sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-		i__1, "daffa_", (ftnlen)4135)] = TRUE_;
+		i__1, "daffa_", (ftnlen)4150)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4144)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)4159)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     namsiz = sumsiz << 3;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)4150)] - 1) * namsiz;
+	    "urr", i__1, "daffa_", (ftnlen)4165)] - 1) * namsiz;
     i__2 = offset;
     s_copy(stnr + (((i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnr",
-	     i__1, "daffa_", (ftnlen)4152)) * 1000 + i__2), name__, offset + 
+	     i__1, "daffa_", (ftnlen)4167)) * 1000 + i__2), name__, offset + 
 	    namsiz - i__2, name_len);
 
 /*     Rewrite the character record. */
 
     i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stthis",
-	     i__2, "daffa_", (ftnlen)4157)] + 1;
+	     i__2, "daffa_", (ftnlen)4172)] + 1;
     dafwcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4157)], &i__4, stnr + ((i__3 = p - 1) < 
+	    i__1, "daffa_", (ftnlen)4172)], &i__4, stnr + ((i__3 = p - 1) < 
 	    5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, "daffa_", (ftnlen)
-	    4157)) * 1000, (ftnlen)1000);
+	    4172)) * 1000, (ftnlen)1000);
     chkout_("DAFRN", (ftnlen)5);
     return 0;
 /* $Procedure DAFWS ( DAF, write summary ) */
@@ -5054,7 +5069,7 @@ L_dafws:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4351)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)4366)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFWS", (ftnlen)5);
 	    return 0;
@@ -5068,9 +5083,9 @@ L_dafws:
 /*     when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)4367)] == 0) {
+	    i__1, "daffa_", (ftnlen)4382)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4369)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4384)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -5078,11 +5093,11 @@ L_dafws:
 	chkout_("DAFWS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)4378)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)4393)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)4378)]) {
+	    ftnlen)4393)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4380)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4395)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -5095,21 +5110,21 @@ L_dafws:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4397)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)4412)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)4401)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)4416)] - 1) * sumsiz + 3;
     moved_(sum, &sumsiz, &stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 
-	    && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)4403)
+	    && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)4418)
 	    ]);
 
 /*     Rewrite the modified summary record. */
 
     dafwdr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4408)], &stthis[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)4408)]
+	    i__1, "daffa_", (ftnlen)4423)], &stthis[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)4423)]
 	    , &stsr[(i__3 = (p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : 
-	    s_rnge("stsr", i__3, "daffa_", (ftnlen)4408)]);
+	    s_rnge("stsr", i__3, "daffa_", (ftnlen)4423)]);
     chkout_("DAFWS", (ftnlen)5);
     return 0;
 /* $Procedure DAFCS ( DAF, continue search ) */
@@ -5261,12 +5276,12 @@ L_dafcs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)4573)] == *handle) {
+		i__1, "daffa_", (ftnlen)4588)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)4577)];
+		    "stpool", i__1, "daffa_", (ftnlen)4592)];
 	}
     }
 
@@ -5299,11 +5314,11 @@ L_dafcs:
 /*        the predecessor of P is not NIL. */
 
 	stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool",
-		 i__1, "daffa_", (ftnlen)4617)] = stpool[(i__2 = p - 1) < 
+		 i__1, "daffa_", (ftnlen)4632)] = stpool[(i__2 = p - 1) < 
 		5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2, "daffa_", (
-		ftnlen)4617)];
+		ftnlen)4632)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)4618)] = sthead;
+		i__1, "daffa_", (ftnlen)4633)] = sthead;
 	sthead = p;
     }
     chkout_("DAFCS", (ftnlen)5);

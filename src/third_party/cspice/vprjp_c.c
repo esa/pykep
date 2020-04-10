@@ -108,7 +108,7 @@
         that origin, which represents the body center, is in the 
         ring plane.  Then we can make a `plane' with the code 
  
-           pnv2pl_c ( origin, normal, &plane ); 
+           nvp2pl_c ( normal, origin, &plane ); 
  
         can find the projection by making the call 
  
@@ -125,9 +125,14 @@
 -Author_and_Institution
  
    N.J. Bachman   (JPL) 
+   B.V. Semenov   (JPL)
  
 -Version
  
+   -CSPICE Version 1.0.1, 01-FEB-2017 (BVS)
+
+       Typo fix: pnv2pl_c -> nvp2pl_c.
+
    -CSPICE Version 1.0.0, 05-MAR-1999 (NJB)
 
 -Index_Entries

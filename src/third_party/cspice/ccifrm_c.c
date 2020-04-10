@@ -217,10 +217,14 @@
 
          printf(  "Class     : %d \n"
                   "Class ID  : %d \n"
-                  "Frame name: %s \n"
+                  "Fame name : %s \n"
                   "Frame Code: %d \n"
                   "Center ID : %d \n", 
-                  clss, clss_ID, frname, frcode2, center2 );
+                  (int)clss, 
+                  (int)clss_ID, 
+                  frname, 
+                  (int)frcode2, 
+                  (int)center2 );
 
          exit(0);
          }
@@ -246,7 +250,14 @@
    N.J. Bachman    (JPL) 
  
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-FEB-2017 (EDW)(BVS)
+
+       Edit to example program to use "%d" with explicit casts
+       to int for printing SpiceInts with printf.
+
+       Shortened one of permuted index entries.
+       
    -CSPICE Version 1.0.0, 14-JUL-2014 (NJB)
 
        Added to the Brief_I/O header section a description 
@@ -258,7 +269,7 @@
  
    Find info associated with a frame class and class id 
    Map frame class and class id to frame info 
-   Map frame class and class id to frame name, id, and center 
+   Map frame class and class id to frame name, id, center 
  
 -&
 */

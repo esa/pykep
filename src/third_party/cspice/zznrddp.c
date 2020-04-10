@@ -265,6 +265,15 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 03-JUL-2016 (EDW) */
+
+/*        The "Revisiting Spacetrack Report #3" by Vallado et. al. */
+/*        indicates the negative inclination modification as a mistake. */
+/*        That code was removed. */
+
+/*        Eliminated bug in ZZDPINIT that allowed NaN contaimination */
+/*        for zero inclination orbits. */
+
 /* -    SPICELIB Version 2.0.0, 20-JAN-2012 (EDW) */
 
 /*        Eliminated use of the DOPERT boolean in ZZDPINIT. */
@@ -483,6 +492,12 @@ L_zzdpinit:
 /*     W.L. Taber       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 27-JUN-2016 (EDW) */
+
+/*        Eliminated bug that allowed NaN contaimination for zero */
+/*        inclination orbits. New code avoids calculating 1/SINIQ for */
+/*        SINIQ = 0. */
 
 /* -    SPICELIB Version 2.0.0, 02-MAR-2011 (EDW) */
 
@@ -734,7 +749,16 @@ L_zzdpinit:
 	sl = -zn * s3 * (z1 + z3 - 14. - eqsq * 6.);
 	sgh = s4 * zn * (z31 + z33 - 6.);
 	sh = -zn * s2 * (z21 + z23);
-	if (xqncl < .052359877) {
+
+/*        Check for, and adust SH, at inclinations near 0 and 180 degs. */
+
+	if (xqncl < .052359877 || xqncl > pi_() - .052359877) {
+	    sh = 0.;
+	}
+
+/*        Secondary check, J.I.C. */
+
+	if (siniq == 0.) {
 	    sh = 0.;
 	}
 	ee2 = s1 * 2. * s6;
@@ -754,7 +778,15 @@ L_zzdpinit:
 /*           Do lunar terms after solar terms, but only once. */
 
 	    ssx[0] = sl;
-	    ssx[2] = sh / siniq;
+
+/*            Prevent evaluation of 1/SINIQ for SH = 0. */
+
+	    if (sh == 0.) {
+		ssx[2] = 0.;
+	    }
+	    if (sh != 0.) {
+		ssx[2] = sh / siniq;
+	    }
 	    ssx[1] = sgh - cosiq * ssx[2];
 	    ssx[3] = se;
 	    ssx[4] = si;
@@ -782,8 +814,21 @@ L_zzdpinit:
 	}
     }
     ssx[0] += sl;
-    ssx[1] = ssx[1] + sgh - cosiq / siniq * sh;
-    ssx[2] += sh / siniq;
+
+/*      Prevent evaluation of 1/SINIQ for SH = 0. */
+
+    if (sh == 0.) {
+	ssx[1] += sgh;
+    }
+    if (sh != 0.) {
+	ssx[1] = ssx[1] + sgh - cosiq / siniq * sh;
+    }
+    if (sh == 0.) {
+	ssx[2] = ssx[2];
+    }
+    if (sh != 0.) {
+	ssx[2] += sh / siniq;
+    }
     ssx[3] += se;
     ssx[4] += si;
 
@@ -1053,12 +1098,22 @@ L_zzdpsec:
 /*     for Propagation of NORAD Element Sets". United States Department */
 /*     of Defense Spacetrack Report (3). */
 
+/*     Vallado, David A., Paul Crawford, Richard Hujsak, and */
+/*     Kelso, T. S., "Revisiting Spacetrack Report #3," AIAA/AAS */
+/*     Astrodynamics Specialist Conference, Keystone, CO, Aug 2006. */
+
 /* $ Author_and_Institution */
 
 /*     E.D. Wright      (JPL) */
 /*     W.L. Taber       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 27-JUN-2016 (EDW) */
+
+/*        The "Revisiting Spacetrack Report #3" by Vallado et. al. */
+/*        indicates the negative inclination modification as a mistake. */
+/*        That code was removed. */
 
 /* -    SPICELIB Version 1.5.1, 19-SEP-2006 (EDW) */
 
@@ -1086,7 +1141,6 @@ L_zzdpsec:
 
 /* -    SPICELIB Version 1.0.0, MAY-2-1997 (EDW) */
 
-
 /* -& */
 /* $ Index_Entries */
 
@@ -1103,27 +1157,10 @@ L_zzdpsec:
     *em = eo + ssx[3] * *t;
     *xinc = xincl + ssx[4] * *t;
 
-/*     Check for a positive inclination and the state of the */
-/*     resonance flag. */
+/*     Check for the state of the resonance flag. */
 
-    if (*xinc >= 0.f) {
-
-/*        If the resonance flag is not set return. */
-
-	if (iresfl == 0) {
-	    return 0;
-	}
-    } else {
-
-/*        A negative inclination.  Fix that and reset XNODES and */
-/*        OMGASM then check the resonance flag. */
-
-	*xinc = -(*xinc);
-	*xnodes += pix1;
-	*omgasm -= pix1;
-	if (iresfl == 0) {
-	    return 0;
-	}
+    if (iresfl == 0) {
+	return 0;
     }
 
 /*     If we got down here then the resonance effects need to be */

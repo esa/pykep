@@ -4,9 +4,12 @@
 
 -Abstract
  
-   Determine time intervals when an observer sees one target 
-   occulted by, or in transit across, another. 
+   Determine time intervals when an observer sees one target occulted
+   by, or in transit across, another.
  
+   The surfaces of the target bodies may be represented by triaxial
+   ellipsoids or by topographic data provided by DSK files.
+
 -Disclaimer
  
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE 
@@ -176,10 +179,44 @@
                                  When a point target is specified, 
                                  the occultation type must be 
                                  set to "ANY". 
-                                  
-              At least one of the target bodies `front' and `back' must 
-              be modeled as an ellipsoid. 
- 
+                                   
+              
+                 "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
+
+                     Use topographic data provided by DSK files to
+                     model the body's shape. These data must be
+                     provided by loaded DSK files.
+
+                     The surface list specification is optional. The
+                     syntax of the list is
+
+                        <surface 1> [, <surface 2>...]
+
+                     If present, it indicates that data only for the
+                     listed surfaces are to be used; however, data
+                     need not be available for all surfaces in the
+                     list. If absent, loaded DSK data for any surface
+                     associated with the target body are used.
+
+                     The surface list may contain surface names or
+                     surface ID codes. Names containing blanks must
+                     be delimited by double quotes, for example
+
+                        SURFACES = "Mars MEGDR 128 PIXEL/DEG"
+
+                     If multiple surfaces are specified, their names
+                     or IDs must be separated by commas.
+
+                     See the Particulars section below for details
+                     concerning use of DSK data.
+
+              The combinations of the shapes of the target bodies
+              `front' and `back' must be one of:
+
+                 One ELLIPSOID, one POINT
+                 Two ELLIPSOIDs
+                 One DSK, one POINT 
+
               Case and leading or trailing blanks are not 
               significant in the string `fshape'. 
  
@@ -298,22 +335,20 @@
  
 -Detailed_Output
  
-   cnfine     is the input confinement window, updated if necessary
-              so the control area of its data array indicates the
-              window's size and cardinality. The window data are
-              unchanged.
-
-
-   result     is a SPICE window representing the set of time 
-              intervals, within the confinement period, when the 
-              specified occultation occurs. 
+   cnfine     is the input confinement window, updated if necessary so
+              the control area of its data array indicates the window's
+              size and cardinality. The window data are unchanged.
+ 
+ 
+   result     is a SPICE window representing the set of time intervals,
+              within the confinement period, when the specified
+              occultation occurs.
  
               The endpoints of the time intervals comprising `result'
               are interpreted as seconds past J2000 TDB.
-
-              If `result' is non-empty on input, its contents 
-              will be discarded before gfoclt_c conducts its 
-              search. 
+ 
+              If `result' is non-empty on input, its contents will be
+              discarded before gfoclt_c conducts its search.
  
 -Parameters
   
@@ -424,39 +459,86 @@
    16) Invalid aberration correction specifications will be
        diagnosed by a routine in the call tree of this routine.
 
-   17) If any input string argument pointer is null, the error
+   17) If either `fshape' or `bshape' specifies that the target surface
+       is represented by DSK data, and no DSK files are loaded for
+       the specified target, the error is signaled by a routine in
+       the call tree of this routine.
+
+   18) If either `fshape' or `bshape' specifies that the target surface
+       is represented by DSK data, but the shape specification is
+       invalid, the error is signaled by a routine in the call tree
+       of this routine.
+
+   19) If any input string argument pointer is null, the error
        SPICE(NULLPOINTER) will be signaled.
 
-   18) If any input string argument, other than `fframe' or `bframe',
+   20) If any input string argument, other than `fframe' or `bframe',
        is empty, the error SPICE(EMPTYSTRING) will be signaled.
 
 -Files
- 
+  
+   
    Appropriate SPICE kernels must be loaded by the calling program
    before this routine is called.
- 
-   The following data are required: 
- 
-      - SPK data: the calling application must load ephemeris data 
-        for the target, source and observer that cover the time 
-        period specified by the window `cnfine'. If aberration 
-        corrections are used, the states of target and observer 
-        relative to the solar system barycenter must be calculable 
-        from the available ephemeris data. Typically ephemeris data 
-        are made available by loading one or more SPK files via 
-        furnsh_c. 
- 
-      - PCK data: bodies modeled as triaxial ellipsoids must have 
-        semi-axis lengths provided by variables in the kernel pool. 
-        Typically these data are made available by loading a text 
-        PCK file via furnsh_c. 
- 
+
+   The following data are required:
+
+      - SPK data: the calling application must load ephemeris data
+        for the targets, source and observer that cover the time
+        period specified by the window `cnfine'. If aberration
+        corrections are used, the states of the target bodies and of
+        the observer relative to the solar system barycenter must be
+        calculable from the available ephemeris data. Typically
+        ephemeris data are made available by loading one or more SPK
+        files via furnsh_c.
+
+      - PCK data: bodies modeled as triaxial ellipsoids must have
+        semi-axis lengths provided by variables in the kernel pool.
+        Typically these data are made available by loading a text
+        PCK file via furnsh_c.
+
       - FK data: if either of the reference frames designated by
         `bframe' or `fframe' are not built in to the SPICE system,
-        one or more FKs specifying these frames must be loaded. 
+        one or more FKs specifying these frames must be loaded.
 
-   Kernel data are normally loaded once per program run, NOT every time
-   this routine is called.
+   The following data may be required:
+
+      - DSK data: if either `fshape' or `bshape' indicates that DSK
+        data are to be used, DSK files containing topographic data
+        for the target body must be loaded. If a surface list is
+        specified, data for at least one of the listed surfaces must
+        be loaded.
+
+      - Surface name-ID associations: if surface names are specified
+        in `fshape' or `bshape', the association of these names with
+        their corresponding surface ID codes must be established by
+        assignments of the kernel variables
+
+           NAIF_SURFACE_NAME
+           NAIF_SURFACE_CODE
+           NAIF_SURFACE_BODY
+
+        Normally these associations are made by loading a text
+        kernel containing the necessary assignments. An example
+        of such a set of assignments is
+
+           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG'
+           NAIF_SURFACE_CODE += 1
+           NAIF_SURFACE_BODY += 499
+
+      - CK data: either of the body-fixed frames to which `fframe' or
+        `bframe' refer might be a CK frame. If so, at least one CK
+        file will be needed to permit transformation of vectors
+        between that frame and the J2000 frame.
+
+      - SCLK data: if a CK file is needed, an associated SCLK
+        kernel is required to enable conversion between encoded SCLK
+        (used to time-tag CK data) and barycentric dynamical time
+        (TDB).
+
+   Kernel data are normally loaded once per program run, NOT every
+   time this routine is called.
+
  
 -Particulars
  
@@ -555,6 +637,127 @@
    slow search of interest must be performed. See the "CASCADE"
    example program in gf.req for a demonstration.
  
+
+   Using DSK data 
+   ============== 
+ 
+      DSK loading and unloading 
+      ------------------------- 
+ 
+      DSK files providing data used by this routine are loaded by 
+      calling furnsh_c and can be unloaded by calling unload_c or 
+      kclear_c. See the documentation of furnsh_c for limits on numbers 
+      of loaded DSK files. 
+ 
+      For run-time efficiency, it's desirable to avoid frequent 
+      loading and unloading of DSK files. When there is a reason to 
+      use multiple versions of data for a given target body---for 
+      example, if topographic data at varying resolutions are to be 
+      used---the surface list can be used to select DSK data to be 
+      used for a given computation. It is not necessary to unload 
+      the data that are not to be used. This recommendation presumes 
+      that DSKs containing different versions of surface data for a 
+      given body have different surface ID codes. 
+ 
+ 
+      DSK data priority 
+      ----------------- 
+ 
+      A DSK coverage overlap occurs when two segments in loaded DSK 
+      files cover part or all of the same domain---for example, a 
+      given longitude-latitude rectangle---and when the time 
+      intervals of the segments overlap as well. 
+ 
+      When DSK data selection is prioritized, in case of a coverage 
+      overlap, if the two competing segments are in different DSK 
+      files, the segment in the DSK file loaded last takes 
+      precedence. If the two segments are in the same file, the 
+      segment located closer to the end of the file takes 
+      precedence. 
+ 
+      When DSK data selection is unprioritized, data from competing 
+      segments are combined. For example, if two competing segments 
+      both represent a surface as a set of triangular plates, the 
+      union of those sets of plates is considered to represent the 
+      surface.  
+ 
+      Currently only unprioritized data selection is supported. 
+      Because prioritized data selection may be the default behavior 
+      in a later version of the routine, the UNPRIORITIZED keyword is 
+      required in the `fshape' and `bshape' arguments. 
+ 
+       
+      Syntax of the shape input arguments for the DSK case
+      ----------------------------------------------------
+ 
+      The keywords and surface list in the target shape arguments
+      `bshape' and `fshape' are called "clauses." The clauses may
+      appear in any order, for example
+ 
+         "DSK/<surface list>/UNPRIORITIZED"
+         "DSK/UNPRIORITIZED/<surface list>"
+         "UNPRIORITIZED/<surface list>/DSK"
+ 
+      The simplest form of the `method' argument specifying use of 
+      DSK data is one that lacks a surface list, for example: 
+ 
+         "DSK/UNPRIORITIZED" 
+ 
+      For applications in which all loaded DSK data for the target 
+      body are for a single surface, and there are no competing 
+      segments, the above string suffices. This is expected to be 
+      the usual case. 
+ 
+      When, for the specified target body, there are loaded DSK 
+      files providing data for multiple surfaces for that body, the 
+      surfaces to be used by this routine for a given call must be 
+      specified in a surface list, unless data from all of the 
+      surfaces are to be used together. 
+ 
+      The surface list consists of the string 
+ 
+         "SURFACES = "
+ 
+      followed by a comma-separated list of one or more surface 
+      identifiers. The identifiers may be names or integer codes in 
+      string format. For example, suppose we have the surface 
+      names and corresponding ID codes shown below: 
+ 
+         Surface Name                              ID code 
+         ------------                              ------- 
+         "Mars MEGDR 128 PIXEL/DEG"                1 
+         "Mars MEGDR 64 PIXEL/DEG"                 2 
+         "Mars_MRO_HIRISE"                         3 
+ 
+      If data for all of the above surfaces are loaded, then 
+      data for surface 1 can be specified by either 
+ 
+         "SURFACES = 1" 
+ 
+      or 
+ 
+         "SURFACES = \"Mars MEGDR 128 PIXEL/DEG\"" 
+ 
+      Escaped double quotes are used to delimit the surface name because 
+      it contains blank characters.  
+          
+      To use data for surfaces 2 and 3 together, any 
+      of the following surface lists could be used: 
+ 
+         "SURFACES = 2, 3" 
+ 
+         "SURFACES = \"Mars MEGDR  64 PIXEL/DEG\", 3" 
+ 
+         "SURFACES = 2, Mars_MRO_HIRISE" 
+ 
+         "SURFACES = \"Mars MEGDR 64 PIXEL/DEG\", Mars_MRO_HIRISE" 
+        
+      An example of a shape argument that could be constructed 
+      using one of the surface lists above is 
+ 
+         "DSK/UNPRIORITIZED/SURFACES = \"Mars MEGDR 64 PIXEL/DEG\", 3" 
+  
+
 -Examples
  
  
@@ -690,10 +893,10 @@
                   timout_c ( left,  TIMFMT, TIMLEN, begstr );
                   timout_c ( right, TIMFMT, TIMLEN, endstr );
 
-                  printf ( "Interval %ld\n"
+                  printf ( "Interval %d\n"
                            "   Start time: %s\n" 
                            "   Stop time:  %s\n",
-                           i, begstr, endstr      );
+                           (int)i, begstr, endstr      );
                }
             }
 
@@ -1027,10 +1230,345 @@
            2008 DEC 30 18:44:23.485898 (TDB)  2008 DEC 31 00:59:17.030568 (TDB)
 
 
--Restrictions
+       
+      3) Find occultations of the Mars Reconaissance Orbiter (MRO)
+         by Mars, or transits of the MRO spacecraft across Mars,
+         as seen from the DSN station DSS-14 over a period of a
+         few hours on FEB 28 2015.
  
-   The kernel files to be used by gfoclt_c must be loaded (normally via 
-   the CSPICE routine furnsh_c) before gfoclt_c is called. 
+         Use both ellipsoid and DSK shape models for Mars.
+ 
+         Use light time corrections to model apparent positions of Mars
+         and MRO. Stellar aberration corrections are not specified
+         because they don't affect occultation computations.
+ 
+         We select a step size of 3 minutes, which means we ignore
+         occultation events lasting less than 3 minutes, if any exist.
+ 
+         Use the meta-kernel shown below to load the required SPICE
+         kernels.
+ 
+ 
+           KPL/MK
+ 
+           File: gfoclt_ex3.tm
+ 
+           This meta-kernel is intended to support operation of SPICE
+           example programs. The kernels shown here should not be
+           assumed to contain adequate or correct versions of data
+           required by SPICE-based user applications.
+ 
+           In order for an application to use this meta-kernel, the
+           kernels referenced here must be present in the user's
+           current working directory.
+ 
+           The names and contents of the kernels referenced
+           by this meta-kernel are as follows:
+ 
+              File name                        Contents
+              ---------                        --------
+              de410.bsp                        Planetary ephemeris
+              mar063.bsp                       Mars satellite ephemeris
+              pck00010.tpc                     Planet orientation and
+                                               radii
+              naif0011.tls                     Leapseconds
+              earthstns_itrf93_050714.bsp      DSN station ephemeris
+              earth_latest_high_prec.bpc       Earth orientation
+              mro_psp34.bsp                    MRO ephemeris
+              megr90n000cb_plate.bds           Plate model based on
+                                               MEGDR DEM, resolution
+                                               4 pixels/degree.
+ 
+           \begindata
+ 
+              PATH_SYMBOLS    = ( 'MRO', 'GEN' )
+ 
+              PATH_VALUES     = (
+                                  '/ftp/pub/naif/pds/data+'
+                                  '/mro-m-spice-6-v1.0/+'
+                                  'mrosp_1000/data/spk',
+                                  '/ftp/pub/naif/generic_kernels'
+                                )
+ 
+              KERNELS_TO_LOAD = ( '$MRO/de410.bsp',
+                                  '$MRO/mar063.bsp',
+                                  '$MRO/mro_psp34.bsp',
+                                  '$GEN/spk/stations/+'
+                                  'earthstns_itrf93_050714.bsp',
+                                  '$GEN/pck/earth_latest_high_prec.bpc',
+                                  'pck00010.tpc',
+                                  'naif0011.tls',
+                                  'megr90n000cb_plate.bds'
+                                )
+           \begintext
+ 
+ 
+        Example code begins here.
+ 
+
+           #include <stdio.h>
+           #include "SpiceUsr.h"
+
+           int main()
+           {
+              /.
+              Local constants 
+              ./
+
+              #define META            "gfoclt_ex3.tm"
+              #define TIMFMT          "YYYY MON DD HR:MN:SC" \
+                                      ".###### (TDB)::TDB"
+              #define MAXWIN          200
+              #define TIMLEN          41
+
+              /.
+              Local variables 
+              ./
+              SPICEDOUBLE_CELL      ( cnfine, MAXWIN );
+              SPICEDOUBLE_CELL      ( result, MAXWIN );
+
+              SpiceChar             * abcorr;
+              SpiceChar             * back;
+              SpiceChar               begstr [ TIMLEN ];
+              SpiceChar             * bframe;
+              SpiceChar             * bshape;
+              SpiceChar               endstr [ TIMLEN ];
+              SpiceChar             * fframe;
+              SpiceChar             * front;
+              SpiceChar             * fshape;
+              SpiceChar             * obsrvr;
+              SpiceChar             * occtyp;
+              SpiceChar             * win0;
+              SpiceChar             * win1;
+
+              SpiceDouble             et0;
+              SpiceDouble             et1;
+              SpiceDouble             left;
+              SpiceDouble             right;
+              SpiceDouble             step;
+
+              SpiceInt                i;
+              SpiceInt                j;
+              SpiceInt                k; 
+
+
+              /.
+              Load kernels. 
+              ./
+              furnsh_c ( META );
+
+
+              /.
+              Set the observer and aberration correction.
+              ./
+              obsrvr = "DSS-14";
+              abcorr = "CN";
+
+              /.
+              Set the occultation type.
+              ./
+              occtyp = "ANY";
+
+              /.
+              Set the TDB time bounds of the confinement
+              window, which is a single interval in this case.
+              ./
+              win0 = "2015 FEB 28 07:00:00 TDB";
+              win1 = "2015 FEB 28 12:00:00 TDB";
+
+              str2et_c ( win0, &et0 );
+              str2et_c ( win1, &et1 );
+
+              /.
+              Insert the time bounds into the confinement
+              window.
+              ./
+              wninsd_c ( et0, et1, &cnfine );
+
+
+              /.
+              Select a 3-minute step. We'll ignore any occultations
+              lasting less than 3 minutes.  Units are TDB seconds.
+              ./
+              step = 180.0;
+
+              /.
+              Perform both spacecraft occultation and spacecraft
+              transit searches.
+              ./
+              for ( i = 0;  i < 2;  i++ )
+              {
+                 if ( i == 0 )
+                 {
+                    /.
+                    Perform a spacecraft occultation search.
+                    ./
+                    front  = "MARS";
+                    fframe = "IAU_MARS";
+
+                    back   = "MRO";
+                    bshape = "POINT";
+                    bframe = " ";
+                 }
+                 else
+                 {
+                    /.
+                    Perform a spacecraft transit search.
+                    ./
+                    front  = "MRO";
+                    fframe = " ";
+                    fshape = "POINT";
+
+                    back   = "MARS";
+                    bframe = "IAU_MARS";
+                 }
+
+                 for ( j = 0;  j < 2;  j++ )
+                 {
+                    if ( j == 0 )
+                    {
+                       /.
+                       Model the planet shape as an ellipsoid.
+                       ./
+                       if ( i == 0 )
+                       {
+                          fshape = "ELLIPSOID";
+                       }
+                       else
+                       {
+                          bshape = "ELLIPSOID";
+                       }
+                    }
+                    else
+                    {
+                       /.
+                       Model the planet shape using DSK data.
+                       ./
+                       if ( i == 0 )
+                       {
+                          fshape = "DSK/UNPRIORITIZED";
+                       }
+                       else
+                       {
+                          bshape = "DSK/UNPRIORITIZED";
+                       }
+                    }
+                    /.
+                    Perform the spacecraft occultation or
+                    transit search.
+                    ./
+                    printf ( "\n" );
+
+                    if ( i == 0 )
+                    {
+                       printf ( "Using shape model %s\n"
+                                "Starting occultation search...\n", 
+                                fshape                             );
+                    }
+                    else
+                    {
+                       printf ( "Using shape model %s\n"
+                                "Starting transit search...\n", 
+                                bshape                             );
+                    }
+
+                    gfoclt_c ( occtyp,                            
+                               front,   fshape,  fframe,
+                               back,    bshape,  bframe,
+                               abcorr,  obsrvr,  step,
+                               &cnfine, &result          );
+
+                    if ( wncard_c(&result) == 0 )
+                    {
+                       printf ( "No event was found.\n" ); 
+                    }
+                    else
+                    {
+                       for ( k = 0;  k < wncard_c(&result); k++ )
+                       { 
+                          /.
+                          Fetch and display each occultation interval.
+                          ./
+                          wnfetd_c ( &result, k, &left, &right );
+
+                          timout_c ( left,  TIMFMT, TIMLEN, begstr );
+                          timout_c ( right, TIMFMT, TIMLEN, endstr );
+
+                          printf ( "Interval %d\n"
+                                   "   Start time: %s\n" 
+                                   "   Stop time:  %s\n",
+                                   (int)k, begstr, endstr );
+                       }
+                    } 
+                 }
+                 /.
+                 End of the target shape loop. 
+                 ./
+              }
+              /.
+              End of the occultation vs transit loop. 
+              ./
+              printf ( "\n" );
+              return ( 0 );
+           } 
+
+
+        When this program was executed on a PC/Linux/gcc 64-bit
+        platform, the output was:
+
+
+           Using shape model ELLIPSOID
+           Starting occultation search...
+           Interval 0
+              Start time: 2015 FEB 28 07:17:35.379879 (TDB)
+              Stop time:  2015 FEB 28 07:50:37.710284 (TDB)
+           Interval 1
+              Start time: 2015 FEB 28 09:09:46.920140 (TDB)
+              Stop time:  2015 FEB 28 09:42:50.497193 (TDB)
+           Interval 2
+              Start time: 2015 FEB 28 11:01:57.845730 (TDB)
+              Stop time:  2015 FEB 28 11:35:01.489716 (TDB)
+
+           Using shape model DSK/UNPRIORITIZED
+           Starting occultation search...
+           Interval 0
+              Start time: 2015 FEB 28 07:17:38.130608 (TDB)
+              Stop time:  2015 FEB 28 07:50:38.310802 (TDB)
+           Interval 1
+              Start time: 2015 FEB 28 09:09:50.314903 (TDB)
+              Stop time:  2015 FEB 28 09:42:55.369626 (TDB)
+           Interval 2
+              Start time: 2015 FEB 28 11:02:01.756296 (TDB)
+              Stop time:  2015 FEB 28 11:35:08.368384 (TDB)
+
+           Using shape model ELLIPSOID
+           Starting transit search...
+           Interval 0
+              Start time: 2015 FEB 28 08:12:21.112018 (TDB)
+              Stop time:  2015 FEB 28 08:45:48.401746 (TDB)
+           Interval 1
+              Start time: 2015 FEB 28 10:04:32.682324 (TDB)
+              Stop time:  2015 FEB 28 10:37:59.920302 (TDB)
+           Interval 2
+              Start time: 2015 FEB 28 11:56:39.757564 (TDB)
+              Stop time:  2015 FEB 28 12:00:00.000000 (TDB)
+
+           Using shape model DSK/UNPRIORITIZED
+           Starting transit search...
+           Interval 0
+              Start time: 2015 FEB 28 08:12:15.750020 (TDB)
+              Stop time:  2015 FEB 28 08:45:43.406870 (TDB)
+           Interval 1
+              Start time: 2015 FEB 28 10:04:29.031706 (TDB)
+              Stop time:  2015 FEB 28 10:37:55.565509 (TDB)
+           Interval 2
+              Start time: 2015 FEB 28 11:56:34.634642 (TDB)
+              Stop time:  2015 FEB 28 12:00:00.000000 (TDB)
+
+
+-Restrictions
+
+  None.
  
 -Literature_References
  
@@ -1044,6 +1582,13 @@
  
 -Version
  
+   -CSPICE Version 2.0.0, 12-JUL-2016 (NJB) (EDW)
+
+       Edit to example program to use "%d" with explicit casts
+       to int for printing SpiceInts with printf.
+
+       Updated to support use of DSKs.
+
    -CSPICE Version 1.0.0, 07-APR-2009 (NJB) (LSE) (EDW)
 
 -Index_Entries

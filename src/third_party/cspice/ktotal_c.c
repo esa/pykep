@@ -69,6 +69,7 @@
                  CK   --- All CK files are counted in the total. 
                  PCK  --- All binary PCK files are counted in the 
                           total. 
+                 DSK  --- All DSK files are counted in the total. 
                  EK   --- All EK files are counted in the total. 
                  TEXT --- All text kernels that are not meta-text. 
                           kernels are included in the total. 
@@ -92,10 +93,6 @@
  
    None. 
  
--Files
- 
-   None. 
- 
 -Exceptions
 
    1) If a word on the list specified by kind is not recognized 
@@ -110,6 +107,10 @@
    4) If the input file kind argument pointer is the empty string, the 
       error SPICE(EMPTYSTRING) will be signaled.
    
+-Files
+ 
+   None. 
+ 
 -Particulars
  
    ktotal_c allows you to easily determine the number of kernels 
@@ -155,17 +156,22 @@
  
    None. 
  
+-Literature_References
+ 
+   None. 
+ 
 -Author_and_Institution
  
    N.J. Bachman    (JPL)
    W.L. Taber      (JPL) 
  
--Literature_References
- 
-   None. 
- 
 -Version
  
+   -CSPICE Version 1.0.1, 20-JAN-2016 (NJB) (WLT)
+
+       Header was updated to reflect support for use
+       of DSKs. Header sections were reordered.
+
    -CSPICE Version 1.0.0, 01-SEP-1999 (NJB) (WLT)
 
 -Index_Entries

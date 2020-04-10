@@ -43,15 +43,16 @@ static doublereal c_b21 = 1.;
     doublereal start;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
+    char lbshap[500];
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    char lbshap[9], lfshap[9];
+    char lfshap[500];
     extern integer wncard_(doublereal *);
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), wnfetd_(doublereal *,
-	     integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), wnfetd_(doublereal *, integer *, doublereal *, 
+	    doublereal *);
 
 /* $ Abstract */
 
@@ -157,6 +158,12 @@ static doublereal c_b21 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
 /* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
 
 /*       Added NWILUM parameter. */
@@ -232,9 +239,6 @@ static doublereal c_b21 = 1.;
 /*     FRMNLN is a string length for frame names. */
 
 
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
-
-
 /*     FOVTLN -- maximum length for FOV string. */
 
 
@@ -267,6 +271,66 @@ static doublereal c_b21 = 1.;
 
 
 /*     End of file gf.inc. */
+
+
+/*     File: zzdsk.inc */
+
+
+/*     Version 4.0.0 13-NOV-2015 (NJB) */
+
+/*        Changed parameter LBTLEN to CVTLEN. */
+/*        Added parameter LMBCRV. */
+
+/*     Version 3.0.0 05-NOV-2015 (NJB) */
+
+/*        Added parameters */
+
+/*           CTRCOR */
+/*           ELLCOR */
+/*           GUIDED */
+/*           LBTLEN */
+/*           PNMBRL */
+/*           TANGNT */
+/*           TMTLEN */
+/*           UMBRAL */
+
+/*     Version 2.0.0 04-MAR-2015 (NJB) */
+
+/*        Removed declaration of parameter SHPLEN. */
+/*        This name is already in use in the include */
+/*        file gf.inc. */
+
+/*     Version 1.0.0 26-JAN-2015 (NJB) */
+
+
+/*     Parameters supporting METHOD string parsing: */
+
+
+/*     Local method length. */
+
+
+/*     Length of sub-point type string. */
+
+
+/*     Length of curve type string. */
+
+
+/*     Limb type parameter codes. */
+
+
+/*     Length of terminator type string. */
+
+
+/*     Terminator type and limb parameter codes. */
+
+
+/*     Length of aberration correction locus string. */
+
+
+/*     Aberration correction locus codes. */
+
+
+/*     End of include file zzdsk.inc */
 
 /* $ Brief_I/O */
 
@@ -357,32 +421,66 @@ static doublereal c_b21 = 1.;
 /*                significant in the string FRONT. */
 
 
-/*     FSHAPE     is a string indicating the geometric model used */
-/*                to represent the shape of the front body. The */
+/*     FSHAPE     is a string indicating the geometric model used to */
+/*                represent the shape of the front target body. The */
 /*                supported options are: */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model, */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                   'ELLIPSOID' */
 
-/*                                      'BODYnnn_RADII' */
+/*                       Use a triaxial ellipsoid model with radius */
+/*                       values provided via the kernel pool. A kernel */
+/*                       variable having a name of the form */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*                          'BODYnnn_RADII' */
 
-/*                   'POINT'         Treat the body as a single point. */
-/*                                   When a point target is specified, */
-/*                                   the occultation type must be */
-/*                                   set to 'ANY'. */
+/*                       where nnn represents the NAIF integer code */
+/*                       associated with the body, must be present in */
+/*                       the kernel pool. This variable must be */
+/*                       associated with three numeric values giving the */
+/*                       lengths of the ellipsoid's X, Y, and Z */
+/*                       semi-axes. */
 
-/*                At least one of the target bodies FRONT and BACK must */
-/*                be modeled as an ellipsoid. */
+/*                   'POINT' */
+
+/*                       Treat the body as a single point. When a point */
+/*                       target is specified, the occultation type must */
+/*                       be set to 'ANY'. */
+
+/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                       Use topographic data provided by DSK files to */
+/*                       model the body's shape. These data must be */
+/*                       provided by loaded DSK files. */
+
+/*                       The surface list specification is optional. The */
+/*                       syntax of the list is */
+
+/*                          <surface 1> [, <surface 2>...] */
+
+/*                       If present, it indicates that data only for the */
+/*                       listed surfaces are to be used; however, data */
+/*                       need not be available for all surfaces in the */
+/*                       list. If absent, loaded DSK data for any surface */
+/*                       associated with the target body are used. */
+
+/*                       The surface list may contain surface names or */
+/*                       surface ID codes. Names containing blanks must */
+/*                       be delimited by double quotes, for example */
+
+/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                       If multiple surfaces are specified, their names */
+/*                       or IDs must be separated by commas. */
+
+/*                       See the Particulars section below for details */
+/*                       concerning use of DSK data. */
+
+/*                The combinations of the shapes of the target bodies */
+/*                FRONT and BACK must be one of: */
+
+/*                   One ELLIPSOID, one POINT */
+/*                   Two ELLIPSOIDs */
+/*                   One DSK, one POINT */
 
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string FSHAPE. */
@@ -395,6 +493,7 @@ static doublereal c_b21 = 1.;
 
 /*                If the front target body is modeled as a point, FFRAME */
 /*                should be left blank. */
+
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string FFRAME. */
 
@@ -800,20 +899,31 @@ static doublereal c_b21 = 1.;
 /*     17) If the convergence tolerance size is non-positive, the error */
 /*         SPICE(INVALIDTOLERANCE) will be signaled. */
 
+/*     18) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, and no DSK files are loaded for */
+/*         the specified target, the error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     19) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, but the shape specification is */
+/*         invalid, the error is signaled by a routine in the call tree */
+/*         of this routine. */
 
 /* $ Files */
 
-/*     Appropriate kernels must be loaded by the calling program before */
-/*     this routine is called. */
+
+/*     Appropriate SPICE kernels must be loaded by the calling program */
+/*     before this routine is called. */
 
 /*     The following data are required: */
 
 /*        - SPK data: the calling application must load ephemeris data */
 /*          for the target, source and observer that cover the time */
 /*          period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
+/*          corrections are used, the states of the target bodies and of */
+/*          the observer relative to the solar system barycenter must be */
+/*          calculable from the available ephemeris data. Typically */
+/*          ephemeris data */
 /*          are made available by loading one or more SPK files via */
 /*          FURNSH. */
 
@@ -825,6 +935,41 @@ static doublereal c_b21 = 1.;
 /*        - FK data: if either of the reference frames designated by */
 /*          BFRAME or FFRAME are not built in to the SPICE system, */
 /*          one or more FKs specifying these frames must be loaded. */
+
+/*     The following data may be required: */
+
+/*        - DSK data: if either FSHAPE or BSHAPE indicates that DSK */
+/*          data are to be used, DSK files containing topographic data */
+/*          for the target body must be loaded. If a surface list is */
+/*          specified, data for at least one of the listed surfaces must */
+/*          be loaded. */
+
+/*        - Surface name-ID associations: if surface names are specified */
+/*          in FSHAPE or BSHAPE, the association of these names with */
+/*          their corresponding surface ID codes must be established by */
+/*          assignments of the kernel variables */
+
+/*             NAIF_SURFACE_NAME */
+/*             NAIF_SURFACE_CODE */
+/*             NAIF_SURFACE_BODY */
+
+/*          Normally these associations are made by loading a text */
+/*          kernel containing the necessary assignments. An example */
+/*          of such a set of assignments is */
+
+/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*             NAIF_SURFACE_CODE += 1 */
+/*             NAIF_SURFACE_BODY += 499 */
+
+/*        - CK data: either of the body-fixed frames to which FFRAME or */
+/*          BFRAME refer might be a CK frame. If so, at least one CK */
+/*          file will be needed to permit transformation of vectors */
+/*          between that frame and the J2000 frame. */
+
+/*        - SCLK data: if a CK file is needed, an associated SCLK */
+/*          kernel is required to enable conversion between encoded SCLK */
+/*          (used to time-tag CK data) and barycentric dynamical time */
+/*          (TDB). */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -921,6 +1066,128 @@ static doublereal c_b21 = 1.;
 /*     slow search of interest must be performed. For an example, see */
 /*     the program CASCADE in the GF Example Programs chapter of the GF */
 /*     Required Reading, gf.req. */
+
+
+/*     Using DSK data */
+/*     ============== */
+
+/*        DSK loading and unloading */
+/*        ------------------------- */
+
+/*        DSK files providing data used by this routine are loaded by */
+/*        calling FURNSH and can be unloaded by calling UNLOAD or */
+/*        KCLEAR. See the documentation of FURNSH for limits on numbers */
+/*        of loaded DSK files. */
+
+/*        For run-time efficiency, it's desirable to avoid frequent */
+/*        loading and unloading of DSK files. When there is a reason to */
+/*        use multiple versions of data for a given target body---for */
+/*        example, if topographic data at varying resolutions are to be */
+/*        used---the surface list can be used to select DSK data to be */
+/*        used for a given computation. It is not necessary to unload */
+/*        the data that are not to be used. This recommendation presumes */
+/*        that DSKs containing different versions of surface data for a */
+/*        given body have different surface ID codes. */
+
+
+/*        DSK data priority */
+/*        ----------------- */
+
+/*        A DSK coverage overlap occurs when two segments in loaded DSK */
+/*        files cover part or all of the same domain---for example, a */
+/*        given longitude-latitude rectangle---and when the time */
+/*        intervals of the segments overlap as well. */
+
+/*        When DSK data selection is prioritized, in case of a coverage */
+/*        overlap, if the two competing segments are in different DSK */
+/*        files, the segment in the DSK file loaded last takes */
+/*        precedence. If the two segments are in the same file, the */
+/*        segment located closer to the end of the file takes */
+/*        precedence. */
+
+/*        When DSK data selection is unprioritized, data from competing */
+/*        segments are combined. For example, if two competing segments */
+/*        both represent a surface as sets of triangular plates, the */
+/*        union of those sets of plates is considered to represent the */
+/*        surface. */
+
+/*        Currently only unprioritized data selection is supported. */
+/*        Because prioritized data selection may be the default behavior */
+/*        in a later version of the routine, the UNPRIORITIZED keyword is */
+/*        required in the FSHAPE and BSHAPE arguments. */
+
+
+/*        Syntax of the shape input arguments for the DSK case */
+/*        ---------------------------------------------------- */
+
+/*        The keywords and surface list in the target shape arguments */
+/*        FSHAPE and BSHAPE, when DSK shape models are specified, are */
+/*        called "clauses." The clauses may appear in any order, for */
+/*        example */
+
+/*           DSK/<surface list>/UNPRIORITIZED */
+/*           DSK/UNPRIORITIZED/<surface list> */
+/*           UNPRIORITIZED/<surface list>/DSK */
+
+/*        The simplest form of a target argument specifying use of */
+/*        DSK data is one that lacks a surface list, for example: */
+
+/*           'DSK/UNPRIORITIZED' */
+
+/*        For applications in which all loaded DSK data for the target */
+/*        body are for a single surface, and there are no competing */
+/*        segments, the above string suffices. This is expected to be */
+/*        the usual case. */
+
+/*        When, for the specified target body, there are loaded DSK */
+/*        files providing data for multiple surfaces for that body, the */
+/*        surfaces to be used by this routine for a given call must be */
+/*        specified in a surface list, unless data from all of the */
+/*        surfaces are to be used together. */
+
+/*        The surface list consists of the string */
+
+/*           SURFACES = */
+
+/*        followed by a comma-separated list of one or more surface */
+/*        identifiers. The identifiers may be names or integer codes in */
+/*        string format. For example, suppose we have the surface */
+/*        names and corresponding ID codes shown below: */
+
+/*           Surface Name                              ID code */
+/*           ------------                              ------- */
+/*           'Mars MEGDR 128 PIXEL/DEG'                1 */
+/*           'Mars MEGDR 64 PIXEL/DEG'                 2 */
+/*           'Mars_MRO_HIRISE'                         3 */
+
+/*        If data for all of the above surfaces are loaded, then */
+/*        data for surface 1 can be specified by either */
+
+/*           'SURFACES = 1' */
+
+/*        or */
+
+/*           'SURFACES = "Mars MEGDR 128 PIXEL/DEG"' */
+
+/*        Double quotes are used to delimit the surface name because */
+/*        it contains blank characters. */
+
+/*        To use data for surfaces 2 and 3 together, any */
+/*        of the following surface lists could be used: */
+
+/*           'SURFACES = 2, 3' */
+
+/*           'SURFACES = "Mars MEGDR  64 PIXEL/DEG", 3' */
+
+/*           'SURFACES = 2, Mars_MRO_HIRISE' */
+
+/*           'SURFACES = "Mars MEGDR 64 PIXEL/DEG", Mars_MRO_HIRISE' */
+
+/*        An example of a shape argument that could be constructed */
+/*        using one of the surface lists above is */
+
+/*              'DSK/UNPRIORITIZED/SURFACES = ' */
+/*           // '"Mars MEGDR 64 PIXEL/DEG", 499003' */
 
 
 /* $ Examples */
@@ -1139,6 +1406,13 @@ static doublereal c_b21 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0 24-FEB-2016 (NJB) */
+
+/*        Now supports DSK target shapes. */
+
+/*        Updated lengths of saved shape variables to accommodate */
+/*        DSK "method" specifications. */
+
 /* -    SPICELIB Version 1.0.0 15-APR-2009 (NJB) (LSE) (WLT) (IMU) (EDW) */
 
 /* -& */
@@ -1204,16 +1478,16 @@ static doublereal c_b21 = 1.;
 
 /*     Check the target shape specifications. */
 
-    ljust_(bshape, lbshap, bshape_len, (ftnlen)9);
-    ucase_(lbshap, lbshap, (ftnlen)9, (ftnlen)9);
-    ljust_(fshape, lfshap, fshape_len, (ftnlen)9);
-    ucase_(lfshap, lfshap, (ftnlen)9, (ftnlen)9);
+    ljust_(bshape, lbshap, bshape_len, (ftnlen)500);
+    ucase_(lbshap, lbshap, (ftnlen)500, (ftnlen)500);
+    ljust_(fshape, lfshap, fshape_len, (ftnlen)500);
+    ucase_(lfshap, lfshap, (ftnlen)500, (ftnlen)500);
 
 /*     Note for maintenance programmer: these checks will */
 /*     require modification to handle DSK-based shapes. */
 
-    if (s_cmp(lfshap, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(lbshap, 
-	    "POINT", (ftnlen)9, (ftnlen)5) == 0) {
+    if (s_cmp(lfshap, "POINT", (ftnlen)500, (ftnlen)5) == 0 && s_cmp(lbshap, 
+	    "POINT", (ftnlen)500, (ftnlen)5) == 0) {
 	setmsg_("The front and back target shape specifications are both PTS"
 		"HAP; at least one of these targets must be an extended objec"
 		"t.", (ftnlen)121);
@@ -1225,8 +1499,8 @@ static doublereal c_b21 = 1.;
 /*     Initialize the occultation calculation. */
 
     zzgfocin_(occtyp, front, lfshap, fframe, back, lbshap, bframe, obsrvr, 
-	    abcorr, occtyp_len, front_len, (ftnlen)9, fframe_len, back_len, (
-	    ftnlen)9, bframe_len, obsrvr_len, abcorr_len);
+	    abcorr, occtyp_len, front_len, (ftnlen)500, fframe_len, back_len, 
+	    (ftnlen)500, bframe_len, obsrvr_len, abcorr_len);
     if (failed_()) {
 	chkout_("GFOCCE", (ftnlen)6);
 	return 0;

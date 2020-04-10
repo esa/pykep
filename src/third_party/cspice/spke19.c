@@ -9,9 +9,32 @@
 /* Subroutine */ int spke19_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spke18_(doublereal *, 
-	    doublereal *, doublereal *), chkout_(char *, ftnlen);
+    /* System generated locals */
+    integer i__1, i__2;
+
+    /* Builtin functions */
+    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+
+    /* Local variables */
+    integer from;
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal work[792]	/* was [396][2] */;
+    integer i__, j, n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    doublereal vbuff[6];
+    integer to;
+    doublereal locrec[198];
+    integer packsz;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen);
+    extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int hrmint_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *), setmsg_(
+	    char *, ftnlen), errint_(char *, integer *, ftnlen), xpsgip_(
+	    integer *, integer *, doublereal *);
     extern logical return_(void);
+    integer xstart, subtyp, ystart;
 
 /* $ Abstract */
 
@@ -104,6 +127,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
+
 /* -    SPICELIB Version 1.0.0, 07-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -128,6 +155,9 @@
 
 
 /*     Subtype 1:  Lagrange interpolation, 6-element packets. */
+
+
+/*     Subtype 2:  Hermite interpolation, 6-element packets. */
 
 
 /*     Packet sizes associated with the various subtypes: */
@@ -359,6 +389,12 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. Now performs */
+/*        computations in-line, rather than calling */
+/*        SPKE18. */
+
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -376,6 +412,21 @@
 /*     SPICELIB functions */
 
 
+/*     Local parameters */
+
+
+/*     Index of subtype code in record: */
+
+
+/*     Index of packet count in record: */
+
+
+/*     Index at which packets start: */
+
+
+/*     Local variables */
+
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
@@ -383,11 +434,156 @@
     }
     chkin_("SPKE19", (ftnlen)6);
 
-/*     Given that our nominally type 19 input record is actually a */
-/*     valid type 18 record, we let the type 18 evaluator do the */
-/*     work. */
+/*     Capture the subtype from the record and set the packet size */
+/*     accordingly. */
 
-    spke18_(et, record, state);
+    subtyp = i_dnnt(record);
+    if (subtyp == 0) {
+	packsz = 12;
+    } else if (subtyp == 1) {
+	packsz = 6;
+    } else if (subtyp == 2) {
+	packsz = 6;
+    } else {
+	setmsg_("Unexpected SPK type 19 subtype found in type 19 record.", (
+		ftnlen)55);
+	errint_("#", &subtyp, (ftnlen)1);
+	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_("SPKE19", (ftnlen)6);
+	return 0;
+    }
+
+/*     Get the packet count. */
+
+    n = i_dnnt(&record[1]);
+    if (subtyp == 0) {
+
+/*        We interpolate each state component in turn.  Position and */
+/*        velocity are interpolated separately. */
+
+	xstart = packsz * n + 3;
+	for (i__ = 1; i__ <= 3; ++i__) {
+	    i__1 = n;
+	    for (j = 1; j <= i__1; ++j) {
+
+/*              For the Jth input packet, copy the Ith position and */
+/*              velocity components into the local record buffer LOCREC. */
+
+		from = packsz * (j - 1) + 2 + i__;
+		to = (j << 1) - 1;
+		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
+			"locrec", i__2, "spke19_", (ftnlen)320)] = record[
+			from - 1];
+		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
+			, i__2, "spke19_", (ftnlen)321)] = record[from + 2];
+	    }
+
+/*           Interpolate the Ith position and velocity components of the */
+/*           state.  We'll keep the position and overwrite the velocity. */
+
+	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &state[(i__1 = 
+		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
+		    "spke19_", (ftnlen)329)], &state[(i__2 = i__ + 2) < 6 && 
+		    0 <= i__2 ? i__2 : s_rnge("state", i__2, "spke19_", (
+		    ftnlen)329)]);
+	}
+
+/*        Now interpolate velocity, using separate velocity data and */
+/*        acceleration. */
+
+	for (i__ = 1; i__ <= 3; ++i__) {
+	    i__1 = n;
+	    for (j = 1; j <= i__1; ++j) {
+
+/*              For the Jth input packet, copy the Ith position and */
+/*              velocity components into the local record buffer LOCREC. */
+
+		from = packsz * (j - 1) + 2 + packsz / 2 + i__;
+		to = (j << 1) - 1;
+		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
+			"locrec", i__2, "spke19_", (ftnlen)353)] = record[
+			from - 1];
+		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
+			, i__2, "spke19_", (ftnlen)354)] = record[from + 2];
+	    }
+
+/*           Interpolate the Ith velocity and acceleration components of */
+/*           the state.  We'll capture the result in a temporary buffer, */
+/*           then transfer the velocity to the output state array. */
+
+	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &vbuff[(i__1 = 
+		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("vbuff", i__1, 
+		    "spke19_", (ftnlen)363)], &vbuff[(i__2 = i__ + 2) < 6 && 
+		    0 <= i__2 ? i__2 : s_rnge("vbuff", i__2, "spke19_", (
+		    ftnlen)363)]);
+	}
+
+/*        Fill in the velocity in the output state using the results of */
+/*        interpolating velocity and acceleration. */
+
+	vequ_(vbuff, &state[3]);
+    } else if (subtyp == 1) {
+
+/*        We perform Lagrange interpolation on each state component. */
+
+/*        We'll transpose the state information in the input record so */
+/*        that contiguous pieces of it can be shoved directly into the */
+/*        interpolation routine LGRINT. */
+
+	xpsgip_(&packsz, &n, &record[2]);
+
+/*        We interpolate each state component in turn. */
+
+	xstart = n * packsz + 3;
+	i__1 = packsz;
+	for (i__ = 1; i__ <= i__1; ++i__) {
+	    ystart = n * (i__ - 1) + 3;
+	    state[(i__2 = i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("state", 
+		    i__2, "spke19_", (ftnlen)398)] = lgrint_(&n, &record[
+		    xstart - 1], &record[ystart - 1], locrec, et);
+	}
+    } else if (subtyp == 2) {
+
+/*        We perform Hermite interpolation on each position component */
+/*        and corresponding velocity component. */
+
+	xstart = n * packsz + 3;
+	for (i__ = 1; i__ <= 3; ++i__) {
+	    i__1 = n;
+	    for (j = 1; j <= i__1; ++j) {
+
+/*              For the Jth input packet, copy the Ith position and */
+/*              velocity components into the local record buffer LOCREC. */
+
+		from = packsz * (j - 1) + 2 + i__;
+		to = (j << 1) - 1;
+		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
+			"locrec", i__2, "spke19_", (ftnlen)423)] = record[
+			from - 1];
+		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
+			, i__2, "spke19_", (ftnlen)424)] = record[from + 2];
+	    }
+
+/*           Interpolate the Ith position and velocity components of the */
+/*           state. */
+
+	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &state[(i__1 = 
+		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
+		    "spke19_", (ftnlen)432)], &state[(i__2 = i__ + 2) < 6 && 
+		    0 <= i__2 ? i__2 : s_rnge("state", i__2, "spke19_", (
+		    ftnlen)432)]);
+	}
+    } else {
+
+/*         This is a backstop case. */
+
+	setmsg_("Unexpected SPK type 19 subtype found in type 19 record.", (
+		ftnlen)55);
+	errint_("#", &subtyp, (ftnlen)1);
+	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_("SPKE19", (ftnlen)6);
+	return 0;
+    }
     chkout_("SPKE19", (ftnlen)6);
     return 0;
 } /* spke19_ */

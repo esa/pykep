@@ -240,6 +240,14 @@
  
 -Version
  
+   -CSPICE Version 1.1.0, 29-JUL-2015 (NJB) 
+
+      Bug fix: removed semi-colon at end of the "if"
+      statement controlling execution of the call
+      to F2C_ConvertStrTrArr. This semi-colon turned 
+      out to have no effect on the behavior of the 
+      routine.
+   
    -CSPICE Version 1.0.0, 24-FEB-2003 (NJB) (KRG)
 
 -Index_Entries
@@ -288,7 +296,7 @@
    /*
    Convert the output array from Fortran to C style. 
    */
-   if ( *n > 0 );
+   if ( *n > 0 )
    {
       F2C_ConvertTrStrArr ( *n,  buflen,  (SpiceChar *)buffer );
    }

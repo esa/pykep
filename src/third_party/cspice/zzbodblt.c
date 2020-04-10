@@ -8,7 +8,7 @@
 /* Table of constant values */
 
 static integer c__1 = 1;
-static integer c__592 = 592;
+static integer c__620 = 620;
 static integer c__2 = 2;
 static integer c__3 = 3;
 
@@ -38,20 +38,20 @@ static integer c__3 = 3;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char zzint[36];
-    static integer bltcod[592];
-    static char bltnam[36*592];
+    static integer bltcod[620];
+    static char bltnam[36*620];
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *), 
 	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static char bltnor[36*592];
+    static char bltnor[36*620];
     extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen), 
 	    cmprss_(char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen)
 	    ;
-    integer zzocod[592];
+    integer zzocod[620];
     char zzline[75];
-    integer zzonam[592];
+    integer zzonam[620];
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
     char zzrqst[4];
@@ -168,7 +168,7 @@ static integer c__3 = 3;
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0, 07-MAY-2014 (BVS)(EDW) */
+/* -    SPICELIB Version 2.0.0, 04-APR-2017 (BVS)(EDW) */
 
 /*        Increased NROOM to 14983. Added a comment note explaining */
 /*        NROOM and MAXE */
@@ -683,20 +683,20 @@ L_zzbodget:
 /*        Retrieve the default mapping list. */
 
 	zzidmap_(bltcod, bltnam, (ftnlen)36);
-	for (i__ = 1; i__ <= 592; ++i__) {
-	    ljust_(bltnam + ((i__1 = i__ - 1) < 592 && 0 <= i__1 ? i__1 : 
+	for (i__ = 1; i__ <= 620; ++i__) {
+	    ljust_(bltnam + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? i__1 : 
 		    s_rnge("bltnam", i__1, "zzbodblt_", (ftnlen)565)) * 36, 
-		    bltnor + ((i__2 = i__ - 1) < 592 && 0 <= i__2 ? i__2 : 
+		    bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? i__2 : 
 		    s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)565)) * 36, (
 		    ftnlen)36, (ftnlen)36);
-	    ucase_(bltnor + ((i__1 = i__ - 1) < 592 && 0 <= i__1 ? i__1 : 
+	    ucase_(bltnor + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? i__1 : 
 		    s_rnge("bltnor", i__1, "zzbodblt_", (ftnlen)566)) * 36, 
-		    bltnor + ((i__2 = i__ - 1) < 592 && 0 <= i__2 ? i__2 : 
+		    bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? i__2 : 
 		    s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)566)) * 36, (
 		    ftnlen)36, (ftnlen)36);
-	    cmprss_(" ", &c__1, bltnor + ((i__1 = i__ - 1) < 592 && 0 <= i__1 
+	    cmprss_(" ", &c__1, bltnor + ((i__1 = i__ - 1) < 620 && 0 <= i__1 
 		    ? i__1 : s_rnge("bltnor", i__1, "zzbodblt_", (ftnlen)567))
-		     * 36, bltnor + ((i__2 = i__ - 1) < 592 && 0 <= i__2 ? 
+		     * 36, bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? 
 		    i__2 : s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)567)) *
 		     36, (ftnlen)1, (ftnlen)36, (ftnlen)36);
 	}
@@ -709,20 +709,20 @@ L_zzbodget:
 /*     Copy the contents of BLTNAM, BLTNOR, and BLTCOD to the output */
 /*     arguments, but only if there is sufficient room. */
 
-    if (*room < 592) {
+    if (*room < 620) {
 	setmsg_("Insufficient room to copy the stored body name-code mapping"
 		"s to the output arguments.  Space required is #, but the cal"
 		"ler supplied #.", (ftnlen)134);
-	errint_("#", &c__592, (ftnlen)1);
+	errint_("#", &c__620, (ftnlen)1);
 	errint_("#", room, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZBODGET", (ftnlen)8);
 	return 0;
     }
-    movec_(bltnam, &c__592, names, (ftnlen)36, names_len);
-    movec_(bltnor, &c__592, nornam, (ftnlen)36, nornam_len);
-    movei_(bltcod, &c__592, codes);
-    *nvals = 592;
+    movec_(bltnam, &c__620, names, (ftnlen)36, names_len);
+    movec_(bltnor, &c__620, nornam, (ftnlen)36, nornam_len);
+    movei_(bltcod, &c__620, codes);
+    *nvals = 620;
     chkout_("ZZBODGET", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODLST ( Output permanent collection to some device. ) */
@@ -904,7 +904,7 @@ L_zzbodlst:
 /*     Upper case the ZZRQST value. */
 
     ucase_(reqst, zzrqst, reqst_len, (ftnlen)4);
-    intstr_(&c__592, zzint, (ftnlen)36);
+    intstr_(&c__620, zzint, (ftnlen)36);
 /* Writing concatenation */
     i__3[0] = 34, a__1[0] = "Total number of name/ID mappings: ";
     i__3[1] = 36, a__1[1] = zzint;
@@ -919,20 +919,20 @@ L_zzbodlst:
 
     if (eqstr_(zzrqst, "ID", (ftnlen)4, (ftnlen)2) || eqstr_(zzrqst, "BOTH", (
 	    ftnlen)4, (ftnlen)4)) {
-	orderi_(bltcod, &c__592, zzocod);
+	orderi_(bltcod, &c__620, zzocod);
 	wrline_(device, " ", device_len, (ftnlen)1);
 	wrline_(device, "ID to name mappings.", device_len, (ftnlen)20);
-	for (i__ = 1; i__ <= 592; ++i__) {
-	    intstr_(&bltcod[(i__2 = zzocod[(i__1 = i__ - 1) < 592 && 0 <= 
+	for (i__ = 1; i__ <= 620; ++i__) {
+	    intstr_(&bltcod[(i__2 = zzocod[(i__1 = i__ - 1) < 620 && 0 <= 
 		    i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbodblt_", (ftnlen)
-		    812)] - 1) < 592 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
+		    812)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
 		    i__2, "zzbodblt_", (ftnlen)812)], zzint, (ftnlen)36);
 /* Writing concatenation */
 	    i__4[0] = 36, a__2[0] = zzint;
 	    i__4[1] = 3, a__2[1] = " | ";
 	    i__4[2] = 36, a__2[2] = bltnam + ((i__2 = zzocod[(i__1 = i__ - 1) 
-		    < 592 && 0 <= i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbo"
-		    "dblt_", (ftnlen)814)] - 1) < 592 && 0 <= i__2 ? i__2 : 
+		    < 620 && 0 <= i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbo"
+		    "dblt_", (ftnlen)814)] - 1) < 620 && 0 <= i__2 ? i__2 : 
 		    s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)814)) * 36;
 	    s_cat(zzline, a__2, i__4, &c__3, (ftnlen)75);
 	    wrline_(device, zzline, device_len, lastnb_(zzline, (ftnlen)75));
@@ -943,18 +943,18 @@ L_zzbodlst:
 
     if (eqstr_(zzrqst, "NAME", (ftnlen)4, (ftnlen)4) || eqstr_(zzrqst, "BOTH",
 	     (ftnlen)4, (ftnlen)4)) {
-	orderc_(bltnam, &c__592, zzonam, (ftnlen)36);
+	orderc_(bltnam, &c__620, zzonam, (ftnlen)36);
 	wrline_(device, " ", device_len, (ftnlen)1);
 	wrline_(device, "Name to ID mappings.", device_len, (ftnlen)20);
-	for (i__ = 1; i__ <= 592; ++i__) {
-	    intstr_(&bltcod[(i__2 = zzonam[(i__1 = i__ - 1) < 592 && 0 <= 
+	for (i__ = 1; i__ <= 620; ++i__) {
+	    intstr_(&bltcod[(i__2 = zzonam[(i__1 = i__ - 1) < 620 && 0 <= 
 		    i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbodblt_", (ftnlen)
-		    834)] - 1) < 592 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
+		    834)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
 		    i__2, "zzbodblt_", (ftnlen)834)], zzint, (ftnlen)36);
 /* Writing concatenation */
 	    i__4[0] = 36, a__2[0] = bltnam + ((i__2 = zzonam[(i__1 = i__ - 1) 
-		    < 592 && 0 <= i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbo"
-		    "dblt_", (ftnlen)836)] - 1) < 592 && 0 <= i__2 ? i__2 : 
+		    < 620 && 0 <= i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbo"
+		    "dblt_", (ftnlen)836)] - 1) < 620 && 0 <= i__2 ? i__2 : 
 		    s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)836)) * 36;
 	    i__4[1] = 3, a__2[1] = " | ";
 	    i__4[2] = 36, a__2[2] = zzint;

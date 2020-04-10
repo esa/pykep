@@ -11,17 +11,16 @@
 {
     integer tree;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *), 
 	    chkin_(char *, ftnlen);
     integer recno;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), setmsg_(
+	    char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer idxtyp;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errfnm_(char *, integer *, ftnlen);
+	    ftnlen);
     integer idx;
     extern /* Subroutine */ int zzekfrx_(integer *, integer *, integer *, 
 	    integer *, integer *);
@@ -457,6 +456,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.0.0, 10-OCT-1995 (NJB) */
 
 /* -& */
@@ -474,9 +478,8 @@
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKIXDL", (ftnlen)8);
     }
+    chkin_("ZZEKIXDL", (ftnlen)8);
     idxtyp = coldsc[5];
     if (idxtyp != -1) {
 
@@ -509,10 +512,9 @@
 /*        question is not indexed. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	setmsg_("Column was not indexed. File = #; RECNO = #; COLIDX = #.", (
 		ftnlen)56);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);

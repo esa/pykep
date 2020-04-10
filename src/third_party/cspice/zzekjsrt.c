@@ -31,7 +31,6 @@ static integer c__4 = 4;
     static integer idat[250000];
     integer ntab;
     logical nfjg, null;
-    integer unit;
     extern /* Subroutine */ int zzekvcal_(integer *, integer *, integer *);
     extern logical zzekvcmp_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
@@ -60,13 +59,13 @@ static integer c__4 = 4;
     logical jle, nfj;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dashlu_(integer *, integer *), errfnm_(char *, integer *,
-	     ftnlen), zzekrsc_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, char *, logical *, logical *, ftnlen), 
-	    zzeksrd_(integer *, integer *, integer *), zzekrsd_(integer *, 
-	    integer *, integer *, integer *, integer *, doublereal *, logical 
-	    *, logical *), zzekrsi_(integer *, integer *, integer *, integer *
-	    , integer *, integer *, logical *, logical *);
+	    ftnlen), errhan_(char *, integer *, ftnlen), zzekrsc_(integer *, 
+	    integer *, integer *, integer *, integer *, integer *, char *, 
+	    logical *, logical *, ftnlen), zzeksrd_(integer *, integer *, 
+	    integer *), zzekrsd_(integer *, integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *, logical *), zzekrsi_(integer *
+	    , integer *, integer *, integer *, integer *, integer *, logical *
+	    , logical *);
 
 /* $ Abstract */
 
@@ -1156,7 +1155,7 @@ static integer c__4 = 4;
 /* $ Exceptions */
 
 /*     1)  If the number of order-by columns NORDER is non-positive, */
-/*         the error SPICE(INVALIDCOUNT) is signalled. */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     2)  If an I/O error occurs while attempting to create an order */
 /*         vector for the specified row set, the error will be diagnosed */
@@ -1164,7 +1163,7 @@ static integer c__4 = 4;
 
 /*     3)  If the first order-by column descriptor in the list has */
 /*         an invalid data type code, the error SPICE(INVALIDTYPE) */
-/*         is signalled. */
+/*         is signaled. */
 /* $ Files */
 
 /*     The input join row set is presumed to refer to EK files currently */
@@ -1197,9 +1196,14 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.2.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    SPICELIB Version 2.1.0, 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added intialization of variable PRVBAS to support */
+/*        Bug fix:  added initialization of variable PRVBAS to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. */
@@ -1221,7 +1225,7 @@ static integer c__4 = 4;
 
 /* -    SPICELIB Version 2.1.0, 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added intialization of variable PRVBAS to support */
+/*        Bug fix:  added initialization of variable PRVBAS to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. The */
@@ -1233,7 +1237,7 @@ static integer c__4 = 4;
 /*        In the previous version of the code, PRVBAS is uninitialized */
 /*        when the loop counter I is 1.  PRVBAS *is* initialized when I */
 /*        is greater than 1, so the logical value of the IF expression */
-/*        is not affected by the lack of proper intialization. */
+/*        is not affected by the lack of proper initialization. */
 
 /*        However, the Intel Fortran compiler for the Mac flags a runtime */
 /*        error when the above code is exercised.  So PRVBAS is now */
@@ -1357,7 +1361,7 @@ static integer c__4 = 4;
     tprime = otabs[0];
     cprime = ocols[0];
     seg = segvec[(i__1 = tprime - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "zzekjsrt_", (ftnlen)528)];
+	    "ec", i__1, "zzekjsrt_", (ftnlen)534)];
     colptr = stdtpt[seg - 1];
     i__1 = cprime;
     for (i__ = 2; i__ <= i__1; ++i__) {
@@ -1402,7 +1406,7 @@ static integer c__4 = 4;
 		i__3 = sgvbas + svsize;
 		zzeksrd_(&i__2, &i__3, segvec);
 		seg = segvec[(i__2 = tprime - 1) < 10 && 0 <= i__2 ? i__2 : 
-			s_rnge("segvec", i__2, "zzekjsrt_", (ftnlen)579)];
+			s_rnge("segvec", i__2, "zzekjsrt_", (ftnlen)585)];
 		handle = sthan[seg - 1];
 		colptr = stdtpt[seg - 1];
 		i__2 = cprime;
@@ -1414,19 +1418,18 @@ static integer c__4 = 4;
 	    i__3 = rwvbas + rvsize;
 	    zzeksrd_(&i__2, &i__3, rowvec);
 	    row = rowvec[(i__2 = tprime - 1) < 11 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rowvec", i__2, "zzekjsrt_", (ftnlen)592)];
+		    s_rnge("rowvec", i__2, "zzekjsrt_", (ftnlen)598)];
 	    eltidx = oelts[cprime - 1];
 	    if (dtype == 1) {
 		zzekrsc_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &cvlen, cdat + (((i__2 = i__ - 
 			1) < 250000 && 0 <= i__2 ? i__2 : s_rnge("cdat", i__2,
-			 "zzekjsrt_", (ftnlen)598)) << 5), &null, &found, (
+			 "zzekjsrt_", (ftnlen)604)) << 5), &null, &found, (
 			ftnlen)32);
 		if (! found) {
-		    dashlu_(&handle, &unit);
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
 			    "column entry elt was not found.", (ftnlen)78);
-		    errfnm_("#", &unit, (ftnlen)1);
+		    errhan_("#", &handle, (ftnlen)1);
 		    errint_("#", &seg, (ftnlen)1);
 		    errint_("#", &row, (ftnlen)1);
 		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
@@ -1440,12 +1443,11 @@ static integer c__4 = 4;
 		zzekrsd_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &ddat[(i__2 = i__ - 1) < 250000 
 			&& 0 <= i__2 ? i__2 : s_rnge("ddat", i__2, "zzekjsrt_"
-			, (ftnlen)632)], &null, &found);
+			, (ftnlen)636)], &null, &found);
 		if (! found) {
-		    dashlu_(&handle, &unit);
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
 			    "column entry elt was not found.", (ftnlen)78);
-		    errfnm_("#", &unit, (ftnlen)1);
+		    errhan_("#", &handle, (ftnlen)1);
 		    errint_("#", &seg, (ftnlen)1);
 		    errint_("#", &row, (ftnlen)1);
 		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
@@ -1458,12 +1460,11 @@ static integer c__4 = 4;
 		zzekrsi_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &idat[(i__2 = i__ - 1) < 250000 
 			&& 0 <= i__2 ? i__2 : s_rnge("idat", i__2, "zzekjsrt_"
-			, (ftnlen)664)], &null, &found);
+			, (ftnlen)666)], &null, &found);
 		if (! found) {
-		    dashlu_(&handle, &unit);
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
 			    "column entry elt was not found.", (ftnlen)78);
-		    errfnm_("#", &unit, (ftnlen)1);
+		    errhan_("#", &handle, (ftnlen)1);
 		    errint_("#", &seg, (ftnlen)1);
 		    errint_("#", &row, (ftnlen)1);
 		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
@@ -1848,7 +1849,7 @@ static integer c__4 = 4;
 			j = 0;
 		    } else {
 
-/*                    Swap the order vectors's Jth and JGth elements. */
+/*                    Swap the order vector's Jth and JGth elements. */
 
 			addrj = *ordbas + j;
 			addrjg = *ordbas + jg;

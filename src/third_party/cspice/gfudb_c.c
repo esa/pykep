@@ -398,9 +398,6 @@
    the Z position component, with also a positive value for the Vz
    velocity component.
 
-
-   Code:
-
       #include <stdio.h>
       #include <stdlib.h>
       #include <string.h>
@@ -498,7 +495,7 @@
                ./
                wnfetd_c ( &result, i, &left, &right );
 
-               printf ( "Interval %ld\n", i );
+               printf ( "Interval %d\n", (int)i );
 
                timout_c ( left, TIMFMT, TIMLEN, begstr );
                printf   ( "   Interval start: %s \n", begstr );
@@ -738,7 +735,7 @@
                ./
                wnfetd_c ( &result, i, &left, &right );
 
-               printf ( "Interval %ld\n", i );
+               printf ( "Interval %d\n", (int)i );
 
                timout_c ( left, TIMFMT, TIMLEN, begstr );
                printf   ( "   Interval start: %s \n", begstr );
@@ -896,6 +893,11 @@
 
 -Version
 
+   -CSPICE Version 1.0.1, 28-JUN-2016 (EDW)
+
+      Edit to Example code, SpiceInts output as ints using 
+      explicit casting.
+      
    -CSPICE Version 1.0.0, 23-OCT-2013 (EDW) (NJB)
 
 -Index_Entries

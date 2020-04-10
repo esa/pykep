@@ -20,7 +20,7 @@ static integer c__63 = 63;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer leaf, lsib, rsib, pkey, prev, unit, root, lsib2, rsib2;
+    integer leaf, lsib, rsib, pkey, prev, root, lsib2, rsib2;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *), 
 	    zzekpgwi_(integer *, integer *, integer *);
     integer pkey2;
@@ -33,10 +33,9 @@ static integer c__63 = 63;
     integer rpage[256], tpage[256], depth, level, nnode, lpidx, lpkey, rpidx, 
 	    nkeys, rpkey, paren2, poffs2, lpidx2, lpkey2, rpidx2, rpkey2;
     extern logical failed_(void);
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer target, parent;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer keyidx, datptr, loffst, nlkeys, poffst, tnkeys, toffst, totkey;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), chkout_(char *, ftnlen);
@@ -458,7 +457,7 @@ static integer c__63 = 63;
 /*         routine. */
 
 /*     3)  If the input key is out of range, the error */
-/*         SPICE(INVALIDINDEX) is signalled. */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -510,10 +509,15 @@ static integer c__63 = 63;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.1.0, 18-JUN-1999 (WLT) */
 
 /*        Fixed calls to CHKIN and CHKOUT so that the same name */
-/*        is used throught the routine. */
+/*        is used throughout the routine. */
 
 /* -    Beta Version 1.0.0, 20-OCT-1995 (NJB) */
 
@@ -543,11 +547,10 @@ static integer c__63 = 63;
     totkey = rpage[2];
     if (*key < 1 || *key > totkey) {
 	chkin_("ZZEKTRUD", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Key = #. Valid range is 1:#.  File = #.", (ftnlen)39);
 	errint_("#", key, (ftnlen)1);
 	errint_("#", &totkey, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	chkout_("ZZEKTRUD", (ftnlen)8);
 	return 0;
     }
@@ -586,30 +589,30 @@ static integer c__63 = 63;
 	i__1 = nkeys - 1;
 	for (i__ = *key; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage",
-		     i__2, "zzektrud_", (ftnlen)293)] = rpage[(i__3 = i__ + 5)
+		     i__2, "zzektrud_", (ftnlen)296)] = rpage[(i__3 = i__ + 5)
 		     < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, "zzek"
-		    "trud_", (ftnlen)293)] - 1;
+		    "trud_", (ftnlen)296)] - 1;
 	    rpage[(i__2 = i__ + 171) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrud_", (ftnlen)294)] = rpage[(i__3 = i__ 
+		    "ge", i__2, "zzektrud_", (ftnlen)297)] = rpage[(i__3 = i__ 
 		    + 172) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, 
-		    "zzektrud_", (ftnlen)294)];
+		    "zzektrud_", (ftnlen)297)];
 	}
 	i__1 = nkeys;
 	for (i__ = *key; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__ + 87) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage"
-		    , i__2, "zzektrud_", (ftnlen)298)] = rpage[(i__3 = i__ + 
+		    , i__2, "zzektrud_", (ftnlen)301)] = rpage[(i__3 = i__ + 
 		    88) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, 
-		    "zzektrud_", (ftnlen)298)];
+		    "zzektrud_", (ftnlen)301)];
 	}
 
 /*        Zero out the freed entries. */
 
 	rpage[(i__1 = nkeys + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrud_", (ftnlen)304)] = 0;
+		i__1, "zzektrud_", (ftnlen)307)] = 0;
 	rpage[(i__1 = nkeys + 171) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage",
-		 i__1, "zzektrud_", (ftnlen)305)] = 0;
+		 i__1, "zzektrud_", (ftnlen)308)] = 0;
 	rpage[(i__1 = nkeys + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrud_", (ftnlen)306)] = 0;
+		i__1, "zzektrud_", (ftnlen)309)] = 0;
 
 /*        Update the key count. */
 
@@ -649,11 +652,11 @@ static integer c__63 = 63;
 /*        Zero out the freed entries. */
 
 	tpage[(i__1 = nkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage", i__1,
-		 "zzektrud_", (ftnlen)357)] = 0;
+		 "zzektrud_", (ftnlen)360)] = 0;
 	tpage[(i__1 = nkeys + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage",
-		 i__1, "zzektrud_", (ftnlen)358)] = 0;
+		 i__1, "zzektrud_", (ftnlen)361)] = 0;
 	tpage[(i__1 = nkeys + 64) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage", 
-		i__1, "zzektrud_", (ftnlen)359)] = 0;
+		i__1, "zzektrud_", (ftnlen)362)] = 0;
 
 /*        Update the key count for this node: */
 
@@ -713,12 +716,11 @@ static integer c__63 = 63;
 
 	    if (tnkeys < 41) {
 		chkin_("ZZEKTRUD", (ftnlen)8);
-		dashlu_(handle, &unit);
 		setmsg_("Node = #. Tree = #. File = #. Key count = #; max al"
 			"lowed, including overflow, is #.", (ftnlen)83);
 		errint_("#", &target, (ftnlen)1);
 		errint_("#", tree, (ftnlen)1);
-		errfnm_("#", &unit, (ftnlen)1);
+		errhan_("#", handle, (ftnlen)1);
 		errint_("#", &tnkeys, (ftnlen)1);
 		errint_("#", &c__63, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
@@ -734,23 +736,23 @@ static integer c__63 = 63;
 	    i__1 = tnkeys - 1;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
 		tpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("tpage",
-			 i__2, "zzektrud_", (ftnlen)455)] = tpage[(i__3 = i__ 
+			 i__2, "zzektrud_", (ftnlen)457)] = tpage[(i__3 = i__ 
 			+ 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("tpage", i__3,
-			 "zzektrud_", (ftnlen)455)] - 1;
+			 "zzektrud_", (ftnlen)457)] - 1;
 	    }
 	    i__1 = tnkeys - 1;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
 		tpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"tpage", i__2, "zzektrud_", (ftnlen)459)] = tpage[(
+			"tpage", i__2, "zzektrud_", (ftnlen)461)] = tpage[(
 			i__3 = i__ + 128) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"tpage", i__3, "zzektrud_", (ftnlen)459)];
+			"tpage", i__3, "zzektrud_", (ftnlen)461)];
 	    }
 	    i__1 = tnkeys;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
 		tpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"tpage", i__2, "zzektrud_", (ftnlen)463)] = tpage[(
+			"tpage", i__2, "zzektrud_", (ftnlen)465)] = tpage[(
 			i__3 = i__ + 64) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"tpage", i__3, "zzektrud_", (ftnlen)463)];
+			"tpage", i__3, "zzektrud_", (ftnlen)465)];
 	    }
 
 /*           Update the key count for the target node. */
@@ -813,15 +815,15 @@ static integer c__63 = 63;
 /*              The root page has already been read into RPAGE. */
 
 		rpage[(i__1 = keyidx + 171) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("rpage", i__1, "zzektrud_", (ftnlen)536)] = 
+			s_rnge("rpage", i__1, "zzektrud_", (ftnlen)537)] = 
 			lpage[(i__2 = prev + 127) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)536)];
+			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)537)];
 	    } else {
 		zzekpgri_(handle, &target, tpage);
 		tpage[(i__1 = keyidx + 127) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("tpage", i__1, "zzektrud_", (ftnlen)542)] = 
+			s_rnge("tpage", i__1, "zzektrud_", (ftnlen)543)] = 
 			lpage[(i__2 = prev + 127) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)542)];
+			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)543)];
 	    }
 
 /*           The keys and data pointers in the leaf must be shifted */

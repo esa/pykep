@@ -458,6 +458,11 @@ static integer c__128 = 128;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.26.0, 15-NOV-2015 (EDW) */
+
+/*        Recast J = 8*(-1+I) + 1 as J = -7+8*I to accomodate */
+/*        f2c processing. */
+
 /* -    SPICELIB Version 1.25.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -620,7 +625,7 @@ static integer c__128 = 128;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-		    374)) << 3), (ftnlen)3, (ftnlen)8);
+		    379)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
@@ -696,10 +701,10 @@ static integer c__128 = 128;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			470)) << 3), (ftnlen)1, (ftnlen)8);
+			475)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			471)) << 3), (ftnlen)1, (ftnlen)8);
+			476)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
 		return 0;
@@ -717,10 +722,10 @@ static integer c__128 = 128;
 		errint_("#", &numdp, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			491)) << 3), (ftnlen)1, (ftnlen)8);
+			496)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			492)) << 3), (ftnlen)1, (ftnlen)8);
+			497)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
@@ -743,7 +748,7 @@ static integer c__128 = 128;
 /*              Compute the substring index of the first character */
 /*              in INPUT for this integer. */
 
-		j = (i__ - 1 << 3) + 1;
+		j = (i__ << 3) - 7;
 
 /*              Now arrange the bytes properly.  Since these characters */
 /*              were read from a file utilizing LTL-IEEE: */
@@ -800,59 +805,59 @@ static integer c__128 = 128;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)573)] = value;
+			"inbufr", i__2, "zzxlated_", (ftnlen)578)] = value;
 		i__2 = j + 4;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 8;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)577)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)582)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)577)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)582)] | value;
 		i__2 = j + 5;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 16;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)581)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)586)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)581)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)586)] | value;
 		i__2 = j + 6;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 24;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)585)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)590)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)585)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)590)] | value;
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
 		value = *(unsigned char *)&ch__1[0];
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)589)] = value;
+			 i__2, "zzxlated_", (ftnlen)594)] = value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 8;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)593)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)598)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)593)] | value;
+			"zzxlated_", (ftnlen)598)] | value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 16;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)597)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)602)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)597)] | value;
+			"zzxlated_", (ftnlen)602)] | value;
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 24;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)601)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)606)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)601)] | value;
+			"zzxlated_", (ftnlen)606)] | value;
 
 /*              Check to see if the local buffer is full and the */
 /*              double precision numbers need to be moved into the */
@@ -882,10 +887,10 @@ static integer c__128 = 128;
 		    " file format # to #. This error should never occur and i"
 		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)638)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)643)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)639)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)644)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATED", (ftnlen)8);
@@ -908,10 +913,10 @@ static integer c__128 = 128;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			666)) << 3), (ftnlen)1, (ftnlen)8);
+			671)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			667)) << 3), (ftnlen)1, (ftnlen)8);
+			672)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
 		return 0;
@@ -929,10 +934,10 @@ static integer c__128 = 128;
 		errint_("#", &numdp, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			687)) << 3), (ftnlen)1, (ftnlen)8);
+			692)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			688)) << 3), (ftnlen)1, (ftnlen)8);
+			693)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
@@ -955,7 +960,7 @@ static integer c__128 = 128;
 /*              Compute the substring index of the first character */
 /*              in INPUT for this integer. */
 
-		j = (i__ - 1 << 3) + 1;
+		j = (i__ << 3) - 7;
 
 /*              Now arrange the bytes properly.  Since these characters */
 /*              were read from a file utilizing BIG-IEEE: */
@@ -1012,59 +1017,59 @@ static integer c__128 = 128;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)769)] = value;
+			"inbufr", i__2, "zzxlated_", (ftnlen)774)] = value;
 		i__2 = j + 5;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 8;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)773)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)778)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)773)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)778)] | value;
 		i__2 = j + 4;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 16;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)777)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)782)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)777)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)782)] | value;
 		i__2 = j + 3;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 24;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)781)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)786)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)781)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)786)] | value;
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)785)] = value;
+			 i__2, "zzxlated_", (ftnlen)790)] = value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 8;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)789)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)794)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)789)] | value;
+			"zzxlated_", (ftnlen)794)] | value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 16;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)793)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)798)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)793)] | value;
+			"zzxlated_", (ftnlen)798)] | value;
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
 		value = *(unsigned char *)&ch__1[0];
 		value <<= 24;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)797)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)802)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)797)] | value;
+			"zzxlated_", (ftnlen)802)] | value;
 
 /*              Check to see if the local buffer is full and the */
 /*              double precision numbers need to be moved into the */
@@ -1094,10 +1099,10 @@ static integer c__128 = 128;
 		    " file format # to #. This error should never occur and i"
 		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)834)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)839)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)835)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)840)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATED", (ftnlen)8);
@@ -1113,7 +1118,7 @@ static integer c__128 = 128;
 		"not currently supported for translation of double precision "
 		"numbers from non-native formats.", (ftnlen)151);
 	errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("strbff", i__1, "zzxlated_", (ftnlen)853)) << 3), (
+		s_rnge("strbff", i__1, "zzxlated_", (ftnlen)858)) << 3), (
 		ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZXLATED", (ftnlen)8);

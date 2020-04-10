@@ -1,9 +1,9 @@
 #include "f2c.h"
 
 #ifdef KR_headers
-VOID r_cnjg(r, z) complex_type *r, *z;
+VOID r_cnjg(r, z) complex *r, *z;
 #else
-VOID r_cnjg(complex_type *r, complex_type *z)
+VOID r_cnjg(complex *r, complex *z)
 #endif
 {
 r->r = z->r;

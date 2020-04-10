@@ -41,19 +41,24 @@
 
    Prototypes in this file:
 
-      alloc_count
-      zzalloc_count
-      alloc_SpiceMemory
-      alloc_SpiceString_C_array
-      alloc_SpiceString_C_Copy_array
+      alloc_SpiceBoolean_C_array
       alloc_SpiceDouble_C_array
       alloc_SpiceInt_C_array
+      alloc_SpiceMemory
       alloc_SpiceString
+      alloc_SpiceString_C_Copy_array
+      alloc_SpiceString_C_array
       alloc_SpiceString_Pointer_array
-      free_SpiceString_C_array
+      alloc_count
       free_SpiceMemory
+      free_SpiceString_C_array
+      zzalloc_count
 
 -Version
+
+   CSPICE 1.3.0 26-AUG-2016 (EDW)
+
+      Added routine alloc_SpiceBoolean_C_array.
 
    CSPICE 1.0.3 02-MAY-2008 (EDW)
 
@@ -78,40 +83,51 @@
 #ifndef ZZALLOC_H
 #define ZZALLOC_H
 
-/*
-Allocation call prototypes:
-*/
-int alloc_count();
+   /*
+   Allocation call prototypes:
+   */
+   int           alloc_count                    ();
 
-SpiceChar **alloc_SpiceString_C_array(int string_length, int string_count);
+   SpiceChar  ** alloc_SpiceString_C_array      ( int string_length,
+                                                  int string_count   );
 
-SpiceChar **alloc_SpiceString_C_Copy_array(int array_len, int string_len, SpiceChar **array);
+   SpiceChar  ** alloc_SpiceString_C_Copy_array ( int array_len ,
+                                                  int string_len,
+                                                  SpiceChar ** array );
 
-SpiceDouble *alloc_SpiceDouble_C_array(int rows, int cols);
+   SpiceDouble * alloc_SpiceDouble_C_array      ( int rows,
+                                                  int cols );
 
-SpiceInt *alloc_SpiceInt_C_array(int rows, int cols);
+   SpiceInt    * alloc_SpiceInt_C_array         ( int rows,
+                                                  int cols );
 
-SpiceChar *alloc_SpiceString(int length);
+   SpiceBoolean * alloc_SpiceBoolean_C_array    ( int rows,
+                                                  int cols );
 
-SpiceChar **alloc_SpiceString_Pointer_array(int array_len);
+   SpiceChar   * alloc_SpiceString              ( int length );
 
-void free_SpiceString_C_array(int dim, SpiceChar **array);
+   SpiceChar  ** alloc_SpiceString_Pointer_array( int array_len );
 
-void *alloc_SpiceMemory(size_t size);
+   void          free_SpiceString_C_array       ( int dim,
+                                                  SpiceChar ** array );
 
-void free_SpiceMemory(void *ptr);
+   void        * alloc_SpiceMemory              ( size_t size );
 
-/*
-Simple macro to ensure a zero value alloc count at end of routine.
-Note, the need to use this macro exists only in those routines
-allocating/deallocating memory.
-*/
-#define ALLOC_CHECK                                                                                                    \
-    if (alloc_count() != 0) {                                                                                          \
-        setmsg_c("Malloc/Free count not zero at end of routine."                                                       \
-                 " Malloc count = #.");                                                                                \
-        errint_c("#", alloc_count());                                                                                  \
-        sigerr_c("SPICE(MALLOCCOUNT)");                                                                                \
-    }
+   void          free_SpiceMemory               ( void * ptr );
+
+
+   /*
+   Simple macro to ensure a zero value alloc count at end of routine.
+   Note, the need to use this macro exists only in those routines
+   allocating/deallocating memory.
+   */
+#define ALLOC_CHECK  if (  alloc_count() != 0 )                            \
+                {                                                          \
+                setmsg_c ( "Malloc/Free count not zero at end of routine." \
+                           " Malloc count = #.");                          \
+                errint_c ( "#", alloc_count()            );                \
+                sigerr_c ( "SPICE(MALLOCCOUNT)"        );                  \
+                }
 
 #endif
+

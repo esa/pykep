@@ -3,10 +3,10 @@
 #ifdef KR_headers
 extern VOID sig_die();
 VOID c_div(c, a, b)
-complex_type *a, *b, *c;
+complex *a, *b, *c;
 #else
 extern void sig_die(char*,int);
-void c_div(complex_type *c, complex_type *a, complex_type *b)
+void c_div(complex *c, complex *a, complex *b)
 #endif
 {
 	double ratio, den;
@@ -19,7 +19,7 @@ void c_div(complex_type *c, complex_type *a, complex_type *b)
 	if( abr <= abi )
 		{
 		if(abi == 0)
-			sig_die("complex_type division by zero", 1);
+			sig_die("complex division by zero", 1);
 		ratio = (double)b->r / b->i ;
 		den = b->i * (1 + ratio*ratio);
 		cr = (a->r*ratio + a->i) / den;

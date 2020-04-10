@@ -126,63 +126,77 @@
 
 -Version
 
+   -CSPICE Version 1.1.0, 25-JAN-2016 (EDW)
+
+       Increased the number of non-inertial frames from 105 to 106
+       in order to accomodate the following PCK based frame:
+
+          IAU_BENNU
+
+       This value matches that listed in nninrt.inc.
+
    -CSPICE Version 1.0.0, 23-MAY-2012 (NJB)
 
 */
 
 #ifndef HAVE_SPICE_FRAME_DEFS
 
-#define HAVE_SPICE_FRAME_DEFS
+   #define HAVE_SPICE_FRAME_DEFS
 
-/*
-Frame counts:
-*/
 
-/*
-Number of built-in inertial frames. This number must be kept in
-sync with that defined in the SPICELIB include file ninert.inc.
-*/
-#define SPICE_NFRAME_NINERT 21
+   /*
+   Frame counts:
+   */
 
-/*
-Number of built-in non-inertial frames. This number must be kept in
-sync with that defined in the SPICELIB include file nninrt.inc.
-*/
-#define SPICE_NFRAME_NNINRT 105
+   /*
+   Number of built-in inertial frames. This number must be kept in
+   sync with that defined in the SPICELIB include file ninert.inc.
+   */
+   #define SPICE_NFRAME_NINERT             21
 
-/*
-The frame class codes defined here are identical
-to those used in SPICELIB.
-*/
+   /*
+   Number of built-in non-inertial frames. This number must be kept in
+   sync with that defined in the SPICELIB include file nninrt.inc.
+   */
+   #define SPICE_NFRAME_NNINRT             106
 
-/*
-Inertial, built-in frames:
-*/
-#define SPICE_FRMTYP_INERTL 1
 
-/*
-PCK frames:
-*/
-#define SPICE_FRMTYP_PCK 2
 
-/*
-CK frames:
-*/
-#define SPICE_FRMTYP_CK 3
+   /*
+   The frame class codes defined here are identical
+   to those used in SPICELIB.
+   */
 
-/*
-TK frames:
-*/
-#define SPICE_FRMTYP_TK 4
+   /*
+   Inertial, built-in frames:
+   */
+   #define SPICE_FRMTYP_INERTL              1
 
-/*
-Dynamic frames:
-*/
-#define SPICE_FRMTYP_DYN 5
+   /*
+   PCK frames:
+   */
+   #define SPICE_FRMTYP_PCK                 2
 
-/*
-All frame classes:
-*/
-#define SPICE_FRMTYP_ALL (-1)
+   /*
+   CK frames:
+   */
+   #define SPICE_FRMTYP_CK                  3
+
+   /*
+   TK frames:
+   */
+   #define SPICE_FRMTYP_TK                  4
+
+   /*
+   Dynamic frames:
+   */
+   #define SPICE_FRMTYP_DYN                 5
+
+   /*
+   All frame classes:
+   */
+   #define SPICE_FRMTYP_ALL              ( -1 )
+
 
 #endif
+

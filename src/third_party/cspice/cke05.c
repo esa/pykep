@@ -649,6 +649,11 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.1.0, 11-AUG-2015 (NJB) */
+
+/*        Bug fix: PRVPTR is now updated at the end of the quaternion */
+/*        sequence check for Hermite subtypes. */
+
 /* -    SPICELIB Version 3.0.0, 06-FEB-2014 (NJB) */
 
 /*        Bug fix and functional change: quaternion sign adjustment */
@@ -849,6 +854,7 @@ static integer c__4 = 4;
 		chkout_("CKE05", (ftnlen)5);
 		return 0;
 	    }
+	    prvptr = newptr;
 	}
     }
     if (subtyp == 1) {
@@ -876,9 +882,9 @@ static integer c__4 = 4;
 	    ystart = n * (i__ - 1) + 5;
 	    lgrind_(&n, &record[xstart - 1], &record[ystart - 1], work, &
 		    sclkdp, &state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : 
-		    s_rnge("state", i__2, "cke05_", (ftnlen)650)], &state[(
+		    s_rnge("state", i__2, "cke05_", (ftnlen)657)], &state[(
 		    i__3 = i__ + 3) < 8 && 0 <= i__3 ? i__3 : s_rnge("state", 
-		    i__3, "cke05_", (ftnlen)650)]);
+		    i__3, "cke05_", (ftnlen)657)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
@@ -958,7 +964,7 @@ static integer c__4 = 4;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 5;
 	    state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge("state", 
-		    i__2, "cke05_", (ftnlen)752)] = lgrint_(&n, &record[
+		    i__2, "cke05_", (ftnlen)759)] = lgrint_(&n, &record[
 		    xstart - 1], &record[ystart - 1], locrec, &sclkdp);
 	}
 
@@ -1000,10 +1006,10 @@ static integer c__4 = 4;
 		from = packsz * (j - 1) + 4 + i__;
 		to = (j << 1) - 1;
 		locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "cke05_", (ftnlen)804)] = record[from 
+			"locrec", i__2, "cke05_", (ftnlen)811)] = record[from 
 			- 1];
 		locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "cke05_", (ftnlen)805)] = record[from + 3] * 
+			, i__2, "cke05_", (ftnlen)812)] = record[from + 3] * 
 			rate;
 	    }
 
@@ -1012,9 +1018,9 @@ static integer c__4 = 4;
 
 	    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &state[(
 		    i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("state", 
-		    i__1, "cke05_", (ftnlen)813)], &state[(i__2 = i__ + 3) < 
+		    i__1, "cke05_", (ftnlen)820)], &state[(i__2 = i__ + 3) < 
 		    8 && 0 <= i__2 ? i__2 : s_rnge("state", i__2, "cke05_", (
-		    ftnlen)813)]);
+		    ftnlen)820)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
@@ -1086,10 +1092,10 @@ static integer c__4 = 4;
 			from = packsz * (j - 1) + 12 + i__;
 			to = (j << 1) - 1;
 			locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : 
-				s_rnge("locrec", i__2, "cke05_", (ftnlen)900)]
+				s_rnge("locrec", i__2, "cke05_", (ftnlen)907)]
 				 = record[from - 1];
 			locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-				"locrec", i__2, "cke05_", (ftnlen)901)] = 
+				"locrec", i__2, "cke05_", (ftnlen)908)] = 
 				record[from + 2] * rate;
 		    }
 
@@ -1100,9 +1106,9 @@ static integer c__4 = 4;
 
 		    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &
 			    vbuff[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("vbuff", i__1, "cke05_", (ftnlen)911)], &
+			    s_rnge("vbuff", i__1, "cke05_", (ftnlen)918)], &
 			    vbuff[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : 
-			    s_rnge("vbuff", i__2, "cke05_", (ftnlen)911)]);
+			    s_rnge("vbuff", i__2, "cke05_", (ftnlen)918)]);
 		}
 
 /*              Fill in the angular velocity in the output angular */

@@ -14,22 +14,15 @@ static doublereal c_b5 = 1.;
 /* Subroutine */ int srfrec_(integer *body, doublereal *long__, doublereal *
 	lat, doublereal *rectan)
 {
-    /* Initialized data */
-
-    static doublereal origin[3] = { 0.,0.,0. };
-
     doublereal uvec[3];
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    logical found;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen), latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen), edpnt_(doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *), bodvcd_(
+	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
+	    latrec_(doublereal *, doublereal *, doublereal *, doublereal *), 
+	    chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
 
 /* $ Abstract */
 
@@ -268,6 +261,11 @@ static doublereal c_b5 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 19-APR-2016 (NJB) */
+
+/*        Re-implemented ellipsoid surface point computation */
+/*        using EDPNT. */
+
 /* -    SPICELIB Version 1.1.0, 03-NOV-2005 (NJB) */
 
 /*        Call to BODVAR was replaced with call to BODVCD. */
@@ -286,7 +284,7 @@ static doublereal c_b5 = 1.;
 /* -& */
 /* $ Index_Entries */
 
-/*     convert bodyfixed latitudinal coordinates to rectangular */
+/*     convert body-fixed latitudinal coordinates to rectangular */
 /*     convert surface latitudinal coordinates to rectangular */
 /*     surface point latitudinal coordinates to rectangular */
 
@@ -298,19 +296,12 @@ static doublereal c_b5 = 1.;
 /*     Local variables */
 
 
-/*     Saved variables */
-
-
-/*     Initial values */
-
-
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("SRFREC", (ftnlen)6);
     }
+    chkin_("SRFREC", (ftnlen)6);
 
 /*     Look up the body's radii. */
 
@@ -324,11 +315,7 @@ static doublereal c_b5 = 1.;
 /*     Find out where the ray defined by this vector intersects the */
 /*     surface.  This intercept is the point we're looking for. */
 
-    surfpt_(origin, uvec, radii, &radii[1], &radii[2], rectan, &found);
-
-/*     You can't miss the surface if you're riding a ray out from the */
-/*     origin, so we don't check the FOUND flag. */
-
+    edpnt_(uvec, radii, &radii[1], &radii[2], rectan);
     chkout_("SRFREC", (ftnlen)6);
     return 0;
 } /* srfrec_ */

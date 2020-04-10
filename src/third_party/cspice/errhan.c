@@ -31,7 +31,7 @@ static integer c__0 = 0;
 
 /*     Substitute the first occurrence of a marker in the current long */
 /*     error message with the file name associated with a given */
-/*     DAF/DAS handle.  (Works for DAF only for N0052.) */
+/*     DAF/DAS handle. */
 
 /* $ Disclaimer */
 
@@ -357,7 +357,7 @@ static integer c__0 = 0;
 
 /*     HANDLE     is the DAF/DAS handle associated with the file of */
 /*                interest.  HANDLE must be associated with a currently */
-/*                loade DAF or DAS file. */
+/*                loaded DAF or DAS file. */
 
 /* $ Detailed_Output */
 
@@ -412,11 +412,7 @@ static integer c__0 = 0;
 
 /* $ Restrictions */
 
-/*     1) This routine works only for DAF files in the N0052 Toolkit */
-/*        version.  It will for for both DAF and DAS files for later */
-/*        Toolkit versions. */
-
-/*     2) The supported filename length is limited by the parameter */
+/*     1) The supported filename length is limited by the parameter */
 /*        FILEN. */
 
 /* $ Literature_References */
@@ -429,12 +425,17 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 05-FEB-2015 (NJB) */
+
+/*        Removed header comments about restrictions */
+/*        on using this routine for DAS files. */
+
 /* -    SPICELIB Version 1.0.0, 04-JAN-2002 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     insert filename into long error message */
+/*     insert DAF or DAS filename into long error message */
 
 /* -& */
 

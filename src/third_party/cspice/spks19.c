@@ -8,12 +8,16 @@
 /* Table of constant values */
 
 static integer c__1 = 1;
-static doublereal c_b114 = 1.;
+static doublereal c_b118 = 1.;
 
 /* $Procedure SPKS19 ( S/P Kernel, subset, type 19 ) */
 /* Subroutine */ int spks19_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
+    /* Initialized data */
+
+    static integer pktszs[3] = { 12,6,6 };
+
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
@@ -22,42 +26,42 @@ static doublereal c_b114 = 1.;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal data[100];
-    integer npad, isel, ndir, npkt, i__, l, nread;
-    logical final;
+    static doublereal data[100];
+    static integer npad, isel, ndir, npkt, i__, l, nread;
+    static logical final;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer minib, minie;
+    static integer minib, minie;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    errdp_(char *, doublereal *, ftnlen);
-    integer shift, nsdir, noivl, start;
-    doublereal iv1beg, iv1end;
+    static integer shift, nsdir, noivl, start;
+    static doublereal iv1beg, iv1end;
     extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
 	    integer *, integer *, integer *, doublereal *);
-    integer min1sz;
+    static integer min1sz;
     extern logical failed_(void);
     extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    integer ub;
-    doublereal ivfbeg;
-    integer begidx, bufbas;
-    doublereal ivlbeg;
-    integer minbep;
-    doublereal ivfend;
-    integer bepidx, endidx, eepidx, remain, ivlbas;
-    doublereal ivlend;
+    static integer ub;
+    static doublereal ivfbeg;
+    static integer begidx, bufbas;
+    static doublereal ivlbeg;
+    static integer minbep;
+    static doublereal ivfend;
+    static integer bepidx, endidx, eepidx, remain, ivlbas;
+    static doublereal ivlend;
     extern integer lstled_(doublereal *, integer *, doublereal *);
-    integer minndr, ptrbas, minnpk;
+    static integer minndr, ptrbas, minnpk;
     extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen);
-    doublereal contrl[3];
+    static doublereal contrl[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    integer curivl;
+    static integer curivl;
     extern integer lstltd_(doublereal *, integer *, doublereal *);
-    integer minfsz;
+    static integer minfsz;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    integer nintvl, wndsiz;
+    static integer nintvl, wndsiz;
     extern logical return_(void);
-    integer pktsiz, subtyp;
-    char spk[255];
+    static integer pktsiz, subtyp;
+    static char spk[255];
 
 /* $ Abstract */
 
@@ -152,6 +156,10 @@ static doublereal c_b114 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
+
 /* -    SPICELIB Version 1.0.0, 07-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -176,6 +184,9 @@ static doublereal c_b114 = 1.;
 
 
 /*     Subtype 1:  Lagrange interpolation, 6-element packets. */
+
+
+/*     Subtype 2:  Hermite interpolation, 6-element packets. */
 
 
 /*     Packet sizes associated with the various subtypes: */
@@ -325,6 +336,14 @@ static doublereal c_b114 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 04-APR-2017 (NJB) */
+
+/*        Typo in comment fixed. */
+
+/*        11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
+
 /* -    SPICELIB Version 1.0.0, 17-OCT-2011 (NJB) (BVS) (WLT) (IMU) (EDW) */
 
 /* -& */
@@ -349,6 +368,12 @@ static doublereal c_b114 = 1.;
 
 
 /*     Local variables */
+
+
+/*     Saved variables */
+
+
+/*     Initial values */
 
 
 /*     Standard SPICE error handling. */
@@ -469,7 +494,7 @@ static doublereal c_b114 = 1.;
 
 /*        3)  All input mini-segments whose interpolation intervals */
 /*            follow that of the first used mini-segment and whose stop */
-/*            times are are less than or equal to END are copied whole */
+/*            times are less than or equal to END are copied whole */
 /*            to the output segment. We refer to this sequence of */
 /*            mini-segments as the "middle group." The middle group may */
 /*            be empty. */
@@ -622,7 +647,7 @@ static doublereal c_b114 = 1.;
 /*     operation. On the first pass NREAD is at least 1. */
 
     while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)557)] < *begin) {
+	    s_rnge("data", i__1, "spks19_", (ftnlen)576)] < *begin) {
 	bufbas += nread;
 	nread = min(100,remain);
 
@@ -691,11 +716,7 @@ static doublereal c_b114 = 1.;
 
 /*     Set the packet size, which is a function of the subtype. */
 
-    if (subtyp == 0) {
-	pktsiz = 12;
-    } else if (subtyp == 1) {
-	pktsiz = 6;
-    } else {
+    if (subtyp < 0 || subtyp >= 3) {
 	setmsg_("Unexpected SPK type 19 subtype # found in type 19 segment w"
 		"ithin mini-segment #.", (ftnlen)80);
 	errint_("#", &subtyp, (ftnlen)1);
@@ -704,6 +725,8 @@ static doublereal c_b114 = 1.;
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
     }
+    pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge("pktszs",
+	     i__1, "spks19_", (ftnlen)666)];
 
 /*     Determine how much of the mini-segment we need to transfer. The */
 /*     first step is to find the last epoch less than or equal to BEGIN */
@@ -733,7 +756,7 @@ static doublereal c_b114 = 1.;
 /*     operation. */
 
     while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)687)] < *begin) {
+	    s_rnge("data", i__1, "spks19_", (ftnlen)701)] < *begin) {
 
 /*        Advance the buffer base to account for the NREAD */
 /*        epochs fetched on the previous DAFGDA call. */
@@ -868,7 +891,7 @@ static doublereal c_b114 = 1.;
 /*        NREAD is (still) at least 2. */
 
 	while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 
-		: s_rnge("data", i__1, "spks19_", (ftnlen)830)] <= *end) {
+		: s_rnge("data", i__1, "spks19_", (ftnlen)844)] <= *end) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 
@@ -916,7 +939,7 @@ static doublereal c_b114 = 1.;
 	    errint_("#", baddr, (ftnlen)1);
 	    errint_("#", eaddr, (ftnlen)1);
 	    errdp_("#", &data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spks19_", (ftnlen)883)], (ftnlen)1);
+		    s_rnge("data", i__1, "spks19_", (ftnlen)897)], (ftnlen)1);
 	    errint_("#", &begidx, (ftnlen)1);
 	    errdp_("#", &ivlend, (ftnlen)1);
 	    sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
@@ -929,7 +952,7 @@ static doublereal c_b114 = 1.;
 /*        index EEPIDX. */
 
 	if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data", 
-		i__1, "spks19_", (ftnlen)897)] == *end) {
+		i__1, "spks19_", (ftnlen)911)] == *end) {
 
 /*           The epochs at indices EEPIDX-1 and EEPIDX comprise the */
 /*           first two epochs of the right half of an interpolation */
@@ -1257,11 +1280,7 @@ static doublereal c_b114 = 1.;
 
 /*           Set the packet size, which is a function of the subtype. */
 
-	    if (subtyp == 0) {
-		pktsiz = 12;
-	    } else if (subtyp == 1) {
-		pktsiz = 6;
-	    } else {
+	    if (subtyp < 0 || subtyp >= 3) {
 		setmsg_("Unexpected SPK type 19 subtype # found in type 19 s"
 			"egment within mini-segment #.", (ftnlen)80);
 		errint_("#", &subtyp, (ftnlen)1);
@@ -1270,6 +1289,8 @@ static doublereal c_b114 = 1.;
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
+	    pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+		    "pktszs", i__1, "spks19_", (ftnlen)1301)];
 
 /*           Determine how much of the mini-segment we need to transfer. */
 /*           The first step is to find the last epoch less than or equal */
@@ -1299,7 +1320,7 @@ static doublereal c_b114 = 1.;
 /*           into the buffer on the previous read operation. */
 
 	    while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1327)] <= *
+		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1335)] <= *
 		    end) {
 		bufbas += nread;
 		nread = min(100,remain);
@@ -1358,7 +1379,7 @@ static doublereal c_b114 = 1.;
 /*           index EEPIDX. */
 
 	    if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data",
-		     i__1, "spks19_", (ftnlen)1394)] == *end) {
+		     i__1, "spks19_", (ftnlen)1402)] == *end) {
 
 /*              The epochs at indices EEPIDX-1 and EEPIDX comprise */
 /*              the first two epochs of the right half of an */
@@ -1639,7 +1660,7 @@ static doublereal c_b114 = 1.;
 /*     The first output mini-segment ranges from relative */
 /*     addresses 1 : MIN1SZ. */
 
-    dafada_(&c_b114, &c__1);
+    dafada_(&c_b118, &c__1);
     if (noivl == 1) {
 
 /*        The next pointer indicates the first address after the */

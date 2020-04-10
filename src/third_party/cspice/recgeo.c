@@ -9,6 +9,10 @@
 /* Subroutine */ int recgeo_(doublereal *rectan, doublereal *re, doublereal *
 	f, doublereal *long__, doublereal *lat, doublereal *alt)
 {
+    /* Builtin functions */
+    double atan2(doublereal, doublereal);
+
+    /* Local variables */
     doublereal base[3], a, b, c__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
 	    doublereal *, ftnlen), reclat_(doublereal *, doublereal *, 
@@ -72,13 +76,15 @@
 
 /* $ Detailed_Input */
 
-/*     RECTAN     The rectangular coordinates of a point. */
+/*     RECTAN     The rectangular coordinates of a point. RECTAN must */
+/*                be in the same units as RE. */
 
 /*     RE         Equatorial radius of a reference spheroid.  This */
 /*                spheroid is a volume of revolution:  its horizontal */
 /*                cross sections are circular.  The shape of the */
-/*                spheroid is defined by an equatorial radius RE and */
-/*                a polar radius RP. */
+/*                spheroid is defined by an equatorial radius RE and a */
+/*                polar radius RP. RE must be in the same units as */
+/*                RECTAN. */
 
 /*     F          Flattening coefficient = (RE-RP) / RE,  where RP is */
 /*                the polar radius of the spheroid. */
@@ -107,7 +113,7 @@
 /*     ALT        Altitude of point above the reference spheroid. */
 
 /*                The units associated with ALT are those associated */
-/*                with the input RECTAN. */
+/*                with the inputs RECTAN and RE. */
 
 /* $ Parameters */
 
@@ -214,9 +220,17 @@
 /*     C.H. Acton      (JPL) */
 /*     N.J. Bachman    (JPL) */
 /*     H.A. Neilan     (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-AUG-2016 (BVS) (NJB) */
+
+/*        Re-implemented derivation of longitude to improve */
+/*        accuray. */
+
+/*        Minor header edits. */
 
 /* -    SPICELIB Version 1.0.3, 02-JUL-2007 (NJB) */
 
@@ -302,18 +316,24 @@
     b = *re;
     c__ = *re - *f * *re;
 
-/*     Find the point on the reference spheroid closes to the input point */
+/*     Find the point on the reference spheroid closest to the input */
+/*     point. From this closest point determine the surface normal. */
 
     nearpt_(rectan, &a, &b, &c__, base, alt);
-
-/*     From this closest point determine the surface normal */
-
     surfnm_(&a, &b, &c__, base, normal);
 
 /*     Using the surface normal, determine the latitude and longitude */
 /*     of the input point. */
 
     reclat_(normal, &radius, long__, lat);
+
+/*     Compute longitude directly rather than from the normal vector. */
+
+    if (rectan[0] == 0. && rectan[1] == 0.) {
+	*long__ = 0.;
+    } else {
+	*long__ = atan2(rectan[1], rectan[0]);
+    }
     chkout_("RECGEO", (ftnlen)6);
     return 0;
 } /* recgeo_ */

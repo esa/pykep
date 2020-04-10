@@ -7,7 +7,7 @@
 
 /* Table of constant values */
 
-static integer c__126 = 126;
+static integer c__127 = 127;
 
 /* $Procedure      ZZFDAT ( Initialize built-in frame names and ID codes ) */
 /* Subroutine */ int zzfdat_(integer *ncount, integer *maxbfr, char *name__, 
@@ -296,6 +296,13 @@ static integer c__126 = 126;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
+
+/*        Increased the number of non-inertial frames from 105 to 106 */
+/*        in order to accomodate the following PCK based frame: */
+
+/*           IAU_BENNU */
+
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
 /*        Increased the number of non-inertial frames from 100 to 105 */
@@ -520,6 +527,12 @@ static integer c__126 = 126;
 
 /* $ Version */
 
+/* -    SPICELIB Version 5.1.0, 30-OCT-2014 (BVS) */
+
+/*        Added the following PCK frame: */
+
+/*           IAU_BENNU */
+
 /* -    SPICELIB Version 5.0.0, 08-AUG-2013 (BVS) */
 
 /*        Changed routine's calling sequence by dropping name and ID */
@@ -653,7 +666,7 @@ static integer c__126 = 126;
 
 /*     Perform the consistency checks first. */
 
-    if (*ncount != 126) {
+    if (*ncount != 127) {
 	chkin_("ZZFDAT", (ftnlen)6);
 	setmsg_("There is an inconsistency between the version of the routin"
 		"e calling ZZFDAT and the current version of ZZFDAT. Check to"
@@ -663,7 +676,7 @@ static integer c__126 = 126;
 	chkout_("ZZFDAT", (ftnlen)6);
 	return 0;
     }
-    if (*maxbfr < 126) {
+    if (*maxbfr < 127) {
 	chkin_("ZZFDAT", (ftnlen)6);
 	setmsg_("There is an inconsistency between the version of the routin"
 		"e calling ZZFDAT and the current version of ZZFDAT. Check to"
@@ -1251,21 +1264,29 @@ static integer c__126 = 126;
     typid[125] = 2002867;
     type__[125] = 2;
 
+/*     Frame for Bennu asteroid, for OSIRIS-Rex project. */
+
+    s_copy(name__ + name_len * 126, "IAU_BENNU", name_len, (ftnlen)9);
+    idcode[126] = 10106;
+    center[126] = 2101955;
+    typid[126] = 2101955;
+    type__[126] = 2;
+
 /*     Below is a template to use for adding another non-inertial */
 /*     frame. Copy it, fill in the new values and then leave */
 /*     a new template for the next person who needs to modify this */
 /*     routine. */
 
-/*     NAME   ( NINERT + 106 ) =  name */
-/*     IDCODE ( NINERT + 106 ) =  10101 */
-/*     CENTER ( NINERT + 106 ) =  center */
-/*     TYPID  ( NINERT + 106 ) =  type ID code */
-/*     TYPE   ( NINERT + 106 ) =  type (INERTL, PCK, etc. ) */
+/*     NAME   ( NINERT + 107 ) =  name */
+/*     IDCODE ( NINERT + 107 ) =  10107 */
+/*     CENTER ( NINERT + 107 ) =  center */
+/*     TYPID  ( NINERT + 107 ) =  type ID code */
+/*     TYPE   ( NINERT + 107 ) =  type (INERTL, PCK, etc. ) */
 
 
 /*     Generate order vector for centers (used by CIDFRM). */
 
-    orderi_(center, &c__126, centrd);
+    orderi_(center, &c__127, centrd);
 
 /*     Initialize build-in frame name- and ID-based hashes. */
 
@@ -1275,7 +1296,7 @@ static integer c__126 = 126;
 /*     Register all built-in frames in the frame name- and ID-based */
 /*     hashes. */
 
-    for (i__ = 1; i__ <= 126; ++i__) {
+    for (i__ = 1; i__ <= 127; ++i__) {
 	zzhscadd_(bnmlst, bnmpol, bnmnms, name__ + (i__ - 1) * name_len, &
 		item, &new__, bnmnms_len, name_len);
 	bnmidx[item - 1] = i__;

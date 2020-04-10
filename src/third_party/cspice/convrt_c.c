@@ -81,8 +81,12 @@
                                       "SECONDANGLE" 
 
               Metric Distances:       "METERS" 
+                                      "M"
+                                      "KILOMETERS"
                                       "KM" 
+                                      "CENTIMETERS"
                                       "CM" 
+                                      "MILLIMETERS"
                                       "MM" 
 
               English Distances:      "FEET" 
@@ -206,6 +210,12 @@
  
 -Version
  
+   -CSPICE Version 2.0.0 13-MAY-2016 (NJB)
+
+       Updated to support expanded names of metric distance
+       units, as well as to support the abbreviation "M" 
+       indicating meters.
+
    -CSPICE Version 1.0.0, 17-MAY-1999 (NJB)(CAC)(HAN)(WMO)(WLT)(IMU)
 
 -Index_Entries

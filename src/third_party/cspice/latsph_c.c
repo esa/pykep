@@ -77,11 +77,21 @@
    rho        Distance of the point from the origin.
 
    colat      Angle between the vector from the origin to the point
-              and the positive z axis in radians.
+              and the positive z axis in radians. `colat' is computed
+              as pi/2 - `lat'.
 
-   lons       Angle of the point from the XZ plane (radians).
+   lons       Angle of the point from the XZ plane (radians). `lons'
+              is set equal to `lon'.
 
 -Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+-Files
 
    None.
 
@@ -119,11 +129,7 @@
 
    None.
 
--Exceptions
-
-   Error free.
-
--Files
+-Literature_References
 
    None.
 
@@ -131,11 +137,11 @@
 
    W.L. Taber      (JPL)
 
--Literature_References
-
-   None.
-
 -Version
+
+   -CSPICE Version 1.0.2, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
 
    -CSPICE Version 1.0.1, 13-DEC-2005   (EDW)
 

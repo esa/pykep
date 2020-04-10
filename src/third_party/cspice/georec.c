@@ -101,12 +101,14 @@ static doublereal c_b11 = 1.;
 /*                range of latitude is unrestricted. */
 
 /*     ALT        Altitude of point above the reference spheroid. */
+/*                ALT must be in the same units as RE. */
 
 /*     RE         Equatorial radius of a reference spheroid.  This */
 /*                spheroid is a volume of revolution:  its horizontal */
 /*                cross sections are circular.  The shape of the */
 /*                spheroid is defined by an equatorial radius RE and */
-/*                a polar radius RP. */
+/*                a polar radius RP. RE must be in the same units */
+/*                as ALT. */
 
 /*     F          Flattening coefficient = (RE-RP) / RE,  where RP is */
 /*                the polar radius of the spheroid. */
@@ -116,7 +118,7 @@ static doublereal c_b11 = 1.;
 /*     RECTAN     The rectangular coordinates of a point. */
 
 /*                The units associated with RECTAN are those associated */
-/*                with the input ALT. */
+/*                with the inputs ALT and RE. */
 
 /* $ Parameters */
 
@@ -210,6 +212,11 @@ static doublereal c_b11 = 1.;
 
 /*     None. */
 
+/* $ Literature_References */
+
+/*     See FUNDAMENTALS OF ASTRODYNAMICS, Bate, Mueller, White */
+/*     published by Dover for a description of geodetic coordinates. */
+
 /* $ Author_and_Institution */
 
 /*     C.H. Acton      (JPL) */
@@ -217,24 +224,23 @@ static doublereal c_b11 = 1.;
 /*     H.A. Neilan     (JPL) */
 /*     W.L. Taber      (JPL) */
 
-/* $ Literature_References */
-
-/*     See FUNDAMENTALS OF ASTRODYNAMICS, Bate, Mueller, White */
-/*     published by Dover for a description of geodetic coordinates. */
-
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.2, 29-JUL-2003 (NJB) (CHA) */
 
 /*        Various header changes were made to improve clarity.  Some */
 /*        minor header corrections were made. */
 
-/* -   SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*       Comment section for permuted index source lines was added */
-/*       following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -   SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

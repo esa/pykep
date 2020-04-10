@@ -234,9 +234,9 @@
 
             if ( !found )
             {
-               printf ( "No descriptor was found for ID %ld at "
+               printf ( "No descriptor was found for ID %d at "
                         "TDB %24.17e\n", 
-                        (long) idcode,
+                        (int) idcode,
                         et                                       );
             }
             else
@@ -245,9 +245,9 @@
                Display the DAF file handle.
                ./
                printf ( "\n"
-                        "DAF handle: %ld\n"
+                        "DAF handle: %d\n"
                         "\n",
-                        (long)handle        );
+                        (int)handle        );
 
                /.
                Display the segment ID.
@@ -258,17 +258,17 @@
 
                printf ( "Segment found.\n"
                         "   Segment ID:        %s\n"
-                        "   Body ID code:      %ld\n"
-                        "   Center ID code:    %ld\n"
-                        "   Frame ID code:     %ld\n"
-                        "   SPK data type:     %ld\n"
+                        "   Body ID code:      %d\n"
+                        "   Center ID code:    %d\n"
+                        "   Frame ID code:     %d\n"
+                        "   SPK data type:     %d\n"
                         "   Start time (TDB):  %24.17e\n"
                         "   Stop time  (TDB):  %24.17e\n",
                         segid,
-                        (long) ic[0],
-                        (long) ic[1],
-                        (long) ic[2],
-                        (long) ic[3],
+                        (int) ic[0],
+                        (int) ic[1],
+                        (int) ic[2],
+                        (int) ic[3],
                         dc[0],
                         dc[1]                             );
             }
@@ -312,6 +312,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.0, 05-OCT-2012 (NJB) (RET)
 
 -Index_Entries

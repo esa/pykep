@@ -214,7 +214,7 @@
                 ./
                 printf ( "%s\n", "========================================" );
 
-                printf ( "Coverage for frame %ld\n", obj );
+                printf ( "Coverage for frame %d\n", (int)obj );
 
                 /.
                 Convert the coverage interval start and stop times to TDB
@@ -237,9 +237,9 @@
                               timstr                                  );
 
                    printf ( "\n"
-                            "Interval:  %ld\n"
+                            "Interval:  %d\n"
                             "Start:     %s\n",
-                            j,
+                            (int)j,
                             timstr            );
 
                    timout_c ( e, 
@@ -270,6 +270,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.0, 01-DEC-2007 (NJB)
 
 -Index_Entries

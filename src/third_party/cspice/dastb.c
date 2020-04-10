@@ -10,6 +10,7 @@
 static integer c__9 = 9;
 static integer c__1 = 1;
 static integer c__0 = 0;
+static logical c_false = FALSE_;
 static integer c__4 = 4;
 
 /* $Procedure DASTB ( DAS, convert transfer file to binary file ) */
@@ -28,7 +29,8 @@ static integer c__4 = 4;
     char line[255];
     logical more;
     char word[255], rest[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen), chkin_(char *, ftnlen);
     integer ncomc;
     logical inblk;
     char tarch[8];
@@ -64,14 +66,14 @@ static integer c__4 = 4;
 	    char *, ftnlen), dasonw_(char *, char *, char *, integer *, 
 	    integer *, ftnlen, ftnlen, ftnlen), daswfr_(integer *, char *, 
 	    char *, integer *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen), dascls_(integer *), dashlu_(integer *, integer *);
+	    ftnlen), dascls_(integer *), nextwd_(char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     integer tcount;
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     extern logical return_(void);
     integer errptr, nresvr;
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), rdencd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
 
     /* Fortran I/O blocks */
     static cilist io___3 = { 1, 0, 1, 0, 0 };
@@ -143,21 +145,17 @@ static integer c__4 = 4;
 
 /*     None. */
 
-/* $ Files */
-
-/*     See arguments XFRLUN, BINFIL. */
-
 /* $ Exceptions */
 
 /*     1)   If the DAS transfer file cannot be read, the error */
-/*          SPICE(FILEREADFAILED) will be signalled. */
+/*          SPICE(FILEREADFAILED) will be signaled. */
 
 /*     2)   If the specified file is not a DAS file, as indicated by the */
-/*          file's ID word, the error SPICE(NOTADASFILE) is signalled. */
+/*          file's ID word, the error SPICE(NOTADASFILE) is signaled. */
 
 /*     3)   If an error occurs while attempting to decode data in the */
 /*          DAS transfer file, the error SPICE(BADDASTRANSFERFILE) will */
-/*          be signalled. */
+/*          be signaled. */
 
 /*     4)   If the DAS file cannot be written, a DAS file access routine */
 /*          will signal an error with an appropriate error message. */
@@ -167,6 +165,10 @@ static integer c__4 = 4;
 /*          text to binary conversion process. In the event of an error, */
 /*          the caller of this routine is required to close the binary */
 /*          DAS file BINFIL. */
+
+/* $ Files */
+
+/*     See arguments XFRLUN, BINFIL. */
 
 /* $ Particulars */
 
@@ -223,6 +225,14 @@ static integer c__4 = 4;
 /*     K.R. Gehringer  (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration with the handle */
+/*        manager subsystem. */
+
+/*        Corrected typo in a long error message and several */
+/*        typos in comments. Re-ordered header sections. */
 
 /* -    SPICELIB Version 3.1.0, 06-DEC-1995 (KRG) */
 
@@ -464,11 +474,11 @@ static integer c__4 = 4;
 
 /*     This routine will check the SPICELIB function FAILED() after */
 /*     each call, or consecutive sequence of calls, to data encoding */
-/*     routines, and if an error was signalled it will simply check out */
+/*     routines, and if an error was signaled it will simply check out */
 /*     and return to the caller. */
 
 /*     This routine will check the SPICELIB function FAILED() after */
-/*     each DAS file access call, and if an error was signalled it will */
+/*     each DAS file access call, and if an error was signaled it will */
 /*     simply check out and return to the caller. */
 
 /*     We begin by reading the DAS file ID word from the DAS transfer */
@@ -649,7 +659,7 @@ L100002:
 /*        so just add the comments. But first, convert the DAS file */
 /*        handle into its equivalent logical unit. */
 
-	dashlu_(&handle, &daslun);
+	zzddhhlu_(&handle, "DAS", &c_false, &daslun, (ftnlen)3);
 	if (failed_()) {
 
 /*           If an error occurred, attempt to close the binary file, */
@@ -1117,8 +1127,8 @@ L100004:
 /*              message, then check out and return. */
 
 		dascls_(&handle);
-		setmsg_("Error reading from the DAS transferfile #. IOSTAT ="
-			" #.", (ftnlen)54);
+		setmsg_("Error reading from the DAS transfer file #. IOSTAT "
+			"= #.", (ftnlen)55);
 		errfnm_("#", xfrlun, (ftnlen)1);
 		errint_("#", &iostat, (ftnlen)1);
 		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
@@ -1385,7 +1395,7 @@ L100004:
 
 		dascls_(&handle);
 		setmsg_("Unknown keyword '#' encountered while processing th"
-			"e DAS trtansfer file #.", (ftnlen)74);
+			"e DAS transfer file #.", (ftnlen)73);
 		errch_("#", word, (ftnlen)1, (ftnlen)255);
 		errfnm_("#", xfrlun, (ftnlen)1);
 		sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);

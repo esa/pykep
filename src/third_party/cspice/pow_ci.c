@@ -2,10 +2,10 @@
 
 #ifdef KR_headers
 VOID pow_ci(p, a, b) 	/* p = a**b  */
- complex_type *p, *a; integer *b;
+ complex *p, *a; integer *b;
 #else
 extern void pow_zi(doublecomplex*, doublecomplex*, integer*);
-void pow_ci(complex_type *p, complex_type *a, integer *b) 	/* p = a**b  */
+void pow_ci(complex *p, complex *a, integer *b) 	/* p = a**b  */
 #endif
 {
 doublecomplex p1, a1;

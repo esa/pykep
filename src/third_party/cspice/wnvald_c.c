@@ -155,8 +155,8 @@
 
          wnvald_c ( 20, 16, &window );
 
-         printf ( "Current intervals:   %ld\n",  card_c(&window)/2  );
-         printf ( "Maximum intervals:   %ld\n",  size_c(&window)/2  );
+         printf ( "Current intervals:   %d\n", (int)card_c(&window)/2 );
+         printf ( "Maximum intervals:   %d\n", (int)size_c(&window)/2 );
          printf ( "\nIntervals\n\n" );
 
          for ( i = 0;   i < card_c(&window);   i+=2 )
@@ -200,6 +200,11 @@
    I.M. Underwood  (JPL) 
  
 -Version
+
+   -CSPICE Version 1.0.3, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
 
    -CSPICE Version 1.0.2, 18-DEC-2008 (EDW)
    

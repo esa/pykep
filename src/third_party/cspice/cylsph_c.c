@@ -80,10 +80,20 @@
    radius     Distance of the point from origin.
 
    colat      Polar angle (co-latitude in radians) of the point.
+              The range of `colat' is [-pi, pi].
 
    lon        Azimuthal angle (longitude) of the point (radians).
+              `lon' is set equal to `lonc'.
 
 -Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+-Files
 
    None.
 
@@ -124,11 +134,7 @@
 
    None.
 
--Exceptions
-
-   Error free.
-
--Files
+-Literature_References
 
    None.
 
@@ -137,15 +143,15 @@
    E.D. Wright     (JPL)
    W.L. Taber      (JPL)
 
--Literature_References
-
-   None.
-
 -Version
+
+   -CSPICE Version 1.0.2, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
 
    -CSPICE Version 1.0.1, 08-FEB-1998 (EDW)
 
-       Corrected and clarified header entries.
+      Corrected and clarified header entries.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 

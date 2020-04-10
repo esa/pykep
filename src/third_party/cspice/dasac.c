@@ -5,6 +5,10 @@
 
 #include "f2c.h"
 
+/* Table of constant values */
+
+static logical c_false = FALSE_;
+
 /* $Procedure     DASAC ( DAS add comments ) */
 /* Subroutine */ int dasac_(integer *handle, integer *n, char *buffer, ftnlen 
 	buffer_len)
@@ -20,6 +24,8 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
     integer i__, j, space;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc, recno, ncomr;
@@ -31,14 +37,14 @@
     integer nchars;
     extern integer lastnb_(char *, ftnlen);
     integer length, newrec, daslun;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
     static char eolmrk[1];
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), dasrfr_(integer *, char 
+	    char *, ftnlen), chkout_(char *, ftnlen), daswfr_(integer *, char 
 	    *, char *, integer *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen), daswfr_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
+	    ftnlen);
     integer nresvc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
@@ -119,14 +125,14 @@
 /* $ Exceptions */
 
 /*     1)   If the number of comments to be added is not positive, the */
-/*          error SPICE(INVALIDARGUMENT) will be signalled. */
+/*          error SPICE(INVALIDARGUMENT) will be signaled. */
 
 /*     2)   If a non printing ASCII character is encountered in the */
 /*          comments, the error SPICE(ILLEGALCHARACTER) will be */
-/*          signalled. */
+/*          signaled. */
 
 /*     3)   If the binary DAS file attached to HANDLE is not open with */
-/*          write access an error will be signalled by a routine called */
+/*          write access an error will be signaled by a routine called */
 /*          by this routine. */
 
 /* $ Files */
@@ -198,6 +204,10 @@
 /*     K.R. Gehringer (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to use ZZDDHHLU. */
 
 /* -    Beta Version 1.0.1, 12-MAY-1994 (KRG) */
 
@@ -288,7 +298,7 @@
 /*     Convert the DAS file handle to its corresponding Fortran logical */
 /*     unit number for reading and writing comment records. */
 
-    dashlu_(handle, &daslun);
+    zzddhhlu_(handle, "DAS", &c_false, &daslun, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASAC", (ftnlen)5);
 	return 0;

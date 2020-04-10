@@ -7,6 +7,7 @@
 
 /* Table of constant values */
 
+static integer c__1 = 1;
 static integer c__6 = 6;
 
 /* $Procedure SPKE10 ( Evaluate SPK record, type 10 ) */
@@ -35,26 +36,22 @@ static integer c__6 = 6;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
 	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    static doublereal vcomp[3], numer, n0;
+    static doublereal vcomp[3], numer;
     extern doublereal twopi_(void);
     static doublereal s1[6], s2[6], t1, t2;
-    extern /* Subroutine */ int ev2lin_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern logical failed_(void);
     extern doublereal pi_(void);
     static doublereal dargdt;
-    extern /* Subroutine */ int dpspce_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    static doublereal mnrate;
     extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *), chkout_(char *, 
 	    ftnlen);
-    static doublereal invprc[36]	/* was [6][6] */;
-    static logical loworb;
-    static doublereal tmpsta[6];
+    static doublereal invprc[36]	/* was [6][6] */, tmpsta[6];
     extern /* Subroutine */ int zzteme_(doublereal *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
     static doublereal arg;
+    extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *), 
+	    xxsgp4i_(doublereal *, doublereal *, integer *);
 
 /* $ Abstract */
 
@@ -95,6 +92,155 @@ static integer c__6 = 6;
 /*     EPHEMERIS */
 
 /* $ Declarations */
+/* $Procedure ZZSGP4 ( SGP4 parameters ) */
+
+/* $ Abstract */
+
+/*      Parameter assignments for SGP4 algorithm as expressed */
+/*      by Vallado [2]. */
+
+/* $ Disclaimer */
+
+/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
+/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
+/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
+/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
+/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
+/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
+/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
+/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
+/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
+/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
+
+/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
+/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
+/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
+/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
+/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
+/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
+
+/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
+/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
+/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
+/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
+
+/* $ Required_Reading */
+
+/*     None. */
+
+/* $ Keywords */
+
+/*     None. */
+
+/* $ Declarations */
+
+/*     None. */
+
+/* $ Brief_I/O */
+
+/*     None. */
+
+/* $ Detailed_Input */
+
+/*     None. */
+
+/* $ Detailed_Output */
+
+/*     None. */
+
+/* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     None. */
+
+/* $ Files */
+
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     J2    = GEOPHS(K_J2) */
+/*     J3    = GEOPHS(K_J3) */
+/*     J4    = GEOPHS(K_J4) */
+/*     ER    = GEOPHS(K_ER) */
+/*     XKE   = GEOPHS(K_KE) */
+
+/*     TUMIN = 1.D0/XKE */
+/*     J3OJ2 = J3/J2 */
+
+/* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
+
+/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
+/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
+/*       U.S. Air Force: Aerospace Defense Command. */
+
+/*   [2] Vallado, David, Crawford, Paul, Hujsak, Richard, and Kelso, T.S. */
+/*       2006. Revisiting Spacetrack Report #3. Paper AIAA 2006-6753 */
+/*       presented at the AIAA/AAS Astrodynamics Specialist Conference, */
+/*       August 21-24, 2006. Keystone, CO. */
+
+/* $ Author_and_Institution */
+
+/*     E. D. Wright    (JPL) */
+
+/* $ Version */
+
+/* -    SPICELIB Version 1.0.0 22-JUL-2014 (EDW) */
+
+/* -& */
+/* $ Index_Entries */
+
+/*  SGP4 */
+
+/* -& */
+
+/*      WGS gravitational constants IDs. */
+
+
+/*      Gravitational constant indices. */
+
+
+/*     The following parameters give the location in the GEOPHS */
+/*     array of the various geophysical parameters needed for */
+/*     the two line element sets. */
+
+/*     K_J2  --- location of J2 */
+/*     K_J3  --- location of J3 */
+/*     K_J4  --- location if J4 */
+/*     K_KE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
+/*     K_QO  --- upper bound of atmospheric model in KM */
+/*     K_SO  --- lower bound of atmospheric model in KM */
+/*     K_ER  --- earth equatorial radius in KM. */
+/*     K_AE  --- distance units/earth radius */
+
+
+/*     Operation mode values, OPMODE. */
+
+
+/*     An enumeration of the various components of the */
+/*     elements array---ELEMS */
+
+/*     KNDT20  --- location of NDT20 */
+/*     KNDD60  --- location of NDD60 */
+/*     KBSTAR  --- location of BSTAR */
+/*     KINCL   --- location of INCL */
+/*     KNODE0  --- location of NODE0 */
+/*     KECC    --- location of ECC */
+/*     KOMEGA  --- location of OMEGA */
+/*     KMO     --- location of MO */
+/*     KNO     --- location of NO */
+
 /* $ Brief_I/O */
 
 /*     Variable  I/O  Description */
@@ -119,26 +265,26 @@ static integer c__6 = 6;
 /*                        .            Geophysical Constants such as */
 /*                        .            GM, J2, J3, J4, etc. */
 /*                        . */
-/*                     RECORD(NGEOCN) */
+/*                     RECORD(NGEO) */
 
-/*                     RECORD(NGEOCN + 1) */
+/*                     RECORD(NGEO + 1) */
 /*                        . */
 /*                        .            elements and epoch for the body */
 /*                        .            at epoch 1. */
 /*                        . */
-/*                     RECORD(NGEOCN + NELEMN ) */
+/*                     RECORD(NGEO + NELEMS ) */
 
-/*                     RECORD(NGEOCN + NELEMN + 1) */
+/*                     RECORD(NGEO + NELEMS + 1) */
 /*                        . */
 /*                        .            elements and epoch for the body */
 /*                        .            at epoch 2. */
 /*                        . */
-/*                     RECORD(NGEOCN + 2*NELEMN ) */
+/*                     RECORD(NGEO + 2*NELEMS ) */
 
 /*                 Epoch 1 and epoch 2 are the times in the segment that */
-/*                 bracket ET.  If ET is less than the first time in the */
+/*                 bracket ET. If ET is less than the first time in the */
 /*                 segment then both epochs 1 and 2 are equal to the */
-/*                 first time.  And if ET is greater than the last time */
+/*                 first time. And if ET is greater than the last time */
 /*                 then, epochs 1 and 2 are set equal to this last time. */
 
 /* $ Detailed_Output */
@@ -148,12 +294,26 @@ static integer c__6 = 6;
 
 /* $ Parameters */
 
-/*     None. */
+/*     NGEO        Number of geophysical constants for SGP4 SPK records. */
+
+/*     AFSPC       set the SGP4 propagator to use the original */
+/*                 Spacke Track #3 GST algorithm [1]; value defined in */
+/*                 zzsgp4.inc. The other option for routines */
+/*                 using this value is IMPRVD which causes the algorithm */
+/*                 to use calculate GST as described in */
+/*                 Vallado 2006 [4]. */
+
+/*     IMPRVD      set the SGP4 propagator to use the improved */
+/*                 GST algorithm [1]; value defined in */
+/*                 zzsgp4.inc. The other option for routines */
+/*                 using this value is AFSPC which causes the algorithm */
+/*                 to use calculate GST as described in */
+/*                 Vallado 2006 [4]. */
 
 /* $ Exceptions */
 
-/*     1) If there is a problem evaluating the two-line elements, */
-/*     the error will be diagnosed by EV2LIN. */
+/*     1) If a problem occurs when evaluating the two-line elements, */
+/*         an error will signal from XXSGPeI or XSGP4E. */
 
 /* $ Files */
 
@@ -167,8 +327,8 @@ static integer c__6 = 6;
 /*     It is assumed that this routine is used in conjunction with */
 /*     the routine SPKR10 as shown here: */
 
-/*        CALL SPKR10 ( HANDLE, DESCR, ET, RECORD         ) */
-/*        CALL SPKE10 (                ET, RECORD, STATE  ) */
+/*        CALL SPKR10   ( HANDLE, DESCR, ET, RECORD         ) */
+/*        CALL SPKE10   (                ET, RECORD, STATE  ) */
 
 /*     Where it is known in advance that the HANDLE, DESCR pair points */
 /*     to a type 10 data segment. */
@@ -218,7 +378,23 @@ static integer c__6 = 6;
 
 /* $ Literature_References */
 
-/*     None. */
+/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
+/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
+/*       U.S. Air Force: Aerospace Defense Command. */
+
+/*   [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
+/*       of Space Command Element Sets." Space Command, */
+/*       U. S. Air Force, CO. */
+
+/*   [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
+/*       History of Analytical Orbit Modeling in the U. S. Space */
+/*       Surveillance System. Journal of Guidance, Control, and */
+/*       Dynamics. 27(2):174-185. */
+
+/*   [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
+/*       and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
+/*       AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
+/*       Specialist Conference, August 21-24, 2006. Keystone, CO. */
 
 /* $ Author_and_Institution */
 
@@ -226,6 +402,11 @@ static integer c__6 = 6;
 /*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.0, 18-FEB-2015 (EDW) */
+
+/*        Evaluator now uses Vallado derived propagator as described */
+/*        in Vallado 2006 [4]. */
 
 /* -    SPICELIB Version 2.0.0, 01-JAN-2011 (EDW) */
 
@@ -249,43 +430,6 @@ static integer c__6 = 6;
 /* -& */
 
 /*     SPICELIB functions */
-
-
-/*     Local Parameters */
-
-
-
-/*     The following parameters give the location of the various */
-/*     geophysical parameters needed for the two line element */
-/*     sets.  We need these only so that we can count how many there */
-/*     are (NGEOCN). */
-
-/*     KJ2  --- location of J2 */
-/*     KJ3  --- location of J3 */
-/*     KJ4  --- location if J4 */
-/*     KKE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
-/*     KQO  --- upper bound of atmospheric model in KM */
-/*     KSO  --- lower bound of atmospheric model in KM */
-/*     KER  --- earth equatorial radius in KM. */
-/*     KAE  --- distance units/earth radius */
-
-
-/*     An enumeration of the various components of the */
-/*     a two-line element set.  These are needed so that we */
-/*     can locate the epochs in the two sets and so that */
-/*     we can count the number of elements in a two-line */
-/*     element set. */
-
-/*     KNDT20 */
-/*     KNDD60 */
-/*     KBSTAR */
-/*     KINCL */
-/*     KNODE0 */
-/*     KECC */
-/*     KOMEGA */
-/*     KMO */
-/*     KNO */
-/*     KEPOCH */
 
 
 /*     The nutation in obliquity and longitude as well as their rates */
@@ -313,13 +457,6 @@ static integer c__6 = 6;
 	my2pi = twopi_();
     }
 
-/*     Fetch the mean motion from the first set of two-line elements */
-/*     stored in the record. */
-
-    n0 = record[16];
-    mnrate = my2pi / 225.;
-    loworb = n0 >= mnrate;
-
 /*     Fetch the two epochs stored in the record. */
 
     t1 = record[17];
@@ -341,12 +478,10 @@ static integer c__6 = 6;
 
 /*     If t1 = t2, the state is just s(t1). */
 
-
 /*     Note: there are a number of weighting schemes we could have */
 /*     used.  This one has the nice property that */
 
 /*     The graph of W is symmetric about the point */
-
 
 /*        ( (t1+t2)/2,  W( (t1+t2)/2 ) ) */
 
@@ -354,12 +489,44 @@ static integer c__6 = 6;
 /*     symmetric and zero at both t1 and t2. */
 
     if (t1 != t2) {
-	if (loworb) {
-	    ev2lin_(et, record, &record[8], s1);
-	    ev2lin_(et, record, &record[22], s2);
-	} else {
-	    dpspce_(et, record, &record[8], s1);
-	    dpspce_(et, record, &record[22], s2);
+
+/*        Initialize then propagate. */
+
+/*        XXSGP4E returns on entry if XXSGP4I signals an error. */
+
+
+/*        Evaluate first TLE. */
+
+	xxsgp4i_(record, &record[8], &c__1);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Time from epoch of set 1 in minutes. */
+
+	d__1 = (*et - t1) / 60.;
+	xxsgp4e_(&d__1, s1);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Evaluate second TLE. */
+
+	xxsgp4i_(record, &record[22], &c__1);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Time from epoch of set 2 in minutes. */
+
+	d__1 = (*et - t2) / 60.;
+	xxsgp4e_(&d__1, s2);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
 	}
 
 /*        Compute the weighting function that we'll need later */
@@ -381,10 +548,22 @@ static integer c__6 = 6;
 	vadd_(&state[3], vcomp, &tmpsta[3]);
 	vequ_(&tmpsta[3], &state[3]);
     } else {
-	if (loworb) {
-	    ev2lin_(et, record, &record[8], state);
-	} else {
-	    dpspce_(et, record, &record[8], state);
+
+/*        Evaluate the TLE. */
+
+	xxsgp4i_(record, &record[8], &c__1);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
+	}
+
+/*        Time from epoch of set 1 in minutes. */
+
+	d__1 = (*et - t1) / 60.;
+	xxsgp4e_(&d__1, state);
+	if (failed_()) {
+	    chkout_("SPKE10", (ftnlen)6);
+	    return 0;
 	}
     }
 

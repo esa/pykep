@@ -5,26 +5,24 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
-
-static integer c__9 = 9;
-
 /* $Procedure  TIPBOD ( Transformation, inertial position to bodyfixed ) */
 /* Subroutine */ int tipbod_(char *ref, integer *body, doublereal *et, 
 	doublereal *tipm, ftnlen ref_len)
 {
-    doublereal ref2j[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
+    /* System generated locals */
+    integer i__1, i__2;
+
+    /* Builtin functions */
+    integer s_rnge(char *, integer, char *, integer);
+
+    /* Local variables */
+    integer i__, j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    doublereal tsipm[36]	/* was [6][6] */;
     extern logical failed_(void);
-    extern /* Subroutine */ int bodmat_(integer *, doublereal *, doublereal *)
-	    , chkout_(char *, ftnlen);
-    doublereal tmpmat[9]	/* was [3][3] */;
-    extern /* Subroutine */ int irftrn_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
+	    doublereal *, ftnlen), chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
 
 /* $ Abstract */
 
@@ -165,7 +163,7 @@ static integer c__9 = 9;
 
 /*      1) If the kernel pool does not contain all of the data required */
 /*         for computing the transformation matrix, TIPM, the error */
-/*         SPICE(INSUFFICIENTANGLES) is signalled. */
+/*         SPICE(INSUFFICIENTANGLES) is signaled. */
 
 /*      2) If the reference frame, REF,  is not recognized, a routine */
 /*         called by TIPBOD will diagnose the condition and invoke the */
@@ -190,28 +188,28 @@ static integer c__9 = 9;
 /*     from them.  Using the Euler angles PHI, DELTA and W */
 /*     we compute */
 
-/*            TIPM = [W] [DELTA] [PHI] */
-/*                      3       1     3 */
+/*           TIPM = [W] [DELTA] [PHI] */
+/*                     3       1     3 */
 
 
-/*      If no appropriate binary PCK files have been loaded, */
-/*      the text PCK file is used.  Here information is found */
-/*      as RA, DEC and W (with the possible addition of nutation */
-/*      and libration terms for satellites).  Again, the Euler */
-/*      angles are found, and the transformation matrix is */
-/*      calculated from them.  The transformation from inertial to */
-/*      bodyfixed coordinates is represented as: */
+/*     If no appropriate binary PCK files have been loaded, */
+/*     the text PCK file is used.  Here information is found */
+/*     as RA, DEC and W (with the possible addition of nutation */
+/*     and libration terms for satellites).  Again, the Euler */
+/*     angles are found, and the transformation matrix is */
+/*     calculated from them.  The transformation from inertial to */
+/*     bodyfixed coordinates is represented as: */
 
-/*            TIPM = [W] [HALFPI-DEC] [RA+HALFPI] */
-/*                      3            1           3 */
+/*           TIPM = [W] [HALFPI-DEC] [RA+HALFPI] */
+/*                     3            1           3 */
 
 /*     These are basically the Euler angles, PHI, DELTA and W: */
 
-/*       RA = PHI - HALFPI */
-/*       DEC = HALFPI - DELTA */
-/*       W = W */
+/*        RA = PHI - HALFPI */
+/*        DEC = HALFPI - DELTA */
+/*        W = W */
 
-/*      In the text file, RA, DEC, and W are defined as follows: */
+/*     In the text file, RA, DEC, and W are defined as follows: */
 
 /*                                         2      ____ */
 /*                                    RA2*t       \ */
@@ -233,7 +231,7 @@ static integer c__9 = 9;
 /*                                      d          i */
 
 
-/*      where: */
+/*     where: */
 
 /*            d = seconds/day */
 
@@ -248,58 +246,67 @@ static integer c__9 = 9;
 /*            planet. */
 
 
-/*        These angles -- typically nodal rates -- vary in number and */
-/*        definition from one planetary system to the next. */
+/*     These angles -- typically nodal rates -- vary in number and */
+/*     definition from one planetary system to the next. */
 
 /* $ Examples */
 
-/*      Note that the items necessary to compute the Euler angles */
-/*      must have been loaded into the kernel pool (by one or more */
-/*      previous calls to FURNSH).  The Euler angles are typically */
-/*      stored in the P_constants kernel file that comes with */
-/*      SPICELIB. */
+/*     Note that the items necessary to compute the Euler angles */
+/*     must have been loaded into the kernel pool (by one or more */
+/*     previous calls to FURNSH).  The Euler angles are typically */
+/*     stored in the P_constants kernel file that comes with */
+/*     SPICELIB. */
 
-/*      1)  In the following code fragment, TIPBOD is used to transform */
-/*          a position in J2000 inertial coordinates to a state in */
-/*          bodyfixed coordinates. */
+/*     1)  In the following code fragment, TIPBOD is used to transform */
+/*         a position in J2000 inertial coordinates to a state in */
+/*         bodyfixed coordinates. */
 
-/*          The 3-vectors POSTN represents the inertial position */
-/*          of an object with respect to the center of the */
-/*          body at time ET. */
+/*         The 3-vectors POSTN represents the inertial position */
+/*         of an object with respect to the center of the */
+/*         body at time ET. */
 
-/*             C */
-/*             C     First load the kernel pool. */
-/*             C */
-/*                   CALL FURNSH ( 'PLANETARY_CONSTANTS.KER' ) */
+/*            C */
+/*            C     First load the kernel pool. */
+/*            C */
+/*                  CALL FURNSH ( 'PLANETARY_CONSTANTS.KER' ) */
 
-/*             C */
-/*             C     Next get the transformation and its derivative. */
-/*             C */
-/*                   CALL TIPBOD ( 'J2000', BODY, ET, TIPM ) */
+/*            C */
+/*            C     Next get the transformation and its derivative. */
+/*            C */
+/*                  CALL TIPBOD ( 'J2000', BODY, ET, TIPM ) */
 
-/*             C */
-/*             C     Convert position, the first three elements of */
-/*             C     STATE, to bodyfixed coordinates. */
-/*             C */
-/*                   CALL MXVG    ( TIPM, POSTN, BDPOS ) */
+/*            C */
+/*            C     Convert position, the first three elements of */
+/*            C     STATE, to bodyfixed coordinates. */
+/*            C */
+/*                  CALL MXVG    ( TIPM, POSTN, BDPOS ) */
 
 /* $ Restrictions */
 
-/*      The kernel pool must be loaded with the appropriate */
-/*      coefficients (from the P_constants kernel or binary PCK file) */
-/*      prior to calling this routine. */
+/*     The kernel pool must be loaded with the appropriate */
+/*     coefficients (from the P_constants kernel or binary PCK file) */
+/*     prior to calling this routine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman   (JPL) */
-/*      W.L. Taber     (JPL) */
-/*      K.S. Zukor     (JPL) */
+/*     N.J. Bachman   (JPL) */
+/*     B.V. Semenov    (JPL) */
+/*     W.L. Taber     (JPL) */
+/*     K.S. Zukor     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 02-MAR-2016 (BVS) */
+
+/*        Updated to use the 3x3 top-left corner of the 6x6 matrix */
+/*        returned by TISBOD instead of fetching kernel data and doing */
+/*        computations in-line. */
+
+/*        Fixed indentation of some header sections. */
 
 /* -    SPICELIB Version 1.2.0, 23-OCT-2005 (NJB) */
 
@@ -337,6 +344,12 @@ static integer c__9 = 9;
 /* -& */
 /* $ Revisions */
 
+/* -    SPICELIB Version 1.3.0, 27-JUL-2016 (BVS) */
+
+/*        Updated to use the 3x3 top-left corner of the 6x6 matrix */
+/*        returned by TISBOD instead of fetching kernel data and doing */
+/*        computations in-line. */
+
 /* -    SPICELIB Version 1.2.0, 06-SEP-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
@@ -357,7 +370,7 @@ static integer c__9 = 9;
 /*     Local variables */
 
 
-/*     Standard SPICE error handling. */
+/*     Standard SPICE Error handling. */
 
     if (return_()) {
 	return 0;
@@ -365,28 +378,22 @@ static integer c__9 = 9;
 	chkin_("TIPBOD", (ftnlen)6);
     }
 
-/*     Get the transformation from the inertial from REF to J2000 */
-/*     coordinates. */
+/*     Get 6x6 state transformation from TISBOD. If succeeded, pull out */
+/*     left-top 3x3 matrix. */
 
-    irftrn_(ref, "J2000", ref2j, ref_len, (ftnlen)5);
-
-/*     Get the transformation from J2000 to body-fixed coordinates */
-/*     for the requested epoch. */
-
-    bodmat_(body, et, tipm);
+    tisbod_(ref, body, et, tsipm, ref_len);
     if (failed_()) {
 	chkout_("TIPBOD", (ftnlen)6);
 	return 0;
     }
-
-/*     Compose the transformations to arrive at the REF-to-J2000 */
-/*     transformation. */
-
-    mxm_(tipm, ref2j, tmpmat);
-    moved_(tmpmat, &c__9, tipm);
-
-/*     That's all folks.  Check out and get out. */
-
+    for (i__ = 1; i__ <= 3; ++i__) {
+	for (j = 1; j <= 3; ++j) {
+	    tipm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
+		    "tipm", i__1, "tipbod_", (ftnlen)389)] = tsipm[(i__2 = 
+		    i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("tsipm"
+		    , i__2, "tipbod_", (ftnlen)389)];
+	}
+    }
     chkout_("TIPBOD", (ftnlen)6);
     return 0;
 } /* tipbod_ */

@@ -9,18 +9,15 @@
 /* Subroutine */ int zzekrd01_(integer *handle, integer *segdsc, integer *
 	coldsc, integer *recptr, integer *ival, logical *isnull)
 {
-    integer nrec;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno, ncols;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
     integer colidx, datptr, ptrloc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -655,10 +652,10 @@
 /*         called by this routine. */
 
 /*     2)  If the specified column entry has not been initialized, the */
-/*         error SPICE(UNINITIALIZEDVALUE) is signalled. */
+/*         error SPICE(UNINITIALIZEDVALUE) is signaled. */
 
 /*     3)  If the ordinal position of the column specified by COLDSC */
-/*         is out of range, the error SPICE(INVALIDINDEX) is signalled. */
+/*         is out of range, the error SPICE(INVALIDINDEX) is signaled. */
 
 /*     4)  If an I/O error occurs while reading the indicated file, */
 /*         the error will be diagnosed by routines called by this */
@@ -691,6 +688,14 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Bug fix: changed max column index in long error */
+/*        message from NREC to NCOLS. */
+
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
@@ -710,15 +715,14 @@
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRD01", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
 		"EK = #", (ftnlen)65);
 	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
+	errint_("#", &ncols, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKRD01", (ftnlen)8);
 	return 0;
@@ -744,14 +748,13 @@
 /*        The data value is absent.  This is an error. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRD01", (ftnlen)8);
 	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
 		"OLIDX = #; RECNO = #; EK = #", (ftnlen)87);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &colidx, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(UNINITIALIZEDVALUE)", (ftnlen)25);
 	chkout_("ZZEKRD01", (ftnlen)8);
 	return 0;
@@ -760,14 +763,13 @@
 /*        The data pointer is corrupted. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRD01", (ftnlen)8);
 	setmsg_("Data pointer is corrupted. SEGNO = #; COLIDX =  #; RECNO = "
 		"#; EK = #", (ftnlen)68);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &colidx, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKRD01", (ftnlen)8);
 	return 0;

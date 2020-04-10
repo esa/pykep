@@ -5,6 +5,10 @@
 
 #include "f2c.h"
 
+/* Table of constant values */
+
+static integer c__100 = 100;
+
 /* $Procedure      OCCULT ( find occultation type at time ) */
 /* Subroutine */ int occult_(char *targ1, char *shape1, char *frame1, char *
 	targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, 
@@ -29,24 +33,37 @@
     extern /* Subroutine */ int zzgfocin_(char *, char *, char *, char *, 
 	    char *, char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    char shap1[9], shap2[9];
+    char shap1[500], shap2[500];
     extern /* Subroutine */ int zzgfocst_(doublereal *, logical *);
     integer i__;
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
     char bname[36], fname[36];
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     integer index;
+    logical found;
     char front[36];
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    integer nsurf;
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
+	    bods2c_(char *, integer *, logical *, ftnlen);
     logical ellps2;
+    char prshp1[9], prshp2[9];
     extern logical failed_(void);
-    char bframe[32], fframe[32], bshape[9], fshape[9];
+    char bframe[32], fframe[32], bshape[500], bmethd[500], fmethd[500], 
+	    fshape[500];
     integer mltfac;
-    logical ocstat;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    char pntdef[20];
     extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    char subtyp[20];
+    integer id1, id2, srflst[100];
+    logical ocstat;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
+	    ftnlen), chkout_(char *, ftnlen);
+    char trmtyp[20];
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    logical pri;
 
 /* $ Abstract */
 
@@ -147,6 +164,12 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
 /* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
 
 /*       Added NWILUM parameter. */
@@ -220,9 +243,6 @@
 
 
 /*     FRMNLN is a string length for frame names. */
-
-
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
 
 
 /*     FOVTLN -- maximum length for FOV string. */
@@ -368,6 +388,77 @@
 
 /*     End include file occult.inc */
 
+
+/*     File: dsk.inc */
+
+
+/*     Version 1.0.0 05-FEB-2016 (NJB) */
+
+/*     Maximum size of surface ID list. */
+
+
+/*     End of include file dsk.inc */
+
+
+/*     File: zzdsk.inc */
+
+
+/*     Version 4.0.0 13-NOV-2015 (NJB) */
+
+/*        Changed parameter LBTLEN to CVTLEN. */
+/*        Added parameter LMBCRV. */
+
+/*     Version 3.0.0 05-NOV-2015 (NJB) */
+
+/*        Added parameters */
+
+/*           CTRCOR */
+/*           ELLCOR */
+/*           GUIDED */
+/*           LBTLEN */
+/*           PNMBRL */
+/*           TANGNT */
+/*           TMTLEN */
+/*           UMBRAL */
+
+/*     Version 2.0.0 04-MAR-2015 (NJB) */
+
+/*        Removed declaration of parameter SHPLEN. */
+/*        This name is already in use in the include */
+/*        file gf.inc. */
+
+/*     Version 1.0.0 26-JAN-2015 (NJB) */
+
+
+/*     Parameters supporting METHOD string parsing: */
+
+
+/*     Local method length. */
+
+
+/*     Length of sub-point type string. */
+
+
+/*     Length of curve type string. */
+
+
+/*     Limb type parameter codes. */
+
+
+/*     Length of terminator type string. */
+
+
+/*     Terminator type and limb parameter codes. */
+
+
+/*     Length of aberration correction locus string. */
+
+
+/*     Aberration correction locus codes. */
+
+
+/*     End of include file zzdsk.inc */
+
 /* $ Brief_I/O */
 
 /*     Variable  I/O  Description */
@@ -393,31 +484,65 @@
 /*                represent the shape of the first target body. The */
 /*                supported options are: */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                   'ELLIPSOID' */
 
-/*                                      'BODYnnn_RADII' */
+/*                       Use a triaxial ellipsoid model with radius */
+/*                       values provided via the kernel pool. A kernel */
+/*                       variable having a name of the form */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*                          'BODYnnn_RADII' */
 
-/*                   'POINT'         Treat the body as a single point. */
-/*                                   When a point target is specified, */
-/*                                   the occultation type must be */
-/*                                   set to 'ANY'. */
+/*                       where nnn represents the NAIF integer code */
+/*                       associated with the body, must be present in */
+/*                       the kernel pool. This variable must be */
+/*                       associated with three numeric values giving the */
+/*                       lengths of the ellipsoid's X, Y, and Z */
+/*                       semi-axes. */
 
-/*                At least one of the target bodies TARG1 or TARG2 must */
-/*                be modeled as an ellipsoid. */
+/*                   'POINT' */
+
+/*                       Treat the body as a single point. When a point */
+/*                       target is specified, the occultation conditions */
+/*                       can only be total, annular, or none. */
+
+/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                       Use topographic data provided by DSK files to */
+/*                       model the body's shape. These data must be */
+/*                       provided by loaded DSK files. */
+
+/*                       The surface list specification is optional. The */
+/*                       syntax of the list is */
+
+/*                          <surface 1> [, <surface 2>...] */
+
+/*                       If present, it indicates that data only for the */
+/*                       listed surfaces are to be used; however, data */
+/*                       need not be available for all surfaces in the */
+/*                       list. If absent, loaded DSK data for any surface */
+/*                       associated with the target body are used. */
+
+/*                       The surface list may contain surface names or */
+/*                       surface ID codes. Names containing blanks must */
+/*                       be delimited by double quotes, for example */
+
+/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                       If multiple surfaces are specified, their names */
+/*                       or IDs must be separated by commas. */
+
+/*                       See the Particulars section below for details */
+/*                       concerning use of DSK data. */
+
+/*                The combinations of the shapes of the target bodies */
+/*                TARG1 and TARG2 must be one of: */
+
+/*                   One ELLIPSOID, one POINT */
+/*                   Two ELLIPSOIDs */
+/*                   One DSK, one POINT */
 
 /*                Case and leading or trailing blanks are not */
-/*                significant in the string. */
+/*                significant in the string SHAPE1. */
 
 /*     FRAME1     is the name of the body-fixed, body-centered reference */
 /*                frame associated with the first target body. Examples */
@@ -488,11 +613,11 @@
 
 /*                    Code sign          Meaning */
 /*                    ---------          ------------------------------ */
-/*                       > 0             The second ellipsoid is */
+/*                       > 0             The second target is */
 /*                                       partially or fully occulted */
 /*                                       by the first. */
 
-/*                       < 0             The first ellipsoid is */
+/*                       < 0             The first target is */
 /*                                       partially of fully */
 /*                                       occulted by the second. */
 
@@ -502,8 +627,12 @@
 /*                The variable names indicate the type of occultation */
 /*                and which target is in the back. For example, TOTAL1 */
 /*                represents a total occultation in which the first */
-/*                target is in the back (or occulted by) the second */
-/*                target. */
+/*                target is in the back of (or is occulted by) the */
+/*                second target. */
+
+/*                When the target shapes are DSK and POINT, the only */
+/*                possible occultation conditions are total, annular, */
+/*                or none. */
 
 /*                    Name      Code     Meaning */
 /*                    ------    -----    ------------------------------ */
@@ -511,9 +640,10 @@
 /*                                       target by second. */
 
 /*                    ANNLR1     -2      Annular occultation of first */
-/*                                       target by second. The second */
-/*                                       target does not block the limb */
-/*                                       of the first. */
+/*                                       target by second. If the second */
+/*                                       target shape is an ellipsoid, */
+/*                                       it does not block the limb of */
+/*                                       the first. */
 
 /*                    PARTL1     -1      Partial occultation of first */
 /*                                       target by second target. */
@@ -572,6 +702,16 @@
 /*     8)  Invalid aberration correction specifications will be */
 /*         diagnosed by a routine in the call tree of this routine. */
 
+/*     17) If either SHAPE1 or SHAPE2 specifies that the target surface */
+/*         is represented by DSK data, and no DSK files are loaded for */
+/*         the specified target, the error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     18) If either SHAPE1 or SHAPE2 specifies that the target surface */
+/*         is represented by DSK data, but the shape specification is */
+/*         invalid, the error is signaled by a routine in the call tree */
+/*         of this routine. */
+
 /* $ Files */
 
 /*     Appropriate SPICE kernels must be loaded by the calling program */
@@ -580,26 +720,196 @@
 /*     The following data are required: */
 
 /*        - SPK data: the calling application must load ephemeris data */
-/*          for the targets and observer for the specified input time. */
-/*          If aberration corrections are used, the states of the target */
-/*          bodies and of the observer relative to the solar system */
-/*          barycenter must be calculable from the available ephemeris */
-/*          data. Typically ephemeris data are made available by loading */
-/*          one or more SPK files via FURNSH. */
+/*          for the target, source and observer that cover the time */
+/*          period specified by the window CNFINE. If aberration */
+/*          corrections are used, the states of the target bodies and of */
+/*          the observer relative to the solar system barycenter must be */
+/*          calculable from the available ephemeris data. Typically */
+/*          ephemeris data */
+/*          are made available by loading one or more SPK files via */
+/*          FURNSH. */
 
 /*        - PCK data: bodies modeled as triaxial ellipsoids must have */
 /*          semi-axis lengths provided by variables in the kernel pool. */
 /*          Typically these data are made available by loading a text */
 /*          PCK file via FURNSH. */
 
+/*        - FK data: if either of the reference frames designated by */
+/*          FRAME1 or FRAME2 are not built in to the SPICE system, */
+/*          one or more FKs specifying these frames must be loaded. */
+
+/*     The following data may be required: */
+
+/*        - DSK data: if either SHAPE1 or SHAPE2 indicates that DSK */
+/*          data are to be used, DSK files containing topographic data */
+/*          for the target body must be loaded. If a surface list is */
+/*          specified, data for at least one of the listed surfaces must */
+/*          be loaded. */
+
+/*        - Surface name-ID associations: if surface names are specified */
+/*          in SHAPE1 or SHAPE2, the association of these names with */
+/*          their corresponding surface ID codes must be established by */
+/*          assignments of the kernel variables */
+
+/*             NAIF_SURFACE_NAME */
+/*             NAIF_SURFACE_CODE */
+/*             NAIF_SURFACE_BODY */
+
+/*          Normally these associations are made by loading a text */
+/*          kernel containing the necessary assignments. An example */
+/*          of such a set of assignments is */
+
+/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*             NAIF_SURFACE_CODE += 1 */
+/*             NAIF_SURFACE_BODY += 499 */
+
+/*        - CK data: either of the body-fixed frames to which FRAME1 or */
+/*          FRAME2 refer might be a CK frame. If so, at least one CK */
+/*          file will be needed to permit transformation of vectors */
+/*          between that frame and the J2000 frame. */
+
+/*        - SCLK data: if a CK file is needed, an associated SCLK */
+/*          kernel is required to enable conversion between encoded SCLK */
+/*          (used to time-tag CK data) and barycentric dynamical time */
+/*          (TDB). */
+
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
 
 /* $ Particulars */
 
+/*     This routine supports the target shape combinations */
+
+/*        POINT     - ELLIPSOID */
+/*        POINT     - DSK */
+/*        ELLIPSOID - ELLIPSOID */
+
 /*     For many purposes, modeling extended bodies as triaxial */
 /*     ellipsoids is adequate for determining whether one body is */
 /*     occulted by another as seen from a specified observer. */
+
+
+/*     Using DSK data */
+/*     ============== */
+
+/*        DSK loading and unloading */
+/*        ------------------------- */
+
+/*        DSK files providing data used by this routine are loaded by */
+/*        calling FURNSH and can be unloaded by calling UNLOAD or */
+/*        KCLEAR. See the documentation of FURNSH for limits on numbers */
+/*        of loaded DSK files. */
+
+/*        For run-time efficiency, it's desirable to avoid frequent */
+/*        loading and unloading of DSK files. When there is a reason to */
+/*        use multiple versions of data for a given target body---for */
+/*        example, if topographic data at varying resolutions are to be */
+/*        used---the surface list can be used to select DSK data to be */
+/*        used for a given computation. It is not necessary to unload */
+/*        the data that are not to be used. This recommendation presumes */
+/*        that DSKs containing different versions of surface data for a */
+/*        given body have different surface ID codes. */
+
+
+/*        DSK data priority */
+/*        ----------------- */
+
+/*        A DSK coverage overlap occurs when two segments in loaded DSK */
+/*        files cover part or all of the same domain---for example, a */
+/*        given longitude-latitude rectangle---and when the time */
+/*        intervals of the segments overlap as well. */
+
+/*        When DSK data selection is prioritized, in case of a coverage */
+/*        overlap, if the two competing segments are in different DSK */
+/*        files, the segment in the DSK file loaded last takes */
+/*        precedence. If the two segments are in the same file, the */
+/*        segment located closer to the end of the file takes */
+/*        precedence. */
+
+/*        When DSK data selection is unprioritized, data from competing */
+/*        segments are combined. For example, if two competing segments */
+/*        both represent a surface as sets of triangular plates, the */
+/*        union of those sets of plates is considered to represent the */
+/*        surface. */
+
+/*        Currently only unprioritized data selection is supported. */
+/*        Because prioritized data selection may be the default behavior */
+/*        in a later version of the routine, the UNPRIORITIZED keyword is */
+/*        required in the SHAPE1 and SHAPE2 arguments. */
+
+
+/*        Syntax of the shape input arguments for the DSK case */
+/*        ---------------------------------------------------- */
+
+/*        The keywords and surface list in the target shape arguments */
+/*        SHAPE1 and SHAPE2, when DSK shape models are specified, are */
+/*        called "clauses." The clauses may appear in any order, for */
+/*        example */
+
+/*           DSK/<surface list>/UNPRIORITIZED */
+/*           DSK/UNPRIORITIZED/<surface list> */
+/*           UNPRIORITIZED/<surface list>/DSK */
+
+/*        The simplest form of a target argument specifying use of */
+/*        DSK data is one that lacks a surface list, for example: */
+
+/*           'DSK/UNPRIORITIZED' */
+
+/*        For applications in which all loaded DSK data for the target */
+/*        body are for a single surface, and there are no competing */
+/*        segments, the above string suffices. This is expected to be */
+/*        the usual case. */
+
+/*        When, for the specified target body, there are loaded DSK */
+/*        files providing data for multiple surfaces for that body, the */
+/*        surfaces to be used by this routine for a given call must be */
+/*        specified in a surface list, unless data from all of the */
+/*        surfaces are to be used together. */
+
+/*        The surface list consists of the string */
+
+/*           SURFACES = */
+
+/*        followed by a comma-separated list of one or more surface */
+/*        identifiers. The identifiers may be names or integer codes in */
+/*        string format. For example, suppose we have the surface */
+/*        names and corresponding ID codes shown below: */
+
+/*           Surface Name                              ID code */
+/*           ------------                              ------- */
+/*           'Mars MEGDR 128 PIXEL/DEG'                1 */
+/*           'Mars MEGDR 64 PIXEL/DEG'                 2 */
+/*           'Mars_MRO_HIRISE'                         3 */
+
+/*        If data for all of the above surfaces are loaded, then */
+/*        data for surface 1 can be specified by either */
+
+/*           'SURFACES = 1' */
+
+/*        or */
+
+/*           'SURFACES = "Mars MEGDR 128 PIXEL/DEG"' */
+
+/*        Double quotes are used to delimit the surface name because */
+/*        it contains blank characters. */
+
+/*        To use data for surfaces 2 and 3 together, any */
+/*        of the following surface lists could be used: */
+
+/*           'SURFACES = 2, 3' */
+
+/*           'SURFACES = "Mars MEGDR  64 PIXEL/DEG", 3' */
+
+/*           'SURFACES = 2, Mars_MRO_HIRISE' */
+
+/*           'SURFACES = "Mars MEGDR 64 PIXEL/DEG", Mars_MRO_HIRISE' */
+
+/*        An example of a shape argument that could be constructed */
+/*        using one of the surface lists above is */
+
+/*              'DSK/UNPRIORITIZED/SURFACES = ' */
+/*           // '"Mars MEGDR 64 PIXEL/DEG", 499003' */
+
 
 /* $ Examples */
 
@@ -610,58 +920,72 @@
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
-/*           KPL/MK */
 
-/*           File: mro_ex_occult.tm */
+/*          KPL/MK */
 
-/*           This is the meta-kernel file for the example problem for */
-/*           the subroutine OCCULT. These kernel files can be found in */
-/*           the NAIF archives. */
+/*          File: occult_ex1.tm */
 
-/*           In order for an application to use this meta-kernel, the */
-/*           kernels referenced here must be present in the user's */
-/*           current working directory. */
+/*          This meta-kernel is intended to support operation of SPICE */
+/*          example programs. The kernels shown here should not be */
+/*          assumed to contain adequate or correct versions of data */
+/*          required by SPICE-based user applications. */
 
-/*           The names and contents of the kernels referenced */
-/*           by this meta-kernel are as follows: */
+/*          In order for an application to use this meta-kernel, the */
+/*          kernels referenced here must be present in the user's */
+/*          current working directory. */
 
-/*                 File name                       Contents */
-/*                 ---------                       -------- */
-/*                 de421.bsp                       Planetary ephemeris */
-/*                 earthstns_itrf93_050714.bsp     DSN station ephemeris */
-/*                 pck00010.tpc                    Planet orientation and */
-/*                                                 radii */
-/*                 earth_000101_120409_120117.bpc  High precision Earth */
-/*                                                 orientation */
-/*                 mro_psp_rec.bsp                 MRO ephemeris */
-/*                 naif0010.tls                    Leapseconds */
-/*                 earth_topo_050714.tf            Topocentric reference */
-/*                                                 frames for */
-/*                                                 DSN stations */
+/*          The names and contents of the kernels referenced */
+/*          by this meta-kernel are as follows: */
 
-/*           \begindata */
+/*             File name                        Contents */
+/*             ---------                        -------- */
+/*             de410.bsp                        Planetary ephemeris */
+/*             mar063.bsp                       Mars satellite ephemeris */
+/*             pck00010.tpc                     Planet orientation and */
+/*                                              radii */
+/*             naif0011.tls                     Leapseconds */
+/*             mro_psp35.bsp                    MRO ephemeris */
+/*             megr90n000cb_plate.bds           Plate model based on */
+/*                                              MEGDR DEM, resolution */
+/*                                              4 pixels/degree. */
 
-/*           KERNELS_TO_LOAD = ( 'de421.bsp', */
-/*                               'earthstns_itrf93_050714.bsp', */
-/*                               'pck00010.tpc', */
-/*                               'earth_000101_120409_120117.bpc', */
-/*                               'mro_psp_rec.bsp', */
-/*                               'naif0010.tls', */
-/*                               'earth_topo_050714.tf' ) */
-/*           \begintext */
+/*          \begindata */
+
+/*             PATH_SYMBOLS    = ( 'MRO', 'GEN' ) */
+
+/*             PATH_VALUES     = ( */
+/*                                 '/ftp/pub/naif/pds/data+' */
+/*                                 '/mro-m-spice-6-v1.0/+' */
+/*                                 'mrosp_1000/data/spk', */
+/*                                 '/ftp/pub/naif/generic_kernels' */
+/*                               ) */
+
+/*             KERNELS_TO_LOAD = ( '$MRO/de410.bsp', */
+/*                                 '$MRO/mar063.bsp', */
+/*                                 '$MRO/mro_psp34.bsp', */
+/*                                 '$GEN/spk/stations/+' */
+/*                                 'earthstns_itrf93_050714.bsp', */
+/*                                 '$GEN/pck/earth_latest_high_prec.bpc', */
+/*                                 'pck00010.tpc', */
+/*                                 'naif0011.tls', */
+/*                                 'megr90n000cb_plate.bds' */
+/*                               ) */
+/*          \begintext */
+
+
 
 /*        Example code begins here. */
+
 
 /*           PROGRAM OCCULT_MRO */
 /*           IMPLICIT NONE */
 
 /*           INCLUDE              'occult.inc' */
-
 /*     C */
 /*     C     Local parameters */
 /*     C */
 /*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META  = mro_ex_occult.tm' ) */
+/*           PARAMETER           ( META  = 'occult_ex1.tm' ) */
 
 /*           CHARACTER*(*)         FRMT */
 /*           PARAMETER           ( FRMT  = '(A18, A5, A21, A5, A4, A6)' ) */
@@ -677,6 +1001,7 @@
 /*           CHARACTER*(CHSIZ)     OBSRVR */
 /*           CHARACTER*(CHSIZ)     SHAPE1 */
 /*           CHARACTER*(CHSIZ)     SHAPE2 */
+/*           CHARACTER*(CHSIZ)     SHAPES ( 2 ) */
 /*           CHARACTER*(CHSIZ)     TARG1 */
 /*           CHARACTER*(CHSIZ)     TARG2 */
 /*           CHARACTER*(CHSIZ)     TIME */
@@ -689,25 +1014,33 @@
 /*           DOUBLE PRECISION      ETEND */
 
 /*           INTEGER               DT */
+/*           INTEGER               I */
 /*           INTEGER               OCLTID */
 
 /*     C */
 /*     C     Saved variables */
 /*     C */
-/*           SAVE OUTCH */
-
+/*           SAVE                  OUTCH */
+/*           SAVE                  SHAPES */
+/*     C */
+/*     C     Initial values */
+/*     C */
 /*           DATA OUTCH ( 1 ) / 'totally occulted by'   / */
 /*           DATA OUTCH ( 2 ) / 'transited by'          / */
 /*           DATA OUTCH ( 3 ) / 'partially occulted by' / */
 /*           DATA OUTCH ( 4 ) / 'not occulted by'       / */
+
+/*           DATA SHAPES      / 'ELLIPSOID', */
+/*          .                   'DSK/UNPRIORITIZED' / */
 
 /*     C */
 /*     C     Initialize the time range. Set the output time */
 /*     C     format to PST. Set DT to an hour interval in */
 /*     C     units of seconds. */
 /*     C */
-/*           TSTART = '2012-JAN-5 1:15:00 UTC' */
-/*           TEND   = '2012-JAN-5 2:50:00 UTC' */
+
+/*           TSTART = '2015-FEB-28 1:15:00 UTC' */
+/*           TEND   = '2015-FEB-28 2:50:00 UTC' */
 /*           FORM   = 'YYYY-MON-DD HR:MN ::UTC-8' */
 /*           DT     = 1000 */
 
@@ -718,7 +1051,6 @@
 /*           TARG1  = 'MRO' */
 /*           SHAPE1 = 'POINT' */
 /*           TARG2  = 'MARS' */
-/*           SHAPE2 = 'ELLIPSOID' */
 /*           OBSRVR = 'DSS-13' */
 /*           ABCORR = 'CN' */
 
@@ -732,72 +1064,98 @@
 /*           CALL STR2ET ( TSTART, ET1   ) */
 /*           CALL STR2ET ( TEND,   ETEND ) */
 
-/*           ET = ET1 */
-/*           DO WHILE ( ET .LT. ETEND ) */
+
+/*           DO I = 1, 2 */
 /*     C */
-/*     C        Calculate the type of occultation that */
-/*     C        corresponds to time ET. */
+/*     C        Set the planet shape model for this pass. */
 /*     C */
-/*              CALL OCCULT ( TARG1,  SHAPE1, ' ', */
-/*          .                 TARG2,  SHAPE2, 'IAU_MARS', */
-/*          .                 ABCORR, OBSRVR,  ET, OCLTID ) */
+/*              SHAPE2 = SHAPES(I) */
+
+/*              WRITE (*,*) ' ' */
+/*              CALL TOSTDO ( 'Mars shape: '//SHAPE2 ) */
+/*              WRITE (*,*) ' ' */
+
+/*              ET = ET1 */
+/*              DO WHILE ( ET .LT. ETEND ) */
 /*     C */
-/*     C        Output the results. */
+/*     C           Calculate the type of occultation that */
+/*     C           corresponds to time ET. */
 /*     C */
-/*              CALL TIMOUT ( ET, FORM, TIME ) */
-
-/*              IF ( OCLTID .EQ. TOTAL1 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG1, OUTCH(1), TARG2, */
-/*          .                     'wrt ', OBSRVR */
-
-/*              ELSEIF ( OCLTID .EQ. ANNLR1 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG1, OUTCH(2), TARG2, */
-/*          .                     'wrt ', OBSRVR */
-
-/*              ELSEIF ( OCLTID .EQ. PARTL1 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG1, OUTCH(3), TARG2, */
-/*          .                     'wrt ', OBSRVR, */
-/*          .                     'NOT POSSIBLE FOR POINT' */
-
-/*              ELSEIF ( OCLTID .EQ. NOOCC ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG1, OUTCH(4), TARG2, */
-/*          .                     'wrt ', OBSRVR */
-
-/*              ELSEIF ( OCLTID .EQ. PARTL2 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG2, OUTCH(3), TARG1, */
-/*          .                     'wrt ', OBSRVR, */
-/*          .                     'NOT POSSIBLE FOR POINT' */
-
-/*              ELSEIF ( OCLTID .EQ. ANNLR2 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG2, OUTCH(2), TARG1, */
-/*          .                     'wrt ', OBSRVR */
-
-/*              ELSEIF ( OCLTID .EQ. TOTAL2 ) THEN */
-/*                 WRITE (*,FRMT) TIME, TARG2, OUTCH(1), TARG1, */
-/*          .                     'wrt ', OBSRVR */
-
-/*              ELSE */
-/*                 WRITE (*,*) 'Bad occultation ID:  ', OCLTID */
-
-/*              END IF */
+/*                 CALL OCCULT ( TARG1,  SHAPE1, ' ', */
+/*          .                    TARG2,  SHAPE2, 'IAU_MARS', */
+/*          .                    ABCORR, OBSRVR,  ET, OCLTID ) */
 /*     C */
-/*     C        Increment the time. */
+/*     C           Output the results. */
 /*     C */
-/*              ET = ET + DT */
+/*                 CALL TIMOUT ( ET, FORM, TIME ) */
+
+/*                 IF ( OCLTID .EQ. TOTAL1 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG1, OUTCH(1), TARG2, */
+/*          .                        'wrt ', OBSRVR */
+
+/*                 ELSEIF ( OCLTID .EQ. ANNLR1 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG1, OUTCH(2), TARG2, */
+/*          .                        'wrt ', OBSRVR */
+
+/*                 ELSEIF ( OCLTID .EQ. PARTL1 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG1, OUTCH(3), TARG2, */
+/*          .                        'wrt ', OBSRVR, */
+/*          .                        'NOT POSSIBLE FOR POINT' */
+
+/*                 ELSEIF ( OCLTID .EQ. NOOCC ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG1, OUTCH(4), TARG2, */
+/*          .                        'wrt ', OBSRVR */
+
+/*                 ELSEIF ( OCLTID .EQ. PARTL2 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG2, OUTCH(3), TARG1, */
+/*          .                        'wrt ', OBSRVR, */
+/*          .                        'NOT POSSIBLE FOR POINT' */
+
+/*                 ELSEIF ( OCLTID .EQ. ANNLR2 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG2, OUTCH(2), TARG1, */
+/*          .                        'wrt ', OBSRVR */
+
+/*                 ELSEIF ( OCLTID .EQ. TOTAL2 ) THEN */
+/*                    WRITE (*,FRMT) TIME, TARG2, OUTCH(1), TARG1, */
+/*          .                        'wrt ', OBSRVR */
+
+/*                 ELSE */
+/*                    WRITE (*,*) 'Bad occultation ID:  ', OCLTID */
+
+/*                 END IF */
+/*     C */
+/*     C           Increment the time. */
+/*     C */
+/*                 ET = ET + DT */
+
+/*              END DO */
 
 /*           END DO */
-
 /*           END */
+
 
 /*        When this program was executed using gfortran on a PC Linux */
 /*        64 bit environment, the output was: */
 
-/*           2012-JAN-04 17:15 MARS transited by         MRO  wrt DSS-13 */
-/*           2012-JAN-04 17:31 MRO  not occulted by      MARS wrt DSS-13 */
-/*           2012-JAN-04 17:48 MRO  totally occulted by  MARS wrt DSS-13 */
-/*           2012-JAN-04 18:04 MRO  totally occulted by  MARS wrt DSS-13 */
-/*           2012-JAN-04 18:21 MRO  not occulted by      MARS wrt DSS-13 */
-/*           2012-JAN-04 18:38 MARS transited by         MRO  wrt DSS-13 */
+
+/*           Mars shape: ELLIPSOID */
+
+/*           2015-FEB-27 17:15 MARS transited by         MRO  wrt DSS-13 */
+/*           2015-FEB-27 17:31 MRO  not occulted by      MARS wrt DSS-13 */
+/*           2015-FEB-27 17:48 MRO  totally occulted by  MARS wrt DSS-13 */
+/*           2015-FEB-27 18:04 MRO  totally occulted by  MARS wrt DSS-13 */
+/*           2015-FEB-27 18:21 MRO  not occulted by      MARS wrt DSS-13 */
+/*           2015-FEB-27 18:38 MARS transited by         MRO  wrt DSS-13 */
+
+/*           Mars shape: DSK/UNPRIORITIZED */
+
+/*           2015-FEB-27 17:15 MARS transited by         MRO  wrt DSS-13 */
+/*           2015-FEB-27 17:31 MRO  not occulted by      MARS wrt DSS-13 */
+/*           2015-FEB-27 17:48 MRO  totally occulted by  MARS wrt DSS-13 */
+/*           2015-FEB-27 18:04 MRO  totally occulted by  MARS wrt DSS-13 */
+/*           2015-FEB-27 18:21 MRO  not occulted by      MARS wrt DSS-13 */
+/*           2015-FEB-27 18:38 MARS transited by         MRO  wrt DSS-13 */
+
 
 /* $ Restrictions */
 
@@ -813,6 +1171,16 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 21-FEB-2017 (NJB) */
+
+/*        Added FAILED tests. */
+
+/*        01-MAR-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. Updated */
+/*        example program to show use of DSKs. Updated example */
+/*        meta-kernel. Corrected various comment typos. */
 
 /* -    SPICELIB Version 1.0.0, 14-NOV-2013 (SCK) (NJB) */
 
@@ -881,27 +1249,67 @@
 
 /*     Left justify the shapes and target names and make them upper case. */
 
-    ljust_(shape1, shap1, shape1_len, (ftnlen)9);
-    ucase_(shap1, shap1, (ftnlen)9, (ftnlen)9);
-    ljust_(shape2, shap2, shape2_len, (ftnlen)9);
-    ucase_(shap2, shap2, (ftnlen)9, (ftnlen)9);
+    ljust_(shape1, shap1, shape1_len, (ftnlen)500);
+    ucase_(shap1, shap1, (ftnlen)500, (ftnlen)500);
+    ljust_(shape2, shap2, shape2_len, (ftnlen)500);
+    ucase_(shap2, shap2, (ftnlen)500, (ftnlen)500);
     ljust_(targ1, fname, targ1_len, (ftnlen)36);
     ucase_(fname, fname, (ftnlen)36, (ftnlen)36);
     ljust_(targ2, bname, targ2_len, (ftnlen)36);
     ucase_(bname, bname, (ftnlen)36, (ftnlen)36);
 
-/*     The variable ELLPS2 is a flag that relates if both targets are */
-/*     represented as ellipsoids. If not, only the 'any' occultation */
-/*     check can be completed. */
+/*     The variable ELLPS2 is a flag that indicates whether both targets */
+/*     are represented as ellipsoids. */
 
-    if (s_cmp(shap1, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 && s_cmp(shap2, 
-	    "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0) {
-	ellps2 = TRUE_;
+    ellps2 = s_cmp(shap1, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 0 && s_cmp(
+	    shap2, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 0;
+
+/*     Parse the input shapes. We need the target ID codes */
+/*     for this. */
+
+    if (s_cmp(shap1, "POINT", (ftnlen)500, (ftnlen)5) == 0) {
+	s_copy(prshp1, shap1, (ftnlen)9, (ftnlen)9);
     } else {
-	ellps2 = FALSE_;
+	bods2c_(fname, &id1, &found, (ftnlen)36);
+	if (! found) {
+	    setmsg_("First target name # could not be mapped to an ID code.", 
+		    (ftnlen)54);
+	    errch_("#", fname, (ftnlen)1, (ftnlen)36);
+	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_("OCCULT", (ftnlen)6);
+	    return 0;
+	}
+	zzprsmet_(&id1, shap1, &c__100, prshp1, subtyp, &pri, &nsurf, srflst, 
+		pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (ftnlen)
+		20, (ftnlen)20);
+	if (failed_()) {
+	    chkout_("OCCULT", (ftnlen)6);
+	    return 0;
+	}
+    }
+    if (s_cmp(shap2, "POINT", (ftnlen)500, (ftnlen)5) == 0) {
+	s_copy(prshp2, shap2, (ftnlen)9, (ftnlen)9);
+    } else {
+	bods2c_(bname, &id2, &found, (ftnlen)36);
+	if (! found) {
+	    setmsg_("Second target name # could not be mapped to an ID code.",
+		     (ftnlen)55);
+	    errch_("#", bname, (ftnlen)1, (ftnlen)36);
+	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_("OCCULT", (ftnlen)6);
+	    return 0;
+	}
+	zzprsmet_(&id2, shap2, &c__100, prshp2, subtyp, &pri, &nsurf, srflst, 
+		pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (ftnlen)
+		20, (ftnlen)20);
+	if (failed_()) {
+	    chkout_("OCCULT", (ftnlen)6);
+	    return 0;
+	}
     }
 
 /*     Test two main cases: */
+
 /*     1) The first target is the front body. */
 /*     2) The second target is the front body. */
 
@@ -917,18 +1325,22 @@
 
 	if (i__ == 1) {
 	    s_copy(front, fname, (ftnlen)36, (ftnlen)36);
-	    s_copy(fshape, shap1, (ftnlen)9, (ftnlen)9);
+	    s_copy(fmethd, shap1, (ftnlen)500, (ftnlen)500);
+	    s_copy(bmethd, shap2, (ftnlen)500, (ftnlen)500);
+	    s_copy(fshape, prshp1, (ftnlen)500, (ftnlen)9);
 	    s_copy(fframe, frame1, (ftnlen)32, frame1_len);
 	    s_copy(back, bname, (ftnlen)36, (ftnlen)36);
-	    s_copy(bshape, shap2, (ftnlen)9, (ftnlen)9);
+	    s_copy(bshape, prshp2, (ftnlen)500, (ftnlen)9);
 	    s_copy(bframe, frame2, (ftnlen)32, frame2_len);
 	    mltfac = 1;
 	} else {
 	    s_copy(front, bname, (ftnlen)36, (ftnlen)36);
-	    s_copy(fshape, shap2, (ftnlen)9, (ftnlen)9);
+	    s_copy(fmethd, shap2, (ftnlen)500, (ftnlen)500);
+	    s_copy(bmethd, shap1, (ftnlen)500, (ftnlen)500);
+	    s_copy(fshape, prshp2, (ftnlen)500, (ftnlen)9);
 	    s_copy(fframe, frame2, (ftnlen)32, frame2_len);
 	    s_copy(back, fname, (ftnlen)36, (ftnlen)36);
-	    s_copy(bshape, shap1, (ftnlen)9, (ftnlen)9);
+	    s_copy(bshape, prshp1, (ftnlen)500, (ftnlen)9);
 	    s_copy(bframe, frame1, (ftnlen)32, frame1_len);
 	    mltfac = -1;
 	}
@@ -938,13 +1350,9 @@
 /*        returns a true/false logical indicating if there is an */
 /*        occultation. */
 
-	zzgfocin_("ANY", front, fshape, fframe, back, bshape, bframe, obsrvr, 
-		abcorr, (ftnlen)3, (ftnlen)36, (ftnlen)9, (ftnlen)32, (ftnlen)
-		36, (ftnlen)9, (ftnlen)32, obsrvr_len, abcorr_len);
-	if (failed_()) {
-	    chkout_("OCCULT", (ftnlen)6);
-	    return 0;
-	}
+	zzgfocin_("ANY", front, fmethd, fframe, back, bmethd, bframe, obsrvr, 
+		abcorr, (ftnlen)3, (ftnlen)36, (ftnlen)500, (ftnlen)32, (
+		ftnlen)36, (ftnlen)500, (ftnlen)32, obsrvr_len, abcorr_len);
 	zzgfocst_(et, &ocstat);
 	if (failed_()) {
 	    chkout_("OCCULT", (ftnlen)6);
@@ -957,56 +1365,58 @@
 /*        occult.inc are changed, the following DO loop will need to be */
 /*        altered. */
 
-	if (ocstat && ellps2) {
-	    for (index = 1; index <= 3; ++index) {
-		zzgfocin_(occtyp + ((i__1 = index - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("occtyp", i__1, "occult_", (ftnlen)718))
-			 * 9, front, fshape, fframe, back, bshape, bframe, 
-			obsrvr, abcorr, (ftnlen)9, (ftnlen)36, (ftnlen)9, (
-			ftnlen)32, (ftnlen)36, (ftnlen)9, (ftnlen)32, 
-			obsrvr_len, abcorr_len);
-		if (failed_()) {
-		    chkout_("OCCULT", (ftnlen)6);
-		    return 0;
+	if (ocstat) {
+
+/*           An occultation exists. */
+
+	    if (ellps2) {
+
+/*              Both shapes are ellipsoids. */
+
+		for (index = 1; index <= 3; ++index) {
+		    zzgfocin_(occtyp + ((i__1 = index - 1) < 3 && 0 <= i__1 ? 
+			    i__1 : s_rnge("occtyp", i__1, "occult_", (ftnlen)
+			    1070)) * 9, front, fshape, fframe, back, bshape, 
+			    bframe, obsrvr, abcorr, (ftnlen)9, (ftnlen)36, (
+			    ftnlen)500, (ftnlen)32, (ftnlen)36, (ftnlen)500, (
+			    ftnlen)32, obsrvr_len, abcorr_len);
+		    zzgfocst_(et, &ocstat);
+		    if (failed_()) {
+			chkout_("OCCULT", (ftnlen)6);
+			return 0;
+		    }
+
+/*                 If the occultation condition is true, return the */
+/*                 integer occultation ID code. */
+
+		    if (ocstat) {
+			*ocltid = mltfac * index;
+			chkout_("OCCULT", (ftnlen)6);
+			return 0;
+		    }
+
+/*                 End the DO loop that checks the occultation type. */
+
 		}
-		zzgfocst_(et, &ocstat);
-		if (failed_()) {
-		    chkout_("OCCULT", (ftnlen)6);
-		    return 0;
-		}
+	    } else if (s_cmp(fshape, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 
+		    0 || s_cmp(fshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
 
-/*              If the occultation condition is true, return the integer */
-/*              occultation ID code. */
+/*              The front target is an ellipsoid or DSK shape: this */
+/*              is a total occultation. (Other target is a point). */
 
-		if (ocstat) {
-		    *ocltid = mltfac * index;
-		    chkout_("OCCULT", (ftnlen)6);
-		    return 0;
-		}
+		*ocltid = mltfac * 3;
+		chkout_("OCCULT", (ftnlen)6);
+		return 0;
+	    } else if (s_cmp(bshape, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 
+		    0 || s_cmp(bshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
 
-/*              End the DO loop that checks the occultation type. */
+/*              The back target is an ellipsoid or DSK shape: this is an */
+/*              annular occultation. (Other target is a point). */
 
+		*ocltid = mltfac << 1;
+		chkout_("OCCULT", (ftnlen)6);
+		return 0;
 	    }
-
-/*        If the search for 'any' occultation was true and the front */
-/*        target is an ellipse, this is a total occultation. (Other */
-/*        target is a point). */
-
-	} else if (ocstat && s_cmp(fshape, "ELLIPSOID", (ftnlen)9, (ftnlen)9) 
-		== 0) {
-	    *ocltid = mltfac * 3;
-	    chkout_("OCCULT", (ftnlen)6);
-	    return 0;
-
-/*        If the search for 'any' occultation was true and the back */
-/*        target is an ellipse, this is an annular occultation. (Other */
-/*        target is a point). */
-
-	} else if (ocstat && s_cmp(bshape, "ELLIPSOID", (ftnlen)9, (ftnlen)9) 
-		== 0) {
-	    *ocltid = mltfac << 1;
-	    chkout_("OCCULT", (ftnlen)6);
-	    return 0;
 	}
 
 /*        End the DO loop that checks the front/back orientation of */

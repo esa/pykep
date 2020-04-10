@@ -44,7 +44,7 @@ static integer c__15 = 15;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer addr__, unit;
+    static integer addr__;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
     static integer e, l, freec, freed;
     static char cfill[1024];
@@ -72,13 +72,13 @@ static integer c__15 = 15;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
 	    dassih_(integer *, char *, ftnlen), dasrdc_(integer *, integer *, 
-	    integer *, integer *, integer *, char *, ftnlen), dasrdd_(integer 
-	    *, integer *, integer *, doublereal *), dashlu_(integer *, 
-	    integer *), prtdec_(char *, integer *, ftnlen), dasudc_(integer *,
+	    integer *, integer *, integer *, char *, ftnlen), errhan_(char *, 
+	    integer *, ftnlen), prtdec_(char *, integer *, ftnlen), dasrdd_(
+	    integer *, integer *, integer *, doublereal *), dasudc_(integer *,
 	     integer *, integer *, integer *, integer *, char *, ftnlen), 
-	    dasudd_(integer *, integer *, integer *, doublereal *), errfnm_(
-	    char *, integer *, ftnlen), sigerr_(char *, ftnlen), prtenc_(
-	    integer *, char *, ftnlen), chkout_(char *, ftnlen);
+	    dasudd_(integer *, integer *, integer *, doublereal *), sigerr_(
+	    char *, ftnlen), prtenc_(integer *, char *, ftnlen), chkout_(char 
+	    *, ftnlen);
     static integer forwrd;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
@@ -369,7 +369,7 @@ static integer c__15 = 15;
 /* $ Exceptions */
 
 /*     1)  If this routine is called directly, the error */
-/*         SPICE(BOGUSENTRY) will be signalled. */
+/*         SPICE(BOGUSENTRY) will be signaled. */
 
 /*     See the entry points for discussions of errors particular to */
 /*     those routines. */
@@ -416,6 +416,11 @@ static integer c__15 = 15;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    Beta Version 1.0.0, 20-OCT-1995 (NJB) */
 
@@ -532,7 +537,7 @@ L_zzekpgin:
 /* $ Exceptions */
 
 /*     1)  If the DAS file designated by HANDLE is not empty, the error */
-/*         SPICE(DASNOTEMPTY) is signalled. */
+/*         SPICE(DASNOTEMPTY) is signaled. */
 
 /*     2)  Any read or write errors detected during reading or writing */
 /*         the DAS file will be diagnosed by routines called by this */
@@ -574,6 +579,11 @@ L_zzekpgin:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
@@ -592,10 +602,9 @@ L_zzekpgin:
 
     daslla_(handle, &lastc, &lastd, &lasti);
     if (lastc > 0 || lastd > 0 || lasti > 0) {
-	dashlu_(handle, &unit);
 	setmsg_("File # contains data; LASTC = #; LASTD = #; LASTI = #.", (
 		ftnlen)54);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &lastc, (ftnlen)1);
 	errint_("#", &lastd, (ftnlen)1);
 	errint_("#", &lasti, (ftnlen)1);
@@ -706,7 +715,7 @@ L_zzekpgan:
 
 /*     P              is the number of an allocated page.  The returned */
 /*                    page is never taken from the free list; it is */
-/*                    the lowest-addressed page of the specifed type */
+/*                    the lowest-addressed page of the specified type */
 /*                    that has never been allocated. */
 
 /*     BASE           is the base DAS address of the page.  This address */
@@ -728,7 +737,7 @@ L_zzekpgan:
 /*         routine. */
 
 /*     3)  If the requested data type is not recognized, the error */
-/*         SPICE(INVALIDTYPE) is signalled. */
+/*         SPICE(INVALIDTYPE) is signaled. */
 
 /* $ Files */
 
@@ -911,7 +920,7 @@ L_zzekpgal:
 /*         routine. */
 
 /*     3)  If the requested data type is not recognized, the error */
-/*         SPICE(INVALIDTYPE) is signalled. */
+/*         SPICE(INVALIDTYPE) is signaled. */
 
 /* $ Files */
 
@@ -1187,11 +1196,11 @@ L_zzekpgfr:
 /*         routine. */
 
 /*     3)  If the requested data type is not recognized, the error */
-/*         SPICE(INVALIDTYPE) is signalled. */
+/*         SPICE(INVALIDTYPE) is signaled. */
 
 /*     4)  If the number of the page to be freed is not that of an */
 /*         allocated page of the specified type, the error */
-/*         SPICE(INVALIDINDEX) is signalled. */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -1432,7 +1441,7 @@ L_zzekpgrc:
 
 /*     2)  If the number of the page to read is not that of an */
 /*         allocated character page, the error SPICE(INVALIDINDEX) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -1575,7 +1584,7 @@ L_zzekpgrd:
 
 /*     2)  If the number of the page to read is not that of an */
 /*         allocated double precision page, the error SPICE(INVALIDINDEX) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -1712,7 +1721,7 @@ L_zzekpgri:
 
 /*     2)  If the number of the page to read is not that of an */
 /*         allocated double precision page, the error SPICE(INVALIDINDEX) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -1853,10 +1862,10 @@ L_zzekpgwc:
 
 /*     2)  If the number of the page to write is not that of an */
 /*         allocated character page, the error SPICE(INVALIDINDEX) is */
-/*         signalled. */
+/*         signaled. */
 
 /*     3)  If the input string has length less than PGSIZC characters, */
-/*         the error SPICE(STRINGTOOSHORT) is signalled. */
+/*         the error SPICE(STRINGTOOSHORT) is signaled. */
 
 /* $ Files */
 
@@ -2015,7 +2024,7 @@ L_zzekpgwd:
 
 /*     2)  If the number of the page to write is not that of an */
 /*         allocated d.p. page, the error SPICE(INVALIDINDEX) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -2165,7 +2174,7 @@ L_zzekpgwi:
 
 /*     2)  If the number of the page to write is not that of an */
 /*         allocated integer page, the error SPICE(INVALIDINDEX) is */
-/*         signalled. */
+/*         signaled. */
 
 /* $ Files */
 
@@ -2307,7 +2316,7 @@ L_zzekpgbs:
 /* $ Exceptions */
 
 /*     1)  If the requested data type is not recognized, the error */
-/*         SPICE(INVALIDTYPE) is signalled. */
+/*         SPICE(INVALIDTYPE) is signaled. */
 
 /*     2)  Range checking is not performed on the input page number P. */
 
@@ -2319,7 +2328,7 @@ L_zzekpgbs:
 
 /* $ Particulars */
 
-/*     This routine provides tranlation from page numbers to DAS */
+/*     This routine provides translation from page numbers to DAS */
 /*     addresses. */
 
 /* $ Examples */
@@ -2445,7 +2454,7 @@ L_zzekpgpg:
 /* $ Exceptions */
 
 /*     1)  If the requested data type is not recognized, the error */
-/*         SPICE(INVALIDTYPE) is signalled. */
+/*         SPICE(INVALIDTYPE) is signaled. */
 
 /*     2)  Range checking is not performed on the input address. */
 
@@ -2457,7 +2466,7 @@ L_zzekpgpg:
 
 /* $ Particulars */
 
-/*     This routine provides tranlation from DAS addresses to page */
+/*     This routine provides translation from DAS addresses to page */
 /*     numbers. */
 
 /* $ Examples */
@@ -2595,7 +2604,7 @@ L_zzekpgst:
 /* $ Exceptions */
 
 /*     1)  If the requested statistic is not recognized, the error */
-/*         SPICE(INVALIDOPTION) is signalled. */
+/*         SPICE(INVALIDOPTION) is signaled. */
 
 /* $ Files */
 
@@ -2605,7 +2614,7 @@ L_zzekpgst:
 
 /* $ Particulars */
 
-/*     This routine provides tranlation from DAS addresses to page */
+/*     This routine provides translation from DAS addresses to page */
 /*     numbers. */
 
 /* $ Examples */

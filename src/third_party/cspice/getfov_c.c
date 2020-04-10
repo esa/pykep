@@ -4,8 +4,8 @@
 
 -Abstract
  
-   This routine returns the field-of-view (FOV) parameters for a
-   specified instrument.
+   Return the field-of-view (FOV) parameters for a specified 
+   instrument. The instrument is specified by its NAIF ID code.
  
 -Disclaimer
 
@@ -39,6 +39,7 @@
 -Keywords
  
    INSTRUMENT
+   FOV
  
 */
 
@@ -113,12 +114,12 @@
               rectangular pyramid.
  
               If the value of `shape' is "CIRCLE" the field of view of
-              the instrument is a circular cone about the boresight
-              vector.  The vertex of the cone is at the instrument
-              focal point.  A single vector will be returned in
-              `bounds'.  This vector will be parallel to a ray that
-              lies in the cone that makes up the boundary of the field
-              of view.
+              the instrument is a circular cone centered on the
+              boresight vector. The vertex of the cone is at the
+              instrument focal point. A single vector will be
+              returned in `bounds'. This vector will be parallel to a
+              ray that lies in the cone that makes up the boundary
+              of the field of view.
  
               If the value of `shape' is "ELLIPSE" the field of view of
               the instrument is an elliptical cone with the boresight
@@ -134,8 +135,16 @@
    frame      is the name of the reference frame in which the field of 
               view boundary vectors are defined. 
  
-   bsight     is a vector that points in the direction of the 
-              center of the field of view.  The length of bsight 
+   bsight     is a vector representing the principal instrument view
+              direction that can be
+
+                 -  the central pixel view direction,
+                 -  the optical axis direction,
+                 -  the FOV geometric center view direction,
+                 -  an axis of the FOV frame,
+
+              or any other vector specified for this purpose
+              in the IK FOV definition. The length of `bsight'
               is not specified other than being non-zero. 
  
    n          is the number of boundary vectors returned. 
@@ -145,96 +154,97 @@
               accompanying `shape' for an expansion of the term 
               "corner of the field of view.")  Note that the vectors 
               returned in `bounds' are not necessarily unit vectors. 
- 
+               Their magnitudes will be as set in the IK (for
+              'CORNER'-style FOV specifications) or the same as the
+              magnitude of the boresight (for 'ANGLES'-style FOV
+              specifications.)
+
 -Parameters
- 
+
    MINCOS     This parameter is the lower limit on the value of the
               cosine of the cross or reference angles in the ANGLES
               specification cases (see Particulars for further
               discussion). The parameter and its current value,
               1.0x10^(-15), are employed in the C code derived from the
               Fortran version of GETFOV that this wrapper invokes.
- 
+
 -Exceptions
 
-   1) The error SPICE(NULLPOINTER) is signaled if either the `shape' or
-      `frame' string pointers are null.
+   1) If either the `shape' or `frame' string pointers are null, the 
+      error SPICE(NULLPOINTER) is signaled. 
 
    2) The user must pass values indicating the length of the `shape' 
       and `frame' strings.  If these values are not at least 2, the
       error SPICE(STRINGTOOSHORT) is signaled.
- 
-   3) The error SPICE(FRAMEMISSING) is signaled if the reference frame
-      associated with the instrument can not be found in the kernel
-      pool.
- 
-   4) The error SPICE(SHAPEMISSING) is signaled if the shape of the
-      instrument field of view can not be found in the kernel pool.
- 
-   5) The error SPICE(SHAPENOTSUPPORTED) is signaled if the shape
-      specified by the instrument kernel is not one of the four
-      values: 'CIRCLE', 'POLYGON', 'ELLIPSE', 'RECTANGLE'.  If the
-      ANGLES specification is used it must be: 'CIRCLE', 'ELLIPSE', or 
-     'RECTANGLE'.
- 
-   6) The error SPICE(BORESIGHTMISSING) is signaled if the direction
-      of the boresight cannot be located in the kernel pool.
- 
-   7) The error SPICE(BADBORESIGHTSPEC) is signaled if the number of
-      components for the boresight vector in the kernel pool is not 3.
- 
-   8) The error SPICE(BOUNDARYMISSING) is signaled if the boundary
-      vectors for the edge of the field of view cannot be found in the
-      kernel pool.
- 
-   9) The error SPICE(BOUNDARYTOOBIG) is signaled if there is
-      insufficient room (as specified by the variable `room') to return
-      all of the vectors associated with the boundary of the field of
-      view.
- 
-  10) The error SPICE(BADBOUNDARY) is signaled if the number of
-      components of vectors making up the field of view is not a
-      multiple of 3.
- 
-  11) The error SPICE(BADBOUNDARY) is signaled if the number of
-      components of vectors making up the field of view is not
-      compatible with the shape specified for the field of view.
 
-  12) The error SPICE(REFVECTORMISSING) is signaled if the 
-      reference vector for the ANGLES spec can not be found
-      in the kernel pool.
+   3) If the `frame' associated with the instrument can not be found,
+      the error SPICE(FRAMEMISSING) is signaled.
 
-  13) The error SPICE(BADREFVECTORSPEC) is signaled if the
-      reference vector stored in the kernel pool to support
-      the ANGLES spec contains an incorrect number of components,
-      contains 3 character components, or is parallel to the
-      boresight.
- 
-  14) The error SPICE(REFANGLEMISSING) is signaled if the reference
-      angle that supports the ANGLES spec is absent from the kernel
-      pool.
- 
-  15) The error SPICE(UNITSMISSING) is signaled if the
-      keyword that stores the angular units for the angles
-      used in the ANGLES spec is absent from the kernel pool.
-  
-  16) The error SPICE(CROSSANGLEMISSING) is signaled if the
-      keyword that stores the cross angle for the ANGLES spec
-      is needed and is absent from the kernel pool.
- 
-  17) The error SPICE(BADBOUNDARY) is signaled if the angles
-      for the RECTANGLE/ANGLES spec case have cosines that
-      are less than those stored in the parameter MINCOS.
- 
-  18) The error SPICE(UNSUPPORTEDSPEC) is signaled if the
-      class specification contains something other than 'ANGLES'
-      or 'CORNERS'.
- 
-  19) In the event that the CLASS_SPEC keyword is absent from the
-      kernel pool for the instrument whose FOV is sought, this
-      module assumes the default CORNERS specification is to be
-      utilized.
- 
+   4) If the `shape' of the instrument field of view can not be found
+      in the kernel pool, the error SPICE(SHAPEMISSING) is signaled
+      signaled.
+
+   5) If the `shape' specified by the instrument kernel is not one of
+      the four values: "CIRCLE", "POLYGON", "ELLIPSE", or
+      "RECTANGLE", the error 'SPICE(SHAPENOTSUPPORTED)' is 
+      signaled. If the ANGLES specification is used, `shape' must be
+      one of the three values: "CIRCLE", "ELLIPSE", or "RECTANGLE".
+
+   6) If the direction of the boresight cannot be located in the
+      kernel pool, the error 'SPICE(BORESIGHTMISSING)' is signaled.
+
+   7) If the number of components for the boresight vector in the
+      kernel pool is not 3, the error 'SPICE(BADBORESIGHTSPEC)' is 
+      signaled.
+
+   8) If the ANGLES specification is not present in the kernel pool
+      and the boundary vectors for the edge of the field of view
+      cannot be found in the kernel pool, the error
+      'SPICE(BOUNDARYMISSING)' is signaled. 
+
+   9) If there is insufficient room (as specified by the variable
+      `room') to return all of the vectors associated with the
+      boundary of the field of view, the error
+      'SPICE(BOUNDARYTOOBIG)' is signaled.
+
+  10) If the number of components of vectors making up the field of
+      view is not a multiple of 3, the error 'SPICE(BADBOUNDARY)' is
+      signaled. 
+
+  11) If the number of components of vectors making up the field of
+      view is not compatible with the shape specified for the field
+      of view, the error 'SPICE(BADBOUNDARY)' is signaled.
+
+  12) If the reference vector for the ANGLES specification can not be
+      found in the kernel pool, the error 'SPICE(REFVECTORMISSING)'
+      is signaled. 
+
+  13) If the reference vector stored in the kernel pool to support
+      the ANGLES specification contains an incorrect number of
+      components, contains 3 character components, or is parallel to
+      the boresight, the error 'SPICE(BADREFVECTORSPEC)' is signaled.
+
+  14) If the ANGLES specification is present in the kernel pool and
+      the reference angle stored in the kernel pool to support the
+      ANGLES specification is absent from the kernel pool, the error 
+      'SPICE(REFANGLEMISSING)' is signaled.
+
+  15) If the keyword that stores the angular units for the angles
+      used in the ANGLES specification is absent from the kernel
+      pool, the error 'SPICE(UNITSMISSING)' is signaled.
+
+  16) If the keyword that stores the cross angle for the ANGLES 
+      specification is needed and is absent from the kernel pool, the
+      error 'SPICE(CROSSANGLEMISSING)' is signaled.
+
+  17) If the angles for the RECTANGLE/ANGLES specification case have
+      cosines that are less than those stored in the parameter 
+      MICOS, the error 'SPICE(BADBOUNDARY)' is signaled.
+
+  18) If the class specification contains something other than
+      'ANGLES' or 'CORNERS', the error 'SPICE(UNSUPPORTEDSPEC)' is
+      signaled.
+
 -Files
  
    This routine relies upon having successfully loaded an instrument
@@ -243,14 +253,14 @@
  
 -Particulars
 
-   This routine provides a common interface to retrieving
-   the geometric characteristics of an instrument field of
-   view for a wide variety of remote sensing instruments
+   This routine provides a common interface for retrieving from the
+   kernel pool the geometric characteristics of an instrument field
+   of view for a wide variety of remote sensing instruments
    across many different space missions.
 
    Given the NAIF instrument ID, (and having "loaded" the
    instrument field of view description via the routine furnsh_c)
-   this routine returns the bore-sight of the instrument, the
+   this routine returns the boresight of the instrument, the
    "shape" of the field of view, a collection of vectors
    that point along the edges of the field of view, and the
    name of the reference frame in which these vectors are defined.
@@ -258,7 +268,7 @@
    Currently this routine supports two classes of specifications
    for FOV definitions: "corners" and "angles".
 
-   The "corners" specification requires the following keywords
+   The "corners" specification requires that the following keywords
    defining the shape, boresight, boundary vectors, and reference
    frame of the FOV be provided in one of the text kernel files
    (normally an IK file) loaded into the kernel pool (in the
@@ -269,7 +279,6 @@
                                          omitted to indicate the
                                          "corners"-class
                                          specification.
-                                         
 
       INS<INSTID>_FOV_SHAPE              must be set to one of these
                                          values:
@@ -293,14 +302,20 @@
       INS<INSTID>_FOV_BOUNDARY_CORNERS   must be set to one (for
                                          FOV_SHAPE = 'CIRCLE'), two
                                          (for FOV_SHAPE =
-                                         'ELLIPSE'), three (for
+                                         'ELLIPSE'), four (for
                                          FOV_SHAPE = 'RECTANGLE'),
                                          or three or more (for
                                          'POLYGON') 3D vectors
                                          defining the corners of the
                                          FOV in the FOV frame
                                          specified in the FOV_FRAME
-                                         keyword.
+                                         keyword. The vectors should
+                                         be listed in either
+                                         clockwise or 
+                                         counterclockwise order.
+                                         This is required by some
+                                         SPICE routines that make
+                                         use of FOV specifications.
 
    The "angles" specification requires the following keywords
    defining the shape, boresight, reference vector, reference and
@@ -346,7 +361,10 @@
                                          plane defined by the 
                                          boresight and the vector
                                          specified in the
-                                         FOV_REF_VECTOR keyword.
+                                         FOV_REF_VECTOR keyword. The
+                                         the FOV angular half-extents
+                                         are measured from the
+                                         boresight vector.
 
       INS<INSTID>_FOV_CROSS_ANGLE        must be set to the angle
                                          that is 1/2 of the total
@@ -356,18 +374,19 @@
                                          to the plane defined by the
                                          boresight and the vector
                                          specified in the
-                                         FOV_REF_VECTOR keyword.
-                                         This keyword is not
-                                         required for FOV_SHAPE =
-                                         'CIRCLE'.
+                                         FOV_REF_VECTOR keyword. The
+                                         the FOV angular half-extents
+                                         are measured from the
+                                         boresight vector. This
+                                         keyword is not required for 
+                                         FOV_SHAPE = 'CIRCLE'.
 
       INS<INSTID>_FOV_ANGLE_UNITS        must specify units for the
                                          angles given in the
                                          FOV_REF_ANGLE and
                                          FOV_CROSS_ANGLE keywords.
-                                         Any angular units
-                                         recognized by convrt_c are
-                                         acceptable.
+                                         Any angular units recognized
+                                         by convrt_c are acceptable.
 
    This routine is intended to be an intermediate level routine.
    It is expected that users of this routine will be familiar
@@ -376,6 +395,11 @@
    routine.
 
 -Examples
+
+   The numerical results shown for this example may differ across 
+   platforms. The results depend on the SPICE kernels used as input, 
+   the compiler and supporting libraries, and the machine specific 
+   arithmetic implementation.
 
    The example program in this section loads the IK file
    'example.ti' with the following contents defining four FOVs of
@@ -446,6 +470,7 @@
    The program shown below loads the IK, fetches parameters for each
    of the four FOVs and prints these parameters to the screen.
 
+      #include <stdio.h>
       #include "SpiceUsr.h"
 
       #define      MAXBND            4
@@ -475,14 +500,14 @@
             getfov_c ( insids[i], MAXBND, WDSIZE, WDSIZE, 
                        shape, frame, bsight, &n, bounds );
 
-            printf( "Instrument ID: %ld\n", insids[i] );
+            printf( "Instrument ID: %d\n", insids[i] );
             printf( "    FOV shape: %s\n",  shape     );
             printf( "    FOV frame: %s\n",  frame     );
-            printf( "FOV boresight: %f %f %f\n", 
+            printf( "FOV boresight: %9.6f %9.6f %f9.6\n", 
                       bsight[0], bsight[1], bsight[2] );
             printf( "  FOV corners: \n" );
             for ( j = 0; j < n; j++ ) {
-               printf( "               %f %f %f\n", 
+               printf( "               %9.6f %9.6f %9.6f\n", 
                        bounds[j][0], bounds[j][1], bounds[j][2] );
             }      
             printf( "--------------------------------------\n" );
@@ -496,44 +521,45 @@
       Instrument ID: -999001
           FOV shape: CIRCLE
           FOV frame: SC999_INST001
-      FOV boresight: 0.000000 0.000000 1.000000
+      FOV boresight:  0.000000  0.000000  1.000000
         FOV corners:
-                     0.087156 0.000000 0.996195
+                      0.087156  0.000000  0.996195
       --------------------------------------
       Instrument ID: -999002
           FOV shape: ELLIPSE
           FOV frame: SC999_INST002
-      FOV boresight: 1.000000 0.000000 0.000000
+      FOV boresight:  1.000000  0.000000  0.000000
         FOV corners:
-                     1.000000 0.000000 0.017455
-                     1.000000 0.034921 0.000000
+                      1.000000  0.000000  0.017455
+                      1.000000  0.034921  0.000000
       --------------------------------------
       Instrument ID: -999003
           FOV shape: RECTANGLE
           FOV frame: SC999_INST003
-      FOV boresight: 0.000000 0.000000 1.000000
+      FOV boresight:  0.000000  0.000000  1.000000
         FOV corners:
-                     0.010472 0.001745 0.999944
-                     -0.010472 0.001745 0.999944
-                     -0.010472 -0.001745 0.999944
-                     0.010472 -0.001745 0.999944
+                      0.010472  0.001745  0.999944
+                     -0.010472  0.001745  0.999944
+                     -0.010472 -0.001745  0.999944
+                      0.010472 -0.001745  0.999944
       --------------------------------------
       Instrument ID: -999004
           FOV shape: POLYGON
           FOV frame: SC999_INST004
-      FOV boresight: 0.000000 1.000000 0.000000
+      FOV boresight:  0.000000  1.000000  0.000000
         FOV corners:
-                     0.000000 0.800000 0.500000
-                     0.400000 0.800000 -0.200000
-                     -0.400000 0.800000 -0.200000
+                      0.000000  0.800000  0.500000
+                      0.400000  0.800000 -0.200000
+                     -0.400000  0.800000 -0.200000
       --------------------------------------
  
 -Restrictions
  
-   An I-kernel for the instrument specified in INSTID must have been
-   loaded via a call to furnsh_c prior to calling this routine and
-   must contain the specification for the instrument field of view
-   consistent with the expectations of this routine.
+   This function will not operate unless an I-kernel for the 
+   instrument with the NAIF ID specified in INSTID have been
+   loaded via a call to FURNSH prior to calling this routine and
+   this IK contains the specification for the instrument field of 
+   view consistent with the expectations of this routine.
  
 -Literature_References
  
@@ -541,14 +567,24 @@
  
 -Author_and_Institution
  
-   C.H. Acton   (JPL)
-   N.J. Bachman (JPL)
-   B.V. Semenov (JPL) 
-   W.L. Taber   (JPL) 
-   F.S. Turner  (JPL)
+   C.H. Acton      (JPL)
+   N.J. Bachman    (JPL)
+   J. Diaz del Rio (ODC Space)
+   B.V. Semenov    (JPL) 
+   W.L. Taber      (JPL) 
+   F.S. Turner     (JPL)
  
 -Version
 
+   -CSPICE Version 1.0.6, 22-MAR-2017 (JDR) (BVS)
+   
+      Header updates: made various header changes to make it 
+      compliant with the SPICE standard header format; updated 
+      BSIGHT description; added explanation of output boundary 
+      vector magnitudes; made other minor header corrections.
+      
+      Added call to return_c as part of the error tracing.
+      
    -CSPICE Version 1.0.5, 05-FEB-2009 (BVS)
 
       Header update: added information about required IK keywords;
@@ -589,6 +625,10 @@
    /*
    Participate in error tracing.
    */
+   if ( return_c()  )
+   {
+      return; 
+   }
    chkin_c ( "getfov_c" );
 
    /*
