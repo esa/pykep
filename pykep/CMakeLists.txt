@@ -32,7 +32,7 @@ endif()
 
 # Setup of the header-only pykep library.
 add_library(pykep INTERFACE)
-target_link_libraries(pykep INTERFACE ${PYKEP_BP_TARGET} Boost::disable_autolinking YACMA::PythonModule Keplerian_toolbox::keplerian_toolbox)
+target_link_libraries(pykep INTERFACE ${PYKEP_BP_TARGET} Boost::disable_autolinking Keplerian_toolbox::keplerian_toolbox)
 target_include_directories(pykep INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
 $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/pykep> $<INSTALL_INTERFACE:include>)
 
