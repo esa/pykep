@@ -19,6 +19,7 @@ Generic
   ex2.ipynb
   ex12.ipynb
   gravity_spherical_harmonic.ipynb
+  hera_trajectory.ipynb
 
 Advanced Research Topics (requires pygmo)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -35,4 +36,3 @@ Advanced Research Topics (requires pygmo)
   ex10
   ex11
   ex13.ipynb
-  hera_trajectory.ipynb
