@@ -35,3 +35,4 @@ Advanced Research Topics (requires pygmo)
   ex10
   ex11
   ex13.ipynb
+  hera_trajectory.ipynb

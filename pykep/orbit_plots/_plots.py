@@ -58,11 +58,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
         if T < 0:
             raise ValueError("tf should be after t0 when plotting an orbit")
 
-    # make an osculating copy of the planet
-    el = list(plnt.osculating_elements(t0))
-    plnt_k = keplerian(t0, el, plnt.mu_central_body, plnt.mu_self, plnt.radius, plnt.safe_radius, plnt.name)
-
-    # points where the orbit will be plotted
+       # points where the orbit will be plotted
     when = np.linspace(0, T, N)
 
     # Ephemerides Calculation for the given planet
@@ -71,7 +67,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
     z = np.array([0.0] * N)
 
     for i, day in enumerate(when):
-        r, v = plnt_k.eph(epoch(t0.mjd2000 + day))
+        r, v = plnt.eph(epoch(t0.mjd2000 + day))
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
