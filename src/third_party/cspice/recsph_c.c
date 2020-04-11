@@ -60,7 +60,7 @@
    --------  ---  -------------------------------------------------- 
    rectan     I   Rectangular coordinates of a point. 
    r          O   Distance of the point from the origin. 
-   colat      O   Angle of the point from the positive Z-axis. 
+   colat      O   Angle of the point from the Z-axis in radians
    lon        O   Longitude of the point in radians. 
  
 -Detailed_Input
@@ -71,17 +71,24 @@
  
    r          Distance of the point from the origin. 
  
-   colat      Angle between the point and the positive z-axis. 
+   colat      Angle between the point and the positive z-axis in
+              radians. The range of `colat' is [0, pi]. 
  
-   lon        Longitude of the point in radians.  This is the angle
+   lon        Longitude of the point in radians. This is the angle
               between the positive X-axis and the orthogonal
-              projection of the point onto the XY plane.  LONG
+              projection of the point onto the XY plane. `lon'
               increases in the counterclockwise sense about the
-              positive Z-axis.  The range of LONG is:
-
-                 -pi < LONG <= pi
+              positive Z-axis. The range of `lon' is [-pi, pi].
  
 -Parameters
+ 
+   None. 
+ 
+-Exceptions
+ 
+   Error free. 
+ 
+-Files
  
    None. 
  
@@ -133,11 +140,7 @@
  
    None. 
  
--Exceptions
- 
-   Error free. 
- 
--Files
+-Literature_References
  
    None. 
  
@@ -146,16 +149,16 @@
    W.L. Taber      (JPL) 
    E.D. Wright     (JPL)
  
--Literature_References
- 
-   None. 
- 
 -Version
  
+   -CSPICE Version 1.1.2, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
+
    -CSPICE Version 1.1.1, 07-JAN-2002 (NJB) (EDW)
 
-     Fixed description of lon in Brief_I/O and Detailed_I/O
-     header sections.
+      Fixed description of lon in Brief_I/O and Detailed_I/O
+      header sections.
 
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 

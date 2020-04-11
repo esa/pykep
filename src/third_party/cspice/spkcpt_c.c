@@ -366,6 +366,13 @@
        the error will be diagnosed by a routine in the call tree of 
        this routine. 
  
+   8)  If any input string pointer is null, or if the output state
+       pointer is null, the error SPICE(NULLPOINTER) will be signaled.
+ 
+   9)  If any input string has length zero, the error SPICE(EMPTYSTRING)
+       will be signaled.
+  
+
 -Files
  
    Appropriate kernels must be loaded by the calling program before 
@@ -1009,6 +1016,12 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 09-SEP-2015 (NJB)
+
+       The Exceptions section of the header was updated
+       to mention exceptions involving null pointers and 
+       empty input strings.
+
    -CSPICE Version 1.0.0, 27-MAR-2012 (NJB) (SCK) (BVS)
 
 -Index_Entries

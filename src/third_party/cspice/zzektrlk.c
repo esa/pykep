@@ -13,6 +13,24 @@
     /* Initialized data */
 
     static logical first = TRUE_;
+    static integer oldval = 0;
+    static integer page[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0 };
+    static integer oldhan = 0;
+    static integer oldidx = 0;
+    static integer oldkey = 0;
+    static integer oldlvl = 0;
+    static integer oldmax = 0;
+    static integer oldnod = 0;
+    static integer oldnof = 0;
+    static integer oldtre = 0;
 
     /* System generated locals */
     integer i__1;
@@ -23,7 +41,7 @@
 
     /* Local variables */
     static logical leaf;
-    static integer page[256], prev, unit, plus;
+    static integer prev, plus;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
     static integer child;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
@@ -31,16 +49,14 @@
     static logical found;
     static integer minus;
     static char access[15];
-    static integer datbas, oldhan;
+    static integer datbas;
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    static integer oldidx, oldmax, oldnod, oldnof, oldtre, oldkey, oldval;
     extern integer lstlei_(integer *, integer *, integer *);
-    static integer oldlvl, newkey, prvkey, totkey;
+    static integer newkey, prvkey, totkey;
     static logical samkey, samtre, rdonly;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -523,14 +539,14 @@
 /*         routine. */
 
 /*     3)  If the input key is out of range, the error */
-/*         SPICE(INDEXOUTOFRANGE) is signalled. */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. */
 
 
 /*     4)  If the tree traversal fails to terminate at the leaf node */
-/*         level, the error SPICE(BUG) is signalled. */
+/*         level, the error SPICE(BUG) is signaled. */
 
 /*     5)  If the key is in range, but the key is not found, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -539,7 +555,7 @@
 
 /* $ Particulars */
 
-/*     This routine obtains the value assocated with a key, and also */
+/*     This routine obtains the value associated with a key, and also */
 /*     returns metadata describing the node containing the key and the */
 /*     key's position in the node. */
 
@@ -564,6 +580,14 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Added initializers for variables used to save old */
+/*        values. */
 
 /* -    Beta Version 1.0.0, 26-OCT-1995 (NJB) */
 
@@ -654,7 +678,7 @@
 	    *node = oldnod;
 	    *noffst = oldnof;
 	    *value = page[(i__1 = datbas + *idx - 1) < 256 && 0 <= i__1 ? 
-		    i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)315)];
+		    i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)332)];
 	    oldidx = *idx;
 	    oldkey = *key;
 	    oldval = *value;
@@ -676,12 +700,11 @@
     totkey = page[2];
     if (*key < 1 || *key > totkey) {
 	chkin_("ZZEKTRLK", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Key = #; valid range = 1:#. Tree = #, file = #", (ftnlen)46);
 	errint_("#", key, (ftnlen)1);
 	errint_("#", &totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZEKTRLK", (ftnlen)8);
 	return 0;
@@ -693,7 +716,7 @@
     prev = lstlei_(key, &page[4], &page[5]);
     if (prev > 0) {
 	prvkey = page[(i__1 = prev + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrlk_", (ftnlen)365)];
+		"page", i__1, "zzektrlk_", (ftnlen)381)];
     } else {
 	prvkey = 0;
     }
@@ -706,7 +729,7 @@
 	*idx = prev;
 	*node = *tree;
 	*value = page[(i__1 = *idx + 171) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrlk_", (ftnlen)379)];
+		"page", i__1, "zzektrlk_", (ftnlen)395)];
 	oldhan = *handle;
 	oldtre = *tree;
 	oldkey = *key;
@@ -728,7 +751,7 @@
 /*     or run out of progeny. */
 
     child = page[(i__1 = prev + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("page",
-	     i__1, "zzektrlk_", (ftnlen)405)];
+	     i__1, "zzektrlk_", (ftnlen)421)];
     *noffst = prvkey;
     while(child > 0 && ! found) {
 
@@ -738,13 +761,12 @@
 	++(*level);
 	if (*level > depth) {
 	    chkin_("ZZEKTRLK", (ftnlen)8);
-	    dashlu_(handle, &unit);
 	    setmsg_("Runaway node pointer chain.  Key = #; valid range = 1:#"
 		    ". Tree = #, file = #", (ftnlen)75);
 	    errint_("#", key, (ftnlen)1);
 	    errint_("#", &totkey, (ftnlen)1);
 	    errint_("#", tree, (ftnlen)1);
-	    errfnm_("#", &unit, (ftnlen)1);
+	    errhan_("#", handle, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZEKTRLK", (ftnlen)8);
 	    return 0;
@@ -760,7 +782,7 @@
 	prev = lstlei_(&newkey, page, &page[1]);
 	if (prev > 0) {
 	    prvkey = page[(i__1 = prev) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "page", i__1, "zzektrlk_", (ftnlen)445)];
+		    "page", i__1, "zzektrlk_", (ftnlen)460)];
 	} else {
 	    prvkey = 0;
 	}
@@ -774,7 +796,7 @@
 	    *idx = prev;
 	    *node = child;
 	    *value = page[(i__1 = *idx + 127) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)460)];
+		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)475)];
 	    oldhan = *handle;
 	    oldtre = *tree;
 	    oldkey = *key;
@@ -787,7 +809,7 @@
 	    leaf = *level == depth;
 	} else {
 	    child = page[(i__1 = prev + 64) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)476)];
+		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)491)];
 	    *noffst = prvkey + *noffst;
 	}
     }
@@ -797,14 +819,13 @@
 
     if (! found) {
 	chkin_("ZZEKTRLK", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Key #; valid range = 1:#. Tree = #, file = #.  Key was not "
 		"found.  This probably indicates a corrupted file or a bug in"
 		" the EK code.", (ftnlen)132);
 	errint_("#", key, (ftnlen)1);
 	errint_("#", &totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTRLK", (ftnlen)8);
 	return 0;

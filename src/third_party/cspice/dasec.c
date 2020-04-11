@@ -7,7 +7,8 @@
 
 /* Table of constant values */
 
-static integer c__21 = 21;
+static logical c_false = FALSE_;
+static integer c__5000 = 5000;
 
 /* $Procedure  DASEC  ( DAS extract comments ) */
 /* Subroutine */ int dasec_(integer *handle, integer *bufsiz, integer *n, 
@@ -25,35 +26,37 @@ static integer c__21 = 21;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
     integer i__, j, k;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc, recno, index, ncomr;
     char ch[1];
     extern logical failed_(void);
     char ifname[60];
-    static integer filhan[21];
+    static integer filhan[5000];
     static char crecrd[1024];
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen);
-    static integer filchr[21];
+    static integer filchr[5000];
     extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *);
     integer linlen, nchars, daslun;
-    static integer filcnt[21];
+    static integer filcnt[5000];
     char idword[8];
-    static integer lsthan, nfiles, lstrec[21];
+    static integer lsthan, nfiles, lstrec[5000];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer numcom;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer nresvc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), dasrfr_(integer *, 
-	    char *, char *, integer *, integer *, integer *, integer *, 
-	    ftnlen, ftnlen), errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen), setmsg_(char *, 
+	    ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
+	    integer *, ftnlen);
     integer curpos;
     extern logical return_(void);
     integer nresvr;
-    static integer lstpos[21];
+    static integer lstpos[5000];
     logical eol;
 
 /* $ Abstract */
@@ -95,6 +98,39 @@ static integer c__21 = 21;
 /*     UTILITY */
 
 /* $ Declarations */
+
+/*     Include file das.inc */
+
+/*     This include file declares public parameters for the DAS */
+/*     subsystem. */
+
+/*        Version 1.0.0 10-FEB-2017 (NJB) */
+
+/*     Parameter declarations follow. */
+
+
+/*     DAS file table size: */
+
+/*        The parameter name is FTSIZE. The value of the parameter is */
+/*        defined in the include file */
+
+/*           zzddhman.inc */
+
+/*        That value is duplicated here, since zzddhman.inc contains */
+/*        other declarations that conflict with some of those in DAS */
+/*        routines. */
+
+
+/*     Capacity of DAS data records: */
+
+/*        -- NWD double precision numbers. */
+/*        -- NWI integers. */
+/*        -- NWC characters. */
+/*     These parameters are named to enhance ease of maintenance of */
+/*     the code; the values should not be changed. */
+
+/*     End of include file das.inc */
+
 /* $ Brief_I/O */
 
 /*     Variable  I/O  Description */
@@ -146,19 +182,19 @@ static integer c__21 = 21;
 /* $ Exceptions */
 
 /*     1)   If the size of the output line buffer is is not positive, */
-/*          the error SPICE(INVALIDARGUMENT) will be signalled. */
+/*          the error SPICE(INVALIDARGUMENT) will be signaled. */
 
 /*     3)   If a comment line in a DAS file is longer than the length */
 /*          of a character string array element of BUFFER, the error */
-/*          SPICE(COMMENTTOOLONG) will be signalled. */
+/*          SPICE(COMMENTTOOLONG) will be signaled. */
 
 /*     3)   If there is a mismatch between the number of comment */
 /*          characters found and the number of comment characters */
 /*          expected, the error SPICE(BADDASCOMMENTAREA) will be */
-/*          signalled. */
+/*          signaled. */
 
 /*     4)   If the binary DAS file attached to HANDLE is not open for */
-/*          reading, an error will be signalled by a routine called by */
+/*          reading, an error will be signaled by a routine called by */
 /*          this routine. */
 
 /* $ Files */
@@ -314,7 +350,7 @@ static integer c__21 = 21;
 /*        DAS file. The maximum length of a line stored in the comment */
 /*        area should be kept reasonable, so that they may be easily */
 /*        extracted. A good value for this would be 255 characters, as */
-/*        this can easily accomodate ``screen width'' lines as well as */
+/*        this can easily accommodate ``screen width'' lines as well as */
 /*        long lines which may contain some other form of information. */
 
 /* $ Literature_References */
@@ -326,6 +362,12 @@ static integer c__21 = 21;
 /*     K.R. Gehringer (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 10-FEB-2017 (NJB) */
+
+/*        Updated to use ZZDDHHLU. */
+
+/*        Now imports parameter FTSIZE from das.inc. */
 
 /* -    SPICELIB Version 1.3.0, 18-JUN-1999 (WLT) */
 
@@ -396,8 +438,6 @@ static integer c__21 = 21;
 
 /*     Local parameters */
 
-/*     The maximum number of DAS files that may be open simultaneously. */
-
 
 /*     Length of a DAS character record, in characters. */
 
@@ -450,17 +490,17 @@ static integer c__21 = 21;
 	first = FALSE_;
 	nfiles = 0;
 	lsthan = -1;
-	for (i__ = 1; i__ <= 21; ++i__) {
-	    filcnt[(i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("filcnt"
-		    , i__1, "dasec_", (ftnlen)478)] = 0;
-	    filchr[(i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("filchr"
-		    , i__1, "dasec_", (ftnlen)479)] = 0;
-	    filhan[(i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("filhan"
-		    , i__1, "dasec_", (ftnlen)480)] = 0;
-	    lstrec[(i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("lstrec"
-		    , i__1, "dasec_", (ftnlen)481)] = 0;
-	    lstpos[(i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("lstpos"
-		    , i__1, "dasec_", (ftnlen)482)] = 0;
+	for (i__ = 1; i__ <= 5000; ++i__) {
+	    filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
+		    "cnt", i__1, "dasec_", (ftnlen)485)] = 0;
+	    filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
+		    "chr", i__1, "dasec_", (ftnlen)486)] = 0;
+	    filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
+		    "han", i__1, "dasec_", (ftnlen)487)] = 0;
+	    lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
+		    "rec", i__1, "dasec_", (ftnlen)488)] = 0;
+	    lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
+		    "pos", i__1, "dasec_", (ftnlen)489)] = 0;
 	}
     }
 
@@ -487,7 +527,7 @@ static integer c__21 = 21;
 /*     Convert the DAS file handle to its corresponding Fortran logical */
 /*     unit number for reading the comment records. */
 
-    dashlu_(handle, &daslun);
+    zzddhhlu_(handle, "DAS", &c_false, &daslun, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASEC", (ftnlen)5);
 	return 0;
@@ -511,17 +551,17 @@ static integer c__21 = 21;
 
     if (index > 0) {
 
-/*        Set the record number and the starting position accordingly, */
+/*        Set the record number and the starting position accocrdingly, */
 /*        i.e., where we left off when we last read from that file. */
 
-	recno = lstrec[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		"lstrec", i__1, "dasec_", (ftnlen)550)];
-	curpos = lstpos[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		"lstpos", i__1, "dasec_", (ftnlen)551)];
-	nchars = filchr[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		"filchr", i__1, "dasec_", (ftnlen)552)];
-	ncomc = filcnt[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		"filcnt", i__1, "dasec_", (ftnlen)553)];
+	recno = lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		"lstrec", i__1, "dasec_", (ftnlen)557)];
+	curpos = lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		s_rnge("lstpos", i__1, "dasec_", (ftnlen)558)];
+	nchars = filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		s_rnge("filchr", i__1, "dasec_", (ftnlen)559)];
+	ncomc = filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		"filcnt", i__1, "dasec_", (ftnlen)560)];
     } else {
 
 /*        We have not yet read any comments from this file, so start at */
@@ -645,7 +685,7 @@ static integer c__21 = 21;
 
 	if (nchars == ncomc) {
 
-/*           If we have reached the end of the comments, signalled */
+/*           If we have reached the end of the comments, signaled */
 /*           by having processed all of the comment characters, NCOMC, */
 /*           then we are done. So, set DONE to .TRUE. and remove the */
 /*           entry for this file from the file table. */
@@ -666,26 +706,26 @@ static integer c__21 = 21;
 	    if (index > 0) {
 		i__1 = nfiles - 1;
 		for (k = index; k <= i__1; ++k) {
-		    filcnt[(i__2 = k - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filcnt", i__2, "dasec_", (ftnlen)729)] = filcnt[(
-			    i__3 = k) < 21 && 0 <= i__3 ? i__3 : s_rnge("fil"
-			    "cnt", i__3, "dasec_", (ftnlen)729)];
-		    filchr[(i__2 = k - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filchr", i__2, "dasec_", (ftnlen)730)] = filchr[(
-			    i__3 = k) < 21 && 0 <= i__3 ? i__3 : s_rnge("fil"
-			    "chr", i__3, "dasec_", (ftnlen)730)];
-		    filhan[(i__2 = k - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filhan", i__2, "dasec_", (ftnlen)731)] = filhan[(
-			    i__3 = k) < 21 && 0 <= i__3 ? i__3 : s_rnge("fil"
-			    "han", i__3, "dasec_", (ftnlen)731)];
-		    lstrec[(i__2 = k - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstrec", i__2, "dasec_", (ftnlen)732)] = lstrec[(
-			    i__3 = k) < 21 && 0 <= i__3 ? i__3 : s_rnge("lst"
-			    "rec", i__3, "dasec_", (ftnlen)732)];
-		    lstpos[(i__2 = k - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstpos", i__2, "dasec_", (ftnlen)733)] = lstpos[(
-			    i__3 = k) < 21 && 0 <= i__3 ? i__3 : s_rnge("lst"
-			    "pos", i__3, "dasec_", (ftnlen)733)];
+		    filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "filcnt", i__2, "dasec_", (ftnlen)736)] = filcnt[(
+			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filcnt", i__3, "dasec_", (ftnlen)736)];
+		    filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "filchr", i__2, "dasec_", (ftnlen)737)] = filchr[(
+			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filchr", i__3, "dasec_", (ftnlen)737)];
+		    filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "filhan", i__2, "dasec_", (ftnlen)738)] = filhan[(
+			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "filhan", i__3, "dasec_", (ftnlen)738)];
+		    lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "lstrec", i__2, "dasec_", (ftnlen)739)] = lstrec[(
+			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "lstrec", i__3, "dasec_", (ftnlen)739)];
+		    lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "lstpos", i__2, "dasec_", (ftnlen)740)] = lstpos[(
+			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
+			    "lstpos", i__3, "dasec_", (ftnlen)740)];
 		}
 		--nfiles;
 	    }
@@ -712,37 +752,37 @@ static integer c__21 = 21;
 /*           has been read, so add it to the file table and save all of */
 /*           its information if there is room in the file table. */
 
-	    if (nfiles >= 21) {
+	    if (nfiles >= 5000) {
 		setmsg_("The file table is full with # files, and another fi"
 			"le could not be added.", (ftnlen)73);
-		errint_("#", &c__21, (ftnlen)1);
+		errint_("#", &c__5000, (ftnlen)1);
 		sigerr_("SPICE(FILETABLEFULL)", (ftnlen)20);
 		chkout_("DASEC", (ftnlen)5);
 		return 0;
 	    }
 	    ++nfiles;
-	    filcnt[(i__1 = nfiles - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filcnt", i__1, "dasec_", (ftnlen)777)] = ncomc;
-	    filchr[(i__1 = nfiles - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dasec_", (ftnlen)778)] = nchars;
-	    filhan[(i__1 = nfiles - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filhan", i__1, "dasec_", (ftnlen)779)] = *handle;
-	    lstrec[(i__1 = nfiles - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dasec_", (ftnlen)780)] = recno;
-	    lstpos[(i__1 = nfiles - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dasec_", (ftnlen)781)] = curpos;
+	    filcnt[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "filcnt", i__1, "dasec_", (ftnlen)784)] = ncomc;
+	    filchr[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "filchr", i__1, "dasec_", (ftnlen)785)] = nchars;
+	    filhan[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "filhan", i__1, "dasec_", (ftnlen)786)] = *handle;
+	    lstrec[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "lstrec", i__1, "dasec_", (ftnlen)787)] = recno;
+	    lstpos[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "lstpos", i__1, "dasec_", (ftnlen)788)] = curpos;
 	    lsthan = *handle;
 	} else {
 
 /*           The comment area of this file is already in the file table, */
 /*           so just update its information. */
 
-	    filchr[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "chr", i__1, "dasec_", (ftnlen)789)] = nchars;
-	    lstrec[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "rec", i__1, "dasec_", (ftnlen)790)] = recno;
-	    lstpos[(i__1 = index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "pos", i__1, "dasec_", (ftnlen)791)] = curpos;
+	    filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "filchr", i__1, "dasec_", (ftnlen)796)] = nchars;
+	    lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "lstrec", i__1, "dasec_", (ftnlen)797)] = recno;
+	    lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "lstpos", i__1, "dasec_", (ftnlen)798)] = curpos;
 	    lsthan = *handle;
 	}
     }

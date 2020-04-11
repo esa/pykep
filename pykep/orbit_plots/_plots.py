@@ -1,16 +1,17 @@
-def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0, s=40, legend=(False, False), axes=None):
+def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40, legend=(False, False), axes=None):
     """
-    ax = plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', s=40, legend=False, axes=None)
+    ax = plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40, legend=(False, False), axes=None):
 
     - axes:      3D axis object created using fig.gca(projection='3d')
     - plnt:      pykep.planet object we want to plot
-    - t0:        a pykep.epoch or float (mjd2000) indicating when we want to plot the planet position
+    - t0:        a pykep.epoch or float (mjd2000) indicating the first date we want to plot the planet position
+    - tf:        a pykep.epoch or float (mjd2000) indicating the final date we want to plot the planet position.
+                 if None this is computed automatically from the orbital period (prone to error for non periodic orbits)
     - units:     the length unit to be used in the plot
     - color:     color to use to plot the orbit (passed to matplotlib)
     - s:         planet size (passed to matplotlib)
-    - legend     tuple of two bool or string. The first element refers to the planet scatter plot, the second to the actual orbit.
-                 If a bool value is used, then an automated legend label is generated (if True), if its a string the exact string is
-                 used as a legend.
+    - legend     2-D tuple of bool or string: The first element activates the planet scatter plot, 
+                 the second to the actual orbit. If a bool value is used, then an automated legend label is generated (if True), if a string is used, the string is the legend. Its also possible but deprecated to use a single bool value. In which case that value is used for both the tuple components.
 
     Plots the planet position and its orbit.
 
@@ -38,23 +39,24 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     else:
         ax = axes
 
-    if t0 == 'pykep.epoch(0)':
-        t0 = epoch(0)
     if type(t0) is not epoch:
         t0 = epoch(t0)
 
     # This is to make the tuple API compatible with the old API
-    if legend is bool:
+    if type(legend) is bool:
         legend = (legend, legend)
 
-    # orbit period at epoch
-    T = plnt.compute_period(t0) * SEC2DAY
+    if tf is None:
+        # orbit period at epoch
+        T = plnt.compute_period(t0) * SEC2DAY
+    else:
+        if type(tf) is not epoch:
+            tf = epoch(tf)
+        T = (tf.mjd2000 - t0.mjd2000)
+        if T < 0:
+            raise ValueError("tf should be after t0 when plotting an orbit")
 
-    # make an osculating copy of the planet
-    el = list(plnt.osculating_elements(t0))
-    plnt_k = keplerian(t0, el, plnt.mu_central_body, plnt.mu_self, plnt.radius, plnt.safe_radius, plnt.name)
-
-    # points where the orbit will be plotted
+       # points where the orbit will be plotted
     when = np.linspace(0, T, N)
 
     # Ephemerides Calculation for the given planet
@@ -63,7 +65,7 @@ def plot_planet(plnt, t0='pykep.epoch(0)', N=60, units=1.0, color='k', alpha=1.0
     z = np.array([0.0] * N)
 
     for i, day in enumerate(when):
-        r, v = plnt_k.eph(epoch(t0.mjd2000 + day))
+        r, v = plnt.eph(epoch(t0.mjd2000 + day))
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
@@ -187,7 +189,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
 
 def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
     """
-    ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', legend=False, axes=None):
+    ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
 
     - axes:     3D axis object created using fig.gca(projection='3d')
     - r0:       initial position (cartesian coordinates)
@@ -211,6 +213,7 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
     from pykep import propagate_lagrangian
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
+    from copy import deepcopy
 
     if axes is None:
         fig = plt.figure()
@@ -227,6 +230,8 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
     z = [0.0] * N
 
     # We calculate the spacecraft position at each dt
+    r = deepcopy(r0)
+    v = deepcopy(v0)
     for i in range(N):
         x[i] = r[0] / units
         y[i] = r[1] / units

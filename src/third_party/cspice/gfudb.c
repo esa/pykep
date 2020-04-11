@@ -27,11 +27,10 @@ static logical c_false = FALSE_;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern /* Subroutine */ int gfrefn_(), gfrepf_(), gfrepi_(), gfrepu_(), 
 	    gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), gfsstp_(doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen), gfsstp_(doublereal *);
     extern logical odd_(integer *);
     doublereal tol;
     extern /* Subroutine */ int zzgfudb_(U_fp, U_fp, doublereal *, U_fp, U_fp,
@@ -137,6 +136,12 @@ static logical c_false = FALSE_;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
+
 /* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
 
 /*       Added NWILUM parameter. */
@@ -210,9 +215,6 @@ static logical c_false = FALSE_;
 
 
 /*     FRMNLN is a string length for frame names. */
-
-
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
 
 
 /*     FOVTLN -- maximum length for FOV string. */

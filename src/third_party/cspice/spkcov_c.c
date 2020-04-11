@@ -233,7 +233,7 @@
                 ./
                 printf ( "%s\n", "========================================" );
 
-                printf ( "Coverage for object %ld\n", obj );
+                printf ( "Coverage for object %d\n", (int)obj );
 
                 /.
                 Convert the coverage interval start and stop times to TDB
@@ -256,9 +256,9 @@
                               timstr                                  );
 
                    printf ( "\n"
-                            "Interval:  %ld\n"
+                            "Interval:  %d\n"
                             "Start:     %s\n",
-                            j,
+                            (int)j,
                             timstr            );
 
                    timout_c ( e, 
@@ -357,7 +357,7 @@
             /.
             Display a simple banner.
             ./
-            printf ( "\nCoverage for object %ld\n", idcode );
+            printf ( "\nCoverage for object %d\n", (int)idcode );
 
             /.
             Convert the coverage interval start and stop times to TDB
@@ -380,9 +380,9 @@
                           timstr                                  );
 
                printf ( "\n"
-                        "Interval:  %ld\n"
+                        "Interval:  %d\n"
                         "Start:     %s\n",
-                        i,
+                        (int)i,
                         timstr            );
 
                timout_c ( e, 
@@ -394,7 +394,6 @@
             }
             return ( 0 );
          }
-
 
 -Restrictions
  
@@ -410,7 +409,12 @@
    N.J. Bachman   (JPL) 
  
 -Version
- 
+
+   -CSPICE Version 1.0.3, 14-JUN-2016 (EDW)
+
+       Edit to example program to use "%d" with explicit casts
+       to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.2, 01-JUL-2014 (NJB)
 
        Added new index entries.

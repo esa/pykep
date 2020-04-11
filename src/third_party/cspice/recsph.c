@@ -53,48 +53,55 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION,  COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      RECTAN     I   Rectangular coordinates of a point. */
-/*      R          O   Distance of the point from the origin. */
-/*      COLAT      O   Angle of the point from the positive Z-axis. */
-/*      LONG       O   Longitude of the point radians. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     RECTAN     I   Rectangular coordinates of a point. */
+/*     R          O   Distance of the point from the origin. */
+/*     COLAT      O   Angle of the point from the Z-axis (radians) */
+/*     LONG       O   Longitude of the point (radians). */
 
 /* $ Detailed_Input */
 
-/*      RECTAN     The rectangular coordinates of a point. */
+/*     RECTAN     The rectangular coordinates of a point. */
 
 /* $ Detailed_Output */
 
-/*      R          Distance of the point from the origin. */
+/*     R          Distance of the point from the origin. */
 
-/*      COLAT      Angle between the point and the positive z-axis. */
+/*     COLAT      Angle between the point and the positive z-axis in */
+/*                radians. The range of COLAT is [0, pi]. */
 
-/*      LONG       Longitude of the point in radians.  This is the angle */
-/*                 between the positive X-axis and the orthogonal */
-/*                 projection of the point onto the XY plane.  LONG */
-/*                 increases in the counterclockwise sense about the */
-/*                 positive Z-axis.  The range of LONG is: */
-
-/*                    -pi < LONG <= pi */
+/*     LONG       Longitude of the point in radians. This is the angle */
+/*                between the positive X-axis and the orthogonal */
+/*                projection of the point onto the XY plane.  LONG */
+/*                increases in the counterclockwise sense about the */
+/*                positive Z-axis. The range of LONG is [-pi, pi]. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine returns the spherical coordinates of a point */
-/*      whose position is input in rectangular coordinates. */
+/*     This routine returns the spherical coordinates of a point */
+/*     whose position is input in rectangular coordinates. */
 
-/*      Spherical coordinates are defined by a distance from a central */
-/*      reference point, an angle from a reference meridian, and an angle */
-/*      from the z-axis. */
+/*     Spherical coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     from the z-axis. */
 
 /* $ Examples */
 
@@ -135,11 +142,7 @@
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
@@ -147,11 +150,11 @@
 
 /*     W.L. Taber      (JPL) */
 
-/* $ Literature_References */
-
-/*     None. */
-
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.2, 07-JAN-2002 (NJB) */
 
@@ -173,9 +176,9 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
 
-/*      Example section of header upgraded. */
+/*        Example section of header upgraded. */
 
 /* -& */
 

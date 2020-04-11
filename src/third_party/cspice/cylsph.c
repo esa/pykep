@@ -20,7 +20,7 @@
 
 /* $ Abstract */
 
-/*      Convert from cylindrical to spherical coordinates. */
+/*     Convert from cylindrical to spherical coordinates. */
 
 /* $ Disclaimer */
 
@@ -53,53 +53,62 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION,  COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  ------------------------------------------------- */
-/*      R          I   Distance of point from Z axis. */
-/*      LONGC      I   Angle (radians) of point from XZ plane. */
-/*      Z          I   Height of point above XY plane. */
-/*      RADIUS     O   Distance of point from origin. */
-/*      COLAT      O   Polar angle (co-latitude in radians) of point. */
-/*      LONG       O   Azimuthal angle (longitude) of point (radians). */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  ------------------------------------------------- */
+/*     R          I   Distance of point from Z axis. */
+/*     LONGC      I   Angle (radians) of point from XZ plane. */
+/*     Z          I   Height of point above XY plane. */
+/*     RADIUS     O   Distance of point from origin. */
+/*     COLAT      O   Polar angle (co-latitude in radians) of point. */
+/*     LONG       O   Azimuthal angle (longitude) of point (radians). */
 
 /* $ Detailed_Input */
 
-/*      R          Distance of the point of interest from Z axis. */
+/*     R          Distance of the point of interest from Z axis. */
 
-/*      LONGC      Cylindrical angle (radians) of the point from the */
-/*                 XZ plane. */
+/*     LONGC      Cylindrical angle (radians) of the point from the */
+/*                XZ plane. */
 
-/*      Z          Height of the point above XY plane. */
+/*     Z          Height of the point above XY plane. */
 
 /* $ Detailed_Output */
 
-/*      RADIUS     Distance of the point from origin. */
+/*     RADIUS     Distance of the point from origin. */
 
-/*      COLAT      Polar angle (co-latitude in radians) of the point. */
+/*     COLAT      Polar angle (co-latitude in radians) of the point. */
+/*                The range of COLAT is [-pi, pi]. */
 
-/*      LONG       Azimuthal angle (longitude) of the point (radians). */
+/*     LONG       Azimuthal angle (longitude) of the point (radians). */
+/*                LONG is set equal to LONGC. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This returns the spherical coordinates of a point whose position */
-/*      is input through cylindrical coordinates. */
+/*     This returns the spherical coordinates of a point whose position */
+/*     is input through cylindrical coordinates. */
 
 /* $ Examples */
 
-
-/*      Below are two tables:  The first is a set of input values */
-/*      the second is the result of the following sequence of */
-/*      calls to Spicelib routines.  Note all input and output angular */
-/*      quantities are in degrees. */
+/*     Below are two tables:  The first is a set of input values */
+/*     the second is the result of the following sequence of */
+/*     calls to SPICELIB routines.  Note all input and output angular */
+/*     quantities are in degrees. */
 
 /*         CALL CONVRT ( LONGC, 'DEGREES', 'RADIANS', LONGC       ) */
 
@@ -110,38 +119,39 @@
 
 
 
-/*      Inputs:                         Results: */
+/*     Inputs:                         Results: */
 
-/*      R        LONGC    Z             RADIUS   LONG     COLAT */
-/*      ------   ------   ------        ------   ------   ------ */
-/*      1.0000     0       0            1.0000     0       90.00 */
-/*      1.0000    90.00    0            1.0000    90.00    90.00 */
-/*      1.0000   180.00    1.000        1.4142   180.00    45.00 */
-/*      1.0000   180.00   -1.000        1.4142   180.00   135.00 */
-/*      0.0000   180.00    1.000        1.0000   180.00     0.00 */
-/*      0.0000    33.00    0            0.0000    33.00     0.00 */
+/*     R        LONGC    Z             RADIUS   LONG     COLAT */
+/*     ------   ------   ------        ------   ------   ------ */
+/*     1.0000     0       0            1.0000     0       90.00 */
+/*     1.0000    90.00    0            1.0000    90.00    90.00 */
+/*     1.0000   180.00    1.000        1.4142   180.00    45.00 */
+/*     1.0000   180.00   -1.000        1.4142   180.00   135.00 */
+/*     0.0000   180.00    1.000        1.0000   180.00     0.00 */
+/*     0.0000    33.00    0            0.0000    33.00     0.00 */
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
+
+/* -    SPICELIB Version 1.1.0, 30-MAR-2016 (BVS) */
+
+/*        A cosmetic change: replaced '0.0 D0's with '0.0D0's. */
+/*        Re-arranged header sections. */
 
 /* -    SPICELIB Version 1.0.2, 22-AUG-2001 (EDW) */
 
@@ -165,7 +175,7 @@
 /*     Local variables */
 
 
-/*  Convert to spherical, storing in temporary variables */
+/*     Convert to spherical, storing in temporary variables */
 
 /* Computing MAX */
     d__1 = abs(*r__), d__2 = abs(*z__);

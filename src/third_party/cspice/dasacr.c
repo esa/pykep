@@ -7,6 +7,7 @@
 
 /* Table of constant values */
 
+static logical c_false = FALSE_;
 static integer c__3 = 3;
 static integer c__256 = 256;
 
@@ -28,12 +29,15 @@ static integer c__256 = 256;
     integer base;
     char recc[1024];
     doublereal recd[128];
-    integer free, reci[256], lrec, nrec, prec, unit, type__, i__;
+    integer free, reci[256], lrec, nrec, prec, unit, type__;
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc;
     extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
 	    integer *);
-    integer ncomr, lword, ltype;
+    integer ncomr, lword;
     extern logical failed_(void);
     extern /* Subroutine */ int cleari_(integer *, integer *), dasioc_(char *,
 	     integer *, integer *, char *, ftnlen, ftnlen), dasiod_(char *, 
@@ -44,8 +48,7 @@ static integer c__256 = 256;
 	     dassih_(integer *, char *, ftnlen), dasioi_(char *, integer *, 
 	    integer *, integer *, ftnlen);
     integer lastla[3];
-    extern /* Subroutine */ int dashlu_(integer *, integer *), daswbr_(
-	    integer *);
+    extern /* Subroutine */ int daswbr_(integer *);
     integer lindex;
     extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
@@ -183,7 +186,8 @@ static integer c__256 = 256;
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1) The DAS file must have a binary file format native to the host */
+/*        system. */
 
 /* $ Literature_References */
 
@@ -195,6 +199,14 @@ static integer c__256 = 256;
 /*     W.L. Taber     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration with the handle */
+/*        manager subsystem. */
+
+/*        Cleaned up use of unnecessary variables and unneeded */
+/*        declarations. */
 
 /* -    SPICELIB Version 1.1.0, 11-OCT-1996 (NJB) */
 
@@ -238,9 +250,6 @@ static integer c__256 = 256;
 /*     Directory pointer locations (backward and forward): */
 
 
-/*     Directory address range locations */
-
-
 /*     Location of first type descriptor */
 
 
@@ -261,9 +270,19 @@ static integer c__256 = 256;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASACR", (ftnlen)6);
     }
+    chkin_("DASACR", (ftnlen)6);
+
+/*     Programmer's note: the calls to */
+
+/*        DASIOC */
+/*        DASIOD */
+/*        DASIOI */
+
+/*     for read access are valid only for native format DAS files. */
+/*     If this routine is updated to support writing to non-native */
+/*     DAS files, at least the calls to the numeric I/O routines */
+/*     will need to be replaced. (Consider using ZZDASGRD, ZZDASGRI.) */
 
 /*     Make sure this DAS file is open for writing.  Signal an error if */
 /*     not. */
@@ -272,7 +291,7 @@ static integer c__256 = 256;
 
 /*     Get the logical unit for this DAS file. */
 
-    dashlu_(handle, &unit);
+    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASACR", (ftnlen)6);
 	return 0;
@@ -306,28 +325,26 @@ static integer c__256 = 256;
 	    lastwd);
 
 /*     Find the record and word positions LREC and LWORD of the last */
-/*     descriptor in the file, and also find the type of the descriptor */
-/*     LTYPE. */
+/*     descriptor in the file. */
 
     maxai_(lastrc, &c__3, &lrec, &loc);
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dasacr_", (ftnlen)371)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dasacr_", (ftnlen)373)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dasac"
-		"r_", (ftnlen)371)] > lword) {
+		"r_", (ftnlen)373)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasacr_", (ftnlen)374)];
-	    ltype = i__;
+		    "lastwd", i__1, "dasacr_", (ftnlen)376)];
 	}
     }
 
-/*     LREC, LWORD, and LTYPE are now the record, word, and data type */
-/*     of the last descriptor in the file.  If LREC is zero, there are */
-/*     no directories in the file yet.  However, even DAS files that */
-/*     don't contain any data have their first directory records */
-/*     zeroed out, and this should remain true after the addition of */
-/*     the comment records. */
+/*     LREC and LWORD are now the record and word index of the last word */
+/*     of the last descriptor in the file. If LREC is zero, there are no */
+/*     directories in the file yet. However, even DAS files that don't */
+/*     contain any data have their first directory records zeroed out, */
+/*     and this should remain true after the addition of the comment */
+/*     records. */
 
     if (lrec == 0) {
 
@@ -370,15 +387,15 @@ static integer c__256 = 256;
 	    i__1 = lindex;
 	    for (i__ = 11; i__ <= i__1; ++i__) {
 		if (dirrec[(i__2 = i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("dirrec", i__2, "dasacr_", (ftnlen)434)] < 0) {
+			s_rnge("dirrec", i__2, "dasacr_", (ftnlen)435)] < 0) {
 		    type__ = prev[(i__2 = type__ - 1) < 3 && 0 <= i__2 ? i__2 
-			    : s_rnge("prev", i__2, "dasacr_", (ftnlen)435)];
+			    : s_rnge("prev", i__2, "dasacr_", (ftnlen)436)];
 		} else {
 		    type__ = next[(i__2 = type__ - 1) < 3 && 0 <= i__2 ? i__2 
-			    : s_rnge("next", i__2, "dasacr_", (ftnlen)437)];
+			    : s_rnge("next", i__2, "dasacr_", (ftnlen)438)];
 		}
 		base += (i__3 = dirrec[(i__2 = i__ - 2) < 256 && 0 <= i__2 ? 
-			i__2 : s_rnge("dirrec", i__2, "dasacr_", (ftnlen)440)]
+			i__2 : s_rnge("dirrec", i__2, "dasacr_", (ftnlen)441)]
 			, abs(i__3));
 	    }
 
@@ -402,22 +419,28 @@ static integer c__256 = 256;
 /*                 ordering of types. */
 
 		    if (dirrec[(i__1 = pos) < 256 && 0 <= i__1 ? i__1 : 
-			    s_rnge("dirrec", i__1, "dasacr_", (ftnlen)466)] > 
+			    s_rnge("dirrec", i__1, "dasacr_", (ftnlen)467)] > 
 			    0) {
+
+/*                    This assignment and the one below in the ELSE */
+/*                    block are performed from the second loop iteration */
+/*                    onward. NXTTYP is initialized on the first loop */
+/*                    iteration. */
+
 			type__ = prev[(i__1 = nxttyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("prev", i__1, "dasacr_", (
-				ftnlen)467)];
+				ftnlen)474)];
 		    } else {
 			type__ = next[(i__1 = nxttyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("next", i__1, "dasacr_", (
-				ftnlen)469)];
+				ftnlen)476)];
 		    }
 
 /*                 Update the cluster base record number. */
 
 		    base -= (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= 
 			    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			    ftnlen)475)], abs(i__2));
+			    ftnlen)482)], abs(i__2));
 		}
 
 /*              Move the current cluster. */
@@ -425,7 +448,7 @@ static integer c__256 = 256;
 		i__3 = base;
 		for (i__ = base + (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 
 			<= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			ftnlen)482)], abs(i__2)) - 1; i__ >= i__3; --i__) {
+			ftnlen)489)], abs(i__2)) - 1; i__ >= i__3; --i__) {
 		    if (type__ == 1) {
 			dasioc_("READ", &unit, &i__, recc, (ftnlen)4, (ftnlen)
 				1024);
@@ -487,11 +510,11 @@ static integer c__256 = 256;
     free += *n;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		 i__3, "dasacr_", (ftnlen)557)] != 0) {
+		 i__3, "dasacr_", (ftnlen)564)] != 0) {
 	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		     i__3, "dasacr_", (ftnlen)558)] = lastrc[(i__1 = i__ - 1) 
+		     i__3, "dasacr_", (ftnlen)565)] = lastrc[(i__1 = i__ - 1) 
 		    < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc", i__1, "dasacr_"
-		    , (ftnlen)558)] + *n;
+		    , (ftnlen)565)] + *n;
 	}
     }
     dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 

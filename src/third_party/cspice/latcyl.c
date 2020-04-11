@@ -50,49 +50,58 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION,  COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      RADIUS     I   Distance of a point from the origin. */
-/*      LONG       I   Angle of the point from the XZ plane in radians. */
-/*      LAT        I   Angle of the point from the XY plane in radians. */
-/*      R          O   Distance of the point from the Z axis. */
-/*      LONGC      O   Angle of the point from the XZ plane in radians. */
-/*      Z          O   Height of the point above the XY plane. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     RADIUS     I   Distance of a point from the origin. */
+/*     LONG       I   Angle of the point from the XZ plane in radians. */
+/*     LAT        I   Angle of the point from the XY plane in radians. */
+/*     R          O   Distance of the point from the Z axis. */
+/*     LONGC      O   Angle of the point from the XZ plane in radians. */
+/*     Z          O   Height of the point above the XY plane. */
 
 /* $ Detailed_Input */
 
-/*      RADIUS     Distance of a point from the origin. */
+/*     RADIUS     Distance of a point from the origin. */
 
-/*      LONG       Angle of the point from the XZ plane in radians. */
+/*     LONG       Angle of the point from the XZ plane in radians. */
 
-/*      LAT        Angle of the point from the XY plane in radians. */
+/*     LAT        Angle of the point from the XY plane in radians. */
 
 /* $ Detailed_Output */
 
-/*      R          Distance of the point from the Z axis. */
+/*     R          Distance of the point from the Z axis. */
 
-/*      LONGC      Angle of the point from the XZ plane in radians. */
+/*     LONGC      Angle of the point from the XZ plane in radians. */
+/*                 LONGC is set equal to LONG. */
 
-/*      Z          Height of the point above the XY plane. */
+/*     Z          Height of the point above the XY plane. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine returns the cylindrical coordinates of a point */
-/*      whose position is input in latitudinal coordinates. */
+/*     This routine returns the cylindrical coordinates of a point */
+/*     whose position is input in latitudinal coordinates. */
 
-/*      Latitudinal coordinates are defined by a distance from a central */
-/*      reference point, an angle from a reference meridian, and an angle */
-/*      above the equator of a sphere centered at the central reference */
-/*      point. */
+/*     Latitudinal coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     above the equator of a sphere centered at the central reference */
+/*     point. */
 
 /* $ Examples */
 
@@ -110,28 +119,23 @@
 /*     areas between regions on the sphere and their projections to the */
 /*     cylinder. */
 
-
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -148,9 +152,9 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
 
-/*      Example section of header upgraded. */
+/*        Example section of header upgraded. */
 
 /* -& */
 

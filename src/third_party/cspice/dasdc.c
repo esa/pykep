@@ -98,13 +98,12 @@
 /*     annotations or descriptive textual information about the data */
 /*     contained in a file. This area is referred to as the ``comment */
 /*     area'' of the file. The comment area of a DAS file is a line */
-/*     oriented medium for storing textual information. The comment */
-/*     area preserves any leading or embedded white space in the line(s) */
-/*     of text which are stored, so that the appearance of the of */
-/*     information will be unchanged when it is retrieved (extracted) at */
-/*     some other time. Trailing blanks, however, are NOT preserved, */
-/*     due to the way that character strings are represented in */
-/*     standard Fortran 77. */
+/*     oriented medium for storing textual information. The comment area */
+/*     preserves any leading or embedded white space in the line(s) of */
+/*     text which are stored, so that the appearance of the information */
+/*     will be unchanged when it is retrieved (extracted) at some other */
+/*     time. Trailing blanks, however, are NOT preserved, due to the way */
+/*     that character strings are represented in standard Fortran 77. */
 
 /*     This routine will delete the entire comment area from the binary */
 /*     DAS file attached to HANDLE. The size of the binary DAS file will */
@@ -138,6 +137,10 @@
 /*     K.R. Gehringer (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 11-NOV-2016 (NJB) */
+
+/*        Fixed typo in Particulars header section. */
 
 /* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
 

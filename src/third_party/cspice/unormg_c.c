@@ -82,6 +82,15 @@
 
    None.
 
+-Exceptions
+
+   1)  If ndim is not physically realistic, greater than zero, a
+       BADDIMENSION error is flagged.
+
+-Files
+
+   None.
+
 -Particulars
 
    unormg_c references a function called vnormg_c (which itself is
@@ -105,12 +114,7 @@
    No error checking is implemented in this subroutine to guard
    against numeric overflow.
 
--Exceptions
-
-   1)  If ndim is not physically realistic, greater than zero, a
-       BADDIMENSION error is flagged.
-
--Files
+-Literature_References
 
    None.
 
@@ -120,11 +124,15 @@
    W.L. Taber      (JPL)
    E.D. Wright     (JPL)
 
--Literature_References
-
-   None.
-
 -Version
+
+   -CSPICE Version 1.2.0, 06-FEB-2017 (EDW)
+
+      Bug fix: eliminated spurious semi-colon on "for(...)" line.
+      This caused the output vector not to be set when the input
+      argument `v1' was the zero vector.
+
+      Corrected section order.
 
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
@@ -147,30 +155,27 @@
    SpiceInt                i;
 
 
-
    /*
    Use discovery check-in.
    */
 
-
-
    /* Check ndim is cool.  Dimension is positive definite. */
-   
+
    if ( ndim <= 0 )
       {
-      
+
       chkin_c    ( "unormg_c"                                    );
       SpiceError ( "Vector dimension less than or equal to zero",
                    "BADDIMENSION"                                );
       chkout_c   ( "unormg_c"                                    );
       return;
-      
+
       }
 
 
 
    /* Get the magnitude of the vector. */
-   
+
    *vmag = vnormg_c ( v1, ndim );
 
 
@@ -194,12 +199,11 @@
    else
       {
 
-      for ( i = 0; i < ndim ; i++ );
+      for ( i = 0; i < ndim ; i++ )
          {
          vout[i] = 0.;
          }
 
      }
-
 
 } /* End unormg_c */

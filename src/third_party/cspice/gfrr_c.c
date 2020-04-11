@@ -34,11 +34,11 @@
 
 -Required_Reading
 
-   GF.REQ
-   NAIF_IDS.REQ
-   SPK.REQ
-   TIME.REQ
-   WINDOWS.REQ
+   GF
+   NAIF_IDS
+   SPK
+   TIME
+   WINDOWS
 
 -Keywords
 
@@ -273,7 +273,7 @@
               constraint is satisfied.
 
               If `result' is non-empty on input, its contents will be
-              discarded before 'gfrr_c' conducts its search.
+              discarded before gfrr_c conducts its search.
 
               `result' must be declared with sufficient size to capture
               the full set of time intervals within the search region
@@ -811,6 +811,14 @@
    E.D. Wright    (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.2, 31-JUL-2014 (EDW)
+
+      Edit to header, replaced ' character with character " to indicate
+      C strings.
+
+      Edit to header, correct Required Reading entry eliminating ".REQ"
+      suffix.
 
    -CSPICE Version 1.0.1, 28-FEB-2013 (NJB) (EDW)
 

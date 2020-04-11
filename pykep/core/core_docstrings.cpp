@@ -1,6 +1,6 @@
 #include <string>
 
-#include "docstrings.hpp"
+#include "core_docstrings.hpp"
 
 namespace pykep
 {
@@ -97,11 +97,11 @@ std::string propagate_taylor_doc()
 {
     return R"(
 
-pykep.propagate_taylor(r0 = [1,0,0], v0 = [0,1,0], m = 100, thrust = [0,0,0], tof = pi/2, mu = 1, veff = 1, log10tol =-15, log10rtol = -15)
+pykep.propagate_taylor(r0 = [1,0,0], v0 = [0,1,0], m0 = 100, thrust = [0,0,0], tof = pi/2, mu = 1, veff = 1, log10tol =-15, log10rtol = -15)
 
 - r: start position, x,y,z.
 - v: start velocity, vx,vy,vz.
-- m: starting mass.
+- m0: starting mass.
 - thrust: fixed inertial thrust, ux,uy,uz.
 - tof: propagation time.
 - mu: central body gravity constant.
@@ -113,12 +113,8 @@ Returns a tuple (rf, vf, mf) containing the final position, velocity and mass af
 
 Example::
 
-  r,v,m = propagate_taylor(r0 = [1,0,0], v0 = [0,1,0], m = 100, thrust = [0,0,0], tof = pi/2, mu = 1, veff = 1, log10tol =-15, log10rtol = -15)
+  r,v,m = propagate_taylor(r0 = [1,0,0], v0 = [0,1,0], m0 = 100, thrust = [0,0,0], tof = pi/2, mu = 1, veff = 1, log10tol =-15, log10rtol = -15)
 )";
 }
-
-
-
-
 
 } // namespace pykep

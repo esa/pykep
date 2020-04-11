@@ -10,7 +10,7 @@
 static integer c__0 = 0;
 static integer c__6 = 6;
 static integer c__3 = 3;
-static doublereal c_b56 = 0.;
+static doublereal c_b65 = 0.;
 
 /* $Procedure      XFMSTA ( Transform state between coordinate systems) */
 /* Subroutine */ int xfmsta_(doublereal *istate, char *icosys, char *ocosys, 
@@ -304,6 +304,10 @@ static doublereal c_b56 = 0.;
 /*     6)  If the product of the Jacobian and velocity components */
 /*         may lead to numeric overflow, the error */
 /*         'SPICE(NUMERICOVERFLOW)' is signaled. */
+
+/*     7)  If body's equatorial radii are not equal and either the */
+/*         input or output coordinate system is geodetic or */
+/*         planetographic, the error 'SPICE(NOTSUPPORTED)' is signaled. */
 
 /* $ Files */
 
@@ -703,6 +707,14 @@ static doublereal c_b56 = 0.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0  09-FEB-2017 (BVS) */
+
+/*        BUG FIX: the routine no longer allows converting to and from */
+/*        geodetic and planetographic coordinates for bodies with */
+/*        unequal equatorial radii. Previously it arbitrarily picked the */
+/*        first and the third radii to compute body's flattening */
+/*        coefficient. */
+
 /* -    SPICELIB Version 1.0.0  22-APR-2014 (SCK)(BVS) */
 
 /* -& */
@@ -938,6 +950,28 @@ static doublereal c_b56 = 0.;
 		chkout_("XFMSTA", (ftnlen)6);
 		return 0;
 	    }
+
+/*           At this point, we also check for unequal equatorial radii, */
+/*           which are not allowed with geodetic or planetographic */
+/*           coordinates. */
+
+	    if (radii[0] != radii[1]) {
+		setmsg_("The body # has radii (#, #, #). Unequal equatorial "
+			"ellipsoid radii are not supported for # and # coordi"
+			"nates.", (ftnlen)109);
+		errch_("#", body, (ftnlen)1, body_len);
+		errdp_("#", radii, (ftnlen)1);
+		errdp_("#", &radii[1], (ftnlen)1);
+		errdp_("#", &radii[2], (ftnlen)1);
+		errch_("#", cosys + 160, (ftnlen)1, (ftnlen)40);
+		errch_("#", cosys + 200, (ftnlen)1, (ftnlen)40);
+		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
+		chkout_("XFMSTA", (ftnlen)6);
+		return 0;
+	    }
+
+/*           Calculate the flattening coefficient, F. */
+
 	    f = (radii[0] - radii[2]) / radii[0];
 	} else {
 	    setmsg_("The input body name # does not have a valid NAIF ID cod"
@@ -1033,9 +1067,9 @@ static doublereal c_b56 = 0.;
 	    for (j = 1; j <= 3; ++j) {
 		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
 			<= i__1 ? i__1 : s_rnge("jacobi", i__1, "xfmsta_", (
-			ftnlen)1054)], abs(d__1))) * sqrt((d__2 = istate[(
+			ftnlen)1092)], abs(d__1))) * sqrt((d__2 = istate[(
 			i__2 = j + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge("ista"
-			"te", i__2, "xfmsta_", (ftnlen)1054)], abs(d__2)));
+			"te", i__2, "xfmsta_", (ftnlen)1092)], abs(d__2)));
 		if (sqtmp > toobig) {
 		    setmsg_("The product of the Jacobian and velocity may ca"
 			    "use numeric overflow.", (ftnlen)68);
@@ -1105,31 +1139,31 @@ static doublereal c_b56 = 0.;
 
 /*                  ... to cylindrical */
 
-		    vpack_(&c_b56, &c_b56, &ivel[2], &ostate[3]);
+		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
 		    reccyl_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 3) {
 
 /*                  ... to latitudinal */
 
-		    vpack_(&ivel[2], &c_b56, &c_b56, &ostate[3]);
+		    vpack_(&ivel[2], &c_b65, &c_b65, &ostate[3]);
 		    reclat_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 4) {
 
 /*                  ... to spherical */
 
-		    vpack_(&ivel[2], &c_b56, &c_b56, &ostate[3]);
+		    vpack_(&ivel[2], &c_b65, &c_b65, &ostate[3]);
 		    recsph_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 5) {
 
 /*                  ... to geodetic */
 
-		    vpack_(&c_b56, &c_b56, &ivel[2], &ostate[3]);
+		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
 		    recgeo_(ipos, radii, &f, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 6) {
 
 /*                  ... to planetographic */
 
-		    vpack_(&c_b56, &c_b56, &ivel[2], &ostate[3]);
+		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
 		    recpgr_(body, ipos, radii, &f, ostate, &ostate[1], &
 			    ostate[2], body_len);
 		} else {
@@ -1224,9 +1258,9 @@ static doublereal c_b56 = 0.;
 	    for (j = 1; j <= 3; ++j) {
 		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
 			<= i__1 ? i__1 : s_rnge("jacobi", i__1, "xfmsta_", (
-			ftnlen)1314)], abs(d__1))) * sqrt((d__2 = ivel[(i__2 =
+			ftnlen)1352)], abs(d__1))) * sqrt((d__2 = ivel[(i__2 =
 			 j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("ivel", i__2,
-			 "xfmsta_", (ftnlen)1314)], abs(d__2)));
+			 "xfmsta_", (ftnlen)1352)], abs(d__2)));
 		if (sqtmp > toobig) {
 		    setmsg_("The product of the Jacobian and velocity may ca"
 			    "use numeric overflow.", (ftnlen)68);

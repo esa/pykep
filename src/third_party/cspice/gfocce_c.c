@@ -8,6 +8,9 @@
    occulted by another. Report progress and handle interrupts 
    if so commanded. 
  
+   The surfaces of the target bodies may be represented by triaxial
+   ellipsoids or by topographic data provided by DSK files.
+
 -Disclaimer
  
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE 
@@ -183,11 +186,11 @@
               significant in the string `front'. 
  
  
-   fshape     is a string indicating the geometric model used 
-              to represent the shape of the front body. The 
-              supported options are: 
+   fshape     is a string indicating the geometric model used to
+              represent the shape of the front target body. The
+              supported options are:
  
-                 "ELLIPSOID"     Use a triaxial ellipsoid model, 
+                 "ELLIPSOID"     Use a triaxial ellipsoid model
                                  with radius values provided via the 
                                  kernel pool. A kernel variable  
                                  having a name of the form 
@@ -206,10 +209,44 @@
                                  When a point target is specified, 
                                  the occultation type must be 
                                  set to "ANY". 
-                                  
-              At least one of the target bodies `front' and `back' must 
-              be modeled as an ellipsoid. 
- 
+                                   
+              
+                 "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
+
+                     Use topographic data provided by DSK files to
+                     model the body's shape. These data must be
+                     provided by loaded DSK files.
+
+                     The surface list specification is optional. The
+                     syntax of the list is
+
+                        <surface 1> [, <surface 2>...]
+
+                     If present, it indicates that data only for the
+                     listed surfaces are to be used; however, data
+                     need not be available for all surfaces in the
+                     list. If absent, loaded DSK data for any surface
+                     associated with the target body are used.
+
+                     The surface list may contain surface names or
+                     surface ID codes. Names containing blanks must
+                     be delimited by double quotes, for example
+
+                        SURFACES = "Mars MEGDR 128 PIXEL/DEG"
+
+                     If multiple surfaces are specified, their names
+                     or IDs must be separated by commas.
+
+                     See the Particulars section below for details
+                     concerning use of DSK data.
+
+              The combinations of the shapes of the target bodies
+              `front' and `back' must be one of:
+
+                 One ELLIPSOID, one POINT
+                 Two ELLIPSOIDs
+                 One DSK, one POINT 
+
               Case and leading or trailing blanks are not 
               significant in the string `fshape'. 
  
@@ -642,50 +679,104 @@
        type is set to a valid value other than "ANY", the 
        error will be diagnosed by a routine in the call tree  
        of this routine. 
- 
-   15) If any input string argument pointer is null, the error
+
+   15) Invalid aberration correction specifications will be
+       diagnosed by a routine in the call tree of this routine.
+
+   16) If either `fshape' or `bshape' specifies that the target surface
+       is represented by DSK data, and no DSK files are loaded for
+       the specified target, the error is signaled by a routine in
+       the call tree of this routine.
+
+   17) If either `fshape' or `bshape' specifies that the target surface
+       is represented by DSK data, but the shape specification is
+       invalid, the error is signaled by a routine in the call tree
+       of this routine.
+
+   18) If any input string argument pointer is null, the error
        SPICE(NULLPOINTER) will be signaled.
 
-   16) If any input string argument, other than `fframe' or `bframe',
+   19) If any input string argument, other than `fframe' or `bframe',
        is empty, the error SPICE(EMPTYSTRING) will be signaled.
 
-   17) If the convergence tolerance size is non-positive, the error 
+   20) If the convergence tolerance size is non-positive, the error 
        SPICE(INVALIDTOLERANCE) will be signaled. 
   
-   18) If the occultation type is not recognized, the error 
+   21) If the occultation type is not recognized, the error 
        SPICE(INVALIDOCCTYPE) is signaled.
 
-   19) If any attempt to change the handler for the interrupt 
+   22) If any attempt to change the handler for the interrupt 
        signal SIGINT fails, the error SPICE(SIGNALFAILURE) is
        signaled.
 
-   20) If operation of this routine is interrupted, the output result
+   23) If operation of this routine is interrupted, the output result
        window will be invalid.
  
 
 -Files
  
+   
    Appropriate SPICE kernels must be loaded by the calling program
    before this routine is called.
- 
-   The following data are required: 
- 
-      - SPK data: the calling application must load ephemeris data 
-        for the target, source and observer that cover the time 
-        period specified by the window `cnfine'. If aberration 
-        corrections are used, the states of target and observer 
-        relative to the solar system barycenter must be calculable 
-        from the available ephemeris data. Typically ephemeris data 
-        are made available by loading one or more SPK files via 
-        furnsh_c. 
- 
-      - PCK data: bodies modeled as triaxial ellipsoids must have 
-        semi-axis lengths provided by variables in the kernel pool. 
-        Typically these data are made available by loading a text 
-        PCK file via furnsh_c. 
- 
-   In all cases, kernel data are normally loaded once per program 
-   run, NOT every time this routine is called.   
+
+   The following data are required:
+
+      - SPK data: the calling application must load ephemeris data
+        for the targets, source and observer that cover the time
+        period specified by the window `cnfine'. If aberration
+        corrections are used, the states of the target bodies and of
+        the observer relative to the solar system barycenter must be
+        calculable from the available ephemeris data. Typically
+        ephemeris data are made available by loading one or more SPK
+        files via furnsh_c.
+
+      - PCK data: bodies modeled as triaxial ellipsoids must have
+        semi-axis lengths provided by variables in the kernel pool.
+        Typically these data are made available by loading a text
+        PCK file via furnsh_c.
+
+      - FK data: if either of the reference frames designated by
+        `bframe' or `fframe' are not built in to the SPICE system,
+        one or more FKs specifying these frames must be loaded.
+
+   The following data may be required:
+
+      - DSK data: if either `fshape' or `bshape' indicates that DSK
+        data are to be used, DSK files containing topographic data
+        for the target body must be loaded. If a surface list is
+        specified, data for at least one of the listed surfaces must
+        be loaded.
+
+      - Surface name-ID associations: if surface names are specified
+        in `fshape' or `bshape', the association of these names with
+        their corresponding surface ID codes must be established by
+        assignments of the kernel variables
+
+           NAIF_SURFACE_NAME
+           NAIF_SURFACE_CODE
+           NAIF_SURFACE_BODY
+
+        Normally these associations are made by loading a text
+        kernel containing the necessary assignments. An example
+        of such a set of assignments is
+
+           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG'
+           NAIF_SURFACE_CODE += 1
+           NAIF_SURFACE_BODY += 499
+
+      - CK data: either of the body-fixed frames to which `fframe' or
+        `bframe' refer might be a CK frame. If so, at least one CK
+        file will be needed to permit transformation of vectors
+        between that frame and the J2000 frame.
+
+      - SCLK data: if a CK file is needed, an associated SCLK
+        kernel is required to enable conversion between encoded SCLK
+        (used to time-tag CK data) and barycentric dynamical time
+        (TDB).
+
+   Kernel data are normally loaded once per program run, NOT every
+   time this routine is called.
+
  
 -Particulars
  
@@ -779,6 +870,126 @@
    Example Programs chapter of the GF Required Reading, gf.req.
  
  
+   Using DSK data 
+   ============== 
+ 
+      DSK loading and unloading 
+      ------------------------- 
+ 
+      DSK files providing data used by this routine are loaded by 
+      calling furnsh_c and can be unloaded by calling unload_c or 
+      kclear_c. See the documentation of furnsh_c for limits on numbers 
+      of loaded DSK files. 
+ 
+      For run-time efficiency, it's desirable to avoid frequent 
+      loading and unloading of DSK files. When there is a reason to 
+      use multiple versions of data for a given target body---for 
+      example, if topographic data at varying resolutions are to be 
+      used---the surface list can be used to select DSK data to be 
+      used for a given computation. It is not necessary to unload 
+      the data that are not to be used. This recommendation presumes 
+      that DSKs containing different versions of surface data for a 
+      given body have different surface ID codes. 
+ 
+ 
+      DSK data priority 
+      ----------------- 
+ 
+      A DSK coverage overlap occurs when two segments in loaded DSK 
+      files cover part or all of the same domain---for example, a 
+      given longitude-latitude rectangle---and when the time 
+      intervals of the segments overlap as well. 
+ 
+      When DSK data selection is prioritized, in case of a coverage 
+      overlap, if the two competing segments are in different DSK 
+      files, the segment in the DSK file loaded last takes 
+      precedence. If the two segments are in the same file, the 
+      segment located closer to the end of the file takes 
+      precedence. 
+ 
+      When DSK data selection is unprioritized, data from competing 
+      segments are combined. For example, if two competing segments 
+      both represent a surface as a set of triangular plates, the 
+      union of those sets of plates is considered to represent the 
+      surface.  
+ 
+      Currently only unprioritized data selection is supported. 
+      Because prioritized data selection may be the default behavior 
+      in a later version of the routine, the UNPRIORITIZED keyword is 
+      required in the `fshape' and `bshape' arguments. 
+ 
+       
+      Syntax of the shape input arguments for the DSK case
+      ----------------------------------------------------
+ 
+      The keywords and surface list in the target shape arguments
+      `bshape' and `fshape' are called "clauses." The clauses may
+      appear in any order, for example
+ 
+         "DSK/<surface list>/UNPRIORITIZED"
+         "DSK/UNPRIORITIZED/<surface list>"
+         "UNPRIORITIZED/<surface list>/DSK"
+ 
+      The simplest form of the `method' argument specifying use of 
+      DSK data is one that lacks a surface list, for example: 
+ 
+         "DSK/UNPRIORITIZED" 
+ 
+      For applications in which all loaded DSK data for the target 
+      body are for a single surface, and there are no competing 
+      segments, the above string suffices. This is expected to be 
+      the usual case. 
+ 
+      When, for the specified target body, there are loaded DSK 
+      files providing data for multiple surfaces for that body, the 
+      surfaces to be used by this routine for a given call must be 
+      specified in a surface list, unless data from all of the 
+      surfaces are to be used together. 
+ 
+      The surface list consists of the string 
+ 
+         "SURFACES = "
+ 
+      followed by a comma-separated list of one or more surface 
+      identifiers. The identifiers may be names or integer codes in 
+      string format. For example, suppose we have the surface 
+      names and corresponding ID codes shown below: 
+ 
+         Surface Name                              ID code 
+         ------------                              ------- 
+         "Mars MEGDR 128 PIXEL/DEG"                1 
+         "Mars MEGDR 64 PIXEL/DEG"                 2 
+         "Mars_MRO_HIRISE"                         3 
+ 
+      If data for all of the above surfaces are loaded, then 
+      data for surface 1 can be specified by either 
+ 
+         "SURFACES = 1" 
+ 
+      or 
+ 
+         "SURFACES = \"Mars MEGDR 128 PIXEL/DEG\"" 
+ 
+      Escaped double quotes are used to delimit the surface name because 
+      it contains blank characters.  
+          
+      To use data for surfaces 2 and 3 together, any 
+      of the following surface lists could be used: 
+ 
+         "SURFACES = 2, 3" 
+ 
+         "SURFACES = \"Mars MEGDR  64 PIXEL/DEG\", 3" 
+ 
+         "SURFACES = 2, Mars_MRO_HIRISE" 
+ 
+         "SURFACES = \"Mars MEGDR 64 PIXEL/DEG\", Mars_MRO_HIRISE" 
+        
+      An example of a shape argument that could be constructed 
+      using one of the surface lists above is 
+ 
+         "DSK/UNPRIORITIZED/SURFACES = \"Mars MEGDR 64 PIXEL/DEG\", 3" 
+  
+
 -Examples
  
  
@@ -967,7 +1178,7 @@
                      timout_c ( left,  TIMFMT, TIMLEN, begstr );
                      timout_c ( right, TIMFMT, TIMLEN, endstr );
 
-                     printf ( "Interval %ld\n", i );
+                     printf ( "Interval %d\n", (int)i );
                      printf ( "   Start time: %s\n", begstr );
                      printf ( "   Stop time:  %s\n", endstr );
                   }
@@ -1031,7 +1242,14 @@
  
 -Version
  
-   -CSPICE Version 1.0.0, 15-APR-2009 (NJB) (LSE) (WLT) (IMU) (EDW )
+   -CSPICE Version 2.0.0, 29-FEB-2016 (NJB) (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
+      Updated to support use of DSKs.
+
+   -CSPICE Version 1.0.0, 15-APR-2009 (NJB) (LSE) (WLT) (IMU) (EDW)
 
 -Index_Entries
  

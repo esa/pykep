@@ -164,7 +164,7 @@
  
       if ( iswhsp_c(frname) )  
       { 
-         sprintf ( frname, "%ld", frcode );
+         sprintf ( frname, "%d", (int)frcode );
       }
 
       printf ( "Concerning reference frame: %s\n", frname );
@@ -188,6 +188,11 @@
    
 -Version
  
+   -CSPICE Version 1.0.3, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.2, 08-JAN-2014 (BVS) 
 
        Fixed typo in Examples (frname_c -> frmnam_c). Reordered

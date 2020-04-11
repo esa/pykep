@@ -18,8 +18,8 @@
 
 /* $ Abstract */
 
-/*      This routine converts from spherical coordinates to cylindrical */
-/*      coordinates. */
+/*     This routine converts from spherical coordinates to cylindrical */
+/*     coordinates. */
 
 /* $ Disclaimer */
 
@@ -52,48 +52,55 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION,  COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  ------------------------------------------------- */
-/*      RADIUS     I   Distance of point from origin. */
-/*      COLAT      I   Polar angle (co-latitude in radians) of point. */
-/*      SLONG      I   Azimuthal angle (longitude) of point (radians). */
-/*      R          O   Distance of point from Z axis. */
-/*      LONG       O   angle (radians) of point from XZ plane. */
-/*      Z          O   Height of point above XY plane. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  ------------------------------------------------- */
+/*     RADIUS     I   Distance of point from origin. */
+/*     COLAT      I   Polar angle (co-latitude in radians) of point. */
+/*     SLONG      I   Azimuthal angle (longitude) of point (radians). */
+/*     R          O   Distance of point from Z axis. */
+/*     LONG       O   angle (radians) of point from XZ plane. */
+/*     Z          O   Height of point above XY plane. */
 
 /* $ Detailed_Input */
 
-/*      RADIUS     Distance of the point from origin. */
+/*     RADIUS     Distance of the point from origin. */
 
-/*      COLAT      Polar angle (co-latitude in radians) of the point. */
+/*     COLAT      Polar angle (co-latitude in radians) of the point. */
 
-/*      SLONG      Azimuthal angle (longitude) of the point (radians). */
+/*     SLONG      Azimuthal angle (longitude) of the point (radians). */
 
 /* $ Detailed_Output */
 
-/*      R          Distance of the point of interest from Z axis. */
+/*     R          Distance of the point of interest from Z axis. */
 
-/*      LONG       cylindrical angle (radians) of the point from the */
-/*                 XZ plane. */
+/*     LONG       cylindrical angle (radians) of the point from the */
+/*                XZ plane. LONG is set equal to SLONG. */
 
-/*      Z          Height of the point above XY plane. */
+/*     Z          Height of the point above XY plane. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This returns the cylindrical coordinates of a point whose */
-/*      position is input through spherical coordinates. */
+/*     This returns the cylindrical coordinates of a point whose */
+/*     position is input through spherical coordinates. */
 
 /* $ Examples */
-
 
 /*     Other than the obvious conversion between coordinate systems */
 /*     this routine could be used to obtain the axial projection */
@@ -111,25 +118,21 @@
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -146,9 +149,9 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
 
-/*      Example section of header upgraded. */
+/*        Example section of header upgraded. */
 
 /* -& */
 

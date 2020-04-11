@@ -34,7 +34,7 @@
 
 -Required_Reading
 
-   GF.REQ
+   GF
 
 -Keywords
 
@@ -59,7 +59,7 @@
 
    value        The scalar double precision value to use as the GF subsystem
                 convergence tolerance. This value will override the default
-                tolerance, SPICE_GF_CNVTOL defined in SpiceGF.h Units are
+                tolerance, SPICE_GF_CNVTOL, defined in SpiceGF.h Units are
                 TDB seconds.
 
 -Detailed_Output
@@ -231,10 +231,10 @@
                   timout_c ( left,  TIMFMT, TIMLEN, begstr );
                   timout_c ( right, TIMFMT, TIMLEN, endstr );
 
-                  printf ( "Interval %ld\n"
-                           "   Start time: %s\n"
+                  printf ( "Interval %d\n"
+                           "   Start time: %s\n" 
                            "   Stop time:  %s\n",
-                           i, begstr, endstr      );
+                           (int)i, begstr, endstr      );
                   }
                }
 
@@ -261,6 +261,14 @@
    E.D. Wright    (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 28-JUN-2016 (EDW)
+
+      Edit to header, correct Required Reading entry eliminating ".REQ"
+      suffix.
+      
+      Edit to Example code, SpiceInts output as ints using 
+      explicit casting.
 
    -CSPICE Version 1.0.0, 27-SEP-2010
 

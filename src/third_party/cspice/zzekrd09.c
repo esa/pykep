@@ -22,7 +22,7 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer mdat[2], nrec, unit;
+    integer mdat[2];
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen);
     char cflag[1];
@@ -33,12 +33,11 @@ static integer c__1 = 1;
     char column[32];
     integer addrss, colidx, datbas, metloc, nflbas, offset;
     logical nullok;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasrdi_(integer *, integer *, integer *, integer *), 
-	    dasrdc_(integer *, integer *, integer *, integer *, integer *, 
-	    char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen), dasrdi_(integer *, 
+	    integer *, integer *, integer *), dasrdc_(integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer spp;
 
 /* $ Abstract */
@@ -760,11 +759,11 @@ static integer c__1 = 1;
 /*         called by this routine. */
 
 /*     2)  If the ordinal position of the column specified by COLDSC */
-/*         is out of range, the error SPICE(INVALIDINDEX) is signalled. */
+/*         is out of range, the error SPICE(INVALIDINDEX) is signaled. */
 
 /*     3)  If the output string CVAL is too short to accommodate the */
 /*         returned string value, the error SPICE(STRINGTRUNCATED) */
-/*         is signalled.  CVAL must be at least as long as the declared */
+/*         is signaled.  CVAL must be at least as long as the declared */
 /*         length of the column being read. */
 
 /*     4)  If an I/O error occurs while reading the indicated file, */
@@ -797,6 +796,14 @@ static integer c__1 = 1;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Bug fix: changed max column index in long error */
+/*        message from NREC to NCOLS. */
 
 /* -    SPICELIB Version 1.1.0, 28-JUL-1997 (NJB) */
 
@@ -839,15 +846,14 @@ static integer c__1 = 1;
     nullok = coldsc[7] == 1;
     l = coldsc[2];
     if (colidx < 1 || colidx > ncols) {
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRD09", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
 		"EK = #", (ftnlen)65);
 	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
+	errint_("#", &ncols, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKRD09", (ftnlen)8);
 	return 0;
@@ -860,10 +866,9 @@ static integer c__1 = 1;
     if (*cvlen > i_len(cval, cval_len)) {
 
 /*        We have a string truncation error.  Look up the column */
-/*        name, record number, and file name before signalling an */
+/*        name, record number, and file name before signaling an */
 /*        error. */
 
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	chkin_("ZZEKRD09", (ftnlen)8);
 	setmsg_("String value has length #; output string can hold only # ch"
@@ -875,7 +880,7 @@ static integer c__1 = 1;
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(STRINGTRUNCATED)", (ftnlen)22);
 	chkout_("ZZEKRD09", (ftnlen)8);
 	return 0;

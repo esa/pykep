@@ -14,16 +14,15 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
     /* Local variables */
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen), chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
     integer class__, recno, segno;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     char column[32];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen);
     extern integer zzeksz04_(integer *, integer *, integer *, integer *), 
 	    zzeksz05_(integer *, integer *, integer *, integer *), zzeksz06_(
 	    integer *, integer *, integer *, integer *);
@@ -387,6 +386,11 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error message. */
+
 /* -    Beta Version 1.0.0, 09-NOV-1995 (NJB) */
 
 /* -& */
@@ -430,12 +434,10 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
 /*        This is an unsupported column class. */
 
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
 	segno = segdsc[1];
 	chkin_("ZZEKESIZ", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported int"
 		"eger class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (
 		ftnlen)113);
@@ -443,7 +445,7 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("ZZEKESIZ", (ftnlen)8);
 	return ret_val;

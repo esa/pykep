@@ -61,9 +61,9 @@
    VARIABLE  I/O  DESCRIPTION 
    --------  ---  ------------------------------------------------- 
    rectan     I   Rectangular coordinates of a point. 
-   r          O   Distance of the point from z axis. 
-   lon        O   Angle (radians) of the point from xZ plane 
-   z          O   Height of the point above xY plane. 
+   r          O   Distance of the point from Z axis. 
+   lon        O   Angle (radians) of the point from XZ plane 
+   z          O   Height of the point above XY plane. 
  
 -Detailed_Input
  
@@ -71,14 +71,22 @@
  
 -Detailed_Output
  
-   r          Distance of the point of interest from z axis. 
+   r          Distance of the point of interest from Z axis. 
  
    lon        Cylindrical angle (in radians) of the point of 
-              interest from xZ plane. 
+              interest from XZ plane. The `lon' range is [0, 2pi].
  
-   z          Height of the point above xY plane. 
+   z          Height of the point above XY plane. 
  
 -Parameters
+ 
+   None. 
+ 
+-Exceptions
+ 
+   Error free. 
+ 
+-Files
  
    None. 
  
@@ -127,11 +135,7 @@
  
    None. 
  
--Exceptions
- 
-   Error free. 
- 
--Files
+-Literature_References
  
    None. 
  
@@ -139,16 +143,16 @@
  
    W.L. Taber      (JPL) 
  
--Literature_References
- 
-   None. 
- 
 -Version
  
+   -CSPICE Version 1.2.1, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
+
    -CSPICE Version 1.2.0, 28-AUG-2001 (NJB)
      
-       Removed tab characters from source file.  Include interface
-       macro definition header SpiceZim.h.
+      Removed tab characters from source file.  Include interface
+      macro definition header SpiceZim.h.
 
    -CSPICE Version 1.1.0, 21-OCT-1998 (NJB)
 

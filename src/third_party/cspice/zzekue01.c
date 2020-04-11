@@ -22,7 +22,6 @@ static integer c_n1 = -1;
     extern /* Subroutine */ int zzekiii1_(integer *, integer *, integer *, 
 	    integer *, integer *, logical *);
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
 	    zzekglnk_(integer *, integer *, integer *, integer *), zzekpgpg_(
 	    integer *, integer *, integer *, integer *), zzekixdl_(integer *, 
@@ -30,7 +29,7 @@ static integer c_n1 = -1;
 	    integer *, integer *);
     integer p, pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols;
+    integer recno;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *), dasudi_(integer *, integer *, integer *, integer *);
@@ -38,9 +37,8 @@ static integer c_n1 = -1;
     integer datptr, idxtyp, nlinks, ptrloc;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), dashlu_(integer *, integer *), errfnm_(char *, integer *,
-	     ftnlen), zzekad01_(integer *, integer *, integer *, integer *, 
-	    integer *, logical *);
+	    ftnlen), errhan_(char *, integer *, ftnlen), zzekad01_(integer *, 
+	    integer *, integer *, integer *, integer *, logical *);
 
 /* $ Abstract */
 
@@ -722,6 +720,13 @@ static integer c_n1 = -1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Deleted unnecessary code and variable declarations. */
+
 /* -    SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
 
 /*        Removed redundant calls to CHKIN. */
@@ -743,9 +748,8 @@ static integer c_n1 = -1;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKUE01", (ftnlen)8);
     }
+    chkin_("ZZEKUE01", (ftnlen)8);
 
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
@@ -755,12 +759,6 @@ static integer c_n1 = -1;
 	chkout_("ZZEKUE01", (ftnlen)8);
 	return 0;
     }
-
-/*     We'll need to know how many columns the segment has in order to */
-/*     compute the size of the record pointer.  The record pointer */
-/*     contains DPTBAS items plus two elements for each column. */
-
-    ncols = segdsc[4];
 
 /*     Compute the data pointer location. */
 
@@ -856,13 +854,12 @@ static integer c_n1 = -1;
 /*        The data pointer is corrupted. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	setmsg_("Data pointer is corrupted. SEGNO = #; COLIDX =  #; RECNO = "
 		"#; EK = #", (ftnlen)68);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKUE01", (ftnlen)8);
 	return 0;

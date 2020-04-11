@@ -22,12 +22,14 @@ static integer c__1000 = 1000;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
+    doublereal diff;
     extern /* Subroutine */ int zzwninsd_(doublereal *, doublereal *, char *, 
 	    doublereal *, ftnlen);
     logical s;
     doublereal begin, t;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer nloop;
     logical l1, l2, savst;
     doublereal t1, t2;
@@ -35,6 +37,7 @@ static integer c__1000 = 1000;
     extern logical failed_(void);
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *), 
 	    touchd_(doublereal *);
+    doublereal prvdif;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     logical instat;
@@ -309,6 +312,11 @@ static integer c__1000 = 1000;
 /*                results of the search and the contents of RESULT */
 /*                on entry. */
 
+
+/*                When RESULT is empty on input, the intervals of the */
+/*                output window stored in RESULT represent times when */
+/*                the state function UDCOND returns the value .TRUE. */
+
 /* $ Parameters */
 
 /*     LBCELL     is the SPICELIB cell lower bound. */
@@ -372,8 +380,17 @@ static integer c__1000 = 1000;
 /*     W.L. Taber     (JPL) */
 /*     I.M. Underwood (JPL) */
 /*     L. S. Elson    (JPL) */
+/*     E.D. Wright    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0,  31-JAN-2017 (NJB) (EDW) */
+
+/*        Restrictions on the input tolerance have been loosened: */
+/*        it is no longer required that the tolerance must yield */
+/*        a new value when it is added to, or subtracted from, */
+/*        either of the input interval bounds. The tolerance */
+/*        still must be strictly positive. */
 
 /* -    SPICELIB Version 1.1.0,  24-OCT-2010 (EDW) */
 
@@ -432,36 +449,6 @@ static integer c__1000 = 1000;
     if (*start > *finish) {
 	setmsg_("Bad time interval result, START > FINISH.", (ftnlen)41);
 	sigerr_("SPICE(BADTIMECASE)", (ftnlen)18);
-	chkout_("ZZGFSOLV", (ftnlen)8);
-	return 0;
-    }
-
-/*     Make sure that TOL is not too small, i.e. that neither */
-/*     START + TOL nor START - TOL equals START. */
-
-    d__1 = *start - *tol;
-    d__2 = *start + *tol;
-    if (touchd_(&d__1) == *start || touchd_(&d__2) == *start) {
-	setmsg_("TOL has value #1. This value is too small to distinguish ST"
-		"ART - TOL or START + TOL from START, #2.", (ftnlen)99);
-	errdp_("#1", tol, (ftnlen)2);
-	errdp_("#2", start, (ftnlen)2);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("ZZGFSOLV", (ftnlen)8);
-	return 0;
-    }
-
-/*     Make sure that TOL is not too small, i.e. that neither */
-/*     FINISH + TOL nor FINISH - TOL equals FINISH. */
-
-    d__1 = *finish - *tol;
-    d__2 = *finish + *tol;
-    if (touchd_(&d__1) == *finish || touchd_(&d__2) == *finish) {
-	setmsg_("TOL has value #1. This value is too small to distinguish FI"
-		"NISH - TOL or FINISH + TOL from FINISH, #2.", (ftnlen)102);
-	errdp_("#1", tol, (ftnlen)2);
-	errdp_("#2", finish, (ftnlen)2);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
 	chkout_("ZZGFSOLV", (ftnlen)8);
 	return 0;
     }
@@ -633,6 +620,13 @@ static integer c__1000 = 1000;
 	    t1 = svdtim;
 	    t2 = curtim;
 
+/*           Set the states at T1 and T2 for use by the refinement */
+/*           function, in case the caller has passed in a function */
+/*           that uses them. */
+
+	    l1 = savst;
+	    l2 = curste;
+
 /*           Make sure that T1 is not greater than T2. Signal an */
 /*           error for T1 > T2. */
 
@@ -650,13 +644,15 @@ static integer c__1000 = 1000;
 /*           length.  Do it as described below... */
 
 /*           Loop while the difference between the times T1 and T2 */
-/*           exceeds a specified tolerance. */
+/*           exceeds a specified tolerance, and while the magnitude */
+/*           of the difference is decreasing from one loop iteration */
+/*           to the next. */
 
+	    prvdif = dpmax_();
+	    d__2 = (d__1 = t2 - t1, abs(d__1));
+	    diff = touchd_(&d__2);
 	    nloop = 0;
-	    for(;;) { /* while(complicated condition) */
-		d__1 = t2 - t1;
-		if (!(touchd_(&d__1) > *tol))
-			break;
+	    while(diff > *tol && diff < prvdif) {
 		++nloop;
 
 /*              This loop count error exists to catch pathologies */
@@ -716,10 +712,19 @@ static integer c__1000 = 1000;
 		    (*udcond)(&t, &s);
 		    if (s == state1) {
 			t1 = t;
+			l1 = s;
 		    } else {
 			t2 = t;
+			l2 = s;
 		    }
 		}
+
+/*              Update PRVDIF and DIFF for the next loop termination */
+/*              test. */
+
+		prvdif = diff;
+		d__2 = (d__1 = t2 - t1, abs(d__1));
+		diff = touchd_(&d__2);
 	    }
 
 /*           Let TRNSTN be the midpoint of [T1, T2].  Record this */

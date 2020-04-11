@@ -27,7 +27,7 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
     char cval[1024*2];
     integer hans[2], elts[2];
     logical null[2];
-    integer unit, rows[2];
+    integer rows[2];
     extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
 	    integer *);
     integer i__, n;
@@ -39,10 +39,9 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 	    ftnlen, ftnlen);
     integer cldscs[22]	/* was [11][2] */, cmplen[2], sgdscs[48]	/* 
 	    was [24][2] */;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errfnm_(char *, integer *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errhan_(char *, 
+	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
     integer rel;
     extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, logical *, logical *, 
@@ -797,11 +796,11 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 /*         handle these errors. */
 
 /*     4)  If the data type code in an input column descriptor is not */
-/*         recognized, the error SPICE(INVALIDDATATYPE) is signalled. */
+/*         recognized, the error SPICE(INVALIDDATATYPE) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /*     5)  If a relational operator code is not recognized, the */
-/*         error SPICE(UNNATURALRELATION) is signalled. */
+/*         error SPICE(UNNATURALRELATION) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /* $ Files */
@@ -821,7 +820,7 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -843,6 +842,10 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to use ERRHAN. */
 
 /* -    SPICELIB Version 1.1.0, 01-JUN-2010 (NJB) */
 
@@ -916,59 +919,58 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 	    } else if (ops[n - 1] == 7 && cldscs[1] == 1) {
 		for (i__ = 1; i__ <= 2; ++i__) {
 		    zzekrsc_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)399)], &
+			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)402)], &
 			    sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? 
 			    i__2 : s_rnge("sgdscs", i__2, "zzekvmch_", (
-			    ftnlen)399)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
+			    ftnlen)402)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
 			    && 0 <= i__3 ? i__3 : s_rnge("cldscs", i__3, 
-			    "zzekvmch_", (ftnlen)399)], &rows[(i__4 = i__ - 1)
+			    "zzekvmch_", (ftnlen)402)], &rows[(i__4 = i__ - 1)
 			     < 2 && 0 <= i__4 ? i__4 : s_rnge("rows", i__4, 
-			    "zzekvmch_", (ftnlen)399)], &elts[(i__5 = i__ - 1)
+			    "zzekvmch_", (ftnlen)402)], &elts[(i__5 = i__ - 1)
 			     < 2 && 0 <= i__5 ? i__5 : s_rnge("elts", i__5, 
-			    "zzekvmch_", (ftnlen)399)], &cvlen[(i__6 = i__ - 
+			    "zzekvmch_", (ftnlen)402)], &cvlen[(i__6 = i__ - 
 			    1) < 2 && 0 <= i__6 ? i__6 : s_rnge("cvlen", i__6,
-			     "zzekvmch_", (ftnlen)399)], cval + (((i__7 = i__ 
+			     "zzekvmch_", (ftnlen)402)], cval + (((i__7 = i__ 
 			    - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge("cval", 
-			    i__7, "zzekvmch_", (ftnlen)399)) << 10), &null[(
+			    i__7, "zzekvmch_", (ftnlen)402)) << 10), &null[(
 			    i__8 = i__ - 1) < 2 && 0 <= i__8 ? i__8 : s_rnge(
-			    "null", i__8, "zzekvmch_", (ftnlen)399)], &found, 
+			    "null", i__8, "zzekvmch_", (ftnlen)402)], &found, 
 			    (ftnlen)1024);
 		    if (! found) {
-			dashlu_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-				i__1 : s_rnge("hans", i__1, "zzekvmch_", (
-				ftnlen)412)], &unit);
 			chkin_("ZZEKVMCH", (ftnlen)8);
 			setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.  "
 				"Column entry  element was not found.", (
 				ftnlen)79);
-			errfnm_("#", &unit, (ftnlen)1);
+			errhan_("#", &hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
+				 i__1 : s_rnge("hans", i__1, "zzekvmch_", (
+				ftnlen)419)], (ftnlen)1);
 			errint_("#", &cldscs[(i__1 = i__ * 11 - 3) < 22 && 0 
 				<= i__1 ? i__1 : s_rnge("cldscs", i__1, "zze"
-				"kvmch_", (ftnlen)419)], (ftnlen)1);
+				"kvmch_", (ftnlen)420)], (ftnlen)1);
 			errint_("#", &rows[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 				 i__1 : s_rnge("rows", i__1, "zzekvmch_", (
-				ftnlen)420)], (ftnlen)1);
+				ftnlen)421)], (ftnlen)1);
 			errint_("#", &elts[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 				 i__1 : s_rnge("elts", i__1, "zzekvmch_", (
-				ftnlen)421)], (ftnlen)1);
+				ftnlen)422)], (ftnlen)1);
 			sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 			chkout_("ZZEKVMCH", (ftnlen)8);
 			return ret_val;
 		    }
 		    if (found && ! null[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
 			    i__1 : s_rnge("null", i__1, "zzekvmch_", (ftnlen)
-			    428)]) {
+			    429)]) {
 /* Computing MIN */
 			i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 
 				: s_rnge("cvlen", i__2, "zzekvmch_", (ftnlen)
-				430)];
+				431)];
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				430)] = min(i__3,1024);
+				431)] = min(i__3,1024);
 		    } else {
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				432)] = 0;
+				433)] = 0;
 		    }
 		}
 		ret_val = matchi_(cval, cval + 1024, "*", "%", cmplen[0], 
@@ -976,59 +978,58 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 	    } else if (ops[n - 1] == 8 && cldscs[1] == 1) {
 		for (i__ = 1; i__ <= 2; ++i__) {
 		    zzekrsc_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)450)], &
+			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)451)], &
 			    sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? 
 			    i__2 : s_rnge("sgdscs", i__2, "zzekvmch_", (
-			    ftnlen)450)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
+			    ftnlen)451)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
 			    && 0 <= i__3 ? i__3 : s_rnge("cldscs", i__3, 
-			    "zzekvmch_", (ftnlen)450)], &rows[(i__4 = i__ - 1)
+			    "zzekvmch_", (ftnlen)451)], &rows[(i__4 = i__ - 1)
 			     < 2 && 0 <= i__4 ? i__4 : s_rnge("rows", i__4, 
-			    "zzekvmch_", (ftnlen)450)], &elts[(i__5 = i__ - 1)
+			    "zzekvmch_", (ftnlen)451)], &elts[(i__5 = i__ - 1)
 			     < 2 && 0 <= i__5 ? i__5 : s_rnge("elts", i__5, 
-			    "zzekvmch_", (ftnlen)450)], &cvlen[(i__6 = i__ - 
+			    "zzekvmch_", (ftnlen)451)], &cvlen[(i__6 = i__ - 
 			    1) < 2 && 0 <= i__6 ? i__6 : s_rnge("cvlen", i__6,
-			     "zzekvmch_", (ftnlen)450)], cval + (((i__7 = i__ 
+			     "zzekvmch_", (ftnlen)451)], cval + (((i__7 = i__ 
 			    - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge("cval", 
-			    i__7, "zzekvmch_", (ftnlen)450)) << 10), &null[(
+			    i__7, "zzekvmch_", (ftnlen)451)) << 10), &null[(
 			    i__8 = i__ - 1) < 2 && 0 <= i__8 ? i__8 : s_rnge(
-			    "null", i__8, "zzekvmch_", (ftnlen)450)], &found, 
+			    "null", i__8, "zzekvmch_", (ftnlen)451)], &found, 
 			    (ftnlen)1024);
 		    if (! found) {
-			dashlu_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-				i__1 : s_rnge("hans", i__1, "zzekvmch_", (
-				ftnlen)463)], &unit);
 			chkin_("ZZEKVMCH", (ftnlen)8);
 			setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.  "
 				"Column entry  element was not found.", (
 				ftnlen)79);
-			errfnm_("#", &unit, (ftnlen)1);
+			errhan_("#", &hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
+				 i__1 : s_rnge("hans", i__1, "zzekvmch_", (
+				ftnlen)468)], (ftnlen)1);
 			errint_("#", &cldscs[(i__1 = i__ * 11 - 3) < 22 && 0 
 				<= i__1 ? i__1 : s_rnge("cldscs", i__1, "zze"
-				"kvmch_", (ftnlen)470)], (ftnlen)1);
+				"kvmch_", (ftnlen)469)], (ftnlen)1);
 			errint_("#", &rows[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 				 i__1 : s_rnge("rows", i__1, "zzekvmch_", (
-				ftnlen)471)], (ftnlen)1);
+				ftnlen)470)], (ftnlen)1);
 			errint_("#", &elts[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
 				 i__1 : s_rnge("elts", i__1, "zzekvmch_", (
-				ftnlen)472)], (ftnlen)1);
+				ftnlen)471)], (ftnlen)1);
 			sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 			chkout_("ZZEKVMCH", (ftnlen)8);
 			return ret_val;
 		    }
 		    if (found && ! null[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
 			    i__1 : s_rnge("null", i__1, "zzekvmch_", (ftnlen)
-			    480)]) {
+			    479)]) {
 /* Computing MIN */
 			i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 
 				: s_rnge("cvlen", i__2, "zzekvmch_", (ftnlen)
-				482)];
+				481)];
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				482)] = min(i__3,1024);
+				481)] = min(i__3,1024);
 		    } else {
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				484)] = 0;
+				483)] = 0;
 		    }
 		}
 		ret_val = ! matchi_(cval, cval + 1024, "*", "%", cmplen[0], 

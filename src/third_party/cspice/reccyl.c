@@ -22,7 +22,7 @@
 
 /* $ Abstract */
 
-/*      Convert from rectangular to cylindrical coordinates. */
+/*     Convert from rectangular to cylindrical coordinates. */
 
 
 /* $ Disclaimer */
@@ -56,39 +56,47 @@
 
 /* $ Keywords */
 
-/*      CONVERSION, COORDINATES */
+/*     CONVERSION, COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  ------------------------------------------------- */
-/*      RECTAN     I   Rectangular coordinates of a point. */
-/*      R          O   Distance of the point from Z axis. */
-/*      LONG       O   Angle (radians) of the point from XZ plane */
-/*      Z          O   Height of the point above XY plane. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  ------------------------------------------------- */
+/*     RECTAN     I   Rectangular coordinates of a point. */
+/*     R          O   Distance of the point from Z axis. */
+/*     LONG       O   Angle (radians) of the point from XZ plane */
+/*     Z          O   Height of the point above XY plane. */
 
 /* $ Detailed_Input */
 
-/*      RECTAN     Rectangular coordinates of the point of interest. */
+/*     RECTAN     Rectangular coordinates of the point of interest. */
 
 /* $ Detailed_Output */
 
-/*      R          Distance of the point of interest from Z axis. */
+/*     R          Distance of the point of interest from Z axis. */
 
-/*      LONG       Cylindrical angle (in radians) of the point of */
-/*                 interest from XZ plane. */
+/*     LONG       Cylindrical angle (in radians) of the point of */
+/*                interest from XZ plane. The LONG range is [0, 2pi]. */
 
-/*      Z          Height of the point above XY plane. */
+/*     Z          Height of the point above XY plane. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine transforms the coordinates of a point from */
-/*      rectangular to cylindrical coordinates. */
+/*     This routine transforms the coordinates of a point from */
+/*     rectangular to cylindrical coordinates. */
 
 /* $ Examples */
 
@@ -128,25 +136,21 @@
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.2, 22-AUG-2001 (EDW) */
 

@@ -14,7 +14,6 @@ static integer c__1 = 1;
 	char *column, integer *nvals, doublereal *dvals, logical *isnull, 
 	ftnlen column_len)
 {
-    integer unit;
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
 	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
 	    zzektrdp_(integer *, integer *, integer *, integer *);
@@ -26,15 +25,15 @@ static integer c__1 = 1;
     integer dtype;
     extern logical failed_(void);
     integer coldsc[11], segdsc[24];
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekrd02_(integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *), 
-	    zzekrd05_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *, logical *), zzekrd08_(integer 
-	    *, integer *, integer *, integer *, doublereal *, logical *);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), zzekrd02_(integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *), zzekrd05_(integer *, integer *, integer 
+	    *, integer *, integer *, integer *, doublereal *, logical *, 
+	    logical *), zzekrd08_(integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *);
 
 /* $ Abstract */
 
@@ -414,11 +413,11 @@ static integer c__1 = 1;
 
 /*     5)  If COLUMN specifies a column of whose data type is not */
 /*         double precision, the error SPICE(WRONGDATATYPE) will be */
-/*         signalled. */
+/*         signaled. */
 
 /*     6)  If COLUMN specifies a column of whose class is not */
 /*         a double precision class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signalled. */
+/*         SPICE(NOCLASS) will be signaled. */
 
 /*     7)  If an attempt is made to read an uninitialized column entry, */
 /*         the error will be diagnosed by routines called by this */
@@ -462,6 +461,11 @@ static integer c__1 = 1;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 06-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    SPICELIB Version 1.2.0, 20-JUN-1999 (WLT) */
 
@@ -519,14 +523,13 @@ static integer c__1 = 1;
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
 	chkin_("EKRCED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Column # is of type #; EKRCED only works with d.p. or TIME "
 		"columns.  RECNO = #; SEGNO =  #; EK = #.", (ftnlen)99);
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", &dtype, (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
 	chkout_("EKRCED", (ftnlen)6);
 	return 0;
@@ -561,7 +564,6 @@ static integer c__1 = 1;
 
 	*segno = segdsc[1];
 	chkin_("EKRCED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported d.p"
 		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
 		110);
@@ -569,7 +571,7 @@ static integer c__1 = 1;
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("EKRCED", (ftnlen)6);
 	return 0;

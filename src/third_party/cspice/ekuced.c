@@ -10,7 +10,6 @@
 	char *column, integer *nvals, doublereal *dvals, logical *isnull, 
 	ftnlen column_len)
 {
-    integer unit;
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
 	    integer *, ftnlen), zzekrbck_(char *, integer *, integer *, 
 	    integer *, integer *, ftnlen), zzeksdsc_(integer *, integer *, 
@@ -20,14 +19,14 @@
     extern logical failed_(void);
     integer coldsc[11], segdsc[24];
     logical isshad;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), ekshdw_(integer *, 
-	    logical *), zzekue02_(integer *, integer *, integer *, integer *, 
-	    doublereal *, logical *), zzekue05_(integer *, integer *, integer 
-	    *, integer *, integer *, doublereal *, logical *);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), ekshdw_(integer *, logical *), zzekue02_(integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *), 
+	    zzekue05_(integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *);
 
 /* $ Abstract */
 
@@ -374,7 +373,7 @@
 /*     DVALS          are, respectively, the number of values to add to */
 /*                    the specified column and the set of values */
 /*                    themselves.  The data values are written in to the */
-/*                    specifed column and record. */
+/*                    specified column and record. */
 
 /*                    If the  column has fixed-size entries, then NVALS */
 /*                    must equal the entry size for the specified column. */
@@ -420,7 +419,7 @@
 
 /*     4)  If COLUMN specifies a column of whose data type is not */
 /*         DOUBLE PRECISION or TIME, the error SPICE(WRONGDATATYPE) will */
-/*         be signalled. */
+/*         be signaled. */
 
 /*     5)  If RECNO is out of range, the error will diagnosed by routines */
 /*         called by this routine. */
@@ -439,7 +438,7 @@
 
 /*     9)  If COLUMN specifies a column of whose class is not */
 /*         a double precision class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signalled. */
+/*         SPICE(NOCLASS) will be signaled. */
 
 /*     10) If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -498,6 +497,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 06-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    SPICELIB Version 1.1.0, 20-JUN-1999 (WLT) */
 
 /*        Removed unbalanced call to CHKOUT. */
@@ -534,14 +538,13 @@
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
 	chkin_("EKUCED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Column # is of type #; EKUCED only works with d.p. or TIME "
 		"columns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)98);
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", &dtype, (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
 	chkout_("EKUCED", (ftnlen)6);
 	return 0;
@@ -582,7 +585,6 @@
 
 	*segno = segdsc[1];
 	chkin_("EKUCED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported d.p"
 		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
 		110);
@@ -590,7 +592,7 @@
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("EKUCED", (ftnlen)6);
 	return 0;

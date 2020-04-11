@@ -17,7 +17,7 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer mxwnsz[2] = { 14,28 };
+    static integer mxwnsz[3] = { 14,28,28 };
     static integer svminb = -1;
     static integer svn = -1;
     static integer svnpkt = -1;
@@ -28,7 +28,7 @@ static integer c__6 = 6;
     static integer svstyp = -1;
     static integer svwnsz = -1;
     static logical pass1 = TRUE_;
-    static integer pktszs[2] = { 12,6 };
+    static integer pktszs[3] = { 12,6,6 };
     static integer svbeg = -1;
     static doublereal svbtim = 0.;
     static doublereal svetim = -1.;
@@ -170,6 +170,10 @@ static integer c__6 = 6;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
+
 /* -    SPICELIB Version 1.0.0, 07-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -194,6 +198,9 @@ static integer c__6 = 6;
 
 
 /*     Subtype 1:  Lagrange interpolation, 6-element packets. */
+
+
+/*     Subtype 2:  Hermite interpolation, 6-element packets. */
 
 
 /*     Packet sizes associated with the various subtypes: */
@@ -432,6 +439,10 @@ static integer c__6 = 6;
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
+
+/*        Updated to support subtype 2. */
 
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS) */
 
@@ -787,7 +798,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)735)] <= *et) {
+			ftnlen)742)] <= *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -903,7 +914,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)870)] < *et) {
+			ftnlen)877)] < *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1037,7 +1048,7 @@ static integer c__6 = 6;
 	subtyp = i_dnnt(contrl);
 	wndsiz = i_dnnt(&contrl[1]);
 	npkt = i_dnnt(&contrl[2]);
-	if (subtyp < 0 || subtyp >= 2) {
+	if (subtyp < 0 || subtyp >= 3) {
 	    setmsg_("Unexpected SPK type 19 subtype # found in type 19 segme"
 		    "nt within mini-segment #.", (ftnlen)80);
 	    errint_("#", &subtyp, (ftnlen)1);
@@ -1046,10 +1057,10 @@ static integer c__6 = 6;
 	    chkout_("SPKR19", (ftnlen)6);
 	    return 0;
 	}
-	pktsiz = pktszs[(i__1 = subtyp) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		"pktszs", i__1, "spkr19_", (ftnlen)1040)];
-	maxwnd = mxwnsz[(i__1 = subtyp) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		"mxwnsz", i__1, "spkr19_", (ftnlen)1041)];
+	pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+		"pktszs", i__1, "spkr19_", (ftnlen)1047)];
+	maxwnd = mxwnsz[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+		"mxwnsz", i__1, "spkr19_", (ftnlen)1048)];
 
 /*        Check the window size. */
 
@@ -1179,7 +1190,7 @@ static integer c__6 = 6;
 	    return 0;
 	}
 	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr19_", (ftnlen)1189)] < *et && remain > 0)
+		"buffer", i__1, "spkr19_", (ftnlen)1196)] < *et && remain > 0)
 		 {
 	    bufbas += nread;
 	    nread = min(remain,100);

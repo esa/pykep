@@ -8,7 +8,7 @@
 /* Table of constant values */
 
 static integer c__3 = 3;
-static doublereal c_b17 = 1.;
+static doublereal c_b16 = 1.;
 
 /* $Procedure      INRYPL ( Intersection of ray and plane ) */
 /* Subroutine */ int inrypl_(doublereal *vertex, doublereal *dir, doublereal *
@@ -133,7 +133,7 @@ static doublereal c_b17 = 1.;
 /*         and XPT are not modified. */
 
 
-/*     3)  If the input plane is s further than DPMAX() / 3 from the */
+/*     3)  If the input plane is further than DPMAX() / 3 from the */
 /*         origin, the error SPICE(VECTORTOOBIG) is signaled.  NXPTS */
 /*         and XPT are not modified. */
 
@@ -535,6 +535,11 @@ static doublereal c_b17 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 29-SEP-2016 (NJB) */
+
+/*        Changed from standard to discovery check-in. Fixed typo */
+/*        in header. */
+
 /* -    SPICELIB Version 1.1.1, 07-FEB-2008 (BVS) */
 
 /*        Fixed a few typos in the header. */
@@ -591,8 +596,6 @@ static doublereal c_b17 = 1.;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("INRYPL", (ftnlen)6);
     }
 
 /*     We'll give the name TOOBIG to the bound DPMAX() / MARGIN. */
@@ -606,6 +609,7 @@ static doublereal c_b17 = 1.;
 
     toobig = dpmax_() / 3.;
     if (vnorm_(vertex) >= toobig) {
+	chkin_("INRYPL", (ftnlen)6);
 	setmsg_("Ray's vertex is too far from the origin.", (ftnlen)40);
 	sigerr_("SPICE(VECTORTOOBIG)", (ftnlen)19);
 	chkout_("INRYPL", (ftnlen)6);
@@ -617,6 +621,7 @@ static doublereal c_b17 = 1.;
 
     pl2nvc_(plane, normal, &const__);
     if (const__ >= toobig) {
+	chkin_("INRYPL", (ftnlen)6);
 	setmsg_("Plane is too far from the origin.", (ftnlen)33);
 	sigerr_("SPICE(VECTORTOOBIG)", (ftnlen)19);
 	chkout_("INRYPL", (ftnlen)6);
@@ -627,6 +632,7 @@ static doublereal c_b17 = 1.;
 
     vhat_(dir, udir);
     if (vzero_(udir)) {
+	chkin_("INRYPL", (ftnlen)6);
 	setmsg_("Ray's direction vector is the zero vector.", (ftnlen)42);
 	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
 	chkout_("INRYPL", (ftnlen)6);
@@ -677,7 +683,6 @@ static doublereal c_b17 = 1.;
 	} else {
 	    *nxpts = 1;
 	}
-	chkout_("INRYPL", (ftnlen)6);
 	return 0;
     }
 
@@ -740,7 +745,6 @@ static doublereal c_b17 = 1.;
 
 	*nxpts = 0;
 	cleard_(&c__3, xpt);
-	chkout_("INRYPL", (ftnlen)6);
 	return 0;
     }
 
@@ -768,7 +772,6 @@ static doublereal c_b17 = 1.;
 
 	*nxpts = 0;
 	cleard_(&c__3, xpt);
-	chkout_("INRYPL", (ftnlen)6);
 	return 0;
     }
 
@@ -779,13 +782,12 @@ static doublereal c_b17 = 1.;
 
     *nxpts = 1;
     scale = abs(prjdif) / abs(prjdir);
-    vlcom_(&c_b17, sclvtx, &scale, udir, xpt);
+    vlcom_(&c_b16, sclvtx, &scale, udir, xpt);
 
 /*     Re-scale XPT.  This is safe, since TOOBIG has already been */
 /*     scaled to allow for any growth of XPT at this step. */
 
     vsclip_(&mscale, xpt);
-    chkout_("INRYPL", (ftnlen)6);
     return 0;
 } /* inrypl_ */
 

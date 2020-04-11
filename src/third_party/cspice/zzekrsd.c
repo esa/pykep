@@ -11,20 +11,19 @@
 	isnull, logical *found)
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen), chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
     integer class__, recno, segno, dtype;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     char column[32];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekrd02_(integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *), 
-	    zzekrd05_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *, logical *), zzekrd08_(integer 
-	    *, integer *, integer *, integer *, doublereal *, logical *);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), zzekrd02_(integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *), zzekrd05_(integer *, integer *, integer 
+	    *, integer *, integer *, integer *, doublereal *, logical *, 
+	    logical *), zzekrd08_(integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *);
 
 /* $ Abstract */
 
@@ -432,17 +431,17 @@
 
 /*     3)  If COLDSC specifies a column of whose data type is not */
 /*         double precision, the error SPICE(WRONGDATATYPE) will be */
-/*         signalled. */
+/*         signaled. */
 
 /*     4)  If COLDSC specifies a column of whose class is not */
 /*         an double precision class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signalled. */
+/*         SPICE(NOCLASS) will be signaled. */
 
 /*     5)  If the indicated column is array-valued, and if ELTIDX is */
 /*         non-positive, the error will be diagnosed by routines called */
 /*         by this routine.  However, if ELTIDX is greater than the */
 /*         number of elements in the specified column entry, FOUND is */
-/*         set to .FALSE. and no error is signalled. */
+/*         set to .FALSE. and no error is signaled. */
 
 /*     6)  If an I/O error occurs while reading the indicated file, */
 /*         the error will be diagnosed by routines called by this */
@@ -481,6 +480,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 06-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.0.0, 06-NOV-1995 (NJB) */
 
 /* -& */
@@ -503,18 +507,16 @@
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	dashlu_(handle, &unit);
 	segno = segdsc[1];
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
 	chkin_("ZZEKRSD", (ftnlen)7);
-	dashlu_(handle, &unit);
 	setmsg_("Column # is of type #; ZZEKRSD only works with DP or TIME c"
 		"olumns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)97);
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &dtype, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
 	chkout_("ZZEKRSD", (ftnlen)7);
 	return 0;
@@ -541,11 +543,9 @@
 /*        This is an unsupported d.p. column class. */
 
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	dashlu_(handle, &unit);
 	segno = segdsc[1];
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
 	chkin_("ZZEKRSD", (ftnlen)7);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported d.p"
 		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
 		110);
@@ -553,7 +553,7 @@
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("ZZEKRSD", (ftnlen)7);
 	return 0;

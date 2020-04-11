@@ -11,7 +11,7 @@ static integer c__4 = 4;
 static logical c_false = FALSE_;
 static integer c__1 = 1;
 
-/* $Procedure ZZDAFGFR ( Private --- DAF Get Data Record ) */
+/* $Procedure ZZDAFGFR ( Private --- DAF Get File Record ) */
 /* Subroutine */ int zzdafgfr_(integer *handle, char *idword, integer *nd, 
 	integer *ni, char *ifname, integer *fward, integer *bward, integer *
 	free, logical *found, ftnlen idword_len, ftnlen ifname_len)
@@ -428,13 +428,6 @@ static integer c__1 = 1;
 
 /*     None. */
 
-/* $ Files */
-
-/*     This routine reads data from the DAF associated with HANDLE. */
-/*     This action may result in connecting a logical unit to the */
-/*     file, if the handle manager has rotated the file out of the */
-/*     unit table. */
-
 /* $ Exceptions */
 
 /*     1) SPICE(HANDLENOTFOUND) is signaled if HANDLE can not be */
@@ -444,6 +437,13 @@ static integer c__1 = 1;
 /*     2) Routines in the call tree of this routine may trap and */
 /*        signal errors.  The output arguments are unmodified in */
 /*        these cases. */
+
+/* $ Files */
+
+/*     This routine reads data from the DAF associated with HANDLE. */
+/*     This action may result in connecting a logical unit to the */
+/*     file, if the handle manager has rotated the file out of the */
+/*     unit table. */
 
 /* $ Particulars */
 
@@ -472,15 +472,20 @@ static integer c__1 = 1;
 /*        incompletely translated or extracted file record is NOT */
 /*        FOUND. */
 
-/* $ Author_and_Institution */
-
-/*     F.S. Turner     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     F.S. Turner     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 24-JUL-2014 (NJB) */
+
+/*        Corrected typo in Procedure line of header. */
+/*        Re-ordered header sections. */
 
 /* -    SPICELIB Version 1.0.0, 12-NOV-2001 (FST) */
 
@@ -535,7 +540,7 @@ static integer c__1 = 1;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgfr_", (ftnlen)
-		    275)) << 3), (ftnlen)3, (ftnlen)8);
+		    280)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */

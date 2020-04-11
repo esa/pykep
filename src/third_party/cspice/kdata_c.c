@@ -98,6 +98,7 @@
                  CK   --- All CK files are counted in the total. 
                  PCK  --- All binary PCK files are counted in the 
                           total. 
+                 DSK  --- All DSK files are counted in the total. 
                  EK   --- All EK files are counted in the total. 
                  TEXT --- All text kernels that are not meta-text 
                           kernels are included in the total. 
@@ -191,9 +192,9 @@
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      #define  FILLEN   128
-      #define  TYPLEN   32
-      #define  SRCLEN   128
+      #define  FILLEN   256
+      #define  TYPLEN   33
+      #define  SRCLEN   256
 
       SpiceInt        which;
       SpiceInt        count;
@@ -207,7 +208,7 @@
 
       int main()
          { 
-         furnsh_c( "/kernels/standard.tm" );
+         furnsh_c( "standard.tm" );
    
          ktotal_c ( "spk", &count );
     
@@ -241,8 +242,15 @@
  
    N.J. Bachman    (JPL)
    W.L. Taber      (JPL) 
- 
+   E.D. Wright     (JPL)
+
 -Version
+
+   -CSPICE Version 1.1.4, 20-JAN-2016 (NJB)
+
+      Updated header to reflect support for use of DSKs.
+      Made minor updates to example program. Added
+      Ed Wright as an author of this routine.
 
    -CSPICE Version 1.1.3, 02-MAY-2008 (EDW)
 

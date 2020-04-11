@@ -1,5 +1,5 @@
 # Main pykep project version.
-set(PYKEP_PROJECT_VERSION 2.4.1)
+set(PYKEP_PROJECT_VERSION 2.5)
 
 # CMake version check.
 cmake_minimum_required(VERSION 3.2)
@@ -154,11 +154,6 @@ list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wold-style-cast")
 
 if(PYKEP_BUILD_PYKEP)
     include(YACMAPythonSetup)
-    # Python version check.
-    if(${PYTHON_VERSION_MAJOR} LESS 2 OR (${PYTHON_VERSION_MAJOR} EQUAL 2 AND ${PYTHON_VERSION_MINOR} LESS 7))
-        message(FATAL_ERROR "Minimum supported Python version is 2.7.")
-    endif()
-
     # NOTE: for the time being, require that dcgp/dcgpy versions are matching exactly.
     find_package(keplerian_toolbox ${PYKEP_PROJECT_VERSION} EXACT REQUIRED)
 

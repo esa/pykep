@@ -595,8 +595,8 @@ static integer c__1 = 1;
 /*                                   polynomials. */
 
 /*                       Subtype 2:  Hermite interpolation, 14-element */
-/*                                   packets.  Quaternion and angular */
-/*                                   angular velocity vector, as well as */
+/*                                   packets. Quaternion and angular */
+/*                                   velocity vector, as well as */
 /*                                   derivatives of each, are provided. */
 /*                                   The quaternion comes first, then */
 /*                                   quaternion derivatives, then */
@@ -611,9 +611,12 @@ static integer c__1 = 1;
 /*                    Angular velocity is always specified relative to */
 /*                    the base frame. */
 
-/*                    Units of angular velocity and of quaternion */
-/*                    derivatives are radians/second and 1/second */
-/*                    respectively. */
+/*                    Units of the input data are: */
+
+/*                       Quaternions                unitless */
+/*                       Quaternion derivatives     1/TDB second */
+/*                       Angular velocity           radians/TDB second */
+/*                       Angular acceleration       radians/TDB second**2 */
 
 /*                    For the Hermite subtypes (0 and 2), quaternion */
 /*                    representations must be selected so that, for */
@@ -733,8 +736,9 @@ static integer c__1 = 1;
 /*         signaled. */
 
 /*     7)  If the first interval start time IVLBDS(1) is greater than */
-/*         FIRST, or if the last interval end time IVLBDS(N+1) is less */
-/*         than LAST, the error SPICE(COVERAGEGAP) will be signaled. */
+/*         FIRST, or if the last interval end time IVLBDS(NMINI+1) is */
+/*         less than LAST, the error SPICE(COVERAGEGAP) will be */
+/*         signaled. */
 
 /*     8)  If any packet count in the array NPKTS is not at least 2, the */
 /*         error SPICE(TOOFEWPACKETS) will be signaled. */
@@ -795,6 +799,9 @@ static integer c__1 = 1;
 /*         If a pair of quaternions violating this condition is found */
 /*         in the input array PACKTS, the error SPICE(BADQUATSIGN) will */
 /*         be signaled. */
+
+/*    18)  If any element of the input RATES array is non-positive, the */
+/*         error SPICE(INVALIDSCLKRATE) will be signaled. */
 
 /* $ Files */
 
@@ -1045,6 +1052,15 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 11-AUG-2015 (NJB) */
+
+/*        Added check for invalid SCLK rates. */
+
+/*        Corrected error in header Exceptions section: changed */
+/*        subscript N+1 to NMINI+1. Corrected typo in description */
+/*        of subtype 2 data. Added mention of angular acceleration */
+/*        units. */
+
 /* -    SPICELIB Version 1.0.0, 14-MAR-2014 (NJB) (BVS) */
 
 /* -& */
@@ -1241,11 +1257,23 @@ static integer c__1 = 1;
 	    return 0;
 	}
 	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1008)];
+		"pktszs", i__2, "ckw06_", (ftnlen)1024)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
+	}
+
+/*        Make sure the SCLK rates in this mini-segment are positive. */
+
+	if (rates[i__ - 1] <= 0.) {
+	    setmsg_("SCLK rate at index # was #; rate must be positive.", (
+		    ftnlen)50);
+	    errint_("#", &i__, (ftnlen)1);
+	    errdp_("#", &rates[i__ - 1], (ftnlen)1);
+	    sigerr_("SPICE(INVALIDSCLKRATE)", (ftnlen)22);
+	    chkout_("CKW06", (ftnlen)5);
+	    return 0;
 	}
 
 /*        Update the packet range pointers for this mini-segment. */
@@ -1521,7 +1549,7 @@ static integer c__1 = 1;
 
 	subtyp = subtps[i__ - 1];
 	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1336)];
+		"pktszs", i__2, "ckw06_", (ftnlen)1367)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
@@ -1614,7 +1642,7 @@ static integer c__1 = 1;
 /*        used as an array index. */
 
 	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 4 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1441)];
+		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1472)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */

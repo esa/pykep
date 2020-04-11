@@ -334,6 +334,14 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+
+/*        Bug fixes: added FAILED checks in entry points ZZGFILIN, */
+/*        ZZGFILDC, and ZZGFILGQ. */
+
+/*        Removed unused declaration of parameter SUN. */
+
+
 /* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
@@ -552,6 +560,11 @@ L_zzgfilin:
 
 /* $ Version */
 
+/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+
+/*        Bug fixes: now checks FAILED after each BODS2C call */
+/*        and after the BODVRD call. */
+
 /* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
@@ -568,6 +581,10 @@ L_zzgfilin:
 /*     Find NAIF IDs for TARGET, OBSRVR, and ILLUM. */
 
     bods2c_(target, &svtarg, &found, target_len);
+    if (failed_()) {
+	chkout_("ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
     if (! found) {
 	setmsg_("The target object, '#', is not a recognized name for an eph"
 		"emeris object. The cause of this problem may be that you nee"
@@ -578,6 +595,10 @@ L_zzgfilin:
 	return 0;
     }
     bods2c_(obsrvr, &svobs, &found, obsrvr_len);
+    if (failed_()) {
+	chkout_("ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -588,6 +609,10 @@ L_zzgfilin:
 	return 0;
     }
     bods2c_(illum, &svilum, &found, illum_len);
+    if (failed_()) {
+	chkout_("ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
     if (! found) {
 	setmsg_("The illumination source, '#', is not a recognized name for "
 		"an ephemeris object. The cause of this problem may be that y"
@@ -658,6 +683,10 @@ L_zzgfilin:
 /*     Look up the radii for the target body. */
 
     bodvrd_(target, "RADII", &c__3, &n, radii, target_len, (ftnlen)5);
+    if (failed_()) {
+	chkout_("ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
 
 /*     Find the surface normal at the surface point. Create a */
 /*     body-fixed state vector for the normal. */
@@ -867,6 +896,10 @@ L_zzgfildc:
 
 /* $ Version */
 
+/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+
+/*        Bug fix: now checks FAILED after ZZILUSTA call. */
+
 /* -    SPICELIB Version 1.0.0 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
@@ -888,6 +921,10 @@ L_zzgfildc:
     zzilusta_(svmeth, svtnam, svinam, et, svref, svcorr, svonam, svsspt, 
 	    svnrml, phssta, incsta, emista, (ftnlen)200, (ftnlen)36, (ftnlen)
 	    36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
+    if (failed_()) {
+	chkout_("ZZGFILDC", (ftnlen)8);
+	return 0;
+    }
     if (svaidx == 1) {
 	rate = phssta[1];
     } else if (svaidx == 2) {
@@ -1024,6 +1061,10 @@ L_zzgfilgq:
 
 /* $ Version */
 
+/* -    SPICELIB version 1.1.0 08-MAR-2017 (NJB) */
+
+/*        Bug fix: now checks FAILED after ILLUMG call. */
+
 /* -    SPICELIB version 1.0.0 23-MAY-2012 (NJB) (EDW) */
 
 /* -& */
@@ -1039,8 +1080,12 @@ L_zzgfilgq:
     illumg_(svmeth, svtnam, svinam, et, svref, svcorr, svonam, svsspt, &
 	    ettarg, srfvec, angles, &angles[1], &angles[2], (ftnlen)200, (
 	    ftnlen)36, (ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
+    if (failed_()) {
+	chkout_("ZZGFILGQ", (ftnlen)8);
+	return 0;
+    }
     *angle = angles[(i__1 = svaidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "angles", i__1, "zzgfilu_", (ftnlen)1051)];
+	    "angles", i__1, "zzgfilu_", (ftnlen)1098)];
     chkout_("ZZGFILGQ", (ftnlen)8);
     return 0;
 } /* zzgfilu_ */

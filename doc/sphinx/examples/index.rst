@@ -13,17 +13,18 @@ advanced optimization techniques and methods. Please quote our papers in case yo
 Generic
 ^^^^^^^
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 1
 
   ex1.ipynb
   ex2.ipynb
   ex12.ipynb
   gravity_spherical_harmonic.ipynb
+  hera_trajectory.ipynb
 
 Advanced Research Topics (requires pygmo)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 1
 
   ex3.ipynb
   ex4

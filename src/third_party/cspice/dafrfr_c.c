@@ -151,8 +151,8 @@
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      int main ( int argc, char ** argv )
-      {
+      int main ()
+         {
          #define IFNLEN   61
 
          SpiceChar               ifname[IFNLEN];
@@ -163,16 +163,25 @@
          SpiceInt                handle;
          SpiceInt                nd;
          SpiceInt                ni;
+         SpiceChar             * kernel = "/kernels/gen/spk/de421.bsp";
 
-         dafopr_c ( argv[1], &handle );
+         dafopr_c ( kernel, &handle );
 
          dafrfr_c ( handle, IFNLEN, &nd, &ni, ifname, &fward, &bward, &free );
 
-         printf ( "First free DAF address is %ld.\n", free );
+         printf ( "First free DAF address is %d.\n", (int)free );
+ 
+        /.
+         Safely close the DAF.
+         ./
+         dafcls_c ( handle  );
 
          return ( 0 );
-      } 
+         }
 
+   The program outputs:
+   
+      First free DAF address is 2098645.
  
 -Restrictions
  
@@ -190,7 +199,12 @@
    I.M. Underwood  (JPL) 
  
 -Version
- 
+
+   -CSPICE Version 1.0.1, 28-JUN-2016 (EDW)
+
+      Edit to Example code, SpiceInts output as ints using 
+      explicit casting.
+
    -CSPICE Version 1.0.0, 17-JUN-2009 (NJB) (KRG) (IMU)
 
 -Index_Entries

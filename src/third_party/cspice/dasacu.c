@@ -111,6 +111,7 @@ static integer c__1 = 1;
 /*      ENDMRK    I   The end comments marker in the comment text file. */
 /*      INSBLN    I   A flag indicating whether to insert a blank line. */
 /*      HANDLE    I   Handle of a DAS file opened with write access. */
+/*      LNSIZE    P   Maximum length of comment line. */
 
 /* $ Detailed_Input */
 
@@ -136,7 +137,7 @@ static integer c__1 = 1;
 /*              itself, and leading and trailing blanks are not */
 /*              significant. */
 
-/*              The line immediately preceeding this marker is the last */
+/*              The line immediately preceding this marker is the last */
 /*              comment line to be placed into the comment area of the */
 /*              binary DAS file. */
 
@@ -165,23 +166,33 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     None. */
+/*     LNSIZE   is both the maximum length of a comment line that can */
+/*              be read from the input file, and the maximum length */
+/*              of a comment line that this routine can write to the */
+/*              output DAS file. */
+
+/*              LNSIZE is set to 255 characters. */
+
+/*              The DAS file format itself does not impose a limit */
+/*              on the length of lines in comment area, other than */
+/*              that the character count must be expressible in a */
+/*              32-bit signed integer. */
 
 /* $ Exceptions */
 
 /*     1)   If the scratch file for temporarily holding the comments */
 /*          culled from the text file cannot be opened, then the */
-/*          error SPICE(FILEOPENFAILED) will be signalled. */
+/*          error SPICE(FILEOPENFAILED) will be signaled. */
 
 /*     2)   If a non printing ASCII character is encountered in the */
 /*          comments, the error SPICE(ILLEGALCHARACTER) will be */
-/*          signalled. */
+/*          signaled. */
 
 /*     3)   If the begin marker cannot be found in the text file, the */
-/*          error SPICE(MARKERNOTFOUND) will be signalled. */
+/*          error SPICE(MARKERNOTFOUND) will be signaled. */
 
 /*     4)   If the end marker cannot be found in the text file, the */
-/*          error SPICE(MARKERNOTFOUND) will be signalled. */
+/*          error SPICE(MARKERNOTFOUND) will be signaled. */
 
 /* $ Files */
 
@@ -199,7 +210,7 @@ static integer c__1 = 1;
 /*     a `begin comments marker' and an `end comments marker,' in a */
 /*     text file into the comment area of a binary DAS file attached to */
 /*     HANDLE. If the `begin comments marker' is blank, then the */
-/*     comments are asumed to start at the current location of the */
+/*     comments are assumed to start at the current location of the */
 /*     comment text file attached to COMLUN. If the `end comments */
 /*     marker' is blank, then the comments are assumed to stop at the */
 /*     end of the comment text file attached to COMLUN. */
@@ -303,7 +314,7 @@ static integer c__1 = 1;
 /*     C */
 /*     C      Initialize the markers for the file `batty.txt'. We want */
 /*     C      to include the bat poem only, so we define the begin and */
-/*     C      end markere accordingly. */
+/*     C      end marker accordingly. */
 /*     C */
 /*            BEGMRK = 'BEGIN bat poem' */
 /*            ENDMRK = 'END bat poem' */
@@ -364,21 +375,22 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) The begin comments marker, BEGMRK, and the end comments marker, */
-/*        ENDMRK, must each appear alone on a line in the comment text */
-/*        file if they are not blank. */
+/*     1)  The begin comments marker, BEGMRK, and the end comments */
+/*         marker, ENDMRK, must each appear alone on a line in the */
+/*         comment text file if they are not blank. */
 
-/*     2) The maximum length of a text line in a comment file is */
-/*        specified by the LINLEN parameter defined below. Currently */
-/*        this values is 255 characters. */
+/*     2)  The maximum length of a text line in the input comment file */
+/*         is specified by the LINLEN parameter defined below. Currently */
+/*         this value is 255 characters. */
 
-/*     3) The maximum length of a single line comment in the comment */
-/*        area is specified by the parameter LINLEN defined below. */
-/*        Currently this value is 255 characters. */
+/*     3)  The maximum length of a single comment line that can be */
+/*         written by this routine to the output DAS file's comment area */
+/*         is specified by the parameter LINLEN defined below. Currently */
+/*         this value is 255 characters. */
 
-/*     4) This routine uses constants that are specific to the ASCII */
-/*        character sequence. The results of using this routine with */
-/*        a different character sequence are unpredictable. */
+/*     4)  This routine uses constants that are specific to the ASCII */
+/*         character sequence. The results of using this routine with a */
+/*         different character sequence are unpredictable. */
 
 /* $ Literature_References */
 
@@ -390,6 +402,11 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB 1.2.1, 15-MAR-2017 (NJB) */
+
+/*        Added description of parameter LNSIZE. Fixed typos */
+/*        throughout the comments. */
+
 /* -    SPICELIB 1.2.0, 07-JUL-1996 (NJB) */
 
 /*        Removed declaration, DATA and SAVE statements for unused */
@@ -398,7 +415,7 @@ static integer c__1 = 1;
 /* -    Beta Version 1.1.0, 20-SEP-1995 (KRG) */
 
 /*        Added a check of FAILED after the call to GETLUN to trap */
-/*        an error, if one is signalled by GETLUN, before attempting to */
+/*        an error, if one is signaled by GETLUN, before attempting to */
 /*        open the SCRATCH file. */
 
 /* -    Beta Version 1.0.0, 4-JAN-1993 (KRG) */
@@ -420,7 +437,7 @@ static integer c__1 = 1;
 /* -    Beta Version 1.1.0, 20-SEP-1995 (KRG) */
 
 /*        Added a check of FAILED after the call to GETLUN to trap */
-/*        an error, if one is signalled by GETLUN, before attempting to */
+/*        an error, if one is signaled by GETLUN, before attempting to */
 /*        open the SCRATCH file. */
 
 /* -& */
@@ -574,9 +591,9 @@ static integer c__1 = 1;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
 			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
-			    ftnlen)570)) * 255, (ftnlen)255);
+			    ftnlen)587)) * 255, (ftnlen)255);
 
-/*                 Scan the comment line for non printinig characters. */
+/*                 Scan the comment line for non printing characters. */
 
 		    i__2 = length;
 		    for (j = 1; j <= i__2; ++j) {
@@ -589,7 +606,7 @@ static integer c__1 = 1;
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
 				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)582)) * 255 + (j - 1)
+				i__3, "dasacu_", (ftnlen)599)) * 255 + (j - 1)
 				];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;
@@ -646,7 +663,7 @@ static integer c__1 = 1;
 		while(more && i__ <= numcom) {
 		    s_copy(line, combuf + ((i__1 = i__ - 1) < 22 && 0 <= i__1 
 			    ? i__1 : s_rnge("combuf", i__1, "dasacu_", (
-			    ftnlen)645)) * 255, (ftnlen)255, (ftnlen)255);
+			    ftnlen)662)) * 255, (ftnlen)255, (ftnlen)255);
 		    ljust_(line, line, (ftnlen)255, (ftnlen)255);
 		    if (s_cmp(line, endmrk, (ftnlen)255, endmrk_len) == 0) {
 			more = FALSE_;
@@ -665,7 +682,7 @@ static integer c__1 = 1;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
 			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
-			    ftnlen)670)) * 255, (ftnlen)255);
+			    ftnlen)687)) * 255, (ftnlen)255);
 
 /*                 Scan the comment line for non printinig characters. */
 
@@ -680,7 +697,7 @@ static integer c__1 = 1;
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
 				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)682)) * 255 + (j - 1)
+				i__3, "dasacu_", (ftnlen)699)) * 255 + (j - 1)
 				];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;
@@ -786,7 +803,7 @@ static integer c__1 = 1;
 	}
     }
 
-/*     Close the scratch file before exiting, it's the only one we */
+/*     Close the scratch file before exiting; it's the only one we */
 /*     opened. */
 
     cl__1.cerr = 0;

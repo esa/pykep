@@ -47,6 +47,7 @@ static integer c__2 = 2;
 	     ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen), repmi_(char *, char *,
 	     integer *, char *, ftnlen, ftnlen, ftnlen);
+    static integer myear;
     static doublereal dinyr;
     static integer month;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
@@ -289,10 +290,15 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
+/*     N.J. Bachman    (JPL) */
 /*     W.L. Taber      (JPL) */
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0 31-JAN-2017 (NJB) */
+
+/*        Bug fix: updated logic so that B.C. leap years are recognized. */
 
 /* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
 
@@ -346,12 +352,17 @@ static integer c__2 = 2;
 /*     checks. */
 
     year = i_dnnt(tvec);
+    if (s_cmp(modify, "B.C.", modify_len, (ftnlen)4) == 0) {
+	myear = 1 - year;
+    } else {
+	myear = year;
+    }
 /* Computing MAX */
-    i__1 = 0, i__2 = abs(year) / c__4 * c__4 + 1 - abs(year);
+    i__1 = 0, i__2 = abs(myear) / c__4 * c__4 + 1 - abs(myear);
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(year) / c__100 * c__100 + 1 - abs(year);
+    i__3 = 0, i__4 = abs(myear) / c__100 * c__100 + 1 - abs(myear);
 /* Computing MAX */
-    i__5 = 0, i__6 = abs(year) / c__400 * c__400 + 1 - abs(year);
+    i__5 = 0, i__6 = abs(myear) / c__400 * c__400 + 1 - abs(myear);
     leapdy = max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6);
     dinmon[1] = (doublereal) leapdy + 28.;
     dinyr = (doublereal) leapdy + 365.;
@@ -444,21 +455,21 @@ static integer c__2 = 2;
 	    return 0;
 	} else if (tvec[2] < 1. || tvec[2] >= dinmon[(i__1 = month - 1) < 12 
 		&& 0 <= i__1 ? i__1 : s_rnge("dinmon", i__1, "tcheck_", (
-		ftnlen)483)] + 1.) {
+		ftnlen)496)] + 1.) {
 	    *ok = FALSE_;
 	    s_copy(error, "The day of the month specified for the month of #"
 		    " was #.  For # the day must be at least 1.0D0 and less t"
 		    "han #. ", error_len, (ftnlen)112);
 	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)490)) *
+		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)503)) *
 		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
 	    repmd_(error, "#", &tvec[2], &c__3, error, error_len, (ftnlen)1, 
 		    error_len);
 	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)492)) *
+		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)505)) *
 		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
 	    d__1 = dinmon[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dinmon", i__1, "tcheck_", (ftnlen)493)] + 1.;
+		    s_rnge("dinmon", i__1, "tcheck_", (ftnlen)506)] + 1.;
 	    repmd_(error, "#", &d__1, &c__2, error, error_len, (ftnlen)1, 
 		    error_len);
 	    return 0;
@@ -466,7 +477,7 @@ static integer c__2 = 2;
 	i__1 = month - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    doy += dinmon[(i__2 = i__ - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		    "dinmon", i__2, "tcheck_", (ftnlen)499)];
+		    "dinmon", i__2, "tcheck_", (ftnlen)512)];
 	}
 	doy += tvec[2];
     }
@@ -538,11 +549,11 @@ static integer c__2 = 2;
 			    error_len, (ftnlen)178);
 		    repmc_(error, "#", cname + ((i__3 = comp - 1) < 4 && 0 <= 
 			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)595)) * 7, error, error_len, (ftnlen)1, (
+			    ftnlen)608)) * 7, error, error_len, (ftnlen)1, (
 			    ftnlen)7, error_len);
 		    repmc_(error, "#", cname + ((i__3 = k - 1) < 4 && 0 <= 
 			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)596)) * 7, error, error_len, (ftnlen)1, (
+			    ftnlen)609)) * 7, error, error_len, (ftnlen)1, (
 			    ftnlen)7, error_len);
 		    repmd_(error, "#", &tvec[j - 1], &c__2, error, error_len, 
 			    (ftnlen)1, error_len);

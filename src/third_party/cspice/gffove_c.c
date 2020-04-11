@@ -1337,9 +1337,9 @@
 
             printf ( "\n"
                      "Instrument:            %s\n"
-                     "Star's catalog number: %ld\n", 
+                     "Star's catalog number: %d\n", 
                      inst,
-                     catno                        );
+                     (int)catno                        );
 
             /.
             Perform the search.
@@ -1436,6 +1436,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.0, 15-APR-2009 (NJB) (EDW)
 
 -Index_Entries

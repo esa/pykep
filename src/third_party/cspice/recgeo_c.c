@@ -68,12 +68,14 @@
  
 -Detailed_Input
  
-   rectan    Rectangular coordinates of the input point.  
+   rectan    Rectangular coordinates of the input point. `rectan' must 
+             be in the same units as `re'.
  
    re        Equatorial radius of a reference spheroid.  This spheroid
              is a volume of revolution:  its horizontal cross sections
              are circular.  The shape of the spheroid is defined by
-             an equatorial radius `re' and a polar radius `rp'.
+             an equatorial radius `re' and a polar radius `rp'. `re' 
+             must be in the same units as `rectan'.
  
    f         Flattening coefficient = (re-rp) / re, where rp is 
              the polar radius of the spheroid. 
@@ -102,7 +104,7 @@
    alt       Altitude of point above the reference spheroid. 
 
              The units associated with `alt' are those associated with
-             the input `rectan'.
+             the inputs `rectan' and `re'.
  
 -Parameters
  
@@ -216,6 +218,10 @@
  
 -Version
  
+   -CSPICE Version 1.2.3, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
+
    -CSPICE Version 1.2.2, 02-JUL-2007 (NJB)
 
       In Examples section of header, heading and description of

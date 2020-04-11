@@ -7,7 +7,7 @@
 
 /* Table of constant values */
 
-static integer c__743 = 743;
+static integer c__773 = 773;
 static integer c__1 = 1;
 
 /* $Procedure ZZBODTRN ( Private --- Body name and code translation ) */
@@ -50,17 +50,17 @@ static integer c__1 = 1;
 	     ftnlen, ftnlen);
     static integer index;
     extern logical failed_(void);
-    static integer defcod[743];
-    static char defnam[36*743];
-    static integer didids[743], dididx[743], kercod[14983], kidids[14983], 
-	    codidx, didpol[749], kididx[14983];
-    static char defnor[36*743], kernam[36*14983];
-    static integer dnmidx[743], defsiz, didlst[743], kidpol[14989], dnmpol[
-	    749], knmidx[14983], kidlst[14983];
-    static char dnmnms[36*743], tmpnam[36];
+    static integer defcod[773];
+    static char defnam[36*773];
+    static integer didids[773], dididx[773], kercod[14983], kidids[14983], 
+	    codidx, didpol[779], kididx[14983];
+    static char defnor[36*773], kernam[36*14983];
+    static integer dnmidx[773], defsiz, didlst[773], kidpol[14989], dnmpol[
+	    779], knmidx[14983], kidlst[14983];
+    static char dnmnms[36*773], tmpnam[36];
     static logical lupdte;
     static char kernor[36*14983];
-    static integer dnmlst[743], knmpol[14989];
+    static integer dnmlst[773], knmpol[14989];
     static char knmnms[36*14983];
     static integer subctr[2], kersiz, knmlst[14983], pulctr[2];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -182,7 +182,7 @@ static integer c__1 = 1;
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0, 07-MAY-2014 (BVS)(EDW) */
+/* -    SPICELIB Version 2.0.0, 04-APR-2017 (BVS)(EDW) */
 
 /*        Increased NROOM to 14983. Added a comment note explaining */
 /*        NROOM and MAXE */
@@ -1246,7 +1246,7 @@ L_zzbodn2c:
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code-name list. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODN2C", (ftnlen)8);
@@ -1255,7 +1255,7 @@ L_zzbodn2c:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
 	if (failed_()) {
@@ -1333,9 +1333,9 @@ L_zzbodn2c:
 
     zzhscchk_(dnmlst, dnmpol, dnmnms, tmpnam, &i__, (ftnlen)36, (ftnlen)36);
     if (i__ != 0) {
-	*code = defcod[(i__2 = dnmidx[(i__1 = i__ - 1) < 743 && 0 <= i__1 ? 
+	*code = defcod[(i__2 = dnmidx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? 
 		i__1 : s_rnge("dnmidx", i__1, "zzbodtrn_", (ftnlen)1212)] - 1)
-		 < 743 && 0 <= i__2 ? i__2 : s_rnge("defcod", i__2, "zzbodtr"
+		 < 773 && 0 <= i__2 ? i__2 : s_rnge("defcod", i__2, "zzbodtr"
 		"n_", (ftnlen)1212)];
 	*found = TRUE_;
     }
@@ -1602,7 +1602,7 @@ L_zzbodc2n:
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODC2N", (ftnlen)8);
@@ -1611,7 +1611,7 @@ L_zzbodc2n:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
 	if (failed_()) {
@@ -1694,8 +1694,8 @@ L_zzbodc2n:
 /*           mappings present in the kernel pool lists. */
 
 	    zzhscchk_(knmlst, knmpol, knmnms, defnor + ((i__2 = dididx[(i__1 =
-		     i__ - 1) < 743 && 0 <= i__1 ? i__1 : s_rnge("dididx", 
-		    i__1, "zzbodtrn_", (ftnlen)1600)] - 1) < 743 && 0 <= i__2 
+		     i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("dididx", 
+		    i__1, "zzbodtrn_", (ftnlen)1600)] - 1) < 773 && 0 <= i__2 
 		    ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)1600)
 		    ) * 36, &j, (ftnlen)36, (ftnlen)36);
 	    if (j != 0) {
@@ -1712,8 +1712,8 @@ L_zzbodc2n:
 /*              Return the name. */
 
 		s_copy(name__, defnam + ((i__2 = dididx[(i__1 = i__ - 1) < 
-			743 && 0 <= i__1 ? i__1 : s_rnge("dididx", i__1, 
-			"zzbodtrn_", (ftnlen)1619)] - 1) < 743 && 0 <= i__2 ? 
+			773 && 0 <= i__1 ? i__1 : s_rnge("dididx", i__1, 
+			"zzbodtrn_", (ftnlen)1619)] - 1) < 773 && 0 <= i__2 ? 
 			i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)
 			1619)) * 36, name_len, (ftnlen)36);
 		*found = TRUE_;
@@ -1723,9 +1723,9 @@ L_zzbodc2n:
 /*           No kernel pool mappings were defined, simply return */
 /*           return the name. */
 
-	    s_copy(name__, defnam + ((i__2 = dididx[(i__1 = i__ - 1) < 743 && 
+	    s_copy(name__, defnam + ((i__2 = dididx[(i__1 = i__ - 1) < 773 && 
 		    0 <= i__1 ? i__1 : s_rnge("dididx", i__1, "zzbodtrn_", (
-		    ftnlen)1630)] - 1) < 743 && 0 <= i__2 ? i__2 : s_rnge(
+		    ftnlen)1630)] - 1) < 773 && 0 <= i__2 ? i__2 : s_rnge(
 		    "defnam", i__2, "zzbodtrn_", (ftnlen)1630)) * 36, 
 		    name_len, (ftnlen)36);
 	    *found = TRUE_;
@@ -2039,7 +2039,7 @@ L_zzboddef:
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODDEF", (ftnlen)8);
@@ -2048,7 +2048,7 @@ L_zzboddef:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
 	if (failed_()) {
@@ -2097,7 +2097,7 @@ L_zzboddef:
 
     zzhscchk_(dnmlst, dnmpol, dnmnms, tmpnam, &i__, (ftnlen)36, (ftnlen)36);
     if (i__ != 0) {
-	index = dnmidx[(i__1 = i__ - 1) < 743 && 0 <= i__1 ? i__1 : s_rnge(
+	index = dnmidx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
 		"dnmidx", i__1, "zzbodtrn_", (ftnlen)2026)];
 
 /*        We are going to replace an existing entry.  There are */
@@ -2119,7 +2119,7 @@ L_zzboddef:
 
 	zzhsichk_(didlst, didpol, didids, code, &i__);
 	if (i__ != 0) {
-	    codidx = dididx[(i__1 = i__ - 1) < 743 && 0 <= i__1 ? i__1 : 
+	    codidx = dididx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? i__1 : 
 		    s_rnge("dididx", i__1, "zzbodtrn_", (ftnlen)2049)];
 	} else {
 	    codidx = 0;
@@ -2133,7 +2133,7 @@ L_zzboddef:
 /*           We altered the built-in body list. Set BODCHG to .TRUE. */
 
 	    bodchg = TRUE_;
-	    s_copy(defnam + ((i__1 = index - 1) < 743 && 0 <= i__1 ? i__1 : 
+	    s_copy(defnam + ((i__1 = index - 1) < 773 && 0 <= i__1 ? i__1 : 
 		    s_rnge("defnam", i__1, "zzbodtrn_", (ftnlen)2065)) * 36, 
 		    name__, (ftnlen)36, name_len);
 	    chkout_("ZZBODDEF", (ftnlen)8);
@@ -2147,19 +2147,19 @@ L_zzboddef:
 
 	i__1 = defsiz;
 	for (i__ = index + 1; i__ <= i__1; ++i__) {
-	    s_copy(defnam + ((i__2 = i__ - 2) < 743 && 0 <= i__2 ? i__2 : 
+	    s_copy(defnam + ((i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : 
 		    s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)2080)) * 36, 
-		    defnam + ((i__3 = i__ - 1) < 743 && 0 <= i__3 ? i__3 : 
+		    defnam + ((i__3 = i__ - 1) < 773 && 0 <= i__3 ? i__3 : 
 		    s_rnge("defnam", i__3, "zzbodtrn_", (ftnlen)2080)) * 36, (
 		    ftnlen)36, (ftnlen)36);
-	    s_copy(defnor + ((i__2 = i__ - 2) < 743 && 0 <= i__2 ? i__2 : 
+	    s_copy(defnor + ((i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : 
 		    s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)2081)) * 36, 
-		    defnor + ((i__3 = i__ - 1) < 743 && 0 <= i__3 ? i__3 : 
+		    defnor + ((i__3 = i__ - 1) < 773 && 0 <= i__3 ? i__3 : 
 		    s_rnge("defnor", i__3, "zzbodtrn_", (ftnlen)2081)) * 36, (
 		    ftnlen)36, (ftnlen)36);
-	    defcod[(i__2 = i__ - 2) < 743 && 0 <= i__2 ? i__2 : s_rnge("defc"
+	    defcod[(i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : s_rnge("defc"
 		    "od", i__2, "zzbodtrn_", (ftnlen)2082)] = defcod[(i__3 = 
-		    i__ - 1) < 743 && 0 <= i__3 ? i__3 : s_rnge("defcod", 
+		    i__ - 1) < 773 && 0 <= i__3 ? i__3 : s_rnge("defcod", 
 		    i__3, "zzbodtrn_", (ftnlen)2082)];
 	}
     } else {
@@ -2167,7 +2167,7 @@ L_zzboddef:
 /*        We need to add this entry to the list.  See if there */
 /*        is room; signal an error and return if there is not. */
 
-	if (defsiz >= 743) {
+	if (defsiz >= 773) {
 	    setmsg_("There is no room available for adding '#'  to the list "
 		    "of name/code pairs. The number of names that can be supp"
 		    "orted is #.  This number has been reached. ", (ftnlen)154)
@@ -2193,18 +2193,18 @@ L_zzboddef:
 /*     Now, we need to add the new entry on to the end of the */
 /*     DEFNAM, DEFNOR, and DEFCOD lists. */
 
-    s_copy(defnam + ((i__1 = defsiz - 1) < 743 && 0 <= i__1 ? i__1 : s_rnge(
+    s_copy(defnam + ((i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
 	    "defnam", i__1, "zzbodtrn_", (ftnlen)2125)) * 36, name__, (ftnlen)
 	    36, name_len);
-    s_copy(defnor + ((i__1 = defsiz - 1) < 743 && 0 <= i__1 ? i__1 : s_rnge(
+    s_copy(defnor + ((i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
 	    "defnor", i__1, "zzbodtrn_", (ftnlen)2126)) * 36, tmpnam, (ftnlen)
 	    36, (ftnlen)36);
-    defcod[(i__1 = defsiz - 1) < 743 && 0 <= i__1 ? i__1 : s_rnge("defcod", 
+    defcod[(i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("defcod", 
 	    i__1, "zzbodtrn_", (ftnlen)2127)] = *code;
 
 /*     Reset the built-in/BODDEF hashes. */
 
-    zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+    zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 	    dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 	    ftnlen)36, (ftnlen)36);
     chkout_("ZZBODDEF", (ftnlen)8);
@@ -2371,7 +2371,7 @@ L_zzbodkik:
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODKIK", (ftnlen)8);
@@ -2380,7 +2380,7 @@ L_zzbodkik:
 
 /*        Populate the initial built-in/BODDEF hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
 	if (failed_()) {
@@ -2566,7 +2566,7 @@ L_zzbodrst:
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODRST", (ftnlen)8);
@@ -2575,7 +2575,7 @@ L_zzbodrst:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
 	if (failed_()) {
@@ -2612,12 +2612,12 @@ L_zzbodrst:
 /*        to the improper specification of MAXE it would have been */
 /*        signaled already to the user. */
 
-	zzbodget_(&c__743, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
+	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
 		ftnlen)36);
 
 /*        Reset the built-in/BODDEF hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__743, dnmlst, dnmpol, 
+	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
 		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
 		ftnlen)36, (ftnlen)36);
     }

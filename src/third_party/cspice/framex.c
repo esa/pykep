@@ -8,7 +8,6 @@
 /* Table of constant values */
 
 static integer c__5209 = 5209;
-static integer c__126 = 126;
 static integer c__127 = 127;
 static integer c__0 = 0;
 static integer c__1 = 1;
@@ -33,10 +32,10 @@ static integer c__100 = 100;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[32*126], line[80*8];
+    static char name__[32*127], line[80*8];
     static integer item;
     static logical lnew;
-    static integer type__[126];
+    static integer type__[127];
     extern /* Subroutine */ int zzhscadd_(integer *, integer *, char *, char *
 	    , integer *, logical *, ftnlen, ftnlen), zzhsiadd_(integer *, 
 	    integer *, integer *, integer *, integer *, logical *), zzhscchk_(
@@ -66,16 +65,16 @@ static integer c__100 = 100;
 	    integer *, logical *, ftnlen);
     static integer id;
     extern logical failed_(void);
-    static integer idcode[126], bidids[127];
+    static integer idcode[127], bidids[127];
     static char lcname[36];
     static integer bididx[127];
     static char lcfram[32];
     extern integer bschoi_(integer *, integer *, integer *, integer *);
     static integer kidids[5209], kclsid[5209], kvclid, bidpol[133], centrd[
-	    126], center[126];
+	    127], center[127];
     static char kvbuff[32*100];
     static integer kidpol[5215], knmids[5209], kclass[5209], kidlst[5209], 
-	    bnmpol[133], typeid[126], values[8], knmpol[5215];
+	    bnmpol[133], typeid[127], values[8], knmpol[5215];
     static logical lupdte;
     static char knmnms[32*5209], dattyp[1], lookup[32];
     static integer kvclss, pulctr[2], knmlst[5209], bnmlst[127];
@@ -265,6 +264,13 @@ static integer c__100 = 100;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
+
+/*        Increased the number of non-inertial frames from 105 to 106 */
+/*        in order to accomodate the following PCK based frame: */
+
+/*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
@@ -589,6 +595,10 @@ static integer c__100 = 100;
 /*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.2.1, 02-FEB-2017 (BVS) */
+
+/*        Shortened one of permutted index entries in CCIFRM. */
 
 /* -    SPICELIB Version 5.2.0, 08-AUG-2012 (BVS) */
 
@@ -1005,7 +1015,7 @@ L_namfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1023,15 +1033,15 @@ L_namfrm:
     zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (ftnlen)32);
     if (item != 0) {
 	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)732)];
+		"bnmidx", i__1, "framex_", (ftnlen)736)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)741)];
+	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)745)];
     } else {
 
 /*        See if this frame is in the kernel pool frame name-based hash. */
@@ -1049,7 +1059,7 @@ L_namfrm:
 		32);
 	if (item != 0) {
 	    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("knmids", i__1, "framex_", (ftnlen)763)];
+		    s_rnge("knmids", i__1, "framex_", (ftnlen)767)];
 	} else {
 
 /*           The name wasn't in the hash, see if we can find this frame */
@@ -1072,7 +1082,7 @@ L_namfrm:
 			ftnlen)32, (ftnlen)32);
 		if (! failed_() && item != 0) {
 		    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("knmids", i__1, "framex_", (ftnlen)793)] = 
+			    s_rnge("knmids", i__1, "framex_", (ftnlen)797)] = 
 			    *frcode;
 		}
 	    } else {
@@ -1308,7 +1318,7 @@ L_frmnam:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1320,11 +1330,11 @@ L_frmnam:
     zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
     if (item != 0) {
 	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1064)];
+		"bididx", i__1, "framex_", (ftnlen)1068)];
     }
     if (item != 0) {
-	s_copy(frname, name__ + (((i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)1069)) << 5), 
+	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
+		: s_rnge("name", i__1, "framex_", (ftnlen)1073)) << 5), 
 		frname_len, (ftnlen)32);
     } else {
 
@@ -1342,7 +1352,7 @@ L_frmnam:
 	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
 	if (item != 0) {
 	    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-		    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)1091)) << 
+		    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)1095)) << 
 		    5), frname_len, (ftnlen)32);
 	} else {
 
@@ -1625,7 +1635,7 @@ L_frinfo:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -1645,19 +1655,19 @@ L_frinfo:
     zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
     if (item != 0) {
 	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1420)];
+		"bididx", i__1, "framex_", (ftnlen)1424)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
     if (item > 0) {
-	*cent = center[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		"center", i__1, "framex_", (ftnlen)1429)];
-	*class__ = type__[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : 
-		s_rnge("type", i__1, "framex_", (ftnlen)1430)];
-	*clssid = typeid[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		"typeid", i__1, "framex_", (ftnlen)1431)];
+	*cent = center[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
+		"center", i__1, "framex_", (ftnlen)1433)];
+	*class__ = type__[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
+		s_rnge("type", i__1, "framex_", (ftnlen)1434)];
+	*clssid = typeid[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
+		"typeid", i__1, "framex_", (ftnlen)1435)];
 	*found = TRUE_;
     } else {
 
@@ -1675,11 +1685,11 @@ L_frinfo:
 	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
 	if (item != 0) {
 	    *cent = kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kcent", i__1, "framex_", (ftnlen)1454)];
+		    s_rnge("kcent", i__1, "framex_", (ftnlen)1458)];
 	    *class__ = kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclass", i__1, "framex_", (ftnlen)1455)];
+		    s_rnge("kclass", i__1, "framex_", (ftnlen)1459)];
 	    *clssid = kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclsid", i__1, "framex_", (ftnlen)1456)];
+		    s_rnge("kclsid", i__1, "framex_", (ftnlen)1460)];
 	    *found = TRUE_;
 	} else {
 
@@ -1742,15 +1752,15 @@ L_frinfo:
 		if (! failed_() && item != 0) {
 		    s_copy(kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)
-			    1530)) << 5), lcfram, (ftnlen)32, (ftnlen)32);
+			    1534)) << 5), lcfram, (ftnlen)32, (ftnlen)32);
 		    kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kcent", i__1, "framex_", (ftnlen)1531)] = 
+			    s_rnge("kcent", i__1, "framex_", (ftnlen)1535)] = 
 			    *cent;
 		    kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclass", i__1, "framex_", (ftnlen)1532)] =
+			    s_rnge("kclass", i__1, "framex_", (ftnlen)1536)] =
 			     *class__;
 		    kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclsid", i__1, "framex_", (ftnlen)1533)] =
+			    s_rnge("kclsid", i__1, "framex_", (ftnlen)1537)] =
 			     *clssid;
 
 /*                 Also, try to add this frame to the name-based hash. */
@@ -1760,7 +1770,7 @@ L_frinfo:
 		    if (! failed_() && item != 0) {
 			knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
 				s_rnge("knmids", i__1, "framex_", (ftnlen)
-				1543)] = *frcode;
+				1547)] = *frcode;
 		    }
 		}
 	    }
@@ -1995,7 +2005,7 @@ L_cidfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2051,12 +2061,12 @@ L_cidfrm:
 		    ftnlen)32);
 	    if (item != 0) {
 		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)1863)];
+			s_rnge("bnmidx", i__1, "framex_", (ftnlen)1867)];
 	    }
 	    if (item > 0) {
 		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)1869)];
+		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
+			 s_rnge("idcode", i__1, "framex_", (ftnlen)1873)];
 		*found = TRUE_;
 	    } else {
 
@@ -2077,7 +2087,7 @@ L_cidfrm:
 		    s_copy(frname, pname, frname_len, (ftnlen)32);
 		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    1893)];
+			    1897)];
 		    *found = TRUE_;
 		} else {
 
@@ -2108,7 +2118,7 @@ L_cidfrm:
 			if (! failed_() && item != 0) {
 			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)1930)] = *frcode;
+				    ftnlen)1934)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2136,15 +2146,15 @@ L_cidfrm:
 	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
 	    if (item != 0) {
 		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)1967)];
+			s_rnge("bididx", i__1, "framex_", (ftnlen)1971)];
 	    }
 	    if (item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 126 && 0 <= 
+		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
 			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			1974)) << 5), frname_len, (ftnlen)32);
+			1978)) << 5), frname_len, (ftnlen)32);
 		*frcode = values[0];
 		*found = TRUE_;
 	    } else {
@@ -2164,7 +2174,7 @@ L_cidfrm:
 		if (item != 0) {
 		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
 			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)1998)) << 5), frname_len, (ftnlen)32);
+			    ftnlen)2002)) << 5), frname_len, (ftnlen)32);
 		    *frcode = values[0];
 		    *found = TRUE_;
 		} else {
@@ -2219,16 +2229,16 @@ L_cidfrm:
 /*     Determine the location of the requested item in the array */
 /*     of centers. */
 
-    item = bschoi_(cent, &c__126, center, centrd);
+    item = bschoi_(cent, &c__127, center, centrd);
 
 /*     If the name is in our list, we can just look up its ID code and */
 /*     name in the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2074)];
-	s_copy(frname, name__ + (((i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)2075)) << 5), 
+	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)2078)];
+	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
+		: s_rnge("name", i__1, "framex_", (ftnlen)2079)) << 5), 
 		frname_len, (ftnlen)32);
 	*found = TRUE_;
     } else {
@@ -2460,7 +2470,7 @@ L_cnmfrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2517,12 +2527,12 @@ L_cnmfrm:
 		    ftnlen)32);
 	    if (item != 0) {
 		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)2385)];
+			s_rnge("bnmidx", i__1, "framex_", (ftnlen)2389)];
 	    }
 	    if (item > 0) {
 		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)2391)];
+		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
+			 s_rnge("idcode", i__1, "framex_", (ftnlen)2395)];
 		*found = TRUE_;
 	    } else {
 
@@ -2543,7 +2553,7 @@ L_cnmfrm:
 		    s_copy(frname, pname, frname_len, (ftnlen)32);
 		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    2415)];
+			    2419)];
 		    *found = TRUE_;
 		} else {
 
@@ -2574,7 +2584,7 @@ L_cnmfrm:
 			if (! failed_() && item != 0) {
 			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
 				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)2452)] = *frcode;
+				    ftnlen)2456)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2602,15 +2612,15 @@ L_cnmfrm:
 	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
 	    if (item != 0) {
 		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)2489)];
+			s_rnge("bididx", i__1, "framex_", (ftnlen)2493)];
 	    }
 	    if (item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 126 && 0 <= 
+		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
 			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			2496)) << 5), frname_len, (ftnlen)32);
+			2500)) << 5), frname_len, (ftnlen)32);
 		*frcode = values[0];
 		*found = TRUE_;
 	    } else {
@@ -2630,7 +2640,7 @@ L_cnmfrm:
 		if (item != 0) {
 		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
 			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)2520)) << 5), frname_len, (ftnlen)32);
+			    ftnlen)2524)) << 5), frname_len, (ftnlen)32);
 		    *frcode = values[0];
 		    *found = TRUE_;
 		} else {
@@ -2684,15 +2694,15 @@ L_cnmfrm:
     zzhscchk_(bnmlst, bnmpol, bnmnms, frname, &item, (ftnlen)32, frname_len);
     if (item != 0) {
 	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)2583)];
+		"bnmidx", i__1, "framex_", (ftnlen)2587)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code and */
 /*     name in the parallel array. */
 
     if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2592)];
+	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
+		"idcode", i__1, "framex_", (ftnlen)2596)];
 	*found = TRUE_;
     } else {
 
@@ -2880,6 +2890,10 @@ L_ccifrm:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.1, 02-FEB-2017 (BVS) */
+
+/*        Shortened one of permutted index entries. */
+
 /* -    SPICELIB Version 1.1.0, 08-AUG-2012 (BVS) */
 
 /*        The routine was updated to be more efficient by using hashes */
@@ -2897,7 +2911,7 @@ L_ccifrm:
 
 /*     Find info associated with a frame class and class id */
 /*     Map frame class and class ID to frame info */
-/*     Map frame class and class ID to frame name, id, and center */
+/*     Map frame class and class ID to frame name, id, center */
 
 /* -& */
 
@@ -2923,7 +2937,7 @@ L_ccifrm:
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__126, &c__127, name__, idcode, center, type__, typeid, 
+	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
 		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
 		bidids, bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
@@ -2941,21 +2955,21 @@ L_ccifrm:
 /*     with the input class and class ID. Unfortunately, this is a */
 /*     linear search. */
 
-    for (i__ = 1; i__ <= 126; ++i__) {
-	if (type__[(i__1 = i__ - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge("type",
-		 i__1, "framex_", (ftnlen)2863)] == *class__ && typeid[(i__2 =
-		 i__ - 1) < 126 && 0 <= i__2 ? i__2 : s_rnge("typeid", i__2, 
-		"framex_", (ftnlen)2863)] == *clssid) {
+    for (i__ = 1; i__ <= 127; ++i__) {
+	if (type__[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("type",
+		 i__1, "framex_", (ftnlen)2871)] == *class__ && typeid[(i__2 =
+		 i__ - 1) < 127 && 0 <= i__2 ? i__2 : s_rnge("typeid", i__2, 
+		"framex_", (ftnlen)2871)] == *clssid) {
 
 /*           We have a match. Assign the output arguments and return. */
 
-	    s_copy(frname, name__ + (((i__1 = i__ - 1) < 126 && 0 <= i__1 ? 
-		    i__1 : s_rnge("name", i__1, "framex_", (ftnlen)2868)) << 
+	    s_copy(frname, name__ + (((i__1 = i__ - 1) < 127 && 0 <= i__1 ? 
+		    i__1 : s_rnge("name", i__1, "framex_", (ftnlen)2876)) << 
 		    5), frname_len, (ftnlen)32);
-	    *frcode = idcode[(i__1 = i__ - 1) < 126 && 0 <= i__1 ? i__1 : 
-		    s_rnge("idcode", i__1, "framex_", (ftnlen)2869)];
-	    *cent = center[(i__1 = i__ - 1) < 126 && 0 <= i__1 ? i__1 : 
-		    s_rnge("center", i__1, "framex_", (ftnlen)2870)];
+	    *frcode = idcode[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
+		    s_rnge("idcode", i__1, "framex_", (ftnlen)2877)];
+	    *cent = center[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
+		    s_rnge("center", i__1, "framex_", (ftnlen)2878)];
 	    *found = TRUE_;
 	    chkout_("CCIFRM", (ftnlen)6);
 	    return 0;
@@ -2983,7 +2997,7 @@ L_ccifrm:
 	i__1 = n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    gipool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "framex_", (ftnlen)2902)) << 5), &
+		    s_rnge("kvbuff", i__2, "framex_", (ftnlen)2910)) << 5), &
 		    c__1, &c__1, &n, &kvclss, &fnd, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("CCIFRM", (ftnlen)6);
@@ -2994,7 +3008,7 @@ L_ccifrm:
 			"rame class keyword is # but integer class was not as"
 			"sociated with this keyword.", (ftnlen)130);
 		errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)2915)
+			i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)2923)
 			) << 5), (ftnlen)1, (ftnlen)32);
 		sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		chkout_("CCIFRM", (ftnlen)6);
@@ -3006,7 +3020,7 @@ L_ccifrm:
 
 		s_copy(look2, kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ?
 			 i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			2926)) << 5), (ftnlen)32, (ftnlen)32);
+			2934)) << 5), (ftnlen)32, (ftnlen)32);
 		suffix_("_ID", &c__0, look2, (ftnlen)3, (ftnlen)32);
 		gipool_(look2, &c__1, &c__1, &n, &kvclid, &fnd, (ftnlen)32);
 		if (failed_()) {
@@ -3020,7 +3034,7 @@ L_ccifrm:
 			    132);
 		    errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
 			    i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_", (
-			    ftnlen)2944)) << 5), (ftnlen)1, (ftnlen)32);
+			    ftnlen)2952)) << 5), (ftnlen)1, (ftnlen)32);
 		    sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		    chkout_("CCIFRM", (ftnlen)6);
 		    return 0;
@@ -3041,7 +3055,7 @@ L_ccifrm:
 
 		    repmc_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 			    i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			    2965)) << 5), "_CLASS", "_NAME", look2, (ftnlen)
+			    2973)) << 5), "_CLASS", "_NAME", look2, (ftnlen)
 			    32, (ftnlen)6, (ftnlen)5, (ftnlen)32);
 		    gcpool_(look2, &c__1, &c__1, &n, frname, &fnd, (ftnlen)32,
 			     frname_len);
@@ -3052,7 +3066,7 @@ L_ccifrm:
 				ftnlen)126);
 			errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
 				i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_"
-				, (ftnlen)2975)) << 5), (ftnlen)1, (ftnlen)32)
+				, (ftnlen)2983)) << 5), (ftnlen)1, (ftnlen)32)
 				;
 			sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 			chkout_("CCIFRM", (ftnlen)6);

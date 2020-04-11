@@ -19,7 +19,7 @@ static integer c__2 = 2;
     integer i__1, i__2;
 
     /* Local variables */
-    integer base, nrec, next, unit;
+    integer base, next;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
 	    zzekgfwd_(integer *, integer *, integer *, integer *), zzekglnk_(
 	    integer *, integer *, integer *, integer *), zzekpgpg_(integer *, 
@@ -27,16 +27,16 @@ static integer c__2 = 2;
 	    integer *, integer *);
     integer p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, nseen, ncols, nelts;
+    integer recno, nseen, nelts;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *), dasudi_(integer *, integer *, integer *, integer *);
     extern logical return_(void);
     integer datptr, nlinks, ptrloc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), dashlu_(integer *, 
-	    integer *), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), zzekdps_(integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
+	    ftnlen), errint_(char *, integer *, ftnlen), errhan_(char *, 
+	    integer *, ftnlen), sigerr_(char *, ftnlen), zzekdps_(integer *, 
+	    integer *, integer *, integer *);
 
 /* $ Abstract */
 
@@ -660,6 +660,13 @@ static integer c__2 = 2;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error message. */
+
+/*        Deleted unneeded declarations and code. */
+
 /* -    Beta Version 1.0.0, 28-SEP-1995 (NJB) */
 
 /* -& */
@@ -674,9 +681,8 @@ static integer c__2 = 2;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKDE04", (ftnlen)8);
     }
+    chkin_("ZZEKDE04", (ftnlen)8);
 
 /*     Before trying to actually modify the file, do every error */
 /*     check we can. */
@@ -689,13 +695,6 @@ static integer c__2 = 2;
 	chkout_("ZZEKDE04", (ftnlen)8);
 	return 0;
     }
-
-/*     We'll need to know how many columns the segment has in order to */
-/*     compute the size of the record pointer.  The record pointer */
-/*     contains DPTBAS items plus two elements for each column. */
-
-    ncols = segdsc[4];
-    nrec = segdsc[5];
 
 /*     Compute the data pointer location.  If the data pointer is */
 /*     already set to `uninitialized', there's nothing to do.  If */
@@ -781,13 +780,12 @@ static integer c__2 = 2;
 /*        UNINIT was the last valid possibility.  The data pointer is */
 /*        corrupted. */
 
-	dashlu_(handle, &unit);
 	setmsg_("Data pointer is corrupted. SEGNO = #; COLIDX =  #; RECNO = "
 		"#; EK = #", (ftnlen)68);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKDE04", (ftnlen)8);
 	return 0;

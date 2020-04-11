@@ -12,17 +12,15 @@ integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
     integer ret_val;
 
     /* Local variables */
-    integer unit;
     extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
     extern integer zzektrls_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer stype;
     extern logical failed_(void);
     integer segdsc[24];
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), setmsg_(
+	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
+	    *, ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -250,6 +248,11 @@ integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 /* -    Beta Version 1.0.0, 09-NOV-1995 (NJB) */
 
 /* -& */
@@ -271,26 +274,24 @@ integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
     if (stype == 1) {
 	ret_val = zzektrls_(handle, &segdsc[6], recptr);
 	if (ret_val == 0) {
-	    dashlu_(handle, &unit);
 	    chkin_("ZZEKRP2N", (ftnlen)8);
 	    setmsg_("Record having pointer # not found in segment # of file #"
 		    , (ftnlen)56);
 	    errint_("#", recptr, (ftnlen)1);
 	    errint_("#", segno, (ftnlen)1);
-	    errfnm_("#", &unit, (ftnlen)1);
+	    errhan_("#", handle, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZEKRP2N", (ftnlen)8);
 	}
     } else if (stype == 2) {
 	ret_val = *recptr;
     } else {
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRP2N", (ftnlen)8);
 	setmsg_("Segment type # is not supported.  SEGNO = #. File = #.", (
 		ftnlen)54);
 	errint_("#", &stype, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKRP2N", (ftnlen)8);
     }

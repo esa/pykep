@@ -141,7 +141,8 @@
           #include "SpiceUsr.h"
 
           int main()
-          {
+             {
+
              /.
              Local parameters
              ./
@@ -183,7 +184,7 @@
              prompt_c ( "Name of SPK file           > ", FILSIZ, spk    );
 
              /.
-             Find the set of objects in the SPK file. 
+             Find the set of objects in the SPK file.
              ./
              spkobj_c ( spk, &ids );
 
@@ -193,12 +194,12 @@
              each item in the set, and display the coverage.
              ./
              for ( i = 0;  i < card_c( &ids );  i++  )
-             {
+                {
                 /.
-                Find the coverage window for the current object. 
+                Find the coverage window for the current object.
                 Empty the coverage window each time so we don't
                 include data for the previous object.
-                ./
+                ./                
                 obj  =  SPICE_CELL_ELEM_I( &ids, i );
 
                 scard_c  ( 0,        &cover );
@@ -214,14 +215,14 @@
                 ./
                 printf ( "%s\n", "========================================" );
 
-                printf ( "Coverage for object %ld\n", obj );
+                printf ( "Coverage for object %d\n", (int)obj );
 
                 /.
                 Convert the coverage interval start and stop times to TDB
                 calendar strings.
                 ./
                 for ( j = 0;  j < niv;  j++  )
-                {
+                   {
                    /.
                    Get the endpoints of the jth interval.
                    ./
@@ -231,29 +232,29 @@
                    Convert the endpoints to TDB calendar
                    format time strings and display them.
                    ./
-                   timout_c ( b, 
-                              "YYYY MON DD HR:MN:SC.### (TDB) ::TDB",  
+                   timout_c ( b,
+                              "YYYY MON DD HR:MN:SC.### (TDB) ::TDB",
                               TIMLEN,
                               timstr                                  );
 
                    printf ( "\n"
-                            "Interval:  %ld\n"
+                            "Interval:  %d\n"
                             "Start:     %s\n",
                             j,
                             timstr            );
 
-                   timout_c ( e, 
-                              "YYYY MON DD HR:MN:SC.### (TDB) ::TDB",  
+                   timout_c ( e,
+                              "YYYY MON DD HR:MN:SC.### (TDB) ::TDB",
                               TIMLEN,
                               timstr                                  );
                    printf ( "Stop:      %s\n", timstr );
 
+                   }
+
                 }
+             return ( 0 );
 
              }
-             return ( 0 );
-          } 
-
 
 -Restrictions
  
@@ -269,6 +270,11 @@
    N.J. Bachman   (JPL) 
  
 -Version
+
+   -CSPICE Version 1.0.3, 14-JUN-2016 (EDW)
+
+       Edit to example program to use "%d" with explicit casts
+       to int for printing SpiceInts with printf.
  
    -CSPICE Version 1.0.2, 01-JUL-2014 (NJB)
 

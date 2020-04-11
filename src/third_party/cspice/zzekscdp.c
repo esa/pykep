@@ -10,7 +10,6 @@
 	coldsc, integer *recptr, integer *datptr)
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), chkin_(
 	    char *, ftnlen);
     integer recno, ncols;
@@ -18,10 +17,9 @@
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *);
     integer colidx, ptrloc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -456,7 +454,7 @@
 
 /* $ Examples */
 
-/*     1)  Set a colummn's data pointer to indicate that a column entry */
+/*     1)  Set a column's data pointer to indicate that a column entry */
 /*         is uninitialized.  The parameter UNINIT is defined in */
 /*         ekrecptr.inc */
 
@@ -475,6 +473,11 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 
@@ -506,7 +509,6 @@
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKSCDP", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
 		"EK = #", (ftnlen)65);
@@ -514,7 +516,7 @@
 	errint_("#", &ncols, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKSCDP", (ftnlen)8);
 	return 0;

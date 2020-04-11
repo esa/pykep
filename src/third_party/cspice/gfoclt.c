@@ -45,8 +45,11 @@ static logical c_false = FALSE_;
 
 /* $ Abstract */
 
-/*     Determine time intervals when an observer sees one target */
-/*     body occulted by, or in transit across, another. */
+/*     Determine time intervals when an observer sees one target body */
+/*     occulted by, or in transit across, another. */
+
+/*     The surfaces of the target bodies may be represented by triaxial */
+/*     ellipsoids or by topographic data provided by DSK files. */
 
 /* $ Disclaimer */
 
@@ -75,6 +78,7 @@ static logical c_false = FALSE_;
 
 /* $ Required_Reading */
 
+/*     CK */
 /*     FRAMES */
 /*     GF */
 /*     KERNEL */
@@ -87,6 +91,7 @@ static logical c_false = FALSE_;
 
 /*     EVENT */
 /*     GEOMETRY */
+/*     OCCULTATION */
 /*     SEARCH */
 /*     WINDOW */
 
@@ -145,6 +150,12 @@ static logical c_false = FALSE_;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0  29-NOV-2016 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
+
+/*        Bug fix: removed declaration of NVRMAX parameter. */
 
 /* -    SPICELIB Version 1.3.0, 01-OCT-2011 (NJB) */
 
@@ -219,9 +230,6 @@ static logical c_false = FALSE_;
 
 
 /*     FRMNLN is a string length for frame names. */
-
-
-/*     NVRMAX is the maximum number of vertices if FOV type is "POLYGON" */
 
 
 /*     FOVTLN -- maximum length for FOV string. */
@@ -420,52 +428,41 @@ static logical c_false = FALSE_;
 
 /*                Supported values and corresponding definitions are: */
 
-/*                   'FULL'               denotes the full occultation */
-/*                                        of the body designated by */
-/*                                        BACK by the body designated */
-/*                                        by FRONT, as seen from */
-/*                                        the location of the observer. */
-/*                                        In other words, the occulted */
-/*                                        body is completely invisible */
-/*                                        as seen from the observer's */
-/*                                        location. */
+/*                   'FULL'      denotes the full occultation of the */
+/*                               body designated by BACK by the body */
+/*                               designated by FRONT, as seen from the */
+/*                               location of the observer. In other */
+/*                               words, the occulted body is completely */
+/*                               invisible as seen from the observer's */
+/*                               location. */
 
-/*                   'ANNULAR'            denotes an annular */
-/*                                        occultation: the body */
-/*                                        designated by FRONT blocks */
-/*                                        part of, but not the limb of, */
-/*                                        the body designated by BACK, */
-/*                                        as seen from the location of */
-/*                                        the observer. */
+/*                   'ANNULAR'   denotes an annular occultation: the */
+/*                               body designated by FRONT blocks part */
+/*                               of, but not the limb of, the body */
+/*                               designated by BACK, as seen from the */
+/*                               location of the observer. */
 
-/*                   'PARTIAL'            denotes a partial, */
-/*                                        non-annular occultation: the */
-/*                                        body designated by FRONT */
-/*                                        blocks part, but not all, of */
-/*                                        the limb of the body */
-/*                                        designated by BACK, as seen */
-/*                                        from the location of the */
-/*                                        observer. */
+/*                   'PARTIAL'   denotes a partial, non-annular */
+/*                               occultation: the body designated by */
+/*                               FRONT blocks part, but not all, of the */
+/*                               limb of the body designated by BACK, as */
+/*                               seen from the location of the observer. */
 
-/*                   'ANY'                denotes any of the above three */
-/*                                        types of occultations: */
-/*                                        'PARTIAL', 'ANNULAR', or */
-/*                                        'FULL'. */
+/*                   'ANY'       denotes any of the above three types of */
+/*                               occultations: 'PARTIAL', 'ANNULAR', or */
+/*                               'FULL'. */
 
-/*                                        'ANY' should be used to search */
-/*                                        for times when the body */
-/*                                        designated by FRONT blocks */
-/*                                        any part of the body designated */
-/*                                        by BACK. */
+/*                               'ANY' should be used to search for */
+/*                               times when the body designated by FRONT */
+/*                               blocks any part of the body designated */
+/*                               by BACK. */
 
-/*                                        The option 'ANY' must be used */
-/*                                        if either the front or back */
-/*                                        target body is modeled as */
-/*                                        a point. */
+/*                               The option 'ANY' must be used if either */
+/*                               the front or back target body is */
+/*                               modeled as a point. */
 
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string OCCTYP. */
-
 
 
 /*     FRONT      is the name of the target body that occults---that is, */
@@ -482,28 +479,62 @@ static logical c_false = FALSE_;
 /*                represent the shape of the front target body. The */
 /*                supported options are: */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                   'ELLIPSOID' */
 
-/*                                      'BODYnnn_RADII' */
+/*                       Use a triaxial ellipsoid model with radius */
+/*                       values provided via the kernel pool. A kernel */
+/*                       variable having a name of the form */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*                          'BODYnnn_RADII' */
 
-/*                   'POINT'         Treat the body as a single point. */
-/*                                   When a point target is specified, */
-/*                                   the occultation type must be */
-/*                                   set to 'ANY'. */
+/*                       where nnn represents the NAIF integer code */
+/*                       associated with the body, must be present in */
+/*                       the kernel pool. This variable must be */
+/*                       associated with three numeric values giving the */
+/*                       lengths of the ellipsoid's X, Y, and Z */
+/*                       semi-axes. */
 
-/*                At least one of the target bodies FRONT and BACK must */
-/*                be modeled as an ellipsoid. */
+/*                   'POINT' */
+
+/*                       Treat the body as a single point. When a point */
+/*                       target is specified, the occultation type must */
+/*                       be set to 'ANY'. */
+
+/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+
+/*                       Use topographic data provided by DSK files to */
+/*                       model the body's shape. These data must be */
+/*                       provided by loaded DSK files. */
+
+/*                       The surface list specification is optional. The */
+/*                       syntax of the list is */
+
+/*                          <surface 1> [, <surface 2>...] */
+
+/*                       If present, it indicates that data only for the */
+/*                       listed surfaces are to be used; however, data */
+/*                       need not be available for all surfaces in the */
+/*                       list. If absent, loaded DSK data for any surface */
+/*                       associated with the target body are used. */
+
+/*                       The surface list may contain surface names or */
+/*                       surface ID codes. Names containing blanks must */
+/*                       be delimited by double quotes, for example */
+
+/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                       If multiple surfaces are specified, their names */
+/*                       or IDs must be separated by commas. */
+
+/*                       See the Particulars section below for details */
+/*                       concerning use of DSK data. */
+
+/*                The combinations of the shapes of the target bodies */
+/*                FRONT and BACK must be one of: */
+
+/*                   One ELLIPSOID, one POINT */
+/*                   Two ELLIPSOIDs */
+/*                   One DSK, one POINT */
 
 /*                Case and leading or trailing blanks are not */
 /*                significant in the string FSHAPE. */
@@ -749,6 +780,17 @@ static logical c_false = FALSE_;
 /*     16) Invalid aberration correction specifications will be */
 /*         diagnosed by a routine in the call tree of this routine. */
 
+/*     17) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, and no DSK files are loaded for */
+/*         the specified target, the error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     18) If either FSHAPE or BSHAPE specifies that the target surface */
+/*         is represented by DSK data, but the shape specification is */
+/*         invalid, the error is signaled by a routine in the call tree */
+/*         of this routine. */
+
+
 /* $ Files */
 
 /*     Appropriate SPICE kernels must be loaded by the calling program */
@@ -757,14 +799,13 @@ static logical c_false = FALSE_;
 /*     The following data are required: */
 
 /*        - SPK data: the calling application must load ephemeris data */
-/*          for the target, source and observer that cover the time */
+/*          for the targets, source and observer that cover the time */
 /*          period specified by the window CNFINE. If aberration */
 /*          corrections are used, the states of the target bodies and of */
 /*          the observer relative to the solar system barycenter must be */
 /*          calculable from the available ephemeris data. Typically */
-/*          ephemeris data */
-/*          are made available by loading one or more SPK files via */
-/*          FURNSH. */
+/*          ephemeris data are made available by loading one or more SPK */
+/*          files via FURNSH. */
 
 /*        - PCK data: bodies modeled as triaxial ellipsoids must have */
 /*          semi-axis lengths provided by variables in the kernel pool. */
@@ -774,6 +815,41 @@ static logical c_false = FALSE_;
 /*        - FK data: if either of the reference frames designated by */
 /*          BFRAME or FFRAME are not built in to the SPICE system, */
 /*          one or more FKs specifying these frames must be loaded. */
+
+/*     The following data may be required: */
+
+/*        - DSK data: if either FSHAPE or BSHAPE indicates that DSK */
+/*          data are to be used, DSK files containing topographic data */
+/*          for the target body must be loaded. If a surface list is */
+/*          specified, data for at least one of the listed surfaces must */
+/*          be loaded. */
+
+/*        - Surface name-ID associations: if surface names are specified */
+/*          in FSHAPE or BSHAPE, the association of these names with */
+/*          their corresponding surface ID codes must be established by */
+/*          assignments of the kernel variables */
+
+/*             NAIF_SURFACE_NAME */
+/*             NAIF_SURFACE_CODE */
+/*             NAIF_SURFACE_BODY */
+
+/*          Normally these associations are made by loading a text */
+/*          kernel containing the necessary assignments. An example */
+/*          of such a set of assignments is */
+
+/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*             NAIF_SURFACE_CODE += 1 */
+/*             NAIF_SURFACE_BODY += 499 */
+
+/*        - CK data: either of the body-fixed frames to which FFRAME or */
+/*          BFRAME refer might be a CK frame. If so, at least one CK */
+/*          file will be needed to permit transformation of vectors */
+/*          between that frame and the J2000 frame. */
+
+/*        - SCLK data: if a CK file is needed, an associated SCLK */
+/*          kernel is required to enable conversion between encoded SCLK */
+/*          (used to time-tag CK data) and barycentric dynamical time */
+/*          (TDB). */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -881,6 +957,128 @@ static logical c_false = FALSE_;
 /*     to reduce the size of the time period over which a relatively */
 /*     slow search of interest must be performed. See the "CASCADE" */
 /*     example program in gf.req for a demonstration. */
+
+
+/*     Using DSK data */
+/*     ============== */
+
+/*        DSK loading and unloading */
+/*        ------------------------- */
+
+/*        DSK files providing data used by this routine are loaded by */
+/*        calling FURNSH and can be unloaded by calling UNLOAD or */
+/*        KCLEAR. See the documentation of FURNSH for limits on numbers */
+/*        of loaded DSK files. */
+
+/*        For run-time efficiency, it's desirable to avoid frequent */
+/*        loading and unloading of DSK files. When there is a reason to */
+/*        use multiple versions of data for a given target body---for */
+/*        example, if topographic data at varying resolutions are to be */
+/*        used---the surface list can be used to select DSK data to be */
+/*        used for a given computation. It is not necessary to unload */
+/*        the data that are not to be used. This recommendation presumes */
+/*        that DSKs containing different versions of surface data for a */
+/*        given body have different surface ID codes. */
+
+
+/*        DSK data priority */
+/*        ----------------- */
+
+/*        A DSK coverage overlap occurs when two segments in loaded DSK */
+/*        files cover part or all of the same domain---for example, a */
+/*        given longitude-latitude rectangle---and when the time */
+/*        intervals of the segments overlap as well. */
+
+/*        When DSK data selection is prioritized, in case of a coverage */
+/*        overlap, if the two competing segments are in different DSK */
+/*        files, the segment in the DSK file loaded last takes */
+/*        precedence. If the two segments are in the same file, the */
+/*        segment located closer to the end of the file takes */
+/*        precedence. */
+
+/*        When DSK data selection is unprioritized, data from competing */
+/*        segments are combined. For example, if two competing segments */
+/*        both represent a surface as sets of triangular plates, the */
+/*        union of those sets of plates is considered to represent the */
+/*        surface. */
+
+/*        Currently only unprioritized data selection is supported. */
+/*        Because prioritized data selection may be the default behavior */
+/*        in a later version of the routine, the UNPRIORITIZED keyword is */
+/*        required in the FSHAPE and BSHAPE arguments. */
+
+
+/*        Syntax of the shape input arguments for the DSK case */
+/*        ---------------------------------------------------- */
+
+/*        The keywords and surface list in the target shape arguments */
+/*        FSHAPE and BSHAPE, when DSK shape models are specified, are */
+/*        called "clauses." The clauses may appear in any order, for */
+/*        example */
+
+/*           DSK/<surface list>/UNPRIORITIZED */
+/*           DSK/UNPRIORITIZED/<surface list> */
+/*           UNPRIORITIZED/<surface list>/DSK */
+
+/*        The simplest form of a target argument specifying use of */
+/*        DSK data is one that lacks a surface list, for example: */
+
+/*           'DSK/UNPRIORITIZED' */
+
+/*        For applications in which all loaded DSK data for the target */
+/*        body are for a single surface, and there are no competing */
+/*        segments, the above string suffices. This is expected to be */
+/*        the usual case. */
+
+/*        When, for the specified target body, there are loaded DSK */
+/*        files providing data for multiple surfaces for that body, the */
+/*        surfaces to be used by this routine for a given call must be */
+/*        specified in a surface list, unless data from all of the */
+/*        surfaces are to be used together. */
+
+/*        The surface list consists of the string */
+
+/*           SURFACES = */
+
+/*        followed by a comma-separated list of one or more surface */
+/*        identifiers. The identifiers may be names or integer codes in */
+/*        string format. For example, suppose we have the surface */
+/*        names and corresponding ID codes shown below: */
+
+/*           Surface Name                              ID code */
+/*           ------------                              ------- */
+/*           'Mars MEGDR 128 PIXEL/DEG'                1 */
+/*           'Mars MEGDR 64 PIXEL/DEG'                 2 */
+/*           'Mars_MRO_HIRISE'                         3 */
+
+/*        If data for all of the above surfaces are loaded, then */
+/*        data for surface 1 can be specified by either */
+
+/*           'SURFACES = 1' */
+
+/*        or */
+
+/*           'SURFACES = "Mars MEGDR 128 PIXEL/DEG"' */
+
+/*        Double quotes are used to delimit the surface name because */
+/*        it contains blank characters. */
+
+/*        To use data for surfaces 2 and 3 together, any */
+/*        of the following surface lists could be used: */
+
+/*           'SURFACES = 2, 3' */
+
+/*           'SURFACES = "Mars MEGDR  64 PIXEL/DEG", 3' */
+
+/*           'SURFACES = 2, Mars_MRO_HIRISE' */
+
+/*           'SURFACES = "Mars MEGDR 64 PIXEL/DEG", Mars_MRO_HIRISE' */
+
+/*        An example of a shape argument that could be constructed */
+/*        using one of the surface lists above is */
+
+/*          'DSK/UNPRIORITIZED/SURFACES = "Mars MEGDR 64 PIXEL/DEG", 3' */
+
 
 /* $ Examples */
 
@@ -1397,10 +1595,355 @@ static logical c_false = FALSE_;
 /*   2008 DEC 30 18:44:23.485898 (TDB)  2008 DEC 31 00:59:17.030568 (TDB) */
 
 
+
+/*     3) Find occultations of the Mars Reconaissance Orbiter (MRO) */
+/*        by Mars or transits of the MRO spacecraft across Mars */
+/*        as seen from the DSN station DSS-14 over a period of a */
+/*        few hours on FEB 28 2015. */
+
+/*        Use both ellipsoid and DSK shape models for Mars. */
+
+/*        Use light time corrections to model apparent positions of */
+/*        Mars and MRO. Stellar aberration corrections are not */
+/*        specified because they don't affect occultation computations. */
+
+/*        We select a step size of 3 minutes, which means we */
+/*        ignore occultation events lasting less than 3 minutes, */
+/*        if any exist. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*          KPL/MK */
+
+/*          File: gfoclt_ex3.tm */
+
+/*          This meta-kernel is intended to support operation of SPICE */
+/*          example programs. The kernels shown here should not be */
+/*          assumed to contain adequate or correct versions of data */
+/*          required by SPICE-based user applications. */
+
+/*          In order for an application to use this meta-kernel, the */
+/*          kernels referenced here must be present in the user's */
+/*          current working directory. */
+
+/*          The names and contents of the kernels referenced */
+/*          by this meta-kernel are as follows: */
+
+/*             File name                        Contents */
+/*             ---------                        -------- */
+/*             de410.bsp                        Planetary ephemeris */
+/*             mar063.bsp                       Mars satellite ephemeris */
+/*             pck00010.tpc                     Planet orientation and */
+/*                                              radii */
+/*             naif0011.tls                     Leapseconds */
+/*             earthstns_itrf93_050714.bsp      DSN station ephemeris */
+/*             earth_latest_high_prec.bpc       Earth orientation */
+/*             mro_psp34.bsp                    MRO ephemeris */
+/*             megr90n000cb_plate.bds           Plate model based on */
+/*                                              MEGDR DEM, resolution */
+/*                                              4 pixels/degree. */
+
+/*          \begindata */
+
+/*             PATH_SYMBOLS    = ( 'MRO', 'GEN' ) */
+
+/*             PATH_VALUES     = ( */
+/*                                 '/ftp/pub/naif/pds/data+' */
+/*                                 '/mro-m-spice-6-v1.0/+' */
+/*                                 'mrosp_1000/data/spk', */
+/*                                 '/ftp/pub/naif/generic_kernels' */
+/*                               ) */
+
+/*             KERNELS_TO_LOAD = ( '$MRO/de410.bsp', */
+/*                                 '$MRO/mar063.bsp', */
+/*                                 '$MRO/mro_psp34.bsp', */
+/*                                 '$GEN/spk/stations/+' */
+/*                                 'earthstns_itrf93_050714.bsp', */
+/*                                 '$GEN/pck/earth_latest_high_prec.bpc', */
+/*                                 'pck00010.tpc', */
+/*                                 'naif0011.tls', */
+/*                                 'megr90n000cb_plate.bds' */
+/*                               ) */
+/*          \begintext */
+
+
+/*       Example code begins here. */
+
+
+/*              PROGRAM EX3 */
+
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'gfoclt_ex3.tm' ) */
+
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .   'YYYY MON DD HR:MN:SC.###### (TDB)::TDB' ) */
+
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 2 * 100 ) */
+
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 10 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
+
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
+
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
+
+/*              INTEGER               SHPLEN */
+/*              PARAMETER           ( SHPLEN = 100 ) */
+
+/*              INTEGER               OTYPLN */
+/*              PARAMETER           ( OTYPLN = 20 ) */
+
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(BDNMLN)    BACK */
+/*              CHARACTER*(FRNMLN)    BFRAME */
+/*              CHARACTER*(SHPLEN)    BSHAPE */
+/*              CHARACTER*(BDNMLN)    FRONT */
+/*              CHARACTER*(SHPLEN)    FSHAPE */
+/*              CHARACTER*(FRNMLN)    FFRAME */
+/*              CHARACTER*(OTYPLN)    OCCTYP */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(TIMLEN)    WIN0 */
+/*              CHARACTER*(TIMLEN)    WIN1 */
+/*              CHARACTER*(TIMLEN)    BEGSTR */
+/*              CHARACTER*(TIMLEN)    ENDSTR */
+
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      STEP */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Initialize the confinement and result windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*        C */
+/*        C     Set the observer and aberration correction. */
+/*        C */
+/*              OBSRVR = 'DSS-14' */
+/*              ABCORR = 'CN' */
+/*        C */
+/*        C     Set the occultation type. */
+/*        C */
+/*              OCCTYP = 'ANY' */
+/*        C */
+/*        C     Set the TDB time bounds of the confinement */
+/*        C     window, which is a single interval in this case. */
+/*        C */
+/*              WIN0 = '2015 FEB 28 07:00:00 TDB' */
+/*              WIN1 = '2015 FEB 28 12:00:00 TDB' */
+
+/*              CALL STR2ET ( WIN0, ET0 ) */
+/*              CALL STR2ET ( WIN1, ET1 ) */
+/*        C */
+/*        C     Insert the time bounds into the confinement */
+/*        C     window. */
+/*        C */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+/*        C */
+/*        C     Select a 3-minute step. We'll ignore any occultations */
+/*        C     lasting less than 3 minutes. Units are TDB seconds. */
+/*        C */
+/*              STEP = 180.D0 */
+
+/*        C */
+/*        C     Perform both spacecraft occultation and spacecraft */
+/*        C     transit searches. */
+/*        C */
+/*              WRITE (*,*) ' ' */
+
+/*              DO I = 1, 2 */
+
+/*                 IF ( I .EQ. 1 ) THEN */
+/*        C */
+/*        C           Perform a spacecraft occultation search. */
+/*        C */
+/*                    FRONT  = 'MARS' */
+/*                    FFRAME = 'IAU_MARS' */
+
+/*                    BACK   = 'MRO' */
+/*                    BSHAPE = 'POINT' */
+/*                    BFRAME = ' ' */
+
+/*                 ELSE */
+/*        C */
+/*        C           Perform a spacecraft transit search. */
+/*        C */
+/*                    FRONT  = 'MRO' */
+/*                    FSHAPE = 'POINT' */
+/*                    FFRAME = ' ' */
+
+/*                    BACK   = 'MARS' */
+/*                    BFRAME = 'IAU_MARS' */
+
+/*                 END IF */
+
+
+/*                 DO J = 1, 2 */
+
+/*                    IF ( J .EQ. 1 ) THEN */
+/*        C */
+/*        C              Model the planet shape as an ellipsoid. */
+/*        C */
+/*                       IF ( I .EQ. 1 ) THEN */
+/*                          FSHAPE = 'ELLIPSOID' */
+/*                       ELSE */
+/*                          BSHAPE = 'ELLIPSOID' */
+/*                       END IF */
+
+/*                    ELSE */
+/*        C */
+/*        C              Model the planet shape using DSK data. */
+/*        C */
+/*                       IF ( I .EQ. 1 ) THEN */
+/*                          FSHAPE = 'DSK/UNPRIORITIZED' */
+/*                       ELSE */
+/*                          BSHAPE = 'DSK/UNPRIORITIZED' */
+/*                       END IF */
+
+/*                    END IF */
+
+/*        C */
+/*        C           Perform the spacecraft occultation or */
+/*        C           transit search. */
+
+/*                    IF ( I .EQ. 1 ) THEN */
+/*                       CALL TOSTDO ( 'Using shape model '//FSHAPE     ) */
+/*                       CALL TOSTDO ( 'Starting occultation search...' ) */
+/*                    ELSE */
+/*                       CALL TOSTDO ( 'Using shape model '//BSHAPE ) */
+/*                       CALL TOSTDO ( 'Starting transit search...' ) */
+/*                    END IF */
+
+/*                    CALL GFOCLT ( OCCTYP, */
+/*             .                    FRONT,  FSHAPE, FFRAME, */
+/*             .                    BACK,   BSHAPE, BFRAME, */
+/*             .                    ABCORR, OBSRVR, STEP, */
+/*             .                    CNFINE, RESULT         ) */
+
+/*                    IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+
+/*                       WRITE (*,*) 'No event was found.' */
+
+/*                    ELSE */
+
+/*                       DO K = 1, WNCARD(RESULT) */
+/*        C */
+/*        C                 Fetch and display each event interval. */
+/*        C */
+/*                          CALL WNFETD ( RESULT, K, LEFT, RIGHT ) */
+
+/*                          CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
+/*                          CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
+
+/*                          WRITE (*,*) '   Interval ', K */
+/*                          WRITE (*,*) '      Start time: '//BEGSTR */
+/*                          WRITE (*,*) '      Stop time:  '//ENDSTR */
+
+/*                       END DO */
+
+/*                    END IF */
+
+/*                    WRITE (*,*) ' ' */
+
+/*                 END DO */
+
+/*              END DO */
+
+/*              END */
+
+
+/*     When this program was executed on a PC/Linux/gfortran 64-bit */
+/*     platform, the output was: */
+
+
+/*        Using shape model ELLIPSOID */
+/*        Starting occultation search... */
+/*            Interval            1 */
+/*               Start time: 2015 FEB 28 07:17:35.379879 (TDB) */
+/*               Stop time:  2015 FEB 28 07:50:37.710284 (TDB) */
+/*            Interval            2 */
+/*               Start time: 2015 FEB 28 09:09:46.920140 (TDB) */
+/*               Stop time:  2015 FEB 28 09:42:50.497193 (TDB) */
+/*            Interval            3 */
+/*               Start time: 2015 FEB 28 11:01:57.845730 (TDB) */
+/*               Stop time:  2015 FEB 28 11:35:01.489716 (TDB) */
+
+/*        Using shape model DSK/UNPRIORITIZED */
+/*        Starting occultation search... */
+/*            Interval            1 */
+/*               Start time: 2015 FEB 28 07:17:38.130608 (TDB) */
+/*               Stop time:  2015 FEB 28 07:50:38.310802 (TDB) */
+/*            Interval            2 */
+/*               Start time: 2015 FEB 28 09:09:50.314903 (TDB) */
+/*               Stop time:  2015 FEB 28 09:42:55.369626 (TDB) */
+/*            Interval            3 */
+/*               Start time: 2015 FEB 28 11:02:01.756296 (TDB) */
+/*               Stop time:  2015 FEB 28 11:35:08.368384 (TDB) */
+
+/*        Using shape model ELLIPSOID */
+/*        Starting transit search... */
+/*            Interval            1 */
+/*               Start time: 2015 FEB 28 08:12:21.112018 (TDB) */
+/*               Stop time:  2015 FEB 28 08:45:48.401746 (TDB) */
+/*            Interval            2 */
+/*               Start time: 2015 FEB 28 10:04:32.682324 (TDB) */
+/*               Stop time:  2015 FEB 28 10:37:59.920302 (TDB) */
+/*            Interval            3 */
+/*               Start time: 2015 FEB 28 11:56:39.757564 (TDB) */
+/*               Stop time:  2015 FEB 28 12:00:00.000000 (TDB) */
+
+/*        Using shape model DSK/UNPRIORITIZED */
+/*        Starting transit search... */
+/*            Interval            1 */
+/*               Start time: 2015 FEB 28 08:12:15.750020 (TDB) */
+/*               Stop time:  2015 FEB 28 08:45:43.406870 (TDB) */
+/*            Interval            2 */
+/*               Start time: 2015 FEB 28 10:04:29.031706 (TDB) */
+/*               Stop time:  2015 FEB 28 10:37:55.565509 (TDB) */
+/*            Interval            3 */
+/*               Start time: 2015 FEB 28 11:56:34.634642 (TDB) */
+/*               Stop time:  2015 FEB 28 12:00:00.000000 (TDB) */
+
+
 /* $ Restrictions */
 
-/*     The kernel files to be used by GFOCLT must be loaded (normally via */
-/*     the SPICELIB routine FURNSH) before GFOCLT is called. */
+/*     The kernel files to be used by GFOCLT must be loaded (normally */
+/*     via the SPICELIB routine FURNSH) before GFOCLT is called. */
 
 /* $ Literature_References */
 
@@ -1413,6 +1956,15 @@ static logical c_false = FALSE_;
 /*    E. D. Wright   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0 29-FEB-2016 (NJB) */
+
+/*        Header was updated. An example program demonstrating */
+/*        DSK usage was added. */
+
+/*        04-MAR-2015 (NJB) */
+
+/*        Upgraded to support surfaces represented by DSKs. */
 
 /* -    SPICELIB Version 1.1.0  31-AUG-2010 (EDW) */
 

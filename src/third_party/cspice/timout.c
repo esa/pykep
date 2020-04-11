@@ -249,16 +249,17 @@ static doublereal c_b338 = 100.;
 /*     As you can see from the samples above, the format picture */
 /*     specifies that every time string created should begin with a */
 /*     three-letter abbreviation for the month, followed by a space and */
-/*     the day of the month. The day of month is followed immediately */
-/*     by a comma and the year. The year component is followed by two */
+/*     the day of the month. The day of month is followed immediately by */
+/*     a comma and the year. The year component is followed by two */
 /*     spaces. The next outputs are hours represented as a two digit */
 /*     integer, a colon, minutes represented as a two digit integer, */
-/*     another colon, and seconds rounded to 4 decimal places and */
-/*     having a two digit integer part. This is followed by a space and */
-/*     the string (TDB). The special marker `::TDB' in the time picture */
-/*     is an ``invisible'' marker. It is used to specify the time */
-/*     system that should be used in creating the time string (in this */
-/*     case Barycentric Dynamical Time). */
+/*     another colon, and seconds truncated to 4 decimal places and */
+/*     having a two digit integer part (rounding can be commanded; see */
+/*     the discussion of truncation and rounding below). This is */
+/*     followed by a space and the string (TDB). The special marker */
+/*     `::TDB' in the time picture is an ``invisible'' marker. It is */
+/*     used to specify the time system that should be used in creating */
+/*     the time string (in this case Barycentric Dynamical Time). */
 
 /*     TIMOUT does not recognize all of the parts of the time format */
 /*     picture in the example above. The list of recognized parts and */
@@ -625,6 +626,11 @@ static doublereal c_b338 = 100.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.3.1, 31-Jan-2017 (NJB) */
+
+/*        Updated header comments to draw attention to the fact that */
+/*        rounding can be commanded. */
+
 /* -    SPICELIB Version 3.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
@@ -938,94 +944,94 @@ static doublereal c_b338 = 100.;
 	id[42] = bsrchc_("::MCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
 	id[45] = bsrchc_("AP", &nmarks, marks, (ftnlen)2, (ftnlen)8);
 	class__[(i__1 = id[1]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1168)] = 2;
+		i__1, "timout_", (ftnlen)1174)] = 2;
 	class__[(i__1 = id[2]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1169)] = 3;
+		i__1, "timout_", (ftnlen)1175)] = 3;
 	class__[(i__1 = id[3]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1170)] = 4;
+		i__1, "timout_", (ftnlen)1176)] = 4;
 	class__[(i__1 = id[4]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1171)] = 47;
+		i__1, "timout_", (ftnlen)1177)] = 47;
 	class__[(i__1 = id[5]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1172)] = 47;
+		i__1, "timout_", (ftnlen)1178)] = 47;
 	class__[(i__1 = id[6]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1173)] = 47;
+		i__1, "timout_", (ftnlen)1179)] = 47;
 	class__[(i__1 = id[7]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1174)] = 47;
+		i__1, "timout_", (ftnlen)1180)] = 47;
 	class__[(i__1 = id[8]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1175)] = 47;
+		i__1, "timout_", (ftnlen)1181)] = 47;
 	class__[(i__1 = id[9]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1176)] = 47;
+		i__1, "timout_", (ftnlen)1182)] = 47;
 	class__[(i__1 = id[10]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1177)] = 11;
+		i__1, "timout_", (ftnlen)1183)] = 11;
 	class__[(i__1 = id[11]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1178)] = 12;
+		i__1, "timout_", (ftnlen)1184)] = 12;
 	class__[(i__1 = id[12]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1179)] = 48;
+		i__1, "timout_", (ftnlen)1185)] = 48;
 	class__[(i__1 = id[13]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1180)] = 48;
+		i__1, "timout_", (ftnlen)1186)] = 48;
 	class__[(i__1 = id[14]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1181)] = 48;
+		i__1, "timout_", (ftnlen)1187)] = 48;
 	class__[(i__1 = id[15]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1182)] = 48;
+		i__1, "timout_", (ftnlen)1188)] = 48;
 	class__[(i__1 = id[16]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1183)] = 48;
+		i__1, "timout_", (ftnlen)1189)] = 48;
 	class__[(i__1 = id[17]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1184)] = 48;
+		i__1, "timout_", (ftnlen)1190)] = 48;
 	class__[(i__1 = id[18]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1185)] = 19;
+		i__1, "timout_", (ftnlen)1191)] = 19;
 	class__[(i__1 = id[19]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1186)] = 20;
+		i__1, "timout_", (ftnlen)1192)] = 20;
 	class__[(i__1 = id[20]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1187)] = 21;
+		i__1, "timout_", (ftnlen)1193)] = 21;
 	class__[(i__1 = id[21]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1188)] = 22;
+		i__1, "timout_", (ftnlen)1194)] = 22;
 	class__[(i__1 = id[22]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1189)] = 23;
+		i__1, "timout_", (ftnlen)1195)] = 23;
 	class__[(i__1 = id[23]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1190)] = 24;
+		i__1, "timout_", (ftnlen)1196)] = 24;
 	class__[(i__1 = id[24]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1191)] = 25;
+		i__1, "timout_", (ftnlen)1197)] = 25;
 	class__[(i__1 = id[25]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1192)] = 44;
+		i__1, "timout_", (ftnlen)1198)] = 44;
 	class__[(i__1 = id[26]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1193)] = 44;
+		i__1, "timout_", (ftnlen)1199)] = 44;
 	class__[(i__1 = id[27]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1194)] = 44;
+		i__1, "timout_", (ftnlen)1200)] = 44;
 	class__[(i__1 = id[28]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1195)] = 29;
+		i__1, "timout_", (ftnlen)1201)] = 29;
 	class__[(i__1 = id[29]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1196)] = 30;
+		i__1, "timout_", (ftnlen)1202)] = 30;
 	class__[(i__1 = id[30]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1197)] = 31;
+		i__1, "timout_", (ftnlen)1203)] = 31;
 	class__[(i__1 = id[31]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1198)] = 32;
+		i__1, "timout_", (ftnlen)1204)] = 32;
 	class__[(i__1 = id[32]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1199)] = 49;
+		i__1, "timout_", (ftnlen)1205)] = 49;
 	class__[(i__1 = id[33]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1200)] = 49;
+		i__1, "timout_", (ftnlen)1206)] = 49;
 	class__[(i__1 = id[34]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1201)] = 49;
+		i__1, "timout_", (ftnlen)1207)] = 49;
 	class__[(i__1 = id[35]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1202)] = 49;
+		i__1, "timout_", (ftnlen)1208)] = 49;
 	class__[(i__1 = id[36]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1203)] = 50;
+		i__1, "timout_", (ftnlen)1209)] = 50;
 	class__[(i__1 = id[37]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1204)] = 50;
+		i__1, "timout_", (ftnlen)1210)] = 50;
 	class__[(i__1 = id[38]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1205)] = 44;
+		i__1, "timout_", (ftnlen)1211)] = 44;
 	class__[(i__1 = id[39]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1206)] = 44;
+		i__1, "timout_", (ftnlen)1212)] = 44;
 	class__[(i__1 = id[40]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1207)] = 45;
+		i__1, "timout_", (ftnlen)1213)] = 45;
 	class__[(i__1 = id[41]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1208)] = 45;
+		i__1, "timout_", (ftnlen)1214)] = 45;
 	class__[(i__1 = id[42]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1209)] = 45;
+		i__1, "timout_", (ftnlen)1215)] = 45;
 	class__[(i__1 = id[45]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1210)] = 46;
+		i__1, "timout_", (ftnlen)1216)] = 46;
 	for (i__ = 1; i__ <= 51; ++i__) {
 	    pad[(i__1 = i__ - 1) < 51 && 0 <= i__1 ? i__1 : s_rnge("pad", 
-		    i__1, "timout_", (ftnlen)1213)] = 0.;
+		    i__1, "timout_", (ftnlen)1219)] = 0.;
 	}
 	pad[21] = .5;
 	pad[19] = pad[21] * 60.;
@@ -1153,23 +1159,23 @@ static doublereal c_b338 = 100.;
     }
     while(unknwn && i__ <= ntokns) {
 	if (class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 :
-		 s_rnge("ident", i__1, "timout_", (ftnlen)1372)]) < 43 && 0 <=
-		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1372)]
+		 s_rnge("ident", i__1, "timout_", (ftnlen)1378)]) < 43 && 0 <=
+		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1378)]
 		 == 44) {
 	    timtyp = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ident", i__1, "timout_", (ftnlen)1373)];
+		    s_rnge("ident", i__1, "timout_", (ftnlen)1379)];
 	    unknwn = FALSE_;
 	    dozone = FALSE_;
 	    if (ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ident", i__1, "timout_", (ftnlen)1377)] == id[38] || 
+		    "ident", i__1, "timout_", (ftnlen)1383)] == id[38] || 
 		    ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ident", i__2, "timout_", (ftnlen)1377)] == id[39]) {
+		    "ident", i__2, "timout_", (ftnlen)1383)] == id[39]) {
 
 /*              We've got a time zone specification. Parse it and */
 /*              store the offsets from UTC. */
 
 		zzutcpm_(mystr, &beg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("beg", i__1, "timout_", (ftnlen)1384)], 
+			i__1 : s_rnge("beg", i__1, "timout_", (ftnlen)1390)], 
 			&hoff, &moff, &last, &ok, (ftnlen)256);
 		if (ok) {
 		    dozone = TRUE_;
@@ -1185,19 +1191,19 @@ static doublereal c_b338 = 100.;
 /*                 format string. */
 
 		    if (last == end[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("end", i__1, "timout_", (ftnlen)1401)]) {
+			    s_rnge("end", i__1, "timout_", (ftnlen)1407)]) {
 			ident[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				"ident", i__1, "timout_", (ftnlen)1402)] = 
+				"ident", i__1, "timout_", (ftnlen)1408)] = 
 				ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 				i__2 : s_rnge("ident", i__2, "timout_", (
-				ftnlen)1402)];
+				ftnlen)1408)];
 			++i__;
 		    } else {
 			end[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("end", i__1, "timout_", (ftnlen)1405)] 
+				s_rnge("end", i__1, "timout_", (ftnlen)1411)] 
 				= last;
 			beg[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				"beg", i__1, "timout_", (ftnlen)1406)] = last 
+				"beg", i__1, "timout_", (ftnlen)1412)] = last 
 				+ 1;
 		    }
 		}
@@ -1224,11 +1230,11 @@ static doublereal c_b338 = 100.;
     }
     while(unknwn && i__ <= ntokns) {
 	if (class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 :
-		 s_rnge("ident", i__1, "timout_", (ftnlen)1442)]) < 43 && 0 <=
-		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1442)]
+		 s_rnge("ident", i__1, "timout_", (ftnlen)1448)]) < 43 && 0 <=
+		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1448)]
 		 == 45) {
 	    caltyp = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ident", i__1, "timout_", (ftnlen)1443)];
+		    s_rnge("ident", i__1, "timout_", (ftnlen)1449)];
 	    unknwn = FALSE_;
 	}
 	++i__;
@@ -1272,8 +1278,8 @@ static doublereal c_b338 = 100.;
 	while(i__ <= ntokns) {
 	    type__ = class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (ftnlen)
-		    1497)]) < 43 && 0 <= i__2 ? i__2 : s_rnge("class", i__2, 
-		    "timout_", (ftnlen)1497)];
+		    1503)]) < 43 && 0 <= i__2 ? i__2 : s_rnge("class", i__2, 
+		    "timout_", (ftnlen)1503)];
 	    if (type__ == 2 || type__ == 23 || type__ == 24 || type__ == 50 ||
 		     type__ == 49 || type__ == 47 || type__ == 48) {
 
@@ -1286,7 +1292,7 @@ static doublereal c_b338 = 100.;
 
 		factor = 1.;
 		incr = pad[(i__1 = type__ - 1) < 51 && 0 <= i__1 ? i__1 : 
-			s_rnge("pad", i__1, "timout_", (ftnlen)1518)];
+			s_rnge("pad", i__1, "timout_", (ftnlen)1524)];
 
 /*              Examine the next token.  If it's not a decimal point */
 /*              and marker, we have the least significant part of */
@@ -1295,8 +1301,8 @@ static doublereal c_b338 = 100.;
 		++i__;
 		type__ = class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= 
 			i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-			ftnlen)1526)]) < 43 && 0 <= i__2 ? i__2 : s_rnge(
-			"class", i__2, "timout_", (ftnlen)1526)];
+			ftnlen)1532)]) < 43 && 0 <= i__2 ? i__2 : s_rnge(
+			"class", i__2, "timout_", (ftnlen)1532)];
 		if (type__ == 23) {
 		    factor *= .1;
 		    ++i__;
@@ -1305,7 +1311,7 @@ static doublereal c_b338 = 100.;
 /*                 holders */
 
 		    while(ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ident", i__1, "timout_", (ftnlen)1537)] ==
+			    s_rnge("ident", i__1, "timout_", (ftnlen)1543)] ==
 			     id[23]) {
 			factor *= .1;
 			++i__;
@@ -1330,7 +1336,7 @@ static doublereal c_b338 = 100.;
 
     for (part = 1; part <= 51; ++part) {
 	have[(i__1 = part - 1) < 51 && 0 <= i__1 ? i__1 : s_rnge("have", i__1,
-		 "timout_", (ftnlen)1567)] = FALSE_;
+		 "timout_", (ftnlen)1573)] = FALSE_;
     }
 
 /*     Set up the input time format and the output time format that will */
@@ -1398,9 +1404,9 @@ static doublereal c_b338 = 100.;
     i__1 = ntokns;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	type__ = class__[(i__3 = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-		i__2 : s_rnge("ident", i__2, "timout_", (ftnlen)1648)]) < 43 
+		i__2 : s_rnge("ident", i__2, "timout_", (ftnlen)1654)]) < 43 
 		&& 0 <= i__3 ? i__3 : s_rnge("class", i__3, "timout_", (
-		ftnlen)1648)];
+		ftnlen)1654)];
 	tvec[0] = myet;
 
 /*        If the next marker is not one we use as a place holder */
@@ -1420,7 +1426,7 @@ static doublereal c_b338 = 100.;
 /*              places requested NOT round. */
 
 		i__3 = width - length[(i__2 = numtyp - 1) < 51 && 0 <= i__2 ? 
-			i__2 : s_rnge("length", i__2, "timout_", (ftnlen)1670)
+			i__2 : s_rnge("length", i__2, "timout_", (ftnlen)1676)
 			] - 1;
 		trncat = brckti_(&i__3, &c__0, &c__14);
 		frac = value - d_int(&value);
@@ -1429,10 +1435,10 @@ static doublereal c_b338 = 100.;
 		    frac += 1.;
 		}
 		d__1 = frac * power[(i__2 = trncat) < 15 && 0 <= i__2 ? i__2 :
-			 s_rnge("power", i__2, "timout_", (ftnlen)1678)];
+			 s_rnge("power", i__2, "timout_", (ftnlen)1684)];
 		intmed = (d_int(&d__1) - .125) / power[(i__3 = trncat) < 15 &&
 			 0 <= i__3 ? i__3 : s_rnge("power", i__3, "timout_", (
-			ftnlen)1678)];
+			ftnlen)1684)];
 		frac = brcktd_(&intmed, &c_b274, &c_b275);
 		value = d_int(&value) + frac;
 		dpfmt_(&value, fmt, substr, (ftnlen)32, (ftnlen)256);
@@ -1451,14 +1457,14 @@ static doublereal c_b338 = 100.;
 
 	if (type__ == 2) {
 	    i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "beg", i__3, "timout_", (ftnlen)1705)] - 1;
+		    "beg", i__3, "timout_", (ftnlen)1711)] - 1;
 	    s_copy(string + (appnd - 1), mystr + i__2, 256 - (appnd - 1), end[
 		    (i__4 = i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end",
-		     i__4, "timout_", (ftnlen)1705)] - i__2);
+		     i__4, "timout_", (ftnlen)1711)] - i__2);
 	    appnd = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("beg", i__2, "timout_", (ftnlen)1706)] + end[(i__3 
+		    s_rnge("beg", i__2, "timout_", (ftnlen)1712)] + end[(i__3 
 		    = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge("end", i__3,
-		     "timout_", (ftnlen)1706)] + 1;
+		     "timout_", (ftnlen)1712)] + 1;
 
 /*        If the token is a place holder, we either just append it */
 /*        or tack it on to a format string we are creating.. */
@@ -1467,28 +1473,28 @@ static doublereal c_b338 = 100.;
 	    if (making) {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1717)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1723)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1717)];
+			"end", i__3, "timout_", (ftnlen)1723)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1718)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1724)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1718)] - i__2);
+			i__4, "timout_", (ftnlen)1724)] - i__2);
 		width = width - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1719)] 
+			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1725)] 
 			+ end[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1719)] + 1;
+			s_rnge("end", i__3, "timout_", (ftnlen)1725)] + 1;
 	    } else {
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1721)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1727)] - 1;
 		s_copy(string + (appnd - 1), mystr + i__2, (ftnlen)1, end[(
 			i__4 = i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-			"end", i__4, "timout_", (ftnlen)1721)] - i__2);
+			"end", i__4, "timout_", (ftnlen)1727)] - i__2);
 		appnd = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1722)] 
+			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1728)] 
 			+ end[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1722)] + 1;
+			s_rnge("end", i__3, "timout_", (ftnlen)1728)] + 1;
 	    }
 
 /*        If the token is the decimal point plus place holder */
@@ -1500,40 +1506,40 @@ static doublereal c_b338 = 100.;
 	    if (! making) {
 		b = appnd;
 		e = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1736)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1742)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1736)];
+			"end", i__3, "timout_", (ftnlen)1742)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1737)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1743)] - 1;
 		s_copy(string + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 
 			= i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1737)] - i__2);
+			i__4, "timout_", (ftnlen)1743)] - i__2);
 		appnd = e + 1;
 		have[22] = FALSE_;
 	    } else if (timfmt == 2) {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1744)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1750)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1744)];
+			"end", i__3, "timout_", (ftnlen)1750)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1745)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1751)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1745)] - i__2);
+			i__4, "timout_", (ftnlen)1751)] - i__2);
 		width = e;
 		have[22] = TRUE_;
 	    } else {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1752)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1758)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1752)];
+			"end", i__3, "timout_", (ftnlen)1758)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1753)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1759)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1753)] - i__2);
+			i__4, "timout_", (ftnlen)1759)] - i__2);
 		width = e;
 		have[22] = TRUE_;
 
@@ -1587,13 +1593,13 @@ static doublereal c_b338 = 100.;
 	    making = TRUE_;
 	    have[22] = FALSE_;
 	    s_copy(fmt, orignl + (((i__2 = type__ - 1) < 51 && 0 <= i__2 ? 
-		    i__2 : s_rnge("orignl", i__2, "timout_", (ftnlen)1810)) <<
+		    i__2 : s_rnge("orignl", i__2, "timout_", (ftnlen)1816)) <<
 		     5), (ftnlen)32, (ftnlen)32);
 	    width = length[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : 
-		    s_rnge("length", i__2, "timout_", (ftnlen)1811)];
+		    s_rnge("length", i__2, "timout_", (ftnlen)1817)];
 	    numtyp = type__;
 	    if (! have[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : s_rnge(
-		    "have", i__2, "timout_", (ftnlen)1814)]) {
+		    "have", i__2, "timout_", (ftnlen)1820)]) {
 		tvec[0] = myet;
 
 /*              Most components are handled in the next block. */
@@ -1768,10 +1774,10 @@ static doublereal c_b338 = 100.;
 	    if (type__ == 47) {
 		indx = i_dnnt(&values[10]);
 		s_copy(mymon, months + ((i__2 = indx - 1) < 12 && 0 <= i__2 ? 
-			i__2 : s_rnge("months", i__2, "timout_", (ftnlen)2054)
+			i__2 : s_rnge("months", i__2, "timout_", (ftnlen)2060)
 			) * 9, (ftnlen)9, (ftnlen)9);
 		montyp = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2055)];
+			s_rnge("ident", i__2, "timout_", (ftnlen)2061)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible MONTYP values are checked explicitly. */
@@ -1789,15 +1795,15 @@ static doublereal c_b338 = 100.;
 		    mylen = 3;
 		} else if (montyp == id[8]) {
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2073)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2079)];
 		} else if (montyp == id[7]) {
 		    ucase_(mymon, mymon, (ftnlen)9, (ftnlen)9);
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2076)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2082)];
 		} else if (montyp == id[9]) {
 		    lcase_(mymon, mymon, (ftnlen)9, (ftnlen)9);
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2079)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2085)];
 		}
 		s_copy(string + (appnd - 1), mymon, 256 - (appnd - 1), (
 			ftnlen)9);
@@ -1806,10 +1812,10 @@ static doublereal c_b338 = 100.;
 	    } else if (type__ == 48) {
 		indx = i_dnnt(&values[47]);
 		s_copy(mywkd, wkdays + ((i__2 = indx - 1) < 7 && 0 <= i__2 ? 
-			i__2 : s_rnge("wkdays", i__2, "timout_", (ftnlen)2089)
+			i__2 : s_rnge("wkdays", i__2, "timout_", (ftnlen)2095)
 			) * 9, (ftnlen)9, (ftnlen)9);
 		wktyp = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2090)];
+			s_rnge("ident", i__2, "timout_", (ftnlen)2096)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible WKTYP values are checked explicitly. */
@@ -1827,15 +1833,15 @@ static doublereal c_b338 = 100.;
 		    mylen = 3;
 		} else if (wktyp == id[16]) {
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2108)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2114)];
 		} else if (wktyp == id[15]) {
 		    ucase_(mywkd, mywkd, (ftnlen)9, (ftnlen)9);
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2111)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2117)];
 		} else if (wktyp == id[17]) {
 		    lcase_(mywkd, mywkd, (ftnlen)9, (ftnlen)9);
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2114)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2120)];
 		}
 		s_copy(string + (appnd - 1), mywkd, 256 - (appnd - 1), (
 			ftnlen)9);
@@ -1844,23 +1850,23 @@ static doublereal c_b338 = 100.;
 	    } else if (type__ == 49) {
 		if (values[48] == 2. && (ident[(i__2 = i__ - 1) < 100 && 0 <= 
 			i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2124)] == id[32] || ident[(i__3 = i__ - 1) < 
+			ftnlen)2130)] == id[32] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2124)] == id[34])) {
+			"out_", (ftnlen)2130)] == id[34])) {
 		    s_copy(string + (appnd - 1), " A.D.", 256 - (appnd - 1), (
 			    ftnlen)5);
 		} else if (values[48] == 2. && (ident[(i__2 = i__ - 1) < 100 
 			&& 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_",
-			 (ftnlen)2130)] == id[33] || ident[(i__3 = i__ - 1) < 
+			 (ftnlen)2136)] == id[33] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2130)] == id[35])) {
+			"out_", (ftnlen)2136)] == id[35])) {
 		    s_copy(string + (appnd - 1), " a.d.", 256 - (appnd - 1), (
 			    ftnlen)5);
 		} else if (values[48] == 1. && (ident[(i__2 = i__ - 1) < 100 
 			&& 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_",
-			 (ftnlen)2135)] == id[32] || ident[(i__3 = i__ - 1) < 
+			 (ftnlen)2141)] == id[32] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2135)] == id[34])) {
+			"out_", (ftnlen)2141)] == id[34])) {
 		    s_copy(string + (appnd - 1), " B.C.", 256 - (appnd - 1), (
 			    ftnlen)5);
 		} else {
@@ -1874,9 +1880,9 @@ static doublereal c_b338 = 100.;
 /*              increment the place holder. */
 
 		if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ident", i__2, "timout_", (ftnlen)2152)] == id[34] || 
+			"ident", i__2, "timout_", (ftnlen)2158)] == id[34] || 
 			ident[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("ident", i__3, "timout_", (ftnlen)2152)] == id[
+			s_rnge("ident", i__3, "timout_", (ftnlen)2158)] == id[
 			35]) {
 		    if (vanish) {
 			s_copy(string + (appnd - 1), " ", 256 - (appnd - 1), (
@@ -1893,17 +1899,17 @@ static doublereal c_b338 = 100.;
 		making = FALSE_;
 	    } else if (type__ == 50) {
 		if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ident", i__2, "timout_", (ftnlen)2172)] == id[36] && 
+			"ident", i__2, "timout_", (ftnlen)2178)] == id[36] && 
 			values[20] >= 12.) {
 		    s_copy(string + (appnd - 1), "P.M.", 256 - (appnd - 1), (
 			    ftnlen)4);
 		} else if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2177)] == id[
+			s_rnge("ident", i__2, "timout_", (ftnlen)2183)] == id[
 			36] && values[20] < 12.) {
 		    s_copy(string + (appnd - 1), "A.M.", 256 - (appnd - 1), (
 			    ftnlen)4);
 		} else if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2182)] == id[
+			s_rnge("ident", i__2, "timout_", (ftnlen)2188)] == id[
 			37] && values[20] >= 12.) {
 		    s_copy(string + (appnd - 1), "p.m.", 256 - (appnd - 1), (
 			    ftnlen)4);
@@ -1915,7 +1921,7 @@ static doublereal c_b338 = 100.;
 		making = FALSE_;
 	    } else {
 		value = values[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : 
-			s_rnge("values", i__2, "timout_", (ftnlen)2198)];
+			s_rnge("values", i__2, "timout_", (ftnlen)2204)];
 	    }
 
 /*           If we are now creating a format string, we should */
@@ -1931,7 +1937,7 @@ static doublereal c_b338 = 100.;
 /*              and SP1950. */
 
 		values[0] = values[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? 
-			i__2 : s_rnge("values", i__2, "timout_", (ftnlen)2216)
+			i__2 : s_rnge("values", i__2, "timout_", (ftnlen)2222)
 			];
 
 /*              Here's how this works:  We will copy all of */
@@ -1952,9 +1958,9 @@ static doublereal c_b338 = 100.;
 
 		for (j = 1; j <= 7; ++j) {
 		    ptvec[(i__2 = j - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			    "ptvec", i__2, "timout_", (ftnlen)2236)] = 0.;
+			    "ptvec", i__2, "timout_", (ftnlen)2242)] = 0.;
 		    ntvec[(i__2 = j - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			    "ntvec", i__2, "timout_", (ftnlen)2237)] = 0.;
+			    "ntvec", i__2, "timout_", (ftnlen)2243)] = 0.;
 		}
 		if (type__ == 3 || type__ == 4) {
 		    stopat = 1;
@@ -2021,21 +2027,21 @@ static doublereal c_b338 = 100.;
 		i__2 = stopat;
 		for (j = 1; j <= i__2; ++j) {
 		    ptvec[(i__3 = j - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			    "ptvec", i__3, "timout_", (ftnlen)2327)] = values[
+			    "ptvec", i__3, "timout_", (ftnlen)2333)] = values[
 			    (i__5 = compnt[(i__4 = j + (timfmt << 3) - 9) < 
 			    16 && 0 <= i__4 ? i__4 : s_rnge("compnt", i__4, 
-			    "timout_", (ftnlen)2327)] - 1) < 51 && 0 <= i__5 ?
+			    "timout_", (ftnlen)2333)] - 1) < 51 && 0 <= i__5 ?
 			     i__5 : s_rnge("values", i__5, "timout_", (ftnlen)
-			    2327)];
+			    2333)];
 		    ntvec[(i__3 = j - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			    "ntvec", i__3, "timout_", (ftnlen)2328)] = ptvec[(
+			    "ntvec", i__3, "timout_", (ftnlen)2334)] = ptvec[(
 			    i__4 = j - 1) < 8 && 0 <= i__4 ? i__4 : s_rnge(
-			    "ptvec", i__4, "timout_", (ftnlen)2328)];
+			    "ptvec", i__4, "timout_", (ftnlen)2334)];
 		}
 		ntvec[(i__2 = stopat - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			"ntvec", i__2, "timout_", (ftnlen)2331)] = ntvec[(
+			"ntvec", i__2, "timout_", (ftnlen)2337)] = ntvec[(
 			i__3 = stopat - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			"ntvec", i__3, "timout_", (ftnlen)2331)] + incr;
+			"ntvec", i__3, "timout_", (ftnlen)2337)] + incr;
 
 /*              If the type is a year or month, then we need to set */
 /*              the month to 1, so that we will be working with */

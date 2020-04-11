@@ -3,7 +3,7 @@
 -Header_File SpiceOccult.h ( CSPICE Occultation specific definitions )
 
 -Abstract
-
+ 
    Perform CSPICE occultation specific definitions.
 
 -Disclaimer
@@ -100,8 +100,8 @@
                                        target by first.
 
 -Examples
-
-   None
+      
+   None 
 
 -Restrictions
 
@@ -122,24 +122,26 @@
 
 */
 
+
 #ifndef HAVE_SPICE_OCCULT_H
 
-#define HAVE_SPICE_OCCULT_H
+   #define HAVE_SPICE_OCCULT_H
+   
+   /*
+   See the Particulars section above for parameter descriptions.
+   */
 
-/*
-See the Particulars section above for parameter descriptions.
-*/
+   /*
+   Occultation parameters
+   */
 
-/*
-Occultation parameters
-*/
+   #define SPICE_OCCULT_TOTAL1   -3
+   #define SPICE_OCCULT_ANNLR1   -2
+   #define SPICE_OCCULT_PARTL1   -1
+   #define SPICE_OCCULT_NOOCC     0
+   #define SPICE_OCCULT_PARTL2    1
+   #define SPICE_OCCULT_ANNLR2    2
+   #define SPICE_OCCULT_TOTAL2    3
 
-#define SPICE_OCCULT_TOTAL1 -3
-#define SPICE_OCCULT_ANNLR1 -2
-#define SPICE_OCCULT_PARTL1 -1
-#define SPICE_OCCULT_NOOCC 0
-#define SPICE_OCCULT_PARTL2 1
-#define SPICE_OCCULT_ANNLR2 2
-#define SPICE_OCCULT_TOTAL2 3
 
 #endif

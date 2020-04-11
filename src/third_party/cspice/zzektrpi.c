@@ -18,15 +18,14 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], lkey, prev, unit;
+    integer page[256], lkey, prev;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
     integer child;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer offset;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern integer lstlei_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer maxkey, newkey, prvkey, totkey;
@@ -541,10 +540,10 @@
 /*         error will be diagnosed by routines called by this routine. */
 
 /*     3)  If the input key is out of range, the error */
-/*         SPICE(INDEXOUTOFRANGE) is signalled. */
+/*         SPICE(INDEXOUTOFRANGE) is signaled. */
 
 /*     4)  If the input key is not found in the tree, the error */
-/*         SPICE(ITEMNOTFOUND) is signalled.  This error most likely */
+/*         SPICE(ITEMNOTFOUND) is signaled.  This error most likely */
 /*         indicates the presence of a serious bug in the EK software, */
 /*         or that the input EK file has been corrupted. */
 
@@ -577,6 +576,12 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
 
 /* -    Beta Version 1.0.0, 23-OCT-1995 (NJB) */
 
@@ -619,12 +624,11 @@
     totkey = page[2];
     if (lkey < 1 || lkey > totkey) {
 	chkin_("ZZEKTRPI", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Key = #; valid range = 1:#. Tree = #, file = #", (ftnlen)46);
 	errint_("#", &lkey, (ftnlen)1);
 	errint_("#", &totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZEKTRPI", (ftnlen)8);
 	return 0;
@@ -636,7 +640,7 @@
     prev = lstlei_(&lkey, &page[4], &page[5]);
     if (prev > 0) {
 	prvkey = page[(i__1 = prev + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)275)];
+		"page", i__1, "zzektrpi_", (ftnlen)279)];
     } else {
 	prvkey = 0;
     }
@@ -658,9 +662,9 @@
     if (prev > 0) {
 	*lpidx = prev;
 	*lpkey = page[(i__1 = *lpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)299)];
+		"page", i__1, "zzektrpi_", (ftnlen)303)];
 	*lsib = page[(i__1 = *lpidx + 87) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)300)];
+		"page", i__1, "zzektrpi_", (ftnlen)304)];
     } else {
 	*lpidx = 0;
 	*lpkey = 0;
@@ -669,16 +673,16 @@
     if (prev < maxkey) {
 	*rpidx = prev + 1;
 	*rpkey = page[(i__1 = *rpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)309)];
+		"page", i__1, "zzektrpi_", (ftnlen)313)];
 	*rsib = page[(i__1 = *rpidx + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)310)];
+		"page", i__1, "zzektrpi_", (ftnlen)314)];
     } else {
 	*rpidx = 0;
 	*rpkey = 0;
 	*rsib = 0;
     }
     child = page[(i__1 = prev + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("page",
-	     i__1, "zzektrpi_", (ftnlen)318)];
+	     i__1, "zzektrpi_", (ftnlen)322)];
     found = FALSE_;
     while(child > 0 && ! found) {
 
@@ -696,7 +700,7 @@
 	prev = lstlei_(&newkey, page, &page[1]);
 	if (prev > 0) {
 	    prvkey = page[(i__1 = prev) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "page", i__1, "zzektrpi_", (ftnlen)338)];
+		    "page", i__1, "zzektrpi_", (ftnlen)342)];
 	} else {
 	    prvkey = 0;
 	}
@@ -718,9 +722,9 @@
 	    if (prev > 0) {
 		*lpidx = prev;
 		*lpkey = page[(i__1 = *lpidx) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)363)];
+			s_rnge("page", i__1, "zzektrpi_", (ftnlen)367)];
 		*lsib = page[(i__1 = *lpidx + 63) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)364)];
+			s_rnge("page", i__1, "zzektrpi_", (ftnlen)368)];
 	    } else {
 		*lpidx = 0;
 		*lpkey = 0;
@@ -729,9 +733,9 @@
 	    if (prev < maxkey) {
 		*rpidx = prev + 1;
 		*rpkey = page[(i__1 = *rpidx) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)373)];
+			s_rnge("page", i__1, "zzektrpi_", (ftnlen)377)];
 		*rsib = page[(i__1 = *rpidx + 64) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)374)];
+			s_rnge("page", i__1, "zzektrpi_", (ftnlen)378)];
 	    } else {
 		*rpidx = 0;
 		*rpkey = 0;
@@ -743,7 +747,7 @@
 
 	    offset = prvkey + offset;
 	    child = page[(i__1 = prev + 64) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrpi_", (ftnlen)386)];
+		    s_rnge("page", i__1, "zzektrpi_", (ftnlen)390)];
 	}
     }
 
@@ -752,14 +756,13 @@
 
     if (! found) {
 	chkin_("ZZEKTRPI", (ftnlen)8);
-	dashlu_(handle, &unit);
 	setmsg_("Key #; valid range = 1:#. Tree = #, file = #.  Key was not "
 		"found.  This probably indicates a corrupted file or a bug in"
 		" the EK code.", (ftnlen)132);
 	errint_("#", &lkey, (ftnlen)1);
 	errint_("#", &totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
 	chkout_("ZZEKTRPI", (ftnlen)8);
 	return 0;

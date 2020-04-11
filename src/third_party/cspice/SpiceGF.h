@@ -3,7 +3,7 @@
 -Header_File SpiceGF.h ( CSPICE GF-specific definitions )
 
 -Abstract
-
+ 
    Perform CSPICE GF-specific definitions.
 
 -Disclaimer
@@ -52,14 +52,14 @@
 
    This header defines macros that may be referenced in application
    code that calls CSPICE GF functions.
-
+   
 
    Macros
    ======
-
+   
       Workspace parameters
       --------------------
-
+ 
       CSPICE applications normally don't declare workspace arguments
       and therefore don't directly reference workspace size parameters.
       However, CSPICE GF APIs dealing with numeric constraints
@@ -67,18 +67,18 @@
       depends on the number of intervals the workspace windows can
       hold. This amount is an input argument to the GF numeric quantity
       APIs.
-
+ 
       The parameters below are used to calculate the amount of memory
       required. Each workspace window contains 6 double precision
       numbers in its control area and 2 double precision numbers for
       each interval it can hold.
 
-
+      
          Name                  Description
          ----                  ----------
-         SPICE_GF_NWMAX        Maximum number of windows required for
-                               a user-defined workspace array.
-
+         SPICE_GF_NWMAX        Maximum number of windows required for 
+                               a user-defined workspace array. 
+         
          SPICE_GF_NWDIST       Number of workspace windows used by
                                gfdist_c and the underlying SPICELIB
                                routine GFDIST.
@@ -94,10 +94,10 @@
          SPICE_GF_NWRR         Number of workspace windows used by
                                gfrr_c and the underlying SPICELIB
                                routine GFRR.
-
+                               
          SPICE_GF_NWPA         Number of workspace windows used by
                                gfpa_c and the underlying SPICELIB
-                               routine GFPA.
+                               routine GFPA.                               
 
 
       Field of view (FOV) parameters
@@ -107,7 +107,7 @@
          ----                  ----------
          SPICE_GF_MAXVRT       Maximum allowed number of boundary
                                vectors for a polygonal FOV.
-
+         
          SPICE_GF_CIRFOV       Parameter identifying a circular FOV.
 
          SPICE_GF_ELLFOV       Parameter identifying a elliptical FOV.
@@ -133,7 +133,7 @@
                                    A such that all boundary vectors
                                    have angular separation from A of
                                    less than (pi/2)-MARGIN radians.
-
+ 
                                2)  There must be a pair of boundary
                                    vectors U, V such that all other
                                    boundary vectors lie in the same
@@ -147,7 +147,7 @@
                                    the plane spanned by U and V.
 
                                MARGIN is currently set to 1.D-12.
-
+         
 
       Occultation parameters
       ----------------------
@@ -173,7 +173,7 @@
                                but not all, of the limb of the
                                background body.
 
-
+ 
 
       Target shape parameters
       -----------------------
@@ -191,9 +191,9 @@
                                for targets whose direction, but not
                                position, relative to an observer is
                                known.
-
+ 
          SPICE_GF_SPSHAP       Parameter indicating a target object's
-                               shape is modeled as a point.
+                               shape is modeled as a sphere.
 
 
 
@@ -201,7 +201,7 @@
       -----------------
 
       These parameters affect the manner in which GF searches are
-      performed.
+      performed. 
 
          SPICE_GF_ADDWIN       is a parameter used in numeric quantity
                                searches that use an equality
@@ -213,7 +213,7 @@
                                case where a geometric quantity is equal
                                to a reference value at a boundary point
                                of the original confinement window.
-
+ 
          SPICE_GF_CNVTOL       is the default convergence tolerance
                                used by GF routines that don't support a
                                user-supplied tolerance value. GF
@@ -225,7 +225,7 @@
       Configuration parameter
       -----------------------
 
-         SPICE_GFEVNT_MAXPAR   Parameter indicating the maximum number of
+         SPICE_GFEVNT_MAXPAR   Parameter indicating the maximum number of 
                                elements needed for the 'qnames' and 'q*pars'
                                arrays used in gfevnt_c.
 
@@ -236,7 +236,7 @@
 
 -Examples
 
-   None
+   None 
 
 -Restrictions
 
@@ -253,10 +253,14 @@
 
 -Version
 
+   -CSPICE Version 2.1.1, 29-NOV-2016 (NJB)
+
+      Corrected description of parameter SPICE_GF_SPSHAP.
+
    -CSPICE Version 2.1.0, 23-FEB-2012 (NJB)
 
       Added parameters:
-
+      
          SPICE_GF_NWILUM
          SPICE_GF_NWRR
          SPICE_GF_NWPA
@@ -269,63 +273,72 @@
 
 */
 
+
 #ifndef HAVE_SPICE_GF_H
 
-#define HAVE_SPICE_GF_H
+   #define HAVE_SPICE_GF_H
+   
 
-/*
-See the Particulars section above for parameter descriptions.
-*/
+   /*
+   See the Particulars section above for parameter descriptions.
+   */
 
-/*
-Workspace parameters
-*/
-#define SPICE_GF_NWMAX 15
-#define SPICE_GF_NWDIST 5
-#define SPICE_GF_NWILUM 5
-#define SPICE_GF_NWSEP 5
-#define SPICE_GF_NWRR 5
-#define SPICE_GF_NWPA 5
+   /*
+   Workspace parameters
+   */      
+   #define SPICE_GF_NWMAX          15
+   #define SPICE_GF_NWDIST         5
+   #define SPICE_GF_NWILUM         5
+   #define SPICE_GF_NWSEP          5
+   #define SPICE_GF_NWRR           5
+   #define SPICE_GF_NWPA           5
 
-/*
-Field of view (FOV) parameters
-*/
-#define SPICE_GF_MAXVRT 10000
-#define SPICE_GF_CIRFOV "CIRCLE"
-#define SPICE_GF_ELLFOV "ELLIPSE"
-#define SPICE_GF_POLFOV "POLYGON"
-#define SPICE_GF_RECFOV "RECTANGLE"
-#define SPICE_GF_SHPLEN 10
-#define SPICE_GF_MARGIN (1.e-12)
 
-/*
-Occultation parameters
-*/
-#define SPICE_GF_ANNULR "ANNULAR"
-#define SPICE_GF_ANY "ANY"
-#define SPICE_GF_FULL "FULL"
-#define SPICE_GF_PARTL "PARTIAL"
+   /*
+   Field of view (FOV) parameters
+   */
+   #define SPICE_GF_MAXVRT         10000         
+   #define SPICE_GF_CIRFOV         "CIRCLE"
+   #define SPICE_GF_ELLFOV         "ELLIPSE"
+   #define SPICE_GF_POLFOV         "POLYGON"
+   #define SPICE_GF_RECFOV         "RECTANGLE"
+   #define SPICE_GF_SHPLEN         10
+   #define SPICE_GF_MARGIN         ( 1.e-12 )
+ 
 
-/*
-Target shape parameters
-*/
-#define SPICE_GF_EDSHAP "ELLIPSOID"
-#define SPICE_GF_PTSHAP "POINT"
-#define SPICE_GF_RYSHAP "RAY"
-#define SPICE_GF_SPSHAP "SPHERE"
+   /*
+   Occultation parameters
+   */
+   #define SPICE_GF_ANNULR         "ANNULAR"                                
+   #define SPICE_GF_ANY            "ANY"                                
+   #define SPICE_GF_FULL           "FULL"
+   #define SPICE_GF_PARTL          "PARTIAL"
 
-/*
-Search parameters
-*/
-#define SPICE_GF_ADDWIN 1.0
-#define SPICE_GF_CNVTOL 1.e-6
+ 
+   /*
+   Target shape parameters
+   */
+   #define SPICE_GF_EDSHAP         "ELLIPSOID"
+   #define SPICE_GF_PTSHAP         "POINT"
+   #define SPICE_GF_RYSHAP         "RAY"
+   #define SPICE_GF_SPSHAP         "SPHERE"
 
-/*
-Configuration parameters.
-*/
-#define SPICE_GFEVNT_MAXPAR 10
+
+   /*
+   Search parameters
+   */
+   #define SPICE_GF_ADDWIN         1.0
+   #define SPICE_GF_CNVTOL         1.e-6
+
+
+   /*
+   Configuration parameters.
+   */
+   #define SPICE_GFEVNT_MAXPAR     10
+
 
 #endif
+
 
 /*
    End of header file SpiceGF.h

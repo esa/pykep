@@ -8,7 +8,6 @@
 /* Table of constant values */
 
 static logical c_false = FALSE_;
-static integer c__100 = 100;
 static integer c__1 = 1;
 
 /* $Procedure GETFAT ( Get file architecture and type ) */
@@ -16,7 +15,6 @@ static integer c__1 = 1;
 	file_len, ftnlen arch_len, ftnlen kertyp_len)
 {
     /* System generated locals */
-    integer i__1;
     cilist ci__1;
     olist o__1;
     cllist cl__1;
@@ -24,54 +22,45 @@ static integer c__1 = 1;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), s_rnge(
-	    char *, integer, char *, integer), f_open(olist *), s_rdue(cilist 
-	    *), do_uio(integer *, char *, ftnlen), e_rdue(void), f_clos(
-	    cllist *), s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), 
-	    e_rsfe(void);
+    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), f_open(
+	    olist *), s_rdue(cilist *), do_uio(integer *, char *, ftnlen), 
+	    e_rdue(void), f_clos(cllist *), s_rsfe(cilist *), do_fio(integer *
+	    , char *, ftnlen), e_rsfe(void);
 
     /* Local variables */
-    integer unit;
     extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
 	    ftnlen), zzddhgsd_(char *, integer *, char *, ftnlen, ftnlen), 
 	    zzddhnfo_(integer *, char *, integer *, integer *, integer *, 
 	    logical *, ftnlen), zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
     integer i__;
-    extern integer cardi_(integer *);
     char fname[255];
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
-    integer which;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     logical found, exist;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    idw2at_(char *, char *, char *, ftnlen, ftnlen, ftnlen);
     integer handle;
     extern /* Subroutine */ int dafcls_(integer *);
     char filarc[32];
-    extern /* Subroutine */ int dashof_(integer *);
     integer intbff;
     logical opened;
     extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
     integer intarc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
     char idword[12];
     integer intamn, number;
-    logical diropn, notdas;
+    logical diropn;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), getlun_(integer *), setmsg_(char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ssizei_(
-	    integer *, integer *), nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), nextwd_(
+	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
     char tmpwrd[12];
     extern logical return_(void);
-    integer myunit, handles[106];
     extern /* Subroutine */ int zzckspk_(integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___19 = { 1, 0, 1, 0, 1 };
+    static cilist io___14 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */
@@ -528,6 +517,16 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 5.0.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration of DAS into the */
+/*        handle manager subsystem. Now opened DAS files */
+/*        must be known to that subsystem; if this routine */
+/*        encounters an open, unrecognized DAS file, an */
+/*        error is signaled. */
+
+/*        Corrected various typos in comments. */
+
 /* -    SPICELIB Version 4.25.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -656,7 +655,7 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.1.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given.  New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.1.3, 22-SEP-1999 (NJB) */
@@ -697,7 +696,7 @@ static integer c__1 = 1;
 /*         record length of a file. */
 
 /*         Added the exception for a blank filename to the header. The */
-/*         error is signalled, but it was not listed in the header. */
+/*         error is signaled, but it was not listed in the header. */
 
 /*         Added IOSTAT values to the appropriate error messages. */
 
@@ -764,10 +763,10 @@ static integer c__1 = 1;
 /*         encounter an environment where 1000 characters of storage is */
 /*         larger than the storage necessary for 128 double precision */
 /*         numbers; typically there are 8 characters per double precision */
-/*         number, yeilding 1024 characters. */
+/*         number, yielding 1024 characters. */
 
 /*         Added the exception for a blank filename to the header. The */
-/*         error is signalled, but it was not listed in the header. */
+/*         error is signaled, but it was not listed in the header. */
 
 /*         Added IOSTAT values to the appropriate error messages. */
 
@@ -881,89 +880,20 @@ static integer c__1 = 1;
 	    return 0;
 	}
 
-/*        If the file is already open, it may be a DAS file. */
+/*        Reject open files not known to the handle manager subsystem. */
 
 	if (opened) {
 
-/*           At the moment, the handle manager doesn't manage DAS */
-/*           handles.  As a result we need to treat the case of an open */
-/*           DAS separately. When the Handle Manager is hooked in with */
-/*           DAS as well as DAF, we should remove the block below. */
+/*           Open files that are not opened within the SPICE */
+/*           binary file management subsystem are forbidden fruit. */
+/*           All we can do is signal an error letting the caller */
+/*           know that we are helpless in this case. */
 
-/*           =================================================== */
-/*           DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS */
-/*           vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-
-/*           This file may or may not be a DAS file.  Until we */
-/*           have determined otherwise, we assume it is not */
-/*           a DAS file. */
-
-	    notdas = TRUE_;
-	    ioin__1.inerr = 1;
-	    ioin__1.infilen = file_len;
-	    ioin__1.infile = file;
-	    ioin__1.inex = 0;
-	    ioin__1.inopen = 0;
-	    ioin__1.innum = &unit;
-	    ioin__1.innamed = 0;
-	    ioin__1.inname = 0;
-	    ioin__1.inacc = 0;
-	    ioin__1.inseq = 0;
-	    ioin__1.indir = 0;
-	    ioin__1.infmt = 0;
-	    ioin__1.inform = 0;
-	    ioin__1.inunf = 0;
-	    ioin__1.inrecl = 0;
-	    ioin__1.innrec = 0;
-	    ioin__1.inblank = 0;
-	    iostat = f_inqu(&ioin__1);
-	    if (iostat != 0) {
-		setmsg_("IOSTAT error in INQUIRE statement. IOSTAT = #.", (
-			ftnlen)46);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(INQUIREERROR)", (ftnlen)19);
-		chkout_("GETFAT", (ftnlen)6);
-		return 0;
-	    }
-
-/*           Get the set of handles of open DAS files.  We will */
-/*           translate each of these handles to the associated */
-/*           logical unit.  If the tranlation matches the result */
-/*           of the inquire, this must be a DAS file and we */
-/*           can proceed to determine the type. */
-
-	    ssizei_(&c__100, handles);
-	    dashof_(handles);
-	    which = cardi_(handles);
-	    while(which > 0) {
-		dashlu_(&handles[(i__1 = which + 5) < 106 && 0 <= i__1 ? i__1 
-			: s_rnge("handles", i__1, "getfat_", (ftnlen)654)], &
-			myunit);
-		if (unit == myunit) {
-		    number = myunit;
-		    which = 0;
-		    notdas = FALSE_;
-		} else {
-		    --which;
-		}
-	    }
-
-/*           If we reach this point and do not have a DAS, there */
-/*           is no point in going on.  The user has opened this */
-/*           file outside the SPICE system.  We shall not attempt */
-/*           to determine its type. */
-
-	    if (notdas) {
-		setmsg_("The file '#' is already open.", (ftnlen)29);
-		errch_("#", file, (ftnlen)1, file_len);
-		sigerr_("SPICE(EXTERNALOPEN)", (ftnlen)19);
-		chkout_("GETFAT", (ftnlen)6);
-		return 0;
-	    }
-/*           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-/*           DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS DAS */
-/*           =================================================== */
-
+	    setmsg_("The file '#' is already open.", (ftnlen)29);
+	    errch_("#", file, (ftnlen)1, file_len);
+	    sigerr_("SPICE(EXTERNALOPEN)", (ftnlen)19);
+	    chkout_("GETFAT", (ftnlen)6);
+	    return 0;
 	}
     }
 
@@ -1026,11 +956,11 @@ static integer c__1 = 1;
 /*     We opened the file successfully, so let's try to read from the */
 /*     file. We need to be sure to use the correct form of the read */
 /*     statement, depending on whether the file was opened with direct */
-/*     acces or sequential access. */
+/*     access or sequential access. */
 
     if (diropn) {
-	io___19.ciunit = number;
-	iostat = s_rdue(&io___19);
+	io___14.ciunit = number;
+	iostat = s_rdue(&io___14);
 	if (iostat != 0) {
 	    goto L100001;
 	}

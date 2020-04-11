@@ -7,6 +7,7 @@
 
 /* Table of constant values */
 
+static logical c_false = FALSE_;
 static integer c__3 = 3;
 static integer c__256 = 256;
 
@@ -28,12 +29,15 @@ static integer c__256 = 256;
     integer base;
     char recc[1024];
     doublereal recd[128];
-    integer free, reci[256], lrec, nrec, unit, type__, i__;
+    integer free, reci[256], lrec, nrec, unit, type__;
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc;
     extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
 	    integer *);
-    integer ncomr, lword, ltype;
+    integer ncomr, lword;
     extern logical failed_(void);
     extern /* Subroutine */ int cleari_(integer *, integer *), dasioc_(char *,
 	     integer *, integer *, char *, ftnlen, ftnlen), dasiod_(char *, 
@@ -41,11 +45,10 @@ static integer c__256 = 256;
     integer dirrec[256];
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     dassih_(integer *, char *, ftnlen), dasioi_(char *, integer *, 
-	    integer *, integer *, ftnlen);
+	     dasioi_(char *, integer *, integer *, integer *, ftnlen), 
+	    dassih_(integer *, char *, ftnlen);
     integer lastla[3];
-    extern /* Subroutine */ int dashlu_(integer *, integer *), daswbr_(
-	    integer *);
+    extern /* Subroutine */ int daswbr_(integer *);
     integer lindex;
     extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
@@ -193,7 +196,8 @@ static integer c__256 = 256;
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1) The DAS file must have a binary file format native to the host */
+/*        system. */
 
 /* $ Literature_References */
 
@@ -205,6 +209,14 @@ static integer c__256 = 256;
 /*     W.L. Taber     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration with the handle */
+/*        manager subsystem. */
+
+/*        Cleaned up use of unnecessary variables and unneeded */
+/*        declarations. */
 
 /* -    SPICELIB Version 1.0.0, 15-NOV-1992 (NJB) (WLT) */
 
@@ -227,10 +239,7 @@ static integer c__256 = 256;
 /*     Data type parameters */
 
 
-/*     Directory pointer locations (backward and forward): */
-
-
-/*     Directory address range locations */
+/*     Directory pointer location (forward): */
 
 
 /*     Location of first type descriptor */
@@ -253,9 +262,8 @@ static integer c__256 = 256;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASRCR", (ftnlen)6);
     }
+    chkin_("DASRCR", (ftnlen)6);
 
 /*     Make sure this DAS file is open for writing.  Signal an error if */
 /*     not. */
@@ -264,7 +272,7 @@ static integer c__256 = 256;
 
 /*     Get the logical unit for this DAS file. */
 
-    dashlu_(handle, &unit);
+    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASRCR", (ftnlen)6);
 	return 0;
@@ -302,28 +310,25 @@ static integer c__256 = 256;
     nshift = min(*n,ncomr);
 
 /*     Find the record and word positions LREC and LWORD of the last */
-/*     descriptor in the file, and also find the type of the descriptor */
-/*     LTYPE. */
+/*     descriptor in the file. */
 
     maxai_(lastrc, &c__3, &lrec, &loc);
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dasrcr_", (ftnlen)365)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dasrcr_", (ftnlen)353)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dasrc"
-		"r_", (ftnlen)365)] > lword) {
+		"r_", (ftnlen)353)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasrcr_", (ftnlen)368)];
-	    ltype = i__;
+		    "lastwd", i__1, "dasrcr_", (ftnlen)356)];
 	}
     }
 
-/*     LREC, LWORD, and LTYPE are now the record, word, and data type */
-/*     of the last descriptor in the file.  If LREC is zero, there are */
-/*     no directories in the file yet.   However, even DAS files that */
-/*     don't contain any data have their first directory records */
-/*     zeroed out, and this should remain true after the removal of */
-/*     the comment records. */
+/*     LREC and LWORD are now the record and word index of the last */
+/*     descriptor in the file. If LREC is zero, there are no directories */
+/*     in the file yet. However, even DAS files that don't contain any */
+/*     data have their first directory records zeroed out, and this */
+/*     should remain true after the removal of the comment records. */
 
     if (lrec == 0) {
 
@@ -383,22 +388,22 @@ static integer c__256 = 256;
 /*                 ordering of types. */
 
 		    if (dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : 
-			    s_rnge("dirrec", i__1, "dasrcr_", (ftnlen)445)] > 
+			    s_rnge("dirrec", i__1, "dasrcr_", (ftnlen)431)] > 
 			    0) {
 			type__ = next[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("next", i__1, "dasrcr_", (
-				ftnlen)446)];
+				ftnlen)432)];
 		    } else {
 			type__ = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("prev", i__1, "dasrcr_", (
-				ftnlen)448)];
+				ftnlen)434)];
 		    }
 
 /*                 Update the cluster base record number. */
 
 		    base += (i__2 = dirrec[(i__1 = pos - 2) < 256 && 0 <= 
 			    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasrcr_", (
-			    ftnlen)454)], abs(i__2));
+			    ftnlen)440)], abs(i__2));
 		}
 
 /*              BASE and TYPE now are correctly set for the current */
@@ -406,7 +411,7 @@ static integer c__256 = 256;
 
 		i__3 = base + (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= 
 			i__1 ? i__1 : s_rnge("dirrec", i__1, "dasrcr_", (
-			ftnlen)462)], abs(i__2)) - 1;
+			ftnlen)448)], abs(i__2)) - 1;
 		for (i__ = base; i__ <= i__3; ++i__) {
 		    if (type__ == 1) {
 			dasioc_("READ", &unit, &i__, recc, (ftnlen)4, (ftnlen)
@@ -433,7 +438,7 @@ static integer c__256 = 256;
 
 /*           Find the next directory record. */
 
-	    nrec = dirrec[1];
+	    nrec = dirrec[0];
 	}
     }
 
@@ -450,11 +455,11 @@ static integer c__256 = 256;
     free -= nshift;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		 i__3, "dasrcr_", (ftnlen)515)] != 0) {
+		 i__3, "dasrcr_", (ftnlen)501)] != 0) {
 	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		     i__3, "dasrcr_", (ftnlen)516)] = lastrc[(i__1 = i__ - 1) 
+		     i__3, "dasrcr_", (ftnlen)502)] = lastrc[(i__1 = i__ - 1) 
 		    < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc", i__1, "dasrcr_"
-		    , (ftnlen)516)] - nshift;
+		    , (ftnlen)502)] - nshift;
 	}
     }
     dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 

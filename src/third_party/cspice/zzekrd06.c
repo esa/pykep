@@ -22,9 +22,8 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, nrec, nelt;
+    integer base, nelt;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
 	    integer *, integer *, integer *, integer *);
@@ -43,8 +42,8 @@ static integer c__1 = 1;
 	    ptroff, strlen;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dashlu_(integer *, integer *), errfnm_(char *, integer *,
-	     ftnlen), zzekgei_(integer *, integer *, integer *);
+	    ftnlen), errhan_(char *, integer *, ftnlen), zzekgei_(integer *, 
+	    integer *, integer *);
 
 /* $ Abstract */
 
@@ -751,14 +750,14 @@ static integer c__1 = 1;
 /*         called by this routine. */
 
 /*     2)  If the specified column entry has not been initialized, the */
-/*         error SPICE(UNINITIALIZED) is signalled. */
+/*         error SPICE(UNINITIALIZED) is signaled. */
 
 /*     3)  If the ordinal position of the column specified by COLDSC */
-/*         is out of range, the error SPICE(INVALIDINDEX) is signalled. */
+/*         is out of range, the error SPICE(INVALIDINDEX) is signaled. */
 
 /*     4)  If the string length of CVALS is shorter than the declared */
 /*         string length of the specified column, the error */
-/*         SPICE(STRINGTRUNCATED) is signalled. */
+/*         SPICE(STRINGTRUNCATED) is signaled. */
 
 /*     5)  If an I/O error occurs while reading the indicated file, */
 /*         the error will be diagnosed by routines called by this */
@@ -790,6 +789,14 @@ static integer c__1 = 1;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Bug fix: changed max column index in long error */
+/*        message from NREC to NCOLS. */
 
 /* -    SPICELIB Version 1.1.0, 28-JUL-1997 (NJB) */
 
@@ -823,8 +830,6 @@ static integer c__1 = 1;
 
 /*     Use discovery check-in. */
 
-    nrec = segdsc[5];
-
 /*     Make sure the column exists. */
 
     ncols = segdsc[4];
@@ -833,7 +838,7 @@ static integer c__1 = 1;
 	chkin_("ZZEKRD06", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
 	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
+	errint_("#", &ncols, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKRD06", (ftnlen)8);
 	return 0;
@@ -847,10 +852,9 @@ static integer c__1 = 1;
     if (strlen > cvlen) {
 
 /*        We have a string truncation error.  Look up the column */
-/*        name, record number, and file name before signalling an */
+/*        name, record number, and file name before signaling an */
 /*        error. */
 
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
 	chkin_("ZZEKRD06", (ftnlen)8);
@@ -862,7 +866,7 @@ static integer c__1 = 1;
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(STRINGTRUNCATED)", (ftnlen)22);
 	chkout_("ZZEKRD06", (ftnlen)8);
 	return 0;
@@ -1022,7 +1026,6 @@ static integer c__1 = 1;
 /*        The data value is absent.  This is an error. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	chkin_("ZZEKRD06", (ftnlen)8);
 	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
@@ -1030,7 +1033,7 @@ static integer c__1 = 1;
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(UNINITIALIZED)", (ftnlen)20);
 	chkout_("ZZEKRD06", (ftnlen)8);
 	return 0;
@@ -1039,7 +1042,6 @@ static integer c__1 = 1;
 /*        The data pointer is corrupted. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	chkin_("ZZEKRD06", (ftnlen)8);
 	setmsg_("Data pointer is corrupted. SEGNO = #; COLUMN =  #; RECNO = "
@@ -1047,7 +1049,7 @@ static integer c__1 = 1;
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKRD06", (ftnlen)8);
 	return 0;

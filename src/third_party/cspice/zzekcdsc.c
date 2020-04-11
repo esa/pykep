@@ -18,7 +18,7 @@ static integer c__32 = 32;
     integer i__1, i__2;
 
     /* Local variables */
-    integer unit, i__;
+    integer i__;
     char cname[32];
     integer mbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
@@ -31,9 +31,9 @@ static integer c__32 = 32;
 	    integer *, integer *, char *, ftnlen);
     integer nambas;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dashlu_(integer *, integer *), setmsg_(char *, ftnlen)
-	    , errint_(char *, integer *, ftnlen), errfnm_(char *, integer *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
+	    integer *), errhan_(char *, integer *, ftnlen), setmsg_(char *, 
+	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
+	    ftnlen), chkout_(char *, ftnlen);
 
 /* $ Abstract */
 
@@ -361,7 +361,7 @@ static integer c__32 = 32;
 /* $ Exceptions */
 
 /*     1)  If the input column name does not match any column in the */
-/*         designated segment, the error SPICE(BUG) is signalled.  It */
+/*         designated segment, the error SPICE(BUG) is signaled.  It */
 /*         is the caller's responsibility to call this routine with */
 /*         valid input arguments. */
 
@@ -391,6 +391,11 @@ static integer c__32 = 32;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error message. */
 
 /* -    Beta Version 1.0.0, 27-SEP-1995 (NJB) */
 
@@ -441,13 +446,12 @@ static integer c__32 = 32;
 	}
     }
     if (! found) {
-	dashlu_(handle, &unit);
 	chkin_("ZZEKCDSC", (ftnlen)8);
 	setmsg_("Descriptor for column # was not found. Segment base = #; fi"
 		"le = #.", (ftnlen)66);
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", &mbase, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKCDSC", (ftnlen)8);
 	return 0;

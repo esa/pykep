@@ -205,15 +205,15 @@
                    }
                    else
                    {
-                       printf ( "String length = %ld\n", 
-                               (SpiceInt) attdsc.strlen );
+                       printf ( "String length = %d\n", 
+                               (int) attdsc.strlen );
                    }
                 }
 
                 /.
                 Write out the current column's entry size. 
                 ./                
-                printf ( "Size = %ld\n", attdsc.size );
+                printf ( "Size = %d\n", (int)attdsc.size );
  
 
                 /.
@@ -263,6 +263,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.2, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.1, 26-MAR-2003 (NJB) 
 
        Fixed description of exception (5):  replaced "lenout-1"

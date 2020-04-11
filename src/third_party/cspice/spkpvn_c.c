@@ -303,17 +303,17 @@
          frmnam_c ( ic[2], FRNMLN, frname );
 
          printf ( "\n"
-                  " Body       = %ld\n"
-                  " Center     = %ld\n"
+                  " Body       = %d\n"
+                  " Center     = %d\n"
                   " Frame      = %s\n"
-                  " Data type  = %ld\n"
+                  " Data type  = %d\n"
                   " Start ET   = %24.17e\n"
                   " Stop ET    = %24.17e\n"
                   " Segment ID = %s\n",
-                  (long)ic[0],
-                  (long)ic[1],
+                  (int)ic[0],
+                  (int)ic[1],
                   frname,
-                  (long)ic[3],
+                  (int)ic[3],
                   dc[0],
                   dc[1],
                   segid                 ); 
@@ -362,8 +362,8 @@
             }
             else
             {
-               printf ( "\nNo data for body %ld found at %s.\n", 
-                        (long)body,
+               printf ( "\nNo data for body %d found at %s.\n", 
+                        (int)body,
                         outstr                                 );
                exit(0);
             }
@@ -425,6 +425,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.0, 05-OCT-2012 (NJB) (WLT)
 
 -Index_Entries

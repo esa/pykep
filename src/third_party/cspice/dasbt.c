@@ -7,6 +7,7 @@
 
 /* Table of constant values */
 
+static logical c_false = FALSE_;
 static integer c__1 = 1;
 static integer c__3 = 3;
 static integer c__4 = 4;
@@ -27,7 +28,8 @@ static integer c__4 = 4;
 
     /* Local variables */
     char line[80];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen), chkin_(char *, ftnlen);
     integer ncomc, recno;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
@@ -48,7 +50,8 @@ static integer c__4 = 4;
     extern /* Subroutine */ int dascls_(integer *);
     integer ibuffr[1024];
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), dashlu_(integer *, integer *);
+	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
+	    ;
     integer daslun;
     extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen);
@@ -63,8 +66,7 @@ static integer c__4 = 4;
     integer numlft;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), wrenci_(
 	    integer *, integer *, integer *), wrencc_(integer *, integer *, 
-	    char *, ftnlen), wrencd_(integer *, integer *, doublereal *), 
-	    dasrdi_(integer *, integer *, integer *, integer *);
+	    char *, ftnlen), wrencd_(integer *, integer *, doublereal *);
     extern logical return_(void);
     integer nresvr;
 
@@ -133,19 +135,15 @@ static integer c__4 = 4;
 
 /*      None. */
 
-/* $ Files */
-
-/*     See arguments BINFIL, XFRLUN. */
-
 /* $ Exceptions */
 
 /*     1)   If the binary DAS file specified by the filename BINFIL */
 /*          cannot be opened for read access, an appropriate error */
-/*          message will be signalled by a DAS file access routine that */
+/*          message will be signaled by a DAS file access routine that */
 /*          is called by this routine. */
 
 /*     2)   If for some reason the DAS transfer file cannot be written */
-/*          to, the error SPICE(FILEWRITEFAILED) is signalled. */
+/*          to, the error SPICE(FILEWRITEFAILED) is signaled. */
 
 /*     3)   If, for any reason, the DAS file cannot be read, a DAS file */
 /*          access routine will signal an error with appropriate error */
@@ -159,9 +157,13 @@ static integer c__4 = 4;
 
 /*     5)   If the values for the number of reserved records or the */
 /*          number of reserved characters in a DAS file is nonzero, */
-/*          the error SPICE(BADDASFILE) will be signalled. THIS ERROR */
-/*          IS SIGNALLED ONLY BECAUSE THE RESERVED RECORD AREA HAS */
+/*          the error SPICE(BADDASFILE) will be signaled. THIS ERROR */
+/*          IS SIGNALED ONLY BECAUSE THE RESERVED RECORD AREA HAS */
 /*          NOT YET BEEN IMPLEMENTED. */
+
+/* $ Files */
+
+/*     See arguments BINFIL, XFRLUN. */
 
 /* $ Particulars */
 
@@ -220,6 +222,11 @@ static integer c__4 = 4;
 /*     K.R. Gehringer  (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 05-FEB-1995 (NJB) */
+
+/*        Updated to support integration with the handle manager */
+/*        subsystem. */
 
 /* -    SPICELIB Version 3.0.0, 13-AUG-1994 (KRG) */
 
@@ -448,11 +455,11 @@ static integer c__4 = 4;
 
 /*     This routine will check the SPICELIB function FAILED() after */
 /*     each call, or consecutive sequence of calls, to data encoding */
-/*     routines, and if an error was signalled it will simply check out */
+/*     routines, and if an error was signaled it will simply check out */
 /*     and return to the caller. */
 
 /*     This routine will check the SPICELIB function FAILED() after */
-/*     each DAS file access call, and if an error was signalled it will */
+/*     each DAS file access call, and if an error was signaled it will */
 /*     simply check out and return to the caller. */
 
 /*     We begin by opening the binary DAS file specified by BINFIL for */
@@ -477,7 +484,7 @@ static integer c__4 = 4;
 /*     unit. We need the logical unit so that we can read the reserved */
 /*     records and the comment records. */
 
-    dashlu_(&handle, &daslun);
+    zzddhhlu_(&handle, "DAS", &c_false, &daslun, (ftnlen)3);
     if (failed_()) {
 
 /*        If an error occurred while converting the DAS file handle to */
@@ -913,7 +920,7 @@ L100007:
 /*              We should exit the loop, and the routine, as soon as */
 /*              an error is detected, so we don't continue doing things */
 /*              for a long time. Attempt to close the binary DAS file */
-/*              that we opened and then returrn to the caller. */
+/*              that we opened and then return to the caller. */
 
 		dascls_(&handle);
 		chkout_("DASBT", (ftnlen)5);
@@ -1065,7 +1072,7 @@ L100010:
 /*              We should exit the loop, and the routine, as soon as */
 /*              an error is detected, so we don't continue doing things */
 /*              for a long time. Attempt to close the binary DAS file */
-/*              that we opened and then returrn to the caller. */
+/*              that we opened and then return to the caller. */
 
 		dascls_(&handle);
 		chkout_("DASBT", (ftnlen)5);
@@ -1217,7 +1224,7 @@ L100013:
 /*              We should exit the loop, and the routine, as soon as */
 /*              an error is detected, so we don't continue doing things */
 /*              for a long time. Attempt to close the binary DAS file */
-/*              that we opened and then returrn to the caller. */
+/*              that we opened and then return to the caller. */
 
 		dascls_(&handle);
 		chkout_("DASBT", (ftnlen)5);

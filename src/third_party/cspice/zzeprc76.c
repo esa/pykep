@@ -26,7 +26,7 @@ static integer c__2 = 2;
 /*     routines.  Users should not call this routine directly due */
 /*     to the volatile nature of this routine. */
 
-/*     Compute the state transformation matrix implementing the IAU 1876 */
+/*     Compute the state transformation matrix implementing the IAU 1976 */
 /*     precession model. */
 
 /* $ Disclaimer */
@@ -169,6 +169,11 @@ static integer c__2 = 2;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 18-APR-2016 (NJB) */
+
+/*        Corrected typo in header abstract: changed "1876" */
+/*        to "1976." */
 
 /* -    SPICELIB Version 2.0.0, 18-DEC-2004 (NJB) */
 

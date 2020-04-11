@@ -17,7 +17,6 @@ static integer c__1 = 1;
     doublereal dval;
     integer ival;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer unit;
     extern /* Subroutine */ int zzeklerc_(integer *, integer *, integer *, 
 	    char *, integer *, logical *, integer *, integer *, ftnlen), 
 	    zzeklerd_(integer *, integer *, integer *, doublereal *, integer *
@@ -29,16 +28,16 @@ static integer c__1 = 1;
     integer dtype, cmplen;
     extern logical return_(void);
     logical isnull;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errhan_(char *, 
+	    integer *, ftnlen), errint_(char *, integer *, ftnlen);
     integer prvptr;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekrsc_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    logical *, logical *, ftnlen), zzekrsd_(integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *, logical 
-	    *), zzekrsi_(integer *, integer *, integer *, integer *, integer *
-	    , integer *, logical *, logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), zzekrsc_(integer *, integer *, integer *, integer *, 
+	    integer *, integer *, char *, logical *, logical *, ftnlen), 
+	    zzekrsd_(integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *, logical *), zzekrsi_(integer *, integer *
+	    , integer *, integer *, integer *, integer *, logical *, logical *
+	    );
 
 /* $ Abstract */
 
@@ -542,6 +541,11 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error message. */
+
 /* -    SPICELIB Version 2.0.0, 31-MAY-2010 (NJB) */
 
 /*        Bug fix: substring bound out-of-range violation */
@@ -566,9 +570,8 @@ static integer c__1 = 1;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKFRX", (ftnlen)7);
     }
+    chkin_("ZZEKFRX", (ftnlen)7);
 
 /*     Determine the data type of the column, and look up the value */
 /*     associated with RECPTR. */
@@ -589,10 +592,9 @@ static integer c__1 = 1;
 	zzekrsi_(handle, segdsc, coldsc, recptr, &c__1, &ival, &isnull, &
 		found);
     } else {
-	dashlu_(handle, &unit);
 	setmsg_("File = #; COLIDX = #. Unrecognized data type code # found i"
 		"n descriptor.", (ftnlen)72);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	errint_("#", &dtype, (ftnlen)1);
 	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
@@ -605,11 +607,10 @@ static integer c__1 = 1;
 /*        to find the value associated with a record. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	setmsg_("File = #; RECNO = #; COLIDX = #. Column entry was not found"
 		".  This probably indicates a corrupted file or a bug in the "
 		"EK code.", (ftnlen)127);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
@@ -643,12 +644,11 @@ static integer c__1 = 1;
 /*        Big problem.  This should never happen. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	setmsg_("File = #; RECNO = #; COLIDX = #.  Record that was last less"
 		" than or equal to RECNO was not equal to RECNO.  This probab"
 		"ly indicates  a corrupted file or a bug in the EK code.", (
 		ftnlen)174);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);

@@ -152,7 +152,7 @@ static integer c__1 = 1;
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0, 07-MAY-2014 (BVS)(EDW) */
+/* -    SPICELIB Version 2.0.0, 04-APR-2017 (BVS)(EDW) */
 
 /*        Increased NROOM to 14983. Added a comment note explaining */
 /*        NROOM and MAXE */

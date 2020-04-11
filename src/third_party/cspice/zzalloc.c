@@ -1,7 +1,7 @@
 /*
 
--Procedure zzalloc ( Umbrella routine for CSPICE amemory allocation cals ) 
- 
+-Procedure zzalloc ( Umbrella routine for CSPICE amemory allocation cals )
+
 -Abstract
 
    Set of routines to manage allocation and deallocation of memory
@@ -41,11 +41,11 @@
 
    error
 
-*/ 
+*/
 
 
    /*
-   Prevent the redefinition of malloc and free in these routines. 
+   Prevent the redefinition of malloc and free in these routines.
    Note, this line must preceed all #includes.
    */
 #define NO_NEW_ALLOC
@@ -63,7 +63,7 @@
 enum{ ALLOC_INC,    /* Increment the count value by +1.   */
       ALLOC_DEC,    /* Decrement the count value by -1.   */
       ALLOC_EQU };  /* Return the current value of count. */
-      
+
 
 /*
 
@@ -96,21 +96,22 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
    Routines coded in this file:
 
       Private:
-      
+
          zzalloc_count
 
       Public:
 
-         alloc_SpiceMemory
-         alloc_SpiceString_C_array
-         alloc_SpiceString_C_Copy_array
+         alloc_SpiceBoolean_C_array
          alloc_SpiceDouble_C_array
-         alloc_SpiceInt_C_array                   
+         alloc_SpiceInt_C_array
+         alloc_SpiceMemory
          alloc_SpiceString
+         alloc_SpiceString_C_Copy_array
+         alloc_SpiceString_C_array
          alloc_SpiceString_Pointer_array
-         free_SpiceString_C_array 
-         free_SpiceMemory
          alloc_count
+         free_SpiceMemory
+         free_SpiceString_C_array
 
 -Examples
 
@@ -130,8 +131,12 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 
 -Version
 
+   CSPICE 1.3.0 26-AUG-2016 (EDW)
+
+      Added routine alloc_SpiceBoolean_C_array.
+
    CSPICE 1.2.0 02-MAY-2008 (EDW)
-   
+
       Implemented use of enums as input flags to zzalloc_count.
       Added a routine alloc_count function as an accessor to
       the allocation count stored in zzalloc_count.
@@ -152,10 +157,10 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
       manner to define an array of strings.
 
       Edited alloc_SpiceMemory to pass an unsigned int rather than
-      an int. Added error check for 'op' value in zzalloc_count. 
+      an int. Added error check for 'op' value in zzalloc_count.
       Cast zzalloc_count calls to void when ignoring the return value.
-      
-      Defined NO_NEW_ALLOC preprocessor flag to prevent the memory 
+
+      Defined NO_NEW_ALLOC preprocessor flag to prevent the memory
       test malloc/free macros from redefining the calls to C malloc/free
       in this routine. Implement the malloc/free macros with:
 
@@ -169,7 +174,7 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
       placed as the first directives in SpiceUsr.h.
 
    Icy 1.0.7 13-JUL-2004 (EDW)
-   
+
       Added proper header documentation.
 
 -Index_Entries
@@ -281,7 +286,7 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 */
 int zzalloc_count ( int op )
    {
-   
+
    /*
    Initialize the count to zero. Save the value
    between calls.
@@ -294,7 +299,7 @@ int zzalloc_count ( int op )
    switch (op)
       {
       case ALLOC_INC:
-      
+
          /*
          An allocation, increment the count.
          */
@@ -305,26 +310,26 @@ int zzalloc_count ( int op )
 
 
       case ALLOC_DEC:
-      
+
          /*
          A free, decrement the count.
          */
          --count;
-      
+
          return count;
          break;
-      
+
       case ALLOC_EQU:
-      
+
           /*
          Return the current count. Should equal zero at end of
          program run and NEVER have a negative value.
          */
          return count;
          break;
-  
+
       default:
-      
+
          setmsg_c ( "Unknown op in zzalloc_count: #");
          errint_c  ( "#", op           );
          sigerr_c ( "SPICE(UNKNOWNOP)" );
@@ -436,14 +441,14 @@ int zzalloc_count ( int op )
 
 SpiceChar * alloc_SpiceString ( int length )
    {
-   
+
    SpiceChar           * str;
 
    chkin_c ( "alloc_SpiceString" );
 
    /* Allocate the needed memory for the double array. Check for errors. */
    str = (SpiceChar *) alloc_SpiceMemory ( length * sizeof(SpiceChar) );
-   
+
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
    */
@@ -562,7 +567,7 @@ SpiceChar * alloc_SpiceString ( int length )
 */
 SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
    {
-   
+
    SpiceInt            * mat;
 
    chkin_c ( "alloc_SpiceInt_C_array" );
@@ -581,11 +586,11 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
       return NULL;
       }
 
-   /* 
+   /*
    Allocate the needed memory for the double array. Check for errors.
    */
    mat = (SpiceInt *) alloc_SpiceMemory ( rows * cols * sizeof(SpiceInt) );
-   
+
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
    */
@@ -603,6 +608,151 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
       }
 
    chkout_c ( "alloc_SpiceInt_C_array" );
+   return mat;
+   }
+
+
+
+/*
+
+-Procedure alloc_SpiceBoolean_C_array ( Allocate an array of SpiceBooleans)
+
+-Abstract
+
+   Allocate a block of memory for an array of SpiceBooleans. Signal an
+   error if the malloc fails.
+
+-Disclaimer
+
+   THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
+   CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S.
+   GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE
+   ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE
+   PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
+   TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
+   WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
+   SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
+   SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
+
+   IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA
+   BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT
+   LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+   INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS,
+   REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE
+   REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY.
+
+   RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF
+   THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
+   CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
+   ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
+
+-Required_Reading
+
+   None.
+
+-Keywords
+
+   None.
+
+-Brief_I/O
+
+   None.
+
+-Detailed_Input
+
+   None.
+
+-Detailed_Output
+
+   None.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   None.
+
+-Files
+
+   None.
+
+-Particulars
+
+   None.
+
+-Examples
+
+   None.
+
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   None.
+
+-Version
+
+   None.
+
+-Index_Entries
+
+   None.
+
+-&
+*/
+SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
+   {
+
+   SpiceBoolean            * mat;
+
+   chkin_c ( "alloc_SpiceBoolean_C_array" );
+
+   if ( rows*cols < 1 )
+      {
+      setmsg_c ( "The specified total workspace size #1 was "
+                 "less than the minimum allowed value (1). "
+                 "The value for both rows, #2, and cols, #3, "
+                 "must excceed zero."                       );
+      errint_c ( "#1", (SpiceInt) (rows*cols)               );
+      errint_c ( "#2", (SpiceInt) rows                      );
+      errint_c ( "#3", (SpiceInt) cols                      );
+      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( "alloc_SpiceBoolean_C_array"                   );
+      return NULL;
+      }
+
+   /*
+   Allocate the needed memory for the double array. Check for errors.
+   */
+   mat = (SpiceBoolean *) alloc_SpiceMemory ( rows * cols * 
+                                              sizeof(SpiceBoolean) );
+
+   /*
+   Check for a malloc failure. Signal a SPICE error if error found.
+   */
+   if ( mat == NULL )
+      {
+
+      /* Malloc failed; signal an error; return a NULL. */
+      setmsg_c ( "Malloc failed to allocate space for an array of "
+                 "$1 * $2 SpiceBooleans. ");
+      errint_c ( "#", (SpiceInt) rows     );
+      errint_c ( "#", (SpiceInt) cols     );
+      sigerr_c ( "SPICE(MALLOCFAILED)"    );
+      chkout_c ( "alloc_SpiceBoolean_C_array" );
+      return NULL;
+      }
+
+   chkout_c ( "alloc_SpiceBoolean_C_array" );
    return mat;
    }
 
@@ -678,15 +828,15 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
 
    The routine allocates a block of contiguous memory then returns a
    pointer the block. It does not return an array of pointers or
-   a pointer to an array of pointers. 
+   a pointer to an array of pointers.
 
 -Examples
 
    SpiceInt         n      = 2;
-   SpiceChar      * utc[] = { "Jan 1 2006", 
+   SpiceChar      * utc[] = { "Jan 1 2006",
                               "Jan 1 2007" };
 
-   et = (SpiceDouble*)alloc_SpiceDouble_C_array( 1, n ); 
+   et = (SpiceDouble*)alloc_SpiceDouble_C_array( 1, n );
 
    for( i=0; i<n; i++ )
       {
@@ -718,7 +868,7 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
 */
 SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
    {
-   
+
    SpiceDouble         * mat;
 
    chkin_c ( "alloc_SpiceDouble_C_array" );
@@ -735,13 +885,13 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
       sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
       chkout_c ( "alloc_SpiceDouble_C_array"                );
       return NULL;
-      } 
+      }
 
-   /* 
-   Allocate the needed memory for the double array. Check for errors. 
+   /*
+   Allocate the needed memory for the double array. Check for errors.
    */
    mat = (SpiceDouble*) alloc_SpiceMemory( rows *cols *sizeof(SpiceDouble));
-   
+
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
    */
@@ -826,10 +976,10 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 
    1) If the input number of strings has value less than 1, the error
       SPICE(NOTPOSITIVE) signals.
-   
+
    2) If the length of each string has value less than 2 (one character plus
       a line terminator), the error SPICE(STRINGTOOSMALL) signals.
-      
+
    3) If a malloc fails, the error SPICE(MALLOCFAILED) signals.
 
 -Files
@@ -838,7 +988,7 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 
 -Particulars
 
-   This routine produces a memory block functionally similar to a 
+   This routine produces a memory block functionally similar to a
    declaration of:
 
       SpiceChar    X[string_count][string_length]
@@ -846,13 +996,13 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 -Examples
 
    CSPICE wrappers using arrays of strings declare the arrays as:
-   
+
       SpiceChar         ** cvals;
-   
+
    Allocate memory:
-   
+
       cvals = alloc_SpiceString_C_array ( cvals_len, cvals_size );
-   
+
    Where 'cvals_len' represents the length of each string, 'cvals[i]',
    and 'cvals_size' represents the number of strings in array 'cvals'.
 
@@ -910,16 +1060,16 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
       {
       setmsg_c ( "The user defined a value less than 2 for string length: #");
       errint_c ( "#", string_length          );
-      sigerr_c ( "SPICE(STRINGTOOSMALL)"     );  
+      sigerr_c ( "SPICE(STRINGTOOSMALL)"     );
       chkout_c ( "alloc_SpiceString_C_array" );
       return NULL;
       }
 
 
-   /* 
-   Allocate the needed memory for the strings array. Check for errors. 
+   /*
+   Allocate the needed memory for the strings array. Check for errors.
    */
-   cvals    = (SpiceChar**) 
+   cvals    = (SpiceChar**)
                alloc_SpiceMemory ( string_count*sizeof(SpiceChar*) );
    if ( cvals == NULL )
       {
@@ -936,12 +1086,12 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
    Now allocate enough memory for the string_length * string_count block.
    Assign the memory to cvals[0], i.e. *cvals.
    */
-   cvals[0] = (SpiceChar* ) alloc_SpiceMemory ( string_length 
-                                                * string_count 
+   cvals[0] = (SpiceChar* ) alloc_SpiceMemory ( string_length
+                                                * string_count
                                                 * sizeof(SpiceChar) );
    if ( cvals[0] == NULL )
       {
-      
+
       /*
       Malloc failed; free the allocated memory; signal an error; return
       a NULL .
@@ -1064,8 +1214,8 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
 
 -&
 */
-SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len, 
-                                              int string_len, 
+SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
+                                              int string_len,
                                               SpiceChar ** array )
    {
 
@@ -1089,11 +1239,11 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
       {
       setmsg_c ( "The user defined a value less than 2 for string length: #");
       errint_c ( "#", string_len                  );
-      sigerr_c ( "SPICE(NOTPOSITIVE)"             );  
+      sigerr_c ( "SPICE(NOTPOSITIVE)"             );
       chkout_c ( "alloc_SpiceString_C_Copy_array" );
       return NULL;
       }
-      
+
 
    /*
    Create a string array for passing to the new array.
@@ -1113,19 +1263,19 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
    /*
    Copy the data from items to the string array for the copy.
    */
-   for ( i=0; i < array_len; i++) 
+   for ( i=0; i < array_len; i++)
          {
-         
-         str_array[i] = (SpiceChar *) 
+
+         str_array[i] = (SpiceChar *)
                         alloc_SpiceMemory(sizeof(SpiceChar) * string_len );
 
          if ( str_array[i] == NULL )
             {
-            /* 
-            Malloc failed; free the memory; signal an error; return a NULL. 
+            /*
+            Malloc failed; free the memory; signal an error; return a NULL.
             */
             free_SpiceString_C_array ( i-1, str_array );
-            
+
             setmsg_c ( "Malloc failed to allocate space for array "
                        "$1 of $2 SpiceChars. "          );
             errint_c ( "$1", (SpiceInt) i               );
@@ -1138,7 +1288,7 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
             {
             strcpy( (char*) str_array[i], *array + i*string_len );
             }
-            
+
          }
 
    chkout_c ( "alloc_SpiceString_C_Copy_array" );
@@ -1465,7 +1615,7 @@ void free_SpiceString_C_array ( int dim, SpiceChar ** array )
 -Particulars
 
    This function serves only as a wrapper to free with
-   an error check for non NULL pointers and a corresponding 
+   an error check for non NULL pointers and a corresponding
    alloc count decrement.
 
 -Examples
@@ -1499,9 +1649,9 @@ void free_SpiceMemory( void * ptr )
 
    /*
    Free the allocated memory.
-   */   
+   */
    free( ptr);
-      
+
    /*
    Decrement the allocation count.
    */
@@ -1734,7 +1884,7 @@ void * alloc_SpiceMemory ( size_t size )
 */
 int alloc_count()
    {
-   
+
    /*
    Nothing to do except return the 'count' value.
    */

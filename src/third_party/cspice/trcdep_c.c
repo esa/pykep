@@ -182,8 +182,8 @@
                {
                   trcnam_c ( i, SPICE_ERROR_MODLEN, modnam );
 
-                  printf ( "Trace level: %ld. Module name = %s\n",
-                           (long)i,
+                  printf ( "Trace level: %d. Module name = %s\n",
+                           (int)i,
                            modnam                                 );
                }
 
@@ -245,6 +245,11 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
+
    -CSPICE Version 1.0.0, 05-NOV-2013 (NJB) (KRG)
 
 -Index_Entries

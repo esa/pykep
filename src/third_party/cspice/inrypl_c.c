@@ -123,7 +123,7 @@
        routines 
  
           nvc2pl_c
-          pnv2pl_c
+          nvp2pl_c
           psv2pl_c
  
        Invalid input planes will cause unpredictable results. 
@@ -519,10 +519,15 @@
  
 -Author_and_Institution
  
-   N.J. Bachman   (JPL) 
+   N.J. Bachman   (JPL)
+   B.V. Semenov   (JPL)
    W.L. Taber     (JPL) 
  
 -Version
+
+   -CSPICE Version 1.0.2, 01-FEB-2017 (BVS)
+
+       Typo fix: pnv2pl_c -> nvp2pl_c.
 
    -CSPICE Version 1.0.1, 12-DEC-2002 (NJB)
 

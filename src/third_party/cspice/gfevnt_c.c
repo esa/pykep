@@ -1165,7 +1165,7 @@
          Check the number of intervals in confining window.
          ./
          count = wncard_c( &cnfine );
-         printf( "Found %ld intervals in cnfine\n", count );
+         printf( "Found %d intervals in cnfine\n", (int)count );
 
       
          /.
@@ -1245,7 +1245,7 @@
          else
             {
             count = wncard_c( &result);
-            printf( "Found %ld intervals in result\n", count );
+            printf( "Found %d intervals in result\n", (int)count );
 
             /.
             List the beginning and ending points in each interval.
@@ -1257,7 +1257,7 @@
                timout_c ( beg, TIMFMT, LNSIZE, begstr );
                timout_c ( end, TIMFMT, LNSIZE, endstr );
 
-               printf( "Interval %ld\n", i );
+               printf( "Interval %d\n", (int)i );
                printf( "Beginning TDB %s\n", begstr );
                printf( "Ending TDB    %s\n", endstr );
                }
@@ -1326,6 +1326,11 @@
    E.D. Wright    (JPL)
  
 -Version
+
+   -CSPICE Version 1.0.2, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
 
    -CSPICE Version 1.0.1, 24-APR-2010 (EDW)
 

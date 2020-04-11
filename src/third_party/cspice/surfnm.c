@@ -82,91 +82,95 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   Length of the ellisoid semi-axis along the x-axis. */
-/*      B          I   Length of the ellisoid semi-axis along the y-axis. */
-/*      C          I   Length of the ellisoid semi-axis along the z-axis. */
-/*      POINT      I   Body-fixed coordinates of a point on the ellipsoid */
-/*      NORMAL     O   Outward pointing unit normal to ellipsoid at POINT */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   Length of the ellipsoid semi-axis along the x-axis. */
+/*     B          I   Length of the ellipsoid semi-axis along the y-axis. */
+/*     C          I   Length of the ellipsoid semi-axis along the z-axis. */
+/*     POINT      I   Body-fixed coordinates of a point on the ellipsoid. */
+/*     NORMAL     O   Outward pointing unit normal to ellipsoid at POINT. */
 
 /* $ Detailed_Input */
 
-/*      A          This is the length of the semi-axis of the ellipsoid */
-/*                 that is parallel to the x-axis of the body-fixed */
-/*                 coordinate system. */
+/*     A          This is the length of the semi-axis of the ellipsoid */
+/*                that is parallel to the x-axis of the body-fixed */
+/*                coordinate system. */
 
-/*      B          This is the length of the semi-axis of the ellipsoid */
-/*                 that is parallel to the y-axis of the body-fixed */
-/*                 coordinate system. */
+/*     B          This is the length of the semi-axis of the ellipsoid */
+/*                that is parallel to the y-axis of the body-fixed */
+/*                coordinate system. */
 
-/*      C          This is the length of the semi-axis of the ellipsoid */
-/*                 that is parallel to the z-axis of the body-fixed */
-/*                 coordinate system. */
+/*     C          This is the length of the semi-axis of the ellipsoid */
+/*                that is parallel to the z-axis of the body-fixed */
+/*                coordinate system. */
 
-/*      POINT      This is a 3-vector giving the bodyfixed coordinates */
-/*                 of a point on the ellipsoid. In bodyfixed coordinates, */
-/*                 the semi-axes of the ellipsoid are aligned with the */
-/*                 x, y, and z-axes of the coordinate system. */
+/*     POINT      This is a 3-vector giving the bodyfixed coordinates */
+/*                of a point on the ellipsoid. In bodyfixed coordinates, */
+/*                the semi-axes of the ellipsoid are aligned with the */
+/*                x, y, and z-axes of the coordinate system. */
 
 /* $ Detailed_Output */
 
-/*      NORMAL    A unit vector pointing away from the ellipsoid and */
+/*     NORMAL     A unit vector pointing away from the ellipsoid and */
 /*                normal to the ellipsoid at POINT. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     1) If any of the axes are non-positive, the error */
-/*        'SPICE(BADAXISLENGTH)' will be signalled. */
+/*        SPICE(BADAXISLENGTH) will be signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine computes the outward pointing unit normal vector to */
-/*      the ellipsoid having semi-axes of length A, B, and C from the */
-/*      point POINT. */
+/*     This routine computes the outward pointing unit normal vector to */
+/*     the ellipsoid having semi-axes of length A, B, and C from the */
+/*     point POINT. */
 
 /* $ Examples */
 
-/*      A typical use of SURFNM would be to find the angle of incidence */
-/*      of the light from the sun at a point on the surface of an */
-/*      ellipsoid. */
+/*     A typical use of SURFNM would be to find the angle of incidence */
+/*     of the light from the sun at a point on the surface of an */
+/*     ellipsoid. */
 
-/*      Let Q be a 3-vector representing the rectangular body-fixed */
-/*      coordinates of a point on the ellipsoid (we are assuming that */
-/*      the axes of the ellipsoid are aligned with the axes of the */
-/*      body fixed frame.)  Let V be the vector from Q to the sun in */
-/*      bodyfixed coordinates.  Then the following code fragment could */
-/*      be used to compute angle of incidence of sunlight at Q. */
+/*     Let Q be a 3-vector representing the rectangular body-fixed */
+/*     coordinates of a point on the ellipsoid (we are assuming that */
+/*     the axes of the ellipsoid are aligned with the axes of the */
+/*     body fixed frame.)  Let V be the vector from Q to the sun in */
+/*     bodyfixed coordinates.  Then the following code fragment could */
+/*     be used to compute angle of incidence of sunlight at Q. */
 
-/*            CALL SURFNM   ( A, B, C, Q, NRML ) */
+/*        CALL SURFNM   ( A, B, C, Q, NRML ) */
 
-/*            INCIDN = VSEP ( V,          NRML ) */
+/*        INCIDN = VSEP ( V,          NRML ) */
 
 
 /* $ Restrictions */
 
-/*      It is assumed that the input POINT is indeed on the ellipsoid. */
-/*      No checking for this is done. */
-
+/*     It is assumed that the input POINT is indeed on the ellipsoid. */
+/*     No checking for this is done. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.2, 23-FEB-2016 (NJB) */
+
+/*        Corrected some typos in the header. */
 
 /* -    SPICELIB Version 1.3.1, 18-MAY-2010 (BVS) */
 
@@ -216,7 +220,7 @@ static integer c__2 = 2;
 
 /* -& */
 
-/*     Spicelib Functions */
+/*     SPICELIB Functions */
 
 
 /*     Local Variables */
@@ -249,7 +253,7 @@ static integer c__2 = 2;
     if (bad > 0) {
 /* Writing concatenation */
 	i__2[0] = 32, a__1[0] = mssg + (((i__1 = bad - 1) < 7 && 0 <= i__1 ? 
-		i__1 : s_rnge("mssg", i__1, "surfnm_", (ftnlen)247)) << 5);
+		i__1 : s_rnge("mssg", i__1, "surfnm_", (ftnlen)251)) << 5);
 	i__2[1] = 3, a__1[1] = " ? ";
 	s_cat(ch__1, a__1, i__2, &c__2, (ftnlen)35);
 	setmsg_(ch__1, (ftnlen)35);
@@ -275,7 +279,7 @@ static integer c__2 = 2;
     m = min(d__1,*c__);
 
 /*     M can be divided by A,B or C without fear of an overflow */
-/*     occuring. */
+/*     occurring. */
 
     a1 = m / *a;
     b1 = m / *b;

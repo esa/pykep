@@ -10,7 +10,6 @@
 	char *column, integer *nvals, doublereal *dvals, logical *isnull, 
 	ftnlen column_len)
 {
-    integer unit;
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
 	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
 	    zzektrdp_(integer *, integer *, integer *, integer *), chkin_(
@@ -18,14 +17,13 @@
     integer class__, dtype;
     extern logical failed_(void);
     integer coldsc[11], segdsc[24];
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekad02_(integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *), 
-	    zzekad05_(integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, logical *);
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), zzekad02_(integer *, integer *, integer *, integer *, 
+	    doublereal *, logical *), zzekad05_(integer *, integer *, integer 
+	    *, integer *, integer *, doublereal *, logical *);
 
 /* $ Abstract */
 
@@ -412,7 +410,7 @@
 
 /*     4)  If COLUMN specifies a column of whose data type is not */
 /*         double precision, the error SPICE(WRONGDATATYPE) will be */
-/*         signalled. */
+/*         signaled. */
 
 /*     5)  If RECNO is out of range, the error will be diagnosed by */
 /*         routines called by this routine. */
@@ -431,7 +429,7 @@
 
 /*     9)  If COLUMN specifies a column of whose class is not */
 /*         an character class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signalled. */
+/*         SPICE(NOCLASS) will be signaled. */
 
 /*     10) If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -595,6 +593,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to use ERRHAN. */
+
 /* -    SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
 
 /*        Removed an unbalanced call to CHKOUT */
@@ -632,14 +634,13 @@
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
 	chkin_("EKACED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Column # is of type #; EKACED only works with d.p. or time "
 		"columns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)98);
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", &dtype, (ftnlen)1);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
 	chkout_("EKACED", (ftnlen)6);
 	return 0;
@@ -668,7 +669,6 @@
 
 	*segno = segdsc[1];
 	chkin_("EKACED", (ftnlen)6);
-	dashlu_(handle, &unit);
 	setmsg_("Class # from input column descriptor is not a supported d.p"
 		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
 		110);
@@ -676,7 +676,7 @@
 	errch_("#", column, (ftnlen)1, column_len);
 	errint_("#", recno, (ftnlen)1);
 	errint_("#", segno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
 	chkout_("EKACED", (ftnlen)6);
 	return 0;

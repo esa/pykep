@@ -57,7 +57,7 @@
    VARIABLE  I/O  DESCRIPTION 
    --------  ---  -------------------------------------------------- 
    r          I   Distance of a point from the origin. 
-   colat      I   Angle of the point from the positive Z-axis. 
+   colat      I   Angle of the point from the Z-axis in radians. 
    lon        I   Angle of the point from the XZ plane in radians. 
    rectan     O   Rectangular coordinates of the point. 
  
@@ -65,17 +65,26 @@
  
    r          Distance of the point from the origin. 
  
-   colat      Angle between the point and the positive z-axis. 
+   colat      Angle between the point and the positive z-axis in
+              radians.
  
-   lon        Angle of the projection of the point to the XY 
-              plane from the positive X-axis.  The positive 
-              Y-axis is at longitude PI/2 radians. 
+   lon        Angle of the projection of the point to the XY plane from
+              the positive X-axis in radians. The positive Y-axis is
+              at longitude PI/2 radians.
  
 -Detailed_Output
  
    rectan     The rectangular coordinates of a point. 
  
 -Parameters
+ 
+   None. 
+ 
+-Exceptions
+ 
+   Error free. 
+ 
+-Files
  
    None. 
  
@@ -130,11 +139,7 @@
  
    None. 
  
--Exceptions
- 
-   Error free. 
- 
--Files
+-Literature_References
  
    None. 
  
@@ -143,12 +148,12 @@
    W.L. Taber      (JPL) 
    E.D. Wright     (JPL)
  
--Literature_References
- 
-   None. 
- 
 -Version
  
+   -CSPICE Version 1.0.1, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
+
    -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
 -Index_Entries

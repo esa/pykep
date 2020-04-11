@@ -29,7 +29,7 @@ static integer c__100 = 100;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer sizei_(integer *);
-    integer idcode, to;
+    integer total, idcode, to;
     extern /* Subroutine */ int scardi_(integer *, integer *);
     char frname[32];
     extern /* Subroutine */ int validi_(integer *, integer *, integer *);
@@ -311,6 +311,13 @@ static integer c__100 = 100;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
+
+/*        Increased the number of non-inertial frames from 105 to 106 */
+/*        in order to accomodate the following PCK based frame: */
+
+/*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
@@ -716,6 +723,13 @@ static integer c__100 = 100;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 18-JUN-2015 (NJB) */
+
+/*        Bug fix: previous algorithm failed if the number of frame */
+/*        names fetched from the kernel pool on a single call exceeded */
+/*        twice the kernel variable buffer size. The count of */
+/*        fetched names is now maintained correctly. */
+
 /* -    SPICELIB Version 1.0.0, 22-MAY-2012 (NJB) */
 
 /* -& */
@@ -777,7 +791,9 @@ static integer c__100 = 100;
     s_copy(kvtemp, "FRAME_*_NAME", (ftnlen)32, (ftnlen)12);
     gnpool_(kvtemp, &c__1, &c__100, &n, kvbuff, &found, (ftnlen)32, (ftnlen)
 	    32);
+    total = 0;
     while(n > 0) {
+	total += n;
 
 /*        At least one kernel variable was found by the last */
 /*        GNPOOL call. Each of these variables is a possible */
@@ -791,7 +807,7 @@ static integer c__100 = 100;
 /*           GNPOOL call. */
 
 	    gcpool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)523)) << 5), &
+		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)536)) << 5), &
 		    c__1, &c__1, &m, frname, &found, (ftnlen)32, (ftnlen)32);
 	    if (found) {
 
@@ -924,7 +940,7 @@ static integer c__100 = 100;
 
 /*        Fetch next batch of potential frame names. */
 
-	i__1 = n + 1;
+	i__1 = total + 1;
 	gnpool_(kvtemp, &i__1, &c__100, &n, kvbuff, &found, (ftnlen)32, (
 		ftnlen)32);
     }

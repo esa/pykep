@@ -102,7 +102,7 @@
 /* $ Exceptions */
 
 /*     1)  If the line direction vector LINDIR is the zero vector, the */
-/*         error SPICE(ZEROVECTOR) is signalled. */
+/*         error SPICE(ZEROVECTOR) is signaled. */
 
 /* $ Files */
 
@@ -156,6 +156,10 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 17-SEP-2014 (NJB) */
+
+/*        Now uses discovery check-in. */
+
 /* -    SPICELIB Version 1.1.0, 09-SEP-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
@@ -190,17 +194,16 @@
 /*     Local variables */
 
 
-/*     Standard SPICE error handling. */
+/*     Use discovery check-in. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("NPLNPT", (ftnlen)6);
     }
 
 /*     We need a real direction vector to work with. */
 
     if (vzero_(lindir)) {
+	chkin_("NPLNPT", (ftnlen)6);
 	setmsg_("Direction vector must be non-zero.", (ftnlen)34);
 	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
 	chkout_("NPLNPT", (ftnlen)6);
@@ -215,7 +218,6 @@
     vproj_(trans, lindir, proj);
     vadd_(proj, linpt, pnear);
     *dist = vdist_(pnear, point);
-    chkout_("NPLNPT", (ftnlen)6);
     return 0;
 } /* nplnpt_ */
 

@@ -401,6 +401,10 @@ static integer c__6 = 6;
 
 /* $ Version */
 
+/* -    SPICELIB Version 6.0.1, 15-MAR-2017 (NJB) */
+
+/*        Corrected various spelling errors within comments. */
+
 /* -    SPICELIB Version 6.0.0, 17-MAR-2014 (NJB) */
 
 /*        Updated segment pool initialization condition in entry */
@@ -471,7 +475,7 @@ static integer c__6 = 6;
 /*              termination test was corrected. */
 
 /*        The "re-use interval" feature was introduced to improve speed */
-/*        in the case where repeated, consecutive requests are satisified */
+/*        in the case where repeated, consecutive requests are satisfied */
 /*        by the same segment. */
 
 /*        The segment list cost algorithm was modified slightly: */
@@ -525,7 +529,7 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 1.0.2, 9-SEP-1991 (HAN) */
 
-/*        The declaraion of the variable STATE in the Examples section */
+/*        The declaration of the variable STATE in the Examples section */
 /*        was changed from a 3 dimensional vector to a 6 dimensional */
 /*        vector, and the term state was specified to be the position */
 /*        and velocity of a body relative to another body. */
@@ -599,7 +603,7 @@ static integer c__6 = 6;
 /*              termination test was corrected. */
 
 /*        The "re-use interval" feature was introduced to improve speed */
-/*        in the case where repeated, consecutive requests are satisified */
+/*        in the case where repeated, consecutive requests are satisfied */
 /*        by the same segment.  For each body, the associated re-use */
 /*        interval marks the time interval containing the previous */
 /*        request time for which the previously returned segment provides */
@@ -839,7 +843,7 @@ L_spklef:
 /*        routine in the call tree of this routine. */
 
 /*     2) If an attempt is made to load more files than is specified */
-/*        by the local paramater FTSIZE, and if the DAF system has */
+/*        by the local parameter FTSIZE, and if the DAF system has */
 /*        room to load another file, the error SPICE(SPKFILETABLEFULL) */
 /*        signaled.  The current setting of FTSIZE does not allow this */
 /*        situation to arise:  the DAF system will trap the error */
@@ -876,6 +880,10 @@ L_spklef:
 /*     I.M. Underwood  (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.1, 15-MAR-2017 (NJB) */
+
+/*        Corrected various spelling errors within comments. */
 
 /* -    SPICELIB Version 5.0.0, 17-MAR-2014 (NJB) */
 
@@ -955,7 +963,7 @@ L_spklef:
 /* -    SPICELIB Version 3.0.0, 14-AUG-1995 (WLT) */
 
 /*        An interim fix to a bug in SPKBSR was made.  The parameters */
-/*        STSIZE and BTSIZE were increase to be much larger than before */
+/*        STSIZE and BTSIZE were increased to be much larger than before */
 /*        (from 100 and 20 to 2000 and 40 respectively).  This should */
 /*        keep the boundary errors experienced by Cassini users from */
 /*        occurring again.  Version 4.0.0 with a real fix to the */
@@ -1033,7 +1041,7 @@ L_spklef:
     i__1 = nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	btchkp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("btchkp", 
-		i__2, "spkbsr_", (ftnlen)1089)] = FALSE_;
+		i__2, "spkbsr_", (ftnlen)1097)] = FALSE_;
     }
 
 /*     Nothing works unless at least one file has been loaded, so this */
@@ -1074,25 +1082,25 @@ L_spklef:
 	i__1 = nft;
 	for (i__ = findex; i__ <= i__1; ++i__) {
 	    fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
-		    , i__2, "spkbsr_", (ftnlen)1135)] = fthan[(i__3 = i__) < 
+		    , i__2, "spkbsr_", (ftnlen)1143)] = fthan[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "spkbsr_"
-		    , (ftnlen)1135)];
+		    , (ftnlen)1143)];
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "spkbsr_", (ftnlen)1136)] = ftnum[(i__3 = i__) < 
+		    , i__2, "spkbsr_", (ftnlen)1144)] = ftnum[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "spkbsr_"
-		    , (ftnlen)1136)];
+		    , (ftnlen)1144)];
 	}
 	i__ = 1;
 	while(i__ <= nbt) {
 	    p = btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "spkbsr_", (ftnlen)1143)];
+		    "btbeg", i__1, "spkbsr_", (ftnlen)1151)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
 		nxtseg = lnknxt_(&p, stpool);
 		if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)1151)] == *
+			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)1159)] == *
 			handle) {
 
 /*                 The segment corresponding to node P came from */
@@ -1103,10 +1111,10 @@ L_spklef:
 
 		    lnkfsl_(&p, &p, stpool);
 		    if (p == btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 
-			    : s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1161)])
+			    : s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1169)])
 			     {
 			btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1162)
+				s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1170)
 				] = nxtseg;
 		    }
 		}
@@ -1121,7 +1129,7 @@ L_spklef:
 /*           table into the space occupied by the one we've deleted. */
 
 	    if (btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "spkbsr_", (ftnlen)1178)] <= 0) {
+		    "btbeg", i__1, "spkbsr_", (ftnlen)1186)] <= 0) {
 
 /*              Because all of the re-use intervals are invalid, we need */
 /*              not copy the saved items associated with them.  The */
@@ -1136,25 +1144,25 @@ L_spklef:
 /*                 BTUB */
 
 		btbod[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "spkbsr_", (ftnlen)1192)] = btbod[(
+			"btbod", i__1, "spkbsr_", (ftnlen)1200)] = btbod[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbod", i__2, "spkbsr_", (ftnlen)1192)];
+			"btbod", i__2, "spkbsr_", (ftnlen)1200)];
 		btexp[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "spkbsr_", (ftnlen)1193)] = btexp[(
+			"btexp", i__1, "spkbsr_", (ftnlen)1201)] = btexp[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "spkbsr_", (ftnlen)1193)];
+			"btexp", i__2, "spkbsr_", (ftnlen)1201)];
 		bthfs[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "spkbsr_", (ftnlen)1194)] = bthfs[(
+			"bthfs", i__1, "spkbsr_", (ftnlen)1202)] = bthfs[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "spkbsr_", (ftnlen)1194)];
+			"bthfs", i__2, "spkbsr_", (ftnlen)1202)];
 		btlfs[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "spkbsr_", (ftnlen)1195)] = btlfs[(
+			"btlfs", i__1, "spkbsr_", (ftnlen)1203)] = btlfs[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "spkbsr_", (ftnlen)1195)];
+			"btlfs", i__2, "spkbsr_", (ftnlen)1203)];
 		btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "spkbsr_", (ftnlen)1196)] = btbeg[(
+			"btbeg", i__1, "spkbsr_", (ftnlen)1204)] = btbeg[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbeg", i__2, "spkbsr_", (ftnlen)1196)];
+			"btbeg", i__2, "spkbsr_", (ftnlen)1204)];
 		--nbt;
 	    } else {
 		++i__;
@@ -1206,7 +1214,7 @@ L_spklef:
 /*           Re-map the HFS table for the Ith body. */
 
 	    j = isrchi_(&bthfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bthfs", i__2, "spkbsr_", (ftnlen)1258)], &nft, 
+		    s_rnge("bthfs", i__2, "spkbsr_", (ftnlen)1266)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
@@ -1214,22 +1222,22 @@ L_spklef:
 /*              in the file table. */
 
 		bthfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "spkbsr_", (ftnlen)1265)] = j;
+			"bthfs", i__2, "spkbsr_", (ftnlen)1273)] = j;
 	    } else {
 
 /*              The highest file searched for body I is not in the file */
 /*              table.  This occurs when the highest file searched has */
-/*              been unloaded.  Note that this assigment makes all files */
+/*              been unloaded.  Note that this assignment makes all files */
 /*              appear to be "new" when a lookup for body I is performed. */
 
 		bthfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "spkbsr_", (ftnlen)1274)] = 0;
+			"bthfs", i__2, "spkbsr_", (ftnlen)1282)] = 0;
 	    }
 
 /*           Re-map the LFS table for the Ith body. */
 
 	    j = isrchi_(&btlfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btlfs", i__2, "spkbsr_", (ftnlen)1281)], &nft, 
+		    s_rnge("btlfs", i__2, "spkbsr_", (ftnlen)1289)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
@@ -1237,7 +1245,7 @@ L_spklef:
 /*              in the file table. */
 
 		btlfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "spkbsr_", (ftnlen)1288)] = j;
+			"btlfs", i__2, "spkbsr_", (ftnlen)1296)] = j;
 	    } else {
 
 /*              The lowest file searched for body I is not in the file */
@@ -1246,9 +1254,9 @@ L_spklef:
 /*              making all files "new." */
 
 		btlfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "spkbsr_", (ftnlen)1297)] = 0;
+			"btlfs", i__2, "spkbsr_", (ftnlen)1305)] = 0;
 		bthfs[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "spkbsr_", (ftnlen)1298)] = 0;
+			"bthfs", i__2, "spkbsr_", (ftnlen)1306)] = 0;
 	    }
 	}
 
@@ -1257,7 +1265,7 @@ L_spklef:
 	i__1 = nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "spkbsr_", (ftnlen)1309)] = i__;
+		    , i__2, "spkbsr_", (ftnlen)1317)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1266,9 +1274,9 @@ L_spklef:
     }
     ++nft;
     fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "spkbsr_", (ftnlen)1322)] = *handle;
+	    "spkbsr_", (ftnlen)1330)] = *handle;
     ftnum[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftnum", i__1, 
-	    "spkbsr_", (ftnlen)1323)] = next;
+	    "spkbsr_", (ftnlen)1331)] = next;
     chkout_("SPKLEF", (ftnlen)6);
     return 0;
 /* $Procedure SPKUEF ( S/P Kernel, Unload ephemeris file ) */
@@ -1373,6 +1381,10 @@ L_spkuef:
 
 /* $ Version */
 
+/* -    SPICELIB Version 4.1.1, 15-MAR-2017 (NJB) */
+
+/*        Corrected various spelling errors within comments. */
+
 /* -    SPICELIB Version 4.1.0, 08-SEP-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
@@ -1392,7 +1404,7 @@ L_spkuef:
 /* -    SPICELIB Version 3.0.0, 14-AUG-1995 (WLT) */
 
 /*        An interim fix to a bug in SPKBSR was made.  The parameters */
-/*        STSIZE and BTSIZE were increase to be much larger than before */
+/*        STSIZE and BTSIZE were increased to be much larger than before */
 /*        (from 100 and 20 to 2000 and 40 respectively).  This should */
 /*        keep the boundary errors experienced by Cassini users from */
 /*        occurring again.  Version 4.0.0 with a real fix to the */
@@ -1511,18 +1523,18 @@ L_spkuef:
 /*     before wiping out the handle. */
 
     dafcls_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "spkbsr_", (ftnlen)1578)]);
+	    "fthan", i__1, "spkbsr_", (ftnlen)1590)]);
     --nft;
     i__1 = nft;
     for (i__ = findex; i__ <= i__1; ++i__) {
 	fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "spkbsr_", (ftnlen)1583)] = fthan[(i__3 = i__) < 5000 &&
+		i__2, "spkbsr_", (ftnlen)1595)] = fthan[(i__3 = i__) < 5000 &&
 		 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "spkbsr_", (ftnlen)
-		1583)];
+		1595)];
 	ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		i__2, "spkbsr_", (ftnlen)1584)] = ftnum[(i__3 = i__) < 5000 &&
+		i__2, "spkbsr_", (ftnlen)1596)] = ftnum[(i__3 = i__) < 5000 &&
 		 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "spkbsr_", (ftnlen)
-		1584)];
+		1596)];
     }
 
 /*     Check each body list individually. Note that the first node */
@@ -1531,15 +1543,15 @@ L_spkuef:
     i__ = 1;
     while(i__ <= nbt) {
 	p = btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btbeg",
-		 i__1, "spkbsr_", (ftnlen)1595)];
+		 i__1, "spkbsr_", (ftnlen)1607)];
 	while(p > 0) {
 	    nxtseg = lnknxt_(&p, stpool);
 	    if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sthan", i__1, "spkbsr_", (ftnlen)1601)] == *handle) {
+		    "sthan", i__1, "spkbsr_", (ftnlen)1613)] == *handle) {
 		if (p == btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1603)]) {
+			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)1615)]) {
 		    btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			    "btbeg", i__1, "spkbsr_", (ftnlen)1604)] = nxtseg;
+			    "btbeg", i__1, "spkbsr_", (ftnlen)1616)] = nxtseg;
 		}
 		lnkfsl_(&p, &p, stpool);
 	    }
@@ -1552,58 +1564,58 @@ L_spkuef:
 /*        space occupied by the deleted body. */
 
 	if (btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btbeg",
-		 i__1, "spkbsr_", (ftnlen)1621)] <= 0) {
+		 i__1, "spkbsr_", (ftnlen)1633)] <= 0) {
 	    if (i__ != nbt) {
 		btbod[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "spkbsr_", (ftnlen)1625)] = btbod[(
+			"btbod", i__1, "spkbsr_", (ftnlen)1637)] = btbod[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbod", i__2, "spkbsr_", (ftnlen)1625)];
+			"btbod", i__2, "spkbsr_", (ftnlen)1637)];
 		btexp[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "spkbsr_", (ftnlen)1626)] = btexp[(
+			"btexp", i__1, "spkbsr_", (ftnlen)1638)] = btexp[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "spkbsr_", (ftnlen)1626)];
+			"btexp", i__2, "spkbsr_", (ftnlen)1638)];
 		bthfs[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "spkbsr_", (ftnlen)1627)] = bthfs[(
+			"bthfs", i__1, "spkbsr_", (ftnlen)1639)] = bthfs[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "spkbsr_", (ftnlen)1627)];
+			"bthfs", i__2, "spkbsr_", (ftnlen)1639)];
 		btlfs[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "spkbsr_", (ftnlen)1628)] = btlfs[(
+			"btlfs", i__1, "spkbsr_", (ftnlen)1640)] = btlfs[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "spkbsr_", (ftnlen)1628)];
+			"btlfs", i__2, "spkbsr_", (ftnlen)1640)];
 		btbeg[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "spkbsr_", (ftnlen)1629)] = btbeg[(
+			"btbeg", i__1, "spkbsr_", (ftnlen)1641)] = btbeg[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbeg", i__2, "spkbsr_", (ftnlen)1629)];
+			"btbeg", i__2, "spkbsr_", (ftnlen)1641)];
 		btlb[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlb", i__1, "spkbsr_", (ftnlen)1630)] = btlb[(i__2 =
+			"btlb", i__1, "spkbsr_", (ftnlen)1642)] = btlb[(i__2 =
 			 nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("btlb", 
-			i__2, "spkbsr_", (ftnlen)1630)];
+			i__2, "spkbsr_", (ftnlen)1642)];
 		btub[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btub", i__1, "spkbsr_", (ftnlen)1631)] = btub[(i__2 =
+			"btub", i__1, "spkbsr_", (ftnlen)1643)] = btub[(i__2 =
 			 nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("btub", 
-			i__2, "spkbsr_", (ftnlen)1631)];
+			i__2, "spkbsr_", (ftnlen)1643)];
 		btprvh[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btprvh", i__1, "spkbsr_", (ftnlen)1632)] = btprvh[(
+			"btprvh", i__1, "spkbsr_", (ftnlen)1644)] = btprvh[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btprvh", i__2, "spkbsr_", (ftnlen)1632)];
+			"btprvh", i__2, "spkbsr_", (ftnlen)1644)];
 		s_copy(btprvi + ((i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : 
-			s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)1633)) * 40,
+			s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)1645)) * 40,
 			 btprvi + ((i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 
-			: s_rnge("btprvi", i__2, "spkbsr_", (ftnlen)1633)) * 
+			: s_rnge("btprvi", i__2, "spkbsr_", (ftnlen)1645)) * 
 			40, (ftnlen)40, (ftnlen)40);
 		btchkp[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btchkp", i__1, "spkbsr_", (ftnlen)1634)] = btchkp[(
+			"btchkp", i__1, "spkbsr_", (ftnlen)1646)] = btchkp[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btchkp", i__2, "spkbsr_", (ftnlen)1634)];
+			"btchkp", i__2, "spkbsr_", (ftnlen)1646)];
 		btruex[(i__1 = i__ - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btruex", i__1, "spkbsr_", (ftnlen)1635)] = btruex[(
+			"btruex", i__1, "spkbsr_", (ftnlen)1647)] = btruex[(
 			i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btruex", i__2, "spkbsr_", (ftnlen)1635)];
+			"btruex", i__2, "spkbsr_", (ftnlen)1647)];
 		moved_(&btprvd[(i__1 = nbt * 5 - 5) < 1000 && 0 <= i__1 ? 
-			i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)1637)
+			i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)1649)
 			], &c__5, &btprvd[(i__2 = i__ * 5 - 5) < 1000 && 0 <= 
 			i__2 ? i__2 : s_rnge("btprvd", i__2, "spkbsr_", (
-			ftnlen)1637)]);
+			ftnlen)1649)]);
 	    }
 	    --nbt;
 	} else {
@@ -1620,11 +1632,11 @@ L_spkuef:
     i__1 = nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (btchkp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("btch"
-		"kp", i__2, "spkbsr_", (ftnlen)1660)]) {
+		"kp", i__2, "spkbsr_", (ftnlen)1672)]) {
 	    if (btprvh[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-		    "btprvh", i__2, "spkbsr_", (ftnlen)1662)] == *handle) {
+		    "btprvh", i__2, "spkbsr_", (ftnlen)1674)] == *handle) {
 		btchkp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btchkp", i__2, "spkbsr_", (ftnlen)1663)] = FALSE_;
+			"btchkp", i__2, "spkbsr_", (ftnlen)1675)] = FALSE_;
 	    }
 	}
     }
@@ -1754,6 +1766,10 @@ L_spksfs:
 
 /* $ Version */
 
+/* -    SPICELIB Version 4.2.1, 15-MAR-2017 (NJB) */
+
+/*        Corrected various spelling errors within comments. */
+
 /* -    SPICELIB Version 4.2.0, 01-MAR-2011 (NJB) */
 
 /*        Bug fix: */
@@ -1791,7 +1807,7 @@ L_spksfs:
 /*              was corrected. */
 
 /*        The "re-use interval" feature was introduced to improve speed */
-/*        in the case where repeated, consecutive requests are satisified */
+/*        in the case where repeated, consecutive requests are satisfied */
 /*        by the same segment. */
 
 /*        The segment list cost algorithm was modified slightly: */
@@ -1815,7 +1831,7 @@ L_spksfs:
 /* -    SPICELIB Version 3.0.0, 14-AUG-1995 (WLT) */
 
 /*        An interim fix to a bug in SPKBSR was made.  The parameters */
-/*        STSIZE and BTSIZE were increase to be much larger than before */
+/*        STSIZE and BTSIZE were increased to be much larger than before */
 /*        (from 100 and 20 to 2000 and 40 respectively).  This should */
 /*        keep the boundary errors experienced by Cassini users from */
 /*        occurring again.  Version 4.0.0 with a real fix to the */
@@ -1884,7 +1900,7 @@ L_spksfs:
 /*              partial list that is to be freed. */
 
 /*        The "re-use interval" feature was introduced to improve speed */
-/*        in the case where repeated, consecutive requests are satisified */
+/*        in the case where repeated, consecutive requests are satisfied */
 /*        by the same segment. */
 
 /*        The segment list cost algorithm was modified slightly: */
@@ -2067,7 +2083,7 @@ L_spksfs:
 /*        for data for that body.  Check whether this is the case. */
 
 	if (btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		"btchkp", i__1, "spkbsr_", (ftnlen)2128)]) {
+		"btchkp", i__1, "spkbsr_", (ftnlen)2144)]) {
 
 /*           The previous segment found for the current body is a */
 /*           viable candidate for the current request.  See whether */
@@ -2081,9 +2097,9 @@ L_spksfs:
 /*           segments. */
 
 	    if (*et > btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2141)] && *et < 
+		    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2157)] && *et < 
 		    btub[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btub", i__2, "spkbsr_", (ftnlen)2141)]) {
+		    s_rnge("btub", i__2, "spkbsr_", (ftnlen)2157)]) {
 
 /*              The request time is covered by the segment found on */
 /*              the previous request for data for the current body, */
@@ -2092,13 +2108,13 @@ L_spksfs:
 /*              the request. */
 
 		*handle = btprvh[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
-			i__1 : s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2150)
+			i__1 : s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2166)
 			];
 		s_copy(ident, btprvi + ((i__1 = bindex - 1) < 200 && 0 <= 
 			i__1 ? i__1 : s_rnge("btprvi", i__1, "spkbsr_", (
-			ftnlen)2151)) * 40, ident_len, (ftnlen)40);
+			ftnlen)2167)) * 40, ident_len, (ftnlen)40);
 		moved_(&btprvd[(i__1 = bindex * 5 - 5) < 1000 && 0 <= i__1 ? 
-			i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)2153)
+			i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)2169)
 			], &c__5, descr);
 		*found = TRUE_;
 		chkout_("SPKSFS", (ftnlen)6);
@@ -2111,13 +2127,13 @@ L_spksfs:
 /*           that component from the expense. */
 
 	    btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btexp", i__1, "spkbsr_", (ftnlen)2168)] = btexp[(i__2 = 
+		    "btexp", i__1, "spkbsr_", (ftnlen)2184)] = btexp[(i__2 = 
 		    bindex - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("btexp", 
-		    i__2, "spkbsr_", (ftnlen)2168)] - btruex[(i__3 = bindex - 
+		    i__2, "spkbsr_", (ftnlen)2184)] - btruex[(i__3 = bindex - 
 		    1) < 200 && 0 <= i__3 ? i__3 : s_rnge("btruex", i__3, 
-		    "spkbsr_", (ftnlen)2168)];
+		    "spkbsr_", (ftnlen)2184)];
 	    btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "spkbsr_", (ftnlen)2169)] = 0;
+		    "btruex", i__1, "spkbsr_", (ftnlen)2185)] = 0;
 
 /*           The re-use interval becomes invalid if it didn't satisfy */
 /*           the request.  The validity flag gets re-set below. */
@@ -2132,16 +2148,16 @@ L_spksfs:
 /*                recently loaded segment. */
 
 	    btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btchkp", i__1, "spkbsr_", (ftnlen)2184)] = FALSE_;
+		    "btchkp", i__1, "spkbsr_", (ftnlen)2200)] = FALSE_;
 	}
 
 /*        If the segment list for this body is empty, make sure the */
 /*        expense is reset to 0. */
 
 	if (btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		"btbeg", i__1, "spkbsr_", (ftnlen)2193)] == 0) {
+		"btbeg", i__1, "spkbsr_", (ftnlen)2209)] == 0) {
 	    btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btexp", i__1, "spkbsr_", (ftnlen)2195)] = 0;
+		    "btexp", i__1, "spkbsr_", (ftnlen)2211)] = 0;
 	}
 	s_copy(status, "?", (ftnlen)15, (ftnlen)1);
     }
@@ -2162,9 +2178,9 @@ L_spksfs:
 /*               a new file. */
 
 	    if (bthfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "spkbsr_", (ftnlen)2222)] < ftnum[(i__2 = 
+		    "bthfs", i__1, "spkbsr_", (ftnlen)2238)] < ftnum[(i__2 = 
 		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "spkbsr_", (ftnlen)2222)]) {
+		    i__2, "spkbsr_", (ftnlen)2238)]) {
 		s_copy(status, "NEW FILES", (ftnlen)15, (ftnlen)9);
 	    } else {
 		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
@@ -2208,12 +2224,12 @@ L_spksfs:
 		i__1 = nbt;
 		for (i__ = 2; i__ <= i__1; ++i__) {
 		    if (btexp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2271)] < 
+			    s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2287)] < 
 			    minexp) {
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "spkbsr_", (
-				ftnlen)2273)];
+				ftnlen)2289)];
 		    }
 		}
 
@@ -2222,7 +2238,7 @@ L_spksfs:
 /*              list. */
 
 		head = btbeg[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2283)];
+			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2299)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -2232,21 +2248,21 @@ L_spksfs:
 /*           Set up a body table entry for the new body. */
 
 	    btbod[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btb"
-		    "od", i__1, "spkbsr_", (ftnlen)2297)] = *body;
+		    "od", i__1, "spkbsr_", (ftnlen)2313)] = *body;
 	    btexp[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("bte"
-		    "xp", i__1, "spkbsr_", (ftnlen)2298)] = 0;
+		    "xp", i__1, "spkbsr_", (ftnlen)2314)] = 0;
 	    bthfs[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("bth"
-		    "fs", i__1, "spkbsr_", (ftnlen)2299)] = ftnum[(i__2 = nft 
+		    "fs", i__1, "spkbsr_", (ftnlen)2315)] = ftnum[(i__2 = nft 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "spkbsr_", (ftnlen)2299)];
+		    "spkbsr_", (ftnlen)2315)];
 	    btlfs[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btl"
-		    "fs", i__1, "spkbsr_", (ftnlen)2300)] = ftnum[(i__2 = nft 
+		    "fs", i__1, "spkbsr_", (ftnlen)2316)] = ftnum[(i__2 = nft 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "spkbsr_", (ftnlen)2300)] + 1;
+		    "spkbsr_", (ftnlen)2316)] + 1;
 	    btbeg[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btb"
-		    "eg", i__1, "spkbsr_", (ftnlen)2301)] = 0;
+		    "eg", i__1, "spkbsr_", (ftnlen)2317)] = 0;
 	    btchkp[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btchkp", i__1, "spkbsr_", (ftnlen)2302)] = FALSE_;
+		    "btchkp", i__1, "spkbsr_", (ftnlen)2318)] = FALSE_;
 
 /*           The following items associated with the re-use interval */
 /*           need not be initialized at this point: */
@@ -2263,18 +2279,18 @@ L_spksfs:
 /*           compilers. */
 
 	    btruex[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "spkbsr_", (ftnlen)2319)] = 0;
+		    "btruex", i__1, "spkbsr_", (ftnlen)2335)] = 0;
 	    btlb[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btlb",
-		     i__1, "spkbsr_", (ftnlen)2320)] = dpmin_();
+		     i__1, "spkbsr_", (ftnlen)2336)] = dpmin_();
 	    btub[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btub",
-		     i__1, "spkbsr_", (ftnlen)2321)] = dpmax_();
+		     i__1, "spkbsr_", (ftnlen)2337)] = dpmax_();
 	    btprvh[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btprvh", i__1, "spkbsr_", (ftnlen)2322)] = 0;
+		    "btprvh", i__1, "spkbsr_", (ftnlen)2338)] = 0;
 	    s_copy(btprvi + ((i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)2323)) * 40, 
+		    s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)2339)) * 40, 
 		    " ", (ftnlen)40, (ftnlen)1);
 	    cleard_(&c__5, &btprvd[(i__1 = cheap * 5 - 5) < 1000 && 0 <= i__1 
-		    ? i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)2324)])
+		    ? i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)2340)])
 		    ;
 
 /*           BINDEX is the body table index of the new entry. */
@@ -2306,17 +2322,17 @@ L_spksfs:
 
 	    findex = 1;
 	    while(bthfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2360)] >= ftnum[(
+		    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2376)] >= ftnum[(
 		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "spkbsr_", (ftnlen)2360)]) {
+		    "ftnum", i__2, "spkbsr_", (ftnlen)2376)]) {
 		++findex;
 	    }
 	    bthfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "spkbsr_", (ftnlen)2364)] = ftnum[(i__2 = 
+		    "bthfs", i__1, "spkbsr_", (ftnlen)2380)] = ftnum[(i__2 = 
 		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "spkbsr_", (ftnlen)2364)];
+		    i__2, "spkbsr_", (ftnlen)2380)];
 	    dafbfs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "spkbsr_", (ftnlen)2366)]);
+		    s_rnge("fthan", i__1, "spkbsr_", (ftnlen)2382)]);
 	    if (failed_()) {
 		chkout_("SPKSFS", (ftnlen)6);
 		return 0;
@@ -2352,9 +2368,9 @@ L_spksfs:
 
 		s_copy(status, "?", (ftnlen)15, (ftnlen)1);
 		btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "spkbsr_", (ftnlen)2408)] = btexp[(
+			"btexp", i__1, "spkbsr_", (ftnlen)2424)] = btexp[(
 			i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "spkbsr_", (ftnlen)2408)] + cost;
+			"btexp", i__2, "spkbsr_", (ftnlen)2424)] + cost;
 	    } else {
 		dafgs_(descr);
 		dafus_(descr, &c__2, &c__6, dcd, icd);
@@ -2392,16 +2408,16 @@ L_spksfs:
 
 /*           2) We have checked the current list (CHECK LIST) for */
 /*              this body, didn't find an applicable segment and */
-/*              have some files left that have not been seached. */
+/*              have some files left that have not been searched. */
 	    findex = nft;
 	    while(btlfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2460)] <= ftnum[(
+		    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2476)] <= ftnum[(
 		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "spkbsr_", (ftnlen)2460)]) {
+		    "ftnum", i__2, "spkbsr_", (ftnlen)2476)]) {
 		--findex;
 	    }
 	    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "spkbsr_", (ftnlen)2464)]);
+		    s_rnge("fthan", i__1, "spkbsr_", (ftnlen)2480)]);
 	    if (failed_()) {
 		chkout_("SPKSFS", (ftnlen)6);
 		return 0;
@@ -2441,13 +2457,13 @@ L_spksfs:
 /*              to be the current file, and go check the current list. */
 
 		btlfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "spkbsr_", (ftnlen)2509)] = ftnum[(
+			"btlfs", i__1, "spkbsr_", (ftnlen)2525)] = ftnum[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2509)];
+			s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2525)];
 		btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "spkbsr_", (ftnlen)2510)] = btexp[(
+			"btexp", i__1, "spkbsr_", (ftnlen)2526)] = btexp[(
 			i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "spkbsr_", (ftnlen)2510)] + cost;
+			"btexp", i__2, "spkbsr_", (ftnlen)2526)] + cost;
 		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
 	    } else {
 		dafgs_(descr);
@@ -2485,14 +2501,14 @@ L_spksfs:
 /*           associated with the current body. */
 
 	    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btlb"
-		    , i__1, "spkbsr_", (ftnlen)2557)] = dpmin_();
+		    , i__1, "spkbsr_", (ftnlen)2573)] = dpmin_();
 	    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btub"
-		    , i__1, "spkbsr_", (ftnlen)2558)] = dpmax_();
+		    , i__1, "spkbsr_", (ftnlen)2574)] = dpmax_();
 	    p = btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "spkbsr_", (ftnlen)2559)];
+		    "btbeg", i__1, "spkbsr_", (ftnlen)2575)];
 	    while(p > 0) {
 		if (*et > stdes[(i__1 = p * 5 - 4) < 500000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stdes", i__1, "spkbsr_", (ftnlen)2563)]
+			i__1 : s_rnge("stdes", i__1, "spkbsr_", (ftnlen)2579)]
 			) {
 
 /*                 ET is to the right of the coverage interval of this */
@@ -2500,28 +2516,28 @@ L_spksfs:
 
 /* Computing MAX */
 		    d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 
-			    : s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2568)], 
+			    : s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2584)], 
 			    d__2 = stdes[(i__3 = p * 5 - 4) < 500000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "spkbsr_", (
-			    ftnlen)2568)];
+			    ftnlen)2584)];
 		    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2568)] = 
+			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2584)] = 
 			    max(d__1,d__2);
 		} else if (*et < stdes[(i__1 = p * 5 - 5) < 500000 && 0 <= 
 			i__1 ? i__1 : s_rnge("stdes", i__1, "spkbsr_", (
-			ftnlen)2571)]) {
+			ftnlen)2587)]) {
 
 /*                 ET is to the left of the coverage interval of this */
 /*                 segment. */
 
 /* Computing MIN */
 		    d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 
-			    : s_rnge("btub", i__2, "spkbsr_", (ftnlen)2576)], 
+			    : s_rnge("btub", i__2, "spkbsr_", (ftnlen)2592)], 
 			    d__2 = stdes[(i__3 = p * 5 - 5) < 500000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "spkbsr_", (
-			    ftnlen)2576)];
+			    ftnlen)2592)];
 		    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2576)] = 
+			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2592)] = 
 			    min(d__1,d__2);
 		} else {
 
@@ -2529,50 +2545,50 @@ L_spksfs:
 
 		    moved_(&stdes[(i__1 = p * 5 - 5) < 500000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stdes", i__1, "spkbsr_", (ftnlen)
-			    2582)], &c__5, descr);
+			    2598)], &c__5, descr);
 		    s_copy(ident, stidnt + ((i__1 = p - 1) < 100000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stidnt", i__1, "spkbsr_", (
-			    ftnlen)2583)) * 40, ident_len, (ftnlen)40);
+			    ftnlen)2599)) * 40, ident_len, (ftnlen)40);
 		    *handle = sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("sthan", i__1, "spkbsr_", (ftnlen)
-			    2584)];
+			    2600)];
 		    *found = TRUE_;
 
 /*                 Set the re-use interval for the current body. */
 
 /* Computing MAX */
 		    d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 
-			    : s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2590)], 
+			    : s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2606)], 
 			    d__2 = stdes[(i__3 = p * 5 - 5) < 500000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "spkbsr_", (
-			    ftnlen)2590)];
+			    ftnlen)2606)];
 		    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2590)] = 
+			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2606)] = 
 			    max(d__1,d__2);
 /* Computing MIN */
 		    d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? i__2 
-			    : s_rnge("btub", i__2, "spkbsr_", (ftnlen)2591)], 
+			    : s_rnge("btub", i__2, "spkbsr_", (ftnlen)2607)], 
 			    d__2 = stdes[(i__3 = p * 5 - 4) < 500000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "spkbsr_", (
-			    ftnlen)2591)];
+			    ftnlen)2607)];
 		    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2591)] = 
+			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2607)] = 
 			    min(d__1,d__2);
 
 /*                 Save the returned output items, in case this segment */
 /*                 may satisfy the next request. */
 
 		    btprvh[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2597)] =
+			    s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2613)] =
 			     *handle;
 		    s_copy(btprvi + ((i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)
-			    2598)) * 40, ident, (ftnlen)40, ident_len);
+			    2614)) * 40, ident, (ftnlen)40, ident_len);
 		    moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 5) < 
 			    1000 && 0 <= i__1 ? i__1 : s_rnge("btprvd", i__1, 
-			    "spkbsr_", (ftnlen)2599)]);
+			    "spkbsr_", (ftnlen)2615)]);
 		    btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btchkp", i__1, "spkbsr_", (ftnlen)2600)] =
+			    s_rnge("btchkp", i__1, "spkbsr_", (ftnlen)2616)] =
 			     TRUE_;
 		    chkout_("SPKSFS", (ftnlen)6);
 		    return 0;
@@ -2582,7 +2598,7 @@ L_spksfs:
 /*              to speed up the operation. */
 
 		p = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= i__1 ? 
-			i__1 : s_rnge("stpool", i__1, "spkbsr_", (ftnlen)2611)
+			i__1 : s_rnge("stpool", i__1, "spkbsr_", (ftnlen)2627)
 			];
 	    }
 
@@ -2593,7 +2609,7 @@ L_spksfs:
 /*           Otherwise, things are hopeless, set the status that way. */
 
 	    if (btlfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btlfs", i__1, "spkbsr_", (ftnlen)2622)] > ftnum[0]) {
+		    "btlfs", i__1, "spkbsr_", (ftnlen)2638)] > ftnum[0]) {
 		s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
 	    } else {
 		s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
@@ -2641,7 +2657,7 @@ L_spksfs:
 /*                 one. */
 
 		    if (btexp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2673)] < 
+			    s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2689)] < 
 			    minexp || cheap == 0) {
 
 /*                    This list is the cheapest seen so far, */
@@ -2652,7 +2668,7 @@ L_spksfs:
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "spkbsr_", (
-				ftnlen)2682)];
+				ftnlen)2698)];
 		    }
 		}
 	    }
@@ -2663,7 +2679,7 @@ L_spksfs:
 /*              'MAKE ROOM'. */
 
 		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "spkbsr_", (ftnlen)2697)) * 15, 
+			s_rnge("stack", i__1, "spkbsr_", (ftnlen)2713)) * 15, 
 			"ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
 
 /*                 There's nothing left to do but search the remaining */
@@ -2688,7 +2704,7 @@ L_spksfs:
 /*                 node. */
 
 		    p = btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2722)];
+			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2738)];
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
 
@@ -2697,19 +2713,19 @@ L_spksfs:
 /*                 Also, reset the suspended task stack to be empty. */
 
 		    btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2732)] = 
+			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2748)] = 
 			    0;
 		    btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "spkbsr_", (ftnlen)2733)] = 
+			    s_rnge("btexp", i__1, "spkbsr_", (ftnlen)2749)] = 
 			    0;
 		    bthfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2734)] = 
+			    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2750)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2734)];
+			    : s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2750)];
 		    btlfs[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2735)] = 
+			    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2751)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2735)] 
+			    : s_rnge("ftnum", i__2, "spkbsr_", (ftnlen)2751)] 
 			    + 1;
 		    s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
 		    top = 0;
@@ -2719,7 +2735,7 @@ L_spksfs:
 /*              Return this cheapest list to the segment pool. */
 
 		p = btbeg[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2745)];
+			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2761)];
 		if (p > 0) {
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
@@ -2730,58 +2746,58 @@ L_spksfs:
 
 		if (cheap != nbt) {
 		    btbod[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbod", i__1, "spkbsr_", (ftnlen)2760)] = 
+			    s_rnge("btbod", i__1, "spkbsr_", (ftnlen)2776)] = 
 			    btbod[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 :
-			     s_rnge("btbod", i__2, "spkbsr_", (ftnlen)2760)];
+			     s_rnge("btbod", i__2, "spkbsr_", (ftnlen)2776)];
 		    btexp[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "spkbsr_", (ftnlen)2761)] = 
+			    s_rnge("btexp", i__1, "spkbsr_", (ftnlen)2777)] = 
 			    btexp[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 :
-			     s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2761)];
+			     s_rnge("btexp", i__2, "spkbsr_", (ftnlen)2777)];
 		    bthfs[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2762)] = 
+			    s_rnge("bthfs", i__1, "spkbsr_", (ftnlen)2778)] = 
 			    bthfs[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 :
-			     s_rnge("bthfs", i__2, "spkbsr_", (ftnlen)2762)];
+			     s_rnge("bthfs", i__2, "spkbsr_", (ftnlen)2778)];
 		    btlfs[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2763)] = 
+			    s_rnge("btlfs", i__1, "spkbsr_", (ftnlen)2779)] = 
 			    btlfs[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 :
-			     s_rnge("btlfs", i__2, "spkbsr_", (ftnlen)2763)];
+			     s_rnge("btlfs", i__2, "spkbsr_", (ftnlen)2779)];
 		    btbeg[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2764)] = 
+			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2780)] = 
 			    btbeg[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 :
-			     s_rnge("btbeg", i__2, "spkbsr_", (ftnlen)2764)];
+			     s_rnge("btbeg", i__2, "spkbsr_", (ftnlen)2780)];
 		    btlb[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2765)] = 
+			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2781)] = 
 			    btlb[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2765)];
+			    s_rnge("btlb", i__2, "spkbsr_", (ftnlen)2781)];
 		    btub[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2766)] = 
+			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2782)] = 
 			    btub[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btub", i__2, "spkbsr_", (ftnlen)2766)];
+			    s_rnge("btub", i__2, "spkbsr_", (ftnlen)2782)];
 		    btprvh[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2767)] =
+			    s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)2783)] =
 			     btprvh[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btprvh", i__2, "spkbsr_", (ftnlen)
-			    2767)];
+			    2783)];
 		    s_copy(btprvi + ((i__1 = cheap - 1) < 200 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvi", i__1, "spkbsr_", (ftnlen)
-			    2768)) * 40, btprvi + ((i__2 = nbt - 1) < 200 && 
+			    2784)) * 40, btprvi + ((i__2 = nbt - 1) < 200 && 
 			    0 <= i__2 ? i__2 : s_rnge("btprvi", i__2, "spkbs"
-			    "r_", (ftnlen)2768)) * 40, (ftnlen)40, (ftnlen)40);
+			    "r_", (ftnlen)2784)) * 40, (ftnlen)40, (ftnlen)40);
 		    btruex[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)2769)] =
+			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)2785)] =
 			     btruex[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btruex", i__2, "spkbsr_", (ftnlen)
-			    2769)];
+			    2785)];
 		    btchkp[(i__1 = cheap - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btchkp", i__1, "spkbsr_", (ftnlen)2770)] =
+			    s_rnge("btchkp", i__1, "spkbsr_", (ftnlen)2786)] =
 			     btchkp[(i__2 = nbt - 1) < 200 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btchkp", i__2, "spkbsr_", (ftnlen)
-			    2770)];
+			    2786)];
 		    moved_(&btprvd[(i__1 = nbt * 5 - 5) < 1000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvd", i__1, "spkbsr_", (ftnlen)
-			    2773)], &c__5, &btprvd[(i__2 = cheap * 5 - 5) < 
+			    2789)], &c__5, &btprvd[(i__2 = cheap * 5 - 5) < 
 			    1000 && 0 <= i__2 ? i__2 : s_rnge("btprvd", i__2, 
-			    "spkbsr_", (ftnlen)2773)]);
+			    "spkbsr_", (ftnlen)2789)]);
 		}
 
 /*              If the final entry in the table happened to be the */
@@ -2829,14 +2845,14 @@ L_spksfs:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2827)] = 
+			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2843)] = 
 			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2827)];
+			 s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2843)];
 		moved_(descr, &c__5, &stdes[(i__1 = new__ * 5 - 5) < 500000 &&
 			 0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "spkbsr_", (
-			ftnlen)2828)]);
+			ftnlen)2844)]);
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "spkbsr_", (ftnlen)2829)
+			i__1 : s_rnge("stidnt", i__1, "spkbsr_", (ftnlen)2845)
 			) * 40, (ftnlen)40);
 		if (failed_()) {
 		    chkout_("SPKSFS", (ftnlen)6);
@@ -2848,9 +2864,9 @@ L_spksfs:
 
 		lnkilb_(&new__, &btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 
 			? i__1 : s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)
-			2840)], stpool);
+			2856)], stpool);
 		btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "spkbsr_", (ftnlen)2841)] = new__;
+			"btbeg", i__1, "spkbsr_", (ftnlen)2857)] = new__;
 		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
 	    }
 	} else if (s_cmp(status, "ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
@@ -2875,27 +2891,27 @@ L_spksfs:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2872)] = 
+			s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2888)] = 
 			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2872)];
+			 s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2888)];
 		moved_(descr, &c__5, &stdes[(i__1 = new__ * 5 - 5) < 500000 &&
 			 0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "spkbsr_", (
-			ftnlen)2873)]);
+			ftnlen)2889)]);
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "spkbsr_", (ftnlen)2874)
+			i__1 : s_rnge("stidnt", i__1, "spkbsr_", (ftnlen)2890)
 			) * 40, (ftnlen)40);
 		if (failed_()) {
 		    chkout_("SPKSFS", (ftnlen)6);
 		    return 0;
 		}
 		if (btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2881)] <= 0) 
+			s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2897)] <= 0) 
 			{
 
 /*                 This is the first node in the list for this body. */
 
 		    btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2885)] = 
+			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2901)] = 
 			    new__;
 		} else {
 
@@ -2903,7 +2919,7 @@ L_spksfs:
 
 		    tail = -lnkprv_(&btbeg[(i__1 = bindex - 1) < 200 && 0 <= 
 			    i__1 ? i__1 : s_rnge("btbeg", i__1, "spkbsr_", (
-			    ftnlen)2891)], stpool);
+			    ftnlen)2907)], stpool);
 		    lnkila_(&tail, &new__, stpool);
 		}
 		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
@@ -2925,7 +2941,7 @@ L_spksfs:
 /*           the re-use interval. */
 
 	    btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "spkbsr_", (ftnlen)2917)] = 0;
+		    "btruex", i__1, "spkbsr_", (ftnlen)2933)] = 0;
 
 /*           Need to find the portion of the current body's segment */
 /*           list which comes from the current file of interest.  It */
@@ -2933,13 +2949,13 @@ L_spksfs:
 /*           remainder of the file's segments can't be added to the list. */
 
 	    crflbg = btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2925)];
+		    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2941)];
 	    fndhan = FALSE_;
 	    while(! fndhan && crflbg > 0) {
 		fndhan = sthan[(i__1 = crflbg - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2930)]
+			i__1 : s_rnge("sthan", i__1, "spkbsr_", (ftnlen)2946)]
 			 == fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-			i__2 : s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2930)]
+			i__2 : s_rnge("fthan", i__2, "spkbsr_", (ftnlen)2946)]
 			;
 		if (! fndhan) {
 
@@ -2948,7 +2964,7 @@ L_spksfs:
 
 		    crflbg = stpool[(i__1 = (crflbg << 1) + 10) < 200012 && 0 
 			    <= i__1 ? i__1 : s_rnge("stpool", i__1, "spkbsr_",
-			     (ftnlen)2937)];
+			     (ftnlen)2953)];
 		}
 	    }
 	    if (crflbg > 0) {
@@ -2966,19 +2982,19 @@ L_spksfs:
 /*              a non-positive value to indicate an empty segment list. */
 
 		if (p == btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 :
-			 s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2958)]) {
+			 s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2974)]) {
 		    btbeg[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2960)] = 
+			    s_rnge("btbeg", i__1, "spkbsr_", (ftnlen)2976)] = 
 			    0;
 
 /*                 Also in this case, we must initialize the re-use */
 /*                 interval for this body. */
 
 		    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2965)] = 
+			    s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2981)] = 
 			    dpmin_();
 		    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2966)] = 
+			    s_rnge("btub", i__1, "spkbsr_", (ftnlen)2982)] = 
 			    dpmax_();
 		}
 
@@ -2991,13 +3007,13 @@ L_spksfs:
 /*                 to the expense of the re-use interval. */
 
 		    btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)2979)] =
+			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)2995)] =
 			     btruex[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btruex", i__2, "spkbsr_", (ftnlen)
-			    2979)] + 1;
+			    2995)] + 1;
 		    if (*et > stdes[(i__1 = crflbg * 5 - 4) < 500000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stdes", i__1, "spkbsr_", (
-			    ftnlen)2982)]) {
+			    ftnlen)2998)]) {
 
 /*                    ET is to the right of the coverage interval of this */
 /*                    segment. */
@@ -3005,15 +3021,15 @@ L_spksfs:
 /* Computing MAX */
 			d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btlb", i__2, "spkbsr_", (
-				ftnlen)2987)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)3003)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 4) < 500000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "spkbsr_", (ftnlen)2987)];
+				"stdes", i__3, "spkbsr_", (ftnlen)3003)];
 			btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btlb", i__1, "spkbsr_", (ftnlen)2987)]
+				s_rnge("btlb", i__1, "spkbsr_", (ftnlen)3003)]
 				 = max(d__1,d__2);
 		    } else if (*et < stdes[(i__1 = crflbg * 5 - 5) < 500000 &&
 			     0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "spkbs"
-			    "r_", (ftnlen)2990)]) {
+			    "r_", (ftnlen)3006)]) {
 
 /*                    ET is to the left of the coverage interval of this */
 /*                    segment. */
@@ -3021,11 +3037,11 @@ L_spksfs:
 /* Computing MIN */
 			d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btub", i__2, "spkbsr_", (
-				ftnlen)2995)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)3011)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 5) < 500000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "spkbsr_", (ftnlen)2995)];
+				"stdes", i__3, "spkbsr_", (ftnlen)3011)];
 			btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btub", i__1, "spkbsr_", (ftnlen)2995)]
+				s_rnge("btub", i__1, "spkbsr_", (ftnlen)3011)]
 				 = min(d__1,d__2);
 		    } else {
 
@@ -3033,14 +3049,14 @@ L_spksfs:
 
 			moved_(&stdes[(i__1 = crflbg * 5 - 5) < 500000 && 0 <=
 				 i__1 ? i__1 : s_rnge("stdes", i__1, "spkbsr_"
-				, (ftnlen)3001)], &c__5, descr);
+				, (ftnlen)3017)], &c__5, descr);
 			s_copy(ident, stidnt + ((i__1 = crflbg - 1) < 100000 
 				&& 0 <= i__1 ? i__1 : s_rnge("stidnt", i__1, 
-				"spkbsr_", (ftnlen)3003)) * 40, ident_len, (
+				"spkbsr_", (ftnlen)3019)) * 40, ident_len, (
 				ftnlen)40);
 			*handle = sthan[(i__1 = crflbg - 1) < 100000 && 0 <= 
 				i__1 ? i__1 : s_rnge("sthan", i__1, "spkbsr_",
-				 (ftnlen)3004)];
+				 (ftnlen)3020)];
 			*found = TRUE_;
 
 /*                    Set the re-use interval for the current body. */
@@ -3048,20 +3064,20 @@ L_spksfs:
 /* Computing MAX */
 			d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btlb", i__2, "spkbsr_", (
-				ftnlen)3010)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)3026)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 5) < 500000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "spkbsr_", (ftnlen)3010)];
+				"stdes", i__3, "spkbsr_", (ftnlen)3026)];
 			btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btlb", i__1, "spkbsr_", (ftnlen)3010)]
+				s_rnge("btlb", i__1, "spkbsr_", (ftnlen)3026)]
 				 = max(d__1,d__2);
 /* Computing MIN */
 			d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 				i__2 : s_rnge("btub", i__2, "spkbsr_", (
-				ftnlen)3011)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)3027)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 4) < 500000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "spkbsr_", (ftnlen)3011)];
+				"stdes", i__3, "spkbsr_", (ftnlen)3027)];
 			btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btub", i__1, "spkbsr_", (ftnlen)3011)]
+				s_rnge("btub", i__1, "spkbsr_", (ftnlen)3027)]
 				 = min(d__1,d__2);
 
 /*                    Save the output items, in case this */
@@ -3069,28 +3085,28 @@ L_spksfs:
 
 			btprvh[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 :
 				 s_rnge("btprvh", i__1, "spkbsr_", (ftnlen)
-				3017)] = *handle;
+				3033)] = *handle;
 			s_copy(btprvi + ((i__1 = bindex - 1) < 200 && 0 <= 
 				i__1 ? i__1 : s_rnge("btprvi", i__1, "spkbsr_"
-				, (ftnlen)3018)) * 40, ident, (ftnlen)40, 
+				, (ftnlen)3034)) * 40, ident, (ftnlen)40, 
 				ident_len);
 			moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 5) <
 				 1000 && 0 <= i__1 ? i__1 : s_rnge("btprvd", 
-				i__1, "spkbsr_", (ftnlen)3019)]);
+				i__1, "spkbsr_", (ftnlen)3035)]);
 			btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 :
 				 s_rnge("btchkp", i__1, "spkbsr_", (ftnlen)
-				3020)] = TRUE_;
+				3036)] = TRUE_;
 
 /*                    Update the expense of the list to reflect */
 /*                    the cost of locating this segment. */
 
 			btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-				s_rnge("btexp", i__1, "spkbsr_", (ftnlen)3026)
+				s_rnge("btexp", i__1, "spkbsr_", (ftnlen)3042)
 				] = btexp[(i__2 = bindex - 1) < 200 && 0 <= 
 				i__2 ? i__2 : s_rnge("btexp", i__2, "spkbsr_",
-				 (ftnlen)3026)] + btruex[(i__3 = bindex - 1) <
+				 (ftnlen)3042)] + btruex[(i__3 = bindex - 1) <
 				 200 && 0 <= i__3 ? i__3 : s_rnge("btruex", 
-				i__3, "spkbsr_", (ftnlen)3026)];
+				i__3, "spkbsr_", (ftnlen)3042)];
 
 /*                    Free the sub-list we were searching. */
 
@@ -3104,7 +3120,7 @@ L_spksfs:
 
 		    crflbg = stpool[(i__1 = (crflbg << 1) + 10) < 200012 && 0 
 			    <= i__1 ? i__1 : s_rnge("stpool", i__1, "spkbsr_",
-			     (ftnlen)3042)];
+			     (ftnlen)3058)];
 		}
 
 /*              Return the sub-list to the segment table pool. */
@@ -3131,10 +3147,10 @@ L_spksfs:
 /*                 re-use interval. */
 
 		    btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)3073)] =
+			    s_rnge("btruex", i__1, "spkbsr_", (ftnlen)3089)] =
 			     btruex[(i__2 = bindex - 1) < 200 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btruex", i__2, "spkbsr_", (ftnlen)
-			    3073)] + 1;
+			    3089)] + 1;
 		    dafgs_(descr);
 		    dafus_(descr, &c__2, &c__6, dcd, icd);
 		    if (failed_()) {
@@ -3154,10 +3170,10 @@ L_spksfs:
 /* Computing MAX */
 			    d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= 
 				    i__2 ? i__2 : s_rnge("btlb", i__2, "spkb"
-				    "sr_", (ftnlen)3093)];
+				    "sr_", (ftnlen)3109)];
 			    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btlb", i__1, "spkbsr_", (
-				    ftnlen)3093)] = max(d__1,dcd[1]);
+				    ftnlen)3109)] = max(d__1,dcd[1]);
 			} else if (*et < dcd[0]) {
 
 /*                       ET is to the left of the coverage interval */
@@ -3166,10 +3182,10 @@ L_spksfs:
 /* Computing MIN */
 			    d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= 
 				    i__2 ? i__2 : s_rnge("btub", i__2, "spkb"
-				    "sr_", (ftnlen)3101)];
+				    "sr_", (ftnlen)3117)];
 			    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btub", i__1, "spkbsr_", (
-				    ftnlen)3101)] = min(d__1,dcd[0]);
+				    ftnlen)3117)] = min(d__1,dcd[0]);
 			} else {
 
 /*                       The segment coverage interval includes ET. */
@@ -3181,7 +3197,7 @@ L_spksfs:
 			    }
 			    *handle = fthan[(i__1 = findex - 1) < 5000 && 0 <=
 				     i__1 ? i__1 : s_rnge("fthan", i__1, 
-				    "spkbsr_", (ftnlen)3114)];
+				    "spkbsr_", (ftnlen)3130)];
 			    *found = TRUE_;
 
 /*                       Set the re-use interval for the current body. */
@@ -3189,47 +3205,47 @@ L_spksfs:
 /* Computing MAX */
 			    d__1 = btlb[(i__2 = bindex - 1) < 200 && 0 <= 
 				    i__2 ? i__2 : s_rnge("btlb", i__2, "spkb"
-				    "sr_", (ftnlen)3120)];
+				    "sr_", (ftnlen)3136)];
 			    btlb[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btlb", i__1, "spkbsr_", (
-				    ftnlen)3120)] = max(d__1,dcd[0]);
+				    ftnlen)3136)] = max(d__1,dcd[0]);
 /* Computing MIN */
 			    d__1 = btub[(i__2 = bindex - 1) < 200 && 0 <= 
 				    i__2 ? i__2 : s_rnge("btub", i__2, "spkb"
-				    "sr_", (ftnlen)3121)];
+				    "sr_", (ftnlen)3137)];
 			    btub[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btub", i__1, "spkbsr_", (
-				    ftnlen)3121)] = min(d__1,dcd[1]);
+				    ftnlen)3137)] = min(d__1,dcd[1]);
 
 /*                       Save the output items, in case this */
 /*                       segment may satisfy the next request. */
 
 			    btprvh[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btprvh", i__1, "spkbsr_", (
-				    ftnlen)3127)] = *handle;
+				    ftnlen)3143)] = *handle;
 			    s_copy(btprvi + ((i__1 = bindex - 1) < 200 && 0 <=
 				     i__1 ? i__1 : s_rnge("btprvi", i__1, 
-				    "spkbsr_", (ftnlen)3128)) * 40, ident, (
+				    "spkbsr_", (ftnlen)3144)) * 40, ident, (
 				    ftnlen)40, ident_len);
 			    moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 
 				    5) < 1000 && 0 <= i__1 ? i__1 : s_rnge(
-				    "btprvd", i__1, "spkbsr_", (ftnlen)3129)])
+				    "btprvd", i__1, "spkbsr_", (ftnlen)3145)])
 				    ;
 			    btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btchkp", i__1, "spkbsr_", (
-				    ftnlen)3130)] = TRUE_;
+				    ftnlen)3146)] = TRUE_;
 
 /*                       Update the expense of the list to reflect */
 /*                       the cost of locating this segment. */
 
 			    btexp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btexp", i__1, "spkbsr_", (
-				    ftnlen)3136)] = btexp[(i__2 = bindex - 1) 
+				    ftnlen)3152)] = btexp[(i__2 = bindex - 1) 
 				    < 200 && 0 <= i__2 ? i__2 : s_rnge("btexp"
-				    , i__2, "spkbsr_", (ftnlen)3136)] + 
+				    , i__2, "spkbsr_", (ftnlen)3152)] + 
 				    btruex[(i__3 = bindex - 1) < 200 && 0 <= 
 				    i__3 ? i__3 : s_rnge("btruex", i__3, 
-				    "spkbsr_", (ftnlen)3136)];
+				    "spkbsr_", (ftnlen)3152)];
 			    chkout_("SPKSFS", (ftnlen)6);
 			    return 0;
 			}
@@ -3247,7 +3263,7 @@ L_spksfs:
 		if (findex > 0) {
 		    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("fthan", i__1, "spkbsr_", (ftnlen)
-			    3161)]);
+			    3177)]);
 		    daffpa_(&fnd);
 		    if (failed_()) {
 			chkout_("SPKSFS", (ftnlen)6);
@@ -3259,7 +3275,7 @@ L_spksfs:
 /*           If you get to here, sorry. */
 
 	    btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "spkbsr_", (ftnlen)3176)] = 0;
+		    "btruex", i__1, "spkbsr_", (ftnlen)3192)] = 0;
 	    s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
 
 /*        When a task is suspended, the current activity is placed on */
@@ -3269,7 +3285,7 @@ L_spksfs:
 	} else if (s_cmp(status, "SUSPEND", (ftnlen)15, (ftnlen)7) == 0) {
 	    ++top;
 	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "spkbsr_", (ftnlen)3187)) * 15, doing, (
+		    "stack", i__1, "spkbsr_", (ftnlen)3203)) * 15, doing, (
 		    ftnlen)15, (ftnlen)15);
 	    s_copy(status, urgent, (ftnlen)15, (ftnlen)15);
 	} else if (s_cmp(status, "RESUME", (ftnlen)15, (ftnlen)6) == 0) {
@@ -3277,7 +3293,7 @@ L_spksfs:
 /*           Pop the status stack. */
 
 	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "spkbsr_", (ftnlen)3194)) * 15, (
+		     s_rnge("stack", i__1, "spkbsr_", (ftnlen)3210)) * 15, (
 		    ftnlen)15, (ftnlen)15);
 	    --top;
 	}
@@ -3289,9 +3305,9 @@ L_spksfs:
 
     if (bindex > 0) {
 	btchkp[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btchkp"
-		, i__1, "spkbsr_", (ftnlen)3208)] = FALSE_;
+		, i__1, "spkbsr_", (ftnlen)3224)] = FALSE_;
 	btruex[(i__1 = bindex - 1) < 200 && 0 <= i__1 ? i__1 : s_rnge("btruex"
-		, i__1, "spkbsr_", (ftnlen)3209)] = 0;
+		, i__1, "spkbsr_", (ftnlen)3225)] = 0;
     }
     chkout_("SPKSFS", (ftnlen)6);
     return 0;

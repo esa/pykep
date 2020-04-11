@@ -59,17 +59,17 @@
    VARIABLE  I/O  DESCRIPTION 
    --------  ---  -------------------------------------------------- 
    r          I   Distance of point from z axis. 
-   lonc       I   Cylindrical angle of point from XZ plane(radians). 
+   lonc       I   Cylindrical angle of point from XZ plane (radians). 
    z          I   Height of point above XY plane. 
    radius     O   Distance of point from origin. 
    lon        O   Longitude of point (radians). 
    lat        O   Latitude of point (radians). 
- 
+
 -Detailed_Input
  
    r          Distance of the input point from z axis. 
  
-   lonc       Cylindrical angle of the point from XZ plane(radians). 
+   lonc       Cylindrical angle of the point from XZ plane (radians). 
  
    z          Height of the point above XY plane. 
  
@@ -78,12 +78,20 @@
    radius     Distance of the input point from origin. 
  
    lon        Longitude (i.e. angle from the XZ plane) of the input 
-              point. 
+              point (radians). `lon' is set equal to `lonc'.
  
    lat        Latitude (i.e. angle above the XY plane) of the input 
-              point (radians). 
+              point (radians). The range of `lat' is [-pi, pi].
  
 -Parameters
+ 
+   None. 
+ 
+-Exceptions
+ 
+   Error free. 
+ 
+-Files
  
    None. 
  
@@ -127,11 +135,7 @@
  
    None. 
  
--Exceptions
- 
-   Error free. 
- 
--Files
+-Literature_References
  
    None. 
  
@@ -140,11 +144,11 @@
    E.D. Wright     (JPL)
    W.L. Taber      (JPL) 
  
--Literature_References
- 
-   None. 
- 
 -Version
+
+   -CSPICE Version 1.1.1, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
 
    -CSPICE Version 1.1.0, 23-JUL-2001 (NJB)
      

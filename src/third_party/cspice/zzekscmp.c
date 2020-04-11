@@ -22,7 +22,7 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
     /* Local variables */
     char eltc[1024];
     doublereal eltd;
-    integer elti, unit;
+    integer elti;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer cvlen;
     logical found, enull;
@@ -33,8 +33,7 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
     integer coltyp, strlen;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dashlu_(integer *, integer *), errfnm_(char *, integer *,
-	     ftnlen);
+	    ftnlen), errhan_(char *, integer *, ftnlen);
     integer rel;
     extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, logical *, logical *, 
@@ -727,15 +726,15 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 /*         made to handle these errors. */
 
 /*     4)  If the data type code in the input column descriptor is not */
-/*         recognized, the error SPICE(INVALIDDATATYPE) is signalled. */
+/*         recognized, the error SPICE(INVALIDDATATYPE) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /*     5)  If the specified column entry cannot be found, the error */
-/*         SPICE(INVALIDINDEX) is signalled.  The function value is */
+/*         SPICE(INVALIDINDEX) is signaled.  The function value is */
 /*         .FALSE. in this case. */
 
 /*     6)  If the relational operator code OP is not recognized, the */
-/*         error SPICE(UNNATURALRELATION) is signalled.  The function */
+/*         error SPICE(UNNATURALRELATION) is signaled.  The function */
 /*         value is .FALSE. in this case. */
 
 
@@ -755,7 +754,7 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -770,6 +769,11 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 09-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
 
 /* -    SPICELIB Version 1.2.0, 31-MAY-2009 (NJB) */
 
@@ -845,11 +849,10 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 	return ret_val;
     }
     if (! found) {
-	dashlu_(handle, &unit);
 	chkin_("ZZEKSCMP", (ftnlen)8);
 	setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry eleme"
 		"nt was not found.", (ftnlen)76);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &coldsc[8], (ftnlen)1);
 	errint_("#", row, (ftnlen)1);
 	errint_("#", eltidx, (ftnlen)1);

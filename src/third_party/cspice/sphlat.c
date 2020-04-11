@@ -47,62 +47,72 @@
 
 /* $ Keywords */
 
-/*      CONVERSION, COORDINATES */
+/*     CONVERSION, COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      R          I   Distance of the point from the origin. */
-/*      COLAT      I   Angle of the point from positive Z axis (radians). */
-/*      LONGS      I   Angle of the point from the XZ plane (radians). */
-/*      RADIUS     O   Distance of a point from the origin */
-/*      LONG       O   Angle of the point from the XZ plane in radians */
-/*      LAT        O   Angle of the point from the XY plane in radians */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     R          I   Distance of the point from the origin. */
+/*     COLAT      I   Angle of the point from positive Z axis (radians). */
+/*     LONGS      I   Angle of the point from the XZ plane (radians). */
+/*     RADIUS     O   Distance of a point from the origin */
+/*     LONG       O   Angle of the point from the XZ plane in radians */
+/*     LAT        O   Angle of the point from the XY plane in radians */
 
 /* $ Detailed_Input */
 
-/*      R          Distance of the point from the origin. */
+/*     R          Distance of the point from the origin. */
 
-/*      COLAT      Angle between the vector from the origin to the point */
-/*                 and the positive Z axis in radians. */
+/*     COLAT      Angle between the vector from the origin to the point */
+/*                and the positive Z axis in radians. */
 
-/*      LONGS      Angle of the point from the XZ plane (radians). */
+/*     LONGS      Angle of the point from the XZ plane (radians). */
 
 /* $ Detailed_Output */
 
-/*      RADIUS     Distance of a point from the origin */
+/*     RADIUS     Distance of a point from the origin */
 
-/*      LONG       Angle of the point from the XZ plane in radians */
+/*     LONG       Angle of the point from the XZ plane in radians. LONG */
+/*                is set equal to LONGS. */
 
-/*      LAT        Angle of the point from the XY plane in radians */
+/*     LAT        Angle of the point from the XY plane in radians. LAT */
+/*                is computed as pi/2 - COLAT. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine returns the latitudinal coordinates of a point */
-/*      whose position is input in spherical coordinates. */
+/*     This routine returns the latitudinal coordinates of a point */
+/*     whose position is input in spherical coordinates. */
 
-/*      Latitudinal coordinates are defined by a distance from a central */
-/*      reference point, an angle from a reference meridian, and an angle */
-/*      above the equator of a sphere centered at the central reference */
-/*      point. */
+/*     Latitudinal coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     above the equator of a sphere centered at the central reference */
+/*     point. */
 
-/*      Spherical coordinates are defined by a distance from a central */
-/*      reference point, an angle from a reference meridian, and an angle */
-/*      from the z-axis. */
+/*     Spherical coordinates are defined by a distance from a central */
+/*     reference point, an angle from a reference meridian, and an angle */
+/*     from the z-axis. */
 
 /* $ Examples */
 
 
-/*      Latitude is obtained by subtracting co-latitude from HALFPI() */
-/*      Radius and longitude mean the same thing in both latitudinal */
-/*      and spherical coordinates.  The table below lists LAT and */
-/*      corresponding COLAT in terms of degrees. */
+/*     Latitude is obtained by subtracting co-latitude from HALFPI() */
+/*     Radius and longitude mean the same thing in both latitudinal */
+/*     and spherical coordinates.  The table below lists LAT and */
+/*     corresponding COLAT in terms of degrees. */
 
 /*             LAT            COLAT */
 /*            ------         ------ */
@@ -115,25 +125,21 @@
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     W.L. Taber      (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-JUL-2016 (BVS) */
+
+/*        Minor headers edits. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -150,9 +156,9 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
+/* -    Beta Version 1.0.1, 1-Feb-1989 (WLT) */
 
-/*      Example section of header upgraded. */
+/*        Example section of header upgraded. */
 
 /* -& */
 

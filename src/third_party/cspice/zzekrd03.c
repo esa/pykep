@@ -22,9 +22,9 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nrec, bpos;
+    integer bpos;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    integer epos, unit;
+    integer epos;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
 	    integer *, integer *, integer *, integer *);
@@ -37,10 +37,10 @@ static integer c__1 = 1;
 	    *, integer *, integer *);
     char column[32];
     integer colidx, datptr, relptr, ptrloc;
-    extern /* Subroutine */ int dashlu_(integer *, integer *), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekgei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
+	    char *, ftnlen), chkout_(char *, ftnlen), zzekgei_(integer *, 
+	    integer *, integer *);
 
 /* $ Abstract */
 
@@ -764,6 +764,14 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.4.0, 07-FEB-2015 (NJB) */
+
+/*        Now uses ERRHAN to insert DAS file name into */
+/*        long error messages. */
+
+/*        Bug fix: changed max column index in long error */
+/*        message from NREC to NCOLS. */
+
 /* -    SPICELIB Version 1.3.0, 31-MAY-2010 (NJB) */
 
 /*        Bug fix: call to DASRDI was overwriting local memory. This */
@@ -827,15 +835,14 @@ static integer c__1 = 1;
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	chkin_("ZZEKRD03", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
 		"EK = #", (ftnlen)65);
 	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
+	errint_("#", &ncols, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKRD03", (ftnlen)8);
 	return 0;
@@ -917,7 +924,6 @@ static integer c__1 = 1;
 /*        The data value is absent.  This is an error. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	chkin_("ZZEKRD03", (ftnlen)8);
 	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
@@ -925,7 +931,7 @@ static integer c__1 = 1;
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(UNINITIALIZED)", (ftnlen)20);
 	chkout_("ZZEKRD03", (ftnlen)8);
 	return 0;
@@ -934,7 +940,6 @@ static integer c__1 = 1;
 /*        The data pointer is corrupted. */
 
 	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	dashlu_(handle, &unit);
 	zzekcnam_(handle, coldsc, column, (ftnlen)32);
 	chkin_("ZZEKRD03", (ftnlen)8);
 	setmsg_("Data pointer is corrupted. SEGNO = #; COLUMN =  #; RECNO = "
@@ -942,7 +947,7 @@ static integer c__1 = 1;
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errch_("#", column, (ftnlen)1, (ftnlen)32);
 	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &unit, (ftnlen)1);
+	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKRD03", (ftnlen)8);
 	return 0;

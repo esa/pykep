@@ -7,9 +7,10 @@
 
 /* Table of constant values */
 
-static doublereal c_b90 = .66666666666666663;
-static doublereal c_b91 = 3.5;
-static doublereal c_b152 = 1.5;
+static doublereal c_b91 = .66666666666666663;
+static doublereal c_b92 = 3.5;
+static doublereal c_b153 = 1.5;
+static integer c__20 = 20;
 
 /* $Procedure      EV2LIN ( Evaluate "two-line" element data) */
 /* Subroutine */ int ev2lin_(doublereal *et, doublereal *geophs, doublereal *
@@ -41,10 +42,11 @@ static doublereal c_b152 = 1.5;
     static integer i__, j;
     static doublereal m;
     static integer n;
-    static doublereal r__, s, u, betal, omega, betao, epoch, ecose, aycof, 
-	    delmo, esine, a3ovk2, tcube, cosik, tempa, bstar, cosio, xincl, 
-	    etasq, rfdot, sinik, a1, rdotk, c1, c2, c3, c4, c5, cosuk, d2, d3,
-	     j2, j3, j4, qomso, d4, lower;
+    static doublereal r__, s, u, betal, omega, betao;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    static doublereal epoch, ecose, aycof, delmo, esine, a3ovk2, tcube, cosik,
+	     tempa, bstar, cosio, xincl, etasq, rfdot, sinik, a1, rdotk, c1, 
+	    c2, c3, c4, c5, cosuk, d2, d3, j2, j3, j4, qomso, d4, lower;
     extern doublereal twopi_(void);
     static doublereal q1, q2, psisq, qoms24, s4, sinio, sinmo, sinuk, tempe, 
 	    betao2, betao3, betao4, templ, tfour, upper, x1m5th, x1mth2, 
@@ -54,8 +56,10 @@ static doublereal c_b152 = 1.5;
     static doublereal xndd6o;
     static integer after;
     static logical recog, unrec;
-    static doublereal ae, xhdot1, xndt2o, ke, ao, fl, eo, qoms2t, er, fu, pl, 
-	    omgadf, rk, qo, uk, so, xl;
+    static doublereal ae, xhdot1;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    static doublereal xndt2o, ke, ao, fl, eo, qoms2t, er, fu, pl, omgadf, rk, 
+	    qo, uk, so, xl;
     static integer before;
     static doublereal xn, omegao, delomg;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
@@ -65,6 +69,9 @@ static doublereal c_b152 = 1.5;
 	     */, rfdotk, sinepw, sinnok, vx, tokmps, vy, pinvsq, vz, xnodcf, 
 	    xnoddf, xnodek, epwnxt, xnodot;
     static logical newgeo;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen);
     static doublereal eta, axn, ayn, epw, est, tsi, xll, xmo, xno, xmp, tsq, 
 	    xlt, xmx, xmy, del1, c1sq, pix2;
 
@@ -225,9 +232,11 @@ static doublereal c_b152 = 1.5;
 
 /* $ Exceptions */
 
-/*     Error free. */
+/*     1) No checks are made on the reasonableness of the inputs. */
 
-/*     1)  No checks are made on the reasonableness of the inputs. */
+/*     2) SPICE(ITERATIONEXCEEDED) signals if the EST calculation loop */
+/*        exceds the MXLOOP value. This error should signal only for */
+/*        bad (nonphysical) TLEs. */
 
 /* $ Files */
 
@@ -260,6 +269,11 @@ static doublereal c_b152 = 1.5;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 15-SEP-2014 (EDW) */
+
+/*        Added error check to prevent infinite loop in */
+/*        calculation of EST. */
+
 /* -    SPICELIB Version 1.0.3, 02-JAN-2008 (EDW) */
 
 /*        Corrected error in the calculation of the C4 term */
@@ -287,7 +301,6 @@ static doublereal c_b152 = 1.5;
 /*        Corrected error in header describing the GEOPHS array. */
 
 /* -    SPICELIB Version 1.0.0, 14-JAN-1994 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -365,6 +378,7 @@ static doublereal c_b152 = 1.5;
 /*     Intermediate quantities. The time independent quantities */
 /*     are calculated only as new elements come into the routine. */
 
+    chkin_("EV2LIN", (ftnlen)6);
 
 /*     Rather than always making function calls we store the */
 /*     values of the PI dependent constants the first time */
@@ -375,12 +389,12 @@ static doublereal c_b152 = 1.5;
 	pix2 = twopi_();
 	for (i__ = 1; i__ <= 8; ++i__) {
 	    lstgeo[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("lstgeo",
-		     i__1, "ev2lin_", (ftnlen)598)] = 0.;
+		     i__1, "ev2lin_", (ftnlen)605)] = 0.;
 	}
 	for (i__ = 1; i__ <= 6; ++i__) {
 	    for (j = 1; j <= 10; ++j) {
 		elemnt[(i__1 = j + i__ * 10 - 11) < 60 && 0 <= i__1 ? i__1 : 
-			s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)603)] = 0.;
+			s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)610)] = 0.;
 	    }
 	}
 
@@ -398,13 +412,13 @@ static doublereal c_b152 = 1.5;
 
 	head = 1;
 	list[(i__1 = (head << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list"
-		, i__1, "ev2lin_", (ftnlen)622)] = 0;
+		, i__1, "ev2lin_", (ftnlen)629)] = 0;
 	list[0] = 2;
 	for (i__ = 2; i__ <= 5; ++i__) {
 	    list[(i__1 = (i__ << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)627)] = i__ + 1;
+		    "list", i__1, "ev2lin_", (ftnlen)634)] = i__ + 1;
 	    list[(i__1 = (i__ << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)628)] = i__ - 1;
+		    "list", i__1, "ev2lin_", (ftnlen)635)] = i__ - 1;
 	}
 	list[10] = 0;
 	list[11] = 5;
@@ -420,7 +434,7 @@ static doublereal c_b152 = 1.5;
 	    geophs[5]) {
 	for (i__ = 1; i__ <= 8; ++i__) {
 	    lstgeo[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("lstgeo",
-		     i__1, "ev2lin_", (ftnlen)650)] = geophs[i__ - 1];
+		     i__1, "ev2lin_", (ftnlen)657)] = geophs[i__ - 1];
 	}
 	j2 = geophs[0];
 	j3 = geophs[1];
@@ -485,14 +499,14 @@ static doublereal c_b152 = 1.5;
 	while(recog && i__ > 0) {
 	    recog = recog && elemnt[(i__1 = i__ + n * 10 - 11) < 60 && 0 <= 
 		    i__1 ? i__1 : s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)
-		    725)] == elems[i__ - 1];
+		    733)] == elems[i__ - 1];
 	    --i__;
 	}
 	unrec = ! recog;
 	if (unrec) {
 	    last = n;
 	    n = list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)733)];
+		    "list", i__1, "ev2lin_", (ftnlen)741)];
 	}
     }
     if (n == 0) {
@@ -511,28 +525,28 @@ static doublereal c_b152 = 1.5;
 /*        link them together. */
 
 	before = list[(i__1 = (n << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)754)];
+		"list", i__1, "ev2lin_", (ftnlen)762)];
 	after = list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)755)];
+		"list", i__1, "ev2lin_", (ftnlen)763)];
 	list[(i__1 = (before << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)757)] = after;
+		"list", i__1, "ev2lin_", (ftnlen)765)] = after;
 	if (after != 0) {
 	    list[(i__1 = (after << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)760)] = before;
+		    "list", i__1, "ev2lin_", (ftnlen)768)] = before;
 	}
 
 /*        Now the guy that will come after N is the current */
 /*        head of the list.  N will have no predecessor. */
 
 	list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge("list", 
-		i__1, "ev2lin_", (ftnlen)766)] = head;
+		i__1, "ev2lin_", (ftnlen)774)] = head;
 	list[(i__1 = (n << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list", 
-		i__1, "ev2lin_", (ftnlen)767)] = 0;
+		i__1, "ev2lin_", (ftnlen)775)] = 0;
 
 /*        The predecessor the current head of the list becomes N */
 
 	list[(i__1 = (head << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list"
-		, i__1, "ev2lin_", (ftnlen)771)] = n;
+		, i__1, "ev2lin_", (ftnlen)779)] = n;
 
 /*        and finally, N becomes the head of the list. */
 
@@ -545,63 +559,63 @@ static doublereal c_b152 = 1.5;
 /*        routine. */
 
 	aodp = prelim[(i__1 = n * 29 - 29) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)786)];
-	aycof = prelim[(i__1 = n * 29 - 28) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)787)];
-	c1 = prelim[(i__1 = n * 29 - 27) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)788)];
-	c4 = prelim[(i__1 = n * 29 - 26) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)789)];
-	c5 = prelim[(i__1 = n * 29 - 25) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)790)];
-	cosio = prelim[(i__1 = n * 29 - 24) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)791)];
-	d2 = prelim[(i__1 = n * 29 - 23) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)792)];
-	d3 = prelim[(i__1 = n * 29 - 22) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)793)];
-	d4 = prelim[(i__1 = n * 29 - 21) < 174 && 0 <= i__1 ? i__1 : s_rnge(
 		"prelim", i__1, "ev2lin_", (ftnlen)794)];
-	delmo = prelim[(i__1 = n * 29 - 20) < 174 && 0 <= i__1 ? i__1 : 
+	aycof = prelim[(i__1 = n * 29 - 28) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)795)];
-	eta = prelim[(i__1 = n * 29 - 19) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+	c1 = prelim[(i__1 = n * 29 - 27) < 174 && 0 <= i__1 ? i__1 : s_rnge(
 		"prelim", i__1, "ev2lin_", (ftnlen)796)];
-	omgcof = prelim[(i__1 = n * 29 - 18) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)797)];
-	omgdot = prelim[(i__1 = n * 29 - 17) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)798)];
-	perige = prelim[(i__1 = n * 29 - 16) < 174 && 0 <= i__1 ? i__1 : 
+	c4 = prelim[(i__1 = n * 29 - 26) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)797)];
+	c5 = prelim[(i__1 = n * 29 - 25) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)798)];
+	cosio = prelim[(i__1 = n * 29 - 24) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)799)];
-	sinio = prelim[(i__1 = n * 29 - 15) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)800)];
-	sinmo = prelim[(i__1 = n * 29 - 14) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)801)];
-	t2cof = prelim[(i__1 = n * 29 - 13) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)802)];
-	t3cof = prelim[(i__1 = n * 29 - 12) < 174 && 0 <= i__1 ? i__1 : 
+	d2 = prelim[(i__1 = n * 29 - 23) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)800)];
+	d3 = prelim[(i__1 = n * 29 - 22) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)801)];
+	d4 = prelim[(i__1 = n * 29 - 21) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)802)];
+	delmo = prelim[(i__1 = n * 29 - 20) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)803)];
-	t4cof = prelim[(i__1 = n * 29 - 11) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)804)];
-	t5cof = prelim[(i__1 = n * 29 - 10) < 174 && 0 <= i__1 ? i__1 : 
+	eta = prelim[(i__1 = n * 29 - 19) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)804)];
+	omgcof = prelim[(i__1 = n * 29 - 18) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)805)];
-	x1mth2 = prelim[(i__1 = n * 29 - 9) < 174 && 0 <= i__1 ? i__1 : 
+	omgdot = prelim[(i__1 = n * 29 - 17) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)806)];
-	x3thm1 = prelim[(i__1 = n * 29 - 8) < 174 && 0 <= i__1 ? i__1 : 
+	perige = prelim[(i__1 = n * 29 - 16) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)807)];
-	x7thm1 = prelim[(i__1 = n * 29 - 7) < 174 && 0 <= i__1 ? i__1 : 
+	sinio = prelim[(i__1 = n * 29 - 15) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)808)];
-	xlcof = prelim[(i__1 = n * 29 - 6) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)809)];
-	xmcof = prelim[(i__1 = n * 29 - 5) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)810)];
-	xmdot = prelim[(i__1 = n * 29 - 4) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)811)];
-	xnodcf = prelim[(i__1 = n * 29 - 3) < 174 && 0 <= i__1 ? i__1 : 
+	sinmo = prelim[(i__1 = n * 29 - 14) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)809)];
+	t2cof = prelim[(i__1 = n * 29 - 13) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)810)];
+	t3cof = prelim[(i__1 = n * 29 - 12) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)811)];
+	t4cof = prelim[(i__1 = n * 29 - 11) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)812)];
-	xnodot = prelim[(i__1 = n * 29 - 2) < 174 && 0 <= i__1 ? i__1 : 
+	t5cof = prelim[(i__1 = n * 29 - 10) < 174 && 0 <= i__1 ? i__1 : 
 		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)813)];
+	x1mth2 = prelim[(i__1 = n * 29 - 9) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)814)];
+	x3thm1 = prelim[(i__1 = n * 29 - 8) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)815)];
+	x7thm1 = prelim[(i__1 = n * 29 - 7) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)816)];
+	xlcof = prelim[(i__1 = n * 29 - 6) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)817)];
+	xmcof = prelim[(i__1 = n * 29 - 5) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)818)];
+	xmdot = prelim[(i__1 = n * 29 - 4) < 174 && 0 <= i__1 ? i__1 : s_rnge(
+		"prelim", i__1, "ev2lin_", (ftnlen)819)];
+	xnodcf = prelim[(i__1 = n * 29 - 3) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)820)];
+	xnodot = prelim[(i__1 = n * 29 - 2) < 174 && 0 <= i__1 ? i__1 : 
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)821)];
 	xnodp = prelim[(i__1 = n * 29 - 1) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)814)];
+		"prelim", i__1, "ev2lin_", (ftnlen)822)];
     } else {
 
 /*        Compute all of the intermediate items needed. */
@@ -626,7 +640,7 @@ static doublereal c_b152 = 1.5;
 /*        Semi-major axis and ascending node related constants. */
 
 	d__1 = ke / xno;
-	a1 = pow_dd(&d__1, &c_b90);
+	a1 = pow_dd(&d__1, &c_b91);
 	del1 = ck2 * 1.5 * x3thm1 / (a1 * a1 * betao3);
 	ao = a1 * (1. - del1 * (del1 * (del1 * 134. / 81. + 1.) + 
 		.33333333333333331));
@@ -663,7 +677,7 @@ static doublereal c_b152 = 1.5;
 	d__1 = tsi, d__1 *= d__1;
 	coef = qoms24 * (d__1 * d__1);
 	psisq = (d__1 = 1. - etasq, abs(d__1));
-	coef1 = coef / pow_dd(&psisq, &c_b91);
+	coef1 = coef / pow_dd(&psisq, &c_b92);
 	c2 = coef1 * xnodp * (aodp * (etasq * 1.5 + 1. + eeta * (etasq + 4.)) 
 		+ ck2 * .75 * (tsi / psisq) * x3thm1 * (etasq * (etasq * 3. + 
 		24.) + 8.));
@@ -720,70 +734,70 @@ static doublereal c_b152 = 1.5;
 /*        results from the above computations. */
 
 	prelim[(i__1 = n * 29 - 29) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)984)] = aodp;
+		"im", i__1, "ev2lin_", (ftnlen)992)] = aodp;
 	prelim[(i__1 = n * 29 - 28) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)985)] = aycof;
+		"im", i__1, "ev2lin_", (ftnlen)993)] = aycof;
 	prelim[(i__1 = n * 29 - 27) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)986)] = c1;
+		"im", i__1, "ev2lin_", (ftnlen)994)] = c1;
 	prelim[(i__1 = n * 29 - 26) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)987)] = c4;
+		"im", i__1, "ev2lin_", (ftnlen)995)] = c4;
 	prelim[(i__1 = n * 29 - 25) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)988)] = c5;
+		"im", i__1, "ev2lin_", (ftnlen)996)] = c5;
 	prelim[(i__1 = n * 29 - 24) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)989)] = cosio;
+		"im", i__1, "ev2lin_", (ftnlen)997)] = cosio;
 	prelim[(i__1 = n * 29 - 23) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)990)] = d2;
+		"im", i__1, "ev2lin_", (ftnlen)998)] = d2;
 	prelim[(i__1 = n * 29 - 22) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)991)] = d3;
+		"im", i__1, "ev2lin_", (ftnlen)999)] = d3;
 	prelim[(i__1 = n * 29 - 21) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)992)] = d4;
+		"im", i__1, "ev2lin_", (ftnlen)1000)] = d4;
 	prelim[(i__1 = n * 29 - 20) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)993)] = delmo;
+		"im", i__1, "ev2lin_", (ftnlen)1001)] = delmo;
 	prelim[(i__1 = n * 29 - 19) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)994)] = eta;
+		"im", i__1, "ev2lin_", (ftnlen)1002)] = eta;
 	prelim[(i__1 = n * 29 - 18) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)995)] = omgcof;
+		"im", i__1, "ev2lin_", (ftnlen)1003)] = omgcof;
 	prelim[(i__1 = n * 29 - 17) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)996)] = omgdot;
+		"im", i__1, "ev2lin_", (ftnlen)1004)] = omgdot;
 	prelim[(i__1 = n * 29 - 16) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)997)] = perige;
+		"im", i__1, "ev2lin_", (ftnlen)1005)] = perige;
 	prelim[(i__1 = n * 29 - 15) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)998)] = sinio;
+		"im", i__1, "ev2lin_", (ftnlen)1006)] = sinio;
 	prelim[(i__1 = n * 29 - 14) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)999)] = sinmo;
+		"im", i__1, "ev2lin_", (ftnlen)1007)] = sinmo;
 	prelim[(i__1 = n * 29 - 13) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1000)] = t2cof;
+		"im", i__1, "ev2lin_", (ftnlen)1008)] = t2cof;
 	prelim[(i__1 = n * 29 - 12) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1001)] = t3cof;
+		"im", i__1, "ev2lin_", (ftnlen)1009)] = t3cof;
 	prelim[(i__1 = n * 29 - 11) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1002)] = t4cof;
+		"im", i__1, "ev2lin_", (ftnlen)1010)] = t4cof;
 	prelim[(i__1 = n * 29 - 10) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1003)] = t5cof;
+		"im", i__1, "ev2lin_", (ftnlen)1011)] = t5cof;
 	prelim[(i__1 = n * 29 - 9) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1004)] = x1mth2;
+		, i__1, "ev2lin_", (ftnlen)1012)] = x1mth2;
 	prelim[(i__1 = n * 29 - 8) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1005)] = x3thm1;
+		, i__1, "ev2lin_", (ftnlen)1013)] = x3thm1;
 	prelim[(i__1 = n * 29 - 7) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1006)] = x7thm1;
+		, i__1, "ev2lin_", (ftnlen)1014)] = x7thm1;
 	prelim[(i__1 = n * 29 - 6) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1007)] = xlcof;
+		, i__1, "ev2lin_", (ftnlen)1015)] = xlcof;
 	prelim[(i__1 = n * 29 - 5) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1008)] = xmcof;
+		, i__1, "ev2lin_", (ftnlen)1016)] = xmcof;
 	prelim[(i__1 = n * 29 - 4) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1009)] = xmdot;
+		, i__1, "ev2lin_", (ftnlen)1017)] = xmdot;
 	prelim[(i__1 = n * 29 - 3) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1010)] = xnodcf;
+		, i__1, "ev2lin_", (ftnlen)1018)] = xnodcf;
 	prelim[(i__1 = n * 29 - 2) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1011)] = xnodot;
+		, i__1, "ev2lin_", (ftnlen)1019)] = xnodot;
 	prelim[(i__1 = n * 29 - 1) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1012)] = xnodp;
+		, i__1, "ev2lin_", (ftnlen)1020)] = xnodp;
 
 /*        Finally, move these elements in the storage area */
 /*        for checking the next time through. */
 
 	for (i__ = 1; i__ <= 10; ++i__) {
 	    elemnt[(i__1 = i__ + n * 10 - 11) < 60 && 0 <= i__1 ? i__1 : 
-		    s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)1018)] = elems[
+		    s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)1026)] = elems[
 		    i__ - 1];
 	}
     }
@@ -834,7 +848,7 @@ static doublereal c_b152 = 1.5;
 
 /*     BETA =  DSQRT( 1.0D0 - E*E ) */
 
-    xn = ke / pow_dd(&a, &c_b152);
+    xn = ke / pow_dd(&a, &c_b153);
 
 /*     Long period periodics */
 
@@ -1064,7 +1078,18 @@ static doublereal c_b152 = 1.5;
     capu = fmod2p;
     epw = capu;
     est = 1.;
+    count = 0;
     while(est > .125) {
+	++count;
+	if (count > 20) {
+	    setmsg_("EST iteration count of #1 exceeded at time ET #2. This "
+		    "error may indicate a bad TLE set.", (ftnlen)88);
+	    errint_("#1", &c__20, (ftnlen)2);
+	    errdp_("#2", et, (ftnlen)2);
+	    sigerr_("SPICE(ITERATIONEXCEEDED)", (ftnlen)24);
+	    chkout_("EV2LIN", (ftnlen)6);
+	    return 0;
+	}
 	epwnxt = capu - axn * sin(epw) + ayn * cos(epw);
 	est = mov1m * (d__1 = epwnxt - epw, abs(d__1));
 	epw = epwnxt;
@@ -1263,6 +1288,7 @@ static doublereal c_b152 = 1.5;
     state[3] = tokmps * (rdotk * ux + rfdotk * vx);
     state[4] = tokmps * (rdotk * uy + rfdotk * vy);
     state[5] = tokmps * (rdotk * uz + rfdotk * vz);
+    chkout_("EV2LIN", (ftnlen)6);
     return 0;
 } /* ev2lin_ */
 

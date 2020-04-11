@@ -179,7 +179,7 @@
       for (i=0; i<7; i++ )
          {
          (void) bodc2s_c ( code[i], lenout, name );
-         printf("%ld   %s\n", code[i], name);
+         printf("%d   %s\n", (int)code[i], name);
          }
 
       return ( 0 );
@@ -213,6 +213,11 @@
   E.D. Wright     (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 12-JUL-2016 (EDW)
+
+      Edit to example program to use "%d" with explicit casts
+      to int for printing SpiceInts with printf.
 
     -CSPICE Version 1.0.0, 24-APR-2010 (EDW)
 

@@ -91,7 +91,10 @@
  
 -Exceptions
  
-   1) 
+   Error free. 
+
+   This routine returns information about parse errors in the output
+   string `errmsg'.
 
 -Files
  
@@ -331,6 +334,10 @@
  
 -Version
  
+   -CSPICE Version 1.0.1, 23-JUL-2015 (NJB)
+
+       Filled in Exceptions section of header.
+
    -CSPICE Version 1.0.0, 5-JUN-1999 (NJB)(JML)(WMO)(MJS)(IMU)(WLT)
 
 -Index_Entries

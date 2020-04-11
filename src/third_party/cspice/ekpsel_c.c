@@ -60,7 +60,7 @@
                    void                  * tabs,
                    void                  * cols,
                    SpiceBoolean          * error,
-                   SpiceChar             * errmsg                     ) 
+                   SpiceChar             * errmsg  ) 
 /*
 
 -Brief_I/O
@@ -69,6 +69,8 @@
    --------  ---  -------------------------------------------------- 
    query      I   EK query. 
    msglen     I   Available space in the output error message string.
+   tablen     I   Length of strings in `tabs' output array.
+   collen     I   Length of strings in `cols' output array.
    n          O   Number of items in SELECT clause of query. 
    xbegs      O   Begin positions of expressions in SELECT clause. 
    xends      O   End positions of expressions in SELECT clause. 
@@ -215,6 +217,16 @@
  
                   The contents of tabs[i] are defined if and only if 
                   the returned value of xclass[i] is SPICE_EK_EXP_COL. 
+
+                  The caller should declare `tabs' as an array of strings
+                  of length
+
+                     SPICE_EK_TSTRLN
+
+                  for example
+
+                     SpiceChar     tabs[SPICE_EK_MAXQSEL][SPICE_EK_TSTRLN];
+                      
  
  
    cols           is an array containing the columns of the SELECT 
@@ -222,6 +234,15 @@
                   only if the returned value of xclass[i] is 
                   SPICE_EK_EXP_COL. 
  
+                  The caller should declare `cols' as an array of strings
+                  of length
+
+                     SPICE_EK_CSTRLN
+
+                  for example
+
+                     SpiceChar     tabs[SPICE_EK_MAXQSEL][SPICE_EK_CSTRLN];
+
  
    error          is a logical flag indicating whether the input 
                   query parsed correctly.  The other outputs of this 
@@ -530,6 +551,12 @@
    N.J. Bachman       (JPL) 
  
 -Version
+
+   -CSPICE Version 2.1.2, 22-MAR-2016   (NJB)
+
+      Updated brief I/O to describe inputs `tablen' and `collen'.
+      Also added to Detailed_Output descriptions of declarations 
+      of the outputs `tabs' and 'cols'.
 
    -CSPICE Version 2.1.1, 14-AUG-2006   (EDW)
 

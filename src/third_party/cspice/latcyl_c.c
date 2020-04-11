@@ -78,10 +78,19 @@
    r          Distance of the point from the z axis.
 
    lonc       Angle of the point from the XZ plane in radians.
+              `lonc' is set equal to `lon'.
 
    z          Height of the point above the XY plane.
 
 -Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+-Files
 
    None.
 
@@ -116,11 +125,7 @@
 
    None.
 
--Exceptions
-
-   Error free.
-
--Files
+-Literature_References
 
    None.
 
@@ -129,11 +134,11 @@
    E.D. Wright     (JPL)
    W.L. Taber      (JPL)
 
--Literature_References
-
-   None.
-
 -Version
+
+   -CSPICE Version 1.0.1, 26-JUL-2016 (BVS)
+
+      Minor headers edits.
 
    -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 

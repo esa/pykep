@@ -82,7 +82,7 @@ doublereal halfpi_(void)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -111,12 +111,12 @@ doublereal halfpi_(void)
 /*                 DOUBLE PRECISION    TIPM ( 3,3 ) */
 
 /*           C */
-/*     SPICELIB functions */
+/*           C     SPICELIB functions */
 /*           C */
-/*                 DOUBLE PRECISION      HALFPI */
+/*                 DOUBLE PRECISION    HALFPI */
 
 /*           C */
-/*           C     The transformation is defined by the compund */
+/*           C     The transformation is defined by the compound */
 /*           C     rotation */
 /*           C */
 /*           C        [W] [pi/2 - Dec] [RA + pi/2] */
@@ -139,10 +139,15 @@ doublereal halfpi_(void)
 
 /* $ Author_and_Institution */
 
+/*     J. Diaz del Rio (ODC Space) */
 /*     W.L. Taber      (JPL) */
 /*     I.M. Underwood  (JPL) */
 
 /* $ Version */
+
+/* -     SPICELIB Version 1.0.2, 08-APR-2015 (JDR) */
+
+/*         Minor edit to example comments eliminating typos. */
 
 /* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

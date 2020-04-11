@@ -5,36 +5,17 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
-
-static integer c__1 = 1;
-
 /* $Procedure      DASRFR ( DAS, read file record ) */
 /* Subroutine */ int dasrfr_(integer *handle, char *idword, char *ifname, 
 	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
 	ftnlen idword_len, ftnlen ifname_len)
 {
-    /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-
-    /* Local variables */
-    integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzdasrfr_(integer *, char *, char *, integer *
+	    , integer *, integer *, integer *, ftnlen, ftnlen), chkin_(char *,
+	     ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int dashlu_(integer *, integer *), errfnm_(char *,
-	     integer *, ftnlen), sigerr_(char *, ftnlen);
-    char tmpifn[60];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
-    integer iostat;
-    char tmpidw[8];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-
-    /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 1, 0, 1 };
-
 
 /* $ Abstract */
 
@@ -122,7 +103,7 @@ static integer c__1 = 1;
 /* $ Exceptions */
 
 /*     1) If the file read attempted by this routine fails, the error */
-/*        SPICE(DASFILEREADFAILED) will be signalled. */
+/*        SPICE(DASFILEREADFAILED) will be signaled. */
 
 /* $ Files */
 
@@ -174,6 +155,12 @@ static integer c__1 = 1;
 /*     W.L. Taber     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.0, 05-FEB-2015 (NJB) */
+
+/*        Updated to support integration with the handle */
+/*        manager subsystem and to support reading of DAS */
+/*        files having non-native binary formats. */
 
 /* -    SPICELIB Version 2.1.0, 25-AUG-1995 (NJB) */
 
@@ -230,7 +217,7 @@ static integer c__1 = 1;
 /*        change. */
 
 /*        Removed the DASID parameter which had the value 'NAIF/DAS', as */
-/*        it was not used and is also made obsolute by the change in the */
+/*        it was not used and is also made obsolete by the change in the */
 /*        format of the ID word being implemented. */
 
 /*        Added a check of FAILED after the call to DASHLU which will */
@@ -253,69 +240,18 @@ static integer c__1 = 1;
 /*     SPICELIB functions */
 
 
-/*     Local parameters */
-
-
-/*     Local variables */
-
-
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DASRFR", (ftnlen)6);
     }
-
-/*     Get the logical unit for this DAS file. */
-
-    dashlu_(handle, &unit);
+    chkin_("DASRFR", (ftnlen)6);
+    zzdasrfr_(handle, idword, ifname, nresvr, nresvc, ncomr, ncomc, 
+	    idword_len, ifname_len);
     if (failed_()) {
 	chkout_("DASRFR", (ftnlen)6);
 	return 0;
     }
-    io___3.ciunit = unit;
-    iostat = s_rdue(&io___3);
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, tmpidw, (ftnlen)8);
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, tmpifn, (ftnlen)60);
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, (char *)&(*nresvr), (ftnlen)sizeof(integer));
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, (char *)&(*nresvc), (ftnlen)sizeof(integer));
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer));
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = do_uio(&c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer));
-    if (iostat != 0) {
-	goto L100001;
-    }
-    iostat = e_rdue();
-L100001:
-    if (iostat != 0) {
-	setmsg_("Could not read file record.  File was #.  IOSTAT was #.", (
-		ftnlen)55);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	chkout_("DASRFR", (ftnlen)6);
-	return 0;
-    }
-    s_copy(idword, tmpidw, idword_len, (ftnlen)8);
-    s_copy(ifname, tmpifn, ifname_len, (ftnlen)60);
     chkout_("DASRFR", (ftnlen)6);
     return 0;
 } /* dasrfr_ */

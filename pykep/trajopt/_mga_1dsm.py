@@ -405,12 +405,12 @@ class mga_1dsm:
             r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu)
 
         plot_kepler(r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu,
-                    N=100, color='b', legend=False, units=AU, axes=axis)
+                    N=100, color='b', units=AU, axes=axis)
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[4]) * T[0] * DAY2SEC
         l = lambert_problem(r, r_P[1], dt, self.common_mu, False, False)
-        plot_lambert(l, sol=0, color='r', legend=False, units=AU, axes=axis)
+        plot_lambert(l, sol=0, color='r', units=AU, axes=axis)
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
 
@@ -426,7 +426,7 @@ class mga_1dsm:
             r, v = propagate_lagrangian(
                 r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             plot_kepler(r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC,
-                        self.common_mu, N=100, color='b', legend=False, units=AU, axes=axis)
+                        self.common_mu, N=100, color='b', units=AU, axes=axis)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
 

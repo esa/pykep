@@ -7,7 +7,7 @@
 
 /* Table of constant values */
 
-static integer c__27 = 27;
+static integer c__31 = 31;
 static integer c__5 = 5;
 static integer c__3 = 3;
 static integer c__9 = 9;
@@ -19,25 +19,27 @@ static integer c__9 = 9;
     /* Initialized data */
 
     static logical first = TRUE_;
-    static char units[16*27] = "RADIANS         " "DEGREES         " "ARCMIN"
+    static char units[16*31] = "RADIANS         " "DEGREES         " "ARCMIN"
 	    "UTES      " "ARCSECONDS      " "HOURANGLE       " "MINUTEANGLE  "
 	    "   " "SECONDANGLE     " "METERS          " "KM              " 
 	    "CM              " "MM              " "LIGHTSECS       " "AU    "
-	    "          " "FEET            " "INCHES          " "STATUTE_MILES"
-	    "   " "NAUTICAL_MILES  " "YARDS           " "LIGHTYEARS      " 
-	    "PARSECS         " "SECONDS         " "MINUTES         " "HOURS "
-	    "          " "DAYS            " "JULIAN_YEARS    " "TROPICAL_YEAR"
-	    "S  " "YEARS           ";
-    static doublereal cnvrtn[27] = { 0.0,1.,.016666666666666666,
+	    "          " "M               " "KILOMETERS      " "CENTIMETERS  "
+	    "   " "MILLIMETERS     " "FEET            " "INCHES          " 
+	    "STATUTE_MILES   " "NAUTICAL_MILES  " "YARDS           " "LIGHTY"
+	    "EARS      " "PARSECS         " "SECONDS         " "MINUTES      "
+	    "   " "HOURS           " "DAYS            " "JULIAN_YEARS    " 
+	    "TROPICAL_YEARS  " "YEARS           ";
+    static doublereal cnvrtn[31] = { 0.0,1.,.016666666666666666,
 	    2.7777777777777778e-4,15.,.25,.0041666666666666666,1.,1e3,.01,
-	    .001,299792458.,149597870613.68887,.3048,.0254,1609.344,1852.,
-	    .9144,9460730472580800.,30856775797231604.,1.,60.,3600.,86400.,
-	    31557600.,31556925.976319999,31557600. };
-    static char type__[8*27] = "ANGLE   " "ANGLE   " "ANGLE   " "ANGLE   " 
+	    .001,299792458.,149597870613.68887,1.,1e3,.01,.001,.3048,.0254,
+	    1609.344,1852.,.9144,9460730472580800.,30856775797231604.,1.,60.,
+	    3600.,86400.,31557600.,31556925.976319999,31557600. };
+    static char type__[8*31] = "ANGLE   " "ANGLE   " "ANGLE   " "ANGLE   " 
 	    "ANGLE   " "ANGLE   " "ANGLE   " "DISTANCE" "DISTANCE" "DISTANCE" 
 	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
-	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "TIME    " "TIME    " 
-	    "TIME    " "TIME    " "TIME    " "TIME    " "TIME    ";
+	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
+	    "DISTANCE" "DISTANCE" "TIME    " "TIME    " "TIME    " "TIME    " 
+	    "TIME    " "TIME    " "TIME    ";
 
     /* System generated locals */
     address a__1[5], a__2[3], a__3[9];
@@ -109,7 +111,7 @@ static integer c__9 = 9;
 /*     X          I   Number representing a measurement in some units. */
 /*     IN         I   The units in which X is measured. */
 /*     OUT        I   Desired units for the measurement. */
-/*     Y          O   The measurment in the desired units. */
+/*     Y          O   The measurement in the desired units. */
 
 /* $ Detailed_Input */
 
@@ -127,10 +129,14 @@ static integer c__9 = 9;
 /*                                        'MINUTEANGLE' */
 /*                                        'SECONDANGLE' */
 
-/*                Metric Distances:       'METERS' */
+/*                Metric Distances:       'M' */
+/*                                        'METERS' */
 /*                                        'KM' */
+/*                                        'KILOMETERS' */
 /*                                        'CM' */
+/*                                        'CENTIMETERS' */
 /*                                        'MM' */
+/*                                        'MILLIMETERS' */
 
 /*                English Distances:      'FEET' */
 /*                                        'INCHES' */
@@ -235,6 +241,7 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
+/*     N.J. Bachman    (JPL) */
 /*     C.A. Curzon     (JPL) */
 /*     H.A. Neilan     (JPL) */
 /*     W.M. Owen       (JPL) */
@@ -242,6 +249,11 @@ static integer c__9 = 9;
 /*     I.M. Underwood  (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 12-MAY-2015 (NJB) */
+
+/*        Added support for full names of metric distance units. Added */
+/*        support for the abbreviation 'M' indicating meters. */
 
 /* -    SPICELIB Version 1.0.2, 01-JUL-2014 (NJB) */
 
@@ -304,29 +316,33 @@ static integer c__9 = 9;
 /*     on the first execution of this routine. */
 
 
-/*     Distance Conversions ( 5 through 17 ) */
+/*     Distance Conversions ( 8 through 17 ) */
 
-/*                 ( 5) Meters/Meter */
-/*                 ( 6) Meters/Km */
-/*                 ( 7) Meters/Cm */
-/*                 ( 8) Meters/mm */
-/*                 ( 9) Meters/Lightsecs */
-/*                 (10) Meters/AU */
-
-
-/*     Distance Conversions */
-
-/*                 (+ 7 ) Meters/Foot */
-/*                 (+ 8 ) Meters/inch */
-/*                 (+ 9 ) Meters/Statute Mile */
-/*                 (+ 10) Meters/Nautical Mile */
-/*                 (+ 11) Meters/Yard */
+/*                 (+  1) Meters/Meter */
+/*                 (+  2) Meters/Km */
+/*                 (+  3) Meters/Cm */
+/*                 (+  4) Meters/mm */
+/*                 (+  5) Meters/Lightsecs */
+/*                 (+  6) Meters/AU */
+/*                 (+  7) Meters/Meter */
+/*                 (+  8) Meters/Km */
+/*                 (+  9) Meters/cm */
+/*                 (+ 10) Meters/mm */
 
 
 /*     Distance Conversions */
 
-/*                 (+ 12) Meters/LightYear */
-/*                 (+ 13) Meters/Parsec */
+/*                 (+ 11) Meters/Foot */
+/*                 (+ 12) Meters/inch */
+/*                 (+ 13) Meters/Statute Mile */
+/*                 (+ 14) Meters/Nautical Mile */
+/*                 (+ 15) Meters/Yard */
+
+
+/*     Distance Conversions */
+
+/*                 (+ 16) Meters/LightYear */
+/*                 (+ 17) Meters/Parsec */
 
 
 /*     Time Conversions */
@@ -352,8 +368,8 @@ static integer c__9 = 9;
     }
     ucase_(in, inu, in_len, (ftnlen)16);
     ucase_(out, outu, out_len, (ftnlen)16);
-    i__ = isrchc_(inu, &c__27, units, (ftnlen)16, (ftnlen)16);
-    j = isrchc_(outu, &c__27, units, (ftnlen)16, (ftnlen)16);
+    i__ = isrchc_(inu, &c__31, units, (ftnlen)16, (ftnlen)16);
+    j = isrchc_(outu, &c__31, units, (ftnlen)16, (ftnlen)16);
     if (i__ == 0 || j == 0) {
 	if (i__ == 0 && j == 0) {
 /* Writing concatenation */
@@ -389,22 +405,22 @@ static integer c__9 = 9;
 	    return 0;
 	}
     }
-    if (s_cmp(type__ + (((i__3 = i__ - 1) < 27 && 0 <= i__3 ? i__3 : s_rnge(
-	    "type", i__3, "convrt_", (ftnlen)521)) << 3), type__ + (((i__4 = 
-	    j - 1) < 27 && 0 <= i__4 ? i__4 : s_rnge("type", i__4, "convrt_", 
-	    (ftnlen)521)) << 3), (ftnlen)8, (ftnlen)8) != 0) {
+    if (s_cmp(type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
+	    "type", i__3, "convrt_", (ftnlen)547)) << 3), type__ + (((i__4 = 
+	    j - 1) < 31 && 0 <= i__4 ? i__4 : s_rnge("type", i__4, "convrt_", 
+	    (ftnlen)547)) << 3), (ftnlen)8, (ftnlen)8) != 0) {
 /* Writing concatenation */
 	i__5[0] = 58, a__3[0] = "CONVRT: Incompatible units. You are attempt"
 		"ing to convert ";
 	i__5[1] = 16, a__3[1] = inu;
 	i__5[2] = 6, a__3[2] = "type: ";
-	i__5[3] = 8, a__3[3] = type__ + (((i__3 = i__ - 1) < 27 && 0 <= i__3 ?
-		 i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)523)) << 3);
+	i__5[3] = 8, a__3[3] = type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ?
+		 i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)549)) << 3);
 	i__5[4] = 4, a__3[4] = " to ";
 	i__5[5] = 16, a__3[5] = outu;
 	i__5[6] = 6, a__3[6] = "type: ";
-	i__5[7] = 8, a__3[7] = type__ + (((i__4 = j - 1) < 27 && 0 <= i__4 ? 
-		i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)523)) << 3);
+	i__5[7] = 8, a__3[7] = type__ + (((i__4 = j - 1) < 31 && 0 <= i__4 ? 
+		i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)549)) << 3);
 	i__5[8] = 1, a__3[8] = ".";
 	s_cat(ch__4, a__3, i__5, &c__9, (ftnlen)123);
 	setmsg_(ch__4, (ftnlen)123);
@@ -412,10 +428,10 @@ static integer c__9 = 9;
 	chkout_("CONVRT", (ftnlen)6);
 	return 0;
     }
-    temp = *x * cnvrtn[(i__3 = i__ - 1) < 27 && 0 <= i__3 ? i__3 : s_rnge(
-	    "cnvrtn", i__3, "convrt_", (ftnlen)539)];
-    *y = temp / cnvrtn[(i__3 = j - 1) < 27 && 0 <= i__3 ? i__3 : s_rnge("cnv"
-	    "rtn", i__3, "convrt_", (ftnlen)540)];
+    temp = *x * cnvrtn[(i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
+	    "cnvrtn", i__3, "convrt_", (ftnlen)565)];
+    *y = temp / cnvrtn[(i__3 = j - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("cnv"
+	    "rtn", i__3, "convrt_", (ftnlen)566)];
     chkout_("CONVRT", (ftnlen)6);
     return 0;
 } /* convrt_ */

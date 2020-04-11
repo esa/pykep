@@ -34,11 +34,11 @@
 
 -Required_Reading
 
-   GF.REQ
-   NAIF_IDS.REQ
-   SPK.REQ
-   TIME.REQ
-   WINDOWS.REQ
+   GF
+   NAIF_IDS
+   SPK
+   TIME
+   WINDOWS
 
 -Keywords
 
@@ -98,7 +98,7 @@
 
    target     the string name of a target body.  Optionally, you may
               supply the integer ID code for the object as an
-              integer string.  For example both 'MOON' and '301'
+              integer string.  For example both "MOON" and "301"
               are legitimate strings that indicate the moon is the
               target body.
 
@@ -119,37 +119,37 @@
               detailed description of the aberration correction options.
               For convenience, the options are listed below:
 
-                  'NONE'     Apply no correction.
+                  "NONE"     Apply no correction.
 
-                  'LT'       "Reception" case:  correct for
+                  "LT"       "Reception" case:  correct for
                              one-way light time using a Newtonian
                              formulation.
 
-                  'LT+S'     "Reception" case:  correct for
+                  "LT+S"     "Reception" case:  correct for
                              one-way light time and stellar
                              aberration using a Newtonian
                              formulation.
 
-                  'CN'       "Reception" case:  converged
+                  "CN"       "Reception" case:  converged
                              Newtonian light time correction.
 
-                  'CN+S'     "Reception" case:  converged
+                  "CN+S"     "Reception" case:  converged
                              Newtonian light time and stellar
                              aberration corrections.
 
-                  'XLT'      "Transmission" case:  correct for
+                  "XLT"      "Transmission" case:  correct for
                              one-way light time using a Newtonian
                              formulation.
 
-                  'XLT+S'    "Transmission" case:  correct for
+                  "XLT+S"    "Transmission" case:  correct for
                              one-way light time and stellar
                              aberration using a Newtonian
                              formulation.
 
-                  'XCN'      "Transmission" case:  converged
+                  "XCN"      "Transmission" case:  converged
                              Newtonian light time correction.
 
-                  'XCN+S'    "Transmission" case:  converged
+                  "XCN+S"    "Transmission" case:  converged
                              Newtonian light time and stellar
                              aberration corrections.
 
@@ -158,7 +158,7 @@
 
    obsrvr     the string naming the observing body. Optionally, you
               may supply the ID code of the object as an integer
-              string. For example, both 'EARTH' and '399' are
+              string. For example, both "EARTH" and "399" are
               legitimate strings to supply to indicate the
               observer is Earth.
 
@@ -171,33 +171,33 @@
 
               Coordinate System (CRDSYS)    Coordinates (COORD)      Range
 
-                 'RECTANGULAR'                  'X'
-                                                'Y'
-                                                'Z'
+                 "RECTANGULAR"                  "X"
+                                                "Y"
+                                                "Z"
 
-                 'LATITUDINAL'                  'RADIUS'
-                                                'LONGITUDE'        (-Pi,Pi]
-                                                'LATITUDE'         [-Pi/2,Pi/2]
+                 "LATITUDINAL"                  "RADIUS"
+                                                "LONGITUDE"        (-Pi,Pi]
+                                                "LATITUDE"         [-Pi/2,Pi/2]
 
-                 'RA/DEC'                       'RANGE'
-                                                'RIGHT ASCENSION'  [0,2Pi)
-                                                'DECLINATION'      [-Pi/2,Pi/2]
+                 "RA/DEC"                       "RANGE"
+                                                "RIGHT ASCENSION"  [0,2Pi)
+                                                "DECLINATION"      [-Pi/2,Pi/2]
 
-                 'SPHERICAL'                    'RADIUS'
-                                                'COLATITUDE'       [0,Pi]
-                                                'LONGITUDE'        (-Pi,Pi]
+                 "SPHERICAL"                    "RADIUS"
+                                                "COLATITUDE"       [0,Pi]
+                                                "LONGITUDE"        (-Pi,Pi]
 
-                 'CYLINDRICAL'                  'RADIUS'
-                                                'LONGITUDE'        [0,2Pi)
-                                                'Z'
+                 "CYLINDRICAL"                  "RADIUS"
+                                                "LONGITUDE"        [0,2Pi)
+                                                "Z"
 
-                 'GEODETIC'                     'LONGITUDE'        (-Pi,Pi]
-                                                'LATITUDE'         [-Pi/2,Pi/2]
-                                                'ALTITUDE'
+                 "GEODETIC"                     "LONGITUDE"        (-Pi,Pi]
+                                                "LATITUDE"         [-Pi/2,Pi/2]
+                                                "ALTITUDE"
 
-                 'PLANETOGRAPHIC'               'LONGITUDE'        [0,2Pi)
-                                                'LATITUDE'         [-Pi/2,Pi/2]
-                                                'ALTITUDE'
+                 "PLANETOGRAPHIC"               "LONGITUDE"        [0,2Pi)
+                                                "LATITUDE"         [-Pi/2,Pi/2]
+                                                "ALTITUDE"
 
                   Limit searches for coordinate events in the GEODETIC and
                   PLANETOGRAPHIC coordinate systems to TARGET bodies with
@@ -211,22 +211,22 @@
                Supported values of relate and corresponding meanings are
                shown below:
 
-                  '>'      Separation is greater than the reference
+                  ">"      Separation is greater than the reference
                            value refval.
 
-                  '='      Separation is equal to the reference
+                  "="      Separation is equal to the reference
                            value refval.
 
-                  '<'      Separation is less than the reference
+                  "<"      Separation is less than the reference
                            value refval.
 
-                 'ABSMAX'  Separation is at an absolute maximum.
+                 "ABSMAX"  Separation is at an absolute maximum.
 
-                 'ABSMIN'  Separation is at an absolute  minimum.
+                 "ABSMIN"  Separation is at an absolute  minimum.
 
-                 'LOCMAX'  Separation is at a local maximum.
+                 "LOCMAX"  Separation is at a local maximum.
 
-                 'LOCMIN'  Separation is at a local minimum.
+                 "LOCMIN"  Separation is at a local minimum.
 
               The caller may indicate that the region of interest
               is the set of time intervals where the quantity is
@@ -917,7 +917,6 @@
       coordinate quantity utility package.  Callers may
       need to re-initialize the package after calling this routine.
 
-
 -Literature_References
 
    None.
@@ -928,6 +927,14 @@
    E.D. Wright    (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.2, 31-JUL-2014 (EDW)
+
+      Edit to header, replaced ' character with character " to indicate
+      C strings.
+
+      Edit to header, correct Required Reading entry eliminating ".REQ"
+      suffix.
 
    -CSPICE Version 1.0.1, 28-FEB-2013 (NJB) (EDW)
 
