@@ -55,7 +55,7 @@
 
 #include "../boost_python_container_conversions.h"
 #include "../utils.h"
-#include "docstrings.hpp"
+#include "core_docstrings.hpp"
 #include <keplerian_toolbox/keplerian_toolbox.hpp>
 
 using namespace boost::python;

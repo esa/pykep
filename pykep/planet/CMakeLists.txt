@@ -1,6 +1,7 @@
 # Setup of the pykep planet module.
 YACMA_PYTHON_MODULE(planet 
     planet.cpp 
+    planet_docstrings.cpp
 )
 target_link_libraries(planet PRIVATE ${PYKEP_BP_TARGET} pykep)
 target_compile_options(planet PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")

@@ -1,5 +1,5 @@
-#ifndef PYKEP_DOCSTRINGS_HPP
-#define PYKEP_DOCSTRINGS_HPP
+#ifndef PYKEP_CORE_DOCSTRINGS_HPP
+#define PYKEP_CORE_DOCSTRINGS_HPP
 
 #include <string>
 
@@ -16,6 +16,7 @@ std::string lambert_problem_doc();
 // Propagations
 std::string propagate_lagrangian_doc();
 std::string propagate_taylor_doc();
+
 
 
 } // namespace pykep
