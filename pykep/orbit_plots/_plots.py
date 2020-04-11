@@ -10,9 +10,8 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
     - units:     the length unit to be used in the plot
     - color:     color to use to plot the orbit (passed to matplotlib)
     - s:         planet size (passed to matplotlib)
-    - legend     tuple of two bool or string. The first element refers to the planet scatter plot, the second to the actual orbit.
-                 If a bool value is used, then an automated legend label is generated (if True), if its a string the exact string is
-                 used as a legend.
+    - legend     2-D tuple of bool or string: The first element activates the planet scatter plot, 
+                 the second to the actual orbit. If a bool value is used, then an automated legend label is generated (if True), if a string is used, the string is the legend. Its also possible but deprecated to use a single bool value. In which case that value is used for both the tuple components.
 
     Plots the planet position and its orbit.
 
@@ -43,9 +42,8 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
     if type(t0) is not epoch:
         t0 = epoch(t0)
 
-
     # This is to make the tuple API compatible with the old API
-    if legend is bool:
+    if type(legend) is bool:
         legend = (legend, legend)
 
     if tf is None:
@@ -191,7 +189,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
 
 def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
     """
-    ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', legend=False, axes=None):
+    ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
 
     - axes:     3D axis object created using fig.gca(projection='3d')
     - r0:       initial position (cartesian coordinates)
@@ -215,6 +213,7 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
     from pykep import propagate_lagrangian
     import matplotlib.pylab as plt
     from mpl_toolkits.mplot3d import Axes3D
+    from copy import deepcopy
 
     if axes is None:
         fig = plt.figure()
@@ -231,6 +230,8 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
     z = [0.0] * N
 
     # We calculate the spacecraft position at each dt
+    r = deepcopy(r0)
+    v = deepcopy(v0)
     for i in range(N):
         x[i] = r[0] / units
         y[i] = r[1] / units

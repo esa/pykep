@@ -73,7 +73,7 @@ class lt_margo:
         # private:
         self.__n_seg = n_seg
         self.__grid_type = grid_type
-        self.__sc = pk.sims_flanagan._sims_flanagan.spacecraft(m0, Tmax, Isp)
+        self.__sc = pk.sims_flanagan.spacecraft(m0, Tmax, Isp)
         self.__earth = pk.planet.jpl_lp('earth')
         self.__earth_gravity = earth_gravity
         self.__sep = sep
