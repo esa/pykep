@@ -1,5 +1,5 @@
 ======================
-Code Documentation
+API reference
 ======================
 
 pykep is made of main modules called :ref:`core`, :ref:`planet`, :ref:`simsflanagan`, :ref:`pontryagin`, :ref:`phasing`, :ref:`trajopt`, :ref:`orbitplots`, :ref:`util`. 

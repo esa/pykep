@@ -10,7 +10,7 @@ compatibility between the two projects.
 
 **pykep** is in use at the European Space Agency's Advanced Concepts Team since 2006.
 
-**Main Developers**:
+**Main Developer**:
 
 Dario Izzo (dario.izzo __AT__ esa.int)
 
