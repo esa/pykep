@@ -1,70 +1,160 @@
 .. _howtoinstall:
 
-Install pykep
+Installation
 ======================
 
-pykep supports python 3.X. Python 2.7 support was dropped as of version 2.4.
-Both PyPi and conda package mangers contain the binaries for pykep, but only for a limited set of
-architectures. In case yours is not include, you will have to compile the code from source.
+Dependencies
+------------
+
+pykep has the following **mandatory** runtime dependencies:
+
+* `Python <https://www.python.org/>`__ 3.4 or later (Python 2.x is
+  **not** supported),
+* the `keplerian_toolbox C++ library <https://esa.github.io/pykep/>`__, same version as pykep included in the pykep source,
+* the `Boost serialization library <https://www.boost.org/doc/libs/release/libs/serialization/doc/index.html>`__,
+  version 1.60 or later,
+
+Additionally, pykep has the following **optional** runtime
+dependencies:
+
+* `scipy <https://www.scipy.org/>`__, which is used in many plotting and related utilities.
+* `Matplotlib <https://matplotlib.org/>`__, which is used in many plotting and related utilities.
+  plotting utilities,
+* `scikit-learn <https://scikit-learn.org/stable//>`__, which is used, for example, in the phasing module
+* `numba <http://numba.pydata.org/>`__, which is used to speed up some pure python code.
 
 
-Using Binaries 
---------------
+Packages
+--------
 
-The Python module called ``pykep`` can be installed from conda or pip only for some architectures / python version combinations.
+pykep packages are available from a variety
+of package managers on several platforms.
 
-Installing with conda
-^^^^^^^^^^^^^^^^^^^^^
-``pykep`` is available in the `conda <https://conda.io/en/latest/>`__ package manager
-from the `conda-forge <https://conda-forge.org/>`__ channel. A single package is available:
+Conda
+^^^^^
 
-* `pykep <https://anaconda.org/conda-forge/pykep>`__, which contains the ``pykep`` python module.
-
-In order to install ``pykep`` via conda, you just need
-to add ``conda-forge`` to the channels:
+pykep is available via the `conda <https://conda.io/docs/>`__
+package manager for Linux, OSX and Windows
+thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
+In order to install pykep via conda, you just need to add ``conda-forge``
+to the channels, and then you can immediately install pykep:
 
 .. code-block:: console
 
    $ conda config --add channels conda-forge
+   $ conda config --set channel_priority strict
    $ conda install pykep
 
-Please refer to the `conda documentation <https://conda.io/en/latest/>`__ for instructions
-on how to setup and manage your conda installation.
+The conda packages for pykep are maintained by the core development team,
+and they are regularly updated when new pykep versions are released.
 
-Installing with pip
-^^^^^^^^^^^^^^^^^^^
-We also provide the pip packages (mainly for linux 64 bit architectures). Check on the 
-`PyPi pykep page <https://pypi.org/project/pykep/>`_ if the needed package is provided.
+Please refer to the `conda documentation <https://conda.io/docs/>`__
+for instructions on how to setup and manage
+your conda installation.
+
+pip
+^^^
+
+pykep is also available on Linux via the `pip <https://pip.pypa.io/en/stable/>`__
+package installer. The installation of pykep with pip is straightforward:
 
 .. code-block:: console
 
    $ pip install pykep
 
-Compiling and Installing under Linux
-------------------------------------
+If you want to install pykep for a single user instead of
+system-wide, which is in general a good idea, you can do:
 
-Assuming you have prepared your system for compiling pykep (see :ref:`prepareyoursystem`) and that you have just downloaded the source code
-following the instructions given, see :ref:`howtodownload`, you will have a directory pykep with the code, move there::
+.. code-block:: console
 
-  cd pykep
+   $ pip install --user pykep
 
-You will now need to 1) build and install the keplerian toolbox (i.e. the c++ library) and then build and install pykep (the python module
-that depends on the keplerian toolbox library). So lets start::
+An even better idea is to make use of Python's
+`virtual environments <https://virtualenv.pypa.io/en/latest/>`__.
 
-  mkdir build
-  cd build
+The pip packages for pykep are maintained by the core development team,
+and they are regularly updated when new pykep versions are released.
 
-and, using cmake::
+.. warning::
 
-  cmake -DBoost_NO_BOOST_CMAKE=ON \
+   Note however that we **strongly** encourage users to install pykep with conda
+   rather than with pip. The reason is that pykep is built on a
+   moderately complicated
+   stack of C++ libraries, which have to be bundled together with pykep
+   in the pip package.
+   This is a problem if one uses pykep together with other Python
+   packages sharing dependencies with pykep, because multiple incompatible
+   versions of the same C++ library might end up being loaded at the
+   same time, leading to crashes and erratic runtime behaviour.
+   The conda packages do not suffer from this issue.
+
+Installation from source
+------------------------
+
+In order to install pygmo from source, you will need:
+
+* a C++11 capable compiler (any recent version of GCC,
+  Clang or MSVC should do),
+* a `Python <https://www.python.org/>`__ installation,
+* the `Boost libraries <https://www.boost.org/>`__,
+* `CMake <https://cmake.org/>`__, version 3.3 or later.
+
+After making sure the above dependencies are installed on your system, you can
+download the pykep source code from the
+`GitHub release page <https://github.com/esa/pykep/releases>`__. Alternatively,
+and if you like living on the bleeding edge, you can get the very latest
+version of pykep via ``git``:
+
+.. code-block:: console
+
+   $ git clone https://github.com/esa/pykep.git
+
+We follow the usual PR-based development workflow, thus pykep's ``master``
+branch is normally kept in a working state.
+
+After downloading and/or unpacking pykep's
+source code, go to pykep's
+source tree, create a ``build`` directory and ``cd`` into it. E.g.,
+on a Unix-like system:
+
+.. code-block:: console
+
+   $ cd /path/to/pykep
+   $ mkdir build
+   $ cd build
+
+Once you are in the ``build`` directory, you must configure your build
+using ``cmake``. There are various useful CMake variables you can set,
+such as:
+
+* ``CMAKE_BUILD_TYPE``: the build type (``Release``, ``Debug``, etc.),
+  defaults to ``Release``.
+* ``CMAKE_INSTALL_PREFIX``: the path into which pygmo will be installed
+  (e.g., this defaults to ``/usr/local`` on Unix-like platforms).
+* ``CMAKE_PREFIX_PATH``: additional paths that will be searched by CMake
+  when looking for dependencies.
+
+Please consult `CMake's documentation <https://cmake.org/cmake/help/latest/>`_
+for more details about CMake's variables and options.
+
+Before compiling pykep we need to install the keplerian toolbox, that is the C++
+code at the heart of most computationally expensive routines. In a linux installation,
+this would typically look like:
+
+.. code-block:: console
+
+    $ cmake -DBoost_NO_BOOST_CMAKE=ON \
         -DPYKEP_BUILD_KEP_TOOLBOX=yes \
         -DPYKEP_BUILD_PYKEP=no \
         -DPYKEP_BUILD_SPICE=yes \
-        -DPYKEP_BUILD_TESTS=no \
-        -DCMAKE_BUILD_TYPE=Release ../;
-  make install
-
-Here is a typical example of the output obtained::
+        -DPYKEP_BUILD_TESTS=yes \
+        -DCMAKE_INSTALL_PREFIX = ~/.local \
+        -DCMAKE_PREFIX_PATH = ~/.local \
+        -DCMAKE_BUILD_TYPE=Release \
+        ../;
+    $ cmake  --build . --target install
+ 
+Here is a typical example of the output you should expect::
 
   [ 99%] Built target propagate_lagrangian_u_test
   [ 99%] Built target anomalies_test
@@ -78,11 +168,13 @@ Here is a typical example of the output obtained::
   Install the project...
   -- Install configuration: "Release"
 
-You can run the tests now typing::
+You can also run the C++ tests typing:
 
-  make test
+.. code-block:: console
 
-And you should see something like::
+     $ make test
+
+And see, hopefully, something like the following output::
 
   Running tests...
   Test project /home/dario/Develop/pykep/build
@@ -115,28 +207,45 @@ And you should see something like::
 
   Total Test time (real) =   3.24 sec
 
-Now you need to compile and install the pykep module::
+You are now ready to compile and install pykep. Move back one level from the folder where you installed the 
+keplerian_toolbox and create a new build directory:
 
-  cd /pykep
-  mkdir build_pykep
-  cd build_pykep
-  cmake -DBoost_NO_BOOST_CMAKE=ON \
-        -DPYKEP_BUILD_KEP_TOOLBOX=no \
-        -DPYKEP_BUILD_PYKEP=yes \
-        -DPYKEP_BUILD_TESTS=no \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} \
-        -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
-  make -j2 install
+.. code-block:: console
+
+     $ cd ..
+     $ mkdir build_pykep
+     $ cd build_pykep
+
+There we need to run cmake again with slightly different options:
+
+.. code-block:: console
+
+     $ cmake -DBoost_NO_BOOST_CMAKE=ON \
+         -DPYKEP_BUILD_KEP_TOOLBOX=no \
+         -DPYKEP_BUILD_PYKEP=yes \
+         -DPYKEP_BUILD_TESTS=no \
+         -DCMAKE_INSTALL_PREFIX = ~/.local \
+         - DCMAKE_PREFIX_PATH = ~/.local \
+         - DCMAKE_BUILD_TYPE=Release \
+         ../;
 
 Watch carefully the message in the terminal where the installation path is given to check
-that the correct python dist-packages or site-packages directory has been located
+that the correct python dist-packages or site-packages directory has been located. If not, 
+set explicitly the relevant cmake variables, for example ```Boost_PYTHON37_LIBRARY_RELEASE``` 
+and ```PYTHON_EXECUTABLE```.
 
-Compiling and Installing under Windows 
-------------------------------------------------------------------
+Verifying the installation
+--------------------------
 
-We do not really support nor reccomend doing this, but in case you are really motivated, you can get inspired by our
-`azure CI script <https://github.com/esa/pykep/blob/master/azure-pipelines.yml>`_ that works using the
-`conda <https://conda.io/en/latest/>`_ package manager or our
-`appveyor CI script <https://github.com/esa/pykep/blob/master/tools/install_appveyor_mingw.py>`_  which
-makes use on minGW. 
+You can verify that pykep was successfully compiled and
+installed by running the test suite. From a
+Python session, run the following commands:
+
+.. code-block:: python
+
+   >>> import pykep
+   >>> pykep.test.run_test_suite()
+
+If these commands execute without any error, then
+your pykep installation is ready for use.
+

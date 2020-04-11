@@ -28,7 +28,8 @@ efficient keplerian propagators, Taylor-integrators, a SGP4 propagator, TLE and 
 **pykep** has been used by the European Space Agency's `Advanced Concepts Team <https://www.esa.int/gsp/ACT/index.html>`_ 
 during different Global Trajectory Optimization Competitions `GTOC <http://sophia.estec.esa.int/gtoc_portal>`_, 
 several research papers as well as for the optimization of preliminary mission scenarios such as in 
-the M-ARGO interplanetary cubesat concept or the phase 0 study for the The Titan and Enceladus Mission (TandEM).
+the M-ARGO interplanetary cubesat concept, the phase 0 study for the The Titan and Enceladus Mission (TandEM)
+and for preliminary mission analysis of the HERA mission.
 
 Please quote **pykep** code using the information in Zenodo.
 
@@ -43,8 +44,6 @@ Content
 .. toctree::
   :maxdepth: 2
 
-  downloading
-  system
   installation
   documentation/index 
   examples/index 

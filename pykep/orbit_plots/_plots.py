@@ -236,7 +236,7 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v = propagate_lagrangian(r0, v0, dt, mu)
+        r, v = propagate_lagrangian(r, v, dt, mu)
 
     # And we plot
     ax.plot(x, y, z, c=color, label=label)
