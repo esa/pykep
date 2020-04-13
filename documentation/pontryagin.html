@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>The pontryagin module &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The phasing module" href="phasing.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -143,9 +141,9 @@ than the final time may vary.</p>
 </table>
 <div class="section" id="detailed-documentation">
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.pontryagin.leg">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.pontryagin.</code><code class="sig-name descname">leg</code><span class="sig-paren">(</span><em class="sig-param">object</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.pontryagin.</code><code class="sig-name descname">leg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indirect optimal control transcription trajectory leg.</p>
 <p>This class represents an indirect optimal control transcription
 (alla moda di <a class="reference external" href="https://en.wikipedia.org/wiki/Pontryagin%27s_maximum_principle">Pontryagin’s maximum principle</a>) of a generic
@@ -169,9 +167,9 @@ two-point boundary trajectory.</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">t0=None</em>, <em class="sig-param">x0=None</em>, <em class="sig-param">l0=None</em>, <em class="sig-param">tf=None</em>, <em class="sig-param">xf=None</em>, <em class="sig-param">sc=pykep.sims_flanagan.spacecraft(1000</em>, <em class="sig-param">0.3</em>, <em class="sig-param">2500)</em>, <em class="sig-param">mu=pykep.MU_SUN</em>, <em class="sig-param">freemass=True</em>, <em class="sig-param">freetime=True</em>, <em class="sig-param">alpha=1</em>, <em class="sig-param">bound=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">l0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sc</span><span class="o">=</span><span class="default_value">pykep.sims_flanagan.spacecraft(1000, 0.3, 2500)</span></em>, <em class="sig-param"><span class="n">mu</span><span class="o">=</span><span class="default_value">pykep.MU_SUN</span></em>, <em class="sig-param"><span class="n">freemass</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">freetime</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialises an indirect optimal control transcription trajectory leg.</p>
 <dl>
 <dt>Args:</dt><dd><ul class="simple">
@@ -204,7 +202,7 @@ two-point boundary trajectory.</p>
 <li><p>TypeError: If costate, <code class="docutils literal notranslate"><span class="pre">l0</span></code>, is does not have 7 elements. Each element of <code class="docutils literal notranslate"><span class="pre">l0</span></code> corresponds to the respective elements of <code class="docutils literal notranslate"><span class="pre">x0</span></code>.</p></li>
 </ul>
 </dd>
-<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -240,9 +238,9 @@ conditions have been set either through <code class="docutils literal notranslat
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">t0</em>, <em class="sig-param">x0</em>, <em class="sig-param">l0</em>, <em class="sig-param">tf</em>, <em class="sig-param">xf</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t0</span></em>, <em class="sig-param"><span class="n">x0</span></em>, <em class="sig-param"><span class="n">l0</span></em>, <em class="sig-param"><span class="n">tf</span></em>, <em class="sig-param"><span class="n">xf</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the departure and arrival boundary conditions of the trajectory.</p>
 <p>This instance method sets the departure time <cite>t0</cite>, departure state <cite>x0</cite>,
 departure costate <cite>l0</cite>, arrival time <cite>tf</cite>, arrival state <cite>xf</cite>.</p>
@@ -267,7 +265,7 @@ departure costate <cite>l0</cite>, arrival time <cite>tf</cite>, arrival state <
 <p>If <code class="docutils literal notranslate"><span class="pre">args</span></code> were not supplied in <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code> must be called before calling <code class="docutils literal notranslate"><span class="pre">mismatch_constraints</span></code>.</p>
 </div>
 <dl>
-<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">()</span> <span class="c1"># t0, x0, l0, tf, xf not set yet</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">()</span> <span class="c1"># t0, x0, l0, tf, xf not set yet</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span> <span class="c1"># now they&#39;re set</span>
 </pre></div>
 </div>
@@ -275,9 +273,9 @@ departure costate <cite>l0</cite>, arrival time <cite>tf</cite>, arrival state <
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.mismatch_constraints">
-<code class="sig-name descname">mismatch_constraints</code><span class="sig-paren">(</span><em class="sig-param">atol=1e-5</em>, <em class="sig-param">rtol=1e-5</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mismatch_constraints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atol</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">rtol</span><span class="o">=</span><span class="default_value">1e-05</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the nondimensional mismatch equality constraints of the arrival boundary conditions.</p>
 <p>This method propagates the nondimensional dynamics of the spacecraft
 from the departure time <cite>t0</cite> to the arrival time <cite>tf</cite>, then evaluates
@@ -333,7 +331,7 @@ vector. Otherwise (<code class="docutils literal notranslate"><span class="pre">
 be supplied as part of the equality constraint vector.</p>
 </div>
 <dl>
-<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 <span class="go">[ -1.15402379e+01  -2.23345886e+00  -9.30022917e-01  -2.53440778e+00</span>
@@ -342,7 +340,7 @@ be supplied as part of the equality constraint vector.</p>
 <span class="go">8</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 <span class="go">[-0.82435194  0.4375439   0.04615264  0.69192818 -0.18327442 -0.00930848</span>
@@ -351,7 +349,7 @@ be supplied as part of the equality constraint vector.</p>
 <span class="go">8</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 <span class="go">[  4.95782514e+00  -7.94403974e+00  -1.10158930e-02   7.27278513e+00</span>
@@ -360,7 +358,7 @@ be supplied as part of the equality constraint vector.</p>
 <span class="go">7</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">(</span><span class="n">freemass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freetime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 <span class="go">[-0.90868565  0.23238016  0.04596579  0.61543688 -0.50023407 -0.0058185</span>
@@ -369,7 +367,7 @@ be supplied as part of the equality constraint vector.</p>
 <span class="go">7</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">pontryagin</span><span class="o">.</span><span class="n">leg</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
 <span class="go">AttributeError: Cannot propagate dynamics, as boundary conditions t0, x0, l0, tf, and xf have not been set. Use set(t0, x0, l0, tf, xf) to set boundary conditions.</span>
 </pre></div>
@@ -378,9 +376,9 @@ be supplied as part of the equality constraint vector.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.get_states">
-<code class="sig-name descname">get_states</code><span class="sig-paren">(</span><em class="sig-param">atol=1e-12</em>, <em class="sig-param">rtol=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.get_states" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_states</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atol</span><span class="o">=</span><span class="default_value">1e-12</span></em>, <em class="sig-param"><span class="n">rtol</span><span class="o">=</span><span class="default_value">1e-12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.get_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the trajectory data of time, states, costates, and controls.</p>
 <p>This method propagates the spacecrafts dynamics with a chosen <code class="docutils literal notranslate"><span class="pre">atol</span></code>
 <code class="docutils literal notranslate"><span class="pre">rtol</span></code> from <code class="docutils literal notranslate"><span class="pre">t0</span></code>, <code class="docutils literal notranslate"><span class="pre">x0</span></code>, <code class="docutils literal notranslate"><span class="pre">l0</span></code> to <code class="docutils literal notranslate"><span class="pre">t0</span></code>, then returns a <cite>numpy.ndarray</cite>
@@ -421,7 +419,7 @@ error tolerances <code class="docutils literal notranslate"><span class="pre">at
 <p>Setting either <code class="docutils literal notranslate"><span class="pre">atol</span></code> or <code class="docutils literal notranslate"><span class="pre">rtol</span></code> smaller than <code class="docutils literal notranslate"><span class="pre">1e-12</span></code> may result in numerical integration difficulties.</p>
 </div>
 <dl>
-<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">leg</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">l0</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">get_states</span><span class="p">(</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># times</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="c1"># positions</span>
@@ -438,9 +436,9 @@ error tolerances <code class="docutils literal notranslate"><span class="pre">at
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.plot_traj">
-<code class="sig-name descname">plot_traj</code><span class="sig-paren">(</span><em class="sig-param">axis</em>, <em class="sig-param">mark=&quot;k.-&quot;</em>, <em class="sig-param">atol=1e-11</em>, <em class="sig-param">rtol=1e-11</em>, <em class="sig-param">units=pykep.AU</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot_traj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot_traj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">axis</span></em>, <em class="sig-param"><span class="n">mark</span><span class="o">=</span><span class="default_value">'k.-'</span></em>, <em class="sig-param"><span class="n">atol</span><span class="o">=</span><span class="default_value">1e-11</span></em>, <em class="sig-param"><span class="n">rtol</span><span class="o">=</span><span class="default_value">1e-11</span></em>, <em class="sig-param"><span class="n">units</span><span class="o">=</span><span class="default_value">pykep.AU</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot_traj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots trajectory onto a 3D axis.</p>
 <dl>
 <dt>Args:</dt><dd><ul class="simple">
@@ -459,7 +457,7 @@ error tolerances <code class="docutils literal notranslate"><span class="pre">at
 <li><p>TypeError: If either <code class="docutils literal notranslate"><span class="pre">atol</span></code>, <code class="docutils literal notranslate"><span class="pre">rtol</span></code>, or <code class="docutils literal notranslate"><span class="pre">units</span></code> is neither an instance of <code class="docutils literal notranslate"><span class="pre">float</span></code> nor <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></li>
 </ul>
 </dd>
-<dt>Examples:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span> <span class="c1"># spacecraft</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sc</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span> <span class="c1"># spacecraft</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;earth&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;mars&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -480,9 +478,9 @@ error tolerances <code class="docutils literal notranslate"><span class="pre">at
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.pontryagin.leg.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">mark=&quot;k.-&quot;</em>, <em class="sig-param">atol=1e-12</em>, <em class="sig-param">rtol=1e-12</em>, <em class="sig-param">unitsx=1</em>, <em class="sig-param">unitsy=1</em>, <em class="sig-param">xlabel=False</em>, <em class="sig-param">ylabel=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">mark</span><span class="o">=</span><span class="default_value">'k.-'</span></em>, <em class="sig-param"><span class="n">atol</span><span class="o">=</span><span class="default_value">1e-12</span></em>, <em class="sig-param"><span class="n">rtol</span><span class="o">=</span><span class="default_value">1e-12</span></em>, <em class="sig-param"><span class="n">unitsx</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">unitsy</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.pontryagin.leg.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots in two dimensions of the leg’s trajectory data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;vx&#39;</span><span class="p">,</span> <span class="s1">&#39;vy&#39;</span><span class="p">,</span> <span class="s1">&#39;vz&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lx&#39;</span><span class="p">,</span> <span class="s1">&#39;ly&#39;</span><span class="p">,</span> <span class="s1">&#39;lz&#39;</span><span class="p">,</span> <span class="s1">&#39;lvx&#39;</span><span class="p">,</span> <span class="s1">&#39;lvy&#39;</span><span class="p">,</span> <span class="s1">&#39;lvz&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;ux&#39;</span><span class="p">,</span> <span class="s1">&#39;uy&#39;</span><span class="p">,</span> <span class="s1">&#39;uz&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">]</span>
 </pre></div>
@@ -521,7 +519,7 @@ error tolerances <code class="docutils literal notranslate"><span class="pre">at
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

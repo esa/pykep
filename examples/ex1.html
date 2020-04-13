@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Multiple impulses transfer between Earth and Venus &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Multi revolutions Lambert Problem" href="ex2.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -166,9 +164,9 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    min-width: 5.5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
@@ -192,7 +190,6 @@ div.nboutput.container div.prompt pre {
 /* input/output area */
 div.nbinput.container div.input_area,
 div.nboutput.container div.output_area {
-    padding: 0.4em;
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
@@ -266,6 +263,27 @@ div.nboutput.container div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -308,15 +326,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Imports
-import pykep as pk
-import pygmo as pg
-import numpy as np
+<span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
+<span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-# Plotting imports
-import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
+<span class="c1"># Plotting imports</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
@@ -325,20 +343,20 @@ import matplotlib.pyplot as plt
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We define the optimization problem
-udp = pk.trajopt.pl2pl_N_impulses(
-    start=pk.planet.jpl_lp(&#39;earth&#39;),
-    target=pk.planet.jpl_lp(&#39;venus&#39;),
-    N_max=3,
-    tof=[100., 1000.],
-    vinf=[0., 4],
-    phase_free=False,
-    multi_objective=False,
-    t0=[pk.epoch(0), pk.epoch(1000)])
-# All pykep problems in the module trajopt are compatible with pygmo.
-# So we create a pygmo problem from the pykep udp (User Defined Problem)
-prob = pg.problem(udp)
-print(prob)
+<span></span><span class="c1"># We define the optimization problem</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">pl2pl_N_impulses</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">),</span>
+    <span class="n">target</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;venus&#39;</span><span class="p">),</span>
+    <span class="n">N_max</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">tof</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">],</span>
+    <span class="n">vinf</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">phase_free</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">multi_objective</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">t0</span><span class="o">=</span><span class="p">[</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">1000</span><span class="p">)])</span>
+<span class="c1"># All pykep problems in the module trajopt are compatible with pygmo.</span>
+<span class="c1"># So we create a pygmo problem from the pykep udp (User Defined Problem)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -348,6 +366,8 @@ print(prob)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Problem name: &lt;class &#39;pykep.trajopt._pl2pl_N_impulses.pl2pl_N_impulses&#39;&gt;
+        C++ class name: pybind11::object
+
         Global dimension:                       7
         Integer dimension:                      0
         Fitness dimension:                      1
@@ -370,38 +390,38 @@ Problem name: &lt;class &#39;pykep.trajopt._pl2pl_N_impulses.pl2pl_N_impulses&#3
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Here we define the solution strategy, which in this simple case is to use
-# Covariance Matrix adaptation Evolutionary Strategy (CMA-ES)
-uda = pg.cmaes(gen=1000, force_bounds = True)
-algo = pg.algorithm(uda)
-# Here we activate some degree of screen output (will only show in the terminal)
-algo.set_verbosity(10)
-# We construct a random population of 20 individuals (the initial guess)
-pop = pg.population(prob, size = 20, seed = 123)
-# We solve the problem
-pop = algo.evolve(pop)
+<span></span><span class="c1"># Here we define the solution strategy, which in this simple case is to use</span>
+<span class="c1"># Covariance Matrix adaptation Evolutionary Strategy (CMA-ES)</span>
+<span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">cmaes</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">force_bounds</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+<span class="c1"># Here we activate some degree of screen output (will only show in the terminal)</span>
+<span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># We construct a random population of 20 individuals (the initial guess)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)</span>
+<span class="c1"># We solve the problem</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Plot our trajectory
-fig = plt.figure(figsize = (16,5))
-ax1 = fig.add_subplot(1, 3, 1, projection=&#39;3d&#39;)
-ax2 = fig.add_subplot(1, 3, 2, projection=&#39;3d&#39;)
-ax3 = fig.add_subplot(1, 3, 3, projection=&#39;3d&#39;)
-ax1 = udp.plot(pop.champion_x, axes = ax1)
-ax2 = udp.plot(pop.champion_x, axes = ax2)
-ax2.view_init(elev=90, azim=0)
-ax3 = udp.plot(pop.champion_x, axes = ax3)
-ax3.view_init(elev=0, azim=0)
+<span></span><span class="c1"># Plot our trajectory</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax3</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -414,12 +434,12 @@ ax3.view_init(elev=0, azim=0)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Inspect
-udp.pretty(pop.champion_x)
+<span></span><span class="c1"># Inspect</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -428,9 +448,9 @@ udp.pretty(pop.champion_x)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Total DV (m/s):  5524.785829106961
-Dvs (m/s):  [2281.053546748252, 321.01198870269815, 2922.720293656011]
-Tofs (days):  [302.29924933023614, 148.9132409336402]
+Total DV (m/s):  6363.335847933547
+Dvs (m/s):  [508.3218553605975, 2609.214286403859, 3245.79970616909]
+Tofs (days):  [250.1799490642077, 149.6145171317176]
 </pre></div></div>
 </div>
 </div>
@@ -448,7 +468,7 @@ Tofs (days):  [302.29924933023614, 148.9132409336402]
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Global Optimization Algorithms Comparison on 6 Trajectory Gym Problems &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Credits" href="../credits.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -166,9 +164,9 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    min-width: 5.5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
@@ -192,7 +190,6 @@ div.nboutput.container div.prompt pre {
 /* input/output area */
 div.nbinput.container div.input_area,
 div.nboutput.container div.output_area {
-    padding: 0.4em;
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
@@ -266,6 +263,27 @@ div.nboutput.container div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -311,143 +329,143 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>import pygmo as pg
-import pykep as pk
-import numpy as np
-import matplotlib as mlp
-import matplotlib.pyplot as plp
-%matplotlib inline
+<span></span><span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mlp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plp</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
 
-fig, axes = plp.subplots(nrows=3, ncols=2, sharex=&#39;col&#39;, sharey=&#39;row&#39;, figsize=(15,15))
-problems=[pk.trajopt.gym.cassini2, pk.trajopt.gym.eve_mga1dsm, pk.trajopt.gym.messenger, pk.trajopt.gym.rosetta, pk.trajopt.gym.em5imp, pk.trajopt.gym.em7imp]
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plp</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;col&#39;</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;row&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">problems</span><span class="o">=</span><span class="p">[</span><span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">cassini2</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">eve_mga1dsm</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">messenger</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">rosetta</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">em5imp</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">em7imp</span><span class="p">]</span>
 
-#We now loop through the 6 problems:
-for prob_number in range(0,6):
-    vec=np.zeros(20)
-    vec_2=np.zeros(20)
-    vec_3=np.zeros(20)
-    vec_4=np.zeros(20)
-    #Now, we loop through 10 runs (each problem is run 10 times, and the results are averaged to remove the randomness)
-    for x in range(1,11):
-        udp = problems[prob_number]
-        #I define the problems to be handled:
-        prob=pg.problem(udp)
-        prob_2=pg.problem(udp)
-        prob_3=pg.problem(udp)
-        prob_4=pg.problem(udp)
-        #We define the algorithms (ACOmi, SGA, SADE and PSO):
-        uda=pg.gaco(gen=1000, ker=15, q=1.0, oracle=1e9, acc=0.01, threshold=500, n_gen_mark=7)
-        uda_2=pg.sga(gen=1000)
-        uda_3=pg.sade(gen=1000)
-        uda_4=pg.pso(gen=1000)
+<span class="c1">#We now loop through the 6 problems:</span>
+<span class="k">for</span> <span class="n">prob_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">vec</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">vec_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">vec_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">vec_4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="c1">#Now, we loop through 10 runs (each problem is run 10 times, and the results are averaged to remove the randomness)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">):</span>
+        <span class="n">udp</span> <span class="o">=</span> <span class="n">problems</span><span class="p">[</span><span class="n">prob_number</span><span class="p">]</span>
+        <span class="c1">#I define the problems to be handled:</span>
+        <span class="n">prob</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+        <span class="n">prob_2</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+        <span class="n">prob_3</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+        <span class="n">prob_4</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+        <span class="c1">#We define the algorithms (ACOmi, SGA, SADE and PSO):</span>
+        <span class="n">uda</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">ker</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">oracle</span><span class="o">=</span><span class="mf">1e9</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_gen_mark</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="n">uda_2</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">sga</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="n">uda_3</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">sade</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="n">uda_4</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">pso</span><span class="p">(</span><span class="n">gen</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 
-        algo=pg.algorithm(uda)
-        algo_2=pg.algorithm(uda_2)
-        algo_3=pg.algorithm(uda_3)
-        algo_4=pg.algorithm(uda_4)
-        #We generate the first random population of 20 individuals, with controlled seed:
-        pop=pg.population(prob=prob, size=20, seed=x)
-        pop_2=pg.population(prob=prob_2, size=20, seed=x)
-        pop_3=pg.population(prob=prob_3, size=20, seed=x)
-        pop_4=pg.population(prob=prob_4, size=20, seed=x)
-        #We print the log every 50 generations:
-        algo.set_verbosity(50)
-        algo_2.set_verbosity(50)
-        algo_3.set_verbosity(50)
-        algo_4.set_verbosity(50)
-        #We evolve the populations:
-        pop=algo.evolve(pop)
-        pop_2=algo_2.evolve(pop_2)
-        pop_3=algo_3.evolve(pop_3)
-        pop_4=algo_4.evolve(pop_4)
-        #We extract the log:
-        uda_gaco=algo.extract(pg.gaco)
-        uda_sga=algo_2.extract(pg.sga)
-        uda_sade=algo_3.extract(pg.sade)
-        uda_pso=algo_4.extract(pg.pso)
+        <span class="n">algo</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+        <span class="n">algo_2</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda_2</span><span class="p">)</span>
+        <span class="n">algo_3</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda_3</span><span class="p">)</span>
+        <span class="n">algo_4</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda_4</span><span class="p">)</span>
+        <span class="c1">#We generate the first random population of 20 individuals, with controlled seed:</span>
+        <span class="n">pop</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">pop_2</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="o">=</span><span class="n">prob_2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">pop_3</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="o">=</span><span class="n">prob_3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">pop_4</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="o">=</span><span class="n">prob_4</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+        <span class="c1">#We print the log every 50 generations:</span>
+        <span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">algo_2</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">algo_3</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">algo_4</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="c1">#We evolve the populations:</span>
+        <span class="n">pop</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+        <span class="n">pop_2</span><span class="o">=</span><span class="n">algo_2</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_2</span><span class="p">)</span>
+        <span class="n">pop_3</span><span class="o">=</span><span class="n">algo_3</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_3</span><span class="p">)</span>
+        <span class="n">pop_4</span><span class="o">=</span><span class="n">algo_4</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_4</span><span class="p">)</span>
+        <span class="c1">#We extract the log:</span>
+        <span class="n">uda_gaco</span><span class="o">=</span><span class="n">algo</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">gaco</span><span class="p">)</span>
+        <span class="n">uda_sga</span><span class="o">=</span><span class="n">algo_2</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sga</span><span class="p">)</span>
+        <span class="n">uda_sade</span><span class="o">=</span><span class="n">algo_3</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">sade</span><span class="p">)</span>
+        <span class="n">uda_pso</span><span class="o">=</span><span class="n">algo_4</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">pso</span><span class="p">)</span>
 
-        log_gaco=uda_gaco.get_log()
-        log_sga=uda_sga.get_log()
-        log_sade=uda_sade.get_log()
-        log_pso=uda_pso.get_log()
+        <span class="n">log_gaco</span><span class="o">=</span><span class="n">uda_gaco</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+        <span class="n">log_sga</span><span class="o">=</span><span class="n">uda_sga</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+        <span class="n">log_sade</span><span class="o">=</span><span class="n">uda_sade</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+        <span class="n">log_pso</span><span class="o">=</span><span class="n">uda_pso</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
 
-        #We store the results in a vector
-        i=0
-        for entry in log_gaco:
-            vec[i]+=entry[2]
-            i=i+1
-        i=0
-        for entry_2 in log_sga:
-            vec_2[i]+=entry_2[2]
-            i=i+1
-        i=0
-        for entry_3 in log_sade:
-            vec_3[i]+=entry_3[2]
-            i=i+1
-        i=0
-        for entry_4 in log_pso:
-            vec_4[i]+=entry_4[2]
-            i=i+1
-    #We average the stored results over the 10 runs:
-    vec=np.true_divide(vec,10)
-    vec_2=np.true_divide(vec_2,10)
-    vec_3=np.true_divide(vec_3,10)
-    vec_4=np.true_divide(vec_4,10)
-    #We finally plot the results in a semilog plot, for each problem:
-    if (prob_number==0):
-            axes[0,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[0,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[0,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[0,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            #axes[0,0].legend(loc=&#39;upper right&#39;)
-            axes[0,0].set_title(&#39;Cassini 2: gen=1000, pop=20&#39;)
+        <span class="c1">#We store the results in a vector</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">:</span>
+            <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry_2</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">:</span>
+            <span class="n">vec_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">entry_2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry_3</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">:</span>
+            <span class="n">vec_3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">entry_3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry_4</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">:</span>
+            <span class="n">vec_4</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">entry_4</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="c1">#We average the stored results over the 10 runs:</span>
+    <span class="n">vec</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">vec_2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span><span class="n">vec_2</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">vec_3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span><span class="n">vec_3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">vec_4</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span><span class="n">vec_4</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+    <span class="c1">#We finally plot the results in a semilog plot, for each problem:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="c1">#axes[0,0].legend(loc=&#39;upper right&#39;)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Cassini 2: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
-    elif (prob_number==1):
-            axes[0,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[0,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[0,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[0,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            #axes[0,1].legend(loc=&#39;upper right&#39;)
-            axes[0,1].set_title(&#39;E-V-E MGA 1DSM: gen=1000, pop=20&#39;)
+    <span class="k">elif</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="c1">#axes[0,1].legend(loc=&#39;upper right&#39;)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;E-V-E MGA 1DSM: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
-    elif (prob_number==2):
-            axes[1,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[1,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[1,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[1,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            #axes[1,0].legend(loc=&#39;upper right&#39;)
-            axes[1,0].set_title(&#39;Messenger: gen=1000, pop=20&#39;)
+    <span class="k">elif</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="c1">#axes[1,0].legend(loc=&#39;upper right&#39;)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Messenger: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
-    elif (prob_number==3):
-            axes[1,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[1,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[1,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[1,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            axes[1,1].legend(loc=&#39;upper right&#39;)
-            axes[1,1].set_title(&#39;Rosetta: gen=1000, pop=20&#39;)
+    <span class="k">elif</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Rosetta: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
 
-    elif (prob_number==4):
-            axes[2,0].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[2,0].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[2,0].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[2,0].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            #axes[2,0].legend(loc=&#39;upper right&#39;)
-            axes[2,0].set_title(&#39;E-M 5 imp: gen=1000, pop=20&#39;)
+    <span class="k">elif</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="c1">#axes[2,0].legend(loc=&#39;upper right&#39;)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;E-M 5 imp: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
-    elif (prob_number==5):
-            axes[2,1].semilogy([entry[1] for entry in log_gaco], vec,&#39;k--&#39;, label = &#39;ACOmi&#39;)
-            axes[2,1].semilogy([entry[1] for entry in log_sga], vec_2,&#39;r--&#39;, label = &#39;SGA&#39;)
-            axes[2,1].semilogy([entry[1] for entry in log_sade], vec_3, &#39;b--&#39;, label = &#39;SADE&#39;)
-            axes[2,1].semilogy([entry[1] for entry in log_pso], vec_4, &#39;--&#39;, label = &#39;PSO&#39;)
-            #axes[2,1].legend(loc=&#39;upper right&#39;)
-            axes[2,1].set_title(&#39;E-M 7 imp: gen=1000, pop=20&#39;)
+    <span class="k">elif</span> <span class="p">(</span><span class="n">prob_number</span><span class="o">==</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_gaco</span><span class="p">],</span> <span class="n">vec</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;ACOmi&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sga</span><span class="p">],</span> <span class="n">vec_2</span><span class="p">,</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SGA&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_sade</span><span class="p">],</span> <span class="n">vec_3</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SADE&#39;</span><span class="p">)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">semilogy</span><span class="p">([</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">log_pso</span><span class="p">],</span> <span class="n">vec_4</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+            <span class="c1">#axes[2,1].legend(loc=&#39;upper right&#39;)</span>
+            <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;E-M 7 imp: gen=1000, pop=20&#39;</span><span class="p">)</span>
 
-for ax in axes.flat:
-    ax.set(xlabel=&#39;Fevals [-]&#39;, ylabel=&#39;Best [m/s]&#39;)
-    ax.grid()
-#We save the results to a .eps file:
-plp.savefig(&quot;GTOP_database_pop20.jpg&quot;)
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Fevals [-]&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Best [m/s]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="c1">#We save the results to a .eps file:</span>
+<span class="n">plp</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;GTOP_database_pop20.jpg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -473,7 +491,7 @@ plp.savefig(&quot;GTOP_database_pop20.jpg&quot;)
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

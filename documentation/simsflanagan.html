@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>The simsflanagan module &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The pontryagin module" href="pontryagin.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -139,13 +137,13 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </table>
 <div class="section" id="detailed-documentation">
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.sims_flanagan.spacecraft">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">spacecraft</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">spacecraft</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains design parameters of a NEP spacecraft</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.spacecraft.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.spacecraft.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.sims_flanagan.spacecraft(mass,thrust,isp)</p>
 <ul class="simple">
 <li><p>mass: the spacecraft mass</p></li>
@@ -171,13 +169,13 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.sims_flanagan.sc_state">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">sc_state</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">sc_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the state of a spacecraft as position, velocity and mass</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.sc_state.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.sims_flanagan.sc_state(r,v,m)</p>
 <ul class="simple">
 <li><p>r: triplet containing the position vector in cartesian coordiantes</p></li>
@@ -200,9 +198,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.sc_state.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the whole spacecraft state at once using a 7 dimensional tuple</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x0</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">))</span>
@@ -210,9 +208,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.sc_state.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.sc_state.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the whole spacecraft state at once putting it into a 7 dimensional tuple</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -223,13 +221,13 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.sims_flanagan.leg">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">leg</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.sims_flanagan.</code><code class="sig-name descname">leg</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents one low-thrust  trajectory leg in the sims-flanagan model</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>pykep.sims_flanagan.leg(start,x0,throttles,end,xe,spacecraft,mu)</p>
 <ul class="simple">
 <li><p>start: starting epoch</p></li>
@@ -280,9 +278,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets leg’s data, leaving the spacecraft and the central body gravitational parameter unchanged</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">x0</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">end</span><span class="p">,</span><span class="n">xe</span><span class="p">)</span>
@@ -290,9 +288,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.high_fidelity">
-<code class="sig-name descname">high_fidelity</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.high_fidelity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">high_fidelity</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.high_fidelity" title="Permalink to this definition">¶</a></dt>
 <dd><p>If True propagation is not impulsive, but continuous</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">high_fidelity</span> <span class="o">=</span> <span class="kc">True</span>
@@ -300,9 +298,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.mismatch_constraints">
-<code class="sig-name descname">mismatch_constraints</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mismatch_constraints</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.mismatch_constraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple containing the state mismatch of the leg x,y,z,vx,vy,vz,m (needs to be all zeros for the leg to be feasible)</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ceq</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">mismatch_constraints</span><span class="p">()</span>
@@ -310,9 +308,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.throttles_constraints">
-<code class="sig-name descname">throttles_constraints</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.throttles_constraints" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">throttles_constraints</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.throttles_constraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a tuple containing the throttle magnitudes minus one</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">throttles_constraints</span><span class="p">()</span>
@@ -320,9 +318,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.set_mu">
-<code class="sig-name descname">set_mu</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_mu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_mu</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_mu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the leg central body gravitational parameter</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">set_mu</span><span class="p">(</span><span class="n">pykep</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
@@ -330,9 +328,9 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.set_spacecraft">
-<code class="sig-name descname">set_spacecraft</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_spacecraft" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_spacecraft</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.set_spacecraft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the leg spacecraft</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span> <span class="o">=</span> <span class="n">pykep</span><span class="o">.</span><span class="n">sims_flanagan</span><span class="o">.</span><span class="n">spacecraft</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span><span class="mi">2500</span><span class="p">)</span>
@@ -341,7 +339,7 @@ and easy mesh refinement by the pykep development team. The key papers containin
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.sims_flanagan.leg.get_states">
 <code class="sig-name descname">get_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.sims_flanagan.leg.get_states" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the spacecraft states (t,r,v,m) at the leg grid points</p>
@@ -369,7 +367,7 @@ and easy mesh refinement by the pykep development team. The key papers containin
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

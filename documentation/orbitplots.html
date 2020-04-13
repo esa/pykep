@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>The orbit plotting module &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The planet module" href="planets.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -139,20 +137,24 @@
 </table>
 <div class="section" id="detailed-documentation">
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.orbit_plots.plot_planet">
-<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_planet</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_planet" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_planet(plnt, t0=’pykep.epoch(0)’, N=60, units=1.0, color=’k’, s=40, legend=False, axes=None)</p>
+<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_planet</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_planet" title="Permalink to this definition">¶</a></dt>
+<dd><p>ax = plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color=’k’, alpha=1.0, s=40, legend=(False, False), axes=None):</p>
 <ul class="simple">
-<li><p>axes:      3D axis object created using fig.gca(projection=‘3d’)</p></li>
+<li><p>axes:      3D axis object created using fig.gca(projection=’3d’)</p></li>
 <li><p>plnt:      pykep.planet object we want to plot</p></li>
-<li><p>t0:        a pykep.epoch or float (mjd2000) indicating when we want to plot the planet position</p></li>
+<li><p>t0:        a pykep.epoch or float (mjd2000) indicating the first date we want to plot the planet position</p></li>
+<li><dl class="simple">
+<dt>tf:        a pykep.epoch or float (mjd2000) indicating the final date we want to plot the planet position.</dt><dd><p>if None this is computed automatically from the orbital period (prone to error for non periodic orbits)</p>
+</dd>
+</dl>
+</li>
 <li><p>units:     the length unit to be used in the plot</p></li>
 <li><p>color:     color to use to plot the orbit (passed to matplotlib)</p></li>
 <li><p>s:         planet size (passed to matplotlib)</p></li>
 <li><dl class="simple">
-<dt>legend     tuple of two bool or string. The first element refers to the planet scatter plot, the second to the actual orbit.</dt><dd><p>If a bool value is used, then an automated legend label is generated (if True), if its a string the exact string is
-used as a legend.</p>
+<dt>legend     2-D tuple of bool or string: The first element activates the planet scatter plot, </dt><dd><p>the second to the actual orbit. If a bool value is used, then an automated legend label is generated (if True), if a string is used, the string is the legend. Its also possible but deprecated to use a single bool value. In which case that value is used for both the tuple components.</p>
 </dd>
 </dl>
 </li>
@@ -172,12 +174,12 @@ used as a legend.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.orbit_plots.plot_lambert">
-<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_lambert</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_lambert" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_lambert</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_lambert" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = plot_lambert(l, N=60, sol=0, units=’pykep.AU’, legend=’False’, axes=None, alpha=1.)</p>
 <ul class="simple">
-<li><p>axes:       3D axis object created using fig.gca(projection=‘3d’)</p></li>
+<li><p>axes:       3D axis object created using fig.gca(projection=’3d’)</p></li>
 <li><p>l:        pykep.lambert_problem object</p></li>
 <li><p>N:                number of points to be plotted along one arc</p></li>
 <li><dl class="simple">
@@ -220,12 +222,12 @@ used as a legend.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.orbit_plots.plot_kepler">
-<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_kepler</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_kepler" title="Permalink to this definition">¶</a></dt>
-<dd><p>ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color=’b’, legend=False, axes=None):</p>
+<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_kepler</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_kepler" title="Permalink to this definition">¶</a></dt>
+<dd><p>ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color=’b’, label=None, axes=None):</p>
 <ul class="simple">
-<li><p>axes:     3D axis object created using fig.gca(projection=‘3d’)</p></li>
+<li><p>axes:     3D axis object created using fig.gca(projection=’3d’)</p></li>
 <li><p>r0:       initial position (cartesian coordinates)</p></li>
 <li><p>v0:               initial velocity (cartesian coordinates)</p></li>
 <li><p>tof:              propagation time</p></li>
@@ -245,12 +247,12 @@ used as a legend.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.orbit_plots.plot_taylor">
-<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_taylor</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_taylor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_taylor</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_taylor" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color=’b’, legend=False, axes=None):</p>
 <ul class="simple">
-<li><p>axes:             3D axis object created using fig.gca(projection=‘3d’)</p></li>
+<li><p>axes:             3D axis object created using fig.gca(projection=’3d’)</p></li>
 <li><p>r0:               initial position (cartesian coordinates)</p></li>
 <li><p>v0:               initial velocity (cartesian coordinates)</p></li>
 <li><p>m0:               initial mass</p></li>
@@ -278,12 +280,12 @@ used as a legend.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.orbit_plots.plot_sf_leg">
-<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_sf_leg</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_sf_leg" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pykep.orbit_plots.</code><code class="sig-name descname">plot_sf_leg</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.orbit_plots.plot_sf_leg" title="Permalink to this definition">¶</a></dt>
 <dd><p>ax = plot_sf_leg(leg, N=5, units=1, color=’b’, legend=False, no_trajectory=False, axes=None):</p>
 <ul class="simple">
-<li><p>axes:                 3D axis object created using fig.gca(projection=‘3d’)</p></li>
+<li><p>axes:                 3D axis object created using fig.gca(projection=’3d’)</p></li>
 <li><p>leg:              a pykep.sims_flanagan.leg</p></li>
 <li><p>N:                    number of points to be plotted along one arc</p></li>
 <li><p>units:        the length unit to be used in the plot</p></li>
@@ -334,7 +336,7 @@ used as a legend.</p>
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

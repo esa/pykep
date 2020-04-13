@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Lunar orbit propagation with degree 20 spherical harmonics gravity model &#8212; pykep  documentation</title>
@@ -10,21 +10,21 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Global optimization of an MGA low-thrust trajectory" href="ex3.html" />
+    <link rel="next" title="Using SPICE kernels to study HERA trajectory" href="hera_trajectory.html" />
     <link rel="prev" title="Orbital parameters (osculating and modified equinoctial)" href="ex12.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -74,7 +74,7 @@
     </a>
   </li>
   <li>
-    <a href="ex3.html" title="Next Chapter: Global optimization of an MGA low-thrust trajectory"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Global optimization of ... &raquo;</span>
+    <a href="hera_trajectory.html" title="Next Chapter: Using SPICE kernels to study HERA trajectory"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Using SPICE kernels to ... &raquo;</span>
     </a>
   </li>
             </ul>
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -166,9 +164,9 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    min-width: 5.5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
@@ -192,7 +190,6 @@ div.nboutput.container div.prompt pre {
 /* input/output area */
 div.nbinput.container div.input_area,
 div.nboutput.container div.output_area {
-    padding: 0.4em;
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
@@ -266,6 +263,27 @@ div.nboutput.container div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -308,12 +326,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Imports
-import matplotlib.pyplot as plt
-import pykep as pk
-import scipy as sp
-
-%matplotlib inline
+<span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
 </div>
 </div>
@@ -322,8 +340,8 @@ import scipy as sp
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Load the gravity model
-r_m, mu_m, c, s, max_degree, max_order = pk.util.load_gravity_model(&quot;glgm3_150.txt&quot;)
+<span></span><span class="c1"># Load the gravity model</span>
+<span class="n">r_m</span><span class="p">,</span> <span class="n">mu_m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">max_degree</span><span class="p">,</span> <span class="n">max_order</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">load_gravity_model</span><span class="p">(</span><span class="s2">&quot;glgm3_150.txt&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -332,13 +350,13 @@ r_m, mu_m, c, s, max_degree, max_order = pk.util.load_gravity_model(&quot;glgm3_
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Define initial orbital parameters
+<span></span><span class="c1"># Define initial orbital parameters</span>
 
-# a, e, i, RAAN, AOP, E
-kepl_init_state = sp.array([1.882105e06, 0.05, sp.radians(92), 0, 3*sp.pi/2, 0])
+<span class="c1"># a, e, i, RAAN, AOP, E</span>
+<span class="n">kepl_init_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.882105e06</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">92</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
-# Convert to cartesian state
-cart_init_state = sp.concatenate(pk.par2ic(kepl_init_state, mu_m))
+<span class="c1"># Convert to cartesian state</span>
+<span class="n">cart_init_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">par2ic</span><span class="p">(</span><span class="n">kepl_init_state</span><span class="p">,</span> <span class="n">mu_m</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -347,36 +365,36 @@ cart_init_state = sp.concatenate(pk.par2ic(kepl_init_state, mu_m))
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Function to calculate the state derivative.
-def propagate(t, state):
-    # Rotational rate of the Moon
-    w_m = 2.661695728e-6  # rad/s
+<span></span><span class="c1"># Function to calculate the state derivative.</span>
+<span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="c1"># Rotational rate of the Moon</span>
+    <span class="n">w_m</span> <span class="o">=</span> <span class="mf">2.661695728e-6</span>  <span class="c1"># rad/s</span>
 
-    # Get the absolute rotation (assuming alpha(t0) = 0)
-    alpha = w_m * t
+    <span class="c1"># Get the absolute rotation (assuming alpha(t0) = 0)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">w_m</span> <span class="o">*</span> <span class="n">t</span>
 
-    # Build the rotation matrix
-    sin = sp.sin(alpha)
-    cos = sp.cos(alpha)
+    <span class="c1"># Build the rotation matrix</span>
+    <span class="n">sin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
 
-    transformation = sp.array([[cos, sin, 0],
-                               [-sin, cos, 0],
-                               [0, 0, 1]])
+    <span class="n">transformation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                               <span class="p">[</span><span class="o">-</span><span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                               <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 
-    # Get the state in the inertial reference frame
-    rotated_pos = sp.dot(transformation, state[0:3])
+    <span class="c1"># Get the state in the inertial reference frame</span>
+    <span class="n">rotated_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">transformation</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
 
-    # gravity_spherical_harmonic needs an (N x 3) input array
-    acc = pk.util.gravity_spherical_harmonic(sp.array([rotated_pos]), r_m, mu_m, c, s, 10, 0)[0]
+    <span class="c1"># gravity_spherical_harmonic needs an (N x 3) input array</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">gravity_spherical_harmonic</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rotated_pos</span><span class="p">]),</span> <span class="n">r_m</span><span class="p">,</span> <span class="n">mu_m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-    delta_state = sp.array([state[3],
-                            state[4],
-                            state[5],
-                            acc[0],
-                            acc[1],
-                            acc[2]])
+    <span class="n">delta_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                            <span class="n">state</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                            <span class="n">state</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                            <span class="n">acc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">acc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="n">acc</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
 
-    return delta_state
+    <span class="k">return</span> <span class="n">delta_state</span>
 </pre></div>
 </div>
 </div>
@@ -385,11 +403,11 @@ def propagate(t, state):
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Run the integration of the orbit for one day
-solution = sp.integrate.solve_ivp(propagate, (0, 3600*24), cart_init_state, rtol=1e-6, atol=1e-6)
+<span></span><span class="c1"># Run the integration of the orbit for one day</span>
+<span class="n">solution</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">solve_ivp</span><span class="p">(</span><span class="n">propagate</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">),</span> <span class="n">cart_init_state</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
 
-time_hist = solution[&#39;t&#39;]
-state_hist = sp.transpose(solution[&#39;y&#39;])
+<span class="n">time_hist</span> <span class="o">=</span> <span class="n">solution</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span>
+<span class="n">state_hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -398,18 +416,18 @@ state_hist = sp.transpose(solution[&#39;y&#39;])
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Transform cartesian to modified equinoctial
-eq_state_hist = sp.zeros(state_hist.shape)
-for i, state in enumerate(state_hist):
-    eq_state_hist[i] = pk.ic2eq(state[0:3], state[3:6], mu_m)
+<span></span><span class="c1"># Transform cartesian to modified equinoctial</span>
+<span class="n">eq_state_hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">state_hist</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_hist</span><span class="p">):</span>
+    <span class="n">eq_state_hist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2eq</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">mu_m</span><span class="p">)</span>
 
-labels = [r&quot;$a \cdot \left( 1 - e^2 \right)$&quot;, r&quot;$h$&quot;, r&quot;$k$&quot;, r&quot;$p$&quot;, r&quot;$q$&quot;, r&quot;$L$&quot;]
-# Plot the orbit
-plt.figure(1, figsize=(16, 3))
-for i in range(6):
-    plt.subplot(1, 6, i + 1)
-    plt.plot(time_hist, eq_state_hist[:, i] - eq_state_hist[0, i])
-    plt.xlabel(labels[i])
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$a \cdot \left( 1 - e^2 \right)$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$h$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$k$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$p$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$q$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$L$&quot;</span><span class="p">]</span>
+<span class="c1"># Plot the orbit</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time_hist</span><span class="p">,</span> <span class="n">eq_state_hist</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">eq_state_hist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -435,7 +453,7 @@ for i in range(6):
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

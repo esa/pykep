@@ -1,31 +1,31 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Install pykep &#8212; pykep  documentation</title>
+    <title>Installation &#8212; pykep  documentation</title>
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <script src="_static/js/jquery-1.11.0.min.js"></script>
+    <script src="_static/js/jquery-fix.js"></script>
+    <script src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Code Documentation" href="documentation/index.html" />
-    <link rel="prev" title="Preparing your system to compile pykep" href="system.html" />
+    <link rel="next" title="API reference" href="documentation/index.html" />
+    <link rel="prev" title="Welcome to pykep" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -70,11 +70,11 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="system.html" title="Previous Chapter: Preparing your system to compile pykep"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Preparing your system t...</span>
+    <a href="index.html" title="Previous Chapter: Welcome to pykep"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Welcome to pykep</span>
     </a>
   </li>
   <li>
-    <a href="documentation/index.html" title="Next Chapter: Code Documentation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Code Documentation &raquo;</span>
+    <a href="documentation/index.html" title="Next Chapter: API reference"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">API reference &raquo;</span>
     </a>
   </li>
             </ul>
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 </ul>
@@ -100,63 +98,139 @@
       </div>
     <div class="col-md-9 content">
       
-  <div class="section" id="install-pykep">
-<span id="howtoinstall"></span><h1>Install pykep<a class="headerlink" href="#install-pykep" title="Permalink to this headline">¶</a></h1>
-<p>pykep supports python 3.X. Python 2.7 support was dropped as of version 2.4.
-Both PyPi and conda package mangers contain the binaries for pykep, but only for a limited set of
-architectures. In case yours is not include, you will have to compile the code from source.</p>
-<div class="section" id="using-binaries">
-<h2>Using Binaries<a class="headerlink" href="#using-binaries" title="Permalink to this headline">¶</a></h2>
-<p>The Python module called <code class="docutils literal notranslate"><span class="pre">pykep</span></code> can be installed from conda or pip only for some architectures / python version combinations.</p>
-<div class="section" id="installing-with-conda">
-<h3>Installing with conda<a class="headerlink" href="#installing-with-conda" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">pykep</span></code> is available in the <a class="reference external" href="https://conda.io/en/latest/">conda</a> package manager
-from the <a class="reference external" href="https://conda-forge.org/">conda-forge</a> channel. A single package is available:</p>
+  <div class="section" id="installation">
+<span id="howtoinstall"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>pykep has the following <strong>mandatory</strong> runtime dependencies:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://anaconda.org/conda-forge/pykep">pykep</a>, which contains the <code class="docutils literal notranslate"><span class="pre">pykep</span></code> python module.</p></li>
+<li><p><a class="reference external" href="https://www.python.org/">Python</a> 3.4 or later (Python 2.x is
+<strong>not</strong> supported),</p></li>
+<li><p>the <a class="reference external" href="https://esa.github.io/pykep/">keplerian_toolbox C++ library</a>, same version as pykep included in the pykep source,</p></li>
+<li><p>the <a class="reference external" href="https://www.boost.org/doc/libs/release/libs/serialization/doc/index.html">Boost serialization library</a>,
+version 1.60 or later,</p></li>
 </ul>
-<p>In order to install <code class="docutils literal notranslate"><span class="pre">pykep</span></code> via conda, you just need
-to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to the channels:</p>
+<p>Additionally, pykep has the following <strong>optional</strong> runtime
+dependencies:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.scipy.org/">scipy</a>, which is used in many plotting and related utilities.</p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/">Matplotlib</a>, which is used in many plotting and related utilities.
+plotting utilities,</p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable//">scikit-learn</a>, which is used, for example, in the phasing module</p></li>
+<li><p><a class="reference external" href="http://numba.pydata.org/">numba</a>, which is used to speed up some pure python code.</p></li>
+</ul>
+</div>
+<div class="section" id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h2>
+<p>pykep packages are available from a variety
+of package managers on several platforms.</p>
+<div class="section" id="conda">
+<h3>Conda<a class="headerlink" href="#conda" title="Permalink to this headline">¶</a></h3>
+<p>pykep is available via the <a class="reference external" href="https://conda.io/docs/">conda</a>
+package manager for Linux, OSX and Windows
+thanks to the infrastructure provided by <a class="reference external" href="https://conda-forge.org/">conda-forge</a>.
+In order to install pykep via conda, you just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>
+to the channels, and then you can immediately install pykep:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> conda config --add channels conda-forge
+<span class="gp">$</span> conda config --set channel_priority strict
 <span class="gp">$</span> conda install pykep
 </pre></div>
 </div>
-<p>Please refer to the <a class="reference external" href="https://conda.io/en/latest/">conda documentation</a> for instructions
-on how to setup and manage your conda installation.</p>
+<p>The conda packages for pykep are maintained by the core development team,
+and they are regularly updated when new pykep versions are released.</p>
+<p>Please refer to the <a class="reference external" href="https://conda.io/docs/">conda documentation</a>
+for instructions on how to setup and manage
+your conda installation.</p>
 </div>
-<div class="section" id="installing-with-pip">
-<h3>Installing with pip<a class="headerlink" href="#installing-with-pip" title="Permalink to this headline">¶</a></h3>
-<p>We also provide the pip packages (mainly for linux 64 bit architectures). Check on the
-<a class="reference external" href="https://pypi.org/project/pykep/">PyPi pykep page</a> if the needed package is provided.</p>
+<div class="section" id="pip">
+<h3>pip<a class="headerlink" href="#pip" title="Permalink to this headline">¶</a></h3>
+<p>pykep is also available on Linux via the <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>
+package installer. The installation of pykep with pip is straightforward:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install pykep
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="compiling-and-installing-under-linux">
-<h2>Compiling and Installing under Linux<a class="headerlink" href="#compiling-and-installing-under-linux" title="Permalink to this headline">¶</a></h2>
-<p>Assuming you have prepared your system for compiling pykep (see <a class="reference internal" href="system.html#prepareyoursystem"><span class="std std-ref">Preparing your system to compile pykep</span></a>) and that you have just downloaded the source code
-following the instructions given, see <a class="reference internal" href="downloading.html#howtodownload"><span class="std std-ref">Download pykep source code</span></a>, you will have a directory pykep with the code, move there:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pykep</span>
+<p>If you want to install pykep for a single user instead of
+system-wide, which is in general a good idea, you can do:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install --user pykep
 </pre></div>
 </div>
-<p>You will now need to 1) build and install the keplerian toolbox (i.e. the c++ library) and then build and install pykep (the python module
-that depends on the keplerian toolbox library). So lets start:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
-<span class="n">cd</span> <span class="n">build</span>
+<p>An even better idea is to make use of Python’s
+<a class="reference external" href="https://virtualenv.pypa.io/en/latest/">virtual environments</a>.</p>
+<p>The pip packages for pykep are maintained by the core development team,
+and they are regularly updated when new pykep versions are released.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note however that we <strong>strongly</strong> encourage users to install pykep with conda
+rather than with pip. The reason is that pykep is built on a
+moderately complicated
+stack of C++ libraries, which have to be bundled together with pykep
+in the pip package.
+This is a problem if one uses pykep together with other Python
+packages sharing dependencies with pykep, because multiple incompatible
+versions of the same C++ library might end up being loaded at the
+same time, leading to crashes and erratic runtime behaviour.
+The conda packages do not suffer from this issue.</p>
+</div>
+</div>
+</div>
+<div class="section" id="installation-from-source">
+<h2>Installation from source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline">¶</a></h2>
+<p>In order to install pygmo from source, you will need:</p>
+<ul class="simple">
+<li><p>a C++11 capable compiler (any recent version of GCC,
+Clang or MSVC should do),</p></li>
+<li><p>a <a class="reference external" href="https://www.python.org/">Python</a> installation,</p></li>
+<li><p>the <a class="reference external" href="https://www.boost.org/">Boost libraries</a>,</p></li>
+<li><p><a class="reference external" href="https://cmake.org/">CMake</a>, version 3.3 or later.</p></li>
+</ul>
+<p>After making sure the above dependencies are installed on your system, you can
+download the pykep source code from the
+<a class="reference external" href="https://github.com/esa/pykep/releases">GitHub release page</a>. Alternatively,
+and if you like living on the bleeding edge, you can get the very latest
+version of pykep via <code class="docutils literal notranslate"><span class="pre">git</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/esa/pykep.git
 </pre></div>
 </div>
-<p>and, using cmake:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">-</span><span class="n">DBoost_NO_BOOST_CMAKE</span><span class="o">=</span><span class="n">ON</span> \
-      <span class="o">-</span><span class="n">DPYKEP_BUILD_KEP_TOOLBOX</span><span class="o">=</span><span class="n">yes</span> \
-      <span class="o">-</span><span class="n">DPYKEP_BUILD_PYKEP</span><span class="o">=</span><span class="n">no</span> \
-      <span class="o">-</span><span class="n">DPYKEP_BUILD_SPICE</span><span class="o">=</span><span class="n">yes</span> \
-      <span class="o">-</span><span class="n">DPYKEP_BUILD_TESTS</span><span class="o">=</span><span class="n">no</span> \
-      <span class="o">-</span><span class="n">DCMAKE_BUILD_TYPE</span><span class="o">=</span><span class="n">Release</span> <span class="o">../</span><span class="p">;</span>
-<span class="n">make</span> <span class="n">install</span>
+<p>We follow the usual PR-based development workflow, thus pykep’s <code class="docutils literal notranslate"><span class="pre">master</span></code>
+branch is normally kept in a working state.</p>
+<p>After downloading and/or unpacking pykep’s
+source code, go to pykep’s
+source tree, create a <code class="docutils literal notranslate"><span class="pre">build</span></code> directory and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into it. E.g.,
+on a Unix-like system:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> /path/to/pykep
+<span class="gp">$</span> mkdir build
+<span class="gp">$</span> <span class="nb">cd</span> build
 </pre></div>
 </div>
-<p>Here is a typical example of the output obtained:</p>
+<p>Once you are in the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory, you must configure your build
+using <code class="docutils literal notranslate"><span class="pre">cmake</span></code>. There are various useful CMake variables you can set,
+such as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code>: the build type (<code class="docutils literal notranslate"><span class="pre">Release</span></code>, <code class="docutils literal notranslate"><span class="pre">Debug</span></code>, etc.),
+defaults to <code class="docutils literal notranslate"><span class="pre">Release</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>: the path into which pygmo will be installed
+(e.g., this defaults to <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code> on Unix-like platforms).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>: additional paths that will be searched by CMake
+when looking for dependencies.</p></li>
+</ul>
+<p>Please consult <a class="reference external" href="https://cmake.org/cmake/help/latest/">CMake’s documentation</a>
+for more details about CMake’s variables and options.</p>
+<p>Before compiling pykep we need to install the keplerian toolbox, that is the C++
+code at the heart of most computationally expensive routines. In a linux installation,
+this would typically look like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cmake -DBoost_NO_BOOST_CMAKE<span class="o">=</span>ON <span class="se">\</span>
+    -DPYKEP_BUILD_KEP_TOOLBOX<span class="o">=</span>yes <span class="se">\</span>
+    -DPYKEP_BUILD_PYKEP<span class="o">=</span>no <span class="se">\</span>
+    -DPYKEP_BUILD_SPICE<span class="o">=</span>yes <span class="se">\</span>
+    -DPYKEP_BUILD_TESTS<span class="o">=</span>yes <span class="se">\</span>
+    -DCMAKE_INSTALL_PREFIX <span class="o">=</span> ~/.local <span class="se">\</span>
+    -DCMAKE_PREFIX_PATH <span class="o">=</span> ~/.local <span class="se">\</span>
+    -DCMAKE_BUILD_TYPE<span class="o">=</span>Release <span class="se">\</span>
+    ../<span class="p">;</span>
+<span class="gp">$</span> cmake  --build . --target install
+</pre></div>
+</div>
+<p>Here is a typical example of the output you should expect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">propagate_lagrangian_u_test</span>
 <span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">anomalies_test</span>
 <span class="p">[</span> <span class="mi">99</span><span class="o">%</span><span class="p">]</span> <span class="n">Built</span> <span class="n">target</span> <span class="n">lambert_test</span>
@@ -170,11 +244,11 @@ that depends on the keplerian toolbox library). So lets start:</p>
 <span class="o">--</span> <span class="n">Install</span> <span class="n">configuration</span><span class="p">:</span> <span class="s2">&quot;Release&quot;</span>
 </pre></div>
 </div>
-<p>You can run the tests now typing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
+<p>You can also run the C++ tests typing:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> make <span class="nb">test</span>
 </pre></div>
 </div>
-<p>And you should see something like:</p>
+<p>And see, hopefully, something like the following output:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Running</span> <span class="n">tests</span><span class="o">...</span>
 <span class="n">Test</span> <span class="n">project</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">dario</span><span class="o">/</span><span class="n">Develop</span><span class="o">/</span><span class="n">pykep</span><span class="o">/</span><span class="n">build</span>
     <span class="n">Start</span>  <span class="mi">1</span><span class="p">:</span> <span class="n">lambert_test</span>
@@ -207,30 +281,40 @@ that depends on the keplerian toolbox library). So lets start:</p>
 <span class="n">Total</span> <span class="n">Test</span> <span class="n">time</span> <span class="p">(</span><span class="n">real</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">3.24</span> <span class="n">sec</span>
 </pre></div>
 </div>
-<p>Now you need to compile and install the pykep module:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd /pykep
-mkdir build_pykep
-cd build_pykep
-cmake -DBoost_NO_BOOST_CMAKE=ON \
-      -DPYKEP_BUILD_KEP_TOOLBOX=no \
-      -DPYKEP_BUILD_PYKEP=yes \
-      -DPYKEP_BUILD_TESTS=no \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DBoost_PYTHON${PYTHON_VERSION}_LIBRARY_RELEASE=/usr/local/lib/${BOOST_PYTHON_LIBRARY_NAME} \
-      -DPYTHON_EXECUTABLE=/opt/python/${PYTHON_DIR}/bin/python ../;
-make -j2 install
+<p>You are now ready to compile and install pykep. Move back one level from the folder where you installed the
+keplerian_toolbox and create a new build directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> ..
+<span class="gp">$</span> mkdir build_pykep
+<span class="gp">$</span> <span class="nb">cd</span> build_pykep
+</pre></div>
+</div>
+<p>There we need to run cmake again with slightly different options:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cmake -DBoost_NO_BOOST_CMAKE<span class="o">=</span>ON <span class="se">\</span>
+    -DPYKEP_BUILD_KEP_TOOLBOX<span class="o">=</span>no <span class="se">\</span>
+    -DPYKEP_BUILD_PYKEP<span class="o">=</span>yes <span class="se">\</span>
+    -DPYKEP_BUILD_TESTS<span class="o">=</span>no <span class="se">\</span>
+    -DCMAKE_INSTALL_PREFIX <span class="o">=</span> ~/.local <span class="se">\</span>
+    - <span class="nv">DCMAKE_PREFIX_PATH</span> <span class="o">=</span> ~/.local <span class="se">\</span>
+    - <span class="nv">DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="se">\</span>
+    ../<span class="p">;</span>
 </pre></div>
 </div>
 <p>Watch carefully the message in the terminal where the installation path is given to check
-that the correct python dist-packages or site-packages directory has been located</p>
+that the correct python dist-packages or site-packages directory has been located. If not,
+set explicitly the relevant cmake variables, for example <code class="docutils literal notranslate"><span class="pre">`Boost_PYTHON37_LIBRARY_RELEASE`</span></code>
+and <code class="docutils literal notranslate"><span class="pre">`PYTHON_EXECUTABLE`</span></code>.</p>
 </div>
-<div class="section" id="compiling-and-installing-under-windows">
-<h2>Compiling and Installing under Windows<a class="headerlink" href="#compiling-and-installing-under-windows" title="Permalink to this headline">¶</a></h2>
-<p>We do not really support nor reccomend doing this, but in case you are really motivated, you can get inspired by our
-<a class="reference external" href="https://github.com/esa/pykep/blob/master/azure-pipelines.yml">azure CI script</a> that works using the
-<a class="reference external" href="https://conda.io/en/latest/">conda</a> package manager or our
-<a class="reference external" href="https://github.com/esa/pykep/blob/master/tools/install_appveyor_mingw.py">appveyor CI script</a>  which
-makes use on minGW.</p>
+<div class="section" id="verifying-the-installation">
+<h2>Verifying the installation<a class="headerlink" href="#verifying-the-installation" title="Permalink to this headline">¶</a></h2>
+<p>You can verify that pykep was successfully compiled and
+installed by running the test suite. From a
+Python session, run the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pykep</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pykep</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">run_test_suite</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If these commands execute without any error, then
+your pykep installation is ready for use.</p>
 </div>
 </div>
 
@@ -247,7 +331,7 @@ makes use on minGW.</p>
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

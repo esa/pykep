@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>The phasing module &#8212; pykep  documentation</title>
@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The trajopt module" href="trajopt.html" />
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -131,9 +129,9 @@
 </table>
 <div class="section" id="detailed-documentation">
 <h2>Detailed Documentation<a class="headerlink" href="#detailed-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.phasing.knn">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">knn</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">knn</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn" title="Permalink to this definition">¶</a></dt>
 <dd><p>The class finds the k-nearest neighbours to a given planet from a list of planets.
 The problem of finding who is “close-by” can be efficiently solved using appropriate data structures.
 Here a kdtree is employed bringng complexity down to O(log N). The k-d-tree can then be queried efficiently
@@ -145,9 +143,9 @@ The position an velocity vectors are scaled w.r.t. some reference values.</p></l
 <li><p>‘orbital’, the distance is computed with respect to (r/T + v, r/T), corresponding to the DV computed over
 a linear model of the orbital transfer. The distance returned will thus be in m/s.</p></li>
 </ul>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.knn.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>USAGE: knn = knn(planet_list, t, metric=’orbital’, ref_r=AU, ref_v=EARTH_VELOCITY, T=365.25):</p>
 <ul class="simple">
 <li><p>planet_list   list of pykep planets (typically thousands)</p></li>
@@ -167,9 +165,9 @@ a linear model of the orbital transfer. The distance returned will thus be in m/
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.knn.find_neighbours">
-<code class="sig-name descname">find_neighbours</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.find_neighbours" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find_neighbours</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.knn.find_neighbours" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the neighbours of a given planet at a given epoch. The user may query for the
 k-nearest neighbours or for all neighbours within a given distance</p>
 <p>knn.find_neighbours(query_planet, query_type=’knn’, *args, **kwargs )</p>
@@ -195,23 +193,23 @@ For arguments, see:
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="class">
+<dl class="py class">
 <dt id="pykep.phasing.dbscan">
-<em class="property">class </em><code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">dbscan</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">dbscan</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can be used to locate areas of the interplanetsry space that are ‘dense’ at one epoch.
 Essentially, it locates planet clusters</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.dbscan.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>USAGE: cl = dbscan(planet_list):</p>
 <ul class="simple">
 <li><p>planet_list = list of pykep planets (typically thousands)</p></li>
 </ul>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.dbscan.cluster">
-<code class="sig-name descname">cluster</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.cluster" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cluster</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.cluster" title="Permalink to this definition">¶</a></dt>
 <dd><p>USAGE: cl.cluster(t, eps=0.125, min_samples=10, metric=’orbital’, T=180, ref_r=AU, ref_v=EARTH_VELOCITY):</p>
 <ul class="simple">
 <li><p>t: epoch (in MJD2000)</p></li>
@@ -224,24 +222,24 @@ Essentially, it locates planet clusters</p>
 </ul>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.dbscan.pretty">
-<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.pretty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.pretty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the cluster lists.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pykep.phasing.dbscan.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.dbscan.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the clusters.</p>
 </dd></dl>
 
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="function">
+<dl class="py function">
 <dt id="pykep.phasing.three_impulses_approx">
-<code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">three_impulses_approx</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.three_impulses_approx" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pykep.phasing.</code><code class="sig-name descname">three_impulses_approx</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.phasing.three_impulses_approx" title="Permalink to this definition">¶</a></dt>
 <dd><p>DV = pykep.phasing.three_impulses_approx(pl1, pl2, ep1=None, ep2=None)</p>
 <ul class="simple">
 <li><p>pl1: departure planet</p></li>
@@ -278,7 +276,7 @@ The argument of perigee is not matched, so that this approximation is only good 
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

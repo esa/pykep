@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Global optimization of an MGA low-thrust trajectory &#8212; pykep  documentation</title>
@@ -10,22 +10,22 @@
     <link rel="stylesheet" href="../_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization" href="ex4.html" />
-    <link rel="prev" title="Lunar orbit propagation with degree 20 spherical harmonics gravity model" href="gravity_spherical_harmonic.html" />
+    <link rel="prev" title="Using SPICE kernels to study HERA trajectory" href="hera_trajectory.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -70,7 +70,7 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="gravity_spherical_harmonic.html" title="Previous Chapter: Lunar orbit propagation with degree 20 spherical harmonics gravity model"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Lunar orbit propagation...</span>
+    <a href="hera_trajectory.html" title="Previous Chapter: Using SPICE kernels to study HERA trajectory"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Using SPICE kernels to ...</span>
     </a>
   </li>
   <li>
@@ -88,10 +88,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documentation/index.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../credits.html">Credits</a></li>
 </ul>
@@ -166,9 +164,9 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    min-width: 5.5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
@@ -192,7 +190,6 @@ div.nboutput.container div.prompt pre {
 /* input/output area */
 div.nbinput.container div.input_area,
 div.nboutput.container div.output_area {
-    padding: 0.4em;
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
@@ -266,6 +263,27 @@ div.nboutput.container div.output_area.stderr {
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
 
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
   border: none;
@@ -306,49 +324,66 @@ div.rendered_html tbody tr:hover {
 <p>This solution technique (MBH + SQP) was developed by members of the pykep team and the original publication can be found here:</p>
 <p>Yam, C. H., D. D. Lorenzo, and D. Izzo. “Low-thrust trajectory design as a constrained global optimization problem.” Proceedings of the Institution of Mechanical Engineers, Part G: Journal of Aerospace Engineering 225, no. 11 (2011): 1243-1251.</p>
 <p>A., Cassioli, D. Izzo, Di Lorenzo, D., Locatelli, M. and Schoen, F.: “Global optimization approaches for optimal trajectory planning.” In Modeling and optimization in space engineering, pp. 111-140. Springer, New York, NY, 2012.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># Imports
-import pykep as pk
-import pygmo as pg
-import pygmo_plugins_nonfree as ppnf
-import numpy as np
-from pykep.examples import add_gradient
+<span></span><span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">pykep</span> <span class="k">as</span> <span class="nn">pk</span>
+<span class="kn">import</span> <span class="nn">pygmo</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="kn">import</span> <span class="nn">pygmo_plugins_nonfree</span> <span class="k">as</span> <span class="nn">ppnf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pykep.examples</span> <span class="kn">import</span> <span class="n">add_gradient</span>
 
-# Plotting imports
-import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
+<span class="c1"># Plotting imports</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ModuleNotFoundError</span>                       Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-d4897bb3ff63&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">import</span> pykep <span class="ansi-green-fg">as</span> pk
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">import</span> pygmo <span class="ansi-green-fg">as</span> pg
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">import</span> pygmo_plugins_nonfree <span class="ansi-green-fg">as</span> ppnf
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">import</span> numpy <span class="ansi-green-fg">as</span> np
+<span class="ansi-green-intense-fg ansi-bold">      6</span> <span class="ansi-green-fg">from</span> pykep<span class="ansi-blue-fg">.</span>examples <span class="ansi-green-fg">import</span> add_gradient
+
+<span class="ansi-red-fg">ModuleNotFoundError</span>: No module named &#39;pygmo_plugins_nonfree&#39;
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We define the optimization problem udp (User Defined Problem): an Earth-Venus-Mercury transfer with low-thrust
-udp = pk.trajopt.mga_lt_nep(
-     seq = [pk.planet.jpl_lp(&#39;earth&#39;), pk.planet.jpl_lp(&#39;venus&#39;), pk.planet.jpl_lp(&#39;mercury&#39;)],
-     n_seg = [5, 20],
-     t0 = [3000, 4000], # This is in mjd2000
-     tof = [[100, 1000], [200, 2000]], # This is in days
-     vinf_dep = 3., # This is in km/s
-     vinf_arr = 2., # This is in km/s
-     mass = [1000., 2000.0],
-     Tmax = 0.5,
-     Isp = 3500.0,
-     fb_rel_vel = 6., # This is in km/s
-     multi_objective = False,
-     high_fidelity = False
-)
-prob = pg.problem(udp)
-prob.c_tol = 1e-4
-print(prob)
+<span></span><span class="c1"># We define the optimization problem udp (User Defined Problem): an Earth-Venus-Mercury transfer with low-thrust</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">mga_lt_nep</span><span class="p">(</span>
+     <span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;earth&#39;</span><span class="p">),</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;venus&#39;</span><span class="p">),</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s1">&#39;mercury&#39;</span><span class="p">)],</span>
+     <span class="n">n_seg</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+     <span class="n">t0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">],</span> <span class="c1"># This is in mjd2000</span>
+     <span class="n">tof</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2000</span><span class="p">]],</span> <span class="c1"># This is in days</span>
+     <span class="n">vinf_dep</span> <span class="o">=</span> <span class="mf">3.</span><span class="p">,</span> <span class="c1"># This is in km/s</span>
+     <span class="n">vinf_arr</span> <span class="o">=</span> <span class="mf">2.</span><span class="p">,</span> <span class="c1"># This is in km/s</span>
+     <span class="n">mass</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1000.</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">],</span>
+     <span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+     <span class="n">Isp</span> <span class="o">=</span> <span class="mf">3500.0</span><span class="p">,</span>
+     <span class="n">fb_rel_vel</span> <span class="o">=</span> <span class="mf">6.</span><span class="p">,</span> <span class="c1"># This is in km/s</span>
+     <span class="n">multi_objective</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+     <span class="n">high_fidelity</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-4</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -358,6 +393,8 @@ print(prob)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Problem name: &lt;class &#39;pykep.trajopt._mga_lt_nep.mga_lt_nep&#39;&gt;
+        C++ class name: pybind11::object
+
         Global dimension:                       92
         Integer dimension:                      0
         Fitness dimension:                      44
@@ -385,17 +422,17 @@ Problem name: &lt;class &#39;pykep.trajopt._mga_lt_nep.mga_lt_nep&#39;&gt;
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We define the optimization algorithm uda (User Defined Algorithm). In this case we use SNOPT from the
-# module pgmo_plugins_nonfree. Note that we point to the snopt7_c library in our system.
-# In such a library is not available, nlopt sqlsqp can also be used here ....
-uda = ppnf.snopt7(screen_output = False, library = &quot;/usr/local/lib/libsnopt72_c.so&quot;, minor_version = 2)
-uda.set_integer_option(&quot;Major iterations limit&quot;, 1000)
-uda.set_integer_option(&quot;Iterations limit&quot;, 200000)
-uda.set_numeric_option(&quot;Major optimality tolerance&quot;, 1e-2)
-uda.set_numeric_option(&quot;Major feasibility tolerance&quot;, 1e-8)
-uda2 = pg.mbh(uda, 3, 0.05)
-algo = pg.algorithm(uda2)
-algo.set_verbosity(1)
+<span></span><span class="c1"># We define the optimization algorithm uda (User Defined Algorithm). In this case we use SNOPT from the</span>
+<span class="c1"># module pgmo_plugins_nonfree. Note that we point to the snopt7_c library in our system.</span>
+<span class="c1"># In such a library is not available, nlopt sqlsqp can also be used here ....</span>
+<span class="n">uda</span> <span class="o">=</span> <span class="n">ppnf</span><span class="o">.</span><span class="n">snopt7</span><span class="p">(</span><span class="n">screen_output</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">library</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/lib/libsnopt72_c.so&quot;</span><span class="p">,</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Major iterations limit&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Iterations limit&quot;</span><span class="p">,</span> <span class="mi">200000</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major optimality tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major feasibility tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
+<span class="n">uda2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">mbh</span><span class="p">(</span><span class="n">uda</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda2</span><span class="p">)</span>
+<span class="n">algo</span><span class="o">.</span><span class="n">set_verbosity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 
 </pre></div>
@@ -406,10 +443,10 @@ algo.set_verbosity(1)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We create a population of 100 random initial guesses
-pop = pg.population(prob, 100)
-# And optimize
-pop = algo.evolve(pop)
+<span></span><span class="c1"># We create a population of 100 random initial guesses</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1"># And optimize</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -419,8 +456,8 @@ pop = algo.evolve(pop)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>print(&quot;Is feasible: &quot;, prob.feasibility_f(pop.champion_f))
-print(&quot;Final Mass at Mercury: &quot;, -pop.champion_f[0], &quot;Kg&quot;)
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is feasible: &quot;</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final Mass at Mercury: &quot;</span><span class="p">,</span> <span class="o">-</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Kg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -438,21 +475,21 @@ Final Mass at Mercury:  1227.9619205547747 Kg
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span># We plot
-mpl.rcParams[&#39;legend.fontsize&#39;] = 10
+<span></span><span class="c1"># We plot</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
 
-# Create the figure and axis
-fig = plt.figure(figsize = (16,5))
-ax1 = fig.add_subplot(1, 3, 1, projection=&#39;3d&#39;)
-udp.plot(pop.champion_x, axes = ax1)
+<span class="c1"># Create the figure and axis</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
 
-ax2 = fig.add_subplot(1, 3, 2, projection=&#39;3d&#39;)
-ax2.view_init(90, 0)
-udp.plot(pop.champion_x, axes = ax2)
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax2</span><span class="p">)</span>
 
-ax3 = fig.add_subplot(1, 3, 3, projection=&#39;3d&#39;)
-ax3.view_init(0,0)
-udp.plot(pop.champion_x, axes = ax3)
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">ax3</span><span class="p">)</span>
 
 
 
@@ -499,7 +536,7 @@ udp.plot(pop.champion_x, axes = ax3)
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Welcome to pykep &#8212; pykep  documentation</title>
@@ -10,21 +10,21 @@
     <link rel="stylesheet" href="_static/bootswatch-3.3.4/yeti/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pykep-styles.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <script src="_static/js/jquery-1.11.0.min.js"></script>
+    <script src="_static/js/jquery-fix.js"></script>
+    <script src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Download pykep source code" href="downloading.html" />
+    <link rel="next" title="Installation" href="installation.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -69,7 +69,7 @@
             <ul class='nav navbar-nav navbar-right'>
                 
   <li>
-    <a href="downloading.html" title="Next Chapter: Download pykep source code"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Download pykep source code &raquo;</span>
+    <a href="installation.html" title="Next Chapter: Installation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Installation &raquo;</span>
     </a>
   </li>
             </ul>
@@ -83,10 +83,8 @@
   <div class="row">
       <div class="col-md-3">
         <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
-<li class="toctree-l1"><a class="reference internal" href="downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system.html">Preparing your system to compile pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Install pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
 </ul>
@@ -113,28 +111,23 @@ efficient keplerian propagators, Taylor-integrators, a SGP4 propagator, TLE and 
 <p><strong>pykep</strong> has been used by the European Space Agency’s <a class="reference external" href="https://www.esa.int/gsp/ACT/index.html">Advanced Concepts Team</a>
 during different Global Trajectory Optimization Competitions <a class="reference external" href="http://sophia.estec.esa.int/gtoc_portal">GTOC</a>,
 several research papers as well as for the optimization of preliminary mission scenarios such as in
-the M-ARGO interplanetary cubesat concept or the phase 0 study for the The Titan and Enceladus Mission (TandEM).</p>
+the M-ARGO interplanetary cubesat concept, the phase 0 study for the The Titan and Enceladus Mission (TandEM)
+and for preliminary mission analysis of the HERA mission.</p>
 <p>Please quote <strong>pykep</strong> code using the information in Zenodo.</p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.2575462"><div align="left" class="align-left"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.2575462.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.2575462.svg" /></div>
-</a>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.2575462"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.2575462.svg" class="align-left" src="https://zenodo.org/badge/DOI/10.5281/zenodo.2575462.svg" /></a>
 <hr class="docutils" />
 <div class="section" id="content">
 <h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="downloading.html">Download pykep source code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system.html">Preparing your system to compile pykep</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="system.html#compiling-under-a-unix-system">Compiling under a Unix System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system.html#compiling-under-windows">Compiling under Windows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#packages">Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-from-source">Installation from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verifying-the-installation">Verifying the installation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Install pykep</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#using-binaries">Using Binaries</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#compiling-and-installing-under-linux">Compiling and Installing under Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#compiling-and-installing-under-windows">Compiling and Installing under Windows</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">Code Documentation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="documentation/index.html">API reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="documentation/index.html#constants-defined-within-pykep-namespace">Constants defined within pykep namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="documentation/index.html#documentation-of-the-main-modules">Documentation of the main modules</a></li>
 </ul>
@@ -163,7 +156,7 @@ the M-ARGO interplanetary cubesat concept or the phase 0 study for the The Titan
     </p>
     <p>
         &copy; Copyright 2020, pykep Development Team.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.1.<br/>
     </p>
   </div>
 </footer>
