@@ -1,5 +1,5 @@
 # Main pykep project version.
-set(PYKEP_PROJECT_VERSION 2.5)
+set(PYKEP_PROJECT_VERSION 2.6)
 
 # CMake version check.
 cmake_minimum_required(VERSION 3.3)
