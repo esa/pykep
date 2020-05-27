@@ -54,6 +54,7 @@ try : base(),
       m_tle(Tle("TLE satellite", line1, line2)),
       m_sgp4_propagator(SGP4(m_tle)) {
     // We read the osculating elements of the satellite
+
     array6D keplerian_elements;
     double mu_central_body = kMU * 1E09;                                                     // (m^3/s^2)
     double mean_motion = m_tle.MeanMotion() * 2 * kPI / kSECONDS_PER_DAY;                    // [rad/s]
@@ -65,8 +66,17 @@ try : base(),
     keplerian_elements[5] = m_tle.MeanAnomaly(false);                                        // M [rad]
 
     std::string year_str = m_tle.IntDesignator().substr(0, 2);
-    int year_int = std::stoi(year_str);
     std::string rest = m_tle.IntDesignator().substr(2);
+    int year_int;
+    // Object that have no ID assigned yet will have an empty year_str
+    try { 
+        year_int = std::stoi(year_str);
+    } catch(...) {
+        year_int = -1;
+        year_str = "xx";
+        rest = "TO BE ASSIGNED";
+    }
+
     int prefix = (year_int > 56) ? (19) : (20);
 
     std::string object_name(std::to_string(prefix) + year_str + std::string("-") + rest);

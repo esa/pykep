@@ -71,7 +71,7 @@ def read_tle(tle_file, verbose=False, with_name=True):
     """
     from pykep.planet import tle
     planet_list = []
-
+    lost = 0
     with open(tle_file, 'r') as f:
         for line in f:
             if with_name:
@@ -79,5 +79,11 @@ def read_tle(tle_file, verbose=False, with_name=True):
             else:
                 line1 = line[:69]
             line2 = next(f)[:69]
-            planet_list.append(tle(line1, line2))
-    return planet_list
+            try:
+                planet_list.append(tle(line1, line2))
+            except:
+                print("Failed to construct a planet object using these two lines:")
+                print(line1)
+                print(line2)
+                raise
+    return planet_list, lost
