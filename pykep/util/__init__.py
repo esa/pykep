@@ -71,7 +71,6 @@ def read_tle(tle_file, verbose=False, with_name=True):
     """
     from pykep.planet import tle
     planet_list = []
-    lost = 0
     with open(tle_file, 'r') as f:
         for line in f:
             if with_name:
@@ -86,4 +85,4 @@ def read_tle(tle_file, verbose=False, with_name=True):
                 print(line1)
                 print(line2)
                 raise
-    return planet_list, lost
+    return planet_list
