@@ -41,6 +41,8 @@ def perform_N(N, sats, years, satellite, seed, q):
         sat_id = np.argmin(D[0])
         D[0,sat_id] = 3
         mins.append(min(D[0]))
+        with open("seed_"+str(seed)+".pk", "wb") as file:
+            pk.dump(mins, file)
     q.put(mins)
 
 if __name__ == "__main__":  # confirms that the code is under main function
@@ -63,7 +65,8 @@ if __name__ == "__main__":  # confirms that the code is under main function
     procs = []
     q = mp.Queue()
     for i in range(mp.cpu_count()):
-        proc = mp.Process(target=perform_N, args=(N, sats, years, sentinel3b, 234234234*i, q))
+        seed = np.random.randint(10000000,100000000)
+        proc = mp.Process(target=perform_N, args=(N, sats, years, sentinel3b, seed, q))
         procs.append(proc)
         proc.start()
 
