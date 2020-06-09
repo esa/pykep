@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+q#!/usr/bin/env python
 # coding: utf-8
 
 # Performing a preliminary conjunction analysis
@@ -12,7 +12,7 @@ import numpy as np
 import multiprocessing as mp
 import pickle as pk
 
-def perform_N(N, sats, years, satellite, seed, q):
+def perform_N(N, sats, t0, years, satellite, seed, q):
     np.random.seed(seed)
     # This will contain the results
     mins = []
@@ -46,6 +46,8 @@ def perform_N(N, sats, years, satellite, seed, q):
     q.put(mins)
 
 if __name__ == "__main__":  # confirms that the code is under main function
+    # Avoids to use the buggy fork
+    ctx = mp.get_context('spawn')
     # Here we import all the objects in the catalogue all.tle into pykep.planet objects
     sats = pykep.util.read_tle(tle_file="all.tle", with_name=True)
 
@@ -56,20 +58,21 @@ if __name__ == "__main__":  # confirms that the code is under main function
 
     # We make the Monte-Carlo simulation
     # Number of runs, should be at least 100000 (hours to compute on a single CPU)
-    N = 10
+    N = 100
     # This is the lower bound for the epoch
     t0 = 58991.90384230018
     # This is the number of years to sample
-    years = 15
+    years = 3
 
     procs = []
     q = mp.Queue()
+
     for i in range(mp.cpu_count()):
         seed = np.random.randint(10000000,100000000)
-        proc = mp.Process(target=perform_N, args=(N, sats, years, sentinel3b, seed, q))
+        proc = ctx.Process(target=perform_N, args=(N, sats, t0, years, sentinel3b, seed, q))
         procs.append(proc)
         proc.start()
-
+        print("Process started: ", proc.pid)
     # complete the processes
     for proc in procs:
         proc.join()
