@@ -3,12 +3,12 @@ from math import acos, asin, cos, log, pi, sin
 import numpy as np
 from numpy.linalg import norm
 from pykep import DAY2SEC, epoch, ic2par
-from pykep.core import fb_prop, lambert_problem, propagate_lagrangian
+from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
 
 
-class _solar_orbiter_udp:
+class _solar_orbiter_udp():
     def __init__(
         self, t0=[epoch(0), epoch(1000)], multi_objective=False, tof_encoding="direct"
     ):
@@ -20,7 +20,6 @@ class _solar_orbiter_udp:
 
         """
 
-        vinf = [0.5, 2.5]
         multi_objective = False
         eta_lb = 0.1
         eta_ub = 0.9
@@ -38,7 +37,7 @@ class _solar_orbiter_udp:
             earth,
             venus,
         ]  # alternative: Launch-Venus-Venus-Earth-Venus
-        tof = [[10, 400]] * (len(seq) - 1)
+        tof = [[10, 600]] * (len(seq) - 1)
 
         # Sanity checks
         # 1 - Planets need to have the same mu_central_body
@@ -82,125 +81,70 @@ class _solar_orbiter_udp:
         self._seq = seq
         self._t0 = t0
         self._tof = tof
-        self._vinf = vinf
         self._tof_encoding = tof_encoding
         self._multi_objective = multi_objective
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
 
-        self.n_legs = len(seq) - 1
-        self.common_mu = seq[0].mu_central_body
+        self._n_legs = len(seq) - 1
+        self._common_mu = seq[0].mu_central_body
 
-    def _decode_times_and_vinf(self, x):
-        # 1 - we decode the times of flight
-        if self._tof_encoding == "alpha":
-            # decision vector is  [t0] + [u, v, Vinf, eta1, a1] + [beta, rp/rV, eta2, a2] + ... + [T]
-            T = list([0] * (self.n_legs))
-            for i in range(len(T)):
-                T[i] = -log(x[5 + 4 * i])
-            alpha_sum = sum(T)
-            retval_T = [x[-1] * time / alpha_sum for time in T]
-        elif self._tof_encoding == "direct":
-            # decision vector is  [t0] + [u, v, Vinf, eta1, T1] + [beta, rp/rV, eta2, T2] + ...
-            retval_T = x[5::4]
-        elif self._tof_encoding == "eta":
-            # decision vector is  [t0] + [u, v, Vinf, eta1, n1] + [beta, rp/rV, eta2, n2] + ...
-            dt = self._tof
-            T = [0] * self.n_legs
-            for i in range(self.n_legs):
-                T[i] = (dt - sum(T[:i])) * x[5 + 4 * i]
-            retval_T = T
+    def _decode_tofs(self, x):
+        if self._tof_encoding == 'alpha':
+            # decision vector is  [t0, T, a1, a2, ....]
+            T = np.log(x[2:])
+            return T / sum(T) * x[1]
+        elif self._tof_encoding == 'direct':
+            # decision vector is  [t0, T1, T2, T3, ... ]
+            return x[1:]
+        elif self._tof_encoding == 'eta':
+            # decision vector is  [t0, n1, n2, n3, ... ]
+            dt = self.tof
+            T = [0] * self._n_legs
+            T[0] = dt * x[1]
+            for i in range(1, len(T)):
+                T[i] = (dt - sum(T[:i])) * x[i + 1]
+            return T
 
-        # 2 - we decode the hyperbolic velocity at departure
-        theta = 2 * pi * x[1]
-        try:
-            phi = acos(2 * x[2] - 1) - pi / 2
-        except ValueError as e:
-            print("x[2]:" + str(x[2]) + " is invalid value.")
-            raise (e)
-
-        Vinfx = x[3] * cos(phi) * cos(theta)
-        Vinfy = x[3] * cos(phi) * sin(theta)
-        Vinfz = x[3] * sin(phi)
-
-        return (retval_T, Vinfx, Vinfy, Vinfz)
-
-    def fitness(self, x):
-        T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
-        # We transform it (only the needed component) to an equatorial system rotating along x
-        # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
-        earth_axis_inclination = 0.409072975
-        # This is different from the GTOP tanmEM problem, I think it was bugged there as the rotation was in the wrong direction.
-        Vinfz = -Vinfy * sin(earth_axis_inclination) + Vinfz * cos(
-            earth_axis_inclination
-        )
-        # And we find the vinf declination (in degrees)
-        sindelta = Vinfz / x[3]
-        declination = asin(sindelta) / np.pi * 180.0
-        # We now have the initial mass of the spacecraft
-        m_initial = launchers.atlas501(x[3] / 1000.0, declination)
-
-        # 2 - We compute the epochs and ephemerides of the planetary encounters
-        t_P = list([None] * (self.n_legs + 1))
-        r_P = list([None] * (self.n_legs + 1))
-        v_P = list([None] * (self.n_legs + 1))
-        DV = list([0.0] * (self.n_legs + 1))
+    def _compute_dvs(self, x):
+        # 1 -  we 'decode' the times of flights and compute epochs (mjd2000)
+        T = self._decode_tofs(x)  # [T1, T2 ...]
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        # 2 - we compute the ephemerides
+        r = [0] * len(self._seq)
+        v = [0] * len(self._seq)
         for i in range(len(self._seq)):
-            t_P[i] = epoch(x[0] + sum(T[0:i]))
-            r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
+            r[i], v[i] = self._seq[i].eph(ep[i])
+        # 3 - we solve the lambert problems
+        l = list()
+        for i in range(self._n_legs):
+            l.append(lambert_problem(
+                r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, 0))
+        # 4 - we compute the various dVs needed at fly-bys to match incoming
+        # and outcoming
+        DVfb = list()
+        for i in range(len(l) - 1):
+            vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
+            vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
+            DVfb.append(fb_vel(vin, vout, self._seq[i + 1]))
+        
+        return (DVfb, l)
 
-        # 3 - We start with the first leg
-        v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = propagate_lagrangian(r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu)
-
-        # Lambert arc to reach seq[1]
-        dt = (1 - x[4]) * T[0] * DAY2SEC
-        l = lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, max_revs=0)
-        v_end_l = l.get_v2()[0]
-        v_beg_l = l.get_v1()[0]
-
-        # First DSM occuring at time nu1*T1
-        DV[0] = norm([a - b for a, b in zip(v_beg_l, v)])
-
-        # 4 - And we proceed with each successive leg
-        for i in range(1, self.n_legs):
-            # Fly-by
-            v_out = fb_prop(
-                v_end_l,
-                v_P[i],
-                x[7 + (i - 1) * 4] * self._seq[i].radius,
-                x[6 + (i - 1) * 4],
-                self._seq[i].mu_self,
-            )
-            # s/c propagation before the DSM
-            r, v = propagate_lagrangian(
-                r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu
-            )
-            # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
-            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt, self.common_mu, cw=False, max_revs=0)
-            v_end_l = l.get_v2()[0]
-            v_beg_l = l.get_v1()[0]
-            # DSM occuring at time nu2*T2
-            DV[i] = norm([a - b for a, b in zip(v_beg_l, v)])
-
-        # Last fly-by
-        i = self.n_legs
-        v_out = fb_prop(
-            v_end_l,
-            v_P[self.n_legs],
-            x[7 + (i - 1) * 4] * self._seq[i].radius,
-            x[6 + (i - 1) * 4],
-            self._seq[i].mu_self,
-        )
-
-        a, e, i, W, w, E = ic2par(r_P[i], v_out, self.common_mu)
-
-        if not self._multi_objective:
-            return (-i, sum(DV) - 10, 209 - m_initial)
+    # Objective function
+    def fitness(self, x):
+        DVfb, _ = self._compute_dvs(x)
+        if self._tof_encoding == 'direct':
+            T = sum(x[1:])
+        elif self._tof_encoding == 'alpha':
+            T = x[1]
+        elif self._tof_encoding == 'eta':
+            T = sum(self.eta2direct(x)[1:])
+        if self._multi_objective:
+            return [np.sum(DVfb), T] # TODO: adapt to inclination
         else:
-            return (-i, sum(T), sum(DV) - 10, 209 - m_initial)
+            return [np.sum(DVfb)]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -208,37 +152,68 @@ class _solar_orbiter_udp:
     def get_bounds(self):
         t0 = self._t0
         tof = self._tof
-        vinf = self._vinf
-        seq = self._seq
-        # Base for all possiblities (eta encoding)
-        lb = (
-            [t0[0].mjd2000]
-            + [0.0, 0.0, vinf[0] * 1000, self._eta_lb, 1e-3]
-            + [-2 * pi, np.nan, self._eta_lb, 1e-3] * (self.n_legs - 1)
-        )
-        ub = (
-            [t0[1].mjd2000]
-            + [1.0, 1.0, vinf[1] * 1000, self._eta_ub, 1.0 - 1e-3]
-            + [2 * pi, self._rp_ub, self._eta_ub, 1.0 - 1e-3] * (self.n_legs - 1)
-        )
-        # Distinguishing among cases (only direct and alpha)
-        if self._tof_encoding == "alpha":
-            lb = lb + [tof[0]]
-            ub = ub + [tof[1]]
-        elif self._tof_encoding == "direct":
-            for i in range(self.n_legs):
-                lb[5 + 4 * i] = tof[i][0]
-                ub[5 + 4 * i] = tof[i][1]
+        n_legs = self._n_legs
 
-        # Setting the minimum rp/rP using the planet safe radius
-        for i, pl in enumerate(seq[1:-1]):
-            lb[7 + 4 * i] = pl.safe_radius / pl.radius
-
-        # Setting final flyby
-        lb = lb + [0, seq[-1].safe_radius / seq[-1].radius]
-        ub = ub + [2 * pi, self._rp_ub]
-
+        if self._tof_encoding == 'alpha':
+            # decision vector is  [t0, T, a1, a2, ....]
+            lb = [t0[0].mjd2000, tof[0]] + [1e-3] * (n_legs)
+            ub = [t0[1].mjd2000, tof[1]] + [1.0 - 1e-3] * (n_legs)
+        elif self._tof_encoding == 'direct':
+            # decision vector is  [t0, T1, T2, T3, ... ]
+            lb = [t0[0].mjd2000] + [it[0] for it in self._tof]
+            ub = [t0[1].mjd2000] + [it[1] for it in self._tof]
+        elif self._tof_encoding == 'eta':
+            # decision vector is  [t0, n1, n2, ....]
+            lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
+            ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
         return (lb, ub)
 
     def get_nic(self):
-        return 2
+        return 0
+
+    def _decode_tofs(self, x):
+        if self._tof_encoding == 'alpha':
+            # decision vector is  [t0, T, a1, a2, ....]
+            T = np.log(x[2:])
+            return T / sum(T) * x[1]
+        elif self._tof_encoding == 'direct':
+            # decision vector is  [t0, T1, T2, T3, ... ]
+            return x[1:]
+        elif self._tof_encoding == 'eta':
+            # decision vector is  [t0, n1, n2, n3, ... ]
+            dt = self.tof
+            T = [0] * self._n_legs
+            T[0] = dt * x[1]
+            for i in range(1, len(T)):
+                T[i] = (dt - sum(T[:i])) * x[i + 1]
+            return T
+
+    def pretty(self, x):
+        """pretty(x)
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Prints human readable information on the trajectory represented by the decision vector x
+        """
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        DVfb, l = self._compute_dvs(x)
+        print("Multiple Gravity Assist (MGA) problem: ")
+        print("Planet sequence: ", [pl.name for pl in self._seq])
+
+        print("Departure: ", self._seq[0].name)
+        print("\tEpoch: ", ep[0], " [mjd2000]")
+        print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
+
+        for pl, e, dv in zip(self._seq[1:-1], ep[1:-1], DVfb):
+            print("Fly-by: ", pl.name)
+            print("\tEpoch: ", e, " [mjd2000]")
+            print("\tDV: ", dv, "[m/s]")
+
+        print("Arrival: ", self._seq[-1].name)
+        print("\tEpoch: ", ep[-1], " [mjd2000]")
+        print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
+
+        print("Time of flights: ", T, "[days]")
