@@ -1,11 +1,7 @@
-from math import acos, asin, cos, log, pi, sin
-
 import numpy as np
-from numpy.linalg import norm
 from pykep import DAY2SEC, epoch, ic2par
-from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
+from pykep.core import fb_vel, lambert_problem
 from pykep.planet import jpl_lp
-from pykep.trajopt import launchers
 
 
 class _solar_orbiter_udp():
@@ -129,7 +125,6 @@ class _solar_orbiter_udp():
             vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
             vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
             DVfb.append(fb_vel(vin, vout, self._seq[i + 1]))
-        
         return (DVfb, l)
 
     # Objective function
@@ -142,7 +137,7 @@ class _solar_orbiter_udp():
         elif self._tof_encoding == 'eta':
             T = sum(self.eta2direct(x)[1:])
         if self._multi_objective:
-            return [np.sum(DVfb), T] # TODO: adapt to inclination
+            return [np.sum(DVfb), T]  # TODO: adapt to inclination
         else:
             return [np.sum(DVfb)]
 
@@ -170,23 +165,6 @@ class _solar_orbiter_udp():
 
     def get_nic(self):
         return 0
-
-    def _decode_tofs(self, x):
-        if self._tof_encoding == 'alpha':
-            # decision vector is  [t0, T, a1, a2, ....]
-            T = np.log(x[2:])
-            return T / sum(T) * x[1]
-        elif self._tof_encoding == 'direct':
-            # decision vector is  [t0, T1, T2, T3, ... ]
-            return x[1:]
-        elif self._tof_encoding == 'eta':
-            # decision vector is  [t0, n1, n2, n3, ... ]
-            dt = self.tof
-            T = [0] * self._n_legs
-            T[0] = dt * x[1]
-            for i in range(1, len(T)):
-                T[i] = (dt - sum(T[:i])) * x[i + 1]
-            return T
 
     def pretty(self, x):
         """pretty(x)
