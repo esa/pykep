@@ -1,13 +1,13 @@
-from math import pi
+from math import pi, sqrt
 
 import numpy as np
 
-from pykep import DAY2SEC, epoch, ic2par
+from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem
 from pykep.planet import jpl_lp
 
 
-class _solar_orbiter_udp():
+class _solar_orbiter_udp:
     def __init__(
         self, t0=[epoch(0), epoch(1000)], multi_objective=False, tof_encoding="direct"
     ):
@@ -90,14 +90,14 @@ class _solar_orbiter_udp():
         self._common_mu = seq[0].mu_central_body
 
     def _decode_tofs(self, x):
-        if self._tof_encoding == 'alpha':
+        if self._tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
             T = np.log(x[2:-2])
             return T / sum(T) * x[1]
-        elif self._tof_encoding == 'direct':
+        elif self._tof_encoding == "direct":
             # decision vector is  [t0, T1, T2, T3, ... ]
             return x[1:-2]
-        elif self._tof_encoding == 'eta':
+        elif self._tof_encoding == "eta":
             # decision vector is  [t0, n1, n2, n3, ... ]
             dt = self.tof
             T = [0] * self._n_legs
@@ -133,23 +133,25 @@ class _solar_orbiter_udp():
     # Objective function
     def fitness(self, x):
         DVfb, lamberts, ep = self._compute_dvs(x)
-        if self._tof_encoding == 'direct':
+        if self._tof_encoding == "direct":
             T = sum(x[1:-2])
-        elif self._tof_encoding == 'alpha':
+        elif self._tof_encoding == "alpha":
             T = x[1]
-        elif self._tof_encoding == 'eta':
+        elif self._tof_encoding == "eta":
             T = sum(self.eta2direct(x)[1:-2])
 
         # compute final flyby
         eph = self._seq[-1].eph(ep[-1])
-        v_out = fb_prop(lamberts[-1].get_v2()[0], eph[1], x[-1], x[-2], self._seq[-1].mu_self)
+        v_out = fb_prop(
+            lamberts[-1].get_v2()[0], eph[1], x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self
+        )
 
-        a,e,i,W,w,E = ic2par(eph[0], v_out, self._common_mu)
+        a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
 
         if self._multi_objective:
             return [-i, T, np.sum(DVfb)-10]  # TODO: add launcher inclination and initial mass
         else:
-            return [-i, np.sum(DVfb)-10]
+            return [-i, np.sum(DVfb) - 10]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -159,15 +161,15 @@ class _solar_orbiter_udp():
         tof = self._tof
         n_legs = self._n_legs
 
-        if self._tof_encoding == 'alpha':
+        if self._tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
             lb = [t0[0].mjd2000, tof[0]] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000, tof[1]] + [1.0 - 1e-3] * (n_legs)
-        elif self._tof_encoding == 'direct':
+        elif self._tof_encoding == "direct":
             # decision vector is  [t0, T1, T2, T3, ... ]
             lb = [t0[0].mjd2000] + [it[0] for it in self._tof]
             ub = [t0[1].mjd2000] + [it[1] for it in self._tof]
-        elif self._tof_encoding == 'eta':
+        elif self._tof_encoding == "eta":
             # decision vector is  [t0, n1, n2, ....]
             lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
@@ -190,10 +192,10 @@ class _solar_orbiter_udp():
 
         Prints human readable information on the trajectory represented by the decision vector x
         """
-        T = self._decode_tofs(x[:-2])
+        T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        DVfb, l = self._compute_dvs(x)
+        DVfb, l, _ = self._compute_dvs(x) # TODO: reduce redundant computation of ep 
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self._seq])
 
@@ -206,10 +208,81 @@ class _solar_orbiter_udp():
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
 
-        print("Arrival: ", self._seq[-1].name)
+        print("Final Fly-by: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
+        print("\tBeta: ", x[-2])
+        print("\tr_p: ", x[-1])
 
-        # TODO: final flyby
+        print("Resulting Solar orbit:")
+        r_P, v_P = self._seq[-1].eph(ep[-1])
+        v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
+        a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
+        print("Perihelion: ", (a*(1-e))/AU, " AU" )
+        print("Ahelion: ", (a*(1+e))/AU, " AU" )
+        print("Inclination: ", i*RAD2DEG, " degrees")
 
         print("Time of flights: ", T, "[days]")
+
+    def plot(self, x, axes=None, units=AU, N=60):
+        """plot(self, x, axes=None, units=pk.AU, N=60)
+
+        Plots the spacecraft trajectory.
+
+        Args:
+            - x (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
+            - units (``float``, ``int``): Length unit by which to normalise data.
+            - N (``float``): Number of points to plot per leg
+        """
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
+        from mpl_toolkits.mplot3d import Axes3D
+
+        from pykep.orbit_plots import plot_planet, plot_lambert, plot_kepler
+
+        # Creating the axes if necessary
+        if axes is None:
+            mpl.rcParams["legend.fontsize"] = 10
+            fig = plt.figure()
+            axes = fig.gca(projection="3d")
+
+        T = self._decode_tofs(x[:-2])
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        _, l, _ = self._compute_dvs(x)
+        for pl, e in zip(self._seq, ep):
+            plot_planet(pl, epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes)
+        for lamb in l:
+            plot_lambert(
+                lamb,
+                N=N,
+                sol=0,
+                units=units,
+                color="k",
+                legend=False,
+                axes=axes,
+                alpha=0.8,
+            )
+
+        # compute final flyby
+        r_P, v_P = self._seq[-1].eph(ep[-1])
+        v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
+
+        a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
+        #orbital_period = 2 * pi * sqrt((a ** 3) / self._common_mu)
+
+        # final trajectory
+        plot_kepler(
+            r_P,
+            v_out,
+            365*DAY2SEC,
+            self._common_mu,
+            N=100,
+            color="r",
+            units=units,
+            axes=axes,
+            label="Final Orbit"
+        )
+
+        return axes
