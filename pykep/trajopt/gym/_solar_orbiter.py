@@ -1,6 +1,7 @@
 import numpy as np
+from math import pi
 from pykep import DAY2SEC, epoch, ic2par
-from pykep.core import fb_vel, lambert_problem
+from pykep.core import fb_prop, fb_vel, lambert_problem
 from pykep.planet import jpl_lp
 
 
@@ -89,11 +90,11 @@ class _solar_orbiter_udp():
     def _decode_tofs(self, x):
         if self._tof_encoding == 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
-            T = np.log(x[2:])
+            T = np.log(x[2:-2])
             return T / sum(T) * x[1]
         elif self._tof_encoding == 'direct':
             # decision vector is  [t0, T1, T2, T3, ... ]
-            return x[1:]
+            return x[1:-2]
         elif self._tof_encoding == 'eta':
             # decision vector is  [t0, n1, n2, n3, ... ]
             dt = self.tof
@@ -125,17 +126,22 @@ class _solar_orbiter_udp():
             vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
             vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
             DVfb.append(fb_vel(vin, vout, self._seq[i + 1]))
-        return (DVfb, l)
+        return (DVfb, l, ep)
 
     # Objective function
     def fitness(self, x):
-        DVfb, _ = self._compute_dvs(x)
+        DVfb, lamberts, ep = self._compute_dvs(x)
         if self._tof_encoding == 'direct':
-            T = sum(x[1:])
+            T = sum(x[1:-2])
         elif self._tof_encoding == 'alpha':
             T = x[1]
         elif self._tof_encoding == 'eta':
-            T = sum(self.eta2direct(x)[1:])
+            T = sum(self.eta2direct(x)[1:-2])
+
+        # compute final flyby
+        eph = self._seq[-1].eph(ep[-1])
+        v_out = fb_prop(lamberts[-1].get_v2()[0], eph[1], x[-1], x[-2], self._seq[-1].mu_self)
+
         if self._multi_objective:
             return [np.sum(DVfb), T]  # TODO: adapt to inclination
         else:
@@ -161,6 +167,12 @@ class _solar_orbiter_udp():
             # decision vector is  [t0, n1, n2, ....]
             lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
+
+        # add final flyby
+        safe_distance = 350000
+        pl = self._seq[-1]
+        lb = lb + [-2 * pi, (pl.radius + safe_distance) / pl.radius]
+        ub = ub + [2 * pi, 30]
         return (lb, ub)
 
     def get_nic(self):
