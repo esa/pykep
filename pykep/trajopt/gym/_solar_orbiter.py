@@ -1,5 +1,7 @@
-import numpy as np
 from math import pi
+
+import numpy as np
+
 from pykep import DAY2SEC, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem
 from pykep.planet import jpl_lp
@@ -142,10 +144,12 @@ class _solar_orbiter_udp():
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(lamberts[-1].get_v2()[0], eph[1], x[-1], x[-2], self._seq[-1].mu_self)
 
+        a,e,i,W,w,E = ic2par(eph[0], v_out, self._common_mu)
+
         if self._multi_objective:
-            return [np.sum(DVfb), T]  # TODO: adapt to inclination
+            return [-i, T, np.sum(DVfb)-10]  # TODO: add launcher inclination and initial mass
         else:
-            return [np.sum(DVfb)]
+            return [-i, np.sum(DVfb)-10]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -176,7 +180,7 @@ class _solar_orbiter_udp():
         return (lb, ub)
 
     def get_nic(self):
-        return 0
+        return 1
 
     def pretty(self, x):
         """pretty(x)
@@ -186,7 +190,7 @@ class _solar_orbiter_udp():
 
         Prints human readable information on the trajectory represented by the decision vector x
         """
-        T = self._decode_tofs(x)
+        T = self._decode_tofs(x[:-2])
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         DVfb, l = self._compute_dvs(x)
@@ -205,5 +209,7 @@ class _solar_orbiter_udp():
         print("Arrival: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
+
+        # TODO: final flyby
 
         print("Time of flights: ", T, "[days]")
