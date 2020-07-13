@@ -1,10 +1,10 @@
-from math import pi, sqrt
+from math import asin, cos, pi, sin, sqrt
 
 import numpy as np
-
 from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem
 from pykep.planet import jpl_lp
+from pykep.trajopt import launchers
 
 
 class _solar_orbiter_udp:
@@ -140,18 +140,30 @@ class _solar_orbiter_udp:
         elif self._tof_encoding == "eta":
             T = sum(self.eta2direct(x)[1:-2])
 
-        # compute final flyby
+        # compute launch velocity and declination
+        Vinfx, Vinfy, Vinfz = [a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])]
+        Vinf_launch = sqrt(Vinfx**2 + Vinfy**2 + Vinfz**2)
+        # We transform it (only the needed component) to an equatorial system rotating along x
+        # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
+        earth_axis_inclination = 0.409072975
+        Vinfz = - Vinfy * sin(earth_axis_inclination) + Vinfz * cos(earth_axis_inclination)
+        # And we find the vinf declination (in degrees)
+        sindelta = Vinfz / Vinf_launch
+        declination = asin(sindelta) / np.pi * 180.
+        # We now have the initial mass of the spacecraft
+        m_initial = launchers.atlas501(Vinf_launch / 1000., declination)
+
+        # compute final flyby and resulting trajectory
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(
             lamberts[-1].get_v2()[0], eph[1], x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self
         )
-
         a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
 
         if self._multi_objective:
-            return [-i, T, np.sum(DVfb)-10]  # TODO: add launcher inclination and initial mass
+            return [-i, T, np.sum(DVfb)-10, 209-m_initial]
         else:
-            return [-i, np.sum(DVfb) - 10]
+            return [-i, np.sum(DVfb) - 10, 209-m_initial]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -182,7 +194,7 @@ class _solar_orbiter_udp:
         return (lb, ub)
 
     def get_nic(self):
-        return 1
+        return 2
 
     def pretty(self, x):
         """pretty(x)
@@ -195,13 +207,16 @@ class _solar_orbiter_udp:
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        DVfb, l, _ = self._compute_dvs(x) # TODO: reduce redundant computation of ep 
+        DVfb, l, _ = self._compute_dvs(x)  # TODO: reduce redundant computation of ep
+        Vinfx, Vinfy, Vinfz = [a - b for a, b in zip(l[0].get_v1()[0], self._seq[0].eph(ep[0])[1])]
+
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self._seq])
 
         print("Departure: ", self._seq[0].name)
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
+        print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
 
         for pl, e, dv in zip(self._seq[1:-1], ep[1:-1], DVfb):
             print("Fly-by: ", pl.name)
@@ -218,8 +233,8 @@ class _solar_orbiter_udp:
         r_P, v_P = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
         a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
-        print("Perihelion: ", (a*(1-e))/AU, " AU" )
-        print("Ahelion: ", (a*(1+e))/AU, " AU" )
+        print("Perihelion: ", (a*(1-e))/AU, " AU")
+        print("Ahelion: ", (a*(1+e))/AU, " AU")
         print("Inclination: ", i*RAD2DEG, " degrees")
 
         print("Time of flights: ", T, "[days]")
