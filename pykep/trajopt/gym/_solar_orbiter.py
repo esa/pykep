@@ -1,6 +1,7 @@
 from math import asin, cos, pi, sin, sqrt
 
 import numpy as np
+
 from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem
 from pykep.planet import jpl_lp
@@ -174,16 +175,29 @@ class _solar_orbiter_udp:
         corrected_inclination = abs(abs(i) % pi - pi / 2)
 
         # check perihelion and ahelion bounds during the flight
-        min_perihelion = final_perihelion
-        max_ahelion = AU
+        min_sun_distance = final_perihelion
+        max_sun_distance = AU
 
         for l_i in range(self._n_legs):
-            # project lambert leg, compute perihelion and ahelion TODO: check whether extremum happens during the transfer
+            # project lambert leg, compute perihelion and ahelion
             eph = self._seq[l_i].eph(ep[l_i])
             transfer_v = lamberts[l_i].get_v1()[0]
-            transfer_a, transfer_e, _, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
-            min_perihelion = min(min_perihelion, transfer_a * (1 - transfer_e))
-            max_ahelion = max(max_ahelion, transfer_a * (1 + transfer_e))
+            transfer_a, transfer_e, _, _, _, E = ic2par(eph[0], transfer_v, self._common_mu)
+            transfer_period = 2*pi*sqrt(transfer_a**3 / self._common_mu)
+
+            # check whether extremum happens during the transfer
+            M = E - transfer_e*sin(E)
+            mean_angle_to_apoapsis = (pi-M)
+            if mean_angle_to_apoapsis < 0:
+                mean_angle_to_apoapsis += 2*pi
+            mean_angle_to_periapsis = (2*pi-M)
+
+            # update min and max sun distance
+            if lamberts[l_i].get_tof() > mean_angle_to_apoapsis*transfer_period:
+                max_sun_distance = max(max_sun_distance, transfer_a * (1 + transfer_e))
+
+            if lamberts[l_i].get_tof() > mean_angle_to_periapsis*transfer_period:
+                min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         if self._multi_objective:
             return [
@@ -191,16 +205,16 @@ class _solar_orbiter_udp:
                 T,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
-                0.28 - min_perihelion / AU,
-                max_ahelion / AU - 1.2,
+                0.28 - min_sun_distance / AU,
+                max_sun_distance / AU - 1.2,
             ]
         else:
             return [
                 corrected_inclination,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
-                0.28 - min_perihelion / AU,
-                max_ahelion / AU - 1.2,
+                0.28 - min_sun_distance / AU,
+                max_sun_distance / AU - 1.2,
             ]
 
     def get_nobj(self):
