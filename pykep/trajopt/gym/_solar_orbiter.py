@@ -23,16 +23,18 @@ class _solar_orbiter_udp:
         eta_lb = 0.1
         eta_ub = 0.9
         rp_ub = 30
+        safe_distance = 350000
+        min_start_mass = 209
 
         # Redefining the planets as to change their safe radius. 350km was given as safe distance.
         earth = jpl_lp("earth")
-        earth.safe_radius = (earth.radius + 350000) / earth.radius
+        earth.safe_radius = (earth.radius + safe_distance) / earth.radius
         venus = jpl_lp("venus")
-        venus.safe_radius = (venus.radius + 350000) / venus.radius
+        venus.safe_radius = (venus.radius + safe_distance) / venus.radius
         seq = [
             earth,
             venus,
-            earth,
+            venus,
             earth,
             venus,
         ]  # alternative: Launch-Venus-Venus-Earth-Venus
@@ -85,6 +87,8 @@ class _solar_orbiter_udp:
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
+        self._safe_distance = safe_distance
+        self._min_start_mass = min_start_mass
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
@@ -159,11 +163,26 @@ class _solar_orbiter_udp:
             lamberts[-1].get_v2()[0], eph[1], x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self
         )
         a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
+        final_perihelion = a*(1-e)
+        # orbit should be as polar as possible, but we do not care about prograde/retrograde
+        corrected_inclination = abs(abs(i) % pi - pi/2)
+
+        # check perihelion and ahelion bounds during the flight
+        min_perihelion = final_perihelion
+        max_ahelion = AU
+
+        for l_i in range(self._n_legs):
+            # project lambert leg, compute perihelion and ahelion TODO: check whether extremum happens during the transfer
+            eph = self._seq[l_i].eph(ep[l_i])
+            transfer_v = lamberts[l_i].get_v1()[0]
+            transfer_a, transfer_e, _, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
+            min_perihelion = min(min_perihelion, transfer_a*(1-transfer_e))
+            max_ahelion = max(max_ahelion, transfer_a*(1+transfer_e))
 
         if self._multi_objective:
-            return [-i, T, np.sum(DVfb)-10, 209-m_initial]
+            return [corrected_inclination, T, np.sum(DVfb) - 10, self._min_start_mass-m_initial, 0.28-min_perihelion/AU, max_ahelion/AU-1.2]
         else:
-            return [-i, np.sum(DVfb) - 10, 209-m_initial]
+            return [corrected_inclination, np.sum(DVfb) - 10, self._min_start_mass-m_initial, 0.28-min_perihelion/AU, max_ahelion/AU-1.2]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -187,14 +206,13 @@ class _solar_orbiter_udp:
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
 
         # add final flyby
-        safe_distance = 350000
         pl = self._seq[-1]
-        lb = lb + [-2 * pi, (pl.radius + safe_distance) / pl.radius]
+        lb = lb + [-2 * pi, (pl.radius + self._safe_distance) / pl.radius]
         ub = ub + [2 * pi, 30]
         return (lb, ub)
 
     def get_nic(self):
-        return 2
+        return 4
 
     def pretty(self, x):
         """pretty(x)
@@ -285,7 +303,6 @@ class _solar_orbiter_udp:
         v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
 
         a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
-        #orbital_period = 2 * pi * sqrt((a ** 3) / self._common_mu)
 
         # final trajectory
         plot_kepler(
