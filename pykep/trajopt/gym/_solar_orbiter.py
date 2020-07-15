@@ -145,27 +145,33 @@ class _solar_orbiter_udp:
             T = sum(self.eta2direct(x)[1:-2])
 
         # compute launch velocity and declination
-        Vinfx, Vinfy, Vinfz = [a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])]
-        Vinf_launch = sqrt(Vinfx**2 + Vinfy**2 + Vinfz**2)
+        Vinfx, Vinfy, Vinfz = [
+            a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
+        ]
+        Vinf_launch = sqrt(Vinfx ** 2 + Vinfy ** 2 + Vinfz ** 2)
         # We transform it (only the needed component) to an equatorial system rotating along x
         # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
         earth_axis_inclination = 0.409072975
         Vinfz = - Vinfy * sin(earth_axis_inclination) + Vinfz * cos(earth_axis_inclination)
         # And we find the vinf declination (in degrees)
         sindelta = Vinfz / Vinf_launch
-        declination = asin(sindelta) / np.pi * 180.
+        declination = asin(sindelta) / np.pi * 180.0
         # We now have the initial mass of the spacecraft
-        m_initial = launchers.atlas501(Vinf_launch / 1000., declination)
+        m_initial = launchers.atlas501(Vinf_launch / 1000.0, declination)
 
         # compute final flyby and resulting trajectory
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(
-            lamberts[-1].get_v2()[0], eph[1], x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self
+            lamberts[-1].get_v2()[0],
+            eph[1],
+            x[-1] * self._seq[-1].radius,
+            x[-2],
+            self._seq[-1].mu_self,
         )
         a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
-        final_perihelion = a*(1-e)
+        final_perihelion = a * (1 - e)
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
-        corrected_inclination = abs(abs(i) % pi - pi/2)
+        corrected_inclination = abs(abs(i) % pi - pi / 2)
 
         # check perihelion and ahelion bounds during the flight
         min_perihelion = final_perihelion
@@ -176,13 +182,26 @@ class _solar_orbiter_udp:
             eph = self._seq[l_i].eph(ep[l_i])
             transfer_v = lamberts[l_i].get_v1()[0]
             transfer_a, transfer_e, _, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
-            min_perihelion = min(min_perihelion, transfer_a*(1-transfer_e))
-            max_ahelion = max(max_ahelion, transfer_a*(1+transfer_e))
+            min_perihelion = min(min_perihelion, transfer_a * (1 - transfer_e))
+            max_ahelion = max(max_ahelion, transfer_a * (1 + transfer_e))
 
         if self._multi_objective:
-            return [corrected_inclination, T, np.sum(DVfb) - 10, self._min_start_mass-m_initial, 0.28-min_perihelion/AU, max_ahelion/AU-1.2]
+            return [
+                corrected_inclination,
+                T,
+                np.sum(DVfb) - 10,
+                self._min_start_mass - m_initial,
+                0.28 - min_perihelion / AU,
+                max_ahelion / AU - 1.2,
+            ]
         else:
-            return [corrected_inclination, np.sum(DVfb) - 10, self._min_start_mass-m_initial, 0.28-min_perihelion/AU, max_ahelion/AU-1.2]
+            return [
+                corrected_inclination,
+                np.sum(DVfb) - 10,
+                self._min_start_mass - m_initial,
+                0.28 - min_perihelion / AU,
+                max_ahelion / AU - 1.2,
+            ]
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -249,11 +268,17 @@ class _solar_orbiter_udp:
 
         print("Resulting Solar orbit:")
         r_P, v_P = self._seq[-1].eph(ep[-1])
-        v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
+        v_out = fb_prop(
+            l[-1].get_v2()[0],
+            v_P,
+            x[-1] * self._seq[-1].radius,
+            x[-2],
+            self._seq[-1].mu_self,
+        )
         a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
-        print("Perihelion: ", (a*(1-e))/AU, " AU")
-        print("Ahelion: ", (a*(1+e))/AU, " AU")
-        print("Inclination: ", i*RAD2DEG, " degrees")
+        print("Perihelion: ", (a * (1 - e)) / AU, " AU")
+        print("Ahelion: ", (a * (1 + e)) / AU, " AU")
+        print("Inclination: ", i * RAD2DEG, " degrees")
 
         print("Time of flights: ", T, "[days]")
 
@@ -300,7 +325,13 @@ class _solar_orbiter_udp:
 
         # compute final flyby
         r_P, v_P = self._seq[-1].eph(ep[-1])
-        v_out = fb_prop(l[-1].get_v2()[0], v_P, x[-1] * self._seq[-1].radius, x[-2], self._seq[-1].mu_self)
+        v_out = fb_prop(
+            l[-1].get_v2()[0],
+            v_P,
+            x[-1] * self._seq[-1].radius,
+            x[-2],
+            self._seq[-1].mu_self,
+        )
 
         a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
 
@@ -308,13 +339,13 @@ class _solar_orbiter_udp:
         plot_kepler(
             r_P,
             v_out,
-            365*DAY2SEC,
+            365 * DAY2SEC,
             self._common_mu,
             N=100,
             color="r",
             units=units,
             axes=axes,
-            label="Final Orbit"
+            label="Final Orbit",
         )
 
         return axes
