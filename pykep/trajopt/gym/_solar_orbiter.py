@@ -174,12 +174,12 @@ class _solar_orbiter_udp:
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
         corrected_inclination = abs(abs(i) % pi - pi / 2)
 
-        # check perihelion and ahelion bounds during the flight
+        # check perihelion and aphelion bounds during the flight
         min_sun_distance = final_perihelion
         max_sun_distance = AU
 
         for l_i in range(self._n_legs):
-            # project lambert leg, compute perihelion and ahelion
+            # project lambert leg, compute perihelion and aphelion
             eph = self._seq[l_i].eph(ep[l_i])
             transfer_v = lamberts[l_i].get_v1()[0]
             transfer_a, transfer_e, _, _, _, E = ic2par(eph[0], transfer_v, self._common_mu)
@@ -291,7 +291,7 @@ class _solar_orbiter_udp:
         )
         a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
         print("Perihelion: ", (a * (1 - e)) / AU, " AU")
-        print("Ahelion: ", (a * (1 + e)) / AU, " AU")
+        print("Aphelion: ", (a * (1 + e)) / AU, " AU")
         print("Inclination: ", i * RAD2DEG, " degrees")
 
         print("Time of flights: ", T, "[days]")
