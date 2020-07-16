@@ -363,3 +363,6 @@ class _solar_orbiter_udp:
         )
 
         return axes
+
+
+solar_orbiter = _solar_orbiter_udp()
