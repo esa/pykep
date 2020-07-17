@@ -101,9 +101,9 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
     """
     ax = plot_lambert(l, N=60, sol=0, units='pykep.AU', legend='False', axes=None, alpha=1.)
 
-    - axes:       3D axis object created using fig.gca(projection='3d')
+    - axes:     3D axis object created using fig.gca(projection='3d')
     - l:        pykep.lambert_problem object
-    - N:		number of points to be plotted along one arc
+    - N:        number of points to be plotted along one arc
     - sol:      solution to the Lambert's problem we want to plot (must be in 0..Nmax*2)
                 where Nmax is the maximum number of revolutions for which there exist a solution.
     - units:    the length unit to be used in the plot
