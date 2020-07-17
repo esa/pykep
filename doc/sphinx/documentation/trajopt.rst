@@ -333,7 +333,7 @@ Time of flights are encoded using the alpha encoding.
     optimization techniques struggle to find the correct combination.
     The amount of specialistic knowledge that needs to be used to obtain a successful design is significant.
     Finding a global optimization approach able to find a good trajectory in complete autonomy without making
-    use of additional problem knowledge is possible, but limiting the number of fitness call is difficult.
+    use of additional problem knowledge is possible, but limiting the number of fitness calls is difficult.
 
 .. note::
 
