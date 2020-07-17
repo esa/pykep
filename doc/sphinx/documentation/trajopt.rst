@@ -331,7 +331,7 @@ Time of flights are encoded using the alpha encoding.
     As far as chemical propelled interplanetary trajectories go, this particular one is particularly complex and difficult
     to design. The time of flights among successive Mercury fly-bys allow for multiple revolutions and resonances, making
     optimization techniques struggle to find the correct combination.
-    The amount of specialistic knowledge that needs to be used to obtain a successfull design is significant.
+    The amount of specialistic knowledge that needs to be used to obtain a successful design is significant.
     Finding a global optimization approach able to find a good trajectory in complete autonomy without making
     use of additional problem knowledge is possible, but limiting the number of fitness call is difficult.
 
