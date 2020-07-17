@@ -162,7 +162,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
     # We define the integration time ...
     dt = T / (N - 1)
 
-    # ... and alocate the cartesian components for r
+    # ... and allocate the cartesian components for r
     x = np.array([0.0] * N)
     y = np.array([0.0] * N)
     z = np.array([0.0] * N)
