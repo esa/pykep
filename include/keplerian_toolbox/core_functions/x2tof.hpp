@@ -47,7 +47,7 @@ namespace kep_toolbox
  * \param[in] lw switch between long and short way solutions (when lw=1 the long way solution sselected)
  * \param[in] N multiple revolutions (default is 0)
  *
- * \see Battin "Introduction to the Mahematics and Methods of Astrodynamic"
+ * \see Battin "Introduction to the Mathematics and Methods of Astrodynamic"
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
