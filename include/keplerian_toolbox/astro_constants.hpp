@@ -58,7 +58,7 @@
 #define ASTRO_G0 9.80665
 #define ASTRO_CAVENDISH 73.6687e-11
 
-// This is used as a numerical proceure (e.g. newton-raphson or runge-kutta or
+// This is used as a numerical procedure (e.g. newton-raphson or runge-kutta or
 // regula-falsi) stopping criteria
 #define ASTRO_TOLERANCE 1e-16
 
