@@ -197,7 +197,7 @@ may not need more than a few, the problem is used to study the alpha encoding fo
 
 .. note::
 
-   The problem is rather simple and is used to study the multiple impulse transription (using alpha encoding)
+   The problem is rather simple and is used to study the multiple impulse transcription (using alpha encoding)
    comparing it to the folowing problems :class:`pykep.trajopt.gym.em5imp` and :class:`pykep.trajopt.gym.em7imp`
    having increasing number of impulses.
 
