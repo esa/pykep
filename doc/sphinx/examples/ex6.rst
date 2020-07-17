@@ -5,7 +5,7 @@ Asteroid hopping in the main belt with a low-thrust spacecraft
    :align: left
    
 
-THis plot is produced by the following code:
+This plot is produced by the following code:
 
 .. code-block:: python
 
