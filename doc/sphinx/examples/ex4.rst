@@ -2,7 +2,7 @@ Automated Mesh Adaptation in low-thrust Interplanetary Trajectory Optimization
 ==============================================================================
 
 .. figure:: ../images/gallery4.png
-   :alt: "Eart-Venus low-thrust transfer with on-line mesh adaptation"
+   :alt: "Earth-Venus low-thrust transfer with on-line mesh adaptation"
    :align: right
 
 This plot is produced by the following code:
