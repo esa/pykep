@@ -327,7 +327,7 @@ Time of flights are encoded using the alpha encoding.
 
     This class represents a rendezvous mission to Mercury modelled as an MGA-1DSM transfer. The selected fly-by sequence,
     E-VVMeMeMe-Me, and other parameters are inspired to the Messenger mission. We have only omitted the first Earth fly-by that
-    was used to correct for launcher performances, since we here do not make use of a luncher model.
+    was used to correct for launcher performances, since we here do not make use of a launcher model.
     As far as chemical propelled interplanetary trajectories go, this particular one is particularly complex and difficult
     to design. The time of flights among successive Mercury fly-bys allow for multiple rvolutions and resonances, making
     optimization techniques struggle to find the correct combination.
