@@ -25,7 +25,7 @@ the task to allocate such a budget among the different legs. The alternative, ca
 for the optimizer, but it does require added domain knowledge. 
 
 In the particular instance constructed in the example, we have an Earth-Venus-Earth transfer with a Venus intermediate
-fly-by. he selected launch windows is 2016-2017, the launch hyperbolic velocity is 2.5 km/s and the allowed time of flight is in [0.5,3] years.
+fly-by. The selected launch windows is 2016-2017, the launch hyperbolic velocity is 2.5 km/s and the allowed time of flight is in [0.5,3] years.
 
 To solve such a global optimization problem, we use jDE, a self-adaptive version of differential evolution and the generalized migration
 operator, thus computing the solution in eight paralel threads.
