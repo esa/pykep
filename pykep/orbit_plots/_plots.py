@@ -193,10 +193,10 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
 
     - axes:     3D axis object created using fig.gca(projection='3d')
     - r0:       initial position (cartesian coordinates)
-    - v0:		initial velocity (cartesian coordinates)
-    - tof:		propagation time
-    - mu:		gravitational parameter
-    - N:		number of points to be plotted along one arc
+    - v0:       initial velocity (cartesian coordinates)
+    - tof:      propagation time
+    - mu:       gravitational parameter
+    - N:	number of points to be plotted along one arc
     - units:	the length unit to be used in the plot
     - color:	matplotlib color to use to plot the line
     - label 	adds a label to the plotted arc.
@@ -247,15 +247,15 @@ def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', leg
     """
     ax = plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - axes:		3D axis object created using fig.gca(projection='3d')
-    - r0:		initial position (cartesian coordinates)
-    - v0:		initial velocity (cartesian coordinates)
-    - m0: 		initial mass
-    - u:		cartesian components for the constant thrust
-    - tof:		propagation time
-    - mu:		gravitational parameter
+    - axes:	3D axis object created using fig.gca(projection='3d')
+    - r0:	initial position (cartesian coordinates)
+    - v0:	initial velocity (cartesian coordinates)
+    - m0: 	initial mass
+    - u:	cartesian components for the constant thrust
+    - tof:	propagation time
+    - mu:	gravitational parameter
     - veff:	the product Isp * g0
-    - N:		number of points to be plotted along one arc
+    - N:	number of points to be plotted along one arc
     - units:	the length unit to be used in the plot
     - color:	matplotlib color to use to plot the line
     - legend:	when True it plots also the legend
@@ -317,16 +317,16 @@ def plot_taylor_disturbance(r0, v0, m0, thrust, disturbance, tof, mu, veff, N=60
     """
     ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - axes:			3D axis object created using fig.gca(projection='3d')
-    - r0:			initial position (cartesian coordinates)
-    - v0:			initial velocity (cartesian coordinates)
-    - m0: 			initial mass
+    - axes:		3D axis object created using fig.gca(projection='3d')
+    - r0:		initial position (cartesian coordinates)
+    - v0:		initial velocity (cartesian coordinates)
+    - m0: 		initial mass
     - thrust:		cartesian components for the constant thrust
     - disturbance:	cartesian components for a constant disturbance (will not affect mass)
-    - tof:			propagation time
-    - mu:			gravitational parameter
-    - veff:			the product Isp * g0
-    - N:			number of points to be plotted along one arc
+    - tof:		propagation time
+    - mu:		gravitational parameter
+    - veff:		the product Isp * g0
+    - N:		number of points to be plotted along one arc
     - units:		the length unit to be used in the plot
     - color:		matplotlib color to use to plot the line
     - legend:		when True it plots also the legend
@@ -372,13 +372,13 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     """
     ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, axes=None):
 
-    - axes:		    3D axis object created using fig.gca(projection='3d')
-    - leg:	        a pykep.sims_flanagan.leg
-    - N:		    number of points to be plotted along one arc
+    - axes:	    3D axis object created using fig.gca(projection='3d')
+    - leg:	    a pykep.sims_flanagan.leg
+    - N:	    number of points to be plotted along one arc
     - units:	    the length unit to be used in the plot
     - color:	    matplotlib color to use to plot the trajectory and the grid points
     - legend	    when True it plots also the legend
-    - plot_line: 	when True plots also the trajectory (between mid-points and grid points)
+    - plot_line:    when True plots also the trajectory (between mid-points and grid points)
 
     Plots a Sims-Flanagan leg
 
