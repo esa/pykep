@@ -270,7 +270,7 @@ including the one necessary for the final orbit injection.
 .. note::
 
    A similar problem was also part of the ESA's `GTOP database <https://www.esa.int/gsp/ACT/projects/gtop/gtop.html>`_ 
-   with the same name, but different implementation details and mission definition. They should not be comapred.
+   with the same name, but different implementation details and mission definition. They should not be compared.
 
 ------------
 
