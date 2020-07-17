@@ -264,7 +264,7 @@ including the one necessary for the final orbit injection.
     This represents a rendezvous mission to the comet 67P/Churyumov-Gerasimenko modelled as an MGA-1DSM transfer.
     The fly-by sequence selected (i.e. E-EMEE-C) is similar to the one planned for the spacecraft 
     `Rosetta <http://www.esa.int/Our_Activities/Space_Science/Rosetta>`_. The objective function considered is the
-    total mission delta V. No launcher model is employed and a final randezvous with the comet is included
+    total mission delta V. No launcher model is employed and a final rendezvous with the comet is included
     in the delta V computations.
 
 .. note::
