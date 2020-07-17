@@ -16,7 +16,7 @@ In addition, two dictionaries will be imported::
   pk.__version__
   pk.__extensions__
 
-The first one, pk.__version__, is the pykep version dictionary that can be queried for major and minor version.
+The first one, pk.__version__, is the pykep version dictionary that can be queried for major and minor versions.
 
 The second one, pk.__extensions__, is the pykep extension dictionary containing relevant third-party dependencies
 as detected by pykep.
