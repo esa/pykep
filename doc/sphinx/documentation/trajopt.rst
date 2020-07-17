@@ -193,7 +193,7 @@ but the time of flights are encoded using the eta encoding technique.
 .. autoattribute:: pykep.trajopt.gym.em3imp
 
 This is a simple Earth Mars transfer that has the possibility to use multiple impulses. While the actual solution
-may not need more than a few, the problem is used to study the alpha encoding for manouvre timings and its evolvability.
+may not need more than a few, the problem is used to study the alpha encoding for maneuver timings and its evolvability.
 
 .. note::
 
