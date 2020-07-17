@@ -28,7 +28,7 @@ In the particular instance constructed in the example, we have an Earth-Venus-Ea
 fly-by. The selected launch windows is 2016-2017, the launch hyperbolic velocity is 2.5 km/s and the allowed time of flight is in [0.5,3] years.
 
 To solve such a global optimization problem, we use jDE, a self-adaptive version of differential evolution and the generalized migration
-operator, thus computing the solution in eight paralel threads.
+operator, thus computing the solution in eight parallel threads.
 
 The code for this example can be studied `here. 
 <https://github.com/esa/pykep/blob/master/pykep/examples/_ex5.py>`_ Feel free to leave comments.
