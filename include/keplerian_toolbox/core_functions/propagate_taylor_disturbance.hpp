@@ -116,7 +116,7 @@ double propagate_taylor_disturbance_step(T &r0, T &v0, double &m0, const double 
 
     // We now compute the Taylor expansion, first the optimal step size and then the sum....
 
-    // Determininsg the optimal step size (see Jorba's method)
+    // Determining the optimal step size (see Jorba's method)
     double step, rho_m;
 
     // The infinity norm of the highest order derivative
