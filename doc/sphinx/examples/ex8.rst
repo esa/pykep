@@ -1,4 +1,4 @@
-Mass optimal Mars Randezvous using a direct method
+Mass optimal Mars Rendezvous using a direct method
 ==================================================
 
 .. figure:: ../images/gallery8.png
