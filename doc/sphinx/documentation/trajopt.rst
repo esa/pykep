@@ -219,7 +219,7 @@ but the number of impulses is increased.
 
 .. autoattribute:: pykep.trajopt.gym.eve_mga1dsm
 
-This is an Earth - Venus - Earth transfer where 1 deep space manouvre is allowed at each leg. 
+This is an Earth - Venus - Earth transfer where 1 deep space maneuver is allowed at each leg. 
 
 .. note::
 
