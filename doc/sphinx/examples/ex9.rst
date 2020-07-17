@@ -20,7 +20,7 @@ if snopt7 is not available, ipopt or slsqp will also produce, eventually, a feas
 This example demonstrates the use of the :class:`pykep.trajopt.indirect_pt2pl` which represents, in cartesian
 coordinates, the TPBVP problem resulting from applying Pontryagin maximum principle to the dynamics of a mass
 varying spacecraft. The starting conditions are fixed and were obtained running a direct method first (see previous example). The end
-condition is a Mars randezvous. Since the corresponding transversality condition (free time, Mars randezvous) is 
+condition is a Mars rendezvous. Since the corresponding transversality condition (free time, Mars rendezvous) is 
 tricky to write for a generic :class:`pykep.planet._base`, we hybridize the indirect method with a direct approach.
 We ignore the transversality conditions when computing the Pontryagin leg, but we add as criteria the optimization of the final
 mass to be passed directly to the solver. 
