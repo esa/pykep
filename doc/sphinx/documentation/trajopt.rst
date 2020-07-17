@@ -11,7 +11,7 @@ solution strategy, they can be also interfaced with any other optimization packa
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
-:class:`pykep.trajopt.mga`                      class           A Multiple Gravity Assist Trajectory with no deep space manouvres
+:class:`pykep.trajopt.mga`                      class           A Multiple Gravity Assist Trajectory with no deep space maneuvers
 :class:`pykep.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre at each leg
 :class:`pykep.trajopt.pl2pl_N_impulses`         class           A single leg transfer with N impulses
 :class:`pykep.trajopt.lt_margo`                 class           A cubesat mission to near Earth asteroids. Solar Electric Propulsion and Earth gravity are modelled.
