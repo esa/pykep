@@ -159,6 +159,6 @@ class lambert_metric(base):
         return (rx, ry)
 
     def human_readable_extra(self):
-        retval = "\n\tAsetroid 1: " + self._ast1.name
-        retval = retval + "\n\tAsetroid 2: " + self._ast2.name
+        retval = "\n\tAsteroid 1: " + self._ast1.name
+        retval = retval + "\n\tAsteroid 2: " + self._ast2.name
         return retval
