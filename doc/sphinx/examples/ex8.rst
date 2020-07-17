@@ -15,7 +15,7 @@ These plots are produced by the following code:
    import pykep as pk
    pk.examples.run_example8(nseg = 40)
 
-if snopt7 is not available, slsqp will also produce, eventually, a feasible solution. 
+If snopt7 is not available, slsqp will also produce, eventually, a feasible solution. 
 Repeat several times in case unfeasible solutions are returned. Local minima may be found too.
 You can also take the solution found and refine it using a direct method using pykep. See the other examples.
 
