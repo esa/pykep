@@ -435,7 +435,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
 
     # Forward propagation
 
-    # x,y,z contain the cartesian components of all points (grid+midpints)
+    # x,y,z contain the cartesian components of all points (grid+midpoints)
     x = [0.0] * (fwd_seg * 2 + 1)
     y = [0.0] * (fwd_seg * 2 + 1)
     z = [0.0] * (fwd_seg * 2 + 1)
