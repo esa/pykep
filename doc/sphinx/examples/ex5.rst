@@ -20,7 +20,7 @@ after the self-adaptive differential evolution algorithm concludes its computati
 The example demonstrates the use of the mga_1dsm problem constructor of the *interplanetary* module. 
 This helper class allows to construct a pygmo global optimization problem (`pygmo project <http://pagmo.sourceforge.net/pygmo/index.html>`_) 
 representing a Multiple Gravity Assist Interplanetary Trajectory where only one Deep Space Maneuver is allowed in each leg. The problem is constructed as either a single objective (total DV) or
-even a multiobjective optimization problem (DV and time of flight). The alpha encoding is used for the time of flights allowing to specify only the mission duration and letting the optimizer 
+even a multiobjective optimization problem (DV and time of flight). The alpha encoding is used for the time of flights allowing to specify only the mission duration and leaving the optimizer 
 the task to allocate such a budget among the different legs. The alternative, called tof encoding, would be to specify the time of flight for each single leg. This would result in an easier problem
 for the optimizer, but it does require added domain knowledge. 
 
