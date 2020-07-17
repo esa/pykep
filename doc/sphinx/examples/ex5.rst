@@ -1,4 +1,4 @@
-Global optimization of a multiple gravity assist trajectory with one deep space manouvre per leg
+Global optimization of a multiple gravity assist trajectory with one deep space maneuver per leg
 ================================================================================================
 
 .. figure:: ../images/gallery5.png
