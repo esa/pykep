@@ -142,7 +142,7 @@ BOOST_PYTHON_MODULE(planet)
              "  T = earth.compute_period()\n"
              "  T = earth.compute_period(epoch(2345.3, 'mjd2000'))")
         .def("osculating_elements", &planet::python_base::compute_elements,
-             "Retruns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch\n"
+             "Returns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch\n"
              "(SI units used). If no epoch is passed 0. is assumed\n\n"
              "Example::\n\n"
              "  elem = earth.osculating_elements()\n"
