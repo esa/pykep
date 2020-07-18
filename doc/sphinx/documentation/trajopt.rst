@@ -15,7 +15,7 @@ Name                                            Type            Description
 :class:`pykep.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space maneuver at each leg
 :class:`pykep.trajopt.pl2pl_N_impulses`         class           A single leg transfer with N impulses
 :class:`pykep.trajopt.lt_margo`                 class           A cubesat mission to near Earth asteroids. Solar Electric Propulsion and Earth gravity are modelled.
-:class:`pykep.trajopt.mr_lt_nep`                class           A multiple randezvous low-thrust optimization problem (e.g. for asteroids in the main belt)
+:class:`pykep.trajopt.mr_lt_nep`                class           A multiple rendezvous low-thrust optimization problem (e.g. for asteroids in the main belt)
 :class:`pykep.trajopt.direct_pl2pl`             class           A low-thrust transfer between planets using a direct transcription.
 :class:`pykep.trajopt.indirect_pt2pt`           class           A low-thrust transfer between Cartesian states using an indirect transcription.
 :class:`pykep.trajopt.indirect_or2or`           class           A low-thrust transfer between orbits using an indirect transcription.
