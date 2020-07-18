@@ -4,7 +4,7 @@ import pykep as pk
 class mr_lt_nep:
     """
     This class represents, as a global optimization problem (linearly constrained,
-    high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
+    high dimensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
     with a nuclear electric propulsion engine.
 
     - Izzo, D. et al., GTOC7 - Solution Returned by the ACT/ISAS team
