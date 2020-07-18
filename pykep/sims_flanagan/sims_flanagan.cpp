@@ -346,7 +346,7 @@ BOOST_PYTHON_MODULE(sims_flanagan)
              "Example::\n\n"
              " tf = l.get_tf()")
         .def("get_throttles", &kep_toolbox::sims_flanagan::leg_s::get_throttles,
-             return_value_policy<copy_const_reference>(), "Reurns a tuple containing the leg's throttles\n\n"
+             return_value_policy<copy_const_reference>(), "Returns a tuple containing the leg's throttles\n\n"
                                                           "Example::\n\n"
                                                           " th = l.get_throttles()")
         .def("mismatch_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_mismatch_con,
