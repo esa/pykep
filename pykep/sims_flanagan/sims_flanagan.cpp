@@ -286,8 +286,8 @@ BOOST_PYTHON_MODULE(sims_flanagan)
         init<unsigned, double , double , optional<double >>(
             "pykep.sims_flanagan.leg_s(n_seg, c, alpha, tol = -10)\n\n"
             "- n_seg: number of segments\n"
-            "- c: constant in the SUndmann transformation dt = cr^(alpha ds)\n"
-            "- alpha: exponent in the SUndmann transformation dt = cr^(alpha ds)\n"
+            "- c: constant in the Sundmann transformation dt = cr^(alpha ds)\n"
+            "- alpha: exponent in the Sundmann transformation dt = cr^(alpha ds)\n"
             "- tol: log 10 tolerance set in the Taylor integration of the leg\n\n"
             "Example::\n\n"
             " from pykep import *\n"
