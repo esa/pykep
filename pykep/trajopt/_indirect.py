@@ -577,7 +577,7 @@ class indirect_pt2or(_indirect_base):
 
 class indirect_pt2pl(_indirect_base):
     """
-    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet (randevouz).
+    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet (rendezvous).
     Since the terminal conditions on the planet are not fixed, the transversality condition H=0 is deactivated
     and optimization of T happens via an explicit minimization of the objective (hybrid direct-indirect method)
 
