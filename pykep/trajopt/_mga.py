@@ -6,7 +6,7 @@ import numpy as np
 
 class mga:
     r"""
-    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space manouvres into an optimisation problem.
+    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space maneuvers into an optimisation problem.
     It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
