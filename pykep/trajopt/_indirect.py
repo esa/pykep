@@ -481,7 +481,7 @@ class indirect_pt2or(_indirect_base):
         # final eccentric anomaly
         Mf = z[1]
 
-        # intial costates
+        # initial costates
         l0 = np.asarray(z[2:])
 
         # set arrival Keplerian elements
