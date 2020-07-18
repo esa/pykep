@@ -95,7 +95,7 @@ class pl2pl_N_impulses(object):
 
     def fitness(self, x):
         # 1 -  we 'decode' the chromosome into the various deep space
-        # manouvres times (days) in the list T
+        # maneuvers times (days) in the list T
         T = list([0] * (self.N_max - 1))
 
         for i in range(len(T)):
@@ -170,7 +170,7 @@ class pl2pl_N_impulses(object):
         axes.scatter(0, 0, 0, color='y')
 
         # 1 -  we 'decode' the chromosome recording the various deep space
-        # manouvres timing (days) in the list T
+        # maneuvers timing (days) in the list T
         T = list([0] * (self.N_max - 1))
 
         for i in range(len(T)):
@@ -233,7 +233,7 @@ class pl2pl_N_impulses(object):
 
     def pretty(self, x):
         # 1 -  we 'decode' the chromosome recording the various deep space
-        # manouvres timing (days) in the list T
+        # maneuvers timing (days) in the list T
         T = list([0] * (self.N_max - 1))
 
         for i in range(len(T)):
