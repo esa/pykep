@@ -42,7 +42,7 @@ class mga_lt_nep:
                  high_fidelity = False):
         """
         Args:
-            - seq (```list of pykep.planet```): defines the encounter sequence for the trajectoty (including the initial planet).
+            - seq (```list of pykep.planet```): defines the encounter sequence for the trajectory (including the initial planet).
             - n_seg (```list``` of ```int```): the number of segments to be used for each leg.
             - t0 (```list``` of ```floats```): the launch window (in mjd2000).
             - tof (```list``` of ```2D-list```): minimum and maximum time of each leg (days).
