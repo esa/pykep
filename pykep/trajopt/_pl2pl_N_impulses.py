@@ -41,7 +41,7 @@ class pl2pl_N_impulses(object):
             - N_max (``int``): maximum number of impulses
             - tof (``list``): the box bounds [lower,upper] for the time of flight (days)
             - vinf (``list``): the box bounds [lower,upper] for each DV magnitude (km/sec)
-            - phase_free (``bool``): when True, no randezvous condition are enforced and start and arrival anomalies will be free
+            - phase_free (``bool``): when True, no rendezvous condition are enforced and start and arrival anomalies will be free
             - multi_objective (``bool``):  when True, a multi-objective problem is constructed with DV and time of flight as objectives
             - t0 (``list``):  the box bounds on the launch window containing two pykep.epoch. This is not needed if phase_free is True.
         """
