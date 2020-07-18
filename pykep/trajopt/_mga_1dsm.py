@@ -9,7 +9,7 @@ def norm(x):
 
 class mga_1dsm:
     r"""
-    This class transcribes a Multiple Gravity Assist trajectory with one deep space manouvre per leg (MGA-1DSM) into an optimisation problem.
+    This class transcribes a Multiple Gravity Assist trajectory with one deep space maneuver per leg (MGA-1DSM) into an optimisation problem.
     It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
