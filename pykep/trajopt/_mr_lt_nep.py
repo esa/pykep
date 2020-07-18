@@ -153,7 +153,7 @@ class mr_lt_nep:
         nseg = self.__nseg
         traj_tof = self.__max_total_time
         n = self.__num_legs
-        # We set the ptoblem box-bounds
+        # We set the problem box-bounds
         # set leg bounds
         lb_leg = [t0[0], leg_tof[0], rest[0], mass[0]] + [-1] * nseg * 3
         ub_leg = [t0[1] + traj_tof * n, leg_tof[1],
