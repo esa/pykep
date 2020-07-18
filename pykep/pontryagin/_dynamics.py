@@ -52,7 +52,7 @@ class _dynamics(object):
         self.c1 = self.spacecraft.thrust
         self.c2 = self.spacecraft.thrust / (self.spacecraft.isp * G0)
 
-        # define nondimenional units
+        # define nondimensional units
         self.L = AU
         self.V = EARTH_VELOCITY
         self.M = self.spacecraft.mass
