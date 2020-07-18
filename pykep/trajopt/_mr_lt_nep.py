@@ -40,7 +40,7 @@ class mr_lt_nep:
                     leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
                     Isp=3000., traj_tof=365.25 * 6, objective='mass', c_tol=1e-05)
 
-        * seq: list of pykep.planet defining the encounter sequence for the trajectoty (including the initial planet)
+        * seq: list of pykep.planet defining the encounter sequence for the trajectory (including the initial planet)
         * n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
         * t0: list of two pykep epochs defining the launch window
         * leg_tof: list of two floats defining the minimum and maximum time of each leg (days)
