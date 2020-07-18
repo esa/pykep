@@ -43,7 +43,7 @@ class _tandem_udp(mga_1dsm):
         # Redefining the planets as to change their safe radius
         earth = jpl_lp('earth')
         earth.safe_radius = 1.05
-        # We need the Earth eph in the fitnes
+        # We need the Earth eph in the fitness
         venus = jpl_lp('venus')
         venus.safe_radius = 1.05
         mars = jpl_lp('mars')
