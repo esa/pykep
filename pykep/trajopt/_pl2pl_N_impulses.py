@@ -7,7 +7,7 @@ from scipy.linalg import norm
 class pl2pl_N_impulses(object):
     """
     This class is a pygmo (http://esa.github.io/pygmo/) problem representing a single leg transfer
-    between two planets allowing up to a maximum number of impulsive Deep Space Manouvres.
+    between two planets allowing up to a maximum number of impulsive Deep Space Maneuvers.
 
     The decision vector is::
 
