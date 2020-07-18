@@ -40,7 +40,7 @@ def _leg_get_states(self):
 
     # Forward propagation
 
-    # x,y,z contain the cartesian components of all points (grid+midpints)
+    # x,y,z contain the cartesian components of all points (grid+midpoints)
     x = [0.0] * (fwd_seg * 2 + 1)
     y = [0.0] * (fwd_seg * 2 + 1)
     z = [0.0] * (fwd_seg * 2 + 1)
