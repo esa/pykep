@@ -305,18 +305,18 @@ class mga:
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self.seq])
 
-        print("Departure: ", seq[0].name)
+        print("Departure: ", self.seq[0].name)
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
         print("\tHyperbolic velocity: ", DVlaunch_tot, "[m/s]")
         print("\tInitial DV: ", DVlaunch, "[m/s]")
 
-        for pl, e, dv in zip(seq[1:-1], ep[1:-1], DVfb):
+        for pl, e, dv in zip(self.seq[1:-1], ep[1:-1], DVfb):
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
 
-        print("Arrival: ", seq[-1].name)
+        print("Arrival: ", self.seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
         print("\tArrival DV: ", DVarrival, "[m/s]")
