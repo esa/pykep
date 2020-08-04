@@ -138,13 +138,7 @@ class _solar_orbiter_udp:
     # Objective function
     def fitness(self, x):
         DVfb, lamberts, ep = self._compute_dvs(x)
-        if self._tof_encoding == "direct":
-            T = sum(x[1:-2])
-        elif self._tof_encoding == "alpha":
-            T = x[1]
-        elif self._tof_encoding == "eta":
-            T = sum(self.eta2direct(x)[1:-2])
-
+        T = self._decode_tofs(x)
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
