@@ -35,7 +35,7 @@
 #endif
 
 #if PY_MAJOR_VERSION < 3
-#error Minimum supported Python version is 2.6.
+#error Minimum supported Python version is 3.
 #endif
 
 #include <boost/math/constants/constants.hpp>
