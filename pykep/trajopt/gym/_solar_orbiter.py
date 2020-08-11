@@ -1,9 +1,8 @@
 from math import asin, cos, pi, sin, sqrt
 
 import numpy as np
-
 from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
-from pykep.core import fb_prop, fb_vel, lambert_problem
+from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
 
@@ -240,6 +239,38 @@ class _solar_orbiter_udp:
 
     def get_nic(self):
         return 4
+
+    def eph(self, x, epoch):
+        DVfb, lamberts, ep = self._compute_dvs(x)
+        if epoch <= ep[0]:
+            raise ValueError("Given epoch " + str(epoch) + " is at or before launch date " + str(ep[0]))
+
+        i = 0
+        while i < len(ep) and epoch > ep[i]:
+            i += 1
+
+        if i < len(ep):
+            # get position and velocity from start of lambert leg i
+            r_P, v_P = self._seq[i-1].eph(ep[i-1])
+            vel = lamberts[i-1].get_v1()[0]
+            elapsed_seconds = epoch - ep[i-1]
+        else:
+            # get position and velocity after last flyby
+            r_P, v_P = self._seq[-1].eph(ep[-1])
+            vel = fb_prop(
+                lamberts[-1].get_v2()[0],
+                v_P,
+                x[-1] * self._seq[-1].radius,
+                x[-2],
+                self._seq[-1].mu_self,
+            )
+            elapsed_seconds = (epoch - ep[-1]) * DAY2SEC
+
+        # propagate the lagrangian
+        r, v = propagate_lagrangian(
+                r_P, vel, elapsed_seconds, self._common_mu)
+
+        return r, v
 
     def pretty(self, x):
         """pretty(x)
