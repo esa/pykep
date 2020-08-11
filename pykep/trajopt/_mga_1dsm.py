@@ -1,5 +1,6 @@
 from pykep.core import epoch, DAY2SEC, MU_SUN, lambert_problem, propagate_lagrangian, fb_prop, AU, epoch
 from pykep.planet import jpl_lp
+from pykep.trajopt._lambert import lambert_problem_multirev
 from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
 
@@ -55,7 +56,8 @@ class mga_1dsm:
                  rp_target = None,
                  eta_lb = 0.1,
                  eta_ub = 0.9,
-                 rp_ub = 30
+                 rp_ub = 30,
+                 max_revs = 0
                  ):
         """
         pykep.trajopt.mga_1dsm(seq = [jpl_lp('earth'), jpl_lp('venus'), jpl_lp('earth')], t0 = [epoch(0),epoch(1000)], tof = [1.0,5.0], vinf = [0.5, 2.5], multi_objective = False, add_vinf_dep = False, add_vinf_arr=True)
@@ -74,6 +76,7 @@ class mga_1dsm:
         - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
         - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
         - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)
+        - max_revs (``int``): maximal number of revolutions for lambert transfer
         """
 
         # Sanity checks
@@ -136,6 +139,7 @@ class mga_1dsm:
 
         self.n_legs = len(seq) - 1
         self.common_mu = seq[0].mu_central_body
+        self.max_revs = max_revs
 
     def get_nobj(self):
         return self._multi_objective + 1
@@ -216,8 +220,8 @@ class mga_1dsm:
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[4]) * T[0] * DAY2SEC
-        l = lambert_problem(
-            r, r_P[1], dt, self.common_mu, cw = False, max_revs = 0)
+        l = lambert_problem_multirev(v, lambert_problem(
+                    r, r_P[1], dt, self.common_mu, cw=False, max_revs=self.max_revs))
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
 
@@ -234,8 +238,8 @@ class mga_1dsm:
                 r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt,
-                                self.common_mu, cw=False, max_revs=0)
+            l = lambert_problem_multirev(v, lambert_problem(r, r_P[i + 1], dt,
+                                  self.common_mu, cw=False, max_revs=self.max_revs))
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
@@ -301,8 +305,8 @@ class mga_1dsm:
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[4]) * T[0] * DAY2SEC
-        l = lambert_problem(
-            r, r_P[1], dt, self.common_mu, cw = False, max_revs = 0)
+        l = lambert_problem_multirev(v, lambert_problem(
+            r, r_P[1], dt, self.common_mu, cw=False, max_revs=self.max_revs))
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
 
@@ -328,8 +332,8 @@ class mga_1dsm:
             print("DSM after " + str(x[8 + (i - 1) * 4] * T[i]) + " days")
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
-            l = lambert_problem(r, r_P[i + 1], dt,
-                                self.common_mu, cw=False, max_revs=0)
+            l = lambert_problem_multirev(v, lambert_problem(r, r_P[i + 1], dt,
+                                self.common_mu, cw=False, max_revs=self.max_revs))
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
@@ -409,7 +413,10 @@ class mga_1dsm:
 
         # Lambert arc to reach seq[1]
         dt = (1 - x[4]) * T[0] * DAY2SEC
-        l = lambert_problem(r, r_P[1], dt, self.common_mu, False, False)
+        
+        l = lambert_problem_multirev(v, lambert_problem(
+            r, r_P[1], dt, self.common_mu, cw=False, max_revs=self.max_revs))
+        
         plot_lambert(l, sol=0, color='r', units=AU, axes=axis)
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
@@ -430,8 +437,9 @@ class mga_1dsm:
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
             dt = (1 - x[8 + (i - 1) * 4]) * T[i] * DAY2SEC
 
-            l = lambert_problem(r, r_P[i + 1], dt,
-                                self.common_mu, False, False)
+            l = lambert_problem_multirev(v, lambert_problem(r, r_P[i + 1], dt,
+                self.common_mu, cw=False, max_revs=self.max_revs))
+
             plot_lambert(l, sol=0, color='r', legend=False,
                          units=AU, N=1000, axes=axis)
 
