@@ -1,6 +1,6 @@
 from pykep.core import epoch, lambert_problem, DAY2SEC, fb_vel, AU
 from pykep.planet import jpl_lp
-from pykep.trajopt._lambert import lambert_problem_stochastic
+from pykep.trajopt._lambert import lambert_problem_multirev
 
 import numpy as np
 
@@ -256,7 +256,7 @@ class mga:
         l = list()
         vi = v[0]
         for i in range(self._n_legs):
-            lp = lambert_problem_stochastic(
+            lp = lambert_problem_multirev(
                 vi, lambert_problem(
                     r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, self.max_revs))
             l.append(lp)
