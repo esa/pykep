@@ -142,16 +142,10 @@ class _solar_orbiter_udp:
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
         ]
-        Vinf_launch = sqrt(Vinfx ** 2 + Vinfy ** 2 + Vinfz ** 2)
-        # We transform it (only the needed component) to an equatorial system rotating along x
-        # (this is an approximation, assuming vernal equinox is roughly x and the ecliptic plane is roughly xy)
-        earth_axis_inclination = 0.409072975
-        Vinfz = - Vinfy * sin(earth_axis_inclination) + Vinfz * cos(earth_axis_inclination)
-        # And we find the vinf declination (in degrees)
-        sindelta = Vinfz / Vinf_launch
-        declination = asin(sindelta) / np.pi * 180.0
+        Vinf_launch = np.linalg.norm([Vinfx, Vinfy, Vinfz])
+        
         # We now have the initial mass of the spacecraft
-        m_initial = launchers.atlas501(Vinf_launch / 1000.0, declination)
+        m_initial = launchers.atlas551(Vinf_launch / 1000.0)
 
         # compute final flyby and resulting trajectory
         eph = self._seq[-1].eph(ep[-1])
