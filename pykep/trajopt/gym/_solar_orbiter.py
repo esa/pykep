@@ -247,16 +247,22 @@ class _solar_orbiter_udp:
 
         i = 0
         while i < len(ep) and epoch > ep[i]:
+            # lambert leg i goes from planet i to planet i+1
             i += 1
 
+        assert(i >= 1 and i <= len(ep))
         if i < len(ep):
-            # get position and velocity from start of lambert leg i
-            r_P, v_P = self._seq[i-1].eph(ep[i-1])
+            assert(epoch < ep[i])
+
+        r_P, v_P = self._seq[i-1].eph(ep[i-1])
+        elapsed_seconds = (epoch - ep[i-1]) * DAY2SEC
+        assert(elapsed_seconds >= 0)
+
+        if i < len(ep):
+            # get velocity from start of lambert leg i
             vel = lamberts[i-1].get_v1()[0]
-            elapsed_seconds = epoch - ep[i-1]
         else:
-            # get position and velocity after last flyby
-            r_P, v_P = self._seq[-1].eph(ep[-1])
+            # get velocity after last flyby
             vel = fb_prop(
                 lamberts[-1].get_v2()[0],
                 v_P,
@@ -264,7 +270,6 @@ class _solar_orbiter_udp:
                 x[-2],
                 self._seq[-1].mu_self,
             )
-            elapsed_seconds = (epoch - ep[-1]) * DAY2SEC
 
         # propagate the lagrangian
         r, v = propagate_lagrangian(
