@@ -93,7 +93,7 @@ class _launchers:
     """
     def __init__(self):
         self._atlas501 = interp2d(_vinfs_A5, _decls_A5, _data_A5, kind='linear', fill_value=0.1, copy=False)
-        self._atlas551 = interp1d(_vinfs_A551, _data_A551, kind='linear', fill_value=0.1, copy=False)
+        self._atlas551 = interp1d(_vinfs_A551, _data_A551, kind='linear', fill_value=0.1, copy=False, bounds_error=False)
         self._soyuzf = interp2d(_vinfs_SF, _decls_SF, _data_SF, kind='linear', fill_value=1e-3, copy=False)
         self._ariane5 = interp2d(_vinfs_Ariane5, _decls_Ariane5, _data_Ariane5, kind='linear', fill_value=1e-3, copy=False)
     def atlas501(self, vinfs, decls):
