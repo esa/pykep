@@ -24,7 +24,7 @@ class _solar_orbiter_udp:
         eta_ub = 0.9
         rp_ub = 30
         safe_distance = 350000
-        min_start_mass = 209
+        min_start_mass = 1800
 
         # Redefining the planets as to change their safe radius. 350km was given as safe distance.
         earth = jpl_lp("earth")
@@ -188,7 +188,7 @@ class _solar_orbiter_udp:
 
         if self._multi_objective:
             return [
-                corrected_inclination,
+                corrected_inclination + 2*min_sun_distance / AU,
                 T,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
@@ -197,7 +197,7 @@ class _solar_orbiter_udp:
             ]
         else:
             return [
-                corrected_inclination,
+                corrected_inclination + 2*min_sun_distance / AU,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
                 0.28 - min_sun_distance / AU,
