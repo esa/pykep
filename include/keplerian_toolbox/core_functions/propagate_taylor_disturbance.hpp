@@ -116,7 +116,7 @@ double propagate_taylor_disturbance_step(T &r0, T &v0, double &m0, const double 
 
     // We now compute the Taylor expansion, first the optimal step size and then the sum....
 
-    // Determininsg the optimal step size (see Jorba's method)
+    // Determining the optimal step size (see Jorba's method)
     double step, rho_m;
 
     // The infinity norm of the highest order derivative
@@ -184,7 +184,7 @@ double propagate_taylor_disturbance_step(T &r0, T &v0, double &m0, const double 
  * \throw value_error if max_iter is hit.....
  * \throw value_error if max_order is exceeded.....
  *
- * NOTE: Equations of motions are written and propagated in ceartesian coordinates
+ * NOTE: Equations of motions are written and propagated in cartesian coordinates
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */

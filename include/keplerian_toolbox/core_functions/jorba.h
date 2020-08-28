@@ -50,7 +50,7 @@ typedef double MY_FLOAT;
         (a) = (b);                                                                                                     \
     }
 
-/* create a MY_FLOAT from a, assigne to r. a is an integer or a float */
+/* create a MY_FLOAT from a, assign to r. a is an integer or a float */
 #define MakeMyFloatA(r, a) (r = (double)(a))
 
 /* create a MY_FLOAT from string, a is an integer or a float, s is its string representation */

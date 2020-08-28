@@ -6,7 +6,7 @@ import numpy as np
 
 class mga:
     r"""
-    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space manouvres into an optimisation problem.
+    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space maneuvers into an optimisation problem.
     It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
@@ -57,7 +57,7 @@ class mga:
               this contains a 2D list with the lower and upper bounds on the time-of-flight. If *tof_encoding*
               is 'eta' tof is a float defining the upper bound on the time-of-flight
             - vinf (``float``): the vinf provided at launch for free
-            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case, 'alpha' or `eta` encodings are reccomended
+            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case, 'alpha' or `eta` encodings are recommended
             - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
             - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
             - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet

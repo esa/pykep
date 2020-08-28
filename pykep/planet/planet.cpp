@@ -142,7 +142,7 @@ BOOST_PYTHON_MODULE(planet)
              "  T = earth.compute_period()\n"
              "  T = earth.compute_period(epoch(2345.3, 'mjd2000'))")
         .def("osculating_elements", &planet::python_base::compute_elements,
-             "Retruns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch\n"
+             "Returns a tuple containing the six osculating keplerian elements a,e,i,W,w,M at the reference epoch\n"
              "(SI units used). If no epoch is passed 0. is assumed\n\n"
              "Example::\n\n"
              "  elem = earth.osculating_elements()\n"
@@ -152,7 +152,7 @@ BOOST_PYTHON_MODULE(planet)
              "pykep.planet._base.eph(when)\n\n"
              "- when: a :py:class:`pykep.epoch` indicating the epoch at which the ephemerides "
              "are needed, it can also be a double in which case its interpreted as a mjd2000\n\n"
-             "Retuns a tuple containing the planet position and velocity in SI units\n\n"
+             "Returns a tuple containing the planet position and velocity in SI units\n\n"
              ".. note::\n\n"
              "   This is a pure virtual method and must be reimplemented in the derived class\n\n"
              "Example::\n\n"
@@ -162,7 +162,7 @@ BOOST_PYTHON_MODULE(planet)
         // Virtual methods that can be reimplemented
         .def("human_readable_extra", &planet::python_base::human_readable_extra,
              "pykep.planet._base.human_readable_extra()\n\n"
-             "Retuns a string with extra information on the problem.\n\n"
+             "Returns a string with extra information on the problem.\n\n"
              ".. note::\n\n"
              "   This is a virtual method and can be reimplemented in the derived class. In which case __repr__ will "
              "append its returned value\n")

@@ -38,12 +38,12 @@ class _tandem_udp(mga_1dsm):
         Args:
             - prob_id (``int``): The problem id defines the fly-by sequence.
             - constrained (``bool``): Activates the constraint on the time of flight 
-              (fitness will thus return two numbers, the objectove function and the inequality constraint violation)
+              (fitness will thus return two numbers, the objective function and the inequality constraint violation)
         """
         # Redefining the planets as to change their safe radius
         earth = jpl_lp('earth')
         earth.safe_radius = 1.05
-        # We need the Earth eph in the fitnes
+        # We need the Earth eph in the fitness
         venus = jpl_lp('venus')
         venus.safe_radius = 1.05
         mars = jpl_lp('mars')

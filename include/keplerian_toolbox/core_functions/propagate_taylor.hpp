@@ -187,7 +187,7 @@ double propagate_taylor_step(T &r0, T &v0, double &m0, const double &h, const in
  * \throw value_error if max_iter is hit.....
  * \throw value_error if max_order is exceeded.....
  *
- * NOTE: Equations of motions are written and propagated in ceartesian
+ * NOTE: Equations of motions are written and propagated in cartesian
  * coordinates
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)

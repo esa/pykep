@@ -137,7 +137,7 @@ if(YACMA_COMPILER_IS_INTELXX)
   # NOTE: on MSVC we use the push/pop pragmas, but they do not seem to work on Intel (the pragmas
   # in icc influence the behaviour at instantiation point, not at definition point).
   # These warnings are useful in principle, but they are generated a lot from cereal and we have no
-  # way of disabling them selectively. Just rely on the other compilers to provde good diagnostic.
+  # way of disabling them selectively. Just rely on the other compilers to provide good diagnostic.
   list(APPEND KEP_TOOLBOX_CXX_FLAGS_DEBUG "-diag-disable" "2259,1682,68")
   list(APPEND KEP_TOOLBOX_CXX_FLAGS_RELEASE "-diag-disable" "2259,1682,68")
 endif()

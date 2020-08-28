@@ -48,7 +48,7 @@ int main()
     std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> dis(0, 2.0);
     std::uniform_real_distribution<> dis2(-1.0, 1.0);
-    auto tol = 1e-8; // tolerance is low as ill cases may be radnomly sample (e~1 etc.) resulting in precision loss
+    auto tol = 1e-8; // tolerance is low as ill cases may be randomly sampled (e~1 etc.) resulting in precision loss
     bool fail = false;
 
     // We test that par2eq and eq2par are perfectly inverse of one another (wthin tol)
