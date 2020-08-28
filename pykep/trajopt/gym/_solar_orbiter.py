@@ -1,21 +1,24 @@
-from math import asin, cos, pi, sin, sqrt
+from math import pi, sin, sqrt
 
 import numpy as np
+
 from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
+from pykep.trajopt._lambert import lambert_problem_multirev
 
 
 class _solar_orbiter_udp:
     def __init__(
-        self, t0=[epoch(0), epoch(1000)], multi_objective=False, tof_encoding="direct"
+        self, t0=[epoch(0), epoch(1000)], multi_objective=False, tof_encoding="direct", max_revs=0
     ):
         """
         Args:
             - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objective
             - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selects the encoding for the time of flights
             - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
+            - max_revs (``int``): maximal number of revolutions for lambert transfer
 
         """
 
@@ -84,6 +87,7 @@ class _solar_orbiter_udp:
         self._tof = tof
         self._tof_encoding = tof_encoding
         self._multi_objective = multi_objective
+        self.max_revs = max_revs
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
@@ -122,9 +126,13 @@ class _solar_orbiter_udp:
             r[i], v[i] = self._seq[i].eph(ep[i])
         # 3 - we solve the lambert problems
         l = list()
+        vi = v[0]
         for i in range(self._n_legs):
-            l.append(lambert_problem(
-                r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, 0))
+            lp = lambert_problem_multirev(
+                vi, lambert_problem(
+                    r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, self.max_revs))
+            l.append(lp)
+            vi = lp.get_v2()[0]
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
         DVfb = list()
@@ -143,7 +151,7 @@ class _solar_orbiter_udp:
             a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
         ]
         Vinf_launch = np.linalg.norm([Vinfx, Vinfy, Vinfz])
-        
+
         # We now have the initial mass of the spacecraft
         m_initial = launchers.atlas551(Vinf_launch / 1000.0)
 
@@ -234,22 +242,22 @@ class _solar_orbiter_udp:
     def get_nic(self):
         return 4
 
-    def eph(self, x, epoch):
+    def eph(self, x, t):
         DVfb, lamberts, ep = self._compute_dvs(x)
-        if epoch <= ep[0]:
-            raise ValueError("Given epoch " + str(epoch) + " is at or before launch date " + str(ep[0]))
+        if t <= ep[0]:
+            raise ValueError("Given epoch " + str(t) + " is at or before launch date " + str(ep[0]))
 
         i = 0
-        while i < len(ep) and epoch > ep[i]:
+        while i < len(ep) and t >= ep[i]:
             # lambert leg i goes from planet i to planet i+1
             i += 1
 
         assert(i >= 1 and i <= len(ep))
         if i < len(ep):
-            assert(epoch < ep[i])
+            assert(t < ep[i])
 
         r_P, v_P = self._seq[i-1].eph(ep[i-1])
-        elapsed_seconds = (epoch - ep[i-1]) * DAY2SEC
+        elapsed_seconds = (t - ep[i-1]) * DAY2SEC
         assert(elapsed_seconds >= 0)
 
         if i < len(ep):
@@ -292,11 +300,17 @@ class _solar_orbiter_udp:
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
+        _, _, transfer_i, _, _, _ = ic2par(self._seq[0].eph(ep[0])[0], l[0].get_v1()[0], self._common_mu)
+        print("\tOutgoing Inclination:", transfer_i*RAD2DEG, "[deg]")
 
-        for pl, e, dv in zip(self._seq[1:-1], ep[1:-1], DVfb):
+        for pl, e, dv, leg in zip(self._seq[1:-1], ep[1:-1], DVfb, l[1:]):
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
+            eph = pl.eph(e)
+            transfer_v = leg.get_v1()[0]
+            _, _, transfer_i, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
+            print("\tOutgoing Inclination:", transfer_i*RAD2DEG, "[deg]")
 
         print("Final Fly-by: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
