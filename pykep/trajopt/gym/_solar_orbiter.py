@@ -11,7 +11,11 @@ from pykep.trajopt._lambert import lambert_problem_multirev
 
 class _solar_orbiter_udp:
     def __init__(
-        self, t0=[epoch(0), epoch(1000)], multi_objective=False, tof_encoding="direct", max_revs=0
+        self,
+        t0=[epoch(0), epoch(1000)],
+        multi_objective=False,
+        tof_encoding="direct",
+        max_revs=0,
     ):
         """
         Args:
@@ -129,8 +133,16 @@ class _solar_orbiter_udp:
         vi = v[0]
         for i in range(self._n_legs):
             lp = lambert_problem_multirev(
-                vi, lambert_problem(
-                    r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, self.max_revs))
+                vi,
+                lambert_problem(
+                    r[i],
+                    r[i + 1],
+                    T[i] * DAY2SEC,
+                    self._common_mu,
+                    False,
+                    self.max_revs,
+                ),
+            )
             l.append(lp)
             vi = lp.get_v2()[0]
         # 4 - we compute the various dVs needed at fly-bys to match incoming
@@ -177,26 +189,28 @@ class _solar_orbiter_udp:
             # project lambert leg, compute perihelion and aphelion
             eph = self._seq[l_i].eph(ep[l_i])
             transfer_v = lamberts[l_i].get_v1()[0]
-            transfer_a, transfer_e, _, _, _, E = ic2par(eph[0], transfer_v, self._common_mu)
-            transfer_period = 2*pi*sqrt(transfer_a**3 / self._common_mu)
+            transfer_a, transfer_e, _, _, _, E = ic2par(
+                eph[0], transfer_v, self._common_mu
+            )
+            transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu)
 
             # check whether extremum happens during the transfer
-            M = E - transfer_e*sin(E)
-            mean_angle_to_apoapsis = (pi-M)
+            M = E - transfer_e * sin(E)
+            mean_angle_to_apoapsis = pi - M
             if mean_angle_to_apoapsis < 0:
-                mean_angle_to_apoapsis += 2*pi
-            mean_angle_to_periapsis = (2*pi-M)
+                mean_angle_to_apoapsis += 2 * pi
+            mean_angle_to_periapsis = 2 * pi - M
 
             # update min and max sun distance
-            if lamberts[l_i].get_tof() > mean_angle_to_apoapsis*transfer_period:
+            if lamberts[l_i].get_tof() > mean_angle_to_apoapsis * transfer_period:
                 max_sun_distance = max(max_sun_distance, transfer_a * (1 + transfer_e))
 
-            if lamberts[l_i].get_tof() > mean_angle_to_periapsis*transfer_period:
+            if lamberts[l_i].get_tof() > mean_angle_to_periapsis * transfer_period:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         if self._multi_objective:
             return [
-                corrected_inclination + 2*min_sun_distance / AU,
+                corrected_inclination + 2 * min_sun_distance / AU,
                 T,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
@@ -205,7 +219,7 @@ class _solar_orbiter_udp:
             ]
         else:
             return [
-                corrected_inclination + 2*min_sun_distance / AU,
+                corrected_inclination + 2 * min_sun_distance / AU,
                 np.sum(DVfb) - 10,
                 self._min_start_mass - m_initial,
                 0.28 - min_sun_distance / AU,
@@ -245,24 +259,26 @@ class _solar_orbiter_udp:
     def eph(self, x, t):
         DVfb, lamberts, ep = self._compute_dvs(x)
         if t <= ep[0]:
-            raise ValueError("Given epoch " + str(t) + " is at or before launch date " + str(ep[0]))
+            raise ValueError(
+                "Given epoch " + str(t) + " is at or before launch date " + str(ep[0])
+            )
 
         i = 0
         while i < len(ep) and t >= ep[i]:
             # lambert leg i goes from planet i to planet i+1
             i += 1
 
-        assert(i >= 1 and i <= len(ep))
+        assert i >= 1 and i <= len(ep)
         if i < len(ep):
-            assert(t < ep[i])
+            assert t < ep[i]
 
-        r_P, v_P = self._seq[i-1].eph(ep[i-1])
-        elapsed_seconds = (t - ep[i-1]) * DAY2SEC
-        assert(elapsed_seconds >= 0)
+        r_P, v_P = self._seq[i - 1].eph(ep[i - 1])
+        elapsed_seconds = (t - ep[i - 1]) * DAY2SEC
+        assert elapsed_seconds >= 0
 
         if i < len(ep):
             # get velocity from start of lambert leg i
-            vel = lamberts[i-1].get_v1()[0]
+            vel = lamberts[i - 1].get_v1()[0]
         else:
             # get velocity after last flyby
             vel = fb_prop(
@@ -274,8 +290,7 @@ class _solar_orbiter_udp:
             )
 
         # propagate the lagrangian
-        r, v = propagate_lagrangian(
-                r_P, vel, elapsed_seconds, self._common_mu)
+        r, v = propagate_lagrangian(r_P, vel, elapsed_seconds, self._common_mu)
 
         return r, v
 
@@ -291,7 +306,9 @@ class _solar_orbiter_udp:
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         DVfb, l, _ = self._compute_dvs(x)  # TODO: reduce redundant computation of ep
-        Vinfx, Vinfy, Vinfz = [a - b for a, b in zip(l[0].get_v1()[0], self._seq[0].eph(ep[0])[1])]
+        Vinfx, Vinfy, Vinfz = [
+            a - b for a, b in zip(l[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
+        ]
 
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self._seq])
@@ -300,8 +317,10 @@ class _solar_orbiter_udp:
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
-        _, _, transfer_i, _, _, _ = ic2par(self._seq[0].eph(ep[0])[0], l[0].get_v1()[0], self._common_mu)
-        print("\tOutgoing Inclination:", transfer_i*RAD2DEG, "[deg]")
+        _, _, transfer_i, _, _, _ = ic2par(
+            self._seq[0].eph(ep[0])[0], l[0].get_v1()[0], self._common_mu
+        )
+        print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
 
         for pl, e, dv, leg in zip(self._seq[1:-1], ep[1:-1], DVfb, l[1:]):
             print("Fly-by: ", pl.name)
@@ -310,7 +329,7 @@ class _solar_orbiter_udp:
             eph = pl.eph(e)
             transfer_v = leg.get_v1()[0]
             _, _, transfer_i, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
-            print("\tOutgoing Inclination:", transfer_i*RAD2DEG, "[deg]")
+            print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
 
         print("Final Fly-by: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
@@ -362,7 +381,9 @@ class _solar_orbiter_udp:
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         _, l, _ = self._compute_dvs(x)
         for pl, e in zip(self._seq, ep):
-            plot_planet(pl, epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes)
+            plot_planet(
+                pl, epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes
+            )
         for lamb in l:
             plot_lambert(
                 lamb,
