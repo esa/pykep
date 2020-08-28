@@ -11,11 +11,11 @@ solution strategy, they can be also interfaced with any other optimization packa
 =========================================       =========       ================================================
 Name                                            Type            Description
 =========================================       =========       ================================================
-:class:`pykep.trajopt.mga`                      class           A Multiple Gravity Assist Trajectory with no deep space manouvres
-:class:`pykep.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space manouvre at each leg
+:class:`pykep.trajopt.mga`                      class           A Multiple Gravity Assist Trajectory with no deep space maneuvers
+:class:`pykep.trajopt.mga_1dsm`                 class           A multiple Gravity Assist Trajectory with one deep space maneuver at each leg
 :class:`pykep.trajopt.pl2pl_N_impulses`         class           A single leg transfer with N impulses
 :class:`pykep.trajopt.lt_margo`                 class           A cubesat mission to near Earth asteroids. Solar Electric Propulsion and Earth gravity are modelled.
-:class:`pykep.trajopt.mr_lt_nep`                class           A multiple randezvous low-thrust optimization problem (e.g. for asteroids in the main belt)
+:class:`pykep.trajopt.mr_lt_nep`                class           A multiple rendezvous low-thrust optimization problem (e.g. for asteroids in the main belt)
 :class:`pykep.trajopt.direct_pl2pl`             class           A low-thrust transfer between planets using a direct transcription.
 :class:`pykep.trajopt.indirect_pt2pt`           class           A low-thrust transfer between Cartesian states using an indirect transcription.
 :class:`pykep.trajopt.indirect_or2or`           class           A low-thrust transfer between orbits using an indirect transcription.
@@ -193,11 +193,11 @@ but the time of flights are encoded using the eta encoding technique.
 .. autoattribute:: pykep.trajopt.gym.em3imp
 
 This is a simple Earth Mars transfer that has the possibility to use multiple impulses. While the actual solution
-may not need more than a few, the problem is used to study the alpha encoding for manouvre timings and its evolvability.
+may not need more than a few, the problem is used to study the alpha encoding for maneuver timings and its evolvability.
 
 .. note::
 
-   The problem is rather simple and is used to study the multiple impulse transription (using alpha encoding)
+   The problem is rather simple and is used to study the multiple impulse transcription (using alpha encoding)
    comparing it to the folowing problems :class:`pykep.trajopt.gym.em5imp` and :class:`pykep.trajopt.gym.em7imp`
    having increasing number of impulses.
 
@@ -219,7 +219,7 @@ but the number of impulses is increased.
 
 .. autoattribute:: pykep.trajopt.gym.eve_mga1dsm
 
-This is an Earth - Venus - Earth transfer where 1 deep space manouvre is allowed at each leg. 
+This is an Earth - Venus - Earth transfer where 1 deep space maneuver is allowed at each leg. 
 
 .. note::
 
@@ -255,7 +255,7 @@ including the one necessary for the final orbit injection.
 .. note::
 
    A similar problem was also part of the ESA's `GTOP database <https://www.esa.int/gsp/ACT/projects/gtop/gtop.html>`_ 
-   with the same name, but different implementation details and mission definition. They should not be comapred.
+   with the same name, but different implementation details and mission definition. They should not be compared.
 
 ------------
 
@@ -264,13 +264,13 @@ including the one necessary for the final orbit injection.
     This represents a rendezvous mission to the comet 67P/Churyumov-Gerasimenko modelled as an MGA-1DSM transfer.
     The fly-by sequence selected (i.e. E-EMEE-C) is similar to the one planned for the spacecraft 
     `Rosetta <http://www.esa.int/Our_Activities/Space_Science/Rosetta>`_. The objective function considered is the
-    total mission delta V. No launcher model is employed and a final randezvous with the comet is included
+    total mission delta V. No launcher model is employed and a final rendezvous with the comet is included
     in the delta V computations.
 
 .. note::
 
    A similar problem was also part of the ESA's `GTOP database <https://www.esa.int/gsp/ACT/projects/gtop/gtop.html>`_ 
-   with the same name, but different implementation details and mission definition. They should not be comapred.
+   with the same name, but different implementation details and mission definition. They should not be compared.
 
 ------------
 
@@ -327,15 +327,15 @@ Time of flights are encoded using the alpha encoding.
 
     This class represents a rendezvous mission to Mercury modelled as an MGA-1DSM transfer. The selected fly-by sequence,
     E-VVMeMeMe-Me, and other parameters are inspired to the Messenger mission. We have only omitted the first Earth fly-by that
-    was used to correct for launcher performances, since we here do not make use of a luncher model.
+    was used to correct for launcher performances, since we here do not make use of a launcher model.
     As far as chemical propelled interplanetary trajectories go, this particular one is particularly complex and difficult
-    to design. The time of flights among successive Mercury fly-bys allow for multiple rvolutions and resonances, making
+    to design. The time of flights among successive Mercury fly-bys allow for multiple revolutions and resonances, making
     optimization techniques struggle to find the correct combination.
-    The amount of specialistic knowledge that needs to be used to obtain a successfull design is significant.
+    The amount of specialistic knowledge that needs to be used to obtain a successful design is significant.
     Finding a global optimization approach able to find a good trajectory in complete autonomy without making
-    use of additional problem knowledge is possible, but limiting the number of fitness call is difficult.
+    use of additional problem knowledge is possible, but limiting the number of fitness calls is difficult.
 
 .. note::
 
    A similar problem was also part of the ESA's `GTOP database <https://www.esa.int/gsp/ACT/projects/gtop/gtop.html>`_ 
-   with the same name, but different implementation details and mission definition. They should not be comapred.
+   with the same name, but different implementation details and mission definition. They should not be compared.

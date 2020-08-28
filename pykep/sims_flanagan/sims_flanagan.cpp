@@ -286,8 +286,8 @@ BOOST_PYTHON_MODULE(sims_flanagan)
         init<unsigned, double , double , optional<double >>(
             "pykep.sims_flanagan.leg_s(n_seg, c, alpha, tol = -10)\n\n"
             "- n_seg: number of segments\n"
-            "- c: constant in the SUndmann transformation dt = cr^(alpha ds)\n"
-            "- alpha: exponent in the SUndmann transformation dt = cr^(alpha ds)\n"
+            "- c: constant in the Sundmann transformation dt = cr^(alpha ds)\n"
+            "- alpha: exponent in the Sundmann transformation dt = cr^(alpha ds)\n"
             "- tol: log 10 tolerance set in the Taylor integration of the leg\n\n"
             "Example::\n\n"
             " from pykep import *\n"
@@ -346,7 +346,7 @@ BOOST_PYTHON_MODULE(sims_flanagan)
              "Example::\n\n"
              " tf = l.get_tf()")
         .def("get_throttles", &kep_toolbox::sims_flanagan::leg_s::get_throttles,
-             return_value_policy<copy_const_reference>(), "Reurns a tuple containing the leg's throttles\n\n"
+             return_value_policy<copy_const_reference>(), "Returns a tuple containing the leg's throttles\n\n"
                                                           "Example::\n\n"
                                                           " th = l.get_throttles()")
         .def("mismatch_constraints", &kep_toolbox::sims_flanagan::leg_s::compute_mismatch_con,

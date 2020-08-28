@@ -35,7 +35,7 @@ using namespace kep_toolbox;
 // In this test we read the historical two line elements of a GPS satellite
 // from the file sgp4_test.txt
 // These represent actual observations made on the satellite r and v.
-// We then compute r and v propagating the TLE of the previous pobservation
+// We then compute r and v propagating the TLE of the previous observation
 // up to the current observation and measure the error. The test passes if
 // the max error is less than 10 km on the position and 15 m/s/ on the velocity
 

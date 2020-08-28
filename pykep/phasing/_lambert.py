@@ -19,19 +19,19 @@ class lambert_metric(base):
 
     def __init__(self, epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax=0.3, Isp=3000, ms=1500):
         """
-pykep.phasing.lambert_metric(epoch_bounds,A1, A2, max_acc, multi_objective)
+        pykep.phasing.lambert_metric(epoch_bounds,A1, A2, max_acc, multi_objective)
 
-- epoch_bounds: a list containing the lower and upper bounds in mjd2000 for the launch and arrival epochs
-- A1: a planet
-- A2: a planet
-- Tmax: maximum spacecraft thrust [N]
-- Isp: specific impulse of the spacecarft propulsion system [s]
-- ms: spacecraft mass at dparture [kg]
-- single_objective: if True defines a single objectiove problem (only DV)
+        - epoch_bounds: a list containing the lower and upper bounds in mjd2000 for the launch and arrival epochs
+        - A1: a planet
+        - A2: a planet
+        - Tmax: maximum spacecraft thrust [N]
+        - Isp: specific impulse of the spacecarft propulsion system [s]
+        - ms: spacecraft mass at dparture [kg]
+        - single_objective: if True defines a single objectiove problem (only DV)
 
-Example::
+        Example::
 
-  lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500)
+        lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500)
         """
 
         # First we call the constructor of the base class telling
@@ -159,6 +159,6 @@ Example::
         return (rx, ry)
 
     def human_readable_extra(self):
-        retval = "\n\tAsetroid 1: " + self._ast1.name
-        retval = retval + "\n\tAsetroid 2: " + self._ast2.name
+        retval = "\n\tAsteroid 1: " + self._ast1.name
+        retval = retval + "\n\tAsteroid 2: " + self._ast2.name
         return retval

@@ -17,3 +17,4 @@ launchers = _launchers()
 from . import gym 
 from pykep.trajopt._indirect import indirect_or2or, indirect_pt2or, indirect_pt2pt, indirect_pt2pl
 from pykep.trajopt._direct import direct_pl2pl
+from pykep.trajopt._lambert import lambert_problem_multirev, lambert_problem_stochastic

@@ -17,7 +17,7 @@ Name                                            Type            Description
 :func:`pykep.propagate_taylor`                  function        propagates keplerian motion disturbed by a constant inertial thrust using Taylor integration method
 :func:`pykep.fb_con`                            function        returns violation of velocity and angular constraint during a fly-by
 :func:`pykep.fb_vel`                            function        returns the violation of the velocity and angular constraint during a fly-by in terms of one single DV
-:func:`pykep.fb_prop`                           function        propoagates forward a fly-by hyperbola returning the new inetrial velocity of a spacecraft after the planetary encounter
+:func:`pykep.fb_prop`                           function        propagates forward a fly-by hyperbola returning the new inertial velocity of a spacecraft after the planetary encounter
 :func:`pykep.barker`                            function        computes the (parabolic) time-of-flight from the Barker equation
 :func:`pykep.ic2par`                            function        Transforms r and v into the osculating orbital elements
 :func:`pykep.par2ic`                            function        Transforms osculating orbital elements into r and v

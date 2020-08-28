@@ -26,7 +26,7 @@ class _indirect_base(object):
             sc=self.sc, mu=mu, freemass=freemass, freetime=freetime, alpha=alpha, bound=bound
         )
 
-        # integration parametres
+        # integration parameters
         if all([(isinstance(par, float) or isinstance(par, int)) for par in [atol, rtol]]):
             self.atol = float(atol)
             self.rtol = float(rtol)
@@ -183,7 +183,7 @@ class indirect_pt2pt(_indirect_base):
             - tof (``list``): Transfer time bounds [days].
             - thrust (``float``, ``int``): Spacecraft maximum thrust [N].
             - isp (``float``, ``int``): Spacecraft specific impulse [s].
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
             - alpha (``float``, ``int``): Homotopy parameter (0 -quadratic control, 1 - mass optimal)
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
@@ -306,9 +306,9 @@ class indirect_or2or(_indirect_base):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
 
         """
 
@@ -455,9 +455,9 @@ class indirect_pt2or(_indirect_base):
             - rtol (``float``, ``int``): Relative integration solution tolerance.
             - tof (``list``): Transfer time bounds [days].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
 
         """
 
@@ -481,7 +481,7 @@ class indirect_pt2or(_indirect_base):
         # final eccentric anomaly
         Mf = z[1]
 
-        # intial costates
+        # initial costates
         l0 = np.asarray(z[2:])
 
         # set arrival Keplerian elements
@@ -577,7 +577,7 @@ class indirect_pt2or(_indirect_base):
 
 class indirect_pt2pl(_indirect_base):
     """
-    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet (randevouz).
+    Represents an indirect trajectory optimisation problem between a Cartesian state and a planet (rendezvous).
     Since the terminal conditions on the planet are not fixed, the transversality condition H=0 is deactivated
     and optimization of T happens via an explicit minimization of the objective (hybrid direct-indirect method)
 
@@ -615,9 +615,9 @@ class indirect_pt2pl(_indirect_base):
             - tof (``list``): Transfer time bounds [days].
             - t0 (``float``): launch epoch [MJD2000].
             - freetime (``bool``): Activates final time transversality condition. Allows final time to vary.
-            - alpha (``float``, ``int``): Homotopy parametre, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
+            - alpha (``float``, ``int``): Homotopy parameter, governing the degree to which the theoretical control law is intended to reduce propellant expenditure or energy.
             - bound (``bool``): Activates bounded control, in which the control throttle is bounded between 0 and 1, otherwise the control throttle is allowed to unbounded.
-            - mu (``float``): Gravitational parametre of primary body [m^3/s^2].
+            - mu (``float``): Gravitational parameter of primary body [m^3/s^2].
 
         """
 

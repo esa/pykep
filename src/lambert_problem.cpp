@@ -129,7 +129,7 @@ lambert_problem::lambert_problem(const array3D &r1, const array3D &r2, const dou
             }
         }
     }
-    // We exit this if clause with Mmax being the maximum number of revolutions
+    // We exit this if clause with Nmax being the maximum number of revolutions
     // for which there exists a solution. We crop it to m_multi_revs
     m_Nmax = std::min(m_multi_revs, m_Nmax);
 

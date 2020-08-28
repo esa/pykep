@@ -49,7 +49,7 @@ namespace kep_toolbox
  * \param[in] t propagation time (can be negative)
  * \param[in] mu central body gravitational parameter
  *
- * NOTE: The Taylor propagation was genrated using Jorba's tool available
+ * NOTE: The Taylor propagation was generated using Jorba's tool available
  * on-line
  *
  * @see http://www.maia.ub.es/~angel/taylor
