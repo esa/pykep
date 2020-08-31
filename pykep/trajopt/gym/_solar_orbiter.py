@@ -1,4 +1,5 @@
 from math import pi, sin, sqrt
+from typing import List
 
 import numpy as np
 
@@ -86,6 +87,11 @@ class _solar_orbiter_udp:
         if type(t0[1]) is not epoch:
             t0[1] = epoch(t0[1])
 
+        # 5 - Resonant Flybys mess up the lambert arcs. Watch out for planet sequences that could have them:
+        possibly_resonant: List[bool] = [False for i in range(len(seq) - 1)]
+        #for i in range(len(seq) - 1):
+        #    possibly_resonant.append(seq[i] == seq[i + 1])
+
         self._seq = seq
         self._t0 = t0
         self._tof = tof
@@ -97,6 +103,7 @@ class _solar_orbiter_udp:
         self._rp_ub = rp_ub
         self._safe_distance = safe_distance
         self._min_start_mass = min_start_mass
+        self._possibly_resonant = possibly_resonant
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
@@ -128,35 +135,75 @@ class _solar_orbiter_udp:
         v = [0] * len(self._seq)
         for i in range(len(self._seq)):
             r[i], v[i] = self._seq[i].eph(ep[i])
+
+        rf_index = np.cumsum(self._possibly_resonant)
         # 3 - we solve the lambert problems
         l = list()
+        DVdsm = list()
         vi = v[0]
         for i in range(self._n_legs):
+            ri = r[i]
+            Ti = T[i]
+            if self._possibly_resonant[i]:
+                # insert dummy DSM
+                flyby_param_index = (
+                    len(x) - 3 * sum(self._possibly_resonant) + (rf_index[i] - 1) * 3
+                )
+                tof_ratio, beta, r_p = x[flyby_param_index:flyby_param_index + 3] # TODO: adapt this to different encodings
+                if tof_ratio < 0 or tof_ratio >= 1:
+                    print(x, self.get_bounds())
+                    raise ValueError("Time of flight ratio of " + str(tof_ratio) + " is invalid.")
+
+                # perform flyby, then propagate lagrangian
+                vi = fb_prop(
+                    vi, ri, r_p * self._seq[i].radius, beta, self._seq[i].mu_self
+                )  # TODO: is seq[i] the correct planet?
+
+                # then propagate after flyby
+                ri, vi = propagate_lagrangian(
+                    ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
+                )
+
+                # adapt the remaining time for the lambert leg
+                Ti = Ti * (1 - tof_ratio)
+
+            # call lambert solver on remaining leg - either after flyby or DSM
             lp = lambert_problem_multirev(
                 vi,
                 lambert_problem(
-                    r[i],
-                    r[i + 1],
-                    T[i] * DAY2SEC,
-                    self._common_mu,
-                    False,
-                    self.max_revs,
+                    ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self.max_revs,
                 ),
             )
             l.append(lp)
+
+            if self._possibly_resonant[i]:
+                DVdsm.append(
+                    np.linalg.norm([a - b for a, b in zip(vi, lp.get_v1()[0])])
+                )
+
             vi = lp.get_v2()[0]
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
-        DVfb = list()
+        DV = list()
+        j = 0  # index of DSM
         for i in range(len(l) - 1):
-            vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
-            vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
-            DVfb.append(fb_vel(vin, vout, self._seq[i + 1]))
-        return (DVfb, l, ep)
+            if self._possibly_resonant[i]:
+                # use delta v of deep space maneuver
+                DV.append(DVdsm[j])
+                j += 1
+            else:
+                # use delta v of flyby
+                vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
+                vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
+                DV.append(fb_vel(vin, vout, self._seq[i + 1]))
+        return (DV, l, ep)
 
     # Objective function
     def fitness(self, x):
-        DVfb, lamberts, ep = self._compute_dvs(x)
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError("Expected " + str(len(self.get_bounds()[0])) + " parameters but got " + str(len(x)))
+
+        DV, lamberts, ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
@@ -212,7 +259,7 @@ class _solar_orbiter_udp:
             return [
                 corrected_inclination + 2 * min_sun_distance / AU,
                 T,
-                np.sum(DVfb) - 10,
+                np.sum(DV) - 10,
                 self._min_start_mass - m_initial,
                 0.28 - min_sun_distance / AU,
                 max_sun_distance / AU - 1.2,
@@ -220,7 +267,7 @@ class _solar_orbiter_udp:
         else:
             return [
                 corrected_inclination + 2 * min_sun_distance / AU,
-                np.sum(DVfb) - 10,
+                np.sum(DV) - 10,
                 self._min_start_mass - m_initial,
                 0.28 - min_sun_distance / AU,
                 max_sun_distance / AU - 1.2,
@@ -251,6 +298,23 @@ class _solar_orbiter_udp:
         pl = self._seq[-1]
         lb = lb + [-2 * pi, (pl.radius + self._safe_distance) / pl.radius]
         ub = ub + [2 * pi, 30]
+
+        # something of a hack: parameters for dummy DSMs of possibly resonant flybys
+        for i_fl in range(len(self._seq) - 1):
+            if self._possibly_resonant[i_fl]:
+                pl = self._seq[i_fl]
+                lb = lb + [0, -2 * pi, (pl.radius + self._safe_distance) / pl.radius]
+                ub = ub + [1, 2 * pi, 30]
+
+        if self._tof_encoding == "alpha":
+            assert len(lb) == 2 + n_legs + 2 + 3 * sum(self._possibly_resonant)
+        elif self._tof_encoding in ["direct", "eta"]:
+            assert len(lb) == 1 + n_legs + 2 + 3 * sum(self._possibly_resonant)
+        elif self._tof_encoding == "eta":
+            assert False
+
+        assert len(ub) == len(lb)
+
         return (lb, ub)
 
     def get_nic(self):
