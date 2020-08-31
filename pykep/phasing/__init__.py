@@ -37,7 +37,7 @@ Examples::
   DV = three_impulses_approx(pl1, pl2, ep1 = epoch(5500), ep2 = epoch(5700))
     """
 
-    from pykep.core._core import _three_impulses_approx
+    from pykep.core import _three_impulses_approx
     if ep2 is None:
         ep2 = ep1
     if ep1 is None:
