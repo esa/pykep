@@ -2,6 +2,7 @@
 # We import the protected symbols we use in this file
 from .core import _get_AU, _get_JR, _get_DAY2SEC, _get_DAY2YEAR, _get_DEG2RAD, _get_EARTH_VELOCITY, _get_EARTH_J2, _get_EARTH_RADIUS, _get_MU_EARTH, _get_G0, _get_MU_SUN, _get_RAD2DEG, _get_SEC2DAY
 from .core import _epoch_type
+from .core import _three_impulses_approx
 # We import symbols we use in this file
 from .core import epoch
 # We import all symbols in the core namespace (also the ones we do not use
