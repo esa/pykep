@@ -39,7 +39,19 @@ class lambert_problem_multirev:
         return self.lambert_problem.get_r2()  
 
     def get_mu(self):
-        return self.lambert_problem.get_mu()  
+        return self.lambert_problem.get_mu()
+
+    def get_x(self):
+        return [self.lambert_problem.get_x()[self.best_i]]
+
+    def get_iters(self):
+        return [self.lambert_problem.get_iters()[self.best_i]]
+
+    def get_tof(self):
+        return self.lambert_problem.get_tof()
+
+    def get_Nmax(self):
+        return self.lambert_problem.get_Nmax()
 
 class lambert_problem_stochastic:
     r"""
@@ -84,11 +96,22 @@ class lambert_problem_stochastic:
         return [self.lambert_problem.get_v2()[self.best_i]]
 
     def get_r1(self):
-        return self.lambert_problem.get_r1()  
+        return self.lambert_problem.get_r1()
 
     def get_r2(self):
-        return self.lambert_problem.get_r2()  
+        return self.lambert_problem.get_r2()
 
     def get_mu(self):
-        return self.lambert_problem.get_mu()  
-    
+        return self.lambert_problem.get_mu()
+
+    def get_x(self):
+        return [self.lambert_problem.get_x()[self.best_i]]
+
+    def get_iters(self):
+        return [self.lambert_problem.get_iters()[self.best_i]]
+
+    def get_tof(self):
+        return self.lambert_problem.get_tof()
+
+    def get_Nmax(self):
+        return self.lambert_problem.get_Nmax()
