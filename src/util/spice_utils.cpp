@@ -68,7 +68,7 @@ void load_spice_kernel(std::string file_name)
  * This function wraps the SPICE toolbox furnsh_c routine. You can find the original documentation
  * at http://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/furnsh_c.html
  *
- * You must call this function to load the corresponding kernel before calling the ephemerdies method of a
+ * You must call this function to load the corresponding kernel before calling the ephemerides method of a
  * kep_toolbox::planet_spice, otherwise an exception will be thrown by the spice library.
  *
  * \param[in] ep a kep_toolbox epoch

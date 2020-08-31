@@ -1,6 +1,6 @@
 def run_example6(n_seg=5):
     """
-    This example demonstrates the optimization of a multiple randezvous mission (low-thrust).
+    This example demonstrates the optimization of a multiple rendezvous mission (low-thrust).
     Such a mission (including more asteroids) is also called asteroid hopping
 
     The spacecraft performances, as well as the three asteroids visited, are taken from the GTOC7 problem description.

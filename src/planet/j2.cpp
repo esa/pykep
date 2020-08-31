@@ -164,7 +164,7 @@ void j2::set_ref_mjd2000(const double &when)
     m_ref_mjd2000 = when;
 }
 
-/// Extra informations streamed in humar readable format
+/// Extra informations streamed in human readable format
 std::string j2::human_readable_extra() const
 {
     std::ostringstream s;

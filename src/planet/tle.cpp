@@ -149,7 +149,7 @@ void tle::set_epoch(const unsigned int year, const double day)
     m_ref_mjd2000 = epoch(m_tle.Epoch().ToJulian(), epoch::JD).mjd2000();
 }
 
-/// Extra informations streamed in human readable format
+/// Extra information streamed in human readable format
 std::string tle::human_readable_extra() const
 {
     std::ostringstream s;

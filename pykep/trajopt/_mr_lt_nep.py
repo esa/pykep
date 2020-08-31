@@ -4,7 +4,7 @@ import pykep as pk
 class mr_lt_nep:
     """
     This class represents, as a global optimization problem (linearly constrained,
-    high diemensional), a Multiple Randezvous trajectory of a low-thrust spacecraft equipped
+    high dimensional), a Multiple Rendezvous trajectory of a low-thrust spacecraft equipped
     with a nuclear electric propulsion engine.
 
     - Izzo, D. et al., GTOC7 - Solution Returned by the ACT/ISAS team
@@ -40,7 +40,7 @@ class mr_lt_nep:
                     leg_tof=[1, 365.25 * 3], rest=[30., 365.25], mass=[800, 2000], Tmax=0.3,
                     Isp=3000., traj_tof=365.25 * 6, objective='mass', c_tol=1e-05)
 
-        * seq: list of pykep.planet defining the encounter sequence for the trajectoty (including the initial planet)
+        * seq: list of pykep.planet defining the encounter sequence for the trajectory (including the initial planet)
         * n_seg: list of integers containing the number of segments to be used for each leg (len(n_seg) = len(seq)-1)
         * t0: list of two pykep epochs defining the launch window
         * leg_tof: list of two floats defining the minimum and maximum time of each leg (days)
@@ -153,7 +153,7 @@ class mr_lt_nep:
         nseg = self.__nseg
         traj_tof = self.__max_total_time
         n = self.__num_legs
-        # We set the ptoblem box-bounds
+        # We set the problem box-bounds
         # set leg bounds
         lb_leg = [t0[0], leg_tof[0], rest[0], mass[0]] + [-1] * nseg * 3
         ub_leg = [t0[1] + traj_tof * n, leg_tof[1],

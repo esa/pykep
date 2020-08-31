@@ -141,7 +141,7 @@ def run_example4():
     print("Running Monotonic Basin Hopping ....")
     pop = algo.evolve(pop)
 
-    print("Is the solution found a feasible trajectory? " +
+    print("Has the solution found a feasible trajectory? " +
           str(prob.feasibility_x(pop.champion_x)))
     udp.udp_inner.plot(pop.champion_x)
 

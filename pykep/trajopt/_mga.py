@@ -1,12 +1,13 @@
 from pykep.core import epoch, lambert_problem, DAY2SEC, fb_vel, AU
 from pykep.planet import jpl_lp
+from pykep.trajopt._lambert import lambert_problem_multirev
 
 import numpy as np
 
 
 class mga:
     r"""
-    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space manouvres into an optimisation problem.
+    This class transcribes a Multiple Gravity Assist (MGA) trajectory with no deep space maneuvers into an optimisation problem.
     It may be used as a User Defined Problem (UDP) for the pygmo (http://esa.github.io/pygmo/) optimisation suite.
 
     - Izzo, Dario. "Global optimization and space pruning for spacecraft trajectory design." Spacecraft Trajectory Optimization 1 (2010): 178-200.
@@ -45,7 +46,8 @@ class mga:
                  tof_encoding='direct',
                  orbit_insertion=False,
                  e_target=None,
-                 rp_target=None
+                 rp_target=None,
+                 max_revs = 0
                  ):
         """mga(seq=[pk.planet.jpl_lp('earth'), pk.planet.jpl_lp('venus'), pk.planet.jpl_lp('earth')], t0=[0, 1000], tof=[100, 500], vinf=2.5, multi_objective=False, alpha_encoding=False, orbit_insertion=False, e_target=None, rp_target=None)
 
@@ -57,11 +59,12 @@ class mga:
               this contains a 2D list with the lower and upper bounds on the time-of-flight. If *tof_encoding*
               is 'eta' tof is a float defining the upper bound on the time-of-flight
             - vinf (``float``): the vinf provided at launch for free
-            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case, 'alpha' or `eta` encodings are reccomended
+            - multi_objective (``bool``): when True constructs a multiobjective problem (dv, T). In this case, 'alpha' or `eta` encodings are recommended
             - tof_encoding (``str``): one of 'direct', 'alpha' or 'eta'. Selects the encoding for the time of flights
             - orbit_insertion (``bool``): when True the arrival dv is computed as that required to acquire a target orbit defined by e_target and rp_target
             - e_target (``float``): if orbit_insertion is True this defines the target orbit eccentricity around the final planet
             - rp_target (``float``): if orbit_insertion is True this defines the target orbit pericenter around the final planet (in m)
+            - max_revs (``int``): maximal number of revolutions for lambert transfer
 
         Raises:
             - ValueError: if *planets* do not share the same central body (checked on the mu_central_body attribute)
@@ -122,6 +125,7 @@ class mga:
         # Private data members
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+        self.max_revs = max_revs
 
     def get_nobj(self):
         return self.multi_objective + 1
@@ -250,9 +254,13 @@ class mga:
             r[i], v[i] = self.seq[i].eph(ep[i])
         # 3 - we solve the lambert problems
         l = list()
+        vi = v[0]
         for i in range(self._n_legs):
-            l.append(lambert_problem(
-                r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, 0))
+            lp = lambert_problem_multirev(
+                vi, lambert_problem(
+                    r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, self.max_revs))
+            l.append(lp)
+            vi = lp.get_v2()[0]
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
         DVfb = list()
@@ -305,18 +313,18 @@ class mga:
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self.seq])
 
-        print("Departure: ", seq[0].name)
+        print("Departure: ", self.seq[0].name)
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
         print("\tHyperbolic velocity: ", DVlaunch_tot, "[m/s]")
         print("\tInitial DV: ", DVlaunch, "[m/s]")
 
-        for pl, e, dv in zip(seq[1:-1], ep[1:-1], DVfb):
+        for pl, e, dv in zip(self.seq[1:-1], ep[1:-1], DVfb):
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
 
-        print("Arrival: ", seq[-1].name)
+        print("Arrival: ", self.seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
         print("\tArrival DV: ", DVarrival, "[m/s]")

@@ -36,7 +36,7 @@
  * This function can be used to compute the orbital transfer cost between two generic keplerian orbits. It makes use
  * of a three impulse approximation, where the three impulses are used (in the best sequence) to match apogee, perigee
  * and inclination. The argument of perigee is not accounted for and thus the approximation is breaking down at high
- * eccentircities
+ * eccentricities
  *
  * \param[in] a1  departure semi-major axis
  * \param[in] e1  departure eccentricity
@@ -95,7 +95,7 @@ inline double three_impulses_approx(double a1, double e1, double i1, double W1, 
  * This function can be used to compute the orbital transfer cost between two generic keplerian orbits. It makes use
  * of a three impulse approximation, where the three impulses are used (in the best sequence) to match apogee, perigee
  * and inclination. The argument of perigee is not accounted for and thus the approximation is breaking down at high
- * eccentircities
+ * eccentricities
  *
  * \param[in] pl1 departure kep_toolbox::planet
  * \param[in] pl2 target kep_toolbox::planet
@@ -121,7 +121,7 @@ inline double three_impulses_approx(const planet::base &pl1, const planet::base 
  * This function can be used to compute the orbital transfer cost between two generic keplerian orbits. It makes use
  * of a three impulse approximation, where the three impulses are used (in the best sequence) to match apogee, perigee
  * and inclination. The argument of perigee is not accounted for and thus the approximation is breaking down at high
- * eccentircities
+ * eccentricities
  *
  * This overload allows to compute the orbital parameters at a given epoch, useful for non keplerian ephemerides as the
  * ones of

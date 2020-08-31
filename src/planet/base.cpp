@@ -145,7 +145,7 @@ double base::get_radius() const
 /// Getter for the planet safe-radius
 /**
  * Gets the safe-radius of the planet. This is intended to be the minimum distance
- * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constarint
+ * from the planet center that is safe ... It may be used, for example,  during fly-bys as a constraint
  * on the spacecraft trajectory
  *
  * @return const reference to safe_radius (SI Units)
@@ -164,7 +164,7 @@ std::string base::get_name() const
 /// Setter for the planet safe-radius
 /**
  * Sets the safe-radius of the planet. This is intended to be the minimum distance
- * from the planet center that is safe ... It is used, for example,  during fly-bys as a constarint
+ * from the planet center that is safe ... It is used, for example,  during fly-bys as a constraint
  * on the spacecraft trajectory
  *
  * \param[in] safe_radius Minimum allowed planetary distance (in planetary radius units)

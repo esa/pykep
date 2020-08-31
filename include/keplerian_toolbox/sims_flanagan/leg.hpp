@@ -315,7 +315,7 @@ public:
         t_f = e;
     }
 
-    /// Sets the leg high difelity state
+    /// Sets the leg high fidelity state
     /**
      * Activates the evaluation of the state-mismatches using a high-fidelity model. Resulting leg
      * is a real low-thrust trajectory (i.e. no impulses approximation)

@@ -193,7 +193,7 @@ class direct_pl2pl(_direct_base):
     """Represents a direct transcription transfer between solar system planets.
 
     This problem works by manipulating the starting epoch t0, the transfer time T the final mass mf and the controls 
-    The dicision vector is::
+    The decision vector is::
 
         z = [t0, T, mf, Vxi, Vyi, Vzi, Vxf, Vyf, Vzf, controls]
     """
