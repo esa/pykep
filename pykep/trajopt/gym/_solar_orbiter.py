@@ -3,7 +3,7 @@ from typing import List
 
 import numpy as np
 
-from pykep import AU, DAY2SEC, RAD2DEG, epoch, ic2par
+from pykep import AU, DAY2SEC, SEC2DAY, RAD2DEG, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
@@ -17,6 +17,7 @@ class _solar_orbiter_udp:
         multi_objective=False,
         tof_encoding="direct",
         max_revs=0,
+        dummy_DSMs=False,
     ):
         """
         Args:
@@ -88,9 +89,11 @@ class _solar_orbiter_udp:
             t0[1] = epoch(t0[1])
 
         # 5 - Resonant Flybys mess up the lambert arcs. Watch out for planet sequences that could have them:
-        possibly_resonant: List[bool] = [False for i in range(len(seq) - 1)]
-        #for i in range(len(seq) - 1):
-        #    possibly_resonant.append(seq[i] == seq[i + 1])
+        possibly_resonant: List[bool] = [
+            dummy_DSMs and seq[i] == seq[i + 1] for i in range(len(seq) - 1)
+        ]
+        if possibly_resonant[0]:
+            raise NotImplementedError("Resonant flybys not yet supported at launch.")
 
         self._seq = seq
         self._t0 = t0
@@ -109,13 +112,14 @@ class _solar_orbiter_udp:
         self._common_mu = seq[0].mu_central_body
 
     def _decode_tofs(self, x):
+        tail = 2 + 3 * sum(self._possibly_resonant)
         if self._tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
-            T = np.log(x[2:-2])
+            T = np.log(x[2:-tail])
             return T / sum(T) * x[1]
         elif self._tof_encoding == "direct":
             # decision vector is  [t0, T1, T2, T3, ... ]
-            return x[1:-2]
+            return x[1:-tail]
         elif self._tof_encoding == "eta":
             # decision vector is  [t0, n1, n2, n3, ... ]
             dt = self.tof
@@ -149,10 +153,13 @@ class _solar_orbiter_udp:
                 flyby_param_index = (
                     len(x) - 3 * sum(self._possibly_resonant) + (rf_index[i] - 1) * 3
                 )
-                tof_ratio, beta, r_p = x[flyby_param_index:flyby_param_index + 3] # TODO: adapt this to different encodings
-                if tof_ratio < 0 or tof_ratio >= 1:
-                    print(x, self.get_bounds())
-                    raise ValueError("Time of flight ratio of " + str(tof_ratio) + " is invalid.")
+                tof_ratio, beta, r_p = x[
+                    flyby_param_index : flyby_param_index + 3
+                ]  # TODO: adapt this to different encodings
+                if tof_ratio < 0 or tof_ratio > 1:
+                    raise ValueError(
+                        "Time of flight ratio of " + str(tof_ratio) + " is invalid."
+                    )
 
                 # perform flyby, then propagate lagrangian
                 vi = fb_prop(
@@ -166,6 +173,8 @@ class _solar_orbiter_udp:
 
                 # adapt the remaining time for the lambert leg
                 Ti = Ti * (1 - tof_ratio)
+                if Ti == 0:
+                    Ti = SEC2DAY
 
             # call lambert solver on remaining leg - either after flyby or DSM
             lp = lambert_problem_multirev(
@@ -184,6 +193,7 @@ class _solar_orbiter_udp:
             vi = lp.get_v2()[0]
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
+        assert len(DVdsm) == sum(self._possibly_resonant)
         DV = list()
         j = 0  # index of DSM
         for i in range(len(l) - 1):
@@ -201,10 +211,16 @@ class _solar_orbiter_udp:
     # Objective function
     def fitness(self, x):
         if len(x) != len(self.get_bounds()[0]):
-            raise ValueError("Expected " + str(len(self.get_bounds()[0])) + " parameters but got " + str(len(x)))
+            raise ValueError(
+                "Expected "
+                + str(len(self.get_bounds()[0]))
+                + " parameters but got "
+                + str(len(x))
+            )
 
         DV, lamberts, ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
+        rf_index = np.cumsum(self._possibly_resonant)
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
@@ -235,10 +251,33 @@ class _solar_orbiter_udp:
         for l_i in range(self._n_legs):
             # project lambert leg, compute perihelion and aphelion
             eph = self._seq[l_i].eph(ep[l_i])
+            ri = eph[0]
+            if self._possibly_resonant[l_i]:
+                fl_i = (
+                    len(x) - 3 * sum(self._possibly_resonant) + (rf_index[l_i] - 1) * 3
+                )
+                tof_ratio, beta, r_p = x[
+                    fl_i : fl_i + 3
+                ]  # TODO: adapt this to different encodings
+                if tof_ratio < 0 or tof_ratio > 1:
+                    raise ValueError(
+                        "Time of flight ratio of " + str(tof_ratio) + " is invalid."
+                    )
+
+                assert l_i > 0
+                vi = lamberts[l_i - 1].get_v2()[0]
+                # perform flyby, then propagate lagrangian
+                vi = fb_prop(
+                    vi, ri, r_p * self._seq[l_i].radius, beta, self._seq[l_i].mu_self
+                )  # TODO: is seq[l_i] the correct planet?
+
+                # then propagate after flyby
+                ri, vi = propagate_lagrangian(
+                    ri, vi, T[l_i] * DAY2SEC * tof_ratio, self._common_mu
+                )
+
             transfer_v = lamberts[l_i].get_v1()[0]
-            transfer_a, transfer_e, _, _, _, E = ic2par(
-                eph[0], transfer_v, self._common_mu
-            )
+            transfer_a, transfer_e, _, _, _, E = ic2par(ri, transfer_v, self._common_mu)
             transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu)
 
             # check whether extremum happens during the transfer
@@ -321,6 +360,14 @@ class _solar_orbiter_udp:
         return 4
 
     def eph(self, x, t):
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError(
+                "Expected chromosome of length "
+                + str(len(self.get_bounds()[0]))
+                + " but got length "
+                + str(len(x))
+            )
+
         DVfb, lamberts, ep = self._compute_dvs(x)
         if t <= ep[0]:
             raise ValueError(
@@ -337,10 +384,12 @@ class _solar_orbiter_udp:
             assert t < ep[i]
 
         r_P, v_P = self._seq[i - 1].eph(ep[i - 1])
+
         elapsed_seconds = (t - ep[i - 1]) * DAY2SEC
         assert elapsed_seconds >= 0
 
         if i < len(ep):
+            # TODO: adjust for DSM
             # get velocity from start of lambert leg i
             vel = lamberts[i - 1].get_v1()[0]
         else:
