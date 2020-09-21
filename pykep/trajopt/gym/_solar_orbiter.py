@@ -3,7 +3,7 @@ from typing import List
 
 import numpy as np
 
-from pykep import AU, DAY2SEC, SEC2DAY, RAD2DEG, epoch, ic2par
+from pykep import AU, DAY2SEC, RAD2DEG, SEC2DAY, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
@@ -45,6 +45,10 @@ class _solar_orbiter_udp:
             venus,
             venus,
             earth,
+            venus,
+            venus,
+            venus,
+            venus,
             venus,
         ]  # alternative: Launch-Venus-Venus-Earth-Venus
         tof = [[10, 600]] * (len(seq) - 1)
@@ -130,10 +134,14 @@ class _solar_orbiter_udp:
             return T
 
     def _compute_dvs(self, x):
+
         # 1 -  we 'decode' the times of flights and compute epochs (mjd2000)
         T = self._decode_tofs(x)  # [T1, T2 ...]
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+        if not len(ep) == len(self._seq):
+            print(len(ep), len(self._seq))
         # 2 - we compute the ephemerides
         r = [0] * len(self._seq)
         v = [0] * len(self._seq)
@@ -185,6 +193,7 @@ class _solar_orbiter_udp:
             )
             l.append(lp)
 
+            # add delta v of DSM
             if self._possibly_resonant[i]:
                 DVdsm.append(
                     np.linalg.norm([a - b for a, b in zip(vi, lp.get_v1()[0])])
@@ -206,6 +215,7 @@ class _solar_orbiter_udp:
                 vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
                 vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
                 DV.append(fb_vel(vin, vout, self._seq[i + 1]))
+        assert(j == len(DVdsm))
         return (DV, l, ep)
 
     # Objective function
@@ -369,6 +379,7 @@ class _solar_orbiter_udp:
             )
 
         DVfb, lamberts, ep = self._compute_dvs(x)
+        rf_index = np.cumsum(self._possibly_resonant)
         if t <= ep[0]:
             raise ValueError(
                 "Given epoch " + str(t) + " is at or before launch date " + str(ep[0])
@@ -389,9 +400,34 @@ class _solar_orbiter_udp:
         assert elapsed_seconds >= 0
 
         if i < len(ep):
-            # TODO: adjust for DSM
             # get velocity from start of lambert leg i
             vel = lamberts[i - 1].get_v1()[0]
+            if self._possibly_resonant[i - 1]:
+                # adjust for DSM
+                fl_i = (
+                    len(x)
+                    - 3 * sum(self._possibly_resonant)
+                    + (rf_index[i - 1] - 1) * 3
+                )
+                tof_ratio, beta, r_p = x[fl_i : fl_i + 3]
+                if tof_ratio < 0 or tof_ratio > 1:
+                    raise ValueError(
+                        "Time of flight ratio of " + str(tof_ratio) + " is invalid."
+                    )
+                seconds_until_DSM = tof_ratio * (ep[i] - ep[i - 1])
+
+                if elapsed_seconds < seconds_until_DSM:
+                    # we are still in the part before the DSM, not in the lambert arc
+                    assert i > 1  # resonances not yet supported at launch
+                    vel = lamberts[i - 2].get_v2()[0]
+                    # perform flyby, then propagate lagrangian
+                    vel = fb_prop(
+                        vel,
+                        v_P,
+                        r_p * self._seq[i - 1].radius,
+                        beta,
+                        self._seq[i - 1].mu_self,
+                    )
         else:
             # get velocity after last flyby
             vel = fb_prop(
@@ -489,7 +525,7 @@ class _solar_orbiter_udp:
             fig = plt.figure()
             axes = fig.gca(projection="3d")
 
-        T = self._decode_tofs(x[:-2])
+        T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         _, l, _ = self._compute_dvs(x)
