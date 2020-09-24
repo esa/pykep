@@ -1,5 +1,5 @@
 from math import pi, sin, sqrt
-from typing import List
+from typing import Any, List, Tuple
 
 import numpy as np
 
@@ -33,7 +33,7 @@ class _solar_orbiter_udp:
             venus,
             venus,
         ],
-    ):
+    ) -> None:
         """
         Args:
             - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objective
@@ -52,7 +52,7 @@ class _solar_orbiter_udp:
 
         # Redefining the planets as to change their safe radius. 350km was given as safe distance.
 
-          # alternative: Launch-Venus-Venus-Earth-Venus
+        # alternative: Launch-Venus-Venus-Earth-Venus
         for i in range(len(seq)):
             seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
         
@@ -120,7 +120,7 @@ class _solar_orbiter_udp:
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
 
-    def _decode_tofs(self, x):
+    def _decode_tofs(self, x: List[float]) -> List[float]:
         tail = 2 + 3 * sum(self._dummy_DSM)
         if self._tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
@@ -131,14 +131,17 @@ class _solar_orbiter_udp:
             return x[1:-tail]
         elif self._tof_encoding == "eta":
             # decision vector is  [t0, n1, n2, n3, ... ]
-            dt = self.tof
+            dt = self._tof
             T = [0] * self._n_legs
             T[0] = dt * x[1]
             for i in range(1, len(T)):
                 T[i] = (dt - sum(T[:i])) * x[i + 1]
             return T
+        else:
+            raise TypeError("tof encoding must be one of 'alpha', 'eta', 'direct'")
 
-    def _compute_dvs(self, x: List[float]):
+
+    def _compute_dvs(self, x: List[float]) -> Tuple[List[float], List[Any], List[float], List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]], List[float]]:
 
         # 1 -  we 'decode' the times of flights and compute epochs (mjd2000)
         T = self._decode_tofs(x)  # [T1, T2 ...]
@@ -148,8 +151,8 @@ class _solar_orbiter_udp:
         if not len(ep) == len(self._seq):
             print(len(ep), len(self._seq))
         # 2 - we compute the ephemerides
-        r = [0] * len(self._seq)
-        v = [0] * len(self._seq)
+        r = [(0,0,0)] * len(self._seq)
+        v = [(0,0,0)] * len(self._seq)
         for i in range(len(self._seq)):
             r[i], v[i] = self._seq[i].eph(ep[i])
 
@@ -157,13 +160,17 @@ class _solar_orbiter_udp:
         # 3 - we solve the lambert problems
         l = list()
         DVdsm = list()
+        ballistic_legs: List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]] = list()
+        ballistic_ep: List[float] = list()
+
         vi = v[0]
         for i in range(self._n_legs):
+            # start leg at planet i, before flyby
             ri = r[i]
             Ti = T[i]
 
             if np.any(np.isnan(vi)):
-                return ([np.nan], [], ep)
+                return ([np.nan], [], ep, [], [])
 
             if self._dummy_DSM[i]:
                 # insert dummy DSM
@@ -178,16 +185,18 @@ class _solar_orbiter_udp:
                         "Time of flight ratio of " + str(tof_ratio) + " is invalid."
                     )
 
-                # perform flyby
+                # perform unpowered flyby
                 vi = fb_prop(
                     vi, ri, r_p * self._seq[i].radius, beta, self._seq[i].mu_self
                 )  # TODO: is seq[i] the correct planet?
+                ballistic_legs.append((ri, vi))
+                ballistic_ep.append(ep[i])
 
                 if np.any(np.isnan(vi)):
-                    return ([np.nan], [], ep)
+                    return ([np.nan], [], ep, [], [])
 
                 if tof_ratio > 0:
-                    # then propagate after flyby
+                    # propagate after flyby
                     ri, vi = propagate_lagrangian(
                         ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
                     )
@@ -213,13 +222,20 @@ class _solar_orbiter_udp:
                 )
 
             vi = lp.get_v2()[0]
+            ep_start_lambert = ep[i+1] - Ti
+            # ri is now either the position of planet i or the position of the DSM
+            ballistic_legs.append((ri, lp.get_v1()[0]))
+            ballistic_ep.append(ep_start_lambert)
+
+        # TODO: add ballistic leg of final flyby
+
         # 4 - we compute the various dVs needed at fly-bys to match incoming
-        # and outcoming
+        # and outcoming, also delta v of deep space maneuvers
         assert len(DVdsm) == sum(self._dummy_DSM)
         DV = list()
         j = 0  # index of DSM
         for i in range(len(l) - 1):
-            if self._dummy_DSM[i+1]: # TODO: make damn sure the indices are right in this one
+            if self._dummy_DSM[i + 1]:
                 # use delta v of deep space maneuver
                 DV.append(DVdsm[j])
                 j += 1
@@ -229,7 +245,9 @@ class _solar_orbiter_udp:
                 vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
                 DV.append(fb_vel(vin, vout, self._seq[i + 1]))
         assert(j == len(DVdsm))
-        return (DV, l, ep)
+        assert(len(ballistic_legs) == sum(self._dummy_DSM) + len(l))
+        assert(len(ballistic_ep) == len(ballistic_legs))
+        return (DV, l, ep, ballistic_legs, ballistic_ep)
 
     # Objective function
     def fitness(self, x):
@@ -241,7 +259,7 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        DV, lamberts, ep = self._compute_dvs(x)
+        DV, lamberts, ep, _, _ = self._compute_dvs(x)
         T = self._decode_tofs(x)
         rf_index = np.cumsum(self._dummy_DSM)
 
@@ -396,7 +414,7 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        DVfb, lamberts, ep = self._compute_dvs(x)
+        DVfb, lamberts, ep, _, _ = self._compute_dvs(x)
         rf_index = np.cumsum(self._dummy_DSM)
         if t <= ep[0]:
             raise ValueError(
@@ -472,7 +490,7 @@ class _solar_orbiter_udp:
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        DVfb, l, _ = self._compute_dvs(x)  # TODO: reduce redundant computation of ep
+        DVfb, l, _, _, _ = self._compute_dvs(x)  # TODO: reduce redundant computation of ep
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(l[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
         ]
@@ -546,7 +564,7 @@ class _solar_orbiter_udp:
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        _, l, _ = self._compute_dvs(x)
+        _, l, _, _, _ = self._compute_dvs(x)
         for pl, e in zip(self._seq, ep):
             plot_planet(
                 pl, epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes
