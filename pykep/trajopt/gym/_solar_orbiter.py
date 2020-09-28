@@ -270,9 +270,8 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        DV, lamberts, ep, _, _ = self._compute_dvs(x)
+        DV, lamberts, ep, b_legs, b_ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
-        rf_index = np.cumsum(self._dummy_DSM)
 
         if np.any(np.isnan(DV)):
             return [np.inf] + [T] * self._multi_objective + [np.nan] * 4
@@ -288,13 +287,7 @@ class _solar_orbiter_udp:
 
         # compute final flyby and resulting trajectory
         eph = self._seq[-1].eph(ep[-1])
-        v_out = fb_prop(
-            lamberts[-1].get_v2()[0],
-            eph[1],
-            x[-1] * self._seq[-1].radius,
-            x[-2],
-            self._seq[-1].mu_self,
-        )
+        v_out = b_legs[-1][1]
         a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
         final_perihelion = a * (1 - e)
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
@@ -304,38 +297,18 @@ class _solar_orbiter_udp:
         min_sun_distance = final_perihelion
         max_sun_distance = AU
 
-        for l_i in range(self._n_legs):
+        for l_i in range(len(b_legs)-1):
             # project lambert leg, compute perihelion and aphelion
-            eph = self._seq[l_i].eph(ep[l_i])
-            ri = eph[0]
-            if self._dummy_DSM[l_i]:
-                fl_i = len(x) - 3 * sum(self._dummy_DSM) + (rf_index[l_i] - 1) * 3
-                tof_ratio, beta, r_p = x[
-                    fl_i : fl_i + 3
-                ]  # TODO: adapt this to different encodings
-                if tof_ratio < 0 or tof_ratio > 1:
-                    raise ValueError(
-                        "Time of flight ratio of " + str(tof_ratio) + " is invalid."
-                    )
+            ri, vi = b_legs[l_i]
 
-                assert l_i > 0
-                vi = lamberts[l_i - 1].get_v2()[0]
-                # perform flyby, then propagate lagrangian
-                vi = fb_prop(
-                    vi, ri, r_p * self._seq[l_i].radius, beta, self._seq[l_i].mu_self
-                )  # TODO: is seq[l_i] the correct planet?
+            # check transfer points for min and max sun distance
+            min_sun_distance = min(min_sun_distance, np.linalg.norm(ri))
+            max_sun_distance = max(max_sun_distance, np.linalg.norm(ri))
 
-                # then propagate after flyby
-                if tof_ratio > 0:
-                    ri, vi = propagate_lagrangian(
-                        ri, vi, T[l_i] * DAY2SEC * tof_ratio, self._common_mu
-                    )
-
-            transfer_v = lamberts[l_i].get_v1()[0]
-            transfer_a, transfer_e, _, _, _, E = ic2par(ri, transfer_v, self._common_mu)
+            transfer_a, transfer_e, _, _, _, E = ic2par(ri, vi, self._common_mu)
             transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu)
 
-            # check whether extremum happens during the transfer
+            # check whether extremum happens during this leg
             M = E - transfer_e * sin(E)
             mean_angle_to_apoapsis = pi - M
             if mean_angle_to_apoapsis < 0:
@@ -343,29 +316,20 @@ class _solar_orbiter_udp:
             mean_angle_to_periapsis = 2 * pi - M
 
             # update min and max sun distance
-            if lamberts[l_i].get_tof() > mean_angle_to_apoapsis * transfer_period:
+            if b_ep[l_i] - b_ep[l_i + 1] > mean_angle_to_apoapsis * transfer_period:
                 max_sun_distance = max(max_sun_distance, transfer_a * (1 + transfer_e))
 
-            if lamberts[l_i].get_tof() > mean_angle_to_periapsis * transfer_period:
+            if b_ep[l_i] - b_ep[l_i + 1] > mean_angle_to_periapsis * transfer_period:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
-        if self._multi_objective:
-            return [
-                corrected_inclination + 2 * min_sun_distance / AU,
-                T,
-                np.sum(DV) - 10,
-                self._min_start_mass - m_initial,
-                0.28 - min_sun_distance / AU,
-                max_sun_distance / AU - 1.2,
-            ]
-        else:
-            return [
-                corrected_inclination + 2 * min_sun_distance / AU,
-                np.sum(DV) - 10,
-                self._min_start_mass - m_initial,
-                0.28 - min_sun_distance / AU,
-                max_sun_distance / AU - 1.2,
-            ]
+        return (
+            [corrected_inclination + 2 * min_sun_distance / AU]
+            + [T] * self._multi_objective
+            + [np.sum(DV) - 10]
+            + [self._min_start_mass - m_initial]
+            + [0.28 - min_sun_distance / AU]
+            + [max_sun_distance / AU - 1.2]
+        )
 
     def get_nobj(self):
         return self._multi_objective + 1
