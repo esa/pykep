@@ -24,7 +24,7 @@ class _solar_orbiter_udp:
         tof_encoding="direct",
         max_revs=0,
         dummy_DSMs=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, ],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus,],
     ) -> None:
         """
         Args:
@@ -203,7 +203,7 @@ class _solar_orbiter_udp:
                             ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
                         )
                     except RuntimeError as e:
-                        print(e.what())
+                        print(e.args)
                         return ([np.nan], [], ep, [], [])
 
                 # adapt the remaining time for the lambert leg
@@ -274,6 +274,12 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
+        lower_bound, upper_bound = self.get_bounds()
+
+        for i in range(len(x)):
+            if x[i] < lower_bound[i] or x[i] > upper_bound[i]:
+                return [np.inf] + [np.inf] * self._multi_objective + [np.nan] * 4
+
         DV, lamberts, ep, b_legs, b_ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
 
@@ -301,7 +307,7 @@ class _solar_orbiter_udp:
         min_sun_distance = final_perihelion
         max_sun_distance = AU
 
-        for l_i in range(len(b_legs)-1):
+        for l_i in range(len(b_legs) - 1):
             # project lambert leg, compute perihelion and aphelion
             ri, vi = b_legs[l_i]
 
