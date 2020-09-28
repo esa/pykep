@@ -24,7 +24,7 @@ class _solar_orbiter_udp:
         tof_encoding="direct",
         max_revs=0,
         dummy_DSMs=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus,],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, ],
     ) -> None:
         """
         Args:
@@ -198,9 +198,13 @@ class _solar_orbiter_udp:
 
                 if tof_ratio > 0:
                     # propagate after flyby
-                    ri, vi = propagate_lagrangian(
-                        ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
-                    )
+                    try:
+                        ri, vi = propagate_lagrangian(
+                            ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
+                        )
+                    except RuntimeError as e:
+                        print(e.what())
+                        return ([np.nan], [], ep, [], [])
 
                 # adapt the remaining time for the lambert leg
                 Ti = Ti * (1 - tof_ratio)
