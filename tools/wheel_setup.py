@@ -11,7 +11,7 @@ URL = 'https://github.com/esa/pykep'
 AUTHOR = 'Dario Izzo'
 AUTHOR_EMAIL = 'dario.izzo@gmail.com'
 LICENSE = 'GPLv3+/LGPL3+'
-INSTALL_REQUIRES = ['numpy', 'scipy', 'matplotlib']
+INSTALL_REQUIRES = ['numpy', 'scipy', 'matplotlib', 'pygmo', 'sklearn', 'numba']
 CLASSIFIERS = [
     # How mature is this project? Common values are
     #   3 - Alpha
@@ -43,8 +43,10 @@ class BinaryDistribution(Distribution):
         return True
 
 
-# Setup the list of external dlls.
+# Setup the list of external dlls and other data files.
 import os.path
+
+PYKEP_UTIL_FILES = ['gravity_models/*/*txt']
 if os.name == 'nt':
     mingw_wheel_libs = 'mingw_wheel_libs_python{}{}.txt'.format(
         sys.version_info[0], sys.version_info[1])
@@ -54,14 +56,14 @@ if os.name == 'nt':
           'pykep.core': ['core.pyd'] + DLL_LIST,
           'pykep.planet': ['planet.pyd'],
           'pykep.sims_flanagan': ['sims_flanagan.pyd'],
-          'pykep.util': ['util.pyd']
+          'pykep.util': ['util.pyd'] + PYKEP_UTIL_FILES
       }
 else:
     PACKAGE_DATA = {
           'pykep.core': ['core.so'],
           'pykep.planet': ['planet.so'],
           'pykep.sims_flanagan': ['sims_flanagan.so'],
-          'pykep.util': ['util.so']
+          'pykep.util': ['util.so'] + PYKEP_UTIL_FILES
       }
 
 setup(name=NAME,
