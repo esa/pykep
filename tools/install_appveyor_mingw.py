@@ -184,5 +184,5 @@ if is_python_build or is_python_lint:
         # Run Python lint checks
         run_command(pip + ' install pylint')
         # Running pylint and erroring only on actual errors. Excluding
-        run_command(pylint + ' pykep -E')
+        run_command(pylint + ' pykep -E --unsafe-load-any-extension=y')
 
