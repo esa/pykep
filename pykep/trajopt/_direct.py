@@ -24,6 +24,26 @@ class _direct_base(object):
         self.leg.set_mu(mu)
         self.leg.high_fidelity = hf
 
+    def fitness(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
+    def _plot_traj(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
+    def _get_controls(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
+    def _pretty(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
     def get_nobj(self):
         return 1
 

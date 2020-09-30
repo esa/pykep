@@ -34,6 +34,21 @@ class _indirect_base(object):
             raise TypeError(
                 "Both atol and rtol must be an instance of either float or int.")
 
+    def fitness(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
+    def _plot_traj(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
+    def _pretty(self):
+        """This function will be redefined in the inheriting classes
+        """
+        pass
+
     def get_nobj(self):
         return 1
 

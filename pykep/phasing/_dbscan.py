@@ -1,6 +1,6 @@
 class dbscan():
     """
-    This class can be used to locate areas of the interplanetsry space that are 'dense' at one epoch.
+    This class can be used to locate areas of the interplanetary space that are 'dense' at one epoch.
     Essentially, it locates planet clusters
     """
     from pykep.core import AU, EARTH_VELOCITY
@@ -28,6 +28,7 @@ class dbscan():
         self.n_clusters = None
         self.members = None
         self.core_members = None
+        self._scaling = None
 
     def _orbital_metric(self, r, v):
         from pykep.core import DAY2SEC
@@ -56,20 +57,20 @@ class dbscan():
         if metric == 'euclidean':
             self._X = [
                 [elem for tupl in p.eph(self._epoch) for elem in tupl] for p in self._asteroids]
-            scaling_vector = [ref_r] * 3
-            scaling_vector += [ref_v] * 3
+            self._scaling = [ref_r] * 3
+            self._scaling += [ref_v] * 3
         elif metric == 'euclidean_r':
             self._X = [list(p.eph(self._epoch)[0]) for p in self._asteroids]
-            scaling_vector = [ref_r] * 3
+            self._scaling = [ref_r] * 3
         elif metric == 'orbital':
             self._T = T
             self._X = [self._orbital_metric(
                 *p.eph(self._epoch)) for p in self._asteroids]
-            scaling_vector = [1.] * 6  # no scaling
+            self._scaling = [1.] * 6  # no scaling
         self._X = numpy.array(self._X)
 
-        scaling_vector = numpy.array(scaling_vector)
-        self._X = self._X / scaling_vector[None, :]
+        self._scaling = numpy.array(self._scaling)
+        self._X = self._X / self._scaling[None, :]
 
         self._db = DBSCAN(eps=eps, min_samples=min_samples).fit(self._X)
         self._core_samples = self._db.core_sample_indices_
@@ -88,7 +89,7 @@ class dbscan():
             self.core_members[int(label)] = [
                 index for index in self._core_samples if self.labels[index] == label]
 
-        self._X = self._X * scaling_vector[None, :]
+        self._X = self._X * self._scaling[None, :]
 
     def pretty(self):
         """Prints the cluster lists."""
@@ -149,7 +150,7 @@ class dbscan():
             return
         if cluster_id >= self.n_clusters or cluster_id < 0:
             print(
-                "cluster_id should be larger then 0 and smaller than the number of clusters (-1)")
+                "cluster_id should be larger than 0 and smaller than the number of clusters (-1)")
             return
         if len(epochs) != 9:
             print("The epochs requested must be exactly 9 as to assemble 3x3 subplots")

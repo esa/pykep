@@ -1,5 +1,5 @@
 from pygmo.problem._base import base
-from pygmo.util import hypervolume
+from pygmo import hypervolume
 from pykep.planet import gtoc7
 from pykep.orbit_plots import plot_planet, plot_lambert
 from pykep.core import lambert_problem, DAY2SEC, epoch, AU, damon
