@@ -29,17 +29,18 @@ class _direct_base(object):
         """
         pass
 
-    def _plot_traj(self):
+    def _plot_traj(self, z, axis, units):
         """This function will be redefined in the inheriting classes
         """
         pass
 
-    def _get_controls(self):
+    @staticmethod
+    def _get_controls(z):
         """This function will be redefined in the inheriting classes
         """
         pass
 
-    def _pretty(self):
+    def _pretty(self, z):
         """This function will be redefined in the inheriting classes
         """
         pass
