@@ -28,6 +28,7 @@ class pl2pl_N_impulses(object):
                  N_max=3,
                  tof=[20., 400.],
                  vinf=[0., 4.],
+		 dsm=[[0.,4.],[0.,4.]],
                  phase_free=True,
                  multi_objective=False,
                  t0=None
