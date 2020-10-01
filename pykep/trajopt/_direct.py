@@ -24,7 +24,7 @@ class _direct_base(object):
         self.leg.set_mu(mu)
         self.leg.high_fidelity = hf
 
-    def fitness(self):
+    def fitness(self, z):
         """This function will be redefined in the inheriting classes
         """
         pass
