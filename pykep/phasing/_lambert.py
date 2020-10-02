@@ -1,4 +1,4 @@
-from pygmo.problem._base import base
+from pygmo.problem._base import base # pylint: disable=import-error
 from pygmo import hypervolume
 from pykep.planet import gtoc7
 from pykep.orbit_plots import plot_planet, plot_lambert
