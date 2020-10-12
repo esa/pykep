@@ -374,7 +374,9 @@ class _solar_orbiter_udp:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         return (
-            [corrected_inclination + 2 * min_sun_distance / AU]
+            [
+                corrected_inclination + 2 * min_sun_distance / AU
+            ]  # TODO: consider changing this fitness to the one from ESOC
             + [T] * self._multi_objective
             + [np.sum(DV) - 10]
             + [self._min_start_mass - m_initial]
@@ -490,41 +492,63 @@ class _solar_orbiter_udp:
         Prints human readable information on the trajectory represented by the decision vector x
         """
         T = self._decode_tofs(x)
-        DV, l, ep, b_legs, b_ep = self._compute_dvs(x)
+        DV, lambert_legs, ep, b_legs, b_ep = self._compute_dvs(x)
         b_i = 0
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(b_legs[b_i][1], self._seq[0].eph(ep[0])[1])
         ]
+
+        if self._tof_encoding == "alpha":
+            tof_offset = 2 + self._n_legs
+        elif self._tof_encoding in ["direct", "eta"]:
+            tof_offset = 1 + self._n_legs
+        else:
+            assert False
+
+        lambert_indices = [0] * self._n_legs
+        if self._evolve_rev_count:
+            lambert_indices = [
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) : -2]
+            ]
+        else:
+            # we assume that the lambert_problem_multirev class is used
+            lambert_indices = [lam.best_i for lam in lambert_legs]
+        assert len(lambert_indices) == self._n_legs
 
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self._seq])
 
         print("Departure: ", self._seq[0].name)
         print("\tEpoch: ", ep[0], " [mjd2000]")
-        print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
+        print("\tSpacecraft velocity: ", b_legs[0][1], "[m/s]")
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
         _, _, transfer_i, _, _, _ = ic2par(*(b_legs[0]), self._common_mu)
         print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
-        b_i += 1 + self._dummy_DSM[0]  # increasing leg index by one, as the launch contains no DSM
+        b_i += (
+            1 + self._dummy_DSM[0]
+        )  # increasing leg index by one, as the launch contains no DSM
 
-        assert(len(DV) == len(self._seq)-2)
-        for i in range(1, len(self._seq)-1):
+        assert len(DV) == len(self._seq) - 2
+        for i in range(1, len(self._seq) - 1):
             pl = self._seq[i]
             e = ep[i]
-            dv = DV[i-1]
-            leg = b_legs[b_i] # this index still looks wrong
+            dv = DV[i - 1]
+            leg = b_legs[b_i]
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
+            if self._dummy_DSM[i]:
+                print("\tDSM at ", b_ep[b_i + 1])
             print("\tDV: ", dv, "[m/s]")
             eph = pl.eph(e)
-            assert np.linalg.norm([a-b for a, b in zip(leg[0], eph[0])]) < 0.01
+            assert np.linalg.norm([a - b for a, b in zip(leg[0], eph[0])]) < 0.01
             _, _, transfer_i, _, _, _ = ic2par(eph[0], leg[1], self._common_mu)
             print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+            print("\tNumber of Revolutions:", int((lambert_indices[i] + 1) / 2))
             b_i += 1 + self._dummy_DSM[i]
 
         print("Final Fly-by: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
-        print("\tSpacecraft velocity: ", l[-1].get_v2()[0], "[m/s]")
+        print("\tSpacecraft velocity: ", lambert_legs[-1].get_v2()[0], "[m/s]")
         print("\tBeta: ", x[-2])
         print("\tr_p: ", x[-1])
 
