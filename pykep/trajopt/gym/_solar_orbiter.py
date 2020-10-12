@@ -22,9 +22,20 @@ class _solar_orbiter_udp:
         t0=[epoch(0), epoch(1000)],
         multi_objective=False,
         tof_encoding="direct",
-        max_revs=0,
-        dummy_DSMs=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus,],
+        max_revs: int = 0,
+        dummy_DSMs: bool = False,
+        evolve_rev_count=False,
+        seq=[
+            earth,
+            venus,
+            venus,
+            earth,
+            venus,
+            venus,
+            venus,
+            venus,
+            venus,
+        ],
     ) -> None:
         """
         Args:
@@ -32,10 +43,12 @@ class _solar_orbiter_udp:
             - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selects the encoding for the time of flights
             - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
             - max_revs (``int``): maximal number of revolutions for lambert transfer
+            - dummy_DSMs (``bool``): whether to add deep space maneuvers after flyby
+            - evolve_rev_count (``bool``): whether to treat the number of revolutions as a evolvable parameter in each leg
+            - seq (``list``)
 
         """
 
-        multi_objective = False
         eta_lb = 0.1
         eta_ub = 0.9
         rp_ub = 30
@@ -108,12 +121,13 @@ class _solar_orbiter_udp:
         self._safe_distance = safe_distance
         self._min_start_mass = min_start_mass
         self._dummy_DSM = possibly_resonant
+        self._evolve_rev_count = evolve_rev_count
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
 
     def _decode_tofs(self, x: List[float]) -> List[float]:
-        tail = 2 + 3 * sum(self._dummy_DSM)
+        tail = 3 * sum(self._dummy_DSM) + self._n_legs * self._evolve_rev_count + 2
         if self._tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
             T = np.log(x[2:-tail])
@@ -155,6 +169,20 @@ class _solar_orbiter_udp:
         for i in range(len(self._seq)):
             r[i], v[i] = self._seq[i].eph(ep[i])
 
+        if self._tof_encoding == "alpha":
+            tof_offset = 2 + self._n_legs
+        elif self._tof_encoding in ["direct", "eta"]:
+            tof_offset = 1 + self._n_legs
+        else:
+            assert False
+
+        lambert_indices = [0] * self._n_legs
+        if self._evolve_rev_count:
+            lambert_indices = [
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) : -2]
+            ]
+        assert len(lambert_indices) == self._n_legs
+
         rf_index = np.cumsum(self._dummy_DSM)
         # 3 - we solve the lambert problems
         l = list()
@@ -175,9 +203,11 @@ class _solar_orbiter_udp:
 
             if self._dummy_DSM[i]:
                 # insert dummy DSM
-                flyby_param_index = (
-                    len(x) - 3 * sum(self._dummy_DSM) + (rf_index[i] - 1) * 3
-                )
+
+                flyby_param_index = tof_offset + (rf_index[i] - 1) * 3
+
+                assert flyby_param_index + 5 <= len(x)
+
                 tof_ratio, beta, r_p = x[
                     flyby_param_index : flyby_param_index + 3
                 ]  # TODO: adapt this to different encodings
@@ -185,6 +215,10 @@ class _solar_orbiter_udp:
                     raise ValueError(
                         "Time of flight ratio of " + str(tof_ratio) + " is invalid."
                     )
+                if beta < -2 * pi or beta > 2 * pi:
+                    raise ValueError("Invalid flyby angle beta: " + str(beta))
+                if r_p < self._seq[i].safe_radius / self._seq[i].radius:
+                    raise ValueError("Invalid flyby periapsis: " + str(r_p))
 
                 # perform unpowered flyby
                 vi = fb_prop(
@@ -212,30 +246,31 @@ class _solar_orbiter_udp:
                     Ti = SEC2DAY
 
             # call lambert solver on remaining leg - either after flyby or DSM
-            lp = lambert_problem_multirev(
-                vi,
-                lambert_problem(
-                    ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self.max_revs,
-                ),
+            lp = lambert_problem(
+                ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self.max_revs
             )
+            if not self._evolve_rev_count:
+                lp = lambert_problem_multirev(vi, lp)
             l.append(lp)
 
             # add delta v of DSM
             if self._dummy_DSM[i]:
                 DVdsm.append(
-                    np.linalg.norm([a - b for a, b in zip(vi, lp.get_v1()[0])])
+                    np.linalg.norm(
+                        [a - b for a, b in zip(vi, lp.get_v1()[lambert_indices[i]])]
+                    )
                 )
 
-            vi = lp.get_v2()[0]
+            vi = lp.get_v2()[lambert_indices[i]]
             ep_start_lambert = ep[i + 1] - Ti
             # ri is now either the position of planet i or the position of the DSM
-            ballistic_legs.append((ri, lp.get_v1()[0]))
+            ballistic_legs.append((ri, lp.get_v1()[lambert_indices[i]]))
             ballistic_ep.append(ep_start_lambert)
 
         # add ballistic leg after final flyby
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(
-            l[-1].get_v2()[0],
+            l[-1].get_v2()[lambert_indices[-1]],
             eph[1],
             x[-1] * self._seq[-1].radius,
             x[-2],
@@ -256,12 +291,18 @@ class _solar_orbiter_udp:
                 j += 1
             else:
                 # use delta v of flyby
-                vin = [a - b for a, b in zip(l[i].get_v2()[0], v[i + 1])]
-                vout = [a - b for a, b in zip(l[i + 1].get_v1()[0], v[i + 1])]
+                vin = [
+                    a - b for a, b in zip(l[i].get_v2()[lambert_indices[i]], v[i + 1])
+                ]
+                vout = [
+                    a - b
+                    for a, b in zip(l[i + 1].get_v1()[lambert_indices[i + 1]], v[i + 1])
+                ]
                 DV.append(fb_vel(vin, vout, self._seq[i + 1]))
         assert j == len(DVdsm)
         assert len(ballistic_legs) == sum(self._dummy_DSM) + len(l) + 1
         assert len(ballistic_ep) == len(ballistic_legs)
+        assert len(DV) == len(l) - 1
         return (DV, l, ep, ballistic_legs, ballistic_ep)
 
     # Objective function
@@ -362,23 +403,42 @@ class _solar_orbiter_udp:
             lb = [t0[0].mjd2000] + [1e-3] * (n_legs)
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
 
-        # add final flyby
-        pl = self._seq[-1]
-        lb = lb + [-2 * pi, (pl.radius + self._safe_distance) / pl.radius]
-        ub = ub + [2 * pi, 30]
-
         # something of a hack: parameters for dummy DSMs of possibly resonant flybys
-        for i_fl in range(len(self._seq) - 1):
+        for i_fl in range(self._n_legs):
             if self._dummy_DSM[i_fl]:
                 pl = self._seq[i_fl]
                 lb = lb + [0, -2 * pi, (pl.radius + self._safe_distance) / pl.radius]
                 ub = ub + [1, 2 * pi, 30]
 
+        # something of a hack: parameters for evolving the lambert revolution count
+        if self._evolve_rev_count:
+            lb = lb + [0] * self._n_legs
+            ub = ub + [self.max_revs] * self._n_legs
+
+        # add final flyby
+        pl = self._seq[-1]
+        lb = lb + [-2 * pi, (pl.radius + self._safe_distance) / pl.radius]
+        ub = ub + [2 * pi, 30]
+
         if self._tof_encoding == "alpha":
-            assert len(lb) == 2 + n_legs + 2 + 3 * sum(self._dummy_DSM)
+            assert (
+                len(lb)
+                == 2
+                + n_legs
+                + 3 * sum(self._dummy_DSM)
+                + self._n_legs * self._evolve_rev_count
+                + 2
+            )
         elif self._tof_encoding in ["direct", "eta"]:
-            assert len(lb) == 1 + n_legs + 2 + 3 * sum(self._dummy_DSM)
-        elif self._tof_encoding == "eta":
+            assert (
+                len(lb)
+                == 1
+                + n_legs
+                + 3 * sum(self._dummy_DSM)
+                + self._n_legs * self._evolve_rev_count
+                + 2
+            )
+        else:
             assert False
 
         assert len(ub) == len(lb)
@@ -430,9 +490,10 @@ class _solar_orbiter_udp:
         Prints human readable information on the trajectory represented by the decision vector x
         """
         T = self._decode_tofs(x)
-        DVfb, l, ep, b_legs, b_ep = self._compute_dvs(x)
+        DV, l, ep, b_legs, b_ep = self._compute_dvs(x)
+        b_i = 0
         Vinfx, Vinfy, Vinfz = [
-            a - b for a, b in zip(l[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
+            a - b for a, b in zip(b_legs[b_i][1], self._seq[0].eph(ep[0])[1])
         ]
 
         print("Multiple Gravity Assist (MGA) problem: ")
@@ -442,19 +503,24 @@ class _solar_orbiter_udp:
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", l[0].get_v1()[0], "[m/s]")
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
-        _, _, transfer_i, _, _, _ = ic2par(
-            self._seq[0].eph(ep[0])[0], l[0].get_v1()[0], self._common_mu
-        )
+        _, _, transfer_i, _, _, _ = ic2par(*(b_legs[0]), self._common_mu)
         print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+        b_i += 1 + self._dummy_DSM[0]  # increasing leg index by one, as the launch contains no DSM
 
-        for pl, e, dv, leg in zip(self._seq[1:-1], ep[1:-1], DVfb, l[1:]):
+        assert(len(DV) == len(self._seq)-2)
+        for i in range(1, len(self._seq)-1):
+            pl = self._seq[i]
+            e = ep[i]
+            dv = DV[i-1]
+            leg = b_legs[b_i] # this index still looks wrong
             print("Fly-by: ", pl.name)
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
             eph = pl.eph(e)
-            transfer_v = leg.get_v1()[0]
-            _, _, transfer_i, _, _, _ = ic2par(eph[0], transfer_v, self._common_mu)
+            assert np.linalg.norm([a-b for a, b in zip(leg[0], eph[0])]) < 0.01
+            _, _, transfer_i, _, _, _ = ic2par(eph[0], leg[1], self._common_mu)
             print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+            b_i += 1 + self._dummy_DSM[i]
 
         print("Final Fly-by: ", self._seq[-1].name)
         print("\tEpoch: ", ep[-1], " [mjd2000]")
