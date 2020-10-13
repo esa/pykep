@@ -179,7 +179,7 @@ class _solar_orbiter_udp:
         lambert_indices = [0] * self._n_legs
         if self._evolve_rev_count:
             lambert_indices = [
-                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) : -2]
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM)*3 : -2]
             ]
         assert len(lambert_indices) == self._n_legs
 
@@ -249,6 +249,13 @@ class _solar_orbiter_udp:
             lp = lambert_problem(
                 ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self.max_revs
             )
+
+            # the lambert solver might offer fewer solutions than asked for
+            lambert_index = min(lp.get_Nmax()*2, lambert_indices[i])
+            if not lambert_index < len(lp.get_v1()):
+                raise ValueError("Lambert leg has " + lp.get_Nmax() + " revolutions but only " + len(lp.get_v1()) + " solutions.")
+            
+
             if not self._evolve_rev_count:
                 lp = lambert_problem_multirev(vi, lp)
             l.append(lp)
@@ -257,20 +264,21 @@ class _solar_orbiter_udp:
             if self._dummy_DSM[i]:
                 DVdsm.append(
                     np.linalg.norm(
-                        [a - b for a, b in zip(vi, lp.get_v1()[lambert_indices[i]])]
+                        [a - b for a, b in zip(vi, lp.get_v1()[lambert_index])]
                     )
                 )
 
-            vi = lp.get_v2()[lambert_indices[i]]
+            vi = lp.get_v2()[lambert_index]
             ep_start_lambert = ep[i + 1] - Ti
             # ri is now either the position of planet i or the position of the DSM
-            ballistic_legs.append((ri, lp.get_v1()[lambert_indices[i]]))
+            ballistic_legs.append((ri, lp.get_v1()[lambert_index]))
             ballistic_ep.append(ep_start_lambert)
 
         # add ballistic leg after final flyby
+        final_lambert_index = min(lambert_indices[-1], l[-1].get_Nmax()*2)
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(
-            l[-1].get_v2()[lambert_indices[-1]],
+            l[-1].get_v2()[final_lambert_index],
             eph[1],
             x[-1] * self._seq[-1].radius,
             x[-2],
@@ -291,12 +299,17 @@ class _solar_orbiter_udp:
                 j += 1
             else:
                 # use delta v of flyby
+                # the lambert solver might offer fewer solutions than asked for
+                lambert_index_incoming = min(l[i].get_Nmax()*2, lambert_indices[i])
+                lambert_index_outgoing = min(l[i+1].get_Nmax()*2, lambert_indices[i+1])
+
                 vin = [
-                    a - b for a, b in zip(l[i].get_v2()[lambert_indices[i]], v[i + 1])
+                    a - b for a, b in zip(l[i].get_v2()[lambert_index_incoming], v[i + 1])
                 ]
+
                 vout = [
                     a - b
-                    for a, b in zip(l[i + 1].get_v1()[lambert_indices[i + 1]], v[i + 1])
+                    for a, b in zip(l[i + 1].get_v1()[lambert_index_outgoing], v[i + 1])
                 ]
                 DV.append(fb_vel(vin, vout, self._seq[i + 1]))
         assert j == len(DVdsm)
@@ -412,10 +425,10 @@ class _solar_orbiter_udp:
                 lb = lb + [0, -2 * pi, (pl.radius + self._safe_distance) / pl.radius]
                 ub = ub + [1, 2 * pi, 30]
 
-        # something of a hack: parameters for evolving the lambert revolution count
+        # something of a hack: parameters for evolving the lambert index
         if self._evolve_rev_count:
             lb = lb + [0] * self._n_legs
-            ub = ub + [self.max_revs] * self._n_legs
+            ub = ub + [2*self.max_revs] * self._n_legs
 
         # add final flyby
         pl = self._seq[-1]
@@ -508,8 +521,10 @@ class _solar_orbiter_udp:
         lambert_indices = [0] * self._n_legs
         if self._evolve_rev_count:
             lambert_indices = [
-                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) : -2]
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM)*3 : -2]
             ]
+            assert(len(lambert_indices) == len(lambert_legs))
+            lambert_indices = [min(index, 2*leg.get_Nmax()) for index, leg in zip(lambert_indices, lambert_legs)]
         else:
             # we assume that the lambert_problem_multirev class is used
             lambert_indices = [lam.best_i for lam in lambert_legs]
