@@ -125,6 +125,7 @@ class _solar_orbiter_udp:
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+        self._eph_cache = (None, None, None)
 
     def _decode_tofs(self, x: List[float]) -> List[float]:
         tail = 3 * sum(self._dummy_DSM) + self._n_legs * self._evolve_rev_count + 2
@@ -472,11 +473,15 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        _, _, ep, b_legs, b_ep = self._compute_dvs(x)
+        if x == self._eph_cache[0]:
+            _, b_legs, b_ep = self._eph_cache
+        else:
+            _, _, _, b_legs, b_ep = self._compute_dvs(x)
+            self._eph_cache = (x, b_legs, b_ep)
 
-        if t <= ep[0]:
+        if t <= b_ep[0]:
             raise ValueError(
-                "Given epoch " + str(t) + " is at or before launch date " + str(ep[0])
+                "Given epoch " + str(t) + " is at or before launch date " + str(b_ep[0])
             )
 
         i = bisect_left(b_ep, t)  # ballistic leg i goes from planet i to planet i+1
@@ -647,7 +652,6 @@ class _solar_orbiter_udp:
         )
 
         return axes
-
 
 solar_orbiter = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = False, evolve_rev_count = False)
 solar_orbiter_dsm = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = True, evolve_rev_count = False)
