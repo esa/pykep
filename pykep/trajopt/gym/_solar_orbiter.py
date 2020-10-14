@@ -180,7 +180,7 @@ class _solar_orbiter_udp:
         lambert_indices = [0] * self._n_legs
         if self._evolve_rev_count:
             lambert_indices = [
-                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM)*3 : -2]
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) * 3 : -2]
             ]
         assert len(lambert_indices) == self._n_legs
 
@@ -252,7 +252,7 @@ class _solar_orbiter_udp:
             )
 
             # the lambert solver might offer fewer solutions than asked for
-            lambert_index = min(lp.get_Nmax()*2, lambert_indices[i])
+            lambert_index = min(lp.get_Nmax() * 2, lambert_indices[i])
             if not lambert_index < len(lp.get_v1()):
                 raise ValueError("Lambert leg has " + lp.get_Nmax() + " revolutions but only " + len(lp.get_v1()) + " solutions.")
             
@@ -276,7 +276,7 @@ class _solar_orbiter_udp:
             ballistic_ep.append(ep_start_lambert)
 
         # add ballistic leg after final flyby
-        final_lambert_index = min(lambert_indices[-1], l[-1].get_Nmax()*2)
+        final_lambert_index = min(lambert_indices[-1], l[-1].get_Nmax() * 2)
         eph = self._seq[-1].eph(ep[-1])
         v_out = fb_prop(
             l[-1].get_v2()[final_lambert_index],
@@ -301,11 +301,14 @@ class _solar_orbiter_udp:
             else:
                 # use delta v of flyby
                 # the lambert solver might offer fewer solutions than asked for
-                lambert_index_incoming = min(l[i].get_Nmax()*2, lambert_indices[i])
-                lambert_index_outgoing = min(l[i+1].get_Nmax()*2, lambert_indices[i+1])
+                lambert_index_incoming = min(l[i].get_Nmax() * 2, lambert_indices[i])
+                lambert_index_outgoing = min(
+                    l[i + 1].get_Nmax() * 2, lambert_indices[i + 1]
+                )
 
                 vin = [
-                    a - b for a, b in zip(l[i].get_v2()[lambert_index_incoming], v[i + 1])
+                    a - b
+                    for a, b in zip(l[i].get_v2()[lambert_index_incoming], v[i + 1])
                 ]
 
                 vout = [
@@ -391,7 +394,7 @@ class _solar_orbiter_udp:
             [
                 corrected_inclination + 2 * min_sun_distance / AU
             ]  # TODO: consider changing this fitness to the one from ESOC
-            + [T] * self._multi_objective
+            + [sum(T)] * self._multi_objective
             + [np.sum(DV) - 10]
             + [self._min_start_mass - m_initial]
             + [0.28 - min_sun_distance / AU]
@@ -429,7 +432,7 @@ class _solar_orbiter_udp:
         # something of a hack: parameters for evolving the lambert index
         if self._evolve_rev_count:
             lb = lb + [0] * self._n_legs
-            ub = ub + [2*self.max_revs] * self._n_legs
+            ub = ub + [2 * self.max_revs] * self._n_legs
 
         # add final flyby
         pl = self._seq[-1]
@@ -464,7 +467,9 @@ class _solar_orbiter_udp:
     def get_nic(self):
         return 4
 
-    def eph(self, x, t):
+    def eph(
+        self, x: List[float], t: float
+    ) -> Tuple[Tuple[float, float, float], Tuple[float, float, float]]:
         if len(x) != len(self.get_bounds()[0]):
             raise ValueError(
                 "Expected chromosome of length "
@@ -479,16 +484,20 @@ class _solar_orbiter_udp:
             _, _, _, b_legs, b_ep = self._compute_dvs(x)
             self._eph_cache = (x, b_legs, b_ep)
 
-        if t <= b_ep[0]:
+        if t < b_ep[0]:
             raise ValueError(
-                "Given epoch " + str(t) + " is at or before launch date " + str(b_ep[0])
+                "Given epoch " + str(t) + " is before launch date " + str(b_ep[0])
             )
+
+        if t == b_ep[0]:
+            # exactly at launch
+            return self._seq[0].eph(t)
 
         i = bisect_left(b_ep, t)  # ballistic leg i goes from planet i to planet i+1
 
         assert i >= 1 and i <= len(b_ep)
         if i < len(b_ep):
-            assert t < b_ep[i]
+            assert t <= b_ep[i]
 
         # get start of ballistic leg
         r_b, v_b = b_legs[i - 1]
@@ -526,10 +535,13 @@ class _solar_orbiter_udp:
         lambert_indices = [0] * self._n_legs
         if self._evolve_rev_count:
             lambert_indices = [
-                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM)*3 : -2]
+                int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) * 3 : -2]
             ]
-            assert(len(lambert_indices) == len(lambert_legs))
-            lambert_indices = [min(index, 2*leg.get_Nmax()) for index, leg in zip(lambert_indices, lambert_legs)]
+            assert len(lambert_indices) == len(lambert_legs)
+            lambert_indices = [
+                min(index, 2 * leg.get_Nmax())
+                for index, leg in zip(lambert_indices, lambert_legs)
+            ]
         else:
             # we assume that the lambert_problem_multirev class is used
             lambert_indices = [lam.best_i for lam in lambert_legs]
@@ -653,6 +665,52 @@ class _solar_orbiter_udp:
 
         return axes
 
-solar_orbiter = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = False, evolve_rev_count = False)
-solar_orbiter_dsm = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = True, evolve_rev_count = False)
-solar_orbiter_evolve_rev = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = False, evolve_rev_count = True)
+    def plot_distance_and_flybys(self, x, axes=None, units=AU, N=200, extension=100):
+        import matplotlib.pyplot as plt
+
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+        timeframe = np.linspace(0, sum(T) + extension, N)
+
+        earth = self._seq[0]
+        venus = self._seq[-1]
+
+        distances = []
+        edistances = []
+        vdistances = []
+
+        for day in timeframe:
+            t = x[0] + day
+            pos, vel = self.eph(x, t)
+            epos, evel = earth.eph(t)
+            vpos, vvel = venus.eph(t)
+            distances.append(np.linalg.norm(pos) / AU)
+            edistances.append(np.linalg.norm(epos) / AU)
+            vdistances.append(np.linalg.norm(vpos) / AU)
+
+        fl_times = list()
+        fl_distances = list()
+        for pl, t in zip(self._seq, ep):
+            fl_times.append(t - x[0])
+            pos, _ = pl.eph(t)
+            fl_distances.append(np.linalg.norm(pos) / AU)
+
+        if axes is None:
+            fig, axes = plt.subplots()
+        axes.plot(list(timeframe), distances, label="Solar Orbiter")
+        axes.plot(list(timeframe), edistances, label="Earth")
+        axes.plot(list(timeframe), vdistances, label="Venus")
+        plt.scatter(fl_times, fl_distances, marker="o", color="r")
+        axes.set_xlabel("Days")
+        axes.set_ylabel("AU")
+        axes.set_title("Distance to Sun")
+        axes.legend()
+
+        return axes
+
+
+solar_orbiter = _solar_orbiter_udp(max_revs=5, dummy_DSMs=False, evolve_rev_count=False)
+solar_orbiter_dsm = _solar_orbiter_udp(max_revs=5, dummy_DSMs=True, evolve_rev_count=False)
+solar_orbiter_evolve_rev = _solar_orbiter_udp(max_revs=5, dummy_DSMs=False, evolve_rev_count=True)
