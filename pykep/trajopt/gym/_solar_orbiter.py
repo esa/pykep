@@ -19,7 +19,7 @@ class _solar_orbiter_udp:
 
     def __init__(
         self,
-        t0=[epoch(0), epoch(1000)],
+        t0=[epoch(0), epoch(10000)],
         multi_objective=False,
         tof_encoding="direct",
         max_revs: int = 0,
@@ -646,4 +646,6 @@ class _solar_orbiter_udp:
         return axes
 
 
-solar_orbiter = _solar_orbiter_udp()
+solar_orbiter = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = False, evolve_rev_count = False)
+solar_orbiter_dsm = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = True, evolve_rev_count = False)
+solar_orbiter_evolve_rev = _solar_orbiter_udp(max_revs = 5, dummy_DSMs = False, evolve_rev_count = True)

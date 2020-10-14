@@ -204,9 +204,10 @@ class gym_test_case(_ut.TestCase):
     def run_solar_orbiter_test(self):
         from .trajopt import gym
         udp = gym.solar_orbiter
-        x = [ 7.88426573e+03,  2.31804224e+02,  4.24593159e+02,  1.48696289e+02,
-        1.53158410e+02, -4.26634715e+00,  1.05783212e+00]
-        self.assertAlmostEqual(udp.fitness(x)[0], 2.1151632781289518)
+        x = [7.52574686e+03, 5.89460811e+02, 3.04820667e+02, 4.90095761e+02,
+        4.41678580e+02, 5.59871619e+02, 5.39100020e+02, 4.49401876e+02,
+        2.24700938e+02, 1.60267063e+00, 1.39925808e+00]
+        self.assertAlmostEqual(udp.fitness(x)[0], 2.3357254274616297)
 
 
 class spherical_harmonics_loader_test_case(_ut.TestCase):
