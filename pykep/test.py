@@ -207,7 +207,14 @@ class gym_test_case(_ut.TestCase):
         x = [7.52574686e+03, 5.89460811e+02, 3.04820667e+02, 4.90095761e+02,
         4.41678580e+02, 5.59871619e+02, 5.39100020e+02, 4.49401876e+02,
         2.24700938e+02, 1.60267063e+00, 1.39925808e+00]
-        self.assertAlmostEqual(udp.fitness(x)[0], 2.3357254274616297)
+        old_fitness = udp.fitness(x)
+        self.assertAlmostEqual(old_fitness[0], 2.3357254274616297)
+
+        udp_rev = gym.solar_orbiter_evolve_rev
+        indices = [1, 1, 1, 1, 4, 3, 4, 2]
+        new_fitness = udp_rev.fitness(x[:-2]+indices+x[-2:])
+        self.assertAlmostEqual(new_fitness[0], 2.3357254274616297)
+        self.assertEqual(new_fitness, old_fitness)
 
 
 class spherical_harmonics_loader_test_case(_ut.TestCase):
