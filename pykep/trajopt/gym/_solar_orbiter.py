@@ -162,7 +162,7 @@ class _solar_orbiter_udp:
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
 
         if not len(ep) == len(self._seq):
-            print(len(ep), len(self._seq))
+            raise ValueError("Got " + str(len(ep)) + " epochs, but sequence of length " + str(len(self._seq)))
         # 2 - we compute the ephemerides
         r = [(0, 0, 0)] * len(self._seq)
         v = [(0, 0, 0)] * len(self._seq)
@@ -342,7 +342,7 @@ class _solar_orbiter_udp:
 
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
-            a - b for a, b in zip(lamberts[0].get_v1()[0], self._seq[0].eph(ep[0])[1])
+            a - b for a, b in zip(b_legs[0][1], self._seq[0].eph(ep[0])[1])
         ]
         Vinf_launch = np.linalg.norm([Vinfx, Vinfy, Vinfz])
 
@@ -539,6 +539,8 @@ class _solar_orbiter_udp:
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
         _, _, transfer_i, _, _, _ = ic2par(*(b_legs[0]), self._common_mu)
         print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+        print("\tNumber of Revolutions:", int((lambert_indices[0] + 1) / 2))
+        print("\tLambert Index:", int(lambert_indices[0]))
         b_i += (
             1 + self._dummy_DSM[0]
         )  # increasing leg index by one, as the launch contains no DSM
@@ -559,6 +561,7 @@ class _solar_orbiter_udp:
             _, _, transfer_i, _, _, _ = ic2par(eph[0], leg[1], self._common_mu)
             print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
             print("\tNumber of Revolutions:", int((lambert_indices[i] + 1) / 2))
+            print("\tLambert Index:", int(lambert_indices[i]))
             b_i += 1 + self._dummy_DSM[i]
 
         print("Final Fly-by: ", self._seq[-1].name)
