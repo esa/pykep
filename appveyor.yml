@@ -5,6 +5,7 @@ environment:
     secure: M+qvYgRh05fEw6G9aglK4g==
     
   matrix:
+    - BUILD_TYPE: "Pylint37-x64"
     - BUILD_TYPE: "Release"
     - BUILD_TYPE: "Debug"
     # At the moment the build fails upon module import

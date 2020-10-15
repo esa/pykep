@@ -290,13 +290,17 @@ def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', leg
     x = [0.0] * N
     y = [0.0] * N
     z = [0.0] * N
-
+    
+    # Replace r0, v0, m0 for r, v, m
+    r = r0
+    v = v0
+    m = m0
     # We calculate the spacecraft position at each dt
     for i in range(N):
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r, v, m = propagate_taylor(r0, v0, m0, u, dt, mu, veff, -10, -10)
+        r, v, m = propagate_taylor(r, v, m, thrust, dt, mu, veff, -10, -10)
 
     # And we plot
     if legend:
@@ -351,13 +355,17 @@ def plot_taylor_disturbance(r0, v0, m0, thrust, disturbance, tof, mu, veff, N=60
     y = [0.0] * N
     z = [0.0] * N
 
+    # Replace r0, v0 and m0
+    r = r0
+    v = v0
+    m = m0
     # We calculate the spacecraft position at each dt
     for i in range(N):
         x[i] = r[0] / units
         y[i] = r[1] / units
         z[i] = r[2] / units
-        r0, v0, m0 = propagate_taylor_disturbance(
-            r0, v0, m0, thrust, disturbance, dt, mu, veff, -10, -10)
+        r, v, m = propagate_taylor_disturbance(
+            r, v, m, thrust, disturbance, dt, mu, veff, -10, -10)
 
     # And we plot
     if legend:
