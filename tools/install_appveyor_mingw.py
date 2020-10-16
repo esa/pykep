@@ -175,14 +175,15 @@ if is_python_build or is_python_lint:
     os.chdir('/')
     run_command(
         pinterp + r' -c "from pykep import test; test.run_test_suite();"')
-    if is_release_build:
-        os.chdir('C:/projects/pykep/build_pykep/wheel')
-        run_command(twine + r' upload -u darioizzo dist\\' +
-                    os.listdir('dist')[0])
-
+    
     if is_python_lint:
         # Run Python lint checks
         run_command(pip + ' install pylint')
         # Running pylint and erroring only on actual errors. Excluding
         run_command(pylint + ' pykep -E --unsafe-load-any-extension=y')
+    else:
+        if is_release_build:
+        os.chdir('C:/projects/pykep/build_pykep/wheel')
+        run_command(twine + r' upload -u darioizzo dist\\' +
+                    os.listdir('dist')[0])
 
