@@ -35,6 +35,7 @@ class _solar_orbiter_udp:
             venus,
             venus,
             venus,
+            venus
         ],
     ) -> None:
         """
@@ -61,7 +62,7 @@ class _solar_orbiter_udp:
         for i in range(len(seq)):
             seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
 
-        tof = [[10, 600]] * (len(seq) - 1)
+        tof = [[10, 900]] * (len(seq) - 1)
 
         # Sanity checks
         # 1 - Planets need to have the same mu_central_body
@@ -125,6 +126,7 @@ class _solar_orbiter_udp:
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+
         self._eph_cache = (None, None, None)
 
     def _decode_tofs(self, x: List[float]) -> List[float]:
@@ -193,13 +195,13 @@ class _solar_orbiter_udp:
         ] = list()
         ballistic_ep: List[float] = list()
 
-        vi = v[0]
+        v_probe = v[0]
         for i in range(self._n_legs):
             # start leg at planet i, before flyby
             ri = r[i]
             Ti = T[i]
 
-            if np.any(np.isnan(vi)):
+            if np.any(np.isnan(v_probe)):
                 return ([np.nan], [], ep, [], [])
 
             if self._dummy_DSM[i]:
@@ -222,20 +224,20 @@ class _solar_orbiter_udp:
                     raise ValueError("Invalid flyby periapsis: " + str(r_p))
 
                 # perform unpowered flyby
-                vi = fb_prop(
-                    vi, ri, r_p * self._seq[i].radius, beta, self._seq[i].mu_self
+                v_probe = fb_prop(
+                    v_probe, v[i], r_p * self._seq[i].radius, beta, self._seq[i].mu_self
                 )  # TODO: is seq[i] the correct planet?
-                ballistic_legs.append((ri, vi))
+                ballistic_legs.append((ri, v_probe))
                 ballistic_ep.append(ep[i])
 
-                if np.any(np.isnan(vi)):
+                if np.any(np.isnan(v_probe)):
                     return ([np.nan], [], ep, [], [])
 
                 if tof_ratio > 0:
                     # propagate after flyby
                     try:
-                        ri, vi = propagate_lagrangian(
-                            ri, vi, T[i] * DAY2SEC * tof_ratio, self._common_mu
+                        ri, v_probe = propagate_lagrangian(
+                            ri, v_probe, T[i] * DAY2SEC * tof_ratio, self._common_mu
                         )
                     except RuntimeError as e:
                         print(e.args)
@@ -258,18 +260,18 @@ class _solar_orbiter_udp:
             
 
             if not self._evolve_rev_count:
-                lp = lambert_problem_multirev(vi, lp)
+                lp = lambert_problem_multirev(v_probe, lp)
             l.append(lp)
 
             # add delta v of DSM
             if self._dummy_DSM[i]:
                 DVdsm.append(
                     np.linalg.norm(
-                        [a - b for a, b in zip(vi, lp.get_v1()[lambert_index])]
+                        [a - b for a, b in zip(v_probe, lp.get_v1()[lambert_index])]
                     )
                 )
 
-            vi = lp.get_v2()[lambert_index]
+            v_probe = lp.get_v2()[lambert_index]
             ep_start_lambert = ep[i + 1] - Ti
             # ri is now either the position of planet i or the position of the DSM
             ballistic_legs.append((ri, lp.get_v1()[lambert_index]))
@@ -478,7 +480,10 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        if x == self._eph_cache[0]:
+        comparison = (x == self._eph_cache[0])
+        if type(comparison) is not bool:
+            comparison = all(comparison)
+        if comparison:
             _, b_legs, b_ep = self._eph_cache
         else:
             _, _, _, b_legs, b_ep = self._compute_dvs(x)
