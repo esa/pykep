@@ -397,7 +397,7 @@ class _solar_orbiter_udp:
 
         return (
             [
-                corrected_inclination + 2 * min_sun_distance / AU
+                corrected_inclination + min_sun_distance / AU
             ]  # TODO: consider changing this fitness to the one from ESOC
             + [sum(T)] * self._multi_objective
             + [np.sum(DV) - 0.1]
