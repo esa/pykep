@@ -400,7 +400,7 @@ class _solar_orbiter_udp:
                 corrected_inclination + 2 * min_sun_distance / AU
             ]  # TODO: consider changing this fitness to the one from ESOC
             + [sum(T)] * self._multi_objective
-            + [np.sum(DV) - 10]
+            + [np.sum(DV) - 0.1]
             + [self._min_start_mass - m_initial]
             + [0.28 - min_sun_distance / AU]
             + [max_sun_distance / AU - 1.2]
