@@ -115,7 +115,7 @@ class _solar_orbiter_udp:
         self._tof = tof
         self._tof_encoding = tof_encoding
         self._multi_objective = multi_objective
-        self.max_revs = max_revs
+        self._max_revs = max_revs
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
         self._rp_ub = rp_ub
@@ -185,6 +185,9 @@ class _solar_orbiter_udp:
                 int(elem) for elem in x[tof_offset + sum(self._dummy_DSM) * 3 : -2]
             ]
         assert len(lambert_indices) == self._n_legs
+        for index in lambert_indices:
+            if (not index >= 0) or index >= 2*self._max_revs+1:
+                raise ValueError("Invalid lambert index " + str(index))
 
         rf_index = np.cumsum(self._dummy_DSM)
         # 3 - we solve the lambert problems
@@ -250,7 +253,7 @@ class _solar_orbiter_udp:
 
             # call lambert solver on remaining leg - either after flyby or DSM
             lp = lambert_problem(
-                ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self.max_revs
+                ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self._max_revs
             )
 
             # the lambert solver might offer fewer solutions than asked for
@@ -258,9 +261,9 @@ class _solar_orbiter_udp:
             if not lambert_index < len(lp.get_v1()):
                 raise ValueError("Lambert leg has " + lp.get_Nmax() + " revolutions but only " + len(lp.get_v1()) + " solutions.")
             
-
             if not self._evolve_rev_count:
                 lp = lambert_problem_multirev(v_probe, lp)
+                assert lambert_index == 0
             l.append(lp)
 
             # add delta v of DSM
@@ -434,7 +437,7 @@ class _solar_orbiter_udp:
         # something of a hack: parameters for evolving the lambert index
         if self._evolve_rev_count:
             lb = lb + [0] * self._n_legs
-            ub = ub + [2 * self.max_revs] * self._n_legs
+            ub = ub + [2 * self._max_revs] * self._n_legs
 
         # add final flyby
         pl = self._seq[-1]
