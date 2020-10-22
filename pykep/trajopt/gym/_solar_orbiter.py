@@ -251,6 +251,9 @@ class _solar_orbiter_udp:
                 if Ti == 0:
                     Ti = SEC2DAY
 
+            if np.any(np.isnan(v_probe)):
+                return ([np.nan], [], ep, [], [])
+
             # call lambert solver on remaining leg - either after flyby or DSM
             lp = lambert_problem(
                 ri, r[i + 1], Ti * DAY2SEC, self._common_mu, False, self._max_revs
@@ -258,7 +261,7 @@ class _solar_orbiter_udp:
 
             # the lambert solver might offer fewer solutions than asked for
             lambert_index = min(lp.get_Nmax() * 2, lambert_indices[i])
-            if not lambert_index < len(lp.get_v1()):
+            if lambert_index < 0 or not lambert_index < len(lp.get_v1()):
                 raise ValueError("Lambert leg has " + lp.get_Nmax() + " revolutions but only " + len(lp.get_v1()) + " solutions.")
             
             if not self._evolve_rev_count:
