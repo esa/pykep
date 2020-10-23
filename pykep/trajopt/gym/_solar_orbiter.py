@@ -1,15 +1,14 @@
-from math import pi, sin, sqrt
+from bisect import bisect_left
+from math import cos, pi, sin, sqrt
 from typing import Any, List, Tuple
 
-from bisect import bisect_left
-
 import numpy as np
+from pykep.trajopt._lambert import lambert_problem_multirev
 
 from pykep import AU, DAY2SEC, RAD2DEG, SEC2DAY, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
-from pykep.trajopt._lambert import lambert_problem_multirev
 
 
 class _solar_orbiter_udp:
@@ -126,6 +125,12 @@ class _solar_orbiter_udp:
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+
+        # initialize data to compute heliolatitude
+        t_plane_crossing = epoch(7645)
+        rotation_axis = seq[0].eph(t_plane_crossing)[0]
+        self._rotation_axis = rotation_axis / np.linalg.norm(rotation_axis)
+        self._theta = 7.25
 
         self._eph_cache = (None, None, None)
 
@@ -330,6 +335,16 @@ class _solar_orbiter_udp:
         assert len(DV) == len(l) - 1
         return (DV, l, ep, ballistic_legs, ballistic_ep)
 
+    def _rotate_vector(self, v, k, theta):
+        dP = np.dot(k, v)
+        cosTheta = cos(theta)
+        sinTheta = sin(theta)
+        # rotate vector into coordinate system defined by the sun's equatorial plane
+        # using Rodrigues rotation formula
+        r_rot = [a*cosTheta + b*sinTheta + c*(1-cosTheta)*dP for a,b,c in zip(v, np.cross(k,v), k)]
+        
+        return r_rot
+
     # Objective function
     def fitness(self, x):
         if len(x) != len(self.get_bounds()[0]):
@@ -364,7 +379,12 @@ class _solar_orbiter_udp:
         # compute final flyby and resulting trajectory
         eph = self._seq[-1].eph(ep[-1])
         v_out = b_legs[-1][1]
-        a, e, i, W, w, E = ic2par(eph[0], v_out, self._common_mu)
+
+        # rotate to get inclination respective to solar equator. This could be moved to the init phase, as it won't change
+        r_rot = self._rotate_vector(eph[0], self._rotation_axis, self._theta)
+        v_rot = self._rotate_vector(v_out, self._rotation_axis, self._theta)
+
+        a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
         final_perihelion = a * (1 - e)
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
         corrected_inclination = abs(abs(i) % pi - pi / 2)
@@ -621,7 +641,7 @@ class _solar_orbiter_udp:
         import matplotlib.pyplot as plt
         from mpl_toolkits.mplot3d import Axes3D
 
-        from pykep.orbit_plots import plot_planet, plot_lambert, plot_kepler
+        from pykep.orbit_plots import plot_kepler, plot_lambert, plot_planet
 
         # Creating the axes if necessary
         if axes is None:
