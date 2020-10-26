@@ -5,7 +5,7 @@ from typing import Any, List, Tuple
 import numpy as np
 from pykep.trajopt._lambert import lambert_problem_multirev
 
-from pykep import AU, DAY2SEC, RAD2DEG, SEC2DAY, epoch, ic2par
+from pykep import AU, DAY2SEC, DEG2RAD, RAD2DEG, SEC2DAY, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
@@ -24,18 +24,7 @@ class _solar_orbiter_udp:
         max_revs: int = 0,
         dummy_DSMs: bool = False,
         evolve_rev_count=False,
-        seq=[
-            earth,
-            venus,
-            venus,
-            earth,
-            venus,
-            venus,
-            venus,
-            venus,
-            venus,
-            venus
-        ],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
     ) -> None:
         """
         Args:
@@ -130,7 +119,7 @@ class _solar_orbiter_udp:
         t_plane_crossing = epoch(7645)
         rotation_axis = seq[0].eph(t_plane_crossing)[0]
         self._rotation_axis = rotation_axis / np.linalg.norm(rotation_axis)
-        self._theta = 7.25
+        self._theta = 7.25 * DEG2RAD
 
         self._eph_cache = (None, None, None)
 
@@ -170,7 +159,12 @@ class _solar_orbiter_udp:
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
 
         if not len(ep) == len(self._seq):
-            raise ValueError("Got " + str(len(ep)) + " epochs, but sequence of length " + str(len(self._seq)))
+            raise ValueError(
+                "Got "
+                + str(len(ep))
+                + " epochs, but sequence of length "
+                + str(len(self._seq))
+            )
         # 2 - we compute the ephemerides
         r = [(0, 0, 0)] * len(self._seq)
         v = [(0, 0, 0)] * len(self._seq)
@@ -191,7 +185,7 @@ class _solar_orbiter_udp:
             ]
         assert len(lambert_indices) == self._n_legs
         for index in lambert_indices:
-            if (not index >= 0) or index >= 2*self._max_revs+1:
+            if (not index >= 0) or index >= 2 * self._max_revs + 1:
                 raise ValueError("Invalid lambert index " + str(index))
 
         rf_index = np.cumsum(self._dummy_DSM)
@@ -267,8 +261,14 @@ class _solar_orbiter_udp:
             # the lambert solver might offer fewer solutions than asked for
             lambert_index = min(lp.get_Nmax() * 2, lambert_indices[i])
             if lambert_index < 0 or not lambert_index < len(lp.get_v1()):
-                raise ValueError("Lambert leg has " + lp.get_Nmax() + " revolutions but only " + len(lp.get_v1()) + " solutions.")
-            
+                raise ValueError(
+                    "Lambert leg has "
+                    + lp.get_Nmax()
+                    + " revolutions but only "
+                    + len(lp.get_v1())
+                    + " solutions."
+                )
+
             if not self._evolve_rev_count:
                 lp = lambert_problem_multirev(v_probe, lp)
                 assert lambert_index == 0
@@ -341,8 +341,11 @@ class _solar_orbiter_udp:
         sinTheta = sin(theta)
         # rotate vector into coordinate system defined by the sun's equatorial plane
         # using Rodrigues rotation formula
-        r_rot = [a*cosTheta + b*sinTheta + c*(1-cosTheta)*dP for a,b,c in zip(v, np.cross(k,v), k)]
-        
+        r_rot = [
+            a * cosTheta + b * sinTheta + c * (1 - cosTheta) * dP
+            for a, b, c in zip(v, np.cross(k, v), k)
+        ]
+
         return r_rot
 
     # Objective function
@@ -506,7 +509,7 @@ class _solar_orbiter_udp:
                 + str(len(x))
             )
 
-        comparison = (x == self._eph_cache[0])
+        comparison = x == self._eph_cache[0]
         if type(comparison) is not bool:
             comparison = all(comparison)
         if comparison:
@@ -619,7 +622,10 @@ class _solar_orbiter_udp:
         print("\tr_p: ", x[-1])
 
         print("Resulting Solar orbit:")
-        a, e, i, W, w, E = ic2par(b_legs[-1][0], b_legs[-1][1], self._common_mu)
+        r_rot = self._rotate_vector(b_legs[-1][0], self._rotation_axis, self._theta)
+        v_rot = self._rotate_vector(b_legs[-1][1], self._rotation_axis, self._theta)
+
+        a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
         print("Perihelion: ", (a * (1 - e)) / AU, " AU")
         print("Aphelion: ", (a * (1 + e)) / AU, " AU")
         print("Inclination: ", i * RAD2DEG, " degrees")
@@ -743,5 +749,9 @@ class _solar_orbiter_udp:
 
 
 solar_orbiter = _solar_orbiter_udp(max_revs=5, dummy_DSMs=False, evolve_rev_count=False)
-solar_orbiter_dsm = _solar_orbiter_udp(max_revs=5, dummy_DSMs=True, evolve_rev_count=False)
-solar_orbiter_evolve_rev = _solar_orbiter_udp(max_revs=5, dummy_DSMs=False, evolve_rev_count=True)
+solar_orbiter_dsm = _solar_orbiter_udp(
+    max_revs=5, dummy_DSMs=True, evolve_rev_count=False
+)
+solar_orbiter_evolve_rev = _solar_orbiter_udp(
+    max_revs=5, dummy_DSMs=False, evolve_rev_count=True
+)
