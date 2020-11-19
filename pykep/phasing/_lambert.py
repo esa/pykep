@@ -1,4 +1,3 @@
-from pygmo.problem._base import base # pylint: disable=import-error
 from pygmo import hypervolume
 from pykep.planet import gtoc7
 from pykep.orbit_plots import plot_planet, plot_lambert
@@ -7,7 +6,7 @@ from numpy.linalg import norm
 from math import exp
 
 
-class lambert_metric(base):
+class lambert_metric:
 
     """
     This class defines the Lambert phasing metric as published in the paper:
@@ -34,15 +33,9 @@ class lambert_metric(base):
         lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500)
         """
 
-        # First we call the constructor of the base class telling
-        # essentially to pygmo what kind of problem to expect (2 objective, 0
-        # contraints etc.)
-        super().__init__(
-            2, 0, 1 + (not single_objective), 0, 0, 0)
-
-        # then we set the problem bounds (in this case equal for all
+        # We set the problem bounds (in this case equal for all
         # components)
-        self.set_bounds(epoch_bounds[0], epoch_bounds[1])
+        self._bounds = (epoch_bounds[0], epoch_bounds[1])
         self._ast1 = A1
         self._ast2 = A2
         self._Tmax = Tmax
@@ -50,8 +43,11 @@ class lambert_metric(base):
         self._ms = ms
         self._UNFEASIBLE = 1e+20
 
-    # We reimplement the virtual method that defines the objective function.
-    def _objfun_impl(self, x):
+    # We implement the get_bounds and fitness functions.
+    def get_bounds(self):
+        return self._bounds
+
+    def fitness(self, x):
         from math import sqrt
         # 1 - We check that the transfer time is positive
         if x[0] >= x[1]:
@@ -158,7 +154,7 @@ class lambert_metric(base):
         ry = self.ub[0]
         return (rx, ry)
 
-    def human_readable_extra(self):
+    def get_extra_info(self):
         retval = "\n\tAsteroid 1: " + self._ast1.name
         retval = retval + "\n\tAsteroid 2: " + self._ast2.name
         return retval
