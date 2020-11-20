@@ -183,7 +183,7 @@ if is_python_build or is_python_lint:
         run_command(pylint + ' pykep -E --unsafe-load-any-extension=y')
     else:
         if is_release_build:
-        os.chdir('C:/projects/pykep/build_pykep/wheel')
-        run_command(twine + r' upload -u darioizzo dist\\' +
+            os.chdir('C:/projects/pykep/build_pykep/wheel')
+            run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 
