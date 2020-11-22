@@ -36,6 +36,7 @@ class lambert_metric:
         # We set the problem bounds (in this case equal for all
         # components)
         self._bounds = (epoch_bounds[0], epoch_bounds[1])
+        self.f_dimension = 1 if single_objective else 2
         self._ast1 = A1
         self._ast2 = A2
         self._Tmax = Tmax
@@ -107,8 +108,8 @@ class lambert_metric:
         else:
             axis = ax
 
-        plot_planet(A1, axes=axis, s=10, t0=epoch(self.lb[0]))
-        plot_planet(A2, axes=axis, s=10, t0=epoch(self.ub[0]))
+        plot_planet(A1, axes=axis, s=10, t0=epoch(self._bounds[0]))
+        plot_planet(A2, axes=axis, s=10, t0=epoch(self._bounds[1]))
         for ind in pop:
             if ind.cur_f[0] == self._UNFEASIBLE:
                 continue
@@ -135,7 +136,7 @@ class lambert_metric:
         rx, ry = self._compute_ref_point()
         axis = pop.plot_pareto_fronts()
         axis.set_xlim([0, rx])
-        axis.set_ylim([self.lb[0], ry])
+        axis.set_ylim([self._bounds[0], ry])
         plt.xlabel("[m/s]")
         plt.ylabel("[MJD2000]")
         plt.draw()
@@ -150,8 +151,8 @@ class lambert_metric:
         return (hv.compute(self._compute_ref_point()) * DAY2SEC / AU)
 
     def _compute_ref_point(self):
-        rx = self._Tmax / self._ms * DAY2SEC * (self.ub[0] - self.lb[0])
-        ry = self.ub[0]
+        rx = self._Tmax / self._ms * DAY2SEC * (self._bounds[1] - self._bounds[0])
+        ry = self._bounds[1]
         return (rx, ry)
 
     def get_extra_info(self):
