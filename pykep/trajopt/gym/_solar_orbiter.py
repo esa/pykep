@@ -702,7 +702,7 @@ class _solar_orbiter_udp:
 
         return axes
 
-    def plot_distance_and_flybys(self, x, axes=None, units=AU, N=200, extension=100):
+    def plot_distance_and_flybys(self, x, axes=None, units=AU, N=200, extension=300):
         import matplotlib.pyplot as plt
 
         T = self._decode_tofs(x)
