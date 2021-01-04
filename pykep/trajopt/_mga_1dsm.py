@@ -3,6 +3,7 @@ from pykep.planet import jpl_lp
 from pykep.trajopt._lambert import lambert_problem_multirev
 from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
+from typing import Any, List, Tuple
 
 # Avoiding scipy dependency
 def norm(x):
@@ -198,7 +199,12 @@ class mga_1dsm:
 
         return (retval_T, Vinfx, Vinfy, Vinfz)
 
-    def _compute_dvs(self, x):
+    def _compute_dvs(self, x: List[float]) -> Tuple[
+        List[float], # DVs
+        List[Any], # Lambert legs
+        List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]], # ballistic legs
+        List[float], # episodes of ballistic legs
+    ]:
         # 1 -  we 'decode' the chromosome recording the various times of flight
         # (days) in the list T and the cartesian components of vinf
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
@@ -211,9 +217,13 @@ class mga_1dsm:
         for i in range(len(self._seq)):
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
+        ballistic_legs = []
+        ballistic_ep = []
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
+        ballistic_legs.append((r_P[0], v0))
+        ballistic_ep.append(t_P[0].mjd2000)
         r, v = propagate_lagrangian(
             r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu)
 
@@ -224,6 +234,9 @@ class mga_1dsm:
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
 
+        ballistic_legs.append((r, v_beg_l))
+        ballistic_ep.append(t_P[0].mjd2000 + x[4] * T[0])
+
         # First DSM occuring at time nu1*T1
         DV[0] = norm([a - b for a, b in zip(v_beg_l, v)])
 
@@ -232,6 +245,8 @@ class mga_1dsm:
             # Fly-by
             v_out = fb_prop(v_end_l, v_P[i], x[
                             7 + (i - 1) * 4] * self._seq[i].radius, x[6 + (i - 1) * 4], self._seq[i].mu_self)
+            ballistic_legs.append((r_P[i], v_out))
+            ballistic_ep.append(t_P[i].mjd2000)
             # s/c propagation before the DSM
             r, v = propagate_lagrangian(
                 r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
@@ -243,6 +258,9 @@ class mga_1dsm:
             v_beg_l = l.get_v1()[0]
             # DSM occuring at time nu2*T2
             DV[i] = norm([a - b for a, b in zip(v_beg_l, v)])
+
+            ballistic_legs.append((r, v_beg_l))
+            ballistic_ep.append(t_P[i].mjd2000 + x[8 + (i - 1) * 4] * T[i])
 
         # Last Delta-v
         if self._add_vinf_arr:
@@ -259,11 +277,11 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
-        return (DV, l)
+        return (DV, l, ballistic_legs, ballistic_ep)
 
     # Objective function
     def fitness(self, x):
-        DV, _ = self._compute_dvs(x)
+        DV, _, _, _ = self._compute_dvs(x)
         T, _, _, _ = self._decode_times_and_vinf(x)
         if not self._multi_objective:
             return [sum(DV),]
