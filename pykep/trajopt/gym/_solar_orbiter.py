@@ -24,7 +24,7 @@ class _solar_orbiter_udp:
         max_revs: int = 0,
         dummy_DSMs: bool = False,
         evolve_rev_count=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus],
     ) -> None:
         """
         Args:
