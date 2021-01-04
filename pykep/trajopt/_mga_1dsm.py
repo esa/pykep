@@ -202,6 +202,7 @@ class mga_1dsm:
     def _compute_dvs(self, x: List[float]) -> Tuple[
         List[float], # DVs
         List[Any], # Lambert legs
+        List[float], # T
         List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]], # ballistic legs
         List[float], # episodes of ballistic legs
     ]:
@@ -277,12 +278,11 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
-        return (DV, l, ballistic_legs, ballistic_ep)
+        return (DV, l, T, ballistic_legs, ballistic_ep)
 
     # Objective function
     def fitness(self, x):
-        DV, _, _, _ = self._compute_dvs(x)
-        T, _, _, _ = self._decode_times_and_vinf(x)
+        DV, _, T, _, _ = self._compute_dvs(x)
         if not self._multi_objective:
             return [sum(DV),]
         else:
