@@ -49,6 +49,7 @@ if is_release_build:
     print("Release build detected, tag is '" +
           os.environ['APPVEYOR_REPO_TAG_NAME'] + "'")
 is_python_build = 'Python' in BUILD_TYPE
+is_python_lint = 'Pylint' in BUILD_TYPE
 
 # Check here for a list of installed software in the appveyor VMs: https://www.appveyor.com/docs/windows-images-software/
 # USING: mingw64 8.1.0
@@ -64,8 +65,8 @@ wget(r'https://github.com/bluescarni/binary_deps/raw/master/boost_mgw81-mt-x64-1
 run_command(r'7z x -aoa -oC:\\ boost.7z', verbose=False)
 
 # Setup of the Python build variables (version based)
-if is_python_build:
-    if 'Python37-x64' in BUILD_TYPE:
+if is_python_build or is_python_lint:
+    if 'Python37-x64' in BUILD_TYPE or 'Pylint37-x64' in BUILD_TYPE:
         python_version = r'37'
         python_folder = r'Python37-x64'
         python_library = r'C:\\' + python_folder + r'\\python37.dll '
@@ -84,6 +85,12 @@ if is_python_build:
     pinterp = r"C:\\" + python_folder + r'\\python.exe'
     pip = r"C:\\" + python_folder + r'\\scripts\\pip'
     twine = r"C:\\" + python_folder + r'\\scripts\\twine'
+    # Set linter paths
+    pylint = r"C:\\" + python_folder + r'\\scripts\\pylint'
+    pycodestyle = r"C:\\" + python_folder + r'\\scripts\\pycodestyle'
+    mypy = r"C:\\" + python_folder + r'\\scripts\\mypy'
+
+
     module_install_path = r"C:\\" + python_folder + r'\\Lib\\site-packages\\pykep'
     # Install pip and deps.
     run_command(pinterp + r' --version', verbose=True)
@@ -103,7 +110,7 @@ common_cmake_opts = r'-DCMAKE_PREFIX_PATH=c:\\local ' + \
                     r'-DBoost_DATE_TIME_LIBRARY_RELEASE=c:\\local\\lib\\libboost_date_time-mgw81-mt-x64-1_70.dll '
 
 # Configuration step.
-if is_python_build:
+if is_python_build or is_python_lint:
     os.makedirs('build_keplerian_toolbox')
     os.chdir('build_keplerian_toolbox')
     run_command(r'cmake -G "MinGW Makefiles" .. ' + common_cmake_opts + \
@@ -149,7 +156,7 @@ else:
 
 
 # Testing, packaging.
-if is_python_build:
+if is_python_build or is_python_lint:
     # Run the Python tests.
     run_command(
         pinterp + r' -c "from pykep import test; test.run_test_suite();"')
@@ -168,8 +175,15 @@ if is_python_build:
     os.chdir('/')
     run_command(
         pinterp + r' -c "from pykep import test; test.run_test_suite();"')
-    if is_release_build:
-        os.chdir('C:/projects/pykep/build_pykep/wheel')
-        run_command(twine + r' upload -u darioizzo dist\\' +
+    
+    if is_python_lint:
+        # Run Python lint checks
+        run_command(pip + ' install pylint')
+        # Running pylint and erroring only on actual errors. Excluding
+        run_command(pylint + ' pykep -E --unsafe-load-any-extension=y')
+    else:
+        if is_release_build:
+            os.chdir('C:/projects/pykep/build_pykep/wheel')
+            run_command(twine + r' upload -u darioizzo dist\\' +
                     os.listdir('dist')[0])
 

@@ -52,7 +52,8 @@ def algo_factory(name, original_screen_output=True):
             pl = 5
         else:
             pl = 0
-        uda = pg.ipopt()
+        # Disable lint check on next line. Known issue (pagmo2/issues/261)
+        uda = pg.ipopt() # pylint: disable=no-member
         uda.set_integer_option("print_level", pl)
         uda.set_integer_option("acceptable_iter", 4)
         uda.set_integer_option("max_iter", 150)
