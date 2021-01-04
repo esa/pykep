@@ -198,8 +198,7 @@ class mga_1dsm:
 
         return (retval_T, Vinfx, Vinfy, Vinfz)
 
-    # Objective function
-    def fitness(self, x):
+    def _compute_dvs(self, x):
         # 1 -  we 'decode' the chromosome recording the various times of flight
         # (days) in the list T and the cartesian components of vinf
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
@@ -260,8 +259,14 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
+        return (DV, l)
+
+    # Objective function
+    def fitness(self, x):
+        DV, _ = self._compute_dvs(x)
+        T, _, _, _ = self._decode_times_and_vinf(x)
         if not self._multi_objective:
-            return (sum(DV),)
+            return [sum(DV),]
         else:
             return (sum(DV), sum(T))
 
