@@ -220,6 +220,7 @@ class mga_1dsm:
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
         ballistic_legs = []
         ballistic_ep = []
+        lamberts = []
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
@@ -234,6 +235,7 @@ class mga_1dsm:
                     r, r_P[1], dt, self.common_mu, cw=False, max_revs=self.max_revs))
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
+        lamberts.append(l)
 
         ballistic_legs.append((r, v_beg_l))
         ballistic_ep.append(t_P[0].mjd2000 + x[4] * T[0])
@@ -257,6 +259,7 @@ class mga_1dsm:
                                   self.common_mu, cw=False, max_revs=self.max_revs))
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
+            lamberts.append(l)
             # DSM occuring at time nu2*T2
             DV[i] = norm([a - b for a, b in zip(v_beg_l, v)])
 
@@ -278,7 +281,7 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
-        return (DV, l, T, ballistic_legs, ballistic_ep)
+        return (DV, lamberts, T, ballistic_legs, ballistic_ep)
 
     # Objective function
     def fitness(self, x):
