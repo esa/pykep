@@ -142,7 +142,12 @@ class mga_1dsm_test_case(_ut.TestCase):
         ep = x[0] + retval[0][0]
         pos = eph(ep)[0]
         pl_pos = udp._seq[1].eph(ep)[0]
-        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.001)
+        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
+        # check closeness at second flyby
+        ep = x[0] + sum(retval[0])
+        pos = eph(ep)[0]
+        pl_pos = udp._seq[2].eph(ep)[0]
+        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
         # check error for too early epoch
         with self.assertRaises(ValueError):
             eph(9)
