@@ -3,7 +3,7 @@ from pykep.planet import jpl_lp
 from pykep.trajopt._lambert import lambert_problem_multirev
 from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 from bisect import bisect_left
 
 
@@ -209,7 +209,7 @@ class mga_1dsm:
         List[float], # DVs
         List[Any], # Lambert legs
         List[float], # T
-        List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]], # ballistic legs
+        List[Tuple[List[float], List[float]]], # ballistic legs
         List[float], # episodes of ballistic legs
     ]:
         # 1 -  we 'decode' the chromosome recording the various times of flight
@@ -224,8 +224,8 @@ class mga_1dsm:
         for i in range(len(self._seq)):
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
-        ballistic_legs = []
-        ballistic_ep = []
+        ballistic_legs: List[Tuple[List[float],List[float]]] = []
+        ballistic_ep: List[float] = []
         lamberts = []
 
         # 3 - We start with the first leg
@@ -299,7 +299,7 @@ class mga_1dsm:
 
     def pretty(self, x):
         """
-        prob.plot(x)
+        prob.pretty(x)
 
         - x: encoded trajectory
 
@@ -487,7 +487,17 @@ class mga_1dsm:
                 "\n\t Add launcher vinf to the objective?: " + self._add_vinf_dep.__repr__() +
                 "\n\t Add final vinf to the objective?: " + self._add_vinf_arr.__repr__())
 
-    def plot_distance_and_flybys(self, x, axes=None, units=AU, N=200, extension=300):
+    def plot_distance_and_flybys(self, x: List[float], axes=None, N: int=200, extension: float=300):
+        """
+        Plot solar distance and flybys of the trajectory defined by x.
+        
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+            - axes: Matplotlib plotting axes
+            - N: number of sample points
+            - extension: number of days to propagate the trajectory after the last flyby
+
+        """
         import matplotlib.pyplot as plt
 
         T = self._decode_tofs(x)
@@ -499,7 +509,7 @@ class mga_1dsm:
         planets = set(self._seq)
 
         distances = []
-        pl_distances = {pl : [] for pl in planets}
+        pl_distances: Dict[Any,List[float]] = {pl : [] for pl in planets}
         
         xeph = self.get_eph_function(x)
 
@@ -519,9 +529,15 @@ class mga_1dsm:
             pos, _ = pl.eph(t)
             fl_distances.append(np.linalg.norm(pos) / AU)
 
+        probename = "Probe"
+        try:
+            probename = self.get_name().split("(")[0].rstrip()
+        except:
+            pass
+
         if axes is None:
             fig, axes = plt.subplots()
-        axes.plot(list(timeframe), distances, label=self.get_name().split("(")[0].rstrip())
+        axes.plot(list(timeframe), distances, label=probename)
         for pl in planets:
             axes.plot(list(timeframe), pl_distances[pl], label=pl.name.capitalize())
         plt.scatter(fl_times, fl_distances, marker="o", color="r")
@@ -533,6 +549,18 @@ class mga_1dsm:
         return axes
 
     def get_eph_function(self, x):
+        """
+        For a chromosome x, returns a function object eph to compute the ephemerides of the spacecraft
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Example:
+
+          eph = prob.get_eph_function(population.champion_x)
+          pos, vel = eph(pykep.epoch(7000))
+
+        """
         if len(x) != len(self.get_bounds()[0]):
             raise ValueError(
                 "Expected chromosome of length "
