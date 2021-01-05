@@ -69,6 +69,7 @@ class mga_1dsm_test_case(_ut.TestCase):
     def runTest(self):
         self.run_construction_test()
         self.run_decode_times_and_vinf_test()
+        self.run_eph_function_test()
 
     def run_construction_test(self):
         from .trajopt import mga_1dsm
@@ -130,6 +131,21 @@ class mga_1dsm_test_case(_ut.TestCase):
         self.assertAlmostEqual(retval[1], 0.)
         self.assertAlmostEqual(retval[2], 0.)
         self.assertAlmostEqual(retval[3], 1.)
+
+    def run_eph_function_test(self):
+        from .trajopt import mga_1dsm
+        udp = mga_1dsm(tof_encoding='direct', tof=[[10, 400], [10, 400]])
+        x = [10] + [0., 0., 1., 0.9, 123] + [0.4, 1.3, 0.5, 321]
+        retval = udp._decode_times_and_vinf(x)
+        eph = udp.get_eph_function(x)
+        # check closeness at first flyby
+        ep = x[0] + retval[0][0]
+        pos = eph(ep)[0]
+        pl_pos = udp._seq[1].eph(ep)[0]
+        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.001)
+        # check error for too early epoch
+        with self.assertRaises(ValueError):
+            eph(9)
 
 
 class gym_test_case(_ut.TestCase):
