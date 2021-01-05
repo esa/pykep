@@ -496,23 +496,21 @@ class mga_1dsm:
 
         timeframe = np.linspace(0, sum(T) + extension, N)
 
-        earth = self._seq[0]
-        venus = self._seq[-1]
+        planets = set(self._seq)
 
         distances = []
-        edistances = []
-        vdistances = []
+        pl_distances = {pl : [] for pl in planets}
         
         xeph = self.get_eph_function(x)
 
         for day in timeframe:
             t = x[0] + day
             pos, vel = xeph(t)
-            epos, evel = earth.eph(t)
-            vpos, vvel = venus.eph(t)
             distances.append(np.linalg.norm(pos) / AU)
-            edistances.append(np.linalg.norm(epos) / AU)
-            vdistances.append(np.linalg.norm(vpos) / AU)
+
+            for pl in planets:
+                ppos, _ = pl.eph(t)
+                pl_distances[pl].append(np.linalg.norm(ppos) / AU)
 
         fl_times = list()
         fl_distances = list()
@@ -523,9 +521,9 @@ class mga_1dsm:
 
         if axes is None:
             fig, axes = plt.subplots()
-        axes.plot(list(timeframe), distances, label="Solar Orbiter")
-        axes.plot(list(timeframe), edistances, label="Earth")
-        axes.plot(list(timeframe), vdistances, label="Venus")
+        axes.plot(list(timeframe), distances, label=self.get_name().split("(")[0].rstrip())
+        for pl in planets:
+            axes.plot(list(timeframe), pl_distances[pl], label=pl.name.capitalize())
         plt.scatter(fl_times, fl_distances, marker="o", color="r")
         axes.set_xlabel("Days")
         axes.set_ylabel("AU")
@@ -570,7 +568,7 @@ class mga_1dsm:
             assert elapsed_seconds >= 0
 
             # propagate the lagrangian
-            r, v = propagate_lagrangian(r_b, v_b, elapsed_seconds, self._common_mu)
+            r, v = propagate_lagrangian(r_b, v_b, elapsed_seconds, self._seq[0].mu_central_body)
 
             return r, v
         
