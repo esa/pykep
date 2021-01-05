@@ -4,6 +4,8 @@ from pykep.trajopt._lambert import lambert_problem_multirev
 from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
 from typing import Any, List, Tuple
+from bisect import bisect_left
+
 
 # Avoiding scipy dependency
 def norm(x):
@@ -198,6 +200,10 @@ class mga_1dsm:
         Vinfz = x[3] * sin(phi)
 
         return (retval_T, Vinfx, Vinfy, Vinfz)
+
+    def _decode_tofs(self, x):
+        T, _, _, _ = self._decode_times_and_vinf(x)
+        return T
 
     def _compute_dvs(self, x: List[float]) -> Tuple[
         List[float], # DVs
@@ -480,3 +486,92 @@ class mga_1dsm:
         return ("\n\t Sequence: " + [pl.name for pl in self._seq].__repr__() +
                 "\n\t Add launcher vinf to the objective?: " + self._add_vinf_dep.__repr__() +
                 "\n\t Add final vinf to the objective?: " + self._add_vinf_arr.__repr__())
+
+    def plot_distance_and_flybys(self, x, axes=None, units=AU, N=200, extension=300):
+        import matplotlib.pyplot as plt
+
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+        timeframe = np.linspace(0, sum(T) + extension, N)
+
+        earth = self._seq[0]
+        venus = self._seq[-1]
+
+        distances = []
+        edistances = []
+        vdistances = []
+        
+        xeph = self.get_eph_function(x)
+
+        for day in timeframe:
+            t = x[0] + day
+            pos, vel = xeph(t)
+            epos, evel = earth.eph(t)
+            vpos, vvel = venus.eph(t)
+            distances.append(np.linalg.norm(pos) / AU)
+            edistances.append(np.linalg.norm(epos) / AU)
+            vdistances.append(np.linalg.norm(vpos) / AU)
+
+        fl_times = list()
+        fl_distances = list()
+        for pl, t in zip(self._seq, ep):
+            fl_times.append(t - x[0])
+            pos, _ = pl.eph(t)
+            fl_distances.append(np.linalg.norm(pos) / AU)
+
+        if axes is None:
+            fig, axes = plt.subplots()
+        axes.plot(list(timeframe), distances, label="Solar Orbiter")
+        axes.plot(list(timeframe), edistances, label="Earth")
+        axes.plot(list(timeframe), vdistances, label="Venus")
+        plt.scatter(fl_times, fl_distances, marker="o", color="r")
+        axes.set_xlabel("Days")
+        axes.set_ylabel("AU")
+        axes.set_title("Distance to Sun")
+        axes.legend()
+
+        return axes
+
+    def get_eph_function(self, x):
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError(
+                "Expected chromosome of length "
+                + str(len(self.get_bounds()[0]))
+                + " but got length "
+                + str(len(x))
+            )
+        _, _, _, b_legs, b_ep = self._compute_dvs(x)
+        
+        def eph(
+            t: float
+        ) -> Tuple[Tuple[float, float, float], Tuple[float, float, float]]:
+
+            if t < b_ep[0]:
+                raise ValueError(
+                    "Given epoch " + str(t) + " is before launch date " + str(b_ep[0])
+                )
+
+            if t == b_ep[0]:
+                # exactly at launch
+                return self._seq[0].eph(t)
+
+            i = bisect_left(b_ep, t)  # ballistic leg i goes from planet i to planet i+1
+
+            assert i >= 1 and i <= len(b_ep)
+            if i < len(b_ep):
+                assert t <= b_ep[i]
+
+            # get start of ballistic leg
+            r_b, v_b = b_legs[i - 1]
+
+            elapsed_seconds = (t - b_ep[i - 1]) * DAY2SEC
+            assert elapsed_seconds >= 0
+
+            # propagate the lagrangian
+            r, v = propagate_lagrangian(r_b, v_b, elapsed_seconds, self._common_mu)
+
+            return r, v
+        
+        return eph
