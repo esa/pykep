@@ -136,17 +136,45 @@ class mga_1dsm_test_case(_ut.TestCase):
         from .trajopt import mga_1dsm
         udp = mga_1dsm(tof_encoding='direct', tof=[[10, 400], [10, 400]])
         x = [10] + [0., 0., 1., 0.9, 123] + [0.4, 1.3, 0.5, 321]
-        retval = udp._decode_times_and_vinf(x)
+        retval = udp._decode_tofs(x)
         eph = udp.get_eph_function(x)
         # check closeness at first flyby
-        ep = x[0] + retval[0][0]
+        ep = x[0] + retval[0]
         pos = eph(ep)[0]
         pl_pos = udp._seq[1].eph(ep)[0]
         self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
         # check closeness at second flyby
-        ep = x[0] + sum(retval[0])
+        ep = x[0] + sum(retval)
         pos = eph(ep)[0]
         pl_pos = udp._seq[2].eph(ep)[0]
+        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
+        # check error for too early epoch
+        with self.assertRaises(ValueError):
+            eph(9)
+
+class mga_test_case(_ut.TestCase):
+    """Test case for the mga1_dsm class
+
+    """
+
+    def runTest(self):
+        self.run_eph_function_test()
+
+    def run_eph_function_test(self):
+        from .trajopt import mga
+        udp = mga(tof_encoding='direct', tof=[[10, 400], [10, 400]])
+        x = [10] + [100, 250]
+        retval = udp._decode_tofs(x)
+        eph = udp.get_eph_function(x)
+        # check closeness at first flyby
+        ep = x[0] + retval[0]
+        pos = eph(ep)[0]
+        pl_pos = udp.seq[1].eph(ep)[0]
+        self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
+        # check closeness at second flyby
+        ep = x[0] + sum(retval)
+        pos = eph(ep)[0]
+        pl_pos = udp.seq[2].eph(ep)[0]
         self.assertLess(np.linalg.norm(np.array(pos) - np.array(pl_pos)), 0.01)
         # check error for too early epoch
         with self.assertRaises(ValueError):
@@ -440,6 +468,7 @@ def run_test_suite(level=0):
     suite = _ut.TestLoader().loadTestsFromTestCase(core_functions_test_case)
     suite.addTest(lambert_test_case())
     suite.addTest(mga_1dsm_test_case())
+    suite.addTest(mga_test_case())
     suite.addTest(gym_test_case())
 
     if __extensions__['numba']:

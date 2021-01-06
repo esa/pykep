@@ -1,8 +1,10 @@
-from pykep.core import epoch, lambert_problem, DAY2SEC, fb_vel, AU
+from pykep.core import epoch, lambert_problem, propagate_lagrangian, DAY2SEC, fb_vel, AU
 from pykep.planet import jpl_lp
 from pykep.trajopt._lambert import lambert_problem_multirev
 
 import numpy as np
+from typing import Any, Dict, List, Tuple
+from bisect import bisect_left
 
 
 class mga:
@@ -149,7 +151,7 @@ class mga:
             ub = [t0[1].mjd2000] + [1.0 - 1e-3] * (n_legs)
         return (lb, ub)
 
-    def _decode_tofs(self, x):
+    def _decode_tofs(self, x: List[float]) -> List[float]:
         if self.tof_encoding == 'alpha':
             # decision vector is  [t0, T, a1, a2, ....]
             T = np.log(x[2:])
@@ -242,18 +244,31 @@ class mga:
             retval[i] = x[i] / (self.tof - sum(x[1:i]))
         return retval
 
-    def _compute_dvs(self, x):
+    def _compute_dvs(self, x: List[float]) -> Tuple[
+        float, # DVlaunch
+        List[float], # DVs
+        float, # DVarrival,
+        List[Any], # Lambert legs
+        float, #DVlaunch_tot
+        List[float], # T
+        List[Tuple[List[float], List[float]]], # ballistic legs
+        List[float], # epochs of ballistic legs
+    ]:
         # 1 -  we 'decode' the times of flights and compute epochs (mjd2000)
-        T = self._decode_tofs(x)  # [T1, T2 ...]
+        T: List[float] = self._decode_tofs(x)  # [T1, T2 ...]
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
         # 2 - we compute the ephemerides
         r = [0] * len(self.seq)
         v = [0] * len(self.seq)
         for i in range(len(self.seq)):
-            r[i], v[i] = self.seq[i].eph(ep[i])
-        # 3 - we solve the lambert problems
+            r[i], v[i] = self.seq[i].eph(float(ep[i]))
+
         l = list()
+        ballistic_legs: List[Tuple[List[float],List[float]]] = []
+        ballistic_ep: List[float] = []
+
+        # 3 - we solve the lambert problems
         vi = v[0]
         for i in range(self._n_legs):
             lp = lambert_problem_multirev(
@@ -261,6 +276,8 @@ class mga:
                     r[i], r[i + 1], T[i] * DAY2SEC, self._common_mu, False, self.max_revs))
             l.append(lp)
             vi = lp.get_v2()[0]
+            ballistic_legs.append((r[i], lp.get_v1()[0]))
+            ballistic_ep.append(ep[i])
         # 4 - we compute the various dVs needed at fly-bys to match incoming
         # and outcoming
         DVfb = list()
@@ -282,11 +299,11 @@ class mga:
             DVper2 = np.sqrt(2 * self.seq[-1].mu_self / self.rp_target -
                              self.seq[-1].mu_self / self.rp_target * (1. - self.e_target))
             DVarrival = np.abs(DVper - DVper2)
-        return (DVlaunch, DVfb, DVarrival, l, DVlaunch_tot)
+        return (DVlaunch, DVfb, DVarrival, l, DVlaunch_tot, T, ballistic_legs, ballistic_ep)
 
     # Objective function
     def fitness(self, x):
-        DVlaunch, DVfb, DVarrival, _, _ = self._compute_dvs(x)
+        DVlaunch, DVfb, DVarrival, _, _, _, _, _ = self._compute_dvs(x)
         if self.tof_encoding == 'direct':
             T = sum(x[1:])
         elif self.tof_encoding == 'alpha':
@@ -309,7 +326,7 @@ class mga:
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        DVlaunch, DVfb, DVarrival, l, DVlaunch_tot = self._compute_dvs(x)
+        DVlaunch, DVfb, DVarrival, l, DVlaunch_tot, _, _, _ = self._compute_dvs(x)
         print("Multiple Gravity Assist (MGA) problem: ")
         print("Planet sequence: ", [pl.name for pl in self.seq])
 
@@ -354,10 +371,10 @@ class mga:
             fig = plt.figure()
             axes = fig.gca(projection='3d')
 
-        T = self._decode_tofs(x)
+        _, _, _, l, _, T, _, _ = self._compute_dvs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-        _, _, _, l, _ = self._compute_dvs(x)
+        
         for pl, e in zip(self.seq, ep):
             plot_planet(pl, epoch(e), units=units, legend=True,
                         color=(0.7, 0.7, 1), axes=axes)
@@ -365,6 +382,62 @@ class mga:
             plot_lambert(lamb, N=N, sol=0, units=units, color='k',
                          legend=False, axes=axes, alpha=0.8)
         return axes
+
+    def get_eph_function(self, x: List[float]):
+        """
+        For a chromosome x, returns a function object eph to compute the ephemerides of the spacecraft
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Example:
+
+          eph = prob.get_eph_function(population.champion_x)
+          pos, vel = eph(pykep.epoch(7000))
+
+        """
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError(
+                "Expected chromosome of length "
+                + str(len(self.get_bounds()[0]))
+                + " but got length "
+                + str(len(x))
+            )
+
+        _, _, _, _, _, _, b_legs, b_ep = self._compute_dvs(x)
+        
+        def eph(
+            t: float
+        ) -> Tuple[Tuple[float, float, float], Tuple[float, float, float]]:
+
+            if t < b_ep[0]:
+                raise ValueError(
+                    "Given epoch " + str(t) + " is before launch date " + str(b_ep[0])
+                )
+
+            if t == b_ep[0]:
+                # exactly at launch
+                return self.seq[0].eph(t)
+
+            i = bisect_left(b_ep, t)  # ballistic leg i goes from planet i to planet i+1
+
+            assert i >= 1 and i <= len(b_ep)
+            if i < len(b_ep):
+                assert t <= b_ep[i]
+
+            # get start of ballistic leg
+            r_b, v_b = b_legs[i - 1]
+
+            elapsed_seconds = (t - b_ep[i - 1]) * DAY2SEC
+            assert elapsed_seconds >= 0
+
+            # propagate the lagrangian
+            r, v = propagate_lagrangian(r_b, v_b, elapsed_seconds, self.seq[0].mu_central_body)
+
+            return r, v
+        
+        return eph
+
 
 
 if __name__ == "__main__":

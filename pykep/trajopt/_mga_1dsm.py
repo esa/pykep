@@ -210,7 +210,7 @@ class mga_1dsm:
         List[Any], # Lambert legs
         List[float], # T
         List[Tuple[List[float], List[float]]], # ballistic legs
-        List[float], # episodes of ballistic legs
+        List[float], # epochs of ballistic legs
     ]:
         # 1 -  we 'decode' the chromosome recording the various times of flight
         # (days) in the list T and the cartesian components of vinf
