@@ -505,13 +505,14 @@ class mga_1dsm:
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
 
-        probename = "Probe"
-        try:
-            probename = self.get_name().split("(")[0].rstrip()
-        except:
-            pass
 
-        return plot_flybys(self._seq, ep, eph_function, probename=probename, **kwargs)
+        return plot_flybys(self._seq, ep, eph_function, probename=self.get_name(), **kwargs)
+
+    def get_name(self):
+        return "MGA_1DSM Trajectory"
+
+    def __repr__(self):
+        return self.get_name()
 
     def get_eph_function(self, x):
         """

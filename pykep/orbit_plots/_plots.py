@@ -609,7 +609,7 @@ def plot_flybys(seq, ep, eph_function, probename="Probe", axes=None, N: int=200,
     planets = set(seq)
 
     distances = []
-    pl_distances: Dict[Any,List[float]] = {pl : [] for pl in planets}
+    pl_distances = {pl : [] for pl in planets}
     
     xeph = eph_function
 
