@@ -438,6 +438,22 @@ class mga:
         
         return eph
 
+    def plot_distance_and_flybys(self, x: List[float], **kwargs):
+
+        from pykep.orbit_plots import plot_flybys
+        eph_function = self.get_eph_function(x)
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+        probename = "Probe"
+        try:
+            probename = self.get_name().split("(")[0].rstrip()
+        except:
+            pass
+
+        return plot_flybys(self.seq, ep, eph_function, probename=probename, **kwargs)
+
 
 
 if __name__ == "__main__":

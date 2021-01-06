@@ -486,8 +486,8 @@ class mga_1dsm:
         return ("\n\t Sequence: " + [pl.name for pl in self._seq].__repr__() +
                 "\n\t Add launcher vinf to the objective?: " + self._add_vinf_dep.__repr__() +
                 "\n\t Add final vinf to the objective?: " + self._add_vinf_arr.__repr__())
-
-    def plot_distance_and_flybys(self, x: List[float], axes=None, N: int=200, extension: float=300):
+       
+    def plot_distance_and_flybys(self, x: List[float], **kwargs):
         """
         Plot solar distance and flybys of the trajectory defined by x.
         
@@ -498,36 +498,12 @@ class mga_1dsm:
             - extension: number of days to propagate the trajectory after the last flyby
 
         """
-        import matplotlib.pyplot as plt
 
+        from pykep.orbit_plots import plot_flybys
+        eph_function = self.get_eph_function(x)
         T = self._decode_tofs(x)
         ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
         ep = np.cumsum(ep)  # [t0, t1, t2, ...]
-
-        timeframe = np.linspace(0, sum(T) + extension, N)
-
-        planets = set(self._seq)
-
-        distances = []
-        pl_distances: Dict[Any,List[float]] = {pl : [] for pl in planets}
-        
-        xeph = self.get_eph_function(x)
-
-        for day in timeframe:
-            t = x[0] + day
-            pos, vel = xeph(t)
-            distances.append(np.linalg.norm(pos) / AU)
-
-            for pl in planets:
-                ppos, _ = pl.eph(t)
-                pl_distances[pl].append(np.linalg.norm(ppos) / AU)
-
-        fl_times = list()
-        fl_distances = list()
-        for pl, t in zip(self._seq, ep):
-            fl_times.append(t - x[0])
-            pos, _ = pl.eph(t)
-            fl_distances.append(np.linalg.norm(pos) / AU)
 
         probename = "Probe"
         try:
@@ -535,18 +511,7 @@ class mga_1dsm:
         except:
             pass
 
-        if axes is None:
-            fig, axes = plt.subplots()
-        axes.plot(list(timeframe), distances, label=probename)
-        for pl in planets:
-            axes.plot(list(timeframe), pl_distances[pl], label=pl.name.capitalize())
-        plt.scatter(fl_times, fl_distances, marker="o", color="r")
-        axes.set_xlabel("Days")
-        axes.set_ylabel("AU")
-        axes.set_title("Distance to Sun")
-        axes.legend()
-
-        return axes
+        return plot_flybys(self._seq, ep, eph_function, probename=probename, **kwargs)
 
     def get_eph_function(self, x):
         """
