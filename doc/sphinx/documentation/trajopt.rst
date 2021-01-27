@@ -73,6 +73,10 @@ Detailed Documentation
 
    .. automethod:: pykep.trajopt.mga.plot(*args)
 
+   .. automethod:: pykep.trajopt.mga.get_eph_function(*args)
+
+   .. automethod:: pykep.trajopt.mga.plot_distance_and_flybys(*args)
+
 ------------
 
 .. autoclass:: pykep.trajopt.mga_1dsm(*args)
@@ -82,6 +86,10 @@ Detailed Documentation
    .. automethod:: pykep.trajopt.mga_1dsm.pretty(*args)
 
    .. automethod:: pykep.trajopt.mga_1dsm.plot(*args)
+
+   .. automethod:: pykep.trajopt.mga.get_eph_function(*args)
+
+   .. automethod:: pykep.trajopt.mga_1dsm.plot_distance_and_flybys(*args)
 
 ------------
 

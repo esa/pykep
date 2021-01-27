@@ -595,3 +595,52 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     if axes is None:  # show only if axis is not set
         plt.show()
     return ax
+
+def plot_flybys(seq, ep, eph_function, probename="Probe", axes=None, N: int=200, extension: float=300):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from pykep.core import epoch, AU
+
+    if len(seq) != len(ep):
+        raise ValueError("Got sequence of length " + len(seq) + ", but " + len(ep) + " time epochs.")
+
+    timeframe = np.linspace(0, ep[-1] - ep[0] + extension, N)
+
+    planets = set(seq)
+
+    distances = []
+    pl_distances = {pl : [] for pl in planets}
+    
+    xeph = eph_function
+
+    for day in timeframe:
+        # position of spacecraft
+        t = ep[0] + day
+        pos, vel = xeph(t)
+        distances.append(np.linalg.norm(pos) / AU)
+
+        # positions of planets
+        for pl in planets:
+            ppos, _ = pl.eph(t)
+            pl_distances[pl].append(np.linalg.norm(ppos) / AU)
+
+    # flyby markers
+    fl_times = list()
+    fl_distances = list()
+    for pl, t in zip(seq, ep):
+        fl_times.append(t - ep[0])
+        pos, _ = pl.eph(t)
+        fl_distances.append(np.linalg.norm(pos) / AU)
+
+    if axes is None:
+        fig, axes = plt.subplots()
+    axes.plot(list(timeframe), distances, label=probename)
+    for pl in planets:
+        axes.plot(list(timeframe), pl_distances[pl], label=pl.name.capitalize())
+    plt.scatter(fl_times, fl_distances, marker="o", color="r")
+    axes.set_xlabel("Days")
+    axes.set_ylabel("AU")
+    axes.set_title("Distance to Sun")
+    axes.legend()
+
+    return axes
