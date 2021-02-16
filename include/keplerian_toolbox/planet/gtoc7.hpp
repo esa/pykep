@@ -40,7 +40,7 @@ namespace planet
  * This class allows to instantiate main belt asteroids
  * from the Global Trajectory Optimization Competition (GTOC) 7th edition
  *
- * @see http://sophia.estec.esa.int/gtoc_portal/
+ * @see https://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
