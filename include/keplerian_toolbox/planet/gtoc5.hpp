@@ -40,7 +40,7 @@ namespace planet
  * This class allows to instantiate asteroids
  * from the Global Trajectory Optimization Competition (GTOC) 5th edition
  *
- * @see http://www.esa.int/gsp/ACT/mad/op/GTOC/index.htm
+ * @see https://sophia.estec.esa.int/gtoc_portal/
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  * @author Francesco Biscani (bluescarni@gmail.com)
  */
