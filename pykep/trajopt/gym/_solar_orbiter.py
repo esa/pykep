@@ -19,7 +19,6 @@ class _solar_orbiter_udp:
     def __init__(
         self,
         t0=[epoch(0), epoch(10000)],
-        multi_objective=False,
         tof_encoding="direct",
         max_revs: int = 0,
         dummy_DSMs: bool = False,
@@ -28,7 +27,6 @@ class _solar_orbiter_udp:
     ) -> None:
         """
         Args:
-            - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objective
             - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selects the encoding for the time of flights
             - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
             - max_revs (``int``): maximal number of revolutions for lambert transfer
@@ -102,7 +100,6 @@ class _solar_orbiter_udp:
         self._t0 = t0
         self._tof = tof
         self._tof_encoding = tof_encoding
-        self._multi_objective = multi_objective
         self._max_revs = max_revs
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
@@ -362,13 +359,13 @@ class _solar_orbiter_udp:
 
         for i in range(len(x)):
             if x[i] < lower_bound[i] or x[i] > upper_bound[i]:
-                return [np.inf] + [np.inf] * self._multi_objective + [np.nan] * 4
+                return [np.nan] * 7
 
         DV, lamberts, ep, b_legs, b_ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
 
         if np.any(np.isnan(DV)):
-            return [np.inf] + [T] * self._multi_objective + [np.nan] * 4
+            return [np.nan] * 7
 
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
@@ -389,12 +386,13 @@ class _solar_orbiter_udp:
 
         a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
         final_perihelion = a * (1 - e)
+        final_aphelion = a * (1 + e)
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
         corrected_inclination = abs(abs(i) % pi - pi / 2)
 
         # check perihelion and aphelion bounds during the flight
         min_sun_distance = final_perihelion
-        max_sun_distance = AU
+        max_sun_distance = final_aphelion
 
         for l_i in range(len(b_legs) - 1):
             # project lambert leg, compute perihelion and aphelion
@@ -422,10 +420,7 @@ class _solar_orbiter_udp:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         return (
-            [
-                corrected_inclination + min_sun_distance / AU
-            ]  # TODO: consider changing this fitness to the one from ESOC
-            + [sum(T)] * self._multi_objective
+            [corrected_inclination, final_perihelion / AU, sum(T)]  # objectives
             + [np.sum(DV) - 0.1]
             + [self._min_start_mass - m_initial]
             + [0.28 - min_sun_distance / AU]
@@ -433,7 +428,7 @@ class _solar_orbiter_udp:
         )
 
     def get_nobj(self):
-        return self._multi_objective + 1
+        return 3
 
     def get_bounds(self):
         t0 = self._t0
