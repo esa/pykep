@@ -116,7 +116,7 @@ class _solar_orbiter_udp:
         t_plane_crossing = epoch(7645)
         rotation_axis = seq[0].eph(t_plane_crossing)[0]
         self._rotation_axis = rotation_axis / np.linalg.norm(rotation_axis)
-        self._theta = 7.25 * DEG2RAD
+        self._theta = -7.25 * DEG2RAD
 
         self._eph_cache = (None, None, None)
 
@@ -403,7 +403,7 @@ class _solar_orbiter_udp:
             max_sun_distance = max(max_sun_distance, np.linalg.norm(ri))
 
             transfer_a, transfer_e, _, _, _, E = ic2par(ri, vi, self._common_mu)
-            transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu)
+            transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu) # in seconds
 
             # check whether extremum happens during this leg
             M = E - transfer_e * sin(E)
@@ -411,12 +411,15 @@ class _solar_orbiter_udp:
             if mean_angle_to_apoapsis < 0:
                 mean_angle_to_apoapsis += 2 * pi
             mean_angle_to_periapsis = 2 * pi - M
+            time_to_periapsis = mean_angle_to_periapsis * transfer_period
+            time_to_apoapsis = mean_angle_to_apoapsis * transfer_period
 
-            # update min and max sun distance
-            if b_ep[l_i] - b_ep[l_i + 1] > mean_angle_to_apoapsis * transfer_period:
+            # update min and max sun distance if extremum in leg.
+            # if the extremum is not within the leg but outside it, the updates at start and end are sufficient.
+            if b_ep[l_i + 1] - b_ep[l_i] > time_to_apoapsis:
                 max_sun_distance = max(max_sun_distance, transfer_a * (1 + transfer_e))
 
-            if b_ep[l_i] - b_ep[l_i + 1] > mean_angle_to_periapsis * transfer_period:
+            if b_ep[l_i + 1] - b_ep[l_i] > time_to_periapsis:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         return (
