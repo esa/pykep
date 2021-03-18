@@ -403,6 +403,8 @@ class _solar_orbiter_udp:
             max_sun_distance = max(max_sun_distance, np.linalg.norm(ri))
 
             transfer_a, transfer_e, _, _, _, E = ic2par(ri, vi, self._common_mu)
+            # Note that transfer_period is the period of the orbital ellipse corresponding to the next leg,
+            # NOT the duration of the next leg
             transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu) # in seconds
 
             # check whether extremum happens during this leg
@@ -411,8 +413,8 @@ class _solar_orbiter_udp:
             if mean_angle_to_apoapsis < 0:
                 mean_angle_to_apoapsis += 2 * pi
             mean_angle_to_periapsis = 2 * pi - M
-            time_to_periapsis = mean_angle_to_periapsis * transfer_period
-            time_to_apoapsis = mean_angle_to_apoapsis * transfer_period
+            time_to_periapsis = (mean_angle_to_periapsis / (2 * pi)) * transfer_period # in seconds
+            time_to_apoapsis = (mean_angle_to_apoapsis  / (2 * pi)) * transfer_period # in seconds
 
             # update min and max sun distance if extremum in leg.
             # if the extremum is not within the leg but outside it, the updates at start and end are sufficient.
