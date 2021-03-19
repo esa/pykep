@@ -30,6 +30,7 @@ class _solo_mgar_udp:
     storing position, velocity, time and mu.  
     The UDP provides a hand crafted 'unconstrain' activated if use_constraints == False which was used to compute the
     reference results at https://github.com/dietmarwo/fast-cma-es/blob/master/examples/data/solo_results.txt
+    An example for test/optimize is here: https://gist.github.com/dietmarwo/5b6bbadbd696d36806177be2df3c6bb7
     """
 
     def __init__(
