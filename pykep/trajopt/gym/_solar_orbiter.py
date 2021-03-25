@@ -23,7 +23,7 @@ class _solar_orbiter_udp:
         max_revs: int = 0,
         dummy_DSMs: bool = False,
         evolve_rev_count=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
     ) -> None:
         """
         Args:
@@ -48,7 +48,7 @@ class _solar_orbiter_udp:
         for i in range(len(seq)):
             seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
 
-        tof = [[10, 900]] * (len(seq) - 1)
+        tof = [[50, 950]] * (len(seq) - 1)
 
         # Sanity checks
         # 1 - Planets need to have the same mu_central_body
@@ -111,6 +111,7 @@ class _solar_orbiter_udp:
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+        self._multi_objective = False
 
         # initialize data to compute heliolatitude
         t_plane_crossing = epoch(7645)
@@ -359,13 +360,13 @@ class _solar_orbiter_udp:
 
         for i in range(len(x)):
             if x[i] < lower_bound[i] or x[i] > upper_bound[i]:
-                return [np.nan] * 7
+                return [np.nan] * (self.get_nobj() + self.get_nic())
 
         DV, lamberts, ep, b_legs, b_ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
 
         if np.any(np.isnan(DV)):
-            return [np.nan] * 7
+            return [np.nan] * (self.get_nobj() + self.get_nic())
 
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
@@ -425,7 +426,8 @@ class _solar_orbiter_udp:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         return (
-            [corrected_inclination, final_perihelion / AU, sum(T)]  # objectives
+            [corrected_inclination + final_perihelion / AU]
+            + [sum(T)] * self._multi_objective # objectives
             + [np.sum(DV) - 0.1]
             + [self._min_start_mass - m_initial]
             + [0.28 - min_sun_distance / AU]
@@ -433,7 +435,7 @@ class _solar_orbiter_udp:
         )
 
     def get_nobj(self):
-        return 3
+        return 1 + self._multi_objective
 
     def get_bounds(self):
         t0 = self._t0
