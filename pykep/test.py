@@ -253,18 +253,26 @@ class gym_test_case(_ut.TestCase):
     def run_solar_orbiter_test(self):
         from .trajopt import gym
         udp = gym.solar_orbiter
-        x = [7.52574686e+03, 5.89460811e+02, 3.04820667e+02, 4.90095761e+02,
-        4.41678580e+02, 5.59871619e+02, 5.39100020e+02, 4.49401876e+02,
-        2.24700938e+02, 1.60267063e+00, 1.39925808e+00]
+        x = [5150.7372, 838.744594, 423.725529, 542.888932,
+         786.972151, 689.379137, 689.367866, 405.891356,
+          490.36507, 814.464243, 2.11941309, 1.05783213]
         old_fitness = udp.fitness(x)
-        self.assertAlmostEqual(old_fitness[0], 1.5075730949219308)
+        self.assertAlmostEqual(old_fitness[0], 1.8437399239490322)
 
-        udp_rev = gym.solar_orbiter_evolve_rev
-        indices = [1, 1, 1, 1, 4, 3, 4, 2]
-        new_fitness = udp_rev.fitness(x[:-2]+indices+x[-2:])
-        self.assertAlmostEqual(new_fitness[0], 1.5075730949219308)
-        self.assertEqual(new_fitness, old_fitness)
-
+        udp = gym.solar_orbiter_1dsm
+        x = [7342.0, 0.14120411251056492, 0.4237723295636071, 5258.156830592356,
+         0.6300665073310685, 324.0,
+        -5.76656131, 2.48737299, 0.1, 225.0,
+         5.00867031, 2.32148522, 0.3521748460245339, 110.0,
+        -4.50716331, 1.0689289, 0.1, 281.0,
+        -5.44279107, 1.86098904, 0.5933742736159363, 899,
+         0.55221244, 1.09450385, 0.5255737976858433, 674,
+         0.75633857, 1.05797006, 0.36486279857122045, 449,
+        -5.98270464, 1.05787804, 0.3640453532964525, 449,
+        -6.09420675, 1.05864758, 0.387330295393306, 449,
+         0.5987826849271193, 1.0641086817294465]
+        old_fitness = udp.fitness(x)
+        self.assertAlmostEqual(old_fitness[0], 1.219085231166766)        
 
 class spherical_harmonics_loader_test_case(_ut.TestCase):
     """Test case for the spherical harmonic gravity file loader function.
