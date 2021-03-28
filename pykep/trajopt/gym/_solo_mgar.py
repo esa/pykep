@@ -4,7 +4,7 @@ from typing import Any, List, Tuple
 
 from pykep import AU, DAY2SEC, SEC2DAY, DEG2RAD, RAD2DEG, epoch, ic2par
 from pykep.core import fb_vel, lambert_problem
-from pykep.trajopt import lambert_problem_multirev_ga
+from pykep.trajopt._lambert import lambert_problem_multirev_ga
 from pykep.planet import jpl_lp
 
 import numpy as np
@@ -202,14 +202,15 @@ class _solo_mgar_udp:
                     50000 * distance_penalty
                     )
         else:
-            value = corrected_inclination
-   
+            value = corrected_inclination if self._multi_objective else \
+                        corrected_inclination + emp_perhelion / AU
         return (
             # objectives
             [value]
             +[emp_perhelion / AU] * self._multi_objective
             +[time_all] * self._multi_objective
             # constraints
+            +[dv_val - 0.1] * self._use_constraints
             +[time_all - time_limit] * self._use_constraints
             +[np.sum(dvs) - 0.1] * self._use_constraints
             +[reso_penalty - 0.1] * self._use_constraints
@@ -221,7 +222,7 @@ class _solo_mgar_udp:
         return self._multi_objective * 2 + 1
     
     def get_nic(self):
-        return self._use_constraints * 5
+        return self._use_constraints * 6
     
     def get_bounds(self):
         t0 = self._t0
