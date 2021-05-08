@@ -202,6 +202,7 @@ class _solo_mgar_udp:
                     50000 * distance_penalty
                     )
         else:
+            corrected_inclination *= DEG2RAD
             value = corrected_inclination if self._multi_objective else \
                         corrected_inclination + emp_perhelion / AU
         return (
@@ -210,8 +211,6 @@ class _solo_mgar_udp:
             +[emp_perhelion / AU] * self._multi_objective
             +[time_all] * self._multi_objective
             # constraints
-            +[dv_val - 0.1] * self._use_constraints
-            +[time_all - time_limit] * self._use_constraints
             +[np.sum(dvs) - 0.1] * self._use_constraints
             +[reso_penalty - 0.1] * self._use_constraints
             +[0.28 - min_sun_distance / AU] * self._use_constraints
@@ -222,7 +221,7 @@ class _solo_mgar_udp:
         return self._multi_objective * 2 + 1
     
     def get_nic(self):
-        return self._use_constraints * 6
+        return self._use_constraints * 4
     
     def get_bounds(self):
         t0 = self._t0
@@ -247,7 +246,8 @@ class _solo_mgar_udp:
         rvt_ins[1:] = [rvt.rotate(self._rotation_axis, self._theta) for rvt in rvt_ins[1:]]
         rvt_pls = [rvt.rotate(self._rotation_axis, self._theta) for rvt in rvt_pls]
             
-        ep = [epoch(rvt_pl._t * SEC2DAY) for rvt_pl in rvt_pls]
+        date = [epoch(rvt_pl._t * SEC2DAY) for rvt_pl in rvt_pls]
+        ep = [rvt_pl._t * SEC2DAY for rvt_pl in rvt_pls]
         b_legs = [[rvt_out._r, rvt_out._v] for rvt_out in rvt_outs]
         Vinfx, Vinfy, Vinfz = [
             a - b for a, b in zip(b_legs[0][1], self._seq[0].eph(ep[0])[1])
@@ -262,8 +262,13 @@ class _solo_mgar_udp:
         print("Planet sequence: ", [pl.name for pl in self._seq])
 
         print("Departure: ", self._seq[0].name)
+        print("\tDate: ", date[0])
         print("\tEpoch: ", ep[0], " [mjd2000]")
         print("\tSpacecraft velocity: ", b_legs[0][1], "[m/s]")
+        
+        print("\tr:", str(rvt_outs[0]._r))
+        print("\tOutgoing V:", str(rvt_outs[0]._v))
+
         print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
         _, _, transfer_i, _, _, _ = ic2par(*(b_legs[0]), common_mu)
         print("\tTransfer Angle: ", np.degrees(transfer_ang), "deg")
@@ -276,6 +281,7 @@ class _solo_mgar_udp:
         for i in range(1, len(self._seq) - 1):
             pl = self._seq[i]
             e = ep[i]
+            d = date[i]
             dv = dvs[i]
             leg = b_legs[i]
             rtv_in = rvt_ins[i]
@@ -287,9 +293,13 @@ class _solo_mgar_udp:
             deflection = _angle(vr_in, vr_out)
             transfer_ang = _angle(rtv_out._r, rvt_outs[i + 1]._r) if i < len(self._seq) - 2 else 0 
             print("Fly-by: ", pl.name)
+            print("\tDate: ", d)            
             print("\tEpoch: ", e, " [mjd2000]")
             print("\tDV: ", dv, "[m/s]")
             print("\tV_inf: ", v_inf, "[m/s]")
+            print("\tr:", str(rtv_out._r))
+            print("\tOutgoing V:", str(rtv_out._v))
+            print("\tOutgoing Vr:", str(vr_out))
             print("\tTransfer Angle: ", np.degrees(transfer_ang), "deg")
             print("\tGA deflection: ", np.degrees(deflection), "deg")
             eph = [rotate_vector(v, self._rotation_axis, self._theta) for v in pl.eph(e)]
