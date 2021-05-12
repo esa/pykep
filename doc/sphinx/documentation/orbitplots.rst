@@ -12,6 +12,7 @@ Name                                                           Type            D
 :func:`pykep.orbit_plots.plot_kepler`                          function        Plots a keplerian propagated arc
 :func:`pykep.orbit_plots.plot_taylor`                          function        Plots a constant thrust propagated arc
 :func:`pykep.orbit_plots.plot_sf_leg`                          function        Plots a Sims_Flanagan leg
+:func:`pykep.orbit_plots.plot_distance_and_flybys              function        Plots distance from sun and flybys over time
 ========================================================       =========       ================================================
 
 Detailed Documentation
@@ -34,3 +35,7 @@ Detailed Documentation
 ------------
 
 .. autofunction:: pykep.orbit_plots.plot_sf_leg(*args)
+
+------------
+
+.. autofunction:: pykep.orbit_plots.plot_distance_and_flybys(*args)

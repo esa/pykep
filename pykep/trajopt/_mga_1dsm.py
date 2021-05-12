@@ -3,6 +3,9 @@ from pykep.planet import jpl_lp
 from pykep.trajopt._lambert import lambert_problem_multirev
 from math import pi, cos, sin, acos, log, sqrt
 import numpy as np
+from typing import Any, Dict, List, Tuple
+from bisect import bisect_left
+
 
 # Avoiding scipy dependency
 def norm(x):
@@ -198,8 +201,17 @@ class mga_1dsm:
 
         return (retval_T, Vinfx, Vinfy, Vinfz)
 
-    # Objective function
-    def fitness(self, x):
+    def _decode_tofs(self, x):
+        T, _, _, _ = self._decode_times_and_vinf(x)
+        return T
+
+    def _compute_dvs(self, x: List[float]) -> Tuple[
+        List[float], # DVs
+        List[Any], # Lambert legs
+        List[float], # T
+        List[Tuple[List[float], List[float]]], # ballistic legs
+        List[float], # epochs of ballistic legs
+    ]:
         # 1 -  we 'decode' the chromosome recording the various times of flight
         # (days) in the list T and the cartesian components of vinf
         T, Vinfx, Vinfy, Vinfz = self._decode_times_and_vinf(x)
@@ -212,9 +224,14 @@ class mga_1dsm:
         for i in range(len(self._seq)):
             t_P[i] = epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
+        ballistic_legs: List[Tuple[List[float],List[float]]] = []
+        ballistic_ep: List[float] = []
+        lamberts = []
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
+        ballistic_legs.append((r_P[0], v0))
+        ballistic_ep.append(t_P[0].mjd2000)
         r, v = propagate_lagrangian(
             r_P[0], v0, x[4] * T[0] * DAY2SEC, self.common_mu)
 
@@ -224,6 +241,10 @@ class mga_1dsm:
                     r, r_P[1], dt, self.common_mu, cw=False, max_revs=self.max_revs))
         v_end_l = l.get_v2()[0]
         v_beg_l = l.get_v1()[0]
+        lamberts.append(l)
+
+        ballistic_legs.append((r, v_beg_l))
+        ballistic_ep.append(t_P[0].mjd2000 + x[4] * T[0])
 
         # First DSM occuring at time nu1*T1
         DV[0] = norm([a - b for a, b in zip(v_beg_l, v)])
@@ -233,6 +254,8 @@ class mga_1dsm:
             # Fly-by
             v_out = fb_prop(v_end_l, v_P[i], x[
                             7 + (i - 1) * 4] * self._seq[i].radius, x[6 + (i - 1) * 4], self._seq[i].mu_self)
+            ballistic_legs.append((r_P[i], v_out))
+            ballistic_ep.append(t_P[i].mjd2000)
             # s/c propagation before the DSM
             r, v = propagate_lagrangian(
                 r_P[i], v_out, x[8 + (i - 1) * 4] * T[i] * DAY2SEC, self.common_mu)
@@ -242,8 +265,12 @@ class mga_1dsm:
                                   self.common_mu, cw=False, max_revs=self.max_revs))
             v_end_l = l.get_v2()[0]
             v_beg_l = l.get_v1()[0]
+            lamberts.append(l)
             # DSM occuring at time nu2*T2
             DV[i] = norm([a - b for a, b in zip(v_beg_l, v)])
+
+            ballistic_legs.append((r, v_beg_l))
+            ballistic_ep.append(t_P[i].mjd2000 + x[8 + (i - 1) * 4] * T[i])
 
         # Last Delta-v
         if self._add_vinf_arr:
@@ -260,14 +287,19 @@ class mga_1dsm:
         if self._add_vinf_dep:
             DV[0] += x[3]
 
+        return (DV, lamberts, T, ballistic_legs, ballistic_ep)
+
+    # Objective function
+    def fitness(self, x):
+        DV, _, T, _, _ = self._compute_dvs(x)
         if not self._multi_objective:
-            return (sum(DV),)
+            return [sum(DV),]
         else:
             return (sum(DV), sum(T))
 
     def pretty(self, x):
         """
-        prob.plot(x)
+        prob.pretty(x)
 
         - x: encoded trajectory
 
@@ -454,3 +486,84 @@ class mga_1dsm:
         return ("\n\t Sequence: " + [pl.name for pl in self._seq].__repr__() +
                 "\n\t Add launcher vinf to the objective?: " + self._add_vinf_dep.__repr__() +
                 "\n\t Add final vinf to the objective?: " + self._add_vinf_arr.__repr__())
+       
+    def plot_distance_and_flybys(self, x: List[float], **kwargs):
+        """
+        Plot solar distance and flybys of the trajectory defined by x.
+        
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+            - axes: Matplotlib plotting axes
+            - N: number of sample points
+            - extension: number of days to propagate the trajectory after the last flyby
+
+        """
+
+        from pykep.orbit_plots import plot_flybys
+        eph_function = self.get_eph_function(x)
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+
+        return plot_flybys(self._seq, ep, eph_function, probename=self.get_name(), **kwargs)
+
+    def get_name(self):
+        return "MGA_1DSM Trajectory"
+
+    def __repr__(self):
+        return self.get_name()
+
+    def get_eph_function(self, x):
+        """
+        For a chromosome x, returns a function object eph to compute the ephemerides of the spacecraft
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Example:
+
+          eph = prob.get_eph_function(population.champion_x)
+          pos, vel = eph(pykep.epoch(7000))
+
+        """
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError(
+                "Expected chromosome of length "
+                + str(len(self.get_bounds()[0]))
+                + " but got length "
+                + str(len(x))
+            )
+        _, _, _, b_legs, b_ep = self._compute_dvs(x)
+        
+        def eph(
+            t: float
+        ) -> Tuple[Tuple[float, float, float], Tuple[float, float, float]]:
+
+            if t < b_ep[0]:
+                raise ValueError(
+                    "Given epoch " + str(t) + " is before launch date " + str(b_ep[0])
+                )
+
+            if t == b_ep[0]:
+                # exactly at launch
+                return self._seq[0].eph(t)
+
+            i = bisect_left(b_ep, t)  # ballistic leg i goes from planet i to planet i+1
+
+            assert i >= 1 and i <= len(b_ep)
+            if i < len(b_ep):
+                assert t <= b_ep[i]
+
+            # get start of ballistic leg
+            r_b, v_b = b_legs[i - 1]
+
+            elapsed_seconds = (t - b_ep[i - 1]) * DAY2SEC
+            assert elapsed_seconds >= 0
+
+            # propagate the lagrangian
+            r, v = propagate_lagrangian(r_b, v_b, elapsed_seconds, self._seq[0].mu_central_body)
+
+            return r, v
+        
+        return eph
