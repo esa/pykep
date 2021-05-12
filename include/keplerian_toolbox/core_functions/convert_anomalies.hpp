@@ -39,7 +39,7 @@ namespace kep_toolbox
 // mean to eccentric
 inline double m2e(const double &M, const double &e)
 {
-    double E = M + e * cos(M);
+    double E = M + e * sin(M);
     newton_raphson(E, boost::bind(kepE, _1, M, e), boost::bind(d_kepE, _1, e), 100, ASTRO_TOLERANCE);
     return (E);
 }
