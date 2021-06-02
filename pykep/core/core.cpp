@@ -35,7 +35,7 @@
 #endif
 
 #if PY_MAJOR_VERSION < 3
-#error Minimum supported Python version is 2.6.
+#error Minimum supported Python version is 3.
 #endif
 
 #include <boost/math/constants/constants.hpp>
@@ -517,8 +517,12 @@ BOOST_PYTHON_MODULE(core)
         "- v: velocity (cartesian)\n"
         "- mu: gravity parameter\n\n"
         "Returns the osculating keplerian elements a,e,i,W,w,E\n"
+        "a is the semi-major axis, always a positive quantity.\n"
+        "e is the eccentricity, non-negative\n"
+        "i is the incliniation\n"
+        "W is the longitude of the ascending node, undefined in an equatorial orbit\n"
+        "w is the argument of perigee, undefined in a circular orbit\n"
         "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-        "a is the semi-major axis always a positive quantity.\n"
         "NOTE: The routine is singular when the elements are not defined.\n"
         "Example:: \n\n"
         "  el = ic2par([1,0,0],[0,1,0],1.0)",
@@ -529,8 +533,12 @@ BOOST_PYTHON_MODULE(core)
         "- E: osculating keplerian elements a,e,i,W,w,E ( l, ND, rad, rad, rad, rad)\n"
         "- mu: gravity parameter (l^3/s^2)\n\n"
         "Returns cartesian elements from Keplerian elements\n"
+        "a is the semi-major axis, always a positive quantity.\n"
+        "e is the eccentricity, non-negative\n"
+        "i is the incliniation\n"
+        "W is the longitude of the ascending node\n"
+        "w is the argument of perigee\n"
         "E is the eccentric anomaly for e<1, the Gudermannian for e>1\n"
-        "a is the semi-major axis always a positive quantity.\n"
         "Example:: \n\n"
         "  r, v = pk.par2ic([1,0.3,0.1,0.1,0.2,0.2], 1)",
         (arg("E"), arg("mu") = 1.0));

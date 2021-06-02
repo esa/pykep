@@ -1,4 +1,5 @@
-from scipy.interpolate import interp2d
+from scipy.interpolate import interp2d, interp1d
+from math import sqrt
 
 _vinfs_A5 = [0., 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6]
 _decls_A5 = [-90, -40, -30, -29, -28.5, -20, -10, 0, 10, 20, 28.5, 29, 30, 40, 90]
@@ -19,6 +20,9 @@ _data_A5 = [
     [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     [1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1]
 ]
+
+_vinfs_A551 = [sqrt(elem) for elem in [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 40, 45, 50, 55, 60]]
+_data_A551 = [5995, 5780, 5570, 5360, 5160, 4965, 4775, 4585, 4405, 4230, 4055, 3890, 3730, 3570, 3420, 3270, 3130, 2995, 2860, 2670, 2380, 2120, 1900, 1695]
 
 _vinfs_SF = [0, 1, 2, 3, 4, 5]
 _decls_SF = [-90, -65, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 65, 90]
@@ -89,6 +93,7 @@ class _launchers:
     """
     def __init__(self):
         self._atlas501 = interp2d(_vinfs_A5, _decls_A5, _data_A5, kind='linear', fill_value=0.1, copy=False)
+        self._atlas551 = interp1d(_vinfs_A551, _data_A551, kind='linear', fill_value=0.1, copy=False, bounds_error=False)
         self._soyuzf = interp2d(_vinfs_SF, _decls_SF, _data_SF, kind='linear', fill_value=1e-3, copy=False)
         self._ariane5 = interp2d(_vinfs_Ariane5, _decls_Ariane5, _data_Ariane5, kind='linear', fill_value=1e-3, copy=False)
     def atlas501(self, vinfs, decls):
@@ -106,6 +111,22 @@ class _launchers:
         
         """
         return self._atlas501(vinfs, decls)
+
+    def atlas551(self, vinfs):
+        """atlas551(vinfs)
+
+        Computes the mass that the Atlas 551 launcher can deliver to a certain vinf
+        If the inputs are arrays, then a mesh is considered and the mass is returned on points of the mesh
+
+        Args:
+            - vinfs (``float`` or array-like): the hyperbolic escape velocity in km/s
+
+        Returns:
+            Numpy array containg the mass delivered to escape with said magnitudes.
+
+        """
+        return self._atlas551(vinfs)
+
     def soyuzf(self, vinfs, decls):
         """soyuzf(vinfs, decls)
 

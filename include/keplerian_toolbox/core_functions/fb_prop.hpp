@@ -41,8 +41,8 @@
  * \param[in]  v_in inertial velocity before encounter (cartesian)
  * \param[in]  v_pla inertial velocity of the planet at encounter (cartesian)
  * \param[in]  rp periplanet radius of the planetocentric hyperbola
- * \param[out] beta determines the hyperbola orbit plane orientation
- * \param[out] mu planet gravitationa parameter
+ * \param[in] beta determines the hyperbola orbit plane orientation
+ * \param[in] mu planet gravitationa parameter
  *
  * @see
  * http://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2010-(CambridgePress)GlobalOptimizationAndSpacePruningForSpacecraftTrajectoryDesign.pdf
