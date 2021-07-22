@@ -257,12 +257,12 @@ class gym_test_case(_ut.TestCase):
         4.41678580e+02, 5.59871619e+02, 5.39100020e+02, 4.49401876e+02,
         2.24700938e+02, 1.60267063e+00, 1.39925808e+00]
         old_fitness = udp.fitness(x)
-        self.assertAlmostEqual(old_fitness[0], 1.5075730949219308)
+        self.assertAlmostEqual(old_fitness[0], 1.7918120371867503)
 
         udp_rev = gym.solar_orbiter_evolve_rev
         indices = [1, 1, 1, 1, 4, 3, 4, 2]
         new_fitness = udp_rev.fitness(x[:-2]+indices+x[-2:])
-        self.assertAlmostEqual(new_fitness[0], 1.5075730949219308)
+        self.assertAlmostEqual(new_fitness[0], 1.7918120371867503)
         self.assertEqual(new_fitness, old_fitness)
 
 
