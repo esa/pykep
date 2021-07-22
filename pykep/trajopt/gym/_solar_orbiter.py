@@ -7,6 +7,7 @@ from pykep.trajopt._lambert import lambert_problem_multirev
 
 from pykep import AU, DAY2SEC, DEG2RAD, RAD2DEG, SEC2DAY, epoch, ic2par
 from pykep.core import fb_prop, fb_vel, lambert_problem, propagate_lagrangian
+from pykep.trajopt import mga_1dsm
 from pykep.planet import jpl_lp
 from pykep.trajopt import launchers
 
@@ -24,7 +25,7 @@ class _solar_orbiter_udp:
         max_revs: int = 0,
         dummy_DSMs: bool = False,
         evolve_rev_count=False,
-        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
     ) -> None:
         """
         Args:
@@ -50,7 +51,7 @@ class _solar_orbiter_udp:
         for i in range(len(seq)):
             seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
 
-        tof = [[10, 900]] * (len(seq) - 1)
+        tof = [[50, 950]] * (len(seq) - 1)
 
         # Sanity checks
         # 1 - Planets need to have the same mu_central_body
@@ -114,6 +115,7 @@ class _solar_orbiter_udp:
 
         self._n_legs = len(seq) - 1
         self._common_mu = seq[0].mu_central_body
+        self._multi_objective = False
 
         # initialize data to compute heliolatitude
         t_plane_crossing = epoch(7645)
@@ -362,13 +364,13 @@ class _solar_orbiter_udp:
 
         for i in range(len(x)):
             if x[i] < lower_bound[i] or x[i] > upper_bound[i]:
-                return [np.inf] + [np.inf] * self._multi_objective + [np.nan] * 4
+                return [np.nan] * (self.get_nobj() + self.get_nic())
 
         DV, lamberts, ep, b_legs, b_ep = self._compute_dvs(x)
         T = self._decode_tofs(x)
 
         if np.any(np.isnan(DV)):
-            return [np.inf] + [T] * self._multi_objective + [np.nan] * 4
+            return [np.nan] * (self.get_nobj() + self.get_nic())
 
         # compute launch velocity and declination
         Vinfx, Vinfy, Vinfz = [
@@ -427,10 +429,8 @@ class _solar_orbiter_udp:
                 min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
 
         return (
-            [
-                corrected_inclination + min_sun_distance / AU
-            ]  # TODO: consider changing this fitness to the one from ESOC
-            + [sum(T)] * self._multi_objective
+            [corrected_inclination + final_perihelion / AU]
+            + [sum(T)] * self._multi_objective # objectives
             + [np.sum(DV) - 0.1]
             + [self._min_start_mass - m_initial]
             + [0.28 - min_sun_distance / AU]
@@ -438,7 +438,7 @@ class _solar_orbiter_udp:
         )
 
     def get_nobj(self):
-        return self._multi_objective + 1
+        return 1 + self._multi_objective
 
     def get_bounds(self):
         t0 = self._t0
@@ -752,11 +752,336 @@ class _solar_orbiter_udp:
 
         return axes
 
+class _solar_orbiter_udp_1dsm(mga_1dsm):
+
+    earth = jpl_lp("earth")
+    venus = jpl_lp("venus")
+
+    def __init__(
+        self,
+        t0=[epoch(0), epoch(10000)],
+        vinf = [0.5, 7.5],
+        seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
+        tof=[[10, 950]]*(9),
+        **kwargs
+    ) -> None:
+        safe_distance = 350000
+        for i in range(len(seq)):
+            seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
+        super().__init__(t0=t0, seq=seq, tof=tof, vinf=vinf, add_vinf_arr = False, **kwargs)
+        self._safe_distance = safe_distance
+        self._min_start_mass = 1800
+        self._common_mu = self._seq[0].mu_central_body
+        
+        # initialize data to compute heliolatitude
+        t_plane_crossing = epoch(7645)
+        rotation_axis = seq[0].eph(t_plane_crossing)[0]
+        self._rotation_axis = rotation_axis / np.linalg.norm(rotation_axis)
+        self._theta = -7.25 * DEG2RAD
+        
+    def _decode_tofs(self, x: List[float]) -> List[float]:
+        T, _, _, _ = self._decode_times_and_vinf(x)
+        return T
+    
+    def _decode_times_and_vinf(self, x: List[float]):
+        tail = 2
+        return super()._decode_times_and_vinf(x[:-tail])
+
+    def _compute_dvs(self, x: List[float]) -> Tuple[
+        List[float], # DVs
+        List[Any], # Lambert legs
+        List[float], # T
+        List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]], # ballistic legs
+        List[float], # episodes of ballistic legs
+    ]:
+        DV, l, T, b_legs, b_ep = super()._compute_dvs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        
+        # add ballistic leg after final flyby
+        eph = self._seq[-1].eph(ep[-1])
+        v_out = fb_prop(
+            l[-1].get_v2()[0],
+            eph[1],
+            x[-1] * self._seq[-1].radius,
+            x[-2],
+            self._seq[-1].mu_self,
+        )
+        b_legs.append((eph[0], v_out))
+        b_ep.append(ep[-1])
+
+        assert len(b_legs) == 2*len(l) + 1
+        assert len(b_ep) == len(b_legs)
+        assert len(DV) == len(l)+1
+        return (DV, l, T, b_legs, b_ep)
+
+    # Objective function
+    def fitness(self, x):
+        if len(x) != len(self.get_bounds()[0]):
+            raise ValueError(
+                "Expected "
+                + str(len(self.get_bounds()[0]))
+                + " parameters but got "
+                + str(len(x))
+            )
+
+        lower_bound, upper_bound = self.get_bounds()
+
+        for i in range(len(x)):
+            if x[i] < lower_bound[i] or x[i] > upper_bound[i]:
+                return [np.inf] + [np.inf] * self._multi_objective + [np.nan] * 4
+
+        DV, lamberts, T, b_legs, b_ep = self._compute_dvs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+
+        if np.any(np.isnan(DV)):
+            return [np.inf] + [T] * self._multi_objective + [np.nan] * 4
+
+        # compute launch velocity and declination
+        Vinfx, Vinfy, Vinfz = [
+            a - b for a, b in zip(b_legs[0][1], self._seq[0].eph(ep[0])[1])
+        ]
+        Vinf_launch = np.linalg.norm([Vinfx, Vinfy, Vinfz])
+
+        # We now have the initial mass of the spacecraft
+        m_initial = launchers.atlas551(Vinf_launch / 1000.0) # 1800#
+
+        # compute final flyby and resulting trajectory
+        eph = self._seq[-1].eph(ep[-1])
+        v_out = b_legs[-1][1]
+        
+        # rotate to get inclination respective to solar equator. This could be moved to the init phase, as it won't change
+        r_rot = self._rotate_vector(eph[0], self._rotation_axis, self._theta)
+        v_rot = self._rotate_vector(v_out, self._rotation_axis, self._theta)
+
+        a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
+        final_perihelion = a * (1 - e)
+        final_aphelion = a * (1 + e)
+        # orbit should be as polar as possible, but we do not care about prograde/retrograde
+        corrected_inclination = abs(abs(i) % pi - pi / 2)
+
+        # check perihelion and aphelion bounds during the flight
+        min_sun_distance = final_perihelion
+        max_sun_distance = final_aphelion
+
+        for l_i in range(len(b_legs) - 1):
+            # project lambert leg, compute perihelion and aphelion
+            ri, vi = b_legs[l_i]
+
+            # check transfer points for min and max sun distance
+            min_sun_distance = min(min_sun_distance, np.linalg.norm(ri))
+            max_sun_distance = max(max_sun_distance, np.linalg.norm(ri))
+
+            transfer_a, transfer_e, _, _, _, E = ic2par(ri, vi, self._common_mu)
+            transfer_period = 2 * pi * sqrt(transfer_a ** 3 / self._common_mu)
+
+            # check whether extremum happens during this leg
+            M = E - transfer_e * sin(E)
+            mean_angle_to_apoapsis = pi - M
+            if mean_angle_to_apoapsis < 0:
+                mean_angle_to_apoapsis += 2 * pi
+            mean_angle_to_periapsis = 2 * pi - M
+            time_to_periapsis = (mean_angle_to_periapsis / (2 * pi)) * transfer_period # in seconds
+            time_to_apoapsis = (mean_angle_to_apoapsis  / (2 * pi)) * transfer_period # in seconds
+
+            # update min and max sun distance
+            if b_ep[l_i + 1] - b_ep[l_i] > time_to_apoapsis:
+                max_sun_distance = max(max_sun_distance, transfer_a * (1 + transfer_e))
+
+            if b_ep[l_i + 1] - b_ep[l_i] > time_to_periapsis:
+                min_sun_distance = min(min_sun_distance, transfer_a * (1 - transfer_e))
+
+        return (
+            [
+                corrected_inclination + min_sun_distance / AU
+            ]  # TODO: consider changing this fitness to the one from ESOC
+            + [sum(T)] * self._multi_objective
+            + [np.sum(DV) - 0.1]
+            + [self._min_start_mass - m_initial]
+            + [0.28 - min_sun_distance / AU]
+            + [max_sun_distance / AU - 1.2]
+        )
+
+    def get_nobj(self):
+        return self._multi_objective + 1
+
+    def get_bounds(self):
+        t0 = self._t0
+        tof = self._tof
+        n_legs = self.n_legs
+
+        lb, ub = super().get_bounds()
+
+        # add final flyby
+        pl = self._seq[-1]
+        lb = lb + [-2 * pi, (pl.radius + self._safe_distance) / pl.radius]
+        ub = ub + [2 * pi, 30]
+
+        assert len(ub) == len(lb)
+
+        return (lb, ub)
+
+    def get_nic(self):
+        return 4
+
+    def pretty(self, x):
+        """pretty(x)
+
+        Args:
+            - x (``list``, ``tuple``, ``numpy.ndarray``): Decision chromosome, e.g. (``pygmo.population.champion_x``).
+
+        Prints human readable information on the trajectory represented by the decision vector x
+        """
+        DV, lambert_legs, T, b_legs, b_ep = self._compute_dvs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        b_i = 0
+        Vinfx, Vinfy, Vinfz = [
+            a - b for a, b in zip(b_legs[b_i][1], self._seq[0].eph(ep[0])[1])
+        ]
+      
+        # we assume that the lambert_problem_multirev class is used
+        lambert_indices = [lam.best_i for lam in lambert_legs]
+        assert len(lambert_indices) == self.n_legs
+
+        print("Multiple Gravity Assist (MGA) problem: ")
+        print("Planet sequence: ", [pl.name for pl in self._seq])
+
+        print("Departure: ", self._seq[0].name)
+        print("\tEpoch: ", ep[0], " [mjd2000]")
+        print("\tSpacecraft velocity: ", b_legs[0][1], "[m/s]")
+        print("\tLaunch velocity: ", [Vinfx, Vinfy, Vinfz], "[m/s]")
+        _, _, transfer_i, _, _, _ = ic2par(*(b_legs[0]), self._common_mu)
+        print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+        print("\tNumber of Revolutions:", int((lambert_indices[0] + 1) / 2))
+        print("\tLambert Index:", int(lambert_indices[0]))
+        b_i += 2
+
+        assert len(DV) == len(self._seq)
+        for i in range(1, len(self._seq) - 1):
+            pl = self._seq[i]
+            e = ep[i]
+            dv = DV[i - 1]
+            leg = b_legs[b_i]
+            print("Fly-by: ", pl.name)
+            print("\tEpoch: ", e, " [mjd2000]")
+            print("\tDSM at ", b_ep[b_i + 1])
+            print("\tDV: ", dv, "[m/s]")
+            eph = pl.eph(e)
+            assert np.linalg.norm([a - b for a, b in zip(leg[0], eph[0])]) < 0.1
+            _, _, transfer_i, _, _, _ = ic2par(eph[0], leg[1], self._common_mu)
+            print("\tOutgoing Inclination:", transfer_i * RAD2DEG, "[deg]")
+            print("\tNumber of Revolutions:", int((lambert_indices[i] + 1) / 2))
+            print("\tLambert Index:", int(lambert_indices[i]))
+            b_i += 2
+
+        print("Final Fly-by: ", self._seq[-1].name)
+        print("\tEpoch: ", ep[-1], " [mjd2000]")
+        print("\tSpacecraft velocity: ", lambert_legs[-1].get_v2()[0], "[m/s]")
+        print("\tBeta: ", x[-2])
+        print("\tr_p: ", x[-1])
+
+        print("Resulting Solar orbit:")
+        r_rot = b_legs[-1][0]
+        v_rot = b_legs[-1][1]
+
+        a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
+        print("Perihelion: ", (a * (1 - e)) / AU, " AU")
+        print("Aphelion: ", (a * (1 + e)) / AU, " AU")
+        print("Inclination: ", i * RAD2DEG, " degrees")
+
+        print("Time of flights: ", T, "[days]")
+
+    def plot(self, x, axes=None, units=AU, N=60):
+        """plot(self, x, axes=None, units=pk.AU, N=60)
+
+        Plots the spacecraft trajectory.
+
+        Args:
+            - x (``tuple``, ``list``, ``numpy.ndarray``): Decision chromosome.
+            - axes (``matplotlib.axes._subplots.Axes3DSubplot``): 3D axes to use for the plot
+            - units (``float``, ``int``): Length unit by which to normalise data.
+            - N (``float``): Number of points to plot per leg
+        """
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
+        from mpl_toolkits.mplot3d import Axes3D
+
+        from pykep.orbit_plots import plot_kepler, plot_lambert, plot_planet
+
+        # Creating the axes if necessary
+        if axes is None:
+            mpl.rcParams["legend.fontsize"] = 10
+            fig = plt.figure()
+            axes = fig.gca(projection="3d")
+
+        T = self._decode_tofs(x)
+        ep = np.insert(T, 0, x[0])  # [t0, T1, T2 ...]
+        ep = np.cumsum(ep)  # [t0, t1, t2, ...]
+        _, l, _, _, _ = self._compute_dvs(x)
+        for pl, e in zip(self._seq, ep):
+            plot_planet(
+                pl, epoch(e), units=units, legend=True, color=(0.7, 0.7, 1), axes=axes
+            )
+        for lamb in l:
+            plot_lambert(
+                lamb,
+                N=N,
+                sol=0,
+                units=units,
+                color="k",
+                legend=False,
+                axes=axes,
+                alpha=0.8,
+            )
+
+        # compute final flyby
+        r_P, v_P = self._seq[-1].eph(ep[-1])
+        v_out = fb_prop(
+            l[-1].get_v2()[0],
+            v_P,
+            x[-1] * self._seq[-1].radius,
+            x[-2],
+            self._seq[-1].mu_self,
+        )
+
+        a, e, i, W, w, E = ic2par(r_P, v_out, self._common_mu)
+
+        # final trajectory
+        plot_kepler(
+            r_P,
+            v_out,
+            365 * DAY2SEC,
+            self._common_mu,
+            N=100,
+            color="r",
+            units=units,
+            axes=axes,
+            label="Final Orbit",
+        )
+
+        return axes
+    
+    def _rotate_vector(self, v, k, theta):
+        dP = np.dot(k, v)
+        cosTheta = cos(theta)
+        sinTheta = sin(theta)
+        # rotate vector into coordinate system defined by the sun's equatorial plane
+        # using Rodrigues rotation formula
+        r_rot = [
+            a * cosTheta + b * sinTheta + c * (1 - cosTheta) * dP
+            for a, b, c in zip(v, np.cross(k, v), k)
+        ]
+
+        return r_rot
 
 solar_orbiter = _solar_orbiter_udp(max_revs=5, dummy_DSMs=False, evolve_rev_count=False)
-solar_orbiter_dsm = _solar_orbiter_udp(
+solar_orbiter_resdsm = _solar_orbiter_udp(
     max_revs=5, dummy_DSMs=True, evolve_rev_count=False
 )
 solar_orbiter_evolve_rev = _solar_orbiter_udp(
     max_revs=5, dummy_DSMs=False, evolve_rev_count=True
 )
+
+solar_orbiter_1dsm = _solar_orbiter_udp_1dsm(max_revs=5)
