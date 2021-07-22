@@ -760,12 +760,13 @@ class _solar_orbiter_udp_1dsm(mga_1dsm):
         t0=[epoch(0), epoch(10000)],
         vinf = [0.5, 7.5],
         seq=[earth, venus, venus, earth, venus, venus, venus, venus, venus, venus],
+        tof=[[10, 950]]*(9),
         **kwargs
     ) -> None:
         safe_distance = 350000
         for i in range(len(seq)):
             seq[i].safe_radius = (seq[i].radius + safe_distance) / seq[i].radius
-        super().__init__(t0=t0, seq=seq, tof=[[10, 950]]*(len(seq)-1), vinf=vinf, add_vinf_arr = False, **kwargs)
+        super().__init__(t0=t0, seq=seq, tof=tof, vinf=vinf, add_vinf_arr = False, **kwargs)
         self._safe_distance = safe_distance
         self._min_start_mass = 1800
         self._common_mu = self._seq[0].mu_central_body
