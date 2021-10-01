@@ -481,10 +481,10 @@ protected:
         for (decltype(n_seg_fwd) i = 0u; i < n_seg_fwd; ++i) {
             double thrust_duration
                 = (throttles[i].get_end().mjd2000() - throttles[i].get_start().mjd2000()) * ASTRO_DAY2SEC;
-            double manouver_time
+            double maneuver_time
                 = (throttles[i].get_start().mjd2000() + throttles[i].get_end().mjd2000()) / 2. * ASTRO_DAY2SEC;
-            propagate_lagrangian(rfwd, vfwd, manouver_time - current_time_fwd, m_mu);
-            current_time_fwd = manouver_time;
+            propagate_lagrangian(rfwd, vfwd, maneuver_time - current_time_fwd, m_mu);
+            current_time_fwd = maneuver_time;
 
             for (unsigned j = 0u; j < 3; j++) {
                 dv[j] = max_thrust / mfwd * thrust_duration * throttles[i].get_value()[j];
@@ -508,12 +508,12 @@ protected:
             double thrust_duration = (throttles[throttles.size() - i - 1].get_end().mjd2000()
                                       - throttles[throttles.size() - i - 1].get_start().mjd2000())
                                      * ASTRO_DAY2SEC;
-            double manouver_time = (throttles[throttles.size() - i - 1].get_start().mjd2000()
+            double maneuver_time = (throttles[throttles.size() - i - 1].get_start().mjd2000()
                                     + throttles[throttles.size() - i - 1].get_end().mjd2000())
                                    / 2. * ASTRO_DAY2SEC;
-            // manouver_time - current_time_back is negative, so this should propagate backwards
-            propagate_lagrangian(rback, vback, manouver_time - current_time_back, m_mu);
-            current_time_back = manouver_time;
+            // maneuver_time - current_time_back is negative, so this should propagate backwards
+            propagate_lagrangian(rback, vback, maneuver_time - current_time_back, m_mu);
+            current_time_back = maneuver_time;
 
             for (int j = 0; j < 3; j++) {
                 dv[j] = -max_thrust / mback * thrust_duration * throttles[throttles.size() - i - 1].get_value()[j];
