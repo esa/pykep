@@ -20,6 +20,7 @@ class _solar_orbiter_udp:
     def __init__(
         self,
         t0=[epoch(0), epoch(10000)],
+        multi_objective=False,
         tof_encoding="direct",
         max_revs: int = 0,
         dummy_DSMs: bool = False,
@@ -28,6 +29,7 @@ class _solar_orbiter_udp:
     ) -> None:
         """
         Args:
+            - multi_objective (``bool``): when True the problem fitness will return also the time of flight as an added objective
             - tof_encoding (``str``): one of 'direct', 'eta' or 'alpha'. Selects the encoding for the time of flights
             - tof (``list`` or ``list`` of ``list``): time of flight bounds. As documented in ``pykep.mga_1dsm``
             - max_revs (``int``): maximal number of revolutions for lambert transfer
@@ -101,6 +103,7 @@ class _solar_orbiter_udp:
         self._t0 = t0
         self._tof = tof
         self._tof_encoding = tof_encoding
+        self._multi_objective = multi_objective
         self._max_revs = max_revs
         self._eta_lb = eta_lb
         self._eta_ub = eta_ub
@@ -388,13 +391,12 @@ class _solar_orbiter_udp:
 
         a, e, i, W, w, E = ic2par(r_rot, v_rot, self._common_mu)
         final_perihelion = a * (1 - e)
-        final_aphelion = a * (1 + e)
         # orbit should be as polar as possible, but we do not care about prograde/retrograde
         corrected_inclination = abs(abs(i) % pi - pi / 2)
 
         # check perihelion and aphelion bounds during the flight
         min_sun_distance = final_perihelion
-        max_sun_distance = final_aphelion
+        max_sun_distance = AU
 
         for l_i in range(len(b_legs) - 1):
             # project lambert leg, compute perihelion and aphelion
