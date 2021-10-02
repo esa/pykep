@@ -10,7 +10,7 @@ from copy import deepcopy
 class _juice_udp(mga_1dsm):
     """
     This class represents a rendezvous mission to Jupiter modelled as an MGA-1DSM transfer. The selected fly-by sequence,
-    E-EVEME-J, and other parameters are inspired to the ESA Juice mission. A launcher model is included, namely an Ariane5
+    E-EVEME-J, and other parameters are inspired by the ESA Juice mission. A launcher model is included, namely an Ariane5
     launch from Kourou.
     JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA's Cosmic Vision 2015-2025 programme.
     Planned for launch in 2022 and arrival at Jupiter in 2029, it will spend at least three years making detailed
