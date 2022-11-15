@@ -2,7 +2,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
     """
     ax = plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40, legend=(False, False), axes=None):
 
-    - axes:      3D axis object created using fig.gca(projection='3d')
+    - axes:      3D axis object created using fig.add_subplot(projection='3d')
     - plnt:      pykep.planet object we want to plot
     - t0:        a pykep.epoch or float (mjd2000) indicating the first date we want to plot the planet position
     - tf:        a pykep.epoch or float (mjd2000) indicating the final date we want to plot the planet position.
@@ -21,7 +21,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
 	import matplotlib.pyplot as plt
 
 	fig = plt.figure()
-	ax = fig.gca(projection = '3d')
+	ax = fig.add_subplot(projection='3d')
 	pl = pk.planet.jpl_lp('earth')
 	t_plot = pk.epoch(219)
 	ax = pk.orbit_plots.plot_planet(pl, ax = ax, color='b')
@@ -35,7 +35,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
@@ -101,7 +101,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
     """
     ax = plot_lambert(l, N=60, sol=0, units='pykep.AU', legend='False', axes=None, alpha=1.)
 
-    - axes:     3D axis object created using fig.gca(projection='3d')
+    - axes:     3D axis object created using fig.add_subplot(projection='3d')
     - l:        pykep.lambert_problem object
     - N:        number of points to be plotted along one arc
     - sol:      solution to the Lambert's problem we want to plot (must be in 0..Nmax*2)
@@ -118,7 +118,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
       import matplotlib.pyplot as plt
 
       fig = plt.figure()
-      ax = fig.gca(projection='3d')
+      ax = fig.add_subplot(projection='3d')
 
       t1 = pk.epoch(0)
       t2 = pk.epoch(640)
@@ -146,7 +146,7 @@ def plot_lambert(l, N=60, sol=0, units=1.0, color='b', legend=False, axes=None, 
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
@@ -191,7 +191,7 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
     """
     ax = plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None):
 
-    - axes:     3D axis object created using fig.gca(projection='3d')
+    - axes:     3D axis object created using fig.add_subplot(projection='3d')
     - r0:       initial position (cartesian coordinates)
     - v0:       initial velocity (cartesian coordinates)
     - tof:      propagation time
@@ -217,7 +217,7 @@ def plot_kepler(r0, v0, tof, mu, N=60, units=1, color='b', label=None, axes=None
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
@@ -247,7 +247,7 @@ def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', leg
     """
     ax = plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - axes:	3D axis object created using fig.gca(projection='3d')
+    - axes:	3D axis object created using fig.add_subplot(projection='3d')
     - r0:	initial position (cartesian coordinates)
     - v0:	initial velocity (cartesian coordinates)
     - m0: 	initial mass
@@ -269,7 +269,7 @@ def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', leg
 	pi = 3.14
 
 	fig = plt.figure()
-	ax = fig.gca(projection = '3d')
+	ax = fig.add_subplot(projection='3d')
 	pk.orbit_plots.plot_taylor([1,0,0],[0,1,0],100,[1,1,0],40, 1, 1, N = 1000, axes = ax)
 	plt.show()
     """
@@ -279,7 +279,7 @@ def plot_taylor(r0, v0, m0, thrust, tof, mu, veff, N=60, units=1, color='b', leg
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
@@ -321,7 +321,7 @@ def plot_taylor_disturbance(r0, v0, m0, thrust, disturbance, tof, mu, veff, N=60
     """
     ax = plot_taylor_disturbance(r, v, m, thrust, disturbance, t, mu, veff, N=60, units=1, color='b', legend=False, axes=None):
 
-    - axes:		3D axis object created using fig.gca(projection='3d')
+    - axes:		3D axis object created using fig.add_subplot(projection='3d')
     - r0:		initial position (cartesian coordinates)
     - v0:		initial velocity (cartesian coordinates)
     - m0: 		initial mass
@@ -343,7 +343,7 @@ def plot_taylor_disturbance(r0, v0, m0, thrust, disturbance, tof, mu, veff, N=60
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
@@ -380,7 +380,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
     """
     ax = plot_sf_leg(leg, N=5, units=1, color='b', legend=False, no_trajectory=False, axes=None):
 
-    - axes:	    3D axis object created using fig.gca(projection='3d')
+    - axes:	    3D axis object created using fig.add_subplot(projection='3d')
     - leg:	    a pykep.sims_flanagan.leg
     - N:	    number of points to be plotted along one arc
     - units:	    the length unit to be used in the plot
@@ -396,7 +396,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
         import matplotlib.pyplot as plt
 
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
         t1 = epoch(0)
         pl = planet_ss('earth')
         rE,vE = pl.eph(t1)
@@ -423,7 +423,7 @@ def plot_sf_leg(leg, N=5, units=1, color='b', legend=False, plot_line=True, plot
 
     if axes is None:
         fig = plt.figure()
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
     else:
         ax = axes
 
