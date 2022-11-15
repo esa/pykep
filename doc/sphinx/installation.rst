@@ -148,8 +148,8 @@ this would typically look like:
         -DPYKEP_BUILD_PYKEP=no \
         -DPYKEP_BUILD_SPICE=yes \
         -DPYKEP_BUILD_TESTS=yes \
-        -DCMAKE_INSTALL_PREFIX = ~/.local \
-        -DCMAKE_PREFIX_PATH = ~/.local \
+        -DCMAKE_INSTALL_PREFIX=~/.local \
+        -DCMAKE_PREFIX_PATH=~/.local \
         -DCMAKE_BUILD_TYPE=Release \
         ../;
     $ cmake  --build . --target install
@@ -224,9 +224,9 @@ There we need to run cmake again with slightly different options:
          -DPYKEP_BUILD_KEP_TOOLBOX=no \
          -DPYKEP_BUILD_PYKEP=yes \
          -DPYKEP_BUILD_TESTS=no \
-         -DCMAKE_INSTALL_PREFIX = ~/.local \
-         - DCMAKE_PREFIX_PATH = ~/.local \
-         - DCMAKE_BUILD_TYPE=Release \
+         -DCMAKE_INSTALL_PREFIX=~/.local \
+         -DCMAKE_PREFIX_PATH=~/.local \
+         -DCMAKE_BUILD_TYPE=Release \
          ../;
 
 Watch carefully the message in the terminal where the installation path is given to check
