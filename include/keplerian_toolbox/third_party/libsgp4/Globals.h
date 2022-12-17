@@ -63,7 +63,13 @@ const double kF = 1.0 / 298.26;
  * earth rotation per sideral day
  */
 const double kOMEGA_E = 1.00273790934;
-const double kAU = 1.49597870691e8;
+/* 1 AU, here given in km, per the IAU 2012 Resolution B2
+ * and the BIPM published "The International System of Units (SI), 9th ed.",
+ * Table 8 of "Non-SI units accepted for use with the SI units".
+ * Ref: https://www.iau.org/static/resolutions/IAU2012_English.pdf, accessed 2022-12-17
+ * Ref: https://www.bipm.org/documents/20126/41483022/SI-Brochure-9.pdf, accessed 2022-12-17
+ */
+const double kAU = 1.49597870700e8;
 
 const double kSECONDS_PER_DAY = 86400.0;
 const double kMINUTES_PER_DAY = 1440.0;
