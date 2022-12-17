@@ -43,7 +43,7 @@
 #define M_E boost::math::constants::e<double>()
 #endif
 
-#define ASTRO_AU 149597870691.0
+#define ASTRO_AU 149597870700.0
 #define ASTRO_JR 71492000.0
 #define ASTRO_MU_SUN 1.32712440018e20
 #define ASTRO_MU_EARTH 398600441800000.0
