@@ -40,8 +40,6 @@ class kep_toolbox_error : public std::exception
 public:
     kep_toolbox_error(std::string _message) : message(_message) {}
 
-    virtual ~kep_toolbox_error() noexcept {}
-
     virtual const char *what() const noexcept override
     {
         return message.c_str();
