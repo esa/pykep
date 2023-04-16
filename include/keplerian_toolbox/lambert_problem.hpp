@@ -76,7 +76,7 @@ private:
     void dTdx(double &DT, double &DDT, double &DDDT, const double x0, const double tof);
     void x2tof(double &tof, const double x0, const int N);
     void x2tof2(double &tof, const double x0, const int N);
-    double hypergeometricF(double z, double tol);
+    double hypergeometricF(double z, double tol) __attribute__((const));
     friend class boost::serialization::access;
     template <class Archive>
     void serialize(Archive &ar, const unsigned int)
