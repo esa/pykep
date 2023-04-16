@@ -62,6 +62,11 @@ public:
     virtual planet_ptr clone() const = 0;
     virtual ~base(){};
 
+    base(const base&) = default;
+    base(base&&) = default;
+    base& operator=(const base&) = default;
+    base& operator=(base&&) = default; 
+
     /// Ephemerides methods
     void eph(const epoch &when, array3D &r, array3D &v) const;
     void eph(const double mjd2000, array3D &r, array3D &v) const;

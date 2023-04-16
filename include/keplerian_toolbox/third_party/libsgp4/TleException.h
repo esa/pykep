@@ -38,7 +38,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~TleException(void) throw()
+    virtual ~TleException(void) noexcept
     {
     }
 
@@ -46,7 +46,7 @@ public:
      * Get the exception message
      * @returns the exception message
      */
-    virtual const char *what() const throw() override
+    virtual const char *what() const noexcept override
     {
         return m_message.c_str();
     }

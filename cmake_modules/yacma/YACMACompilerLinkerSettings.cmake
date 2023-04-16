@@ -122,8 +122,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # NOTE: this is a new flag in Clang 13 which seems to give
         # incorrect warnings for UDLs.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-reserved-identifier)
-        # NOTE: this is specific to old code in pykep and should be removed eventually
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-sign-conversion)
+
     endif()
 
     # Common configuration for GCC, clang and Intel.
@@ -134,7 +133,7 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # NOTE: this flag is a bit too chatty, let's disable it for the moment.
         #_YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnoexcept)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wlogical-op)
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wconversion)
+        #_YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wconversion)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wdeprecated)
         # This limit is supposed to be at least 1024 in C++11, but for some reason
         # clang sets this to 256, and gcc to 900.

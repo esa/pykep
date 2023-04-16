@@ -44,10 +44,10 @@ gtoc6::gtoc6(const std::string &name)
     mapped_planets["callisto"] = 4;
     double mjd = 58849.0;
     array6D keplerian_elements_;
-    double mu_central_body_;
-    double mu_self_;
-    double radius_;
-    double safe_radius_;
+    double mu_central_body_=0;
+    double mu_self_=0;
+    double radius_=0;
+    double safe_radius_=0;
     const double mu_jupiter = 126686534921800000.0; // m^3/s^2
     std::string lower_case_name = name;
     boost::algorithm::to_lower(lower_case_name);

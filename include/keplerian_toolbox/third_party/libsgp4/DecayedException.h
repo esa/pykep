@@ -41,14 +41,14 @@ public:
     /**
      * Destructor
      */
-    virtual ~DecayedException(void) throw()
+    virtual ~DecayedException(void) noexcept
     {
     }
 
     /**
      * @returns the error string
      */
-    virtual const char *what() const throw() override
+    virtual const char *what() const noexcept override
     {
         return "Error: Satellite decayed";
     }

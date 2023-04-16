@@ -116,7 +116,7 @@ struct default_policy {
     }
 
     template <typename ContainerType>
-    static void reserve(ContainerType &a, std::size_t sz)
+    static void reserve(ContainerType &/*a*/, std::size_t /*sz*/)
     {
     }
 };

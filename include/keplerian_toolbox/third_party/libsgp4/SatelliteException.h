@@ -29,11 +29,11 @@ public:
     {
     }
 
-    virtual ~SatelliteException(void) throw()
+    virtual ~SatelliteException(void) noexcept
     {
     }
 
-    virtual const char *what() const throw() override
+    virtual const char *what() const noexcept override
     {
         return message_.c_str();
     }

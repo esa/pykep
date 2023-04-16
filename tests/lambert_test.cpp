@@ -72,9 +72,9 @@ int main()
             lambert_problem lp(r1, r2, tof, mu, cw, revs_max);
 
             // 3 - Check its precision using propagate_lagrangian
-            for (unsigned int i = 0; i < lp.get_v1().size(); ++i) {
+            for (unsigned int j = 0; i < lp.get_v1().size(); ++j) {
                 array3D r1_p(r1), v1_p, err;
-                v1_p = lp.get_v1()[i];
+                v1_p = lp.get_v1()[j];
                 propagate_lagrangian(r1_p, v1_p, tof, mu);
                 diff(err, r2, r1_p);
                 if (norm(err) > 1e-2) {

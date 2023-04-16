@@ -63,7 +63,7 @@ int main()
     SpiceDouble mu_mars[1];
 
     // We define the epoch to compute ephemerides
-    kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
+    // kep_toolbox::epoch when(kep_toolbox::epoch_from_string("2012-01-20 00:00:00.000"));
 
     char stringa[] = "RETURN";
 
