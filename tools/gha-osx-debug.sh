@@ -6,9 +6,6 @@ set -x
 # Exit on error.
 set -e
 
-# Core deps.
-sudo apt-get install wget
-
 # Install conda+deps.
 wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-x86_64.sh -O mambaforge.sh
 export deps_dir=$HOME/local
