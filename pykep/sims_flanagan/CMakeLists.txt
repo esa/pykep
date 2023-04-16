@@ -4,7 +4,7 @@ YACMA_PYTHON_MODULE(sims_flanagan
 )
 target_link_libraries(sims_flanagan PRIVATE ${PYKEP_BP_TARGET} pykep)
 target_compile_options(sims_flanagan PRIVATE "$<$<CONFIG:DEBUG>:${KEP_TOOLBOX_CXX_FLAGS_DEBUG}>" "$<$<CONFIG:RELEASE>:${KEP_TOOLBOX_CXX_FLAGS_RELEASE}>")
-set_property(TARGET sims_flanagan PROPERTY CXX_STANDARD 11)
+set_property(TARGET sims_flanagan PROPERTY CXX_STANDARD 14)
 set_property(TARGET sims_flanagan PROPERTY CXX_STANDARD_REQUIRED YES)
 set_property(TARGET sims_flanagan PROPERTY CXX_EXTENSIONS NO)
 
