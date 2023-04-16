@@ -26,12 +26,15 @@
 #ifndef KEP_TOOLBOX_M2E_H
 #define KEP_TOOLBOX_M2E_H
 
-#include <boost/bind.hpp>
 #include <cmath>
+
+#include <boost/bind/bind.hpp>
 
 #include <keplerian_toolbox/astro_constants.hpp>
 #include <keplerian_toolbox/core_functions/kepler_equations.hpp>
 #include <keplerian_toolbox/numerics/newton_raphson.hpp>
+
+using namespace boost::placeholders;
 
 namespace kep_toolbox
 {
@@ -68,5 +71,5 @@ inline double f2zeta(const double &zeta, const double &e)
 {
     return 2 * std::atan(std::sqrt((e - 1) / (1 + e)) * std::tan(zeta / 2));
 }
-}
+} // namespace kep_toolbox
 #endif // KEP_TOOLBOX_M2E_H

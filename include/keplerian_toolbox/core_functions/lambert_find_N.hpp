@@ -26,7 +26,6 @@
 #ifndef KEP_TOOLBOX_LAMBERT_FIND_N_H
 #define KEP_TOOLBOX_LAMBERT_FIND_N_H
 
-#include <boost/bind.hpp>
 #include <boost/math/tools/minima.hpp>
 
 #include <keplerian_toolbox/core_functions/x2tof.hpp>
@@ -63,6 +62,6 @@ inline int lambert_find_N(const double &s, const double &c, const double &tof, c
     return Ntemp - 1;
 }
 
-} // namespaces
+} // namespace kep_toolbox
 
 #endif // KEP_TOOLBOX_LAMBERT_FIND_N_H

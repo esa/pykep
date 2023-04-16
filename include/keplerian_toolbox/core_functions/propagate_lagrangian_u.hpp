@@ -26,13 +26,15 @@
 #ifndef KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_U_H
 #define KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_U_H
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/math/tools/roots.hpp>
 
 #include <keplerian_toolbox/astro_constants.hpp>
-#include <keplerian_toolbox/numerics/newton_raphson.hpp>
 #include <keplerian_toolbox/core_functions/kepler_equations.hpp>
 #include <keplerian_toolbox/core_functions/stumpff.hpp>
+#include <keplerian_toolbox/numerics/newton_raphson.hpp>
+
+using namespace boost::placeholders;
 
 namespace kep_toolbox
 {
@@ -86,9 +88,8 @@ void propagate_lagrangian_u(T &r0, T &v0, const double &t, const double &mu = 1)
 
     // solve kepler's equation in universal variables
     double DS = 1;
-    alpha > 0 ? DS = sqrt(mu) * t_copy * std::abs(alpha)
-              : DS = 1; // initial guess for the universal anomaly. For hyperbolas
-                        // it is 1.... can be better?
+    alpha > 0 ? DS = sqrt(mu) * t_copy * std::abs(alpha) : DS = 1; // initial guess for the universal anomaly. For
+                                                                   // hyperbolas it is 1.... can be better?
     // newton_raphson(DS,boost::bind(kepDS,_1,t_copy,R0,VR0,alpha,mu),boost::bind(d_kepDS,_1,R0,V0,alpha,mu),100,ASTRO_TOLERANCE);
     std::pair<double, double> result;
     boost::uintmax_t iter = ASTRO_MAX_ITER;
@@ -130,6 +131,6 @@ void propagate_lagrangian_u(T &r0, T &v0, const double &t, const double &mu = 1)
         v0[2] = -v0[2];
     }
 }
-}
+} // namespace kep_toolbox
 
 #endif // KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_U_H

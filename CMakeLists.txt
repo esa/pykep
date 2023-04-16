@@ -235,7 +235,7 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     set_target_properties(keplerian_toolbox PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
     # Let's setup the target C++ standard, but only if the user did not provide it manually.
     if(NOT CMAKE_CXX_STANDARD)
-        set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD 11)
+        set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD 14)
     endif()
     set_property(TARGET keplerian_toolbox PROPERTY CXX_STANDARD_REQUIRED YES)
     set_property(TARGET keplerian_toolbox PROPERTY CXX_EXTENSIONS NO)

@@ -26,16 +26,15 @@
 #ifndef KEP_TOOLBOX_LAMBERT_2D_H
 #define KEP_TOOLBOX_LAMBERT_2D_H
 
-#include <boost/bind.hpp>
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <cmath>
 
 #include <keplerian_toolbox/astro_constants.hpp>
+#include <keplerian_toolbox/core_functions/x2tof.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
 #include <keplerian_toolbox/numerics/regula_falsi.hpp>
-#include <keplerian_toolbox/core_functions/x2tof.hpp>
 #define D_ALP 1.5
 
 namespace kep_toolbox
@@ -163,7 +162,7 @@ inline int lambert_2d(double &vr1, double &vt1, double &vr2, double &vt2, double
     vr2 = -vr1 + (vt1 - vt2) / tan(theta / 2.0);
     return retval;
 }
-} // namespaces
+} // namespace kep_toolbox
 
 #undef D_ALP
 

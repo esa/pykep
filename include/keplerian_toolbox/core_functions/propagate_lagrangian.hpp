@@ -26,12 +26,14 @@
 #ifndef KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H
 #define KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/math/tools/roots.hpp>
 
 #include <keplerian_toolbox/astro_constants.hpp>
-#include <keplerian_toolbox/numerics/newton_raphson.hpp>
 #include <keplerian_toolbox/core_functions/kepler_equations.hpp>
+#include <keplerian_toolbox/numerics/newton_raphson.hpp>
+
+using namespace boost::placeholders;
 
 namespace kep_toolbox
 {
@@ -122,6 +124,6 @@ void propagate_lagrangian(T &r0, T &v0, const double &t, const double &mu)
         v0[i] = Ft * temp[i] + Gt * v0[i];
     }
 }
-}
+} // namespace kep_toolbox
 
 #endif // KEP_TOOLBOX_PROPAGATE_LAGRANGIAN_H
