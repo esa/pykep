@@ -149,7 +149,8 @@ ptime epoch::get_posix_time() const
     std::ostringstream fsecstr;
     fsecstr << std::setiosflags(std::ios::fixed)
             << std::setprecision(-static_cast<int>(std::log10(BOOST_DATE_PRECISION))) << dblfsec;
-    fsec = boost::lexical_cast<long>(fsecstr.str().substr(2, -static_cast<int>(std::log10(BOOST_DATE_PRECISION) + 1)));
+    fsec = boost::lexical_cast<long>(
+        fsecstr.str().substr(2, static_cast<unsigned long>(-std::log10(BOOST_DATE_PRECISION) + 1)));
     ptime retval;
     if (flag)
         retval = ptime(date(2000, 1, 1), time_duration(-hrs, -min, -sec, -fsec));
