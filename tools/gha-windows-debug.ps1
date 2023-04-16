@@ -13,7 +13,7 @@ cmake `
     -DCMAKE_PREFIX_PATH=C:\Miniconda\envs\pykep `
     -DCMAKE_INSTALL_PREFIX=C:\Miniconda\envs\pykep `
     -DBoost_NO_BOOST_CMAKE=ON `
-    -DPYKEP_BUILD_KEP_TOOLBOX=yes \`
+    -DPYKEP_BUILD_KEP_TOOLBOX=yes `
     -DPYKEP_BUILD_PYKEP=no `
     -DPYKEP_BUILD_SPICE=yes `
     -DPYKEP_BUILD_TESTS=yes `
