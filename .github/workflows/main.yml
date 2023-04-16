@@ -44,5 +44,5 @@ jobs:
           channels: conda-forge
           channel-priority: strict
       - name: Build
-        run: .\tools\gha-windows-2019-debug.ps1
+        run: .\tools\gha-windows-debug.ps1
         shell: powershell
