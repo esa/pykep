@@ -27,8 +27,8 @@
 #define KEP_TOOLBOX_PLANET_JPL_LP_H
 
 #include <keplerian_toolbox/detail/visibility.hpp>
-#include <keplerian_toolbox/serialization.hpp>
 #include <keplerian_toolbox/planet/base.hpp>
+#include <keplerian_toolbox/serialization.hpp>
 
 namespace kep_toolbox
 {
@@ -69,8 +69,8 @@ private:
     array6D jpl_elements_dot;
     const double ref_mjd2000;
 };
-}
-} /// End of namespaces
+} // namespace planet
+} // namespace kep_toolbox
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::jpl_lp)
 

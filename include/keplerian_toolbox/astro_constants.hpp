@@ -77,7 +77,7 @@ namespace kep_toolbox
 typedef std::array<double, 3> array3D;
 typedef std::array<double, 6> array6D;
 typedef std::array<double, 7> array7D;
-}
+} // namespace kep_toolbox
 
 namespace std
 {
@@ -108,5 +108,5 @@ inline ostream &operator<<(ostream &os, const std::vector<double> &v)
     os << ']';
     return os;
 }
-}
+} // namespace std
 #endif // KEP_TOOLBOX_ASTRO_CONSTANTS_H

@@ -61,7 +61,7 @@ int regula_falsi(my_float &a, my_float &b, my_function F, int max_loop, const do
     b = c;
     return n;
 }
-}
+} // namespace kep_toolbox
 
 /* Main program to test the method
 double func_1(double x) // root is 1.85792

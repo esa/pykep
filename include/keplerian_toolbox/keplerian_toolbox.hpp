@@ -77,5 +77,4 @@
 #include <keplerian_toolbox/util/spice_utils.hpp>
 #endif
 
-
 #endif // KEP_TOOLBOX_H

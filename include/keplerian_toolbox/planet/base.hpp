@@ -118,8 +118,8 @@ private:
 };
 
 KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &s, const base &body);
-}
-} /// End of namespace kep_toolbox planet
+} // namespace planet
+} // namespace kep_toolbox
 
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(kep_toolbox::planet::base)
 

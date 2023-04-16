@@ -52,7 +52,7 @@ int newton_raphson(my_float &x, my_functionA F, my_functionB dF, int max_loop, c
     while ((fabs(term / std::max(std::fabs(x), 1.)) > accuracy) && (--max_loop));
     return max_loop;
 }
-}
+} // namespace kep_toolbox
 /*
 //----------------------------------------------------------------------------//
 // test functions

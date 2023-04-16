@@ -32,8 +32,8 @@
 #include <keplerian_toolbox/detail/visibility.hpp>
 #include <keplerian_toolbox/epoch.hpp>
 #include <keplerian_toolbox/exceptions.hpp>
-#include <keplerian_toolbox/serialization.hpp>
 #include <keplerian_toolbox/planet/base.hpp>
+#include <keplerian_toolbox/serialization.hpp>
 
 namespace kep_toolbox
 {
@@ -100,8 +100,8 @@ protected:
     double m_ref_mjd2000;
     double m_J2RG2;
 };
-}
-} /// End of namespace kep_toolbox
+} // namespace planet
+} // namespace kep_toolbox
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::j2)
 

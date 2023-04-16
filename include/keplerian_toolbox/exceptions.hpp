@@ -38,15 +38,11 @@ inline void throw_value_error(std::string s)
 class kep_toolbox_error : public std::exception
 {
 public:
-    kep_toolbox_error(std::string _message) : message(_message)
-    {
-    }
+    kep_toolbox_error(std::string _message) : message(_message) {}
 
-    virtual ~kep_toolbox_error() throw()
-    {
-    }
+    virtual ~kep_toolbox_error() noexcept {}
 
-    virtual const char *what() const throw() override
+    virtual const char *what() const noexcept override
     {
         return message.c_str();
     }

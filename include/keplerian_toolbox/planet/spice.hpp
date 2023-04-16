@@ -28,8 +28,8 @@
 
 #include <string>
 
-#include <keplerian_toolbox/planet/base.hpp>
 #include <keplerian_toolbox/detail/visibility.hpp>
+#include <keplerian_toolbox/planet/base.hpp>
 #include <keplerian_toolbox/serialization.hpp>
 #include <keplerian_toolbox/util/spice_utils.hpp>
 

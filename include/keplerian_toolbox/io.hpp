@@ -112,7 +112,7 @@ inline void stream_impl(std::ostream &os, const std::map<T, U> &m)
 }
 
 template <typename T, typename... Args>
-inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
+inline void stream_impl(std::ostream &os, const T &x, const Args &...args)
 {
     stream_impl(os, x);
     stream_impl(os, args...);
@@ -137,7 +137,7 @@ inline std::string to_string(const T &x)
  * @param args the objects that will be directed to to \p os.
  */
 template <typename... Args>
-inline void stream(std::ostream &os, const Args &... args)
+inline void stream(std::ostream &os, const Args &...args)
 {
     detail::stream_impl(os, args...);
 }
@@ -149,7 +149,7 @@ inline void stream(std::ostream &os, const Args &... args)
  * @param args the objects that will be printed to screen.
  */
 template <typename... Args>
-inline void print(const Args &... args)
+inline void print(const Args &...args)
 {
     stream(std::cout, args...);
 }

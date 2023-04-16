@@ -29,8 +29,8 @@
 #include <string>
 
 #include <keplerian_toolbox/detail/visibility.hpp>
-#include <keplerian_toolbox/serialization.hpp>
 #include <keplerian_toolbox/planet/keplerian.hpp>
+#include <keplerian_toolbox/serialization.hpp>
 
 namespace kep_toolbox
 {
@@ -92,8 +92,8 @@ private:
     // Year the asteroid was first discovered
     unsigned m_year_of_discovery;
 };
-}
-} /// End of namespace kep_toolbox
+} // namespace planet
+} // namespace kep_toolbox
 
 BOOST_CLASS_EXPORT_KEY(kep_toolbox::planet::mpcorb)
 
