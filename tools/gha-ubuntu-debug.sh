@@ -10,10 +10,10 @@ set -e
 sudo apt-get install wget
 
 # Install conda+deps.
-wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O miniforge.sh
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O mambaforge.sh
 export deps_dir=$HOME/local
-export PATH="$HOME/miniforge/bin:$PATH"
-bash miniforge.sh -b -p $HOME/miniforge
+export PATH="$HOME/mambaforge/bin:$PATH"
+bash mambaforge.sh -b -p $HOME/mambaforge
 mamba create -y -q -p $deps_dir c-compiler cxx-compiler cmake boost boost-cpp pybind11 python=3.11
 source activate $deps_dir
 
@@ -47,7 +47,7 @@ cmake \
     -PYKEP_BUILD_KEP_TOOLBOX=no \
     -PYKEP_BUILD_PYKEP=yes \
     ..
-    
+
 make VERBOSE=1 install
 python -c "import pyaudi.test; pyaudi.test.run_test_suite()"
 
