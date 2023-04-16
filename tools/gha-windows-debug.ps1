@@ -19,5 +19,5 @@ cmake `
     -DPYKEP_BUILD_TESTS=yes `
     ..
 
-cmake --build . --config Debug --target install
-ctest -VV --output-on-failure -j4 -C Debug
+cmake --build . --target install --config Release
+ctest -j4 -V -C Release
