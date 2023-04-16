@@ -49,7 +49,6 @@ cmake \
     ..
 
 make VERBOSE=1 install
-python -c "import pyaudi.test; pyaudi.test.run_test_suite()"
-
+python -c "import pykep.test; pykep.test.run_test_suite()"
 set +e
 set +x
