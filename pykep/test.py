@@ -89,7 +89,7 @@ class mga_1dsm_test_case(_ut.TestCase):
         # Incorrect use (raise)
         with self.assertRaises(TypeError):
             mga_1dsm(tof_encoding='direct', tof=34)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             mga_1dsm(tof_encoding='direct', tof=[[400], [20, 400]])
         with self.assertRaises(TypeError):
             mga_1dsm(tof_encoding='direct', tof=[20, 400])
