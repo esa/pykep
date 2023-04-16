@@ -122,6 +122,8 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # NOTE: this is a new flag in Clang 13 which seems to give
         # incorrect warnings for UDLs.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-reserved-identifier)
+        # NOTE: this is specific to old code in pykep and should be removed eventually
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-sign-conversion)
     endif()
 
     # Common configuration for GCC, clang and Intel.
