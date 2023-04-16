@@ -14,7 +14,7 @@ wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforg
 export deps_dir=$HOME/local
 export PATH="$HOME/mambaforge/bin:$PATH"
 bash mambaforge.sh -b -p $HOME/mambaforge
-mamba create -y -q -p $deps_dir c-compiler cxx-compiler cmake boost boost-cpp pybind11 python=3.11
+mamba create -y -q -p $deps_dir c-compiler cxx-compiler cmake boost boost-cpp python=3.11
 source activate $deps_dir
 
 # Create the build dir and cd into it.
@@ -27,10 +27,10 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$deps_dir \
     -DCMAKE_PREFIX_PATH=$deps_dir \
     -DCMAKE_BUILD_TYPE=Debug \
-    -PYKEP_BUILD_KEP_TOOLBOX=yes \
-    -PYKEP_BUILD_PYKEP=no \
-    -PYKEP_BUILD_SPICE=yes \
-    -PYKEP_BUILD_TESTS=yes \
+    -DPYKEP_BUILD_KEP_TOOLBOX=yes \
+    -DPYKEP_BUILD_PYKEP=no \
+    -DPYKEP_BUILD_SPICE=yes \
+    -DPYKEP_BUILD_TESTS=yes \
     ..
 make VERBOSE=1 install
 ctest -j4 -V
@@ -44,8 +44,8 @@ cmake \
     -DCMAKE_INSTALL_PREFIX=$deps_dir \
     -DCMAKE_PREFIX_PATH=$deps_dir \
     -DCMAKE_BUILD_TYPE=Debug \
-    -PYKEP_BUILD_KEP_TOOLBOX=no \
-    -PYKEP_BUILD_PYKEP=yes \
+    -DPYKEP_BUILD_KEP_TOOLBOX=no \
+    -DPYKEP_BUILD_PYKEP=yes \
     ..
 
 make VERBOSE=1 install
