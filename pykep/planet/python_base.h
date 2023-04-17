@@ -63,7 +63,7 @@ public:
     }
 
     /// Clone pure virtual
-    planet_ptr clone() const
+    planet_ptr clone() const override
     {
         planet_ptr retval = this->get_override("__get_deepcopy__")();
         if (!retval) {
@@ -74,7 +74,7 @@ public:
     }
 
     /// Human readable virtual
-    std::string human_readable_extra() const
+    std::string human_readable_extra() const override
     {
         if (boost::python::override f = this->get_override("human_readable_extra")) {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1700)
@@ -92,7 +92,7 @@ public:
 
 protected:
     /// Pure virtual ephemerides
-    void eph_impl(double mjd2000, array3D &r, array3D &v) const
+    void eph_impl(double mjd2000, array3D &r, array3D &v) const override
     {
         if (boost::python::override f = this->get_override("eph_impl")) {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1700)
