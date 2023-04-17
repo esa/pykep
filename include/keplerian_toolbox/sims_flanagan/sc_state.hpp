@@ -45,6 +45,9 @@ namespace sims_flanagan
  *
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
+class KEP_TOOLBOX_DLL_PUBLIC sc_state;
+std::ostream &operator<<(std::ostream &s, const sc_state &in);
+
 class KEP_TOOLBOX_DLL_PUBLIC sc_state
 {
 

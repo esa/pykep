@@ -51,13 +51,18 @@ namespace kep_toolbox
  * @author Dario Izzo (dario.izzo _AT_ googlemail.com)
  */
 
+class KEP_TOOLBOX_DLL_PUBLIC lambert_problem;
+
+// Streaming operator for the class kep_toolbox::lambert_problem.
+KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const lambert_problem &);
+
 class KEP_TOOLBOX_DLL_PUBLIC lambert_problem
 {
     static const array3D default_r1;
     static const array3D default_r2;
 
 public:
-    friend std::ostream &operator<<(std::ostream &, const lambert_problem &);
+    friend KEP_TOOLBOX_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const lambert_problem &);
     lambert_problem(const array3D &r1 = default_r1, const array3D &r2 = default_r2,
                     const double &tof = boost::math::constants::pi<double>() / 2, const double &mu = 1.,
                     const int &cw = 0, const int &multi_revs = 5);
