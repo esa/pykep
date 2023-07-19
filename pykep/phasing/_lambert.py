@@ -1,4 +1,3 @@
-from pygmo.problem._base import base # pylint: disable=import-error
 from pygmo import hypervolume
 from pykep.planet import gtoc7
 from pykep.orbit_plots import plot_planet, plot_lambert
@@ -7,7 +6,7 @@ from numpy.linalg import norm
 from math import exp
 
 
-class lambert_metric(base):
+class lambert_metric:
 
     """
     This class defines the Lambert phasing metric as published in the paper:
@@ -34,15 +33,10 @@ class lambert_metric(base):
         lm = planet(epoch_bounds=[0, 1000], A1=gtoc7(1), A2=gtoc7(2), single_objective=False, Tmax = 0.3, Isp = 3000, ms = 1500)
         """
 
-        # First we call the constructor of the base class telling
-        # essentially to pygmo what kind of problem to expect (2 objective, 0
-        # contraints etc.)
-        super().__init__(
-            2, 0, 1 + (not single_objective), 0, 0, 0)
-
-        # then we set the problem bounds (in this case equal for all
+        # We set the problem bounds (in this case equal for all
         # components)
-        self.set_bounds(epoch_bounds[0], epoch_bounds[1])
+        self._bounds = (epoch_bounds[0], epoch_bounds[1])
+        self.f_dimension = 1 if single_objective else 2
         self._ast1 = A1
         self._ast2 = A2
         self._Tmax = Tmax
@@ -50,8 +44,11 @@ class lambert_metric(base):
         self._ms = ms
         self._UNFEASIBLE = 1e+20
 
-    # We reimplement the virtual method that defines the objective function.
-    def _objfun_impl(self, x):
+    # We implement the get_bounds and fitness functions.
+    def get_bounds(self):
+        return self._bounds
+
+    def fitness(self, x):
         from math import sqrt
         # 1 - We check that the transfer time is positive
         if x[0] >= x[1]:
@@ -111,8 +108,8 @@ class lambert_metric(base):
         else:
             axis = ax
 
-        plot_planet(A1, axes=axis, s=10, t0=epoch(self.lb[0]))
-        plot_planet(A2, axes=axis, s=10, t0=epoch(self.ub[0]))
+        plot_planet(A1, axes=axis, s=10, t0=epoch(self._bounds[0]))
+        plot_planet(A2, axes=axis, s=10, t0=epoch(self._bounds[1]))
         for ind in pop:
             if ind.cur_f[0] == self._UNFEASIBLE:
                 continue
@@ -139,7 +136,7 @@ class lambert_metric(base):
         rx, ry = self._compute_ref_point()
         axis = pop.plot_pareto_fronts()
         axis.set_xlim([0, rx])
-        axis.set_ylim([self.lb[0], ry])
+        axis.set_ylim([self._bounds[0], ry])
         plt.xlabel("[m/s]")
         plt.ylabel("[MJD2000]")
         plt.draw()
@@ -154,11 +151,11 @@ class lambert_metric(base):
         return (hv.compute(self._compute_ref_point()) * DAY2SEC / AU)
 
     def _compute_ref_point(self):
-        rx = self._Tmax / self._ms * DAY2SEC * (self.ub[0] - self.lb[0])
-        ry = self.ub[0]
+        rx = self._Tmax / self._ms * DAY2SEC * (self._bounds[1] - self._bounds[0])
+        ry = self._bounds[1]
         return (rx, ry)
 
-    def human_readable_extra(self):
+    def get_extra_info(self):
         retval = "\n\tAsteroid 1: " + self._ast1.name
         retval = retval + "\n\tAsteroid 2: " + self._ast2.name
         return retval
