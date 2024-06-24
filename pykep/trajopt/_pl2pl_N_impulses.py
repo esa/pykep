@@ -28,6 +28,7 @@ class pl2pl_N_impulses(object):
                  N_max=3,
                  tof=[20., 400.],
                  vinf=[0., 4.],
+                 dsm=[[0.,4.],[0.,4.]],
                  phase_free=True,
                  multi_objective=False,
                  t0=None
@@ -63,6 +64,9 @@ class pl2pl_N_impulses(object):
             t0[0] = epoch(t0[0])
         if (type(t0[1]) != type(epoch(0))):
             t0[1] = epoch(t0[1])
+        if len(dsm)!=N_max-2:
+            raise ValueError('Please register the allowed magnitude interval for each dsm')
+
 
         self.obj_dim = multi_objective + 1
         # We then define all class data members
@@ -76,16 +80,22 @@ class pl2pl_N_impulses(object):
         self.__common_mu = start.mu_central_body
 
         # And we compute the bounds
+        dsm_l=[1e-3, 0.0, 0.0, dsm[0][0] * 1000]
+        dsm_u=[1e-3, 0.0, 0.0, dsm[0][1] * 1000]
+        for i in range(len(dsm)-1):
+            dsm_l = dsm_l + [1e-3, 0.0, 0.0, dsm[i+1][0] * 1000]
+            dsm_u = dsm_u + [1e-3, 0.0, 0.0, dsm[i+1][1] * 1000]
+
         if phase_free:
-            self._lb = [0, tof[0]] + [1e-3, 0.0, 0.0,
-                                      vinf[0] * 1000] * (N_max - 2) + [1e-3] + [0]
+            self._lb = [0, tof[0]] + [1e-3, 0.0, 0.0, vinf[0] * 1000] + dsm_l + [1e-3] + [0]
+									  
             self._ub = [2 * start.compute_period(epoch(0)) * SEC2DAY, tof[1]] + [1.0-1e-3, 1.0, 1.0, vinf[
-                1] * 1000] * (N_max - 2) + [1.0-1e-3] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
+                1] * 1000] + dsm_u + [1.0-1e-3] + [2 * target.compute_period(epoch(0)) * SEC2DAY]
         else:
             self._lb = [t0[0].mjd2000, tof[0]] + \
-                [1e-3, 0.0, 0.0, vinf[0] * 1000] * (N_max - 2) + [1e-3]
+                ([1e-3, 0.0, 0.0, vinf[0] * 1000]  + dsm_l) + [1e-3]
             self._ub = [t0[1].mjd2000, tof[1]] + \
-                [1.0-1e-3, 1.0, 1.0, vinf[1] * 1000] * (N_max - 2) + [1.0-1e-3]
+                ([1.0-1e-3, 1.0, 1.0, vinf[1] * 1000] + dsm_u) + [1.0-1e-3]
 
     def get_nobj(self):
         return self.obj_dim
