@@ -14,7 +14,7 @@ wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge
 export deps_dir=$HOME/local
 export PATH="$HOME/miniforge/bin:$PATH"
 bash miniforge.sh -b -p $HOME/miniforge
-conda create -y -q -p $deps_dir c-compiler cxx-compiler cmake libboost-devel python scipy matplotlib ninja
+conda create -y -q -p $deps_dir c-compiler cxx-compiler cmake libboost-devel libboost-python-devel python scipy matplotlib ninja
 source activate $deps_dir
 
 # Create the build dir and cd into it.
