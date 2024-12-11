@@ -421,11 +421,11 @@ static void
 
 #ifdef KR_headers
 
-   fk_open( seq, fmt, n) ftnint n;
+   int fk_open( seq, fmt, n) ftnint n;
 
 #else
 
-   fk_open(int seq, int fmt, ftnint n)
+   int fk_open(int seq, int fmt, ftnint n)
 
 #endif
    {

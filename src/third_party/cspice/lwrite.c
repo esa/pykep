@@ -232,9 +232,9 @@ lwrt_C(double a, double b)
 	PUT(')');
 }
 #ifdef KR_headers
-l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+int l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
+int l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)

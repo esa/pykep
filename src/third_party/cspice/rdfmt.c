@@ -387,9 +387,9 @@ rd_POS(char *s)
 	return(1);
 }
 #ifdef KR_headers
-rd_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
+int rd_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
 #else
-rd_ed(struct syl *p, char *ptr, ftnlen len)
+int rd_ed(struct syl *p, char *ptr, ftnlen len)
 #endif
 {	int ch;
 	for(;f__cursor>0;f__cursor--) if((ch=(*f__getn)())<0) return(ch);
@@ -452,7 +452,7 @@ rd_ed(struct syl *p, char *ptr, ftnlen len)
 #ifdef KR_headers
 rd_ned(p) struct syl *p;
 #else
-rd_ned(struct syl *p)
+int rd_ned(struct syl *p)
 #endif
 {
 	switch(p->op)

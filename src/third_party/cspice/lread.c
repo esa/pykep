@@ -73,7 +73,7 @@ extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
 #endif
 #endif
 
-t_getc(Void)
+int t_getc(Void)
 {	int ch;
 	if(f__curunit->uend) return(EOF);
 	if((ch=getc(f__cf))!=EOF) return(ch);
@@ -523,9 +523,9 @@ l_CHAR(Void)
 	}
 }
 #ifdef KR_headers
-c_le(a) cilist *a;
+int c_le(a) cilist *a;
 #else
-c_le(cilist *a)
+int c_le(cilist *a)
 #endif
 {
 	if(!f__init)
@@ -543,9 +543,9 @@ c_le(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-l_read(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+int l_read(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
+int l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)

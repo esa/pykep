@@ -2,7 +2,7 @@
 #include "fio.h"
 #include "fmt.h"
 
-y_rsk(Void)
+int y_rsk(Void)
 {
 	if(f__curunit->uend || f__curunit->url <= f__recpos
 		|| f__curunit->url == 1) return 0;
@@ -11,7 +11,7 @@ y_rsk(Void)
 	} while(++f__recpos < f__curunit->url);
 	return 0;
 }
-y_getc(Void)
+int y_getc(Void)
 {
 	int ch;
 	if(f__curunit->uend) return(-1);
@@ -61,9 +61,9 @@ y_newrec(Void)
 }
 
 #ifdef KR_headers
-c_dfe(a) cilist *a;
+int c_dfe(a) cilist *a;
 #else
-c_dfe(cilist *a)
+int c_dfe(cilist *a)
 #endif
 {
 	f__sequential=0;

@@ -4,9 +4,9 @@ extern uiolen f__reclen;
 long f__recloc;
 
 #ifdef KR_headers
-c_sue(a) cilist *a;
+int c_sue(a) cilist *a;
 #else
-c_sue(cilist *a)
+int c_sue(cilist *a)
 #endif
 {
 	f__external=f__sequential=1;

@@ -220,7 +220,7 @@ wrt_H(int a, char *s)
 #ifdef KR_headers
 wrt_L(n,len, sz) Uint *n; ftnlen sz;
 #else
-wrt_L(Uint *n, int len, ftnlen sz)
+int wrt_L(Uint *n, int len, ftnlen sz)
 #endif
 {	int i;
 	long x;
@@ -290,9 +290,9 @@ wrt_G(ufloat *p, int w, int d, int e, ftnlen len)
 	return(wrt_E(p,w,d,e,len));
 }
 #ifdef KR_headers
-w_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
+int w_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
 #else
-w_ed(struct syl *p, char *ptr, ftnlen len)
+int w_ed(struct syl *p, char *ptr, ftnlen len)
 #endif
 {
 	int i;
@@ -336,9 +336,9 @@ w_ed(struct syl *p, char *ptr, ftnlen len)
 	}
 }
 #ifdef KR_headers
-w_ned(p) struct syl *p;
+int w_ned(p) struct syl *p;
 #else
-w_ned(struct syl *p)
+int w_ned(struct syl *p)
 #endif
 {
 	switch(p->op)
