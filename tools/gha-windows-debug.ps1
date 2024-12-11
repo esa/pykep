@@ -1,7 +1,7 @@
 # Powershell script
 # Install conda environment
 conda config --set always_yes yes
-conda create --name pykep cmake boost boost-cpp python=3.11 scipy matplotlib
+conda create --name pykep cmake libboost-devel libboost-python-devel python scipy matplotlib
 conda activate pykep
 
 mkdir build

@@ -1,9 +1,10 @@
-from scipy.interpolate import interp2d, interp1d
+from scipy.interpolate import RectBivariateSpline, interp1d
 from math import sqrt
+import numpy as np
 
 _vinfs_A5 = [0., 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 5.75, 6]
 _decls_A5 = [-90, -40, -30, -29, -28.5, -20, -10, 0, 10, 20, 28.5, 29, 30, 40, 90]
-_data_A5 = [
+_data_A5 = np.array([
     [1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1],
     [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0],
@@ -19,14 +20,14 @@ _data_A5 = [
     [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0],
     [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
     [1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1, 1e-1]
-]
+])
 
 _vinfs_A551 = [sqrt(elem) for elem in [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 40, 45, 50, 55, 60]]
 _data_A551 = [5995, 5780, 5570, 5360, 5160, 4965, 4775, 4585, 4405, 4230, 4055, 3890, 3730, 3570, 3420, 3270, 3130, 2995, 2860, 2670, 2380, 2120, 1900, 1695]
 
 _vinfs_SF = [0, 1, 2, 3, 4, 5]
 _decls_SF = [-90, -65, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 65, 90]
-_data_SF = [
+_data_SF = np.array([
     [1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3],
     [100., 100.00000, 100.00000, 100.00000, 100.00000, 100.00000],
     [1830.50000, 1830.50000, 1815.90000, 1737.70000, 1588.00000, 1344.30000],
@@ -42,14 +43,14 @@ _data_SF = [
     [1805.90000, 1805.90000, 1796.00000, 1722.70000, 1571.60000, 1327.60000],
     [100.00000, 100.00000, 100.00000, 100.00000, 100.00000, 100.00000],
     [1e-3, 1e-3, 1e-3, 1e-3, 1e-3, 1e-3]
-]
+])
 
 # Ariane 5: data provided to ESOC by Arianespace when they were still considering Ariane launch for ExoMars. 
 # Negative mass values have been substituted with exp(m/1000) to avoid problems.
 # Declination has been extended up to 90 degrees.
 _vinfs_Ariane5 = [0.5, 1. , 1.5, 2. , 2.5, 3. , 3.5, 4. , 4.5, 5. , 5.5, 6. ]
 _decls_Ariane5 = [-90, -50, -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 90]
-_data_Ariane5 = [
+_data_Ariane5 = np.array([
     [4.97870684e-02, 3.01973834e-02, 1.83156389e-02, 1.11089965e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04, 3.35462628e-04, 1.23409804e-04, 4.53999298e-05, 1.67017008e-05, 6.14421235e-06],
     [4.97870684e-02, 3.01973834e-02, 1.83156389e-02, 1.11089965e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04, 3.35462628e-04, 1.23409804e-04, 4.53999298e-05, 1.67017008e-05, 6.14421235e-06],
     [8.20849986e-02, 4.97870684e-02, 3.01973834e-02, 1.83156389e-02, 1.11089965e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04, 3.35462628e-04, 1.23409804e-04, 4.53999298e-05, 1.67017008e-05],
@@ -73,7 +74,7 @@ _data_Ariane5 = [
     [5.47700000e+03, 5.23900000e+03, 4.88200000e+03, 4.40100000e+03, 3.79500000e+03, 3.67879441e-01, 1.35335283e-01, 4.97870684e-02, 1.83156389e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04],
     [5.30200000e+03, 5.02100000e+03, 4.60400000e+03, 4.04400000e+03, 3.67879441e-01, 1.35335283e-01, 4.97870684e-02, 1.83156389e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04, 3.35462628e-04],
     [5.30200000e+03, 5.02100000e+03, 4.60400000e+03, 4.04400000e+03, 3.67879441e-01, 1.35335283e-01, 4.97870684e-02, 1.83156389e-02, 6.73794700e-03, 2.47875218e-03, 9.11881966e-04, 3.35462628e-04]
-]
+])
 
 class _launchers:
     """
@@ -92,10 +93,10 @@ class _launchers:
 
     """
     def __init__(self):
-        self._atlas501 = interp2d(_vinfs_A5, _decls_A5, _data_A5, kind='linear', fill_value=0.1, copy=False)
+        self._atlas501 = RectBivariateSpline(_vinfs_A5, _decls_A5, _data_A5.T, kx=1, ky=1)
         self._atlas551 = interp1d(_vinfs_A551, _data_A551, kind='linear', fill_value=0.1, copy=False, bounds_error=False)
-        self._soyuzf = interp2d(_vinfs_SF, _decls_SF, _data_SF, kind='linear', fill_value=1e-3, copy=False)
-        self._ariane5 = interp2d(_vinfs_Ariane5, _decls_Ariane5, _data_Ariane5, kind='linear', fill_value=1e-3, copy=False)
+        self._soyuzf = RectBivariateSpline(_vinfs_SF, _decls_SF, _data_SF.T, kx=1, ky=1)
+        self._ariane5 = RectBivariateSpline(_vinfs_Ariane5, _decls_Ariane5, _data_Ariane5.T, kx=1, ky=1)
     def atlas501(self, vinfs, decls):
         """atlas501(vinfs, decls)
 
@@ -110,7 +111,7 @@ class _launchers:
             Numpy array containg the mass delivered to escape with said declinations and magnitudes.
         
         """
-        return self._atlas501(vinfs, decls)
+        return self._atlas501(vinfs, decls).T
 
     def atlas551(self, vinfs):
         """atlas551(vinfs)
@@ -140,7 +141,7 @@ class _launchers:
         Returns:
             Numpy array containg the mass delivered to escape with said declinations and magnitudes.
         """
-        return self._soyuzf(vinfs, decls)
+        return self._soyuzf(vinfs, decls).T
     def ariane5(self, vinfs, decls):
         """ariane5(vinfs, decls)
 
@@ -155,4 +156,4 @@ class _launchers:
         Returns:
             Numpy array containg the mass delivered to escape with said declinations and magnitudes.
         """
-        return self._ariane5(vinfs, decls)
+        return self._ariane5(vinfs, decls).T

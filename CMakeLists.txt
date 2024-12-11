@@ -1,8 +1,8 @@
 # Main pykep project version.
-set(PYKEP_PROJECT_VERSION 2.6.2)
+set(PYKEP_PROJECT_VERSION 2.6.3)
 
 # CMake version check.
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.18.0)
 
 # Module path setup.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules" "${CMAKE_SOURCE_DIR}/cmake_modules/yacma")
@@ -155,14 +155,12 @@ list(REMOVE_ITEM KEP_TOOLBOX_CXX_FLAGS_DEBUG "-Wold-style-cast")
 if(PYKEP_BUILD_PYKEP)
     include(YACMAPythonSetup)
     # NOTE: for the time being, require that dcgp/dcgpy versions are matching exactly.
-    find_package(keplerian_toolbox ${PYKEP_PROJECT_VERSION} EXACT REQUIRED)
-
-    # Internal variable that will be used to tell PykepFindBoost to locate Boost.Python.
-    set(_PYKEP_FIND_BOOST_PYTHON TRUE)
+    find_package(keplerian_toolbox ${PYKEP_PROJECT_VERSION} EXACT REQUIRED CONFIG)
 endif()
 
 # Boost setup. Will allow using Boost::library_name for the needed components
-include(PykepFindBoost)
+find_package(Boost 1.69 REQUIRED COMPONENTS serialization date_time python CONFIG)
+
 
 if(PYKEP_BUILD_KEP_TOOLBOX)
     # List of source files.
@@ -298,7 +296,6 @@ if(PYKEP_BUILD_KEP_TOOLBOX)
     )
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/keplerian_toolbox-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" @ONLY)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/keplerian_toolbox-config.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PykepFindBoost.cmake" DESTINATION "lib/cmake/keplerian_toolbox")
     install(EXPORT keplerian_toolbox_export NAMESPACE Keplerian_toolbox:: DESTINATION lib/cmake/keplerian_toolbox)
     # Take care of versioning.
     include(CMakePackageConfigHelpers)
