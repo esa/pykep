@@ -10,7 +10,7 @@ set -e
 sudo apt-get install wget
 
 # Install conda+deps.
-wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O miniforge.sh
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-x86_64.sh -O miniconda.sh
 export deps_dir=$HOME/local
 export PATH="$HOME/miniforge/bin:$PATH"
 bash miniforge.sh -b -p $HOME/miniforge
