@@ -59,7 +59,7 @@ from pykep import core, sims_flanagan, pontryagin, orbit_plots, examples, phasin
 ###########################################################
 # We define pykep module
 ###########################################################
-version = '2.6.3'
+version = '2.6.4'
 __doc__ = 'pykep is the answer ... but what was the question?'
 __all__ = ['core', 'sims_flanagan', 'pontryagin', 'orbit_plots',
            'examples', 'trajopt', 'phasing', 'util', 'planet', 'test']
