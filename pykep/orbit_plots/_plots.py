@@ -24,7 +24,7 @@ def plot_planet(plnt, t0=0, tf=None, N=60, units=1.0, color='k', alpha=1.0, s=40
 	ax = fig.add_subplot(projection='3d')
 	pl = pk.planet.jpl_lp('earth')
 	t_plot = pk.epoch(219)
-	ax = pk.orbit_plots.plot_planet(pl, ax = ax, color='b')
+	ax = pk.orbit_plots.plot_planet(pl, axes = ax, color='b')
     """
     from pykep import MU_SUN, SEC2DAY, epoch, AU, RAD2DEG
     from pykep.planet import keplerian
