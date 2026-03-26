@@ -1,0 +1,23 @@
+// Copyright © 2023–2025 Dario Izzo (dario.izzo@gmail.com), 
+// Francesco Biscani (bluescarni@gmail.com)
+//
+// This file is part of the kep3 library.
+//
+// Licensed under the Mozilla Public License, version 2.0.
+// You may obtain a copy of the MPL at https://www.mozilla.org/MPL/2.0/.
+
+#ifndef kep3_CONFIG_HPP
+#define kep3_CONFIG_HPP
+
+// Start of defines instantiated by CMake.
+
+// clang-format off
+#define kep3_VERSION "@kep3_VERSION@"
+#define kep3_VERSION_MAJOR @kep3_VERSION_MAJOR@
+#define kep3_VERSION_MINOR @kep3_VERSION_MINOR@
+#define kep3_VERSION_PATCH @kep3_VERSION_PATCH@
+// clang-format on
+
+// End of defines instantiated by CMake.
+
+#endif

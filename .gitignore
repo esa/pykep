@@ -1,0 +1,21 @@
+# Build dirs.
+build*
+
+# clangd bits.
+.cache
+
+# vscode bits.
+.vscode
+
+# config files
+include/kep3/config.hpp
+pykep/_version.py
+
+# python stuff
+*__pycache__*
+
+# docs tmp files
+doc/_build*
+
+# Stuff
+*DS_Store

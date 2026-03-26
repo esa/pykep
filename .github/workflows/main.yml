@@ -1,0 +1,62 @@
+name: C++ Library
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linux_asan_debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_linux_asan_debug.sh
+  osx_11_debug:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_osx_debug.sh
+  windows_2022_release:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: kep3_devel
+          environment-file: kep3_devel.yml
+          auto-update-conda: false
+          channels: conda-forge
+          channel-priority: strict
+          auto-activate-base: false
+      - name: Build
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          mkdir build
+          cd build
+          cmake ../ -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=C:\Miniconda\envs\kep3_devel\Library -Dkep3_BUILD_TESTS=yes
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          cmake --build . --config Release --target install -- /m
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          ctest -j4 -V -C Release --output-on-failure
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+  linux_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_linux_coverage.sh
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.info
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

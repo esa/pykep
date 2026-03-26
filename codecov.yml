@@ -1,0 +1,14 @@
+coverage:
+  ignore:
+  - "test/.*"
+  - "include/kep3/detail/tanuki.hpp"
+  - "include/kep3/detail/tanuki_impl.hpp"
+codecov: 
+ token: c29e9be0-08f0-46b6-aa0d-6dd1aa3bfc9f
+
+comment:                  # this is a top-level key
+  layout: " diff, flags, files"
+  behavior: default
+  require_changes: false  # if true: only post the comment if coverage changes
+  require_base: false        # [true :: must have a base report to post]
+  require_head: true       # [true :: must have a head report to post]

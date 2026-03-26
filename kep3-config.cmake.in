@@ -1,0 +1,16 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Mandatory public dependencies.
+find_dependency(Boost @_kep3_MIN_BOOST_VERSION@ REQUIRED COMPONENTS serialization)
+find_dependency(fmt @_kep3_MIN_FMT_VERSION@ REQUIRED CONFIG)
+find_dependency(heyoka @_kep3_MIN_HEYOKA_VERSION@ REQUIRED CONFIG)
+
+# Get current dir.
+get_filename_component(_kep3_CONFIG_SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+include(${_kep3_CONFIG_SELF_DIR}/kep3_export.cmake)
+
+# Clean up.
+unset(_kep3_CONFIG_SELF_DIR)

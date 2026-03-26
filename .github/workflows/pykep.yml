@@ -1,0 +1,52 @@
+name: Python Module
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  linux_pykep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_linux_pykep.sh
+      - name: Upload to github pages 🚀
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@v4.6.4 #workaround to be fixed upstream
+        with:
+          folder: doc/_build/html # The folder the action should deploy.
+  osx_pykep:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_osx_pykep.sh
+  windows_pykep:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: kep3_devel
+          environment-file: kep3_devel.yml
+          auto-update-conda: false
+          channels: conda-forge
+          channel-priority: strict
+          auto-activate-base: false
+      - name: Build
+        shell: pwsh
+        run: |
+          conda install numpy matplotlib pybind11 sgp4 spiceypy -y
+          mkdir build
+          cd build
+          cmake ../ -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=C:\Miniconda\envs\kep3_devel\Library -Dkep3_BUILD_PYTHON_BINDINGS=yes
+          cmake --build . -j4 --config Release --target install
+          python -c "import pykep; pykep.test.run_test_suite()"

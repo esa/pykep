@@ -1,0 +1,38 @@
+// Copyright © 2023–2025 Dario Izzo (dario.izzo@gmail.com),
+// Francesco Biscani (bluescarni@gmail.com)
+//
+// This file is part of the kep3 library.
+//
+// Licensed under the Mozilla Public License, version 2.0.
+// You may obtain a copy of the MPL at https://www.mozilla.org/MPL/2.0/.
+
+#ifndef kep3_TA_zero_hold_cr3bp_H
+#define kep3_TA_zero_hold_cr3bp_H
+
+#include <vector>
+
+#include <kep3/detail/visibility.hpp>
+
+#include <heyoka/expression.hpp>
+#include <heyoka/taylor.hpp>
+
+namespace kep3::ta
+{
+// Returns the low-thrust dynamics (heyoka API) of the zero_hold_cr3bp. 6 states, 4 parameters: mu, Tx, Ty, Tz.
+// Note that the dynamics is assuming the following units L = distance between the bodies, T = period of the primaries /
+// 2pi, M = sum of the mass of the two primaries.
+// ... all others follow.
+kep3_DLL_PUBLIC std::vector<std::pair<heyoka::expression, heyoka::expression>> zero_hold_cr3bp_dyn();
+
+// These return const references to function level static variables of type heyoka::taylor_adaptive<double>.
+// NOTE: The object retruned are expected to be copied to then be modified.
+kep3_DLL_PUBLIC const heyoka::taylor_adaptive<double> &get_ta_zero_hold_cr3bp(double tol);
+kep3_DLL_PUBLIC const heyoka::taylor_adaptive<double> &
+get_ta_zero_hold_cr3bp_var(double tol); // variational (x, y, z, vx, vy, vz, Tx, Ty, Tz) first order
+
+// Methods to access the cache dimensions.
+kep3_DLL_PUBLIC size_t get_ta_zero_hold_cr3bp_cache_dim();
+kep3_DLL_PUBLIC size_t get_ta_zero_hold_cr3bp_var_cache_dim();
+} // namespace kep3::ta
+
+#endif
