@@ -1,0 +1,683 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Epoch class &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'epoch';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Planet class" href="planet.html" />
+    <link rel="prev" title="Orbital Elements" href="elements.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="api.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fepoch.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/epoch.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Epoch class</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch"><code class="docutils literal notranslate"><span class="pre">epoch</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.jd"><code class="docutils literal notranslate"><span class="pre">epoch.jd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.julian_type"><code class="docutils literal notranslate"><span class="pre">epoch.julian_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.mjd"><code class="docutils literal notranslate"><span class="pre">epoch.mjd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.mjd2000"><code class="docutils literal notranslate"><span class="pre">epoch.mjd2000</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.now"><code class="docutils literal notranslate"><span class="pre">epoch.now()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.string_format"><code class="docutils literal notranslate"><span class="pre">epoch.string_format</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.to_datetime"><code class="docutils literal notranslate"><span class="pre">epoch.to_datetime()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="epoch-class">
+<span id="epoch"></span><h1>Epoch class<a class="headerlink" href="#epoch-class" title="Link to this heading">#</a></h1>
+<p>The representation of an epoch, that is of a specific point in time, be it in the future or in the past, can be rather confusing.
+In <cite>pykep</cite> we opted to offer a dedicated class called <a class="reference internal" href="#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a> to offer a simple interface and, under the hoods, interfacing
+seamlessly both to the c++ <a class="reference external" href="https://en.cppreference.com/w/cpp/header/chrono">std::chrono</a>
+library and to the python <a class="reference external" href="https://docs.python.org/3/library/datetime.html">datetime</a> module.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In <cite>pykep</cite> the default Julian Date is the Modified Julian Date, defined as a <cite>float</cite> representing the number
+of days since the start of 2000-1-1.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The date in <cite>pykep</cite> <strong>does</strong> account for leap seconds. If the user wishes to use the exact ISO 8601 representation of some epoch,
+also including leap seconds, he will have to account for the offset himself. As of of 2023 this may account to maximum 28 seconds.
+<a class="reference external" href="https://en.wikipedia.org/wiki/Leap_second">More info</a> on leap seconds.</p>
+</div>
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.epoch">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MJD2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch" title="Link to this definition">#</a></dt>
+<dd><p>Represents a specific point in time.</p>
+<blockquote>
+<div><p>Constructs an epoch from a Julian Date.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the Julian Date (days since reference)</p>
+<p><em>julian_type</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">julian_type</span></code>): one of MJD2000, JD or MJD</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">12.3</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="o">.</span><span class="n">julian_type</span><span class="o">.</span><span class="n">MJD2000</span><span class="p">)</span>
+<span class="go">2000-01-13T07:12:00.000000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt><strong>Alternative Constructor:</strong></dt><dd><p><strong>__init__(</strong> <em>when: str</em>, <em>string_format = pk.epoch.string_format.ISO</em> <strong>)</strong></p>
+<p>Constructs an epoch from a string.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): a date</p>
+<p><em>string_format</em> (<a class="reference internal" href="#pykep.epoch.string_format" title="pykep.epoch.string_format"><code class="xref py py-class docutils literal notranslate"><span class="pre">string_format</span></code></a>): string format.</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="s2">&quot;2000-01-14T00:00:00.000001&quot;</span><span class="p">)</span>
+<span class="go">2000-01-14T00:00:00.000001</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt><strong>Alternative Constructor:</strong></dt><dd><p><strong>__init__(</strong> <em>when: datetime.datetime</em> <strong>)</strong></p>
+<p>Constructs an epoch from a datetime object.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>): a date</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">13</span><span class="p">))</span>
+<span class="go">2000-01-13T00:00:00.000000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pykep.epoch.jd">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">jd</span></span><a class="headerlink" href="#pykep.epoch.jd" title="Link to this definition">#</a></dt>
+<dd><p>The Julian Date</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.epoch.julian_type">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">julian_type</span></span><a class="headerlink" href="#pykep.epoch.julian_type" title="Link to this definition">#</a></dt>
+<dd><p>Members:</p>
+<p>MJD2000 : Modified Julian Date 2000.</p>
+<p>MJD : Modified Julian Date.</p>
+<p>JD : Julian Date.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pykep.epoch.mjd">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mjd</span></span><a class="headerlink" href="#pykep.epoch.mjd" title="Link to this definition">#</a></dt>
+<dd><p>The Modified Julian Date</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pykep.epoch.mjd2000">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mjd2000</span></span><a class="headerlink" href="#pykep.epoch.mjd2000" title="Link to this definition">#</a></dt>
+<dd><p>The Modified Julian Date 2000</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.epoch.now">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch.now" title="Link to this definition">#</a></dt>
+<dd><p>Returns a pykep.epoch with the current UTC date.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.epoch.string_format">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">string_format</span></span><a class="headerlink" href="#pykep.epoch.string_format" title="Link to this definition">#</a></dt>
+<dd><p>Members:</p>
+<p>ISO : ISO 8601 format for dates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.epoch.to_datetime">
+<span class="sig-name descname"><span class="pre">to_datetime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch.to_datetime" title="Link to this definition">#</a></dt>
+<dd><p>Convert this <code class="docutils literal notranslate"><span class="pre">epoch</span></code> to a timezone-aware Python <code class="docutils literal notranslate"><span class="pre">datetime</span></code> in UTC.</p>
+<p>This method is added to the class via monkey-patching:</p>
+<ul>
+<li><p>It interprets <code class="docutils literal notranslate"><span class="pre">self.mjd2000</span></code> as a day count relative to the MJD2000
+reference epoch (2000-01-01 00:00:00) in UTC.</p></li>
+<li><p>It converts days to seconds by multiplying by 86400.</p></li>
+<li><p>It returns an <em>aware</em> <code class="docutils literal notranslate"><span class="pre">datetime</span></code> (<code class="docutils literal notranslate"><span class="pre">tzinfo=timezone.utc</span></code>) computed as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datetime</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mjd2000</span> <span class="o">*</span> <span class="mi">86400</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="simple">
+<dt>Notes:</dt><dd><p>This is a civil-time conversion that assumes the MJD2000 epoch and the
+stored day count are meant to be interpreted in UTC. If your underlying
+time scale is TT/TAI (or you require leap-second-aware conversions), use
+an astronomy time library (e.g., Astropy) instead of naive arithmetic.</p>
+</dd>
+<dt>Returns:</dt><dd><p>datetime: A timezone-aware <code class="docutils literal notranslate"><span class="pre">datetime</span></code> in UTC corresponding to this epoch.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="elements.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Orbital Elements</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="planet.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Planet class</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch"><code class="docutils literal notranslate"><span class="pre">epoch</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.jd"><code class="docutils literal notranslate"><span class="pre">epoch.jd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.julian_type"><code class="docutils literal notranslate"><span class="pre">epoch.julian_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.mjd"><code class="docutils literal notranslate"><span class="pre">epoch.mjd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.mjd2000"><code class="docutils literal notranslate"><span class="pre">epoch.mjd2000</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.now"><code class="docutils literal notranslate"><span class="pre">epoch.now()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.string_format"><code class="docutils literal notranslate"><span class="pre">epoch.string_format</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.epoch.to_datetime"><code class="docutils literal notranslate"><span class="pre">epoch.to_datetime()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

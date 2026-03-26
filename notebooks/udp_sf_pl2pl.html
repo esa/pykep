@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sims-Flanagan: planet to plane low-thrust transfer &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/udp_sf_pl2pl';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)" href="udp_sf_pl2pl_alpha.html" />
+    <link rel="prev" title="Sims-Flanagan: point to point low-thrust transfer" href="udp_sf_point2point.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/udp_sf_pl2pl.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/udp_sf_pl2pl.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/udp_sf_pl2pl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Sims-Flanagan: planet to plane low-thrust transfer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-performances-of-the-analytical-gradient">Analytical performances of the analytical gradient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-low-thrust-transfer">Solving the low-thrust transfer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graident-vs-no-gradient">Graident vs no gradient</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="sims-flanagan-planet-to-plane-low-thrust-transfer">
+<h1>Sims-Flanagan: planet to plane low-thrust transfer<a class="headerlink" href="#sims-flanagan-planet-to-plane-low-thrust-transfer" title="Link to this heading">#</a></h1>
+<p>In this tutorial we show the use of the <a class="reference internal" href="../trajopt.html#pykep.trajopt.sf_pl2pl" title="pykep.trajopt.sf_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.sf_pl2pl</span></code></a> to find a low-thrust trajectory connecting two moving planets.
+This naturally follows the previous notebook on the <a class="reference internal" href="udp_sf_point2point.html"><span class="std std-doc">point to point</span></a> version of the same problem.</p>
+<p>The decision vector for this problem, compatible with pygmo <span id="id1">[<a class="reference internal" href="../bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> UDPs (User Defined Problems), is:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf x = [t_0, m_f, V_{sx}^\infty, V^\infty_{sy}, V^\infty_{sz}, V^\infty_{fx}, V^\infty_{fy}, V^\infty_{fz}, u_{x0}, u_{y0}, u_{z0}, u_{x1}, u_{y1}, u_{z1}, ..., T_{tof}]
+\]</div>
+<p>containing the starting epoch <span class="math notranslate nohighlight">\(t_0\)</span> as a MJD2000, the final mass <span class="math notranslate nohighlight">\(m_f\)</span> as well as the starting and final <span class="math notranslate nohighlight">\(V^{\infty}\)</span>, throttles and the time-of-flight <span class="math notranslate nohighlight">\(T_{tof}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This notebook makes use of the commercial solver SNOPT 7 and to run needs a valid <code class="docutils literal notranslate"><span class="pre">snopt_7_c</span></code> library installed in the system. In case SNOPT7 is not available, you can still run the notebook using, for example <code class="docutils literal notranslate"><span class="pre">uda</span> <span class="pre">=</span> <span class="pre">pg.algorithm.nlopt(&quot;slsqp&quot;)</span></code> with minor modifications.</p>
+</div>
+<p>Basic imports:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We start defining the problem data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem data</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">max_thrust</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="n">isp</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+
+<span class="c1"># Source and destination planets</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;EARTH&quot;</span><span class="p">)),</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">mars</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;MARS&quot;</span><span class="p">)),</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">venus</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;venus&quot;</span><span class="p">)),</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Initial state</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="mf">1500.0</span>
+
+<span class="c1"># Number of segments</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">30</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We here instantiate two different versions of the same UDP (User Defined Problem), with analytical gradients and without.</p>
+<p>For the purpose of this simple notebook we choose a relatively simple Earth to Mars transfer with an initial <span class="math notranslate nohighlight">\(V_{\infty}\)</span> of 3 km/s.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_nog</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">sf_pl2pl</span><span class="p">(</span>
+        <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
+        <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+        <span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">,</span>
+        <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="p">,</span>
+        <span class="n">veff</span><span class="o">=</span><span class="n">veff</span><span class="p">,</span>
+        <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
+        <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">350.0</span><span class="p">],</span>
+        <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">ms</span><span class="p">],</span>
+        <span class="n">vinfs</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+        <span class="n">vinff</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+        <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+        <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">mass_scaling</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span>
+        <span class="n">r_scaling</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span>
+        <span class="n">v_scaling</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">EARTH_VELOCITY</span><span class="p">,</span>
+        <span class="n">with_gradient</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">udp_g</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">sf_pl2pl</span><span class="p">(</span>
+        <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
+        <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+        <span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">,</span>
+        <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="p">,</span>
+        <span class="n">veff</span><span class="o">=</span><span class="n">veff</span><span class="p">,</span>
+        <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
+        <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">350.0</span><span class="p">],</span>
+        <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">ms</span><span class="p">],</span>
+        <span class="n">vinfs</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+        <span class="n">vinff</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+        <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+        <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">mass_scaling</span><span class="o">=</span><span class="n">ms</span><span class="p">,</span>
+        <span class="n">r_scaling</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span>
+        <span class="n">v_scaling</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">EARTH_VELOCITY</span><span class="p">,</span>
+        <span class="n">with_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="analytical-performances-of-the-analytical-gradient">
+<h2>Analytical performances of the analytical gradient<a class="headerlink" href="#analytical-performances-of-the-analytical-gradient" title="Link to this heading">#</a></h2>
+<p>And we take a quick look at the performances of the analytical gradient with respect to the numerically computed one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We need to generste a random chromosomes compatible with the UDP where to test the gradient.</span>
+<span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g</span><span class="p">)</span>
+<span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>First the analytical gradient:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">udp_g</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>630 μs ± 11.1 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then a simple numerical gradient based on finite differences:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">udp_g</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.73 ms ± 20.9 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then a higher order numerical gradient:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp_g</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20.2 ms ± 144 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The analytical gradient is, in this case, exact and faster, seems like a no brainer to decide wether one has to use it.</p>
+<p>In reality, the effects on the optimization technique used are not straightforward, making the option to use numerical gradients still interesting in some, albeit rare, cases.</p>
+</section>
+<section id="solving-the-low-thrust-transfer">
+<h2>Solving the low-thrust transfer<a class="headerlink" href="#solving-the-low-thrust-transfer" title="Link to this heading">#</a></h2>
+<p>We define (again) the optimization problem, and set a tolerance for <em>pagmo</em> to be able to judge the relative value of two individuals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tolerance has a different role from the numerical tolerance set in the particular algorithm chosen to solve the problem and is only used by the <em>pagmo</em> machinery to decide outside the optimizer whether the new proposed indivdual is better than what was the previous <em>champion</em>.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g</span><span class="p">)</span>
+<span class="n">prob_g</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and we define an optimization algorithm.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">snopt72</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/lib/libsnopt7_c.so&quot;</span>
+<span class="n">uda</span> <span class="o">=</span> <span class="n">ppnf</span><span class="o">.</span><span class="n">snopt7</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">snopt72</span><span class="p">,</span> <span class="n">minor_version</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">screen_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Major iterations limit&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Iterations limit&quot;</span><span class="p">,</span> <span class="mi">20000</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major optimality tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major feasibility tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-11</span><span class="p">)</span>
+
+<span class="c1">#uda = pg.nlopt(&quot;slsqp&quot;)</span>
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We solve the problem from random initial guess ten times and only save the result if a feasible solution is found (as defined by the criterias above)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">prob_g</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.........x
+Best mass is:  1234.15677161
+Worst mass is:  1055.94065222
+</pre></div>
+</div>
+</div>
+</div>
+<p>And we plot the trajectory found:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Low-thrust NEP transfer
+Departure: earth(jpl_lp)(K)
+Arrival: mars(jpl_lp)(K)
+
+Launch epoch: 7451.99290 MJD2000, a.k.a. 2020-05-26T23:49:46.639162
+Arrival epoch: 7801.99290 MJD2000, a.k.a. 2021-05-11T23:49:46.639162
+Time of flight (days): 350.00000 
+
+Launch DV (km/s) 0.00000000 - [-0.0,-0.0,-0.0]
+Arrival DV (km/s) 0.00000000 - [-0.0,-0.0,-0.0]
+Final mass (kg): 1234.156771610159
+
+Details on the low-thrust leg: 
+Number of segments: 30
+Number of fwd segments: 18
+Number of bck segments: 12
+Maximum thrust: 0.6
+Central body gravitational parameter: 1.3271244004127942e+20
+Specific impulse: 29419.949999999997
+
+Time of flight: 30240000
+Initial mass: 1500
+Final mass: 1234.156771610159
+State at departure: [[-61954526368.884995, -138336261328.15906, 4315628.631202786], [26701.920353639984, -12287.534991671208, 0.38332999105107457]]
+State at arrival: [[-154565138881.2139, 191757916330.46805, 7812274607.089294], [-17948.711153788554, -13142.621427747503, 165.25507018889533]]
+Throttles values: [0.9150544648347976, -0.2727543389414908, -0.29712018218766784, 0.9624610630773269, -0.10203797729041932, -0.25150935164371235, 0.9776014444167017, 0.07614377352808915, -0.19620790610918598, 0.957702324318249, 0.2552571227935213, -0.13285352754629626, 0.9020195250406122, 0.4270367782902017, -0.06324845384866676, 0.8125740078618441, 0.582769461576093, 0.010160722844625271, 0.6250556058421802, 0.643431656576734, 0.07588141128543445, 7.598343716549538e-06, 1.1185880791432576e-05, 2.2453332061872086e-06, 1.4408745246271949e-05, 3.1565395204124255e-05, 8.088752742965002e-06, 4.167876473489592e-06, 1.5868867168138716e-05, 4.815375942141084e-06, 8.545615563570315e-06, 8.944395789605744e-05, 3.19946851569267e-05, -8.669356237676905e-05, 0.0013694500186129483, 0.0005403961740439303, -0.19815756048776179, 0.8908099690924527, 0.408890181917974, -0.32595401927831397, 0.8403740439172253, 0.433042081594063, -0.4419725332619276, 0.7766744775427021, 0.4488173756337557, -0.16721227800602773, 0.21506256326908357, 0.13984526500303546, -0.0008577982888386832, 0.0008253804748373212, 0.000611955943109358, -1.9689873107124022e-05, 1.4484973841899776e-05, 1.2436117595143888e-05, -2.8620412636608553e-06, 1.4743737492308882e-06, 1.3706037810142675e-06, -2.402979236322631e-06, 1.1913160319104661e-06, 1.2756146936779317e-06, -4.244191704846397e-07, 1.0828530514628123e-07, 1.8453337167945703e-07, -9.37373180281157e-07, 8.370732519658679e-08, 4.5982001574680147e-07, -5.02625458610645e-06, 7.7773055659164e-08, 1.7093668556714202e-06, -6.066420090578855e-07, -9.776882662778539e-08, 1.693196783758444e-07, -2.4279305758096285e-06, -5.020957271186525e-07, 5.687923131273488e-07, -1.763015410795579e-06, -5.570191621396674e-07, 3.671370129445859e-07, -6.662472253806185e-07, -3.989017097670747e-07, 1.796905964689047e-07, -0.6703382738852394, -0.37712488780496517, 0.07550759065615623, -0.8176963270878755, -0.5736343129475407, 0.04812890714381351, -0.7587432384564023, -0.6513895542677574, -0.0005888145804974916]
+
+Mismatch constraints: [-43.6181640625, 15.74029541015625, 10.302734851837158, -5.042853445047513e-06, 5.885649443371221e-07, 1.9215204929423635e-06, -5.930804263698519e-06]
+Throttle constraints: [5.6887403676597614e-09, 7.136988777745046e-10, 7.924696454608693e-10, 5.228979471638695e-10, 4.812135134812934e-10, 3.887074884190156e-09, -0.18954320434151561, -0.9999999998120997, -0.999999998730586, -0.99999999970762, -0.999999990903091, -0.9999978250628478, 6.818712261491555e-10, 8.047968957924923e-10, 8.949667673618933e-10, -0.9062314498203972, -0.9999982084390912, -0.9999999992478374, -0.9999999999877563, -0.9999999999911793, -0.9999999999997741, -0.9999999999989029, -0.9999999999718088, -0.9999999999995938, -0.9999999999935295, -0.9999999999964467, -0.9999999999993647, -0.4027220213159526, 2.665689891045986e-11, 1.5066836667188e-11]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp_g</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">show_gridpoints</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b054ac32211605ef8f1bdcbdaa80bd16b6737050ba6a624a01016c87c0240cbc.png" src="../_images/b054ac32211605ef8f1bdcbdaa80bd16b6737050ba6a624a01016c87c0240cbc.png" />
+</div>
+</div>
+</section>
+<section id="graident-vs-no-gradient">
+<h2>Graident vs no gradient<a class="headerlink" href="#graident-vs-no-gradient" title="Link to this heading">#</a></h2>
+<p>We here take a look at the difference in solving the problem using the analytical gradient and not using it.
+To do so we solve the same problem starting from 100 different initial guesses using both versions and compare.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">cpu_nog</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">cpu_g</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">fail_g</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">fail_nog</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g</span><span class="p">)</span>
+<span class="n">prob_nog</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_nog</span><span class="p">)</span>
+<span class="n">prob_g</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">prob_nog</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)):</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pop_nog</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_nog</span><span class="p">)</span>
+    <span class="n">pop_nog</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prob_g</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="n">fail_g</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># We only record the time for successfull attempts</span>
+        <span class="n">cpu_g</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">pop_nog</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_nog</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">prob_nog</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_nog</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="n">fail_nog</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># We only record the time for successfull attempts</span>
+        <span class="n">cpu_nog</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gradient: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">cpu_g</span><span class="p">)</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No Gradient: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">cpu_nog</span><span class="p">)</span><span class="si">:</span><span class="s2">.4e</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Gradient (n.fails): </span><span class="si">{</span><span class="n">fail_g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No Gradient (n.fails): </span><span class="si">{</span><span class="n">fail_nog</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/100 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 100/100 [07:40&lt;00:00,  4.60s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gradient: 1.4176e+00s
+No Gradient: 3.0340e+00s
+
+Gradient (n.fails): 14
+No Gradient (n.fails): 37
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cpu_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cpu_g</span><span class="p">)</span>
+<span class="n">cpu_nog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cpu_nog</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cpu_g</span><span class="p">[</span><span class="n">cpu_g</span> <span class="o">&lt;</span> <span class="mf">2.2</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;gradient&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cpu_nog</span><span class="p">[</span><span class="n">cpu_nog</span> <span class="o">&lt;</span> <span class="mf">1.2</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;no_gradient&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="c1"># plt.xlim([0,0.15])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;point2point, 10 seg case&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;CPU time&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;N. occurrences&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;N. occurrences&#39;)
+</pre></div>
+</div>
+<img alt="../_images/7a157e578fc077ff54d270ef53434aa8dba1d4ac1a1dd10a70dc0e135684161a.png" src="../_images/7a157e578fc077ff54d270ef53434aa8dba1d4ac1a1dd10a70dc0e135684161a.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="udp_sf_point2point.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sims-Flanagan: point to point low-thrust transfer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="udp_sf_pl2pl_alpha.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-performances-of-the-analytical-gradient">Analytical performances of the analytical gradient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-low-thrust-transfer">Solving the low-thrust transfer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graident-vs-no-gradient">Graident vs no gradient</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

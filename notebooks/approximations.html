@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Approximators for low-thrust transfers &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/approximations';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
+    <link rel="prev" title="The CR3BP and BCP dynamics" href="ta_cr3bp_bcp.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/approximations.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/approximations.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/approximations.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Approximators for low-thrust transfers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-orbital-metric">The Orbital Metric</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-maximum-initial-mass-approximations-mima-s">The Maximum Initial Mass Approximations - MIMA(s)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mim-not-approximated">The MIM (not approximated)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimum-transfer-time-not-approximated">The minimum transfer time (not approximated)</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="approximators-for-low-thrust-transfers">
+<h1>Approximators for low-thrust transfers<a class="headerlink" href="#approximators-for-low-thrust-transfers" title="Link to this heading">#</a></h1>
+<p>Before computing a full low-thrust transfer is often convenent to compute approximations that are computationally less heavy and help anyway to establish the worth of a given transfer opportunity. The main purpose of these is to avoid computing eventually the low-thrust transfer altogether, and thus prune out uninteresting cases.</p>
+<p>In the old-school one would use Edelbaum, Lambert as well as Hohmann <span class="math notranslate nohighlight">\(\Delta V\)</span> and transfer times <span class="math notranslate nohighlight">\(T\)</span> as to produce quick estimates for these quantities, maybe incomprating some gravity loss coefficident set to an arbitrary value (argauble learned from experience). In the last decade, also thanks to the many <a class="reference external" href="https://sophia.estec.esa.int/gtoc_portal/">GTOC competitions</a> new concpets and approximations have been developed that are much more informative and precise. In <em>pykep</em> we implemented a few, mainly from our own work and developments and that have since been embraced by the larger trajectory design community.</p>
+<p>In this notebook we give some examples of their usage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to access a large number of possible targets (asteroids) we use the GTOC12 dataset which we read and use to produce a list of <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>. We add the Earth in Keplerian motion as a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> at index azero so that we also obtain the nice property of indexing the asteroid with their id directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This epoch is used to define all asteroid in the GTOC 12 dataset.</span>
+<span class="n">when</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">64328</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">epoch</span><span class="o">.</span><span class="n">julian_type</span><span class="o">.</span><span class="n">MJD</span><span class="p">)</span>
+<span class="c1"># We read in the file</span>
+<span class="n">raw_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;GTOC12_Asteroids_Data.txt&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">raw_data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">:]</span><span class="o">*=</span><span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span>
+<span class="n">raw_data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">*=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And create the planets</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">64328</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="o">.</span><span class="n">julian_type</span><span class="o">.</span><span class="n">MJD</span><span class="p">),</span>
+                            <span class="p">(</span><span class="mf">1.49579151285E8</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="mf">1.65519129162E-2</span><span class="p">,</span> <span class="mf">4.64389155500E-3</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span>
+                             <span class="mf">1.98956406477e2</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">2.62960364700e2</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span> <span class="mf">3.58039899470e2</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">),</span>
+                            <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">,</span>
+                            <span class="s2">&quot;earth&quot;</span><span class="p">,</span> <span class="n">el_type</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">el_type</span><span class="o">.</span><span class="n">KEP_M</span><span class="p">))</span>
+
+<span class="n">gtoc12_asts</span> <span class="o">=</span> <span class="p">[</span><span class="n">earth</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elements</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raw_data</span><span class="p">):</span>
+    <span class="n">gtoc12_asts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">when</span><span class="p">,</span> <span class="n">elements</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">,</span> <span class="s2">&quot;gtoc12 ast-&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">el_type</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">el_type</span><span class="o">.</span><span class="n">KEP_M</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let us visualize on the fly a <em>snapshot</em> at the chosen epoch of this population of asteroids. We also ovelray the Earth orbit to give a sense of dimensions and we only plot 1/10 asteroids as to
+speed up the plot creation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using built-in pykep plotting routines</span>
+<span class="n">ax3D</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planets</span><span class="p">(</span><span class="n">ax3D</span><span class="p">,</span> <span class="n">gtoc12_asts</span><span class="p">[::</span><span class="mi">10</span><span class="p">],</span> <span class="n">when</span> <span class="o">=</span><span class="n">when</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax3D</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;earth&quot;</span><span class="p">)),</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;royalblue&quot;</span><span class="p">)</span>
+<span class="n">ax3D</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax3D</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b0ec8faa990494c5fe4828f646b92199b983b2eab77af49eb087ef77aa389043.png" src="../_images/b0ec8faa990494c5fe4828f646b92199b983b2eab77af49eb087ef77aa389043.png" />
+</div>
+</div>
+<section id="the-orbital-metric">
+<h2>The Orbital Metric<a class="headerlink" href="#the-orbital-metric" title="Link to this heading">#</a></h2>
+<p>Consider now the problem of selecting what transfer some spacecarft could make when sitting at some asteroid (say id = 24) at epoch <span class="math notranslate nohighlight">\(t_0\)</span>. To answer the question we could:</p>
+<ul class="simple">
+<li><p>Solve all low-thrust transfers to all possible targets (ehm, … well sure going to take some time, what if we then need to change the id or <span class="math notranslate nohighlight">\(t_0\)</span> and need to do this multiple times?). This option is rather slow and still leaves open the question on whether to look for time optimal or mass optimal transfers.</p></li>
+<li><p>Fix some time of flight <span class="math notranslate nohighlight">\(T\)</span> and solve all Lambert transfers to all targets. Consider the resulting <span class="math notranslate nohighlight">\(\Delta V\)</span> as a ranking of good transfer options. (This option is actually not bad, but is very sensitive to the chosen <span class="math notranslate nohighlight">\(T\)</span>, requires to solve a lot of Lambert Problems and is not a metric: thus it does not possess a number of nice and useful properties)</p></li>
+<li><p>Define a concept of metric between orbiting objects, one that accounts for physical proximity (in the phase space) as well as directionality, and use that to find neighbours and clusters.</p></li>
+</ul>
+<p>In the work <span id="id1">[<a class="reference internal" href="../bibliography.html#id18" title="Dario Izzo, Daniel Hennes, Luís F Simões, and Marcus Märtens. Designing complex interplanetary trajectories for the global trajectory optimization competitions. Space Engineering: Modeling and Optimization with Case Studies, pages 151–176, 2016.">IHSimoesMartens16</a>]</span> the concept of an <em>orbital metric</em> is introduced, which is a metric in the phase space of the two-body problem that is able to capture the physical proximity of two objects, including phasing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We check what asteroids are close to each other at epoch mjd2000 = 5500 under the orbital metric</span>
+<span class="n">when</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5500</span><span class="p">)</span>
+<span class="n">tof_days</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">knn_instance</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">gtoc12_asts</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;orbital&#39;</span><span class="p">)</span>
+<span class="c1"># And find the closest 5 neighbours to the asteroid with id=24</span>
+<span class="n">ast_id_ref</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">neighbours_names</span><span class="p">,</span> <span class="n">neighbours_idxs</span><span class="p">,</span> <span class="n">neighbours_dists</span> <span class="o">=</span> <span class="n">knn_instance</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">ast_id_ref</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and visualize the selected asteroids.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_sun</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">earth</span><span class="p">)</span>
+<span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">neighbours_idxs</span><span class="p">:</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="n">when</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/61b993780aaac800b68bf99f575c73a7712c67075f5b5d05190d677d961595a1.png" src="../_images/61b993780aaac800b68bf99f575c73a7712c67075f5b5d05190d677d961595a1.png" />
+</div>
+</div>
+<p>Clearly the neighbours found are well phased asteroids that can thus be considered for a transfer (a hop). The above computation is extremely quick to make, so that for the asteroids found we can afford to complexify our trajectory model. For example computing now the transfer Maximum initial mass approximations (which are also computationally light as they require only Lambert arc computations)</p>
+<p>We measure the computational cost of running the orbital metric:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This cost covers the computation of the orbital metric for all pairs of asteroids (having fixed the epoch), and is the most expensive part of the computation. The cost of the performing further queries (i.e. for different asteroid ids) is negligible in comparison.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">knn_instance</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">gtoc12_asts</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;orbital&#39;</span><span class="p">)</span>
+<span class="n">neighbours_names</span><span class="p">,</span> <span class="n">neighbours_idxs</span><span class="p">,</span> <span class="n">neighbours_dists</span> <span class="o">=</span> <span class="n">knn_instance</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">ast_id_ref</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>142 ms ± 1.77 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-maximum-initial-mass-approximations-mima-s">
+<h2>The Maximum Initial Mass Approximations - MIMA(s)<a class="headerlink" href="#the-maximum-initial-mass-approximations-mima-s" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="n">Isp</span> <span class="o">=</span> <span class="mi">4000</span>
+
+<span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">ast_id_ref</span><span class="p">]</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">when</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">neighbours_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">posvel_f</span> <span class="o">=</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">when</span> <span class="o">+</span> <span class="n">tof_days</span><span class="p">)</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">lambert_problem</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">posvel_f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tof</span> <span class="o">=</span> <span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
+    <span class="n">dv1</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">v0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">)]</span>
+    <span class="n">dv2</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">posvel_f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">l</span><span class="o">.</span><span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">mima</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">*</span> <span class="n">Isp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">posvel</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">l</span><span class="o">.</span><span class="n">v0</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">mima2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima2</span><span class="p">(</span><span class="n">posvel</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">*</span> <span class="n">Isp</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">lambert_dv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dv1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dv2</span><span class="p">)</span>
+    <span class="n">lambertm</span> <span class="o">=</span> <span class="n">Tmax</span> <span class="o">/</span> <span class="p">(</span><span class="n">lambert_dv</span> <span class="o">/</span> <span class="p">(</span><span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;idx: </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: mima: </span><span class="si">{</span><span class="n">mima</span><span class="si">:</span><span class="s2">.8f</span><span class="si">}</span><span class="s2">, mima2: </span><span class="si">{</span><span class="n">mima2</span><span class="si">:</span><span class="s2">.8f</span><span class="si">}</span><span class="s2">, lambert_estimate: </span><span class="si">{</span><span class="n">lambertm</span><span class="si">:</span><span class="s2">.8f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>idx: 56806: mima: 1270.16102850, mima2: 1336.53752330, lambert_estimate: 1980.95464032
+idx: 21298: mima: 1376.28433396, mima2: 1349.12057368, lambert_estimate: 2365.34798345
+idx: 11241: mima: 805.84627823, mima2: 764.22499060, lambert_estimate: 1413.08850455
+idx: 17333: mima: 966.96031125, mima2: 942.28767024, lambert_estimate: 1720.34149613
+idx: 58382: mima: 899.57118064, mima2: 981.70709099, lambert_estimate: 1196.73301555
+idx: 9791: mima: 952.07569132, mima2: 939.52952745, lambert_estimate: 1490.11499765
+idx: 59398: mima: 868.63412492, mima2: 849.81378715, lambert_estimate: 1446.03050794
+idx: 13156: mima: 892.72968973, mima2: 899.41910901, lambert_estimate: 1491.10483402
+idx: 55344: mima: 838.49574444, mima2: 808.47917624, lambert_estimate: 1322.65465481
+</pre></div>
+</div>
+</div>
+</div>
+<p>Theres a very good correlation between the ranking assembled by the orbital metric and that of the MIMA(s). The Lambert based approximation has a much larger error, whch can be reduced introducing an arbitrary gravity loss coefficient, but still the MIMA(s) are much more informative and precise.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ranking produced by the various criteria is sensitive to the value set for the time of flight.</p>
+</div>
+<p>We profile the computational cost of the MIMA(s) computation (this referes to one only asteroid id.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">mima</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">*</span> <span class="n">Isp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>678 ns ± 21.1 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">mima2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima2</span><span class="p">(</span><span class="n">posvel</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof_days</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">*</span> <span class="n">Isp</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>119 μs ± 1.73 μs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The cost of running MIMA for one asteroid is compatible (only marginally faster) to the cost of running the orbital metric on all asteroid couples. Thus its typicaly considered as a refinement step to the ranking of targets provided by the orbital metric.</p>
+</section>
+<section id="the-mim-not-approximated">
+<h2>The MIM (not approximated)<a class="headerlink" href="#the-mim-not-approximated" title="Link to this heading">#</a></h2>
+<p>In order to have a clear picture on the error introduced by using the aproximations above, we can actually compute (spending more computational resources) the ground truth, the actual MIM.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">neighbours_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">mim</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">mim_from_hop</span><span class="p">(</span><span class="n">gtoc12_asts</span><span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">when</span><span class="p">,</span> <span class="n">when</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">4000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;idx: </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: mim: </span><span class="si">{</span><span class="n">mim</span><span class="si">:</span><span class="s2">.8f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit https://github.com/coin-or/Ipopt
+******************************************************************************
+
+idx: 56806: mim: 1305.48251156
+idx: 21298: mim: 1324.55556079
+idx: 11241: mim: 734.44287902
+idx: 17333: mim: 918.53324856
+idx: 58382: mim: 1042.69839087
+idx: 9791: mim: 969.96271512
+idx: 59398: mim: 851.56392999
+idx: 13156: mim: 888.98947395
+idx: 55344: mim: 815.63354491
+</pre></div>
+</div>
+</div>
+</div>
+<p>And the corresponding computational cost being order of magnitude larger:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%timeit</span>
+<span class="n">mim</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">mim_from_hop</span><span class="p">(</span><span class="n">gtoc12_asts</span><span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">when</span><span class="p">,</span> <span class="n">when</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">4000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>283 ms ± 93.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-minimum-transfer-time-not-approximated">
+<h2>The minimum transfer time (not approximated)<a class="headerlink" href="#the-minimum-transfer-time-not-approximated" title="Link to this heading">#</a></h2>
+<p>Another important information to help select the target for a low-thrust transfer is the minimum transfer time (assuming an initial mass).
+This can be computed exactly at the cost of extra CPU time, but it is valuable information and helps to understand the worth
+of using some approximate method before emmploying it in a large scale computation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Factory for the pygmo problem.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prob_factory</span><span class="p">(</span><span class="n">ast_id_s</span><span class="p">,</span> <span class="n">ast_id_t</span><span class="p">,</span> <span class="n">T_max</span><span class="p">,</span> <span class="n">tof_guess</span><span class="p">,</span> <span class="n">when</span><span class="p">):</span>
+    <span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">pontryagin_cartesian_time</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">ast_id_s</span><span class="p">],</span>
+        <span class="n">target</span><span class="o">=</span> <span class="n">gtoc12_asts</span><span class="p">[</span><span class="n">ast_id_t</span><span class="p">],</span>
+        <span class="n">tof_guess</span><span class="o">=</span><span class="n">tof_guess</span><span class="p">,</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">when</span><span class="p">,</span>
+        <span class="n">T_max</span><span class="o">=</span><span class="n">T_max</span><span class="p">,</span>
+        <span class="n">Isp</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+        <span class="n">m0</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+        <span class="n">L</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span>
+        <span class="n">TIME</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">YEAR2DAY</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span>
+        <span class="n">MASS</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+        <span class="n">with_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+    <span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="k">return</span> <span class="n">prob</span>
+
+<span class="c1"># Factory for the pygmo algorithm.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">algo_factory</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">)</span>  <span class="c1"># Change the maximum iterations</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Makes Ipopt unverbose</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
+        <span class="s2">&quot;nlp_scaling_method&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span>
+    <span class="p">)</span>  <span class="c1"># Removes any scaling made in auto mode</span>
+    <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
+        <span class="s2">&quot;mu_strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;adaptive&quot;</span>
+    <span class="p">)</span>  <span class="c1"># Alternative is to tune the initial mu value</span>
+    <span class="k">return</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx_t</span> <span class="ow">in</span> <span class="n">neighbours_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">prob_factory</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="n">idx_t</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">algo_factory</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">pontryagin_cartesian_time</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+            <span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+            <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+            <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">udp</span><span class="o">.</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;idx: </span><span class="si">{</span><span class="n">idx_t</span><span class="si">}</span><span class="s2">: minumum time: </span><span class="si">{</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, mass: </span><span class="si">{</span><span class="n">masses</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">udp</span><span class="o">.</span><span class="n">MASS</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>idx: 56806: minumum time: 228.61, mass: 1097.18
+idx: 21298: minumum time: 219.98, mass: 1112.37
+idx: 11241: minumum time: 355.47, mass: 873.63
+idx: 17333: minumum time: 285.46, mass: 997.00
+idx: 58382: minumum time: 236.69, mass: 1082.94
+idx: 9791: minumum time: 247.80, mass: 1063.37
+idx: 59398: minumum time: 276.69, mass: 1012.46
+idx: 13156: minumum time: 282.90, mass: 1001.51
+idx: 55344: minumum time: 292.73, mass: 984.18
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ta_cr3bp_bcp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The CR3BP and BCP dynamics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="leg_sims_flanagan.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Sims-Flanagan trajectory leg</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-orbital-metric">The Orbital Metric</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-maximum-initial-mass-approximations-mima-s">The Maximum Initial Mass Approximations - MIMA(s)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mim-not-approximated">The MIM (not approximated)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimum-transfer-time-not-approximated">The minimum transfer time (not approximated)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

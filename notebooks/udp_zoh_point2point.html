@@ -1,0 +1,1304 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Zero Order Hold: point to point low thrust transfer &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/udp_zoh_point2point';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Zero Order Hold: planet to planet low thrust transfer" href="udp_zoh_pl2pl.html" />
+    <link rel="prev" title="Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)" href="udp_sf_pl2pl_alpha.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/udp_zoh_point2point.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/udp_zoh_point2point.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/udp_zoh_point2point.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Zero Order Hold: point to point low thrust transfer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero Order Hold: point to point low thrust transfer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-time-grid-transcription">Fixed Time Grid Transcription</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-length-segment-transcription-softmax-encoding">Variable-Length Segment Transcription (Softmax Encoding)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relationship-between-weights-and-segment-duration">Relationship Between Weights and Segment Duration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-use-softmax-encoding">Why Use Softmax Encoding?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-uniform-time-grid">Using a uniform time grid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-softmax-encoding">Using the softmax encoding:</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-equinoctial-elements">A different dynamics: equinoctial elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-cr3bp">A different dynamics: CR3BP</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-solar-sailing">A different dynamics: Solar Sailing</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-point-to-point-low-thrust-transfer">
+<h1>Zero Order Hold: point to point low thrust transfer<a class="headerlink" href="#zero-order-hold-point-to-point-low-thrust-transfer" title="Link to this heading">#</a></h1>
+<p>In this tutorial we show the use of the <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_point2point</span></code></a> to find a low-thrust trajectory connecting two fixed points in space.<br />
+The underlying transcription, that is the process to transform an Optimal Control Problem (OCP) into a Non Linear Programming Problem (NLP), is based
+on <code class="docutils literal notranslate"><span class="pre">pykep</span></code>’s Zero Order Hold legs (<a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>, <a class="reference internal" href="../leg.html#pykep.leg.zoh_ss" title="pykep.leg.zoh_ss"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ss</span></code></a>), and was originally conceived as a generalization to the Sims-Flanagan transcription.</p>
+<p>According to the encoding of the various segments, the decision vector for this problem will vary.</p>
+<section id="fixed-time-grid-transcription">
+<h2>Fixed Time Grid Transcription<a class="headerlink" href="#fixed-time-grid-transcription" title="Link to this heading">#</a></h2>
+<p>In the fixed time grid formulation, the total time of flight is divided into <strong>N segments of equal duration</strong>.</p>
+<p>The decision vector for this problem, compatible with <span id="id1">[<a class="reference internal" href="../bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> UDPs, is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf x =
+[m_f] +
+[T_0, i_{x0}, i_{y0}, i_{z0}] +
+[T_1, i_{x1}, i_{y1}, i_{z1}] +
+\ldots +
+[tof]
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( m_f \)</span> is the final mass,</p></li>
+<li><p><span class="math notranslate nohighlight">\( T_k \)</span> is the thrust magnitude on segment <span class="math notranslate nohighlight">\( k \)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\( (i_{xk}, i_{yk}, i_{zk}) \)</span> define the thrust direction components,</p></li>
+<li><p><span class="math notranslate nohighlight">\( tof \)</span> is the total time of flight.</p></li>
+</ul>
+<p>If the grid has <span class="math notranslate nohighlight">\( N \)</span> segments, then each segment duration is:</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta t = \frac{tof}{N}
+\]</div>
+<p>Thus, all segments have equal duration.</p>
+</section>
+<section id="variable-length-segment-transcription-softmax-encoding">
+<h2>Variable-Length Segment Transcription (Softmax Encoding)<a class="headerlink" href="#variable-length-segment-transcription-softmax-encoding" title="Link to this heading">#</a></h2>
+<p>In the second formulation, the total time of flight is still a decision variable, but the <strong>individual segment durations are also optimization variables</strong>.</p>
+<p>Instead of optimizing segment durations directly (which would require enforcing positivity and a sum constraint), we introduce a <strong>softmax encoding</strong>. The decision vector becomes:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf x =
+[m_f] +
+[T_0, i_{x0}, i_{y0}, i_{z0}] +
+[T_1, i_{x1}, i_{y1}, i_{z1}] +
+\ldots +
+[tof] +
+[w_0, w_1, \ldots, w_{N-1}]
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\( w_k \)</span> is the weight associated with segment <span class="math notranslate nohighlight">\( k \)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\( tof \)</span> is the total time of flight,</p></li>
+<li><p><span class="math notranslate nohighlight">\( N \)</span> is the number of segments.</p></li>
+</ul>
+<section id="relationship-between-weights-and-segment-duration">
+<h3>Relationship Between Weights and Segment Duration<a class="headerlink" href="#relationship-between-weights-and-segment-duration" title="Link to this heading">#</a></h3>
+<p>The segment durations are obtained by applying the <strong>softmax transformation</strong> to the weights:</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_k =
+\frac{e^{w_k}}{\sum_{j=0}^{N-1} e^{w_j}}
+\]</div>
+<p>Each <span class="math notranslate nohighlight">\(\alpha_k\)</span> satisfies:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha_k &gt; 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sum_{k=0}^{N-1} \alpha_k = 1\)</span></p></li>
+</ul>
+<p>The duration of segment <span class="math notranslate nohighlight">\(k\)</span> is then:</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta t_k = tof \cdot \alpha_k
+\]</div>
+<p>Therefore,</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta t_k =
+tof \cdot
+\frac{e^{w_k}}{\sum_{j=0}^{N-1} e^{w_j}}
+\]</div>
+<p>Each weight <span class="math notranslate nohighlight">\( w_k \)</span> controls the <strong>relative duration</strong> of segment <span class="math notranslate nohighlight">\( k \)</span>.</p>
+<p>Properties:</p>
+<ul class="simple">
+<li><p>Increasing <span class="math notranslate nohighlight">\( w_k \)</span> increases <span class="math notranslate nohighlight">\( \Delta t_k \)</span> relative to the other segments.</p></li>
+<li><p>If all weights are equal, all segments have equal duration.</p></li>
+<li><p>Positivity and the sum-to-<span class="math notranslate nohighlight">\( tof \)</span> constraint are automatically enforced.</p></li>
+<li><p>The optimizer can smoothly redistribute time among segments.</p></li>
+</ul>
+</section>
+</section>
+<section id="why-use-softmax-encoding">
+<h2>Why Use Softmax Encoding?<a class="headerlink" href="#why-use-softmax-encoding" title="Link to this heading">#</a></h2>
+<p>The softmax-based variable segment formulation:</p>
+<ul class="simple">
+<li><p>Avoids explicit equality constraints,</p></li>
+<li><p>Improves feasibility handling,</p></li>
+<li><p>Allows adaptive time distribution,</p></li>
+<li><p>Should improve convergence for difficult low-thrust problems.</p></li>
+</ul>
+<p>However, it introduces stronger nonlinear coupling between variables and may affect conditioning of the optimization problem.</p>
+<p>Let’s now delve into both… First we setup a problem. Here we use the Keplerian (Cartesian) dynamics.</p>
+<p>First some imports …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and the SQP solvers setup</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#library_snopt72 = &quot;/usr/local/lib/libsnopt7_c.so&quot;</span>
+<span class="n">library_snopt72</span> <span class="o">=</span> <span class="s2">&quot;/Users/dario.izzo/opt/libsnopt7_c.dylib&quot;</span>
+
+<span class="n">snopt72</span> <span class="o">=</span> <span class="n">ppnf</span><span class="o">.</span><span class="n">snopt7</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">library_snopt72</span><span class="p">,</span> <span class="n">minor_version</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">screen_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">snopt72</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Major iterations limit&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">snopt72</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Iterations limit&quot;</span><span class="p">,</span> <span class="mi">20000</span><span class="p">)</span>
+<span class="n">snopt72</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major optimality tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">)</span>
+<span class="n">snopt72</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major feasibility tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">)</span>
+
+<span class="n">slsqp</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">nlopt</span><span class="p">(</span><span class="s2">&quot;slsqp&quot;</span><span class="p">)</span>
+<span class="n">slsqp</span><span class="o">.</span><span class="n">xtol_abs</span><span class="o">=</span><span class="mf">1e-10</span>
+<span class="n">slsqp</span><span class="o">.</span><span class="n">xtol_rel</span><span class="o">=</span><span class="mf">1e-10</span>
+<span class="n">slsqp</span><span class="o">.</span><span class="n">ftol_abs</span><span class="o">=</span><span class="mf">1e-10</span>
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">snopt72</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now setup the problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Physical parameters</span>
+<span class="n">max_thrust</span> <span class="o">=</span> <span class="mf">0.22</span> <span class="c1"># N</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="mf">3000.</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="c1"># m/s</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span> <span class="c1"># m^3/s^2</span>
+
+<span class="c1"># Initial state (Cartesian)</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="c1"># kg</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">])</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">])</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">EARTH_VELOCITY</span>
+
+<span class="c1"># Final state (Cartesian)</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0</span><span class="p">])</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">vf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0</span><span class="p">])</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">EARTH_VELOCITY</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we instantiate the ZOH Taylor integrators, these need to be set in nondimensional units so we define those too!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Non dimensional units</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># (central body mu must be 1 in these units as a requirement of the ZOH integrator used)</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="n">ms</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
+
+<span class="c1"># Non dimensional problem data</span>
+<span class="n">ms_nd</span> <span class="o">=</span> <span class="n">ms</span> <span class="o">/</span> <span class="n">MASS</span>
+<span class="n">rs_nd</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">]</span>
+<span class="n">vs_nd</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">]</span>
+<span class="n">rf_nd</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">rf</span><span class="p">]</span>
+<span class="n">vf_nd</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">vf</span><span class="p">]</span>
+
+<span class="c1"># Instantiating the ZOH integrators</span>
+<span class="c1"># Tolerances used in the numerical integration</span>
+<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># We instantiate ZOH Taylor integrators for Keplerian dynamics.</span>
+<span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># We set the Taylor integrator parameters</span>
+<span class="n">veff_nd</span> <span class="o">=</span> <span class="n">veff</span> <span class="o">/</span> <span class="n">V</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-a-uniform-time-grid">
+<h2>Using a uniform time grid<a class="headerlink" href="#using-a-uniform-time-grid" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Throttles and tof</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">throttles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">nseg</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">tof</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_point2point</span><span class="p">(</span>
+    <span class="n">states</span><span class="o">=</span><span class="n">rs_nd</span> <span class="o">+</span> <span class="n">vs_nd</span><span class="p">,</span>
+    <span class="n">statef</span><span class="o">=</span><span class="n">rf_nd</span> <span class="o">+</span> <span class="n">vf_nd</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span> <span class="o">/</span> <span class="n">F</span><span class="p">,</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">,</span> <span class="mi">700</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s check the correctness of the analytical gradients:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-8.7092062450722096e-09, 6.8754469617626768e-09)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/90387334d0c7d66188af61eff21aa9b4e7e2c433ae2a2623eaaa1798dfad48b2.png" src="../_images/90387334d0c7d66188af61eff21aa9b4e7e2c433ae2a2623eaaa1798dfad48b2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TIME</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: 
+<span class="ne">function</span>: evolve_version
+<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 603
+<span class="ne">what</span>: 
+<span class="n">An</span> <span class="n">error</span> <span class="n">occurred</span> <span class="k">while</span> <span class="n">loading</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span> <span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">typically</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span>
+<span class="ne">reasons</span>:
+
+<span class="o">-</span> <span class="n">The</span> <span class="n">file</span> <span class="n">declared</span> <span class="n">to</span> <span class="n">be</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">dario</span><span class="o">.</span><span class="n">izzo</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">libsnopt7_c</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">shared</span> <span class="n">library</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">necessary</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span> <span class="p">(</span><span class="ow">is</span> <span class="n">the</span> <span class="n">file</span> <span class="n">path</span> <span class="n">really</span> <span class="n">pointing</span> <span class="n">to</span>
+<span class="n">a</span> <span class="n">valid</span> <span class="n">shared</span> <span class="n">library</span><span class="err">?</span><span class="p">)</span>
+ <span class="o">-</span> <span class="n">The</span> <span class="n">library</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">it</span> <span class="n">does</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span><span class="p">,</span> <span class="n">but</span> <span class="n">it</span> <span class="n">needs</span> <span class="n">linking</span> <span class="n">to</span> <span class="n">some</span> <span class="n">additional</span> <span class="n">libraries</span> <span class="n">that</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">found</span>
+<span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span>
+
+<span class="n">We</span> <span class="n">report</span> <span class="n">the</span> <span class="n">exact</span> <span class="n">text</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span> <span class="n">exception</span> <span class="n">thrown</span><span class="p">:</span>
+
+ 
+<span class="ne">function</span>: evolve_version
+<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 553
+<span class="ne">what</span>: The snopt7_c library path was constructed to be: /Users/dario.izzo/opt/libsnopt7_c.dylib and it does not appear to be a file
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6ebf2b27dc2dfb212e74e1d6662abecdd36ad143037c9c0af86eff639abb7ed7.png" src="../_images/6ebf2b27dc2dfb212e74e1d6662abecdd36ad143037c9c0af86eff639abb7ed7.png" />
+</div>
+</div>
+</section>
+<section id="using-the-softmax-encoding">
+<h2>Using the softmax encoding:<a class="headerlink" href="#using-the-softmax-encoding" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Throttles and tof</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_point2point</span><span class="p">(</span>
+    <span class="n">states</span><span class="o">=</span><span class="n">rs_nd</span> <span class="o">+</span> <span class="n">vs_nd</span><span class="p">,</span>
+    <span class="n">statef</span><span class="o">=</span><span class="n">rf_nd</span> <span class="o">+</span> <span class="n">vf_nd</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span> <span class="o">/</span> <span class="n">F</span><span class="p">,</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">,</span> <span class="mi">700</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s check the correctness of the analytical gradients</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-4.8853863454656477e-09, 6.8031940324286833e-09)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/78527bcf73d97a9e8337a41ad37adbe2057ec68f96ff269e2e91e439e594576a.png" src="../_images/78527bcf73d97a9e8337a41ad37adbe2057ec68f96ff269e2e91e439e594576a.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TIME</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+Final mass: 928.818877582
+Final tof: 623.147255258
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/51b8fef4df09e2dac9884b1d680a383b67136ac29d76a62db50c86bc2f62ed30.png" src="../_images/51b8fef4df09e2dac9884b1d680a383b67136ac29d76a62db50c86bc2f62ed30.png" />
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="a-different-dynamics-equinoctial-elements">
+<h1>A different dynamics: equinoctial elements<a class="headerlink" href="#a-different-dynamics-equinoctial-elements" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_point2point</span></code></a> internally makes use of a <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> which is will make use of a generic dynamics defined in the numerical integrators used and passed by the user via the kwarg <em>tas</em>.
+This is a rather powerful setup as it allows to use the very same ZOH transcription over a generic dynamics.</p>
+<p>In the initial part of this notebook we have used a Cartesian dynamics. We now show how to instantiate the very same optimization problem, but in modified equinoctial elements.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We instantiate ZOH Taylor integrators for the dynamics in equinoctial elements.</span>
+<span class="n">ta_eq</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_eq</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_eq_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_eq_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># We set the Taylor integrator parameters</span>
+<span class="n">veff_nd</span> <span class="o">=</span> <span class="n">veff</span> <span class="o">/</span> <span class="n">V</span>
+<span class="n">ta_eq</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_eq_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We use the softmax encoding allowing for variable length segments. Note that we have only changed the dynamics and the corresponding initial conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Throttles and tof</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">states</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">rs_nd</span><span class="p">,</span> <span class="n">vs_nd</span><span class="p">],</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">statef</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">rf_nd</span> <span class="p">,</span><span class="n">vf_nd</span><span class="p">],</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">statef</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+=</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_point2point</span><span class="p">(</span>
+    <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+    <span class="n">statef</span><span class="o">=</span><span class="n">statef</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span> <span class="o">/</span> <span class="n">F</span><span class="p">,</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">600</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">,</span> <span class="mi">700</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_eq</span><span class="p">,</span> <span class="n">ta_eq_var</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s check the correctness of the analytical gradients (now using equinoctial elements)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-4.8828083312746351e-09, 4.8903709241876481e-09)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">to_cartesian</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/13120eb43586def6b59021b26861c03114ed65b0705e49a1a1c5effe2d9ae0ae.png" src="../_images/13120eb43586def6b59021b26861c03114ed65b0705e49a1a1c5effe2d9ae0ae.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">TIME</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+Final mass: 929.422255631
+Final tof: 622.584988339
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">to_cartesian</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e7b60d167fe7ea208fc2d96cf21d4f98cfe1784648c38ecb0c529cdf9a10fa75.png" src="../_images/e7b60d167fe7ea208fc2d96cf21d4f98cfe1784648c38ecb0c529cdf9a10fa75.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="a-different-dynamics-cr3bp">
+<h1>A different dynamics: CR3BP<a class="headerlink" href="#a-different-dynamics-cr3bp" title="Link to this heading">#</a></h1>
+<p>We now show how to instantiate the very same optimization problem type (i.e. a point to point low-thrust problem) but in the CR3BP dynamics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiating the ZOH integrators</span>
+<span class="c1"># Tolerances used in the numerical integration</span>
+<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbit)</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-16</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># We instantiate ZOH Taylor integrators for the CR3BP dynamics.</span>
+<span class="n">ta_cr3bp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_cr3bp</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_cr3bp_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_cr3bp_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># We set the Taylor integrators parameters (veff and mu in this case)</span>
+<span class="n">veff_nd</span> <span class="o">=</span> <span class="mf">11.56499372183432</span>
+<span class="n">mu_cr3bp</span> <span class="o">=</span> <span class="mf">0.01215058560962404</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_cr3bp_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_cr3bp</span>
+<span class="n">ta_cr3bp_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_cr3bp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are ready to instantiate a <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_point2point</span></code></a> representing this gym problem:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nseg</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_point2point</span><span class="p">(</span>
+    <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0809931218390707</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20235953267405354</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.19895001215078018</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="c1"># mass is excluded in the states kwarg definition</span>
+    <span class="n">statef</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1648780946517576</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11145303634437023</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20191923237095796</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="c1"># mass is excluded in the states kwarg definition</span>
+    <span class="n">ms</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="c1"># initial mass</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="mf">0.3010999584011414</span><span class="p">,</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_cr3bp</span><span class="p">,</span> <span class="n">ta_cr3bp_var</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># For quick plotting purposes we create a decision vector corresponding to a ballistic leg </span>
+<span class="n">x_ballistic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.</span><span class="p">]</span><span class="o">*</span><span class="n">nseg</span><span class="o">+</span><span class="p">[</span><span class="mf">15.3</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="mf">0.1</span><span class="p">]</span><span class="o">*</span><span class="n">nseg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We check that the analytical gradients are correct …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-2.3391790620053143e-06, 1.5331602894741447e-06)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plot a random chromosome</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_ballistic</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mark_mismatch</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-1.0, 2.0)
+</pre></div>
+</div>
+<img alt="../_images/5349002b7f9cff975032d42efb4bca6bbbecc3e21a7f32166cc500f323fc5a03.png" src="../_images/5349002b7f9cff975032d42efb4bca6bbbecc3e21a7f32166cc500f323fc5a03.png" />
+</div>
+</div>
+<p>Optimize.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># to refine a few final steps its sometime useful</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass (nd):&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof (nd):&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+Final mass (nd): 0.928212868042
+Final tof (nd): 5.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_ballistic</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mark_mismatch</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-0.5, 0.5)
+</pre></div>
+</div>
+<img alt="../_images/3f5a999c1695c0fc52702f2bcab5e41da93d22348299c267faaf870a113859dd.png" src="../_images/3f5a999c1695c0fc52702f2bcab5e41da93d22348299c267faaf870a113859dd.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="a-different-dynamics-solar-sailing">
+<h1>A different dynamics: Solar Sailing<a class="headerlink" href="#a-different-dynamics-solar-sailing" title="Link to this heading">#</a></h1>
+<p>The dynamics of solar sailing is radically different than the low-thrust one as the spacecraft mass is no longer a state variable for the spacecarft  and is constant. Besides, the controls are the sail clock and cone angles, which have a smaller dimensionality than the 3D low-thrust vector. For this reason and API development reasons, in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> we provide a separate dedicated Solar Sailing trajectory leg in the class <a class="reference internal" href="../leg.html#pykep.leg.zoh_ss" title="pykep.leg.zoh_ss"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ss</span></code></a>, showcased in a corresponding <a class="reference internal" href="leg_zoh_ss.html"><span class="std std-doc">leg tutorial</span></a>.</p>
+<p>This also means that we need an added class to instantiate a point to point transfer making use of this dynamics and we cannot use <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_point2point</span></code></a> as we did above when the dynamics was equinoctial parameters or the CR3BP.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiating the ZOH integrators</span>
+<span class="c1"># Tolerances used in the numerical integration</span>
+<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbit)</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># We instantiate ZOH Taylor integrators for the CR3BP dynamics.</span>
+<span class="n">ta_ss</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_ss_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># We set the Taylor integrators parameters (c_sail in this case)</span>
+<span class="c1"># c_sail is 2 C A / M. (C is the solar flux at reference distance L, A is the area, M the mass)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mf">5.4026</span><span class="o">*</span><span class="mf">1E-6</span> <span class="c1"># N/m^2 (Sun)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mi">120</span><span class="o">*</span><span class="mi">120</span> <span class="c1"># m^2</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">500</span> <span class="c1"># Kg</span>
+<span class="n">c_sail</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">C</span> <span class="o">*</span> <span class="n">A</span> <span class="o">/</span> <span class="n">M</span> <span class="c1"># m/s^2</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="n">MU</span><span class="p">)</span>
+<span class="n">c_sail_nd</span> <span class="o">=</span> <span class="n">c_sail</span> <span class="o">/</span> <span class="p">(</span><span class="n">L</span><span class="o">/</span><span class="n">TIME</span><span class="o">/</span><span class="n">TIME</span><span class="p">)</span>
+<span class="n">ta_ss</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_sail_nd</span>
+<span class="n">ta_ss_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_sail_nd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nseg</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_ss_point2point</span><span class="p">(</span>
+    <span class="n">states</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span>
+    <span class="n">statef</span><span class="o">=</span><span class="p">[</span><span class="mf">1.03</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span> 
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">12.</span><span class="p">],</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_ss</span><span class="p">,</span> <span class="n">ta_ss_var</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span>
+<span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">-</span><span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(-8.1309493582537584e-09, 3.6341662734695745e-09)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">plot_sail</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a1a0e016ac088c4a0d2825256021a3d7c575056da52aa9ab3c5a8445ff818c07.png" src="../_images/a1a0e016ac088c4a0d2825256021a3d7c575056da52aa9ab3c5a8445ff818c07.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="c1"># to refine a few final steps its sometime useful</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof (nd):&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">nseg</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+Final tof (nd): 6.50664557209
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7c9cdc69b0c41ace4f591f15a520beea648a54fa6189a95af9a0a6c0df9896de.png" src="../_images/7c9cdc69b0c41ace4f591f15a520beea648a54fa6189a95af9a0a6c0df9896de.png" />
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="udp_sf_pl2pl_alpha.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="udp_zoh_pl2pl.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Zero Order Hold: planet to planet low thrust transfer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero Order Hold: point to point low thrust transfer</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-time-grid-transcription">Fixed Time Grid Transcription</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-length-segment-transcription-softmax-encoding">Variable-Length Segment Transcription (Softmax Encoding)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relationship-between-weights-and-segment-duration">Relationship Between Weights and Segment Duration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-use-softmax-encoding">Why Use Softmax Encoding?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-uniform-time-grid">Using a uniform time grid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-softmax-encoding">Using the softmax encoding:</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-equinoctial-elements">A different dynamics: equinoctial elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-cr3bp">A different dynamics: CR3BP</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#a-different-dynamics-solar-sailing">A different dynamics: Solar Sailing</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1147 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Zero Order Hold: planet to planet low thrust transfer &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/udp_zoh_pl2pl';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multiple Gravity Assist (MGA)" href="udp_mga.html" />
+    <link rel="prev" title="Zero Order Hold: point to point low thrust transfer" href="udp_zoh_point2point.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/udp_zoh_pl2pl.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/udp_zoh_pl2pl.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/udp_zoh_pl2pl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Zero Order Hold: planet to planet low thrust transfer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision Vector</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-imports">Basic Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gradient-vs-no-gradient-comparison">Part 1: Gradient vs No-Gradient Comparison</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-performance-analysis">Gradient Performance Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-with-and-without-gradients">Solving with and without Gradients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-gradients">Optimization with Gradients</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-without-gradients">Optimization without Gradients</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-time-encoding-comparison-uniform-vs-softmax">Part 2: Time Encoding Comparison (Uniform vs Softmax)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-encoding-explanation">Time Encoding Explanation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-udp-with-softmax-encoding">Create UDP with Softmax Encoding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-with-softmax-encoding">Solve with Softmax Encoding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#display-best-solution-with-softmax">Display Best Solution with Softmax</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-planet-to-planet-low-thrust-transfer">
+<h1>Zero Order Hold: planet to planet low thrust transfer<a class="headerlink" href="#zero-order-hold-planet-to-planet-low-thrust-transfer" title="Link to this heading">#</a></h1>
+<p>In this tutorial we demonstrate the use of the <code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code> class to find a low-thrust trajectory connecting two moving planets using the <strong>Zero-Order Hold (ZOH)</strong> direct method with free departure and arrival velocities.</p>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code> class offers several features that make it a powerful tool for low-thrust trajectory optimization:</p>
+<ol class="arabic simple">
+<li><p><strong>Free departure and arrival velocities</strong> - The spacecraft can depart and arrive with excess velocity relative to the planets</p></li>
+<li><p><strong>Non-dimensional formulation</strong> - Works internally with non-dimensional units for better numerical conditioning</p></li>
+<li><p><strong>Taylor-adaptive integration</strong> - Uses heyoka as Taylor propagator for accurate trajectory propagation</p></li>
+<li><p><strong>Analytical gradients</strong> - Optional analytical gradient computation for faster optimization</p></li>
+<li><p><strong>Flexible time encoding</strong> - Supports both <code class="docutils literal notranslate"><span class="pre">uniform</span></code> and <code class="docutils literal notranslate"><span class="pre">softmax</span></code> time grid encodings</p></li>
+</ol>
+</section>
+<section id="decision-vector">
+<h2>Decision Vector<a class="headerlink" href="#decision-vector" title="Link to this heading">#</a></h2>
+<p>The decision vector for this class is:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x} = [t_0, m_f, v^{\infty}_{\text{dep}}, \hat{i}_{\text{dep},x}, \hat{i}_{\text{dep},y}, \hat{i}_{\text{dep},z}, v^{\infty}_{\text{arr}}, \hat{i}_{\text{arr},x}, \hat{i}_{\text{arr},y}, \hat{i}_{\text{arr},z}, \text{controls}, T_{\text{tof}}] (+ [\mathbf{w}] \text{ for softmax})
+\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(t_0\)</span> is the departure epoch (MJD2000, in days)</p></li>
+<li><p><span class="math notranslate nohighlight">\(m_f\)</span> is the final spacecraft mass (non-dimensional)</p></li>
+<li><p><span class="math notranslate nohighlight">\(v^{\infty}_{\text{dep/arr}}\)</span> are the magnitudes of departure/arrival excess velocities (non-dimensional)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{i}_{\text{dep/arr}}\)</span> are unit direction vectors for the excess velocities</p></li>
+<li><p>controls = <span class="math notranslate nohighlight">\([T, \hat{i}_x, \hat{i}_y, \hat{i}_z] \times n_{\text{seg}}\)</span> where <span class="math notranslate nohighlight">\(T\)</span> is thrust magnitude and <span class="math notranslate nohighlight">\(\hat{i}\)</span> is thrust direction</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_{\text{tof}}\)</span> is the time of flight (non-dimensional)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{w}\)</span> are softmax weights (only for softmax encoding)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This notebook can use the commercial solver SNOPT 7 or the open-source IPOPT solver. Both are demonstrated below.</p>
+</div>
+</section>
+<section id="basic-imports">
+<h2>Basic Imports<a class="headerlink" href="#basic-imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+    <span class="n">has_snopt</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">has_snopt</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNOPT not available, will use IPOPT instead&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-definition">
+<h2>Problem Definition<a class="headerlink" href="#problem-definition" title="Link to this heading">#</a></h2>
+<p>We define the problem parameters including planets, spacecraft characteristics, and non-dimensional scaling factors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem data</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">max_thrust</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="n">isp</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="c1"># Initial mass</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="mf">1500.0</span>
+<span class="c1"># Number of segments</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1"># Non dimensional units</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># (central body mu must be 1 in these units as a requirement of the ZOH integrator used)</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="n">ms</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
+<span class="n">ms_nd</span> <span class="o">=</span> <span class="n">ms</span> <span class="o">/</span> <span class="n">MASS</span>
+
+<span class="c1"># Source and destination planets</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;EARTH&quot;</span><span class="p">)),</span> 
+    <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">mars</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;MARS&quot;</span><span class="p">)),</span> 
+    <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># We instantiate ZOH Taylor integrators for Keplerian dynamics.</span>
+<span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># We set the Taylor integrator parameters</span>
+<span class="n">veff_nd</span> <span class="o">=</span> <span class="n">veff</span> <span class="o">/</span> <span class="n">V</span>
+
+<span class="c1"># Creating Taylor-Adaptive Integrators</span>
+<span class="c1"># The ZOH method requires Taylor-adaptive integrators for high-precision trajectory propagation. We create two integrators:</span>
+<span class="c1"># 1. Nominal dynamics integrator (for fitness evaluation)</span>
+<span class="c1"># 2. Variational dynamics integrator (for gradient computation)</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nominal integrator state dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variational integrator state dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nominal integrator state dimension: 7
+Variational integrator state dimension: 84
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_uniform</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
+    <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
+    <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
+    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="kc">None</span><span class="p">),</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
+    <span class="c1"># w_bounds_softmax=[-1., 1.],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">udp_g_uniform</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
+    <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
+    <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
+    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="n">ta_var</span><span class="p">),</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
+    <span class="c1"># w_bounds_softmax=[-1., 1.],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UDP instances created successfully&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;With gradient: </span><span class="si">{</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">has_gradient</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Without gradient: </span><span class="si">{</span><span class="n">udp_uniform</span><span class="o">.</span><span class="n">has_gradient</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UDP instances created successfully
+With gradient: True
+Without gradient: False
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="part-1-gradient-vs-no-gradient-comparison">
+<h2>Part 1: Gradient vs No-Gradient Comparison<a class="headerlink" href="#part-1-gradient-vs-no-gradient-comparison" title="Link to this heading">#</a></h2>
+<p>We first compare the performance of the UDP with and without analytical gradients. Both use uniform time encoding.</p>
+<section id="gradient-performance-analysis">
+<h3>Gradient Performance Analysis<a class="headerlink" href="#gradient-performance-analysis" title="Link to this heading">#</a></h3>
+<p>Let’s compare the performance of analytical gradients versus numerical gradients.
+The analytical gradients use variational equations integrated alongside the dynamics, providing exact derivatives.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a problem and population to test gradient</span>
+<span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
+<span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Gradient Performance Comparison ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Decision vector dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitness dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prob_g</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x_test</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Analytical gradient (from variational equations + chain rule):&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">timeit</span> udp_g_uniform.gradient(x_test)
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Numerical gradient (simple finite difference):&quot;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">timeit</span> pg.estimate_gradient(udp_g_uniform.fitness, x_test)
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ The analytical gradient is significantly faster!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Gradient Performance Comparison ===
+
+Decision vector dimension: 131
+Fitness dimension: 40
+
+Analytical gradient (from variational equations + chain rule):
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.14 ms ± 23.1 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+
+Numerical gradient (simple finite difference):
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>39.4 ms ± 72.8 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+
+✓ The analytical gradient is significantly faster!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="solving-with-and-without-gradients">
+<h3>Solving with and without Gradients<a class="headerlink" href="#solving-with-and-without-gradients" title="Link to this heading">#</a></h3>
+<p>Now we solve the optimization problem using both approaches to compare convergence.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup optimization algorithm</span>
+<span class="k">if</span> <span class="n">has_snopt</span><span class="p">:</span>
+    <span class="c1"># Use SNOPT if available</span>
+    <span class="n">library_snopt72</span> <span class="o">=</span> <span class="s2">&quot;/Users/dario.izzo/opt/libsnopt7_c.dylib&quot;</span>
+    <span class="n">uda</span> <span class="o">=</span> <span class="n">ppnf</span><span class="o">.</span><span class="n">snopt7</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">library_snopt72</span><span class="p">,</span> <span class="n">minor_version</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">screen_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Major iterations limit&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Iterations limit&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major optimality tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major feasibility tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">)</span>
+    <span class="n">algo_name</span> <span class="o">=</span> <span class="s2">&quot;SNOPT7&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Use IPOPT as fallback</span>
+    <span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;constr_viol_tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
+    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+    <span class="n">algo_name</span> <span class="o">=</span> <span class="s2">&quot;IPOPT&quot;</span>
+
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using </span><span class="si">{</span><span class="n">algo_name</span><span class="si">}</span><span class="s2"> optimizer&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using SNOPT7 optimizer
+</pre></div>
+</div>
+</div>
+</div>
+<section id="optimization-with-gradients">
+<h4>Optimization with Gradients<a class="headerlink" href="#optimization-with-gradients" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve with gradients</span>
+<span class="n">prob_g_uniform</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
+<span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITH Gradients (Uniform) ===&quot;</span><span class="p">)</span>
+
+<span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Uniform) ===
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">11</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="k">if</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: 
+<span class="ne">function</span>: evolve_version
+<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 603
+<span class="ne">what</span>: 
+<span class="n">An</span> <span class="n">error</span> <span class="n">occurred</span> <span class="k">while</span> <span class="n">loading</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span> <span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">typically</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span>
+<span class="ne">reasons</span>:
+
+<span class="o">-</span> <span class="n">The</span> <span class="n">file</span> <span class="n">declared</span> <span class="n">to</span> <span class="n">be</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">dario</span><span class="o">.</span><span class="n">izzo</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">libsnopt7_c</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">shared</span> <span class="n">library</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">necessary</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span> <span class="p">(</span><span class="ow">is</span> <span class="n">the</span> <span class="n">file</span> <span class="n">path</span> <span class="n">really</span> <span class="n">pointing</span> <span class="n">to</span>
+<span class="n">a</span> <span class="n">valid</span> <span class="n">shared</span> <span class="n">library</span><span class="err">?</span><span class="p">)</span>
+ <span class="o">-</span> <span class="n">The</span> <span class="n">library</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">it</span> <span class="n">does</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span><span class="p">,</span> <span class="n">but</span> <span class="n">it</span> <span class="n">needs</span> <span class="n">linking</span> <span class="n">to</span> <span class="n">some</span> <span class="n">additional</span> <span class="n">libraries</span> <span class="n">that</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">found</span>
+<span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span>
+
+<span class="n">We</span> <span class="n">report</span> <span class="n">the</span> <span class="n">exact</span> <span class="n">text</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span> <span class="n">exception</span> <span class="n">thrown</span><span class="p">:</span>
+
+ 
+<span class="ne">function</span>: evolve_version
+<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 553
+<span class="ne">what</span>: The snopt7_c library path was constructed to be: /Users/dario.izzo/opt/libsnopt7_c.dylib and it does not appear to be a file
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="optimization-without-gradients">
+<h4>Optimization without Gradients<a class="headerlink" href="#optimization-without-gradients" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_uniform</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_uniform</span><span class="p">)</span>
+<span class="n">prob_uniform</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITHOUT Gradients (Uniform) ===&quot;</span><span class="p">)</span>
+<span class="n">masses_no_grad</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">prob_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses_no_grad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses_no_grad</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses_no_grad</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITHOUT Gradients (Uniform) ===
+..x.x.....
+Best mass is:  1233.19966226
+Worst mass is:  1216.47963104
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>  
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">compute_t0</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mars&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="o">+</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">][</span><span class="mi">10</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">*</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">TIME</span><span class="o">/</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Best ZOH Transfer Trajectory (with gradients, uniform)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bc18fc4f68da49a86cf7813c3bef6f0fbb57e4e52689a37631fa0753e18dee42.png" src="../_images/bc18fc4f68da49a86cf7813c3bef6f0fbb57e4e52689a37631fa0753e18dee42.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/36ee40584da49d97a0b05bfe1debba6bf6282aebdec4a6ec59bc8c346a7fcaba.png" src="../_images/36ee40584da49d97a0b05bfe1debba6bf6282aebdec4a6ec59bc8c346a7fcaba.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="part-2-time-encoding-comparison-uniform-vs-softmax">
+<h2>Part 2: Time Encoding Comparison (Uniform vs Softmax)<a class="headerlink" href="#part-2-time-encoding-comparison-uniform-vs-softmax" title="Link to this heading">#</a></h2>
+<p>Now we compare the two time encoding methods: <code class="docutils literal notranslate"><span class="pre">uniform</span></code> and <code class="docutils literal notranslate"><span class="pre">softmax</span></code>.</p>
+<section id="time-encoding-explanation">
+<h3>Time Encoding Explanation<a class="headerlink" href="#time-encoding-explanation" title="Link to this heading">#</a></h3>
+<p><strong>Uniform Encoding:</strong> Time grid nodes are evenly spaced from 0 to TOF:
+$<span class="math notranslate nohighlight">\(t_i = \frac{i \cdot T_{\text{tof}}}{n_{\text{seg}}}, \quad i = 0, 1, ..., n_{\text{seg}}\)</span>$</p>
+<p><strong>Softmax Encoding:</strong> Time grid nodes are determined by learnable weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:
+$<span class="math notranslate nohighlight">\(\Delta t_i = T_{\text{tof}} \cdot \text{softmax}(\mathbf{w})_i, \quad t_i = \sum_{j=0}^{i-1} \Delta t_j\)</span>$</p>
+<p>The softmax encoding adds <span class="math notranslate nohighlight">\(n_{\text{seg}}\)</span> additional decision variables but allows the optimizer to adaptively distribute time where it’s most needed.
+For a better discussion on the softmax encoding see also the tutorial: <code class="docutils literal notranslate"><span class="pre">udp_zoh_point2point.ipynb</span></code>.</p>
+</section>
+<section id="create-udp-with-softmax-encoding">
+<h3>Create UDP with Softmax Encoding<a class="headerlink" href="#create-udp-with-softmax-encoding" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
+    <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
+    <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
+    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
+    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="n">ta_var</span><span class="p">),</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
+    <span class="n">w_bounds_softmax</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UDP with softmax encoding created successfully&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decision vector size:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;With softmax: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> (includes softmax weights)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Without softmax: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UDP with softmax encoding created successfully
+Decision vector size:
+With softmax: 161 (includes softmax weights)
+Without softmax: 131
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="solve-with-softmax-encoding">
+<h3>Solve with Softmax Encoding<a class="headerlink" href="#solve-with-softmax-encoding" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#solve with gradients:</span>
+<span class="n">prob_g_softmax</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_softmax</span><span class="p">)</span>
+<span class="n">prob_g_softmax</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITH Gradients (Softmax) ===&quot;</span><span class="p">)</span>
+<span class="n">masses_softmax</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs_softmax</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop_g_sm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_softmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pop_g_sm</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">prob_g_softmax</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses_softmax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs_softmax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+<span class="n">best_idx_sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Softmax) ===
+x.....xx.x
+Best mass is:  1233.65545015
+Worst mass is:  1215.44188073
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="display-best-solution-with-softmax">
+<h3>Display Best Solution with Softmax<a class="headerlink" href="#display-best-solution-with-softmax" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>  
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">compute_t0</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mars&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="o">+</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">][</span><span class="mi">10</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">*</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">TIME</span><span class="o">/</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Best ZOH Transfer Trajectory (with gradients, uniform)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/57a82060b5bae8a19184cd84bc175052878af6c58b4547fd08b85ba34f3cd4b5.png" src="../_images/57a82060b5bae8a19184cd84bc175052878af6c58b4547fd08b85ba34f3cd4b5.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Low-thrust ZOH transfer (free velocities, non-dimensional formulation)
+Departure: earth(jpl_lp)(K)
+Arrival: mars(jpl_lp)(K)
+
+Launch epoch: 7452.11748 MJD2000, a.k.a. 2020-05-27T02:49:10.229252
+Arrival epoch: 7802.11748 MJD2000, a.k.a. 2021-05-12T02:49:10.229252
+Time of flight: 6.02073 (nd), 350.00000 days
+
+Departure excess velocity:
+  Magnitude: 0.000000 (nd), 0.000000 km/s
+  Vector (nd): [0.000000, -0.000000, 0.000000]
+  Vector (km/s): [0.000000, -0.000000, 0.000000]
+  Direction: [0.738962, -0.026113, 0.673240], norm: 1.000000
+
+Arrival excess velocity:
+  Magnitude: 0.000000 (nd), 0.000000 km/s
+  Vector (nd): [-0.000000, 0.000000, -0.000000]
+  Vector (km/s): [-0.000000, 0.000000, -0.000000]
+  Direction: [-0.728527, 0.489609, -0.479094], norm: 1.000000
+
+Final mass: 0.822437 (nd)
+
+Scaling factors: L=149.598 Gm, V=29.785 km/s, TIME=58.132 days
+
+Details on the ZOH leg:
+&lt;pykep.leg._zoh.zoh object at 0x31ff20ad0&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/9e4b56f61e15d707cd44edaaaf7f260d74a3b7d3a762a6438d1ccf252e552f0b.png" src="../_images/9e4b56f61e15d707cd44edaaaf7f260d74a3b7d3a762a6438d1ccf252e552f0b.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="udp_zoh_point2point.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Zero Order Hold: point to point low thrust transfer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="udp_mga.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Multiple Gravity Assist (MGA)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision Vector</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-imports">Basic Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gradient-vs-no-gradient-comparison">Part 1: Gradient vs No-Gradient Comparison</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-performance-analysis">Gradient Performance Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-with-and-without-gradients">Solving with and without Gradients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-gradients">Optimization with Gradients</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-without-gradients">Optimization without Gradients</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-time-encoding-comparison-uniform-vs-softmax">Part 2: Time Encoding Comparison (Uniform vs Softmax)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-encoding-explanation">Time Encoding Explanation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-udp-with-softmax-encoding">Create UDP with Softmax Encoding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-with-softmax-encoding">Solve with Softmax Encoding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#display-best-solution-with-softmax">Display Best Solution with Softmax</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

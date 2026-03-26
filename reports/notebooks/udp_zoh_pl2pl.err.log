@@ -1,0 +1,87 @@
+Traceback (most recent call last):
+  File "/home/runner/local/lib/python3.14/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+    ~~~~~~~~~^
+        nb,
+        ^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/home/runner/local/lib/python3.14/site-packages/nbclient/client.py", line 1323, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/runner/local/lib/python3.14/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/runner/local/lib/python3.14/asyncio/base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/runner/local/lib/python3.14/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+        cell, index, execution_count=self.code_cells_executed + 1
+    )
+  File "/home/runner/local/lib/python3.14/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/local/lib/python3.14/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Solve with gradients
+prob_g_uniform = pg.problem(udp_g_uniform)
+prob_g_uniform.c_tol = 1e-6
+
+print("\n=== Optimization WITH Gradients (Uniform) ===")
+
+masses = []
+xs=[]
+for i in range(10):
+    pop_g = pg.population(prob_g_uniform, 1)
+    pop_g = algo.evolve(pop_g)
+    if(prob_g_uniform.feasibility_f(pop_g.champion_f)):
+        print(".", end="")
+        masses.append(pop_g.champion_x[1])
+        xs.append(pop_g.champion_x)
+    else:
+        print("x", end ="")
+print("\nBest mass is: ", np.max(masses)*MASS)
+print("Worst mass is: ", np.min(masses)*MASS)
+best_idx = np.argmax(masses)
+------------------
+
+----- stdout -----
+
+=== Optimization WITH Gradients (Uniform) ===
+------------------
+
+[31m---------------------------------------------------------------------------[39m
+[31mValueError[39m                                Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[6][39m[32m, line 11[39m
+[32m      9[39m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m([32m10[39m):
+[32m     10[39m     pop_g = pg.population(prob_g_uniform, [32m1[39m)
+[32m---> [39m[32m11[39m     pop_g = [43malgo[49m[43m.[49m[43mevolve[49m[43m([49m[43mpop_g[49m[43m)[49m
+[32m     12[39m     [38;5;28;01mif[39;00m(prob_g_uniform.feasibility_f(pop_g.champion_f)):
+[32m     13[39m         [38;5;28mprint[39m([33m"[39m[33m.[39m[33m"[39m, end=[33m"[39m[33m"[39m)
+
+[31mValueError[39m: 
+function: evolve_version
+where: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 603
+what: 
+An error occurred while loading the snopt7_c library at run-time. This is typically caused by one of the following
+reasons:
+
+- The file declared to be the snopt7_c library, i.e. /Users/dario.izzo/opt/libsnopt7_c.dylib, is not a shared library containing the necessary C interface symbols (is the file path really pointing to
+a valid shared library?)
+ - The library is found and it does contain the C interface symbols, but it needs linking to some additional libraries that are not found
+at run-time.
+
+We report the exact text of the original exception thrown:
+
+ 
+function: evolve_version
+where: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 553
+what: The snopt7_c library path was constructed to be: /Users/dario.izzo/opt/libsnopt7_c.dylib and it does not appear to be a file
+
+
+

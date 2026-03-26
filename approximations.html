@@ -1,0 +1,888 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Various approximations for orbital transfers &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'approximations';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Numerical Propagation" href="propagation.html" />
+    <link rel="prev" title="Fly-by routines" href="flyby.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="api.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fapproximations.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/approximations.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Various approximations for orbital transfers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-transfers">Basic transfers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.hohmann"><code class="docutils literal notranslate"><span class="pre">hohmann()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.bielliptic"><code class="docutils literal notranslate"><span class="pre">bielliptic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-initial-mass-approximation-mima">Maximum initial mass approximation (MIMA)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mim_from_hop"><code class="docutils literal notranslate"><span class="pre">mim_from_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima"><code class="docutils literal notranslate"><span class="pre">mima()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima_from_hop"><code class="docutils literal notranslate"><span class="pre">mima_from_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima2"><code class="docutils literal notranslate"><span class="pre">mima2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima2_from_hop"><code class="docutils literal notranslate"><span class="pre">mima2_from_hop()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#phasing-indicators">Phasing indicators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.utils.knn"><code class="docutils literal notranslate"><span class="pre">knn</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.utils.knn.find_neighbours"><code class="docutils literal notranslate"><span class="pre">knn.find_neighbours()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="various-approximations-for-orbital-transfers">
+<span id="approximations"></span><h1>Various approximations for orbital transfers<a class="headerlink" href="#various-approximations-for-orbital-transfers" title="Link to this heading">#</a></h1>
+<p>Computing the exact optimal transfer between orbits is often more expensive than allowed in
+preliminary phases of the mission design. For this reason, <strong>pykep</strong> offers a number of approximations
+that can be used as surrogates of the actual complete computation. These can be used to quickly pre-screen
+a large number of possible transfers, to then focus on the most promising ones.
+Many of these approximations have been used and developed during the various edition of the
+[GTOC competition](<a class="reference external" href="https://sophia.estec.esa.int/gtoc_portal/">https://sophia.estec.esa.int/gtoc_portal/</a>) and can
+be found in our papers, e.g. <span id="id1">[<a class="reference internal" href="bibliography.html#id15" title="Daniel Hennes, Dario Izzo, and Damon Landau. Fast approximators for optimal low-thrust hops between main belt asteroids. In 2016 IEEE Symposium Series on Computational Intelligence (SSCI), 1–7. IEEE, 2016.">HIL16</a>]</span>, <span id="id2">[<a class="reference internal" href="bibliography.html#id16" title="Dario Izzo, Marcus Märtens, Laurent Beauregard, Max Bannach, Giacomo Acciarini, Emmanuel Blazquez, Alexander Hadjiivanov, Jai Grover, Gernot Heißel, Yuri Shimane, and others. Asteroid mining: ACT&amp;Friends’ results for the GTOC12 problem. Astrodynamics, 9(1):19–40, 2025.">IMartensB+25</a>]</span>.</p>
+<section id="basic-transfers">
+<h2>Basic transfers<a class="headerlink" href="#basic-transfers" title="Link to this heading">#</a></h2>
+<p>Sometimes basic ideal transfers models can be used to get some bounds or information on the possible
+difficulty of a certain orbital geometry.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.hohmann">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">hohmann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.hohmann" title="Link to this definition">#</a></dt>
+<dd><p>Computes the delta v and transfer time required for a Hohmann transfer between two circular orbits.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>r1</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): radius of the first orbit</p>
+<p><em>r2</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): radius of the second orbit</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter of the central body</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]:</dt><dd><p>[total delta v, transfer time, [first delta v, second delta v]]</p>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span> <span class="o">=</span> <span class="mi">7000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="mi">9000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv_total</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="p">[</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">]</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">hohmann</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total delta v:&quot;</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transfer time:&quot;</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First delta v:&quot;</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Second delta v:&quot;</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.bielliptic">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">bielliptic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.bielliptic" title="Link to this definition">#</a></dt>
+<dd><p>Computes the delta v and transfer time required for a bielliptic transfer between two circular orbits.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>r1</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): radius of the first orbit</p>
+<p><em>r2</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): radius of the second orbit</p>
+<p><em>rb</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): radius of the intermediate orbit</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter of the central body</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]:</dt><dd><p>[total delta v, transfer time, [first delta v, second delta v, third delta v]]</p>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span> <span class="o">=</span> <span class="mi">7000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="mi">9000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rb</span> <span class="o">=</span> <span class="mi">11000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv_total</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="p">[</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">dv3</span><span class="p">]</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">bielliptic</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total delta v:&quot;</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transfer time:&quot;</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First delta v:&quot;</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Second delta v:&quot;</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Third delta v:&quot;</span><span class="p">,</span> <span class="n">dv3</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="maximum-initial-mass-approximation-mima">
+<h2>Maximum initial mass approximation (MIMA)<a class="headerlink" href="#maximum-initial-mass-approximation-mima" title="Link to this heading">#</a></h2>
+<p>If we are computing the low-thrust transfer between two arbitrary orbits and we know the starting and final time of arrival,
+these approximations can be used to compute the maximum initial mass (MIM) that will result in a feasible transfer.
+In other words if our spacecraft is fat (heavier than the MIM), the transfer will not be feasible.
+In general the best way to approximate the MIM is via neural method and machine learning <span id="id3">[<a class="reference internal" href="bibliography.html#id17" title="Giacomo Acciarini, Laurent Beauregard, and Dario Izzo. Computing low-thrust transfers in the asteroid belt, a comparison between astrodynamical manipulations and a machine learning approach. arXiv preprint arXiv:2405.18918, 2024.">ABI24</a>]</span>,
+but that requires learning from a vast database of precomputed trajectories and sometimes we do not have that luxury.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.mim_from_hop">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mim_from_hop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pl_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pl_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MASS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mim_from_hop" title="Link to this definition">#</a></dt>
+<dd><p>The Maximum Initial Mass from a hop transfer. A hop transfer is fixed time randevouz between two planets.
+This function is slower then its approximations <a class="reference internal" href="#pykep.mima_from_hop" title="pykep.mima_from_hop"><code class="xref py py-class docutils literal notranslate"><span class="pre">mima_from_hop</span></code></a> and <a class="reference internal" href="#pykep.mima2_from_hop" title="pykep.mima2_from_hop"><code class="xref py py-class docutils literal notranslate"><span class="pre">mima2_from_hop</span></code></a>,
+if succesfull, returns the exact solution to the problem. Behind the scene Potryagin Maximum Principle
+is applied to the problem and the TPBVP is solved using ipopt / heyoka.</p>
+<p>Args:</p>
+<blockquote>
+<div><p><em>pl_s</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the source planet</p>
+<p><em>pl_t</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the target planet</p>
+<p><em>when_s</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the start epoch</p>
+<p><em>when_f</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the final epoch</p>
+<p><em>Tmax</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Maximum spacecraft thrust.</p>
+<p><em>veff</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Isp*G0.</p>
+<p><em>MASS</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Units to use to scale the mass intrnally. It also influences the bounds for the MIM in the
+optimization problem.</p>
+<p><em>max_trials</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Maximum number of trials to find the MIM. If the algorithm does not converge, it will
+return None.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: The Maximum Initial Mass</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span> <span class="c1"># assuming to have two planets pl_s and pl_t</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_s</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_f</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mim_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_f</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.mima">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dv1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veff</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mima" title="Link to this definition">#</a></dt>
+<dd><p>The Maximum Initial Mass Approximation.</p>
+<p>Izzo, D., Hennes, D., Simões, L. F., &amp; Märtens, M. (2016). Designing complex interplanetary trajectories
+for the global trajectory optimization competitions. Space Engineering: Modeling and Optimization with Case Studies, 151-176.
+<a class="reference external" href="https://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2016-SSCI-Fast_approximators.pdf">https://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2016-SSCI-Fast_approximators.pdf</a></p>
+<p>Having computed a two-impulse transfer, this approximation allows to compute
+the maximum initial mass that a spacecraft can have as to be able to perform
+that transfer in low-thrust.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>dv1</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): First  vectorial delta v (m/s, or Any velocity units)</p>
+<p><em>dv2</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): Second vectorial delta v (m/s or Any velocity units)</p>
+<p><em>tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Time of flight (Any time units)</p>
+<p><em>Tmax</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Maximum spacecraft thrust.</p>
+<p><em>veff</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Isp*G0.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: mima and magnitude of the acceleration required 
+(units induced by the inputs)</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">320</span><span class="p">,</span><span class="o">-</span><span class="mi">345</span><span class="p">,</span><span class="mi">43</span><span class="p">])</span> <span class="c1">#m/s</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">510</span><span class="p">,</span><span class="mi">175</span><span class="p">,</span><span class="mi">87</span><span class="p">])</span> <span class="c1">#m/s</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tof</span> <span class="o">=</span> <span class="mi">150</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span> <span class="c1">#seconds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span><span class="p">,</span> <span class="n">a_required</span>  <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">veff</span><span class="o">=</span><span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.mima_from_hop">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mima_from_hop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pl_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pl_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mima_from_hop" title="Link to this definition">#</a></dt>
+<dd><p>The Maximum Initial Mass Approximation from a hop transfer. A hop transfer is fixed time rendezvous between two planets.</p>
+<p>Izzo, D., Hennes, D., Simões, L. F., &amp; Märtens, M. (2016). Designing complex interplanetary trajectories
+for the global trajectory optimization competitions. Space Engineering: Modeling and Optimization with Case Studies, 151-176.
+<a class="reference external" href="https://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2016-SSCI-Fast_approximators.pdf">https://www.esa.int/gsp/ACT/doc/MAD/pub/ACT-RPR-MAD-2016-SSCI-Fast_approximators.pdf</a></p>
+<dl>
+<dt>Args:</dt><dd><p><em>pl_s</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the source planet</p>
+<p><em>pl_t</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the target planet</p>
+<p><em>when_s</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the departure epoch</p>
+<p><em>when_t</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the arrival epoch</p>
+<p><em>Tmax</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Maximum spacecraft thrust.</p>
+<p><em>veff</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Isp*G0.</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): gravitational parameter of the central body.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: mima and magnitude of the acceleration required</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span> <span class="c1"># assuming to have two planets pl_s and pl_t</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_s</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_t</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span><span class="p">,</span> <span class="n">a_required</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_t</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.mima2">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mima2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posvel1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mima2" title="Link to this definition">#</a></dt>
+<dd><p>More accurate approximation of mima.</p>
+<p>Having computed a two-impulse transfer, this approximation allows to compute
+the maximum initial mass that a spacecraft can have as to be able to perform
+that transfer in low-thrust.</p>
+<p>Izzo, D., … &amp; Yam, C. H. (2025). Asteroid mining: ACT&amp;Friends’ results for the GTOC12 problem. Astrodynamics, 9(1),
+19-40.  (<a class="reference external" href="https://arxiv.org/pdf/2410.20839">https://arxiv.org/pdf/2410.20839</a>)</p>
+<dl>
+<dt>Args:</dt><dd><p><em>posvel1</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]): initial position and velocty ALONG THE LAMBERT TRANSFER.</p>
+<p><em>dv1</em> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): First delta v (m/s, or Any velocity units)</p>
+<p><em>dv2</em> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): Second delta v (m/s or Any velocity units)</p>
+<p><em>tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Time of flight (Any time units)</p>
+<p><em>Tmax</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Maximum spacecraft thrust.</p>
+<p><em>veff</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Isp*G0.</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter of the central body.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: mima and magnitude of the acceleration required 
+(units induced by the inputs)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pykep.mima2_from_hop">
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mima2_from_hop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pl_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pl_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mima2_from_hop" title="Link to this definition">#</a></dt>
+<dd><p>More accurate approximation of mima from a hop transfer. A hop transfer is fixed time transfer between two planets.</p>
+<p>Izzo, D., … &amp; Yam, C. H. (2025). Asteroid mining: ACT&amp;Friends’ results for the GTOC12 problem. Astrodynamics, 9(1),
+19-40.  (<a class="reference external" href="https://arxiv.org/pdf/2410.20839">https://arxiv.org/pdf/2410.20839</a>)</p>
+<dl>
+<dt>Args:</dt><dd><p><em>pl_s</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the source planet</p>
+<p><em>pl_t</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the target planet</p>
+<p><em>when_s</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the departure epoch</p>
+<p><em>when_t</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the arrival epoch</p>
+<p><em>Tmax</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Maximum spacecraft thrust.</p>
+<p><em>veff</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Isp*G0.</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): gravitational parameter of the central body.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: mima and magnitude of the acceleration required</p>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span> <span class="c1"># assuming to have two planets pl_s and pl_t</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_s</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">when_t</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mima2</span><span class="p">,</span> <span class="n">a_required</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima2_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_t</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="phasing-indicators">
+<h2>Phasing indicators<a class="headerlink" href="#phasing-indicators" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.utils.knn">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planet_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orbital'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">pk.AU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">pk.EARTH_VELOCITY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.knn" title="Link to this definition">#</a></dt>
+<dd><p>The class finds the k-nearest neighbours to a given planet
+at some epoch from a list of planets.
+The idea being that under some definition of “closeness”
+close-by planets are good candidates for orbital transfers (i.e. resulting in a low <span class="math notranslate nohighlight">\(\Delta V\)</span>).
+The use of this class is thus in preliminary mission phases of
+multiple randevous trajectories where target selection is to be performed efficiently.</p>
+<p>The problem of finding who is “close-by” under a given metric can be efficiently solved
+using appropriate data structures. Here a kdtree is employed bringing complexity down to O(log N).
+The k-d-tree can then be queried efficiently for all asteroid within a given distance (‘ball’ query)
+or for all k closest asteroids (‘knn’ query).</p>
+<p>The notion of distance used (metric) can be:</p>
+<ul class="simple">
+<li><p>‘euclidean’: the simple Euclidean distance over the asteroid’s (r,v).
+The position and velocity vectors are scaled w.r.t. some reference values.</p></li>
+<li><p>‘orbital’, the distance is computed with respect to <span class="math notranslate nohighlight">\(\frac{r}{T} + v\)</span>, <span class="math notranslate nohighlight">\(\frac{r}{T}\)</span>,
+corresponding to the <span class="math notranslate nohighlight">\(\Delta V\)</span> computed over a linear model of the orbital transfer.
+The distance returned will thus be in m/s.</p></li>
+</ul>
+<p>The class is initialized with a list of planets, an epoch, and the metric to be used.</p>
+<p>Initializes the knn class.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>planet_list</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): list of pykep planets (typically thousands).</p>
+<p><em>when</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): epoch.</p>
+<p><em>metric</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): one of [‘euclidean’, ‘orbital’]. Defaults to ‘orbital’.</p>
+<p><em>ref_r</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): reference radius (used as a scaling factor for r if the metric is ‘euclidean’). Defaults to AU.</p>
+<p><em>ref_v</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): reference velocity (used as a scaling factor for v if the metric is ‘euclidean’). Defaults to EARTH_VELOCITY.</p>
+<p><em>tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): average transfer time in days (used in the definition of the ‘orbital’ metric). Defaults to 180.0.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="n">pl_list</span> <span class="o">=</span> <span class="o">......</span> <span class="c1"># a list of planets</span>
+<span class="n">knn</span> <span class="o">=</span> <span class="n">phasing</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">pl_list</span><span class="p">,</span> <span class="n">epoch</span><span class="p">(</span><span class="n">t0</span><span class="p">),</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;orbital&#39;</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">dists</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">&#39;knn&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">&#39;ball&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.utils.knn.find_neighbours">
+<span class="sig-name descname"><span class="pre">find_neighbours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_planet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'knn'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.knn.find_neighbours" title="Link to this definition">#</a></dt>
+<dd><p>Finds the neighbours of a given planet at a given epoch. The user may query for the
+k-nearest neighbours or for all neighbours within a given distance.</p>
+<dl>
+<dt>Args:</dt><dd><p><em>query_planet</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): the planet we want to find neighbours of. Can be an integer, in which case it refers to the idx in self.asteroid_list.</p>
+<p><em>query_type</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): one of ‘knn’ or ‘ball’. Defaults to ‘knn’.</p>
+<p><em>*args</em>: according to the query type (read below).</p>
+<p><em>**kwargs</em>: according to the query type (read below).</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: (neighb, neighb_ids, dists), where dist is only computed if ‘knn’ type query is made.</p>
+</dd>
+</dl>
+<p>The following kinds of spatial queries are currently implemented:</p>
+<dl class="simple">
+<dt>query_type = ‘knn’:</dt><dd><p>The kwarg ‘k’ determines how many k-nearest neighbours are returned.
+For arguments, see:
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html</a></p>
+</dd>
+<dt>query_type = ‘ball’:</dt><dd><p>The kwarg ‘r’ determines the distance within which all asteroids are returned.
+For arguments, see:
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="flyby.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fly-by routines</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="propagation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Numerical Propagation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-transfers">Basic transfers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.hohmann"><code class="docutils literal notranslate"><span class="pre">hohmann()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.bielliptic"><code class="docutils literal notranslate"><span class="pre">bielliptic()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-initial-mass-approximation-mima">Maximum initial mass approximation (MIMA)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mim_from_hop"><code class="docutils literal notranslate"><span class="pre">mim_from_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima"><code class="docutils literal notranslate"><span class="pre">mima()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima_from_hop"><code class="docutils literal notranslate"><span class="pre">mima_from_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima2"><code class="docutils literal notranslate"><span class="pre">mima2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mima2_from_hop"><code class="docutils literal notranslate"><span class="pre">mima2_from_hop()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#phasing-indicators">Phasing indicators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.utils.knn"><code class="docutils literal notranslate"><span class="pre">knn</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.utils.knn.find_neighbours"><code class="docutils literal notranslate"><span class="pre">knn.find_neighbours()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

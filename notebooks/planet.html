@@ -1,0 +1,845 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Planets and User Defined Planets (UDPLAs) &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/planet';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interfacing to SPICE and JPL DE ephs" href="interface_to_spice.html" />
+    <link rel="prev" title="Epochs and Julian Dates" href="epochs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/planet.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/planet.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/planet.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Planets and User Defined Planets (UDPLAs)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Planets and User Defined Planets (UDPLAs)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#udplas-in-pykep">UDPLAs in pykep</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-udplas-a-tutorial">Custom UDPLAs: a tutorial</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-udplas-an-example-in-the-cr3bp">Custom UDPLAs: an example in the CR3BP</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="planets-and-user-defined-planets-udplas">
+<h1>Planets and User Defined Planets (UDPLAs)<a class="headerlink" href="#planets-and-user-defined-planets-udplas" title="Link to this heading">#</a></h1>
+<p>The ephemerides of a body are the position end velocity Cartesian vectors of a moving object. In <code class="docutils literal notranslate"><span class="pre">pykep</span></code> the class <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> offers a common interface to access various ephemerides, regardless on how they are computed. Whether the underlying computations are simply Keplerian, or based on more advanced trajectory propagations, interpolations or predictions, a unified interface is offered by this type-erasing class.</p>
+<p>The user can code his own python class following the mandatory interface of a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> and his own coded objects will be treated uniformly as any other planet in <code class="docutils literal notranslate"><span class="pre">pykep</span></code>. These User Defined Planets (or UPLAs) can implement heterogeneous techniques and interface to any third-party API, but once they are used to construct a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>, they will appear as any other <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> in <code class="docutils literal notranslate"><span class="pre">pykep</span></code>.</p>
+<p>For convenience, a number of already coded UDPLAs are offered so that, to start with, users can compute the positions of planet, satellites comets and spacecraft without the need to code their own UDPLA.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="udplas-in-pykep">
+<h1>UDPLAs in pykep<a class="headerlink" href="#udplas-in-pykep" title="Link to this heading">#</a></h1>
+<p>Let us start to use the UDPLA <a class="reference internal" href="../udpla.html#pykep.udpla.keplerian" title="pykep.udpla.keplerian"><code class="xref py py-class docutils literal notranslate"><span class="pre">keplerian</span></code></a> which describes the motion of an object in a Keplerian orbit. All UDPLAs provided by <code class="docutils literal notranslate"><span class="pre">pykep</span></code> are in the module <code class="xref py py-mod docutils literal notranslate"><span class="pre">udpla</span></code></p>
+<p><a class="reference external" href="https://naif.jpl.nasa.gov/naif/aboutspice.html">SPICE</a> kernels can be used to create the UDPLA <a class="reference internal" href="../udpla.html#pykep.udpla.spice" title="pykep.udpla.spice"><code class="xref py py-class docutils literal notranslate"><span class="pre">spice</span></code></a>, without needing to download kernels, the <a class="reference external" href="https://ssd.jpl.nasa.gov/planets/orbits.html">DE440</a> ephemerides are conveniently provided in <a class="reference internal" href="../udpla.html#pykep.udpla.de440s" title="pykep.udpla.de440s"><code class="xref py py-class docutils literal notranslate"><span class="pre">de440s</span></code></a>. For <a class="reference external" href="https://en.wikipedia.org/wiki/Two-line_element_set">TLEs</a> the UDPLA <a class="reference internal" href="../udpla.html#pykep.udpla.tle" title="pykep.udpla.tle"><code class="xref py py-class docutils literal notranslate"><span class="pre">tle</span></code></a> can be used to build a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We instantiate the udpla</span>
+<span class="n">udpla</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mu_central_body</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;A Circular Orbit&quot;</span><span class="p">)</span>
+<span class="c1"># And use it to construct a pykep planet, hence erasing its type.</span>
+<span class="n">pla</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">udpla</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Non-dimensional units are often useful in astrodynamics and most pykep class allow their use. Of course only if everything is consistent the computations will make sense. <code class="docutils literal notranslate"><span class="pre">pykep</span></code> does not check this consistency and thus the user must be careful when using anything which is non SI, and to not mix units.</p>
+</div>
+<p>Let us print on screen this <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Short repr: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Long repr: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Short repr: 
+ A Circular Orbit
+Long repr: 
+ Keplerian planet elements: 
+Semi major axis: 1
+Semi major axis (AU): 6.684587122268445e-12
+Eccentricity: 0
+Inclination (deg.): 0
+Big Omega (deg.): 0
+Small omega (deg.): 0
+True anomly (deg.): 0
+Mean anomly (deg.): 0
+Elements reference epoch (MJD2000): 0
+Elements reference epoch (UTC): 2000-01-01T00:00:00.000000
+r at ref. = [1, 0, 0]
+v at ref. = [0, 1, 0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The textual representation of a planet can be extracted in two parts.</p>
+<p>The first part is common to all objects of type <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> and reports the body name only.</p>
+<p>The second part is instead original with the udpla type, and is essentially whatever is returned by the <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface optional method <code class="docutils literal notranslate"><span class="pre">extra_info</span></code>. In this case, the udpla is a c++ based class exposed to python as :class:<code class="docutils literal notranslate"><span class="pre">pykep.udpla.keplerian</span></code> and its extra info report the orbital parameters as well as the Cartesian components of the body state at the reference epoch.</p>
+<p>Let see where the body is:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epoch</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="s2">&quot;2026-10-22 00:00:00:00&quot;</span><span class="p">)</span>
+<span class="n">pla</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-0.9810645314764517, -0.19368114280665175, -0.0],
+ [0.19368114280665175, -0.9810645314764517, 0.0]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="custom-udplas-a-tutorial">
+<h1>Custom UDPLAs: a tutorial<a class="headerlink" href="#custom-udplas-a-tutorial" title="Link to this heading">#</a></h1>
+<p>Lets see how users can define their own custom udplas and thus leverage the common <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.
+A minimal version includes the method <em>eph</em> only. Here we will code a very simple and strange object moving in a rectilinear constant motion
+along the x-axis. Its a ficticious object and it only serves the purpose of this tutorial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">my_udpla</span><span class="p">:</span>
+    <span class="c1"># This is the only mandatory method in the planet interface</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">mjd2000</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])]</span>
+
+<span class="c1"># Lets instantiate a planet</span>
+<span class="n">pla</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">my_udpla</span><span class="p">())</span>
+
+<span class="c1"># And test</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *eph* works, calls user implementation:&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="mf">2.</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *eph_v* also works, calls default implementation:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="o">.</span><span class="n">eph_v</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *mu_central_body* returns a default -1 value signalling its not implemented:&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="o">.</span><span class="n">mu_central_body</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *name* returns a default value with little info:&quot;</span><span class="p">,</span> <span class="n">pla</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="c1"># etc....</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>call to *eph* works, calls user implementation: [[2.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
+call to *eph_v* also works, calls default implementation:
+ [[ 1.  0.  0.  1.  0.  0.]
+ [ 2.  0.  0.  1.  0.  0.]]
+call to *mu_central_body* returns a default -1 value signalling its not implemented: -1.0
+call to *name* returns a default value with little info: &lt;class &#39;__main__.my_udpla&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can then add a bunch of optional method unlocking various functionalities. A rather complete final udpla could look like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">my_udpla</span><span class="p">:</span>
+    <span class="c1"># This is the only mandatory method in the planet interface</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">mjd2000</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])]</span>
+
+    <span class="c1"># Often used to compute gradients in some optimal control, the acc method (optional)</span>
+    <span class="c1"># returns a (acc), while eph are r,v (pos, vel). Its default implementation</span>
+    <span class="c1"># will return -mu/r^3 if mu is present, or throw otherwise.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">])</span><span class="o">*</span><span class="n">mjd2000</span>
+    
+    <span class="c1"># Vectorized versions for eph and acc have default naive implementations, which can be (optionally) overidden.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000s</span><span class="p">):</span>
+        <span class="c1"># We implement a naive vectorization</span>
+        <span class="n">retval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">mjd2000s</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mjd2000</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mjd2000s</span><span class="p">):</span>
+            <span class="n">acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">(</span><span class="n">mjd2000</span><span class="p">)</span>
+            <span class="n">retval</span><span class="p">[</span><span class="n">i</span><span class="p">,:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+        <span class="k">return</span> <span class="n">retval</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eph_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000s</span><span class="p">):</span>
+        <span class="c1"># We implement a naive vectorization</span>
+        <span class="n">retval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">mjd2000s</span><span class="p">),</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mjd2000</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mjd2000s</span><span class="p">):</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">mjd2000</span><span class="p">)</span>
+            <span class="n">retval</span><span class="p">[</span><span class="n">i</span><span class="p">,:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
+            <span class="n">retval</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">retval</span>
+    
+    <span class="c1"># A bunch of methods allow to add information to</span>
+    <span class="c1"># the udpla (and exposed in the planet interface) which can be used in some contexts and </span>
+    <span class="c1"># also affect the availability of default implementations of, for example, acc and elements.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mu_central_body</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">3.</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mu_self</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.1</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.345</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_safe_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.124</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">whoami</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Extra info&quot;</span>
+    
+    <span class="c1"># We can also have a constructor to have some internal state.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">whoami</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">whoami</span> <span class="o">=</span> <span class="n">whoami</span>
+    
+<span class="n">pla2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">my_udpla</span><span class="p">(</span><span class="s2">&quot;I have all methods! I feel complete.&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *eph* works, calls user implementation:&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="mf">2.</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *eph_v* calls user implementation:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">eph_v</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *mu_central_body* calls user implementation:&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">mu_central_body</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *name* calls user implementation:&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *period* makes use of the user provided mu:&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">period</span><span class="p">(</span><span class="mf">2.</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;call to *elements* makes use of the user provided mu:&quot;</span><span class="p">,</span> <span class="n">pla2</span><span class="o">.</span><span class="n">elements</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">el_type</span><span class="o">.</span><span class="n">MEE</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>call to *eph* works, calls user implementation: [[2.0, 0.0, 0.0], [1.0, 0.0, 0.0]]
+call to *eph_v* calls user implementation:
+ [[ 1.  0.  0.  1.  0.  0.]
+ [ 2.  0.  0.  1.  0.  0.]]
+call to *mu_central_body* calls user implementation: 3.0
+call to *name* calls user implementation: I have all methods! I feel complete.
+call to *period* makes use of the user provided mu: 6.664324407237548
+call to *elements* makes use of the user provided mu: [0.0, nan, nan, nan, nan, nan]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note the <em>nans</em> deriving from the impossibility to define osculating equinoctial elemnts for this <em>weird</em> body moving along a line passing throught eh origin … all good. Equinoctial elements are non-singular …. up to a certain extent!</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="custom-udplas-an-example-in-the-cr3bp">
+<h1>Custom UDPLAs: an example in the CR3BP<a class="headerlink" href="#custom-udplas-an-example-in-the-cr3bp" title="Link to this heading">#</a></h1>
+<p>Lets say we want to define a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> in the CR3BP. For example we may have an object <em>station</em> moving along a periodic orbit around L1.
+We need to define an udpla able to compute <span class="math notranslate nohighlight">\(r,v\)</span> and possibly <span class="math notranslate nohighlight">\(a\)</span> at some given epoch. We assume non dimensional units for the <em>state</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">cr3bp_udpla</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_mjd2000</span><span class="p">,</span> <span class="n">state_nd</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">T_units</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;station&quot;</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">=</span> <span class="n">ref_mjd2000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span> <span class="o">=</span> <span class="n">state_nd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span> <span class="o">=</span> <span class="n">T_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_cr3bp</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+        <span class="n">dyn</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">cr3bp_dyn</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">vz</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dyn</span><span class="p">[</span><span class="mi">3</span><span class="p">:]],</span> <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">vz</span><span class="p">])</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">eph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">mjd2000</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_for</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">:]]</span> <span class="c1"># these will be casted to list by the pykep planet iface.</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="n">epoch</span> <span class="o">=</span> <span class="n">mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span> <span class="c1"># We use propagate until so that if eph was called just before we avoid propagating.</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;A body under nd CR3BP dynamics&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">retval</span> <span class="o">=</span> <span class="s2">&quot;Reference state (nd): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span><span class="p">)</span>
+        <span class="n">retval</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reference epoch (mjd2000): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">retval</span>
+        
+<span class="n">L_Units</span> <span class="o">=</span> <span class="mi">384400000</span>
+<span class="n">T_Units</span> <span class="o">=</span> <span class="mf">4.35</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span>
+<span class="n">state</span> <span class="o">=</span> <span class="p">[</span> <span class="mf">0.99263187</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15446297</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span> <span class="o">-</span><span class="mf">0.74481059</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.53599621</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="n">station</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">cr3bp_udpla</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">CR3BP_MU_EARTH_MOON</span><span class="p">,</span> <span class="n">T_Units</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;station&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">station</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">station</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ephemerides at epoch: &quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;r:&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;v:&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A body under nd CR3BP dynamics
+Reference state (nd): [0.99263187, -0.15446297, 0.0, -0.74481059, -0.53599621, 0.0]
+Reference epoch (mjd2000): 0.0
+Ephemerides at epoch:  2026-10-22T00:00:00.000000
+r: [0.07233978305614301, -0.8336255008104227, 0.0]
+v: [-0.47833877065155095, 0.8387520292044038, 0.0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>And thats it! Hope you enjoyed.</p>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="epochs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Epochs and Julian Dates</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="interface_to_spice.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Interfacing to SPICE and JPL DE ephs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Planets and User Defined Planets (UDPLAs)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#udplas-in-pykep">UDPLAs in pykep</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-udplas-a-tutorial">Custom UDPLAs: a tutorial</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-udplas-an-example-in-the-cr3bp">Custom UDPLAs: an example in the CR3BP</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

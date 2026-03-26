@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Trajectory Optimization Gym &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gym';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The plot module" href="plot.html" />
+    <link rel="prev" title="Trajectory Optimization" href="trajopt.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="api.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fgym.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/gym.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Trajectory Optimization Gym</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mga-problems">MGA problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1"><code class="docutils literal notranslate"><span class="pre">gym.cassini1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1_a"><code class="docutils literal notranslate"><span class="pre">gym.cassini1_a</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1_n"><code class="docutils literal notranslate"><span class="pre">gym.cassini1_n</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mga-1dsm-problems">MGA-1DSM problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini2"><code class="docutils literal notranslate"><span class="pre">gym.cassini2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.rosetta"><code class="docutils literal notranslate"><span class="pre">gym.rosetta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm_a"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm_a</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm_n"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm_n</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.juice"><code class="docutils literal notranslate"><span class="pre">gym.juice</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.juice_mo"><code class="docutils literal notranslate"><span class="pre">gym.juice_mo</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.messenger"><code class="docutils literal notranslate"><span class="pre">gym.messenger</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-impulse-problem">Multiple impulse problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em3imp"><code class="docutils literal notranslate"><span class="pre">gym.em3imp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em5imp"><code class="docutils literal notranslate"><span class="pre">gym.em5imp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em7imp"><code class="docutils literal notranslate"><span class="pre">gym.em7imp</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="trajectory-optimization-gym">
+<span id="gym"></span><h1>Trajectory Optimization Gym<a class="headerlink" href="#trajectory-optimization-gym" title="Link to this heading">#</a></h1>
+<p>A number of interplanetary trajectory problems are provided in <cite>pykep</cite> in the form of
+User Defined Problems (UDP) compatible with the <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> <span id="id1">[<a class="reference internal" href="bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> python package.
+All of the problems are instantiated upon import of the <cite>pykep</cite> module and can be used directly. The collection of all
+problems is called the “pykep gym” and hopes to become an established benchmark set to test the performances of evolutionary
+and traditional optimisation techniques on trajectory design problems.</p>
+<section id="mga-problems">
+<h2>MGA problems<a class="headerlink" href="#mga-problems" title="Link to this heading">#</a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.cassini1">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">cassini1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Cassini</span> <span class="pre">MGA</span> <span class="pre">direct</span> <span class="pre">tof</span> <span class="pre">encoding</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P1)</span></em><a class="headerlink" href="#pykep.trajopt.gym.cassini1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is an MGA problem inspired to the Cassini spacecraft interplanetary transfer to Saturn.
+The objective of this mission is to reach Saturn and to be captured by its gravity into an orbit having pericenter
+radius <span class="math notranslate nohighlight">\(r_p=108950\)</span> km, and eccentricity <span class="math notranslate nohighlight">\(e=0.98\)</span>. The planetary fly-by sequence considered
+is E-VVEJ-S (as the one used by Cassini spacecraft). As objective function we use the total <span class="math notranslate nohighlight">\(\Delta V\)</span>
+accumulated during the mission, including the launch <span class="math notranslate nohighlight">\(\Delta V\)</span> (exceeding a value provided for free by the launcher)
+and the various <span class="math notranslate nohighlight">\(\Delta V\)</span> one needs to give at the planets and upon arrival to perform the final orbit injection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.cassini1_a">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">cassini1_a</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Cassini</span> <span class="pre">MGA</span> <span class="pre">alpha</span> <span class="pre">tof</span> <span class="pre">encoding</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P2)</span></em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_a" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is the same MGA problem as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1</span></code></a>, but with using
+a different encoding of the decision variables. In this case, the decision variables are no longer directly
+the times of flight but an equivalent set called the alpha encoding. This encoding is particularly useful
+when bounds on the times of flight are not known a priori. It creates a less evolvable problem, albeit a less biased one,
+or at least one that is not using any apriori knowledge on the final solution. The decision vector is also augmented with one
+more variable: the total time of flight which is thus controlled via its bounds, making the encoding particularly suitable
+for multi-objective optimization problems where the total time of flight is a second objective for which we want to search solutions
+on the pareto front.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.cassini1_n">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">cassini1_n</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Cassini1</span> <span class="pre">MGA</span> <span class="pre">eta</span> <span class="pre">tof</span> <span class="pre">encoding</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P3)</span></em><a class="headerlink" href="#pykep.trajopt.gym.cassini1_n" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is the same MGA problem as <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1</span></code></a>, but with using
+a different encoding of the decision variables. In this case, the decision variables are no longer directly
+the times of flight but an equivalent set called the eta encoding. This encoding is particularly useful
+when bounds on the times of flight are not known a priori. It creates a less evolvable problem, albeit a less biased one.</p>
+</section>
+<section id="mga-1dsm-problems">
+<h2>MGA-1DSM problems<a class="headerlink" href="#mga-1dsm-problems" title="Link to this heading">#</a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.cassini2">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">cassini2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Cassini</span> <span class="pre">MGA-1DSM</span> <span class="pre">direct</span> <span class="pre">tof</span> <span class="pre">encoding</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P11)</span></em><a class="headerlink" href="#pykep.trajopt.gym.cassini2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is an MGA-1DSM problem inspired to the Cassini spacecraft interplanetary transfer to Saturn.
+It is fundamentally similar to <a class="reference internal" href="#pykep.trajopt.gym.cassini1" title="pykep.trajopt.gym.cassini1"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1</span></code></a>, but it allows for one deep space maneuver (DSM) at any point
+of each trajectory leg, and does not account for the launch <span class="math notranslate nohighlight">\(\Delta V\)</span> which is bounded instead to a maximum value.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.rosetta">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">rosetta</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Rosetta</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P10)</span></em><a class="headerlink" href="#pykep.trajopt.gym.rosetta" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is an MGA-1DSM problem inspired to the Rosetta spacecraft interplanetary transfer to comet 67P/Churyumov-Gerasimenko.
+The objective of this mission is to rendezvous with the comet matching its heliocentric position and velocity exactly.
+The planetary fly-by sequence considered is E-EMEE-comet (as the one used by Rosetta spacecraft).
+As objective function we use the total <span class="math notranslate nohighlight">\(\Delta V\)</span> computed as the sum of all the <span class="math notranslate nohighlight">\(\Delta V\)</span> needed to perform the various
+maneuvers and fly-bys. The launch <span class="math notranslate nohighlight">\(\Delta V\)</span> is not accounted for, as it is bounded to a maximum value.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.eve_mga1dsm">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">eve_mga1dsm</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Venus-Earth</span> <span class="pre">mga-1dsm</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P7-9)</span></em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is an MGA-1DSM problem useful to test the performance of evolutionary algorithms on a simpe trajectory problem.
+The planetary encounter sequence is E-V-E, and the objective is to rendezvous with the Earth matching its heliocentric
+position and velocity exactly. As objective function we use the total <span class="math notranslate nohighlight">\(\Delta V\)</span> computed as the sum of all the <span class="math notranslate nohighlight">\(\Delta V\)</span> needed to perform the various
+maneuvers and fly-bys. The launch <span class="math notranslate nohighlight">\(\Delta V\)</span> is not accounted for, as it is bounded to a maximum value.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.eve_mga1dsm_a">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">eve_mga1dsm_a</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Venus-Earth</span> <span class="pre">mga-1dsm</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P7-9)</span></em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_a" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is the same MGA-1DSM problem as <code class="xref py py-class docutils literal notranslate"><span class="pre">eve_mga_1dsm</span></code>, but with using
+a different encoding of the decision variables. In this case, the decision variables are no longer directly
+the times of flight but an equivalent set called the alpha encoding (see <a class="reference internal" href="#pykep.trajopt.gym.cassini1_a" title="pykep.trajopt.gym.cassini1_a"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1_a</span></code></a>).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.eve_mga1dsm_n">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">eve_mga1dsm_n</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Venus-Earth</span> <span class="pre">mga-1dsm</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P7-9)</span></em><a class="headerlink" href="#pykep.trajopt.gym.eve_mga1dsm_n" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is the same MGA-1DSM problem as <code class="xref py py-class docutils literal notranslate"><span class="pre">eve_mga_1dsm</span></code>, but with using
+a different encoding of the decision variables. In this case, the decision variables are no longer directly
+the times of flight but an equivalent set called the eta encoding (see <a class="reference internal" href="#pykep.trajopt.gym.cassini1_n" title="pykep.trajopt.gym.cassini1_n"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1_n</span></code></a>).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.juice">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">juice</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Juice</span> <span class="pre">(Trajectory</span> <span class="pre">Optimization</span> <span class="pre">Gym</span> <span class="pre">P13-14)</span></em><a class="headerlink" href="#pykep.trajopt.gym.juice" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is an MGA-1DSM problem inspired to the JUICE spacecraft interplanetary transfer to Jupiter.
+The selected fly-by sequence, E-EVEME-J, and other parameters are inspired by the ESA Juice mission.
+A launcher model is included, namely an Ariane5 launch from Kourou.
+JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA’s Cosmic Vision 2015-2025 programme.
+Launched on the 14th of April 2023, ESA’s Jupiter Icy Moons Explorer, Juice, will make detailed observations
+of the giant gas planet and its three large ocean-bearing moons – Ganymede, Callisto and Europa – with a suite of
+remote sensing, geophysical and in situ instruments. The mission will characterise these moons as both
+planetary objects and possible habitats, explore Jupiter’s complex environment in depth, and study the wider
+Jupiter system as an archetype for gas giants across the Universe.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.juice_mo">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">juice_mo</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Juice</span> <span class="pre">(Trajectory</span> <span class="pre">Optimization</span> <span class="pre">Gym</span> <span class="pre">P13-14)</span></em><a class="headerlink" href="#pykep.trajopt.gym.juice_mo" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This is the same MGA-1DSM problem as <a class="reference internal" href="#pykep.trajopt.gym.juice" title="pykep.trajopt.gym.juice"><code class="xref py py-class docutils literal notranslate"><span class="pre">juice</span></code></a>, but with using
+the alpha encoding for the time of flight variables (see <a class="reference internal" href="#pykep.trajopt.gym.cassini1_a" title="pykep.trajopt.gym.cassini1_a"><code class="xref py py-class docutils literal notranslate"><span class="pre">cassini1_a</span></code></a>).
+The problem is also multi-objective, with the total time of flight as a second objective, leveraging the
+alpha encoding to control the total time of flight (at the cost of evolvability).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.messenger">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">messenger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">MGA_1DSM</span> <span class="pre">Trajectory</span></em><a class="headerlink" href="#pykep.trajopt.gym.messenger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p>This an MGA-1DSM problem inspired by the messenger mission that orbited the planet Mercury between 2011 and 2015, studying Mercury’s chemical composition,
+geology, and magnetic field. The name is a backronym for Mercury Surface, Space Environment, Geochemistry, and Ranging, and a reference to the messenger
+god Mercury from Roman mythology. The selected fly-by sequence, E-VVMeMeMe-Me, and other parameters are coincident to the actual Messenger mission.
+We have only omitted the first Earth fly-by that was used to correct for launcher performances, since we here do not make use of a launcher model.
+As far as chemical propelled interplanetary trajectories go, this particular one is particularly complex and difficult to design.
+The time of flights among successive Mercury fly-bys allow for multiple rvolutions and resonances, making optimization techniques struggle to find the correct combination.
+The amount of specialistic knowledge that needs to be used to obtain a successful design is significant.
+Finding a global optimization approach able to find a good trajectory in complete autonomy without making
+use of additional problem knowledge is challenging but possible, but limiting the number of fitness call is difficult.</p>
+</section>
+<section id="multiple-impulse-problem">
+<h2>Multiple impulse problem<a class="headerlink" href="#multiple-impulse-problem" title="Link to this heading">#</a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.em3imp">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">em3imp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Mars</span> <span class="pre">3</span> <span class="pre">impulses</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P4)</span></em><a class="headerlink" href="#pykep.trajopt.gym.em3imp" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.em5imp">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">em5imp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Mars</span> <span class="pre">5</span> <span class="pre">impulses</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P5)</span></em><a class="headerlink" href="#pykep.trajopt.gym.em5imp" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.em7imp">
+<span class="sig-prename descclassname"><span class="pre">gym.</span></span><span class="sig-name descname"><span class="pre">em7imp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Earth-Mars</span> <span class="pre">7</span> <span class="pre">impulses</span> <span class="pre">(Trajectory</span> <span class="pre">Optimisation</span> <span class="pre">Gym</span> <span class="pre">P6)</span></em><a class="headerlink" href="#pykep.trajopt.gym.em7imp" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="trajopt.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Trajectory Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The plot module</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mga-problems">MGA problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1"><code class="docutils literal notranslate"><span class="pre">gym.cassini1</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1_a"><code class="docutils literal notranslate"><span class="pre">gym.cassini1_a</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini1_n"><code class="docutils literal notranslate"><span class="pre">gym.cassini1_n</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mga-1dsm-problems">MGA-1DSM problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.cassini2"><code class="docutils literal notranslate"><span class="pre">gym.cassini2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.rosetta"><code class="docutils literal notranslate"><span class="pre">gym.rosetta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm_a"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm_a</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.eve_mga1dsm_n"><code class="docutils literal notranslate"><span class="pre">gym.eve_mga1dsm_n</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.juice"><code class="docutils literal notranslate"><span class="pre">gym.juice</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.juice_mo"><code class="docutils literal notranslate"><span class="pre">gym.juice_mo</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.messenger"><code class="docutils literal notranslate"><span class="pre">gym.messenger</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-impulse-problem">Multiple impulse problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em3imp"><code class="docutils literal notranslate"><span class="pre">gym.em3imp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em5imp"><code class="docutils literal notranslate"><span class="pre">gym.em5imp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em7imp"><code class="docutils literal notranslate"><span class="pre">gym.em7imp</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

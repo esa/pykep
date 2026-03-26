@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Zero Order Hold trajectory leg &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/leg_zoh';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Zero Order Hold - Solar Sail" href="leg_zoh_ss.html" />
+    <link rel="prev" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/leg_zoh.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/leg_zoh.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/leg_zoh.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Zero Order Hold trajectory leg</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero Order Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-the-zero-hold-leg">1 - Test the zero hold leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-trajectory-leg">
+<h1>The Zero Order Hold trajectory leg<a class="headerlink" href="#the-zero-order-hold-trajectory-leg" title="Link to this heading">#</a></h1>
+<p>The Zero Order Hold (ZOH) trajectory leg is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> in the class <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. Extending the class <a class="reference internal" href="../leg.html#pykep.leg.sims_flanagan" title="pykep.leg.sims_flanagan"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.sims_flanagan</span></code></a>, this leg accounts for a continuous thrust considered fixed in some frame along each segment of predefined length, as well as for a generic dynamics and variable segment lengths.</p>
+<p>Thus, it approximates a thrust strategy via a sequence of continuous, constant thrust arcs (zero order hold). The leg is defined by a starting state <span class="math notranslate nohighlight">\(\mathbf x_0 = [\mathbf r_0, \mathbf v_0, m_0]\)</span>, a final state <span class="math notranslate nohighlight">\(\mathbf x_1 = [\mathbf r_1, \mathbf v_1, m_1]\)</span> and a time grid defining the various segment lengths.</p>
+<p>A sequence of controls <span class="math notranslate nohighlight">\(\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, T_2, i_{x2}, i_{y2}, i_{z2}, ... ]\)</span> define the magnitude and direction of the continuous thrust vector along each segment.</p>
+<p>In this tutorial we show the basic API to interface with the class <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>.</p>
+<p>We start with some imports:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="c1">#%matplotlib ipympl</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tolerances used in the numerical integration</span>
+<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
+<span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># We instantiate ZOH Taylor integrators for Keplerian dynamics, shipped in pykep.</span>
+<span class="n">ta_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_var_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># nd units (remember that the ZOH taylor integrator is using non dimensional units expecting MU=1)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="n">MU</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span>  <span class="n">L</span><span class="o">/</span><span class="n">TIME</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span><span class="o">/</span><span class="n">TIME</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">MASS</span><span class="o">*</span><span class="n">ACC</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="test-the-zero-hold-leg">
+<h1>1 - Test the zero hold leg<a class="headerlink" href="#test-the-zero-hold-leg" title="Link to this heading">#</a></h1>
+<p>We compute the gradient of the mismatch and throttle constraints numerically and using the analytical ones provided by <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. We check that they are indeed the same,
+and in the process we learn how to instantiate and use the class.</p>
+<p>We need a small helper to get the numerical gradients easily:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># These assume some copy of the leg as they will modify it.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">):</span>
+   <span class="n">leg_mod</span><span class="o">.</span><span class="n">tgrid</span> <span class="o">=</span> <span class="n">tgrid</span>
+   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state0</span> <span class="o">=</span> <span class="n">state0</span>
+   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state1</span> <span class="o">=</span> <span class="n">state1</span>
+   <span class="n">leg_mod</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span>
+   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state1</span> <span class="o">=</span> <span class="n">state1</span>
+   <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_throttle_constraints_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
+    <span class="n">leg_mod</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span>
+    <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_throttle_constraints</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are now ready to instantiate the leg. We do so by randomly selecting the number of segments, the cut, the effective exhaust velocity, the controls and initializing the remaining quantities.</p>
+<p>To obtain meaningful initial and final states, we compute a Lambert transfer between two Solar System planets. This choice is not essential to the method and is only meant to provide a physically plausible example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Lambert leg </span>
+<span class="n">t0</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="mi">10400</span>
+<span class="n">pl0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;Earth&quot;</span><span class="p">))</span>
+<span class="n">pl1</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">&quot;Mars&quot;</span><span class="p">))</span>
+<span class="n">r0</span><span class="p">,</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">pl0</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span>
+<span class="n">r1</span><span class="p">,</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">pl1</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+<span class="c1"># We create some starting conditions from a Lambert arc</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">lambert_problem</span><span class="p">(</span><span class="n">r0</span><span class="o">=</span><span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span> <span class="n">tof</span> <span class="o">=</span> <span class="p">(</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
+<span class="n">m0</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># leg random data</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="p">,))</span>
+<span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">]</span> <span class="o">/=</span> <span class="p">(</span><span class="n">F</span><span class="p">)</span>  <span class="c1"># force will be in [-1, 1] N</span>
+<span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">])</span> <span class="c1"># force will be in [0.s, 1] N</span>
+<span class="n">cut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># putting all in nd units</span>
+<span class="n">state0</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span><span class="o">/</span><span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">r0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">it</span><span class="o">/</span><span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">v0</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">m0</span><span class="o">/</span><span class="n">MASS</span><span class="p">]</span>
+<span class="n">state1</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span><span class="o">/</span><span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">r1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">it</span><span class="o">/</span><span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="n">m1</span><span class="o">/</span><span class="n">MASS</span><span class="p">]</span>
+<span class="n">veff_nd</span> <span class="o">=</span> <span class="n">veff</span> <span class="o">/</span> <span class="n">V</span>
+<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">t0</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="n">t1</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Setting the integrator parameters</span>
+<span class="n">ta_global</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">veff_nd</span>
+<span class="n">ta_var_global</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">veff_nd</span>
+
+<span class="c1"># Instantiate the leg</span>
+<span class="n">leg</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">cut</span><span class="p">,</span> <span class="n">tas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ta_global</span><span class="p">,</span> <span class="n">ta_var_global</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now compute and store the analytical gradient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grad_an_mc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_mc_grad</span><span class="p">()</span>
+<span class="n">tcgrad_an_tc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_tc_grad</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and check with the numerically computed one. We compute the numerical gradient using <code class="docutils literal notranslate"><span class="pre">pagmo</span></code> provided routine.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dx0</span>
+<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">state0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0477505005812316e-07
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Chack on dmc/dxf</span>
+<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">state1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.5681844028918941e-07
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Chack on dmc/dcontrols</span>
+<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.9877358736308016e-07
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">tgrid</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.5661232933140654e-08
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_throttle_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nseg</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">tcgrad_an_tc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.9812097524103668e-08
+</pre></div>
+</div>
+</div>
+</div>
+<p>So … those are small differences, compatible with the numercial gradient low precision (the analytical gradient will be better, and can be made as accurate as needed controlling the precision of the Taylor adaptive integrator)</p>
+<p>We can even plot the leg, in this case overlaying it with pykep planets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
+<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1236e9d35192066cda8fa4dcacd94f15afac9d7d5dbea72fc85958478ad76dbe.png" src="../_images/1236e9d35192066cda8fa4dcacd94f15afac9d7d5dbea72fc85958478ad76dbe.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="use-with-arbitrary-dynamics">
+<h1>2 - Use with arbitrary dynamics<a class="headerlink" href="#use-with-arbitrary-dynamics" title="Link to this heading">#</a></h1>
+<p>One of the very, and I mean very, cool things in <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> is the possibility to use arbitrary dynamics. One can then have a leg in the CR3BP, as well as the equinoctial parameter dynamics for Keplerian motion, or a full ephemerides model of N-Body dynamics, and so on…..</p>
+<p>The requirements for a dynamics to be usable in <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> are:</p>
+<ul class="simple">
+<li><p>The state dimension must be 7 (typically <em>pos</em>, <em>vel</em> and <em>mass</em>, but not necessarily)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters used in the dynamics must include at least and in this order: hy.par[0] -&gt; <span class="math notranslate nohighlight">\(T\)</span>, hy.par[1] -&gt; <span class="math notranslate nohighlight">\(i_x\)</span>, hy.par[2] -&gt; <span class="math notranslate nohighlight">\(i_y\)</span>, hy.par[3] -&gt; <span class="math notranslate nohighlight">\(i_z\)</span></p></li>
+<li><p>The variational state dimension must be 84 (corresponding to 7 equations for 7 state and 4 parameters 7 + 7<em>7 + 7</em>4). The four parameters must be hy.par[0] .. hy.par[3].</p></li>
+</ul>
+<p>In <code class="docutils literal notranslate"><span class="pre">Pykep</span></code> several dynamics are already written which satisfy the above requirements: <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_kep</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_eq</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> and thus can
+be readily used.</p>
+<p>In the following we will, instead, explicitly define a ZOH dynamics for the cr3bp, with the understanding that we could have insted used directly <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The symbolic variables.</span>
+<span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
+
+<span class="c1"># Naming the system controls</span>
+<span class="n">T_norm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">i_x</span><span class="p">,</span> <span class="n">i_y</span><span class="p">,</span> <span class="n">i_z</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Naming the system parametes</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># 1/veff</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="c1"># Distances to the bodies.</span>
+<span class="n">r_1</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hy</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mu</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="nb">pow</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="nb">pow</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)]))</span>
+<span class="n">r_2</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hy</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">),</span> <span class="nb">pow</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="nb">pow</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)]))</span>
+
+<span class="c1"># The Equations of Motion.</span>
+<span class="n">xdot</span> <span class="o">=</span> <span class="n">vx</span>
+<span class="n">ydot</span> <span class="o">=</span> <span class="n">vy</span>
+<span class="n">zdot</span> <span class="o">=</span> <span class="n">vz</span>
+<span class="n">vxdot</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mf">2.0</span> <span class="o">*</span> <span class="n">vy</span>
+    <span class="o">+</span> <span class="n">x</span>
+    <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="o">-</span> <span class="n">mu</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">mu</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">T_norm</span> <span class="o">*</span> <span class="n">i_x</span> <span class="o">/</span> <span class="n">m</span>
+<span class="p">)</span>
+<span class="n">vydot</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="o">-</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">vx</span>
+    <span class="o">+</span> <span class="n">y</span>
+    <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="o">-</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">T_norm</span> <span class="o">*</span> <span class="n">i_y</span> <span class="o">/</span> <span class="n">m</span>
+<span class="p">)</span>
+<span class="n">vzdot</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">z</span> <span class="o">/</span> <span class="nb">pow</span><span class="p">(</span><span class="n">r_2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_norm</span> <span class="o">*</span> <span class="n">i_z</span> <span class="o">/</span> <span class="n">m</span>
+<span class="n">mdot</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="o">-</span><span class="n">c</span> <span class="o">*</span> <span class="n">T_norm</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">m</span> <span class="o">/</span> <span class="mf">1e16</span><span class="p">)</span>
+<span class="p">)</span>  <span class="c1"># the added term regularizes the dynamics keeping it differentiable</span>
+
+<span class="n">dyn</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xdot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ydot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">zdot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">vx</span><span class="p">,</span> <span class="n">vxdot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">vy</span><span class="p">,</span> <span class="n">vydot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">vz</span><span class="p">,</span> <span class="n">vzdot</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">mdot</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">ta_cr3bp</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">])</span>
+<span class="n">vsys</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">var_ode_sys</span><span class="p">(</span>
+    <span class="n">dyn</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+    <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ta_cr3bp_var</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span>
+    <span class="n">vsys</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span>
+    <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note how we wrote the usual CR3BP dynamics, adding some external thrust force and a corresponding (regularized) mass equation. To respect the ZOH requirements on the dynamics we reserved the first four parameters for the differetiable thrust description, and thus used <code class="docutils literal notranslate"><span class="pre">par[4]</span></code> and <code class="docutils literal notranslate"><span class="pre">par[5]</span></code> to store <span class="math notranslate nohighlight">\(I_{sp}g_0\)</span> and <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
+<p>Let us start simulating in this dynamics (always a good check) a periodic orbit in the Lyapunov family of the Earth-Moon system. First we define the exact problem parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01215058560962404</span>
+<span class="n">ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.5643551520142581e-02</span><span class="p">,</span> <span class="mf">9.2420772211102929e-27</span><span class="p">,</span> <span class="mf">1.3616512785913887e-31</span><span class="p">,</span> <span class="mf">2.6173746491479341e-12</span><span class="p">,</span> <span class="mf">5.2390814115699671e+00</span><span class="p">,</span> <span class="mf">5.3268092625591314e-30</span><span class="p">,</span> <span class="mi">1000</span><span class="o">/</span><span class="n">MASS</span><span class="p">])</span>
+<span class="n">period</span> <span class="o">=</span> <span class="mf">6.301205688481844</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">veff_nd</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span>
+<span class="n">ta_cr3bp_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">veff_nd</span>
+<span class="n">ta_cr3bp_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Perform the numerical integration</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">state</span><span class="p">[:]</span><span class="o">=</span><span class="n">ic</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># No thrust</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">propagate_grid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span><span class="mi">1000</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Confirm the orbit is indeed periodic and we did things correctly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" src="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" />
+</div>
+</div>
+<p>We now select two points along the orbit, which we will use as defining bits of our ZOH leg.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="o">-</span><span class="n">period</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">period</span><span class="o">/</span><span class="mi">5</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">pars</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># No thrust</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">tf</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">xf</span> <span class="o">=</span> <span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And we visualize them:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" src="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" />
+</div>
+</div>
+<p>We are ready to instantiate our ZOH leg:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate the leg</span>
+<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">nseg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nseg</span> <span class="c1"># no thrust</span>
+<span class="n">leg_cr3bp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_cr3bp</span><span class="p">,</span> <span class="n">ta_cr3bp_var</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The mismatch constraints are: &quot;</span><span class="p">,</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-6.147971021164267e-12, 1.0964562591198046e-12, -1.1129462728283778e-41, -5.471914588106586e-12, -5.950795411990839e-14, -1.9544960655786467e-41, 0.0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let us visualize the leg:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4c9fe87184e99765c864222d1d0f97f2fe0d7f47318f832e4cf89472aa16827c.png" src="../_images/4c9fe87184e99765c864222d1d0f97f2fe0d7f47318f832e4cf89472aa16827c.png" />
+</div>
+</div>
+<p>YAY! … feels like we have achieved something ….
+Let see what happens if we add some non-zero controls …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate the leg</span>
+<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">nseg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nseg</span> <span class="c1"># no thrust</span>
+<span class="n">leg_cr3bp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_cr3bp</span><span class="p">,</span> <span class="n">ta_cr3bp_var</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The mismatch constraints are: &quot;</span><span class="p">,</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-0.058580084853515124, 0.013280826692230963, -1.445633107896864e-31, 0.10283885953927548, 0.01952029699252633, -3.057188770013858e-32, -0.7360823374599823]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">)</span> 
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9f4470fb6794ddbf3c3aba4c229531d286ca52731379fc5b31b48c8c9f5f23e4.png" src="../_images/9f4470fb6794ddbf3c3aba4c229531d286ca52731379fc5b31b48c8c9f5f23e4.png" />
+</div>
+</div>
+<p>Makes sense ….</p>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="leg_sims_flanagan.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Sims-Flanagan trajectory leg</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="leg_zoh_ss.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Zero Order Hold - Solar Sail</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero Order Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-the-zero-hold-leg">1 - Test the zero hold leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

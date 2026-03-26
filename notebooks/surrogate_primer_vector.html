@@ -1,0 +1,907 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Surrogate Primer Vector &#8212; pykep 3.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=6a41c08d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/surrogate_primer_vector';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Primer Vector" href="primer_vector.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero Order Hold: point to point low thrust transfer</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/surrogate_primer_vector.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/surrogate_primer_vector.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/surrogate_primer_vector.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Surrogate Primer Vector</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Surrogate Primer Vector</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#but-is-it-true">But is it true?</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="surrogate-primer-vector">
+<h1>Surrogate Primer Vector<a class="headerlink" href="#surrogate-primer-vector" title="Link to this heading">#</a></h1>
+<p>In this notebook we extend the theory outlined in the notebook on the <a class="reference internal" href="primer_vector.html"><span class="std std-doc">primer vector</span></a> to the case where we are adding simultaneously two impulses
+to a trajectory where we can control one single existing impulse (as opposed to the original case where one adds only one impulse in a trajectory where two can be controlled).</p>
+<p>While the developments are similar, please note that the index <span class="math notranslate nohighlight">\(k\)</span> was before reserved to indicate the only node (of three, ijk) where no finite impulse was given. In this developments it indicates, instead, the only node (of three, ijk) where a finite impulse is given.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The developments as well as the test case used are taken from the work from Bauregard, Acciarini and Izzo <span id="id1">[<a class="reference internal" href="../bibliography.html#id14" title="Laurent Beauregard, Dario Izzo, and Giacomo Acciarini. Breaking traditions: introducing a surrogate Primer Vector in non Keplerian dynamics. arXiv preprint arXiv:2405.18903, 2024.">BIA24</a>]</span>.
+The developments are shown in details as they can be extended to more generic cases that use different dynamics and number of impulses. The user must in that case provide the state ransition matrices and DVs on a time grid as constructed below.</p>
+<p class="rubric" id="theory-and-notation">Theory and notation</p>
+<p>a) Consider the following definition of the State Transition Matrix, <span class="math notranslate nohighlight">\(\mathbf M_{fs}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+  \mathbf M_{fs} := \frac{\partial \mathbf x_{f}}{\partial \mathbf x_{s}}
+  \]</div>
+<p>Note how this definition does not depend on the dynamics. The STM allows to describe variations of the (final) state at <span class="math notranslate nohighlight">\(f\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[
+  \delta\mathbf x_f = \mathbf M_{fs} \delta \mathbf x_s
+  \]</div>
+<p>We also make use of the following definitions for the various blocks of the STM:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+  \mathbf M = \left[ 
+  \begin{array}{c|c} 
+    \mathbf M^{rr} &amp; \mathbf M^{rv} \\ 
+    \hline 
+    \mathbf M^{vr} &amp; \mathbf M^{vv} 
+  \end{array} 
+  \right] 
+  = \left[ 
+  \begin{array}{c|c} 
+    \mathbf M^{xr} &amp; \mathbf M^{xv} 
+  \end{array} 
+  \right] 
+  = \left[ 
+  \begin{array}{c} 
+    \mathbf M^{rx} \\
+    \hline 
+    \mathbf M^{vx} 
+  \end{array} 
+  \right] 
+  \end{split}\]</div>
+<hr class="docutils" />
+<p>b) Assume now to have a grid of <span class="math notranslate nohighlight">\(N\)</span> points along a multiple impulse trajectory and pick three indexes <span class="math notranslate nohighlight">\(i,j,k\)</span>.</p>
+<p>We ask the following question: what happens when we add three small <span class="math notranslate nohighlight">\(\delta\Delta V\)</span> at the selected nodes?</p>
+<p>To answer this question, we compute the variation of the final state due to intermidiate variations at the nodes using the STMs:</p>
+<div class="math notranslate nohighlight">
+\[
+\delta \mathbf x_f = \mathbf M_{fi}\delta\mathbf x_i + \mathbf M_{fj}\delta\mathbf x_j + \mathbf M_{fk}\delta\mathbf x_k
+\]</div>
+<p>which we set to zero, as we do not want the trajectory boundary cnstraints to change, only find a better <span class="math notranslate nohighlight">\(\Delta V\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf 0 = \mathbf M_{fi}\delta\mathbf x_i + \mathbf M_{fj}\delta\mathbf x_j + \mathbf M_{fk}\delta\mathbf x_k
+\]</div>
+<p>which becomes (multiplying by <span class="math notranslate nohighlight">\(\mathbf M_{kf}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf M_{ki}\delta\mathbf x_i + \mathbf M_{kj}\delta\mathbf x_j + \delta\mathbf x_k = \mathbf 0
+\]</div>
+<p>Note that, with respect to the derivations for the primer vector, we have now changed the reference node to <span class="math notranslate nohighlight">\(k\)</span> for convenience.</p>
+<hr class="docutils" />
+<p>c) The state variations <span class="math notranslate nohighlight">\(\delta\mathbf x\)</span> are, in our case, consequence of three <span class="math notranslate nohighlight">\(\delta\Delta \mathbf V\)</span>, so that the previous equations becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\mathbf M_i^{rv} \delta\Delta \mathbf V_i + \mathbf M_j^{rv} \delta\Delta \mathbf V_j = \mathbf 0\\
+\mathbf M_i^{vv} \delta\Delta \mathbf V_i + \mathbf M_j^{vv} \delta\Delta \mathbf V_j + \delta\Delta \mathbf V_k = \mathbf 0\\
+\end{align}
+\end{split}\]</div>
+<p>solving for <span class="math notranslate nohighlight">\(\delta\Delta \mathbf V_i\)</span> and <span class="math notranslate nohighlight">\(\delta\Delta \mathbf V_k\)</span> (as a function of <span class="math notranslate nohighlight">\(j\)</span> where one of the added impulses is present):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\delta\Delta \mathbf V_i &amp;=&amp; - (\mathbf M_i^{rv})^{-1}\mathbf M_j^{rv} \delta\Delta \mathbf V_j = \mathbf A_{ij}\delta\Delta \mathbf V_j\\
+\delta\Delta \mathbf V_k &amp;=&amp; - \big(\mathbf M_i^{vv}\mathbf A_{ij} + \mathbf M_j^{vv} \big)  \delta\Delta \mathbf V_j = \mathbf A_{kj}\delta\Delta \mathbf V_j\\
+\end{align}
+\end{split}\]</div>
+<p>The matrices <span class="math notranslate nohighlight">\(\mathbf A\)</span> are telling us how the three variations of impulsive velocity changes applied in (<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(k\)</span>) must be related for the overall trajectory to not change its boundary conditions (i.e. <span class="math notranslate nohighlight">\(\mathbf x_f = \mathbf 0\)</span>).</p>
+<p>Note here that we chose to use the index <span class="math notranslate nohighlight">\(j\)</span> as reference as we relate all others <span class="math notranslate nohighlight">\(\delta\Delta V\)</span> to <span class="math notranslate nohighlight">\(\delta\Delta V_j\)</span>. It convenient to keep the chosen index as the one where no finite impulse is present.</p>
+<hr class="docutils" />
+<p>d) So far the three indexes we picked (i.e. <span class="math notranslate nohighlight">\(i,j,k\)</span>) were equivalent, now we assume that in <span class="math notranslate nohighlight">\(i,j\)</span> no finite <span class="math notranslate nohighlight">\(\Delta V\)</span> is present. In <span class="math notranslate nohighlight">\(k\)</span>, instead, an additional <span class="math notranslate nohighlight">\(\Delta \mathbf V\)</span> will exist.</p>
+<p>The total magnitude of the <span class="math notranslate nohighlight">\(\Delta \mathbf V\)</span> can then be expressed by:</p>
+<div class="math notranslate nohighlight">
+\[
+J = \Delta V_{tot} = \underbrace{|\mathbf V_k + \delta\Delta \mathbf V_k |}_{\text{finite impulse}} + \underbrace{|\delta\Delta \mathbf V_i| + |\delta\Delta \mathbf V_j|}_{\text{infinitesimal}}
+\]</div>
+<p>and its first order variation:</p>
+<div class="math notranslate nohighlight">
+\[
+\delta J = \frac{\Delta\mathbf V_k}{|\Delta \mathbf V_k|}\cdot \delta\Delta \mathbf V_k + |\delta\Delta \mathbf V_i| + |\delta\Delta \mathbf V_j|
+\]</div>
+<hr class="docutils" />
+<p>e) The surrogate primer vector</p>
+<p>We introduce <span class="math notranslate nohighlight">\(\hat{\mathbf u} = \frac{\delta \Delta \mathbf V_j}{|\delta \Delta \mathbf V_j|}\)</span> as the unit vector along the direction
+of the infinitesimal <span class="math notranslate nohighlight">\(\delta \Delta V\)</span> added in our reference node <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p>Substituting and regrouping we have:</p>
+<div class="math notranslate nohighlight">
+\[
+\delta J = |\delta\Delta \mathbf V_j| \left(1 +\mathbf A_{kj}^T\frac{\Delta\mathbf V_k}{|\Delta \mathbf V_k|} \cdot \hat {\mathbf u}
+  + |\mathbf A_{ij}\hat {\mathbf u}|  \right)
+\]</div>
+<p>which we rewrite and rearrange as:</p>
+<div class="math notranslate nohighlight">
+\[
+\delta J = |\delta\Delta \mathbf V_j| \left(1 - (\mathbf b \cdot \hat {\mathbf u} - |\mathbf B\hat {\mathbf u}|  \right)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf B:=\mathbf A_{ij}\)</span>, <span class="math notranslate nohighlight">\(\mathbf b = -\mathbf A_{kj}^T\frac{\Delta\mathbf V_k}{|\Delta \mathbf V_k|}\)</span>.</p>
+<p>We now introduce the vectors:</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{\hat {\mathbf u}^* = \argmax_{|\hat {\mathbf u}|=1}\left(\mathbf b\cdot \hat {\mathbf u} - |\mathbf B\hat {\mathbf u}|\right)}
+\]</div>
+<p>and,</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{\tilde{\mathbf p} = (\mathbf b \cdot \hat {\mathbf u}^* - |\mathbf B\hat {\mathbf u}^*| ) \hat {\mathbf u}^*}
+\]</div>
+<p>which we call <strong>surrogate primer vector</strong>, since <span class="math notranslate nohighlight">\(\delta J = (1-|\tilde{\mathbf p}|) |\delta\Delta \mathbf V_j|\)</span> as in the
+classical case where the <strong>primer vector</strong> <span class="math notranslate nohighlight">\(\mathbf p\)</span> is introduced.</p>
+<p>From the expression of <span class="math notranslate nohighlight">\(\delta J\)</span> it appears clear that if we want to be able to decrease the overall <span class="math notranslate nohighlight">\(\Delta V\)</span> adding in <span class="math notranslate nohighlight">\(i,j\)</span> two
+impulses, it is necessary for the norm of the surrogate primer vector (computed in <span class="math notranslate nohighlight">\(i,j\)</span>) to be larger than 1.</p>
+</div>
+<p>Enough of that, let us start coding now …</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">legacy</span><span class="o">=</span><span class="s2">&quot;1.25&quot;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let us define a toy problem. In the Keplerian dynamics, we define the following trajectory</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem data</span>
+<span class="n">n_points</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">r0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">v0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">DVk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">DVk_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">DVk</span><span class="p">)</span>
+<span class="c1"># Impulse is applied at the end of the trajectory</span>
+<span class="n">idx_k</span> <span class="o">=</span> <span class="n">n_points</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">t_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since the grid is uniform, and the DV is aplied at the end, we can compute all STMs in a single propagation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">retval</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">propagate_lagrangian_grid</span><span class="p">([</span><span class="n">r0</span><span class="p">,</span> <span class="n">v0</span><span class="p">],</span> <span class="n">t_grid</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">stm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">stm_n0</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">retval</span><span class="p">]</span> <span class="c1"># Mn0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We may now loop over all possible positions for the indexes <span class="math notranslate nohighlight">\(i,j\)</span> and compute the <em>surrogate primer vector</em> at each point.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">norm_surrogate_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">idx_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_points</span><span class="p">):</span>
+    <span class="n">Mk0</span> <span class="o">=</span> <span class="n">stm_n0</span><span class="p">[</span><span class="n">idx_k</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">idx_i</span> <span class="o">==</span> <span class="n">idx_k</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">Mki</span> <span class="o">=</span> <span class="n">Mk0</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">stm_n0</span><span class="p">[</span><span class="n">idx_i</span><span class="p">])</span>  <span class="c1"># Mki = Mk0*M0i</span>
+    <span class="k">for</span> <span class="n">idx_j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">idx_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">idx_j</span> <span class="o">==</span> <span class="n">idx_k</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">Mkj</span> <span class="o">=</span> <span class="n">Mk0</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">stm_n0</span><span class="p">[</span><span class="n">idx_j</span><span class="p">])</span>  <span class="c1"># Mkj = Mk0*M0j</span>
+        <span class="n">norm_surrogate_p</span><span class="p">[</span><span class="n">idx_j</span><span class="p">,</span> <span class="n">idx_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+            <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">primer_vector_surrogate</span><span class="p">(</span><span class="n">DVk</span><span class="p">,</span> <span class="n">Mki</span><span class="p">,</span> <span class="n">Mkj</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">norm_surrogate_p</span><span class="p">[</span><span class="n">idx_i</span><span class="p">,</span> <span class="n">idx_j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Lets see what is its maximum value across all <span class="math notranslate nohighlight">\(i,j\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">norm_surrogate_p</span><span class="o">.</span><span class="n">argmax</span><span class="p">(),</span> <span class="n">norm_surrogate_p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;The maximum value of the surrogate primer is attained when infinitesimal impulses are added at:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t1: </span><span class="si">{</span><span class="n">t_grid</span><span class="p">[</span><span class="n">idx2</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">  and t2: </span><span class="si">{</span><span class="n">t_grid</span><span class="p">[</span><span class="n">idx1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Its norm is: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">norm_surrogate_p</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Larger then one! -&gt; Trajectory can be improved&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The maximum value of the surrogate primer is attained when infinitesimal impulses are added at:
+t1: 4.8727  and t2: 7.6937
+Its norm is: 2.7366
+Larger then one! -&gt; Trajectory can be improved
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let us visualize the computed surrogate vector:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">t_grid</span><span class="p">,</span> <span class="n">t_grid</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">norm_surrogate_p</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">norm_surrogate_p</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_grid</span><span class="p">,</span><span class="n">t_grid</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$t_1=t_2$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t_grid</span><span class="p">[</span><span class="n">idx2</span><span class="p">],</span> <span class="n">t_grid</span><span class="p">[</span><span class="n">idx1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Highest primer&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([],[],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;|p| = 1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f321a51c050&gt;
+</pre></div>
+</div>
+<img alt="../_images/c04d324e1afff12a114f9068b83d4996cb467179249107f8999b6cd2edc9e09d.png" src="../_images/c04d324e1afff12a114f9068b83d4996cb467179249107f8999b6cd2edc9e09d.png" />
+</div>
+</div>
+<p>Revealing all areas where adding two impulses would improve the trajectory leaving all boundary conditions unchanged.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="but-is-it-true">
+<h1>But is it true?<a class="headerlink" href="#but-is-it-true" title="Link to this heading">#</a></h1>
+<p>Where we check that the transfer can indeed be improved using three impulses, and reaching identical conditions (initial-final) as the ones of our original trajectory (and in the same transfer time)</p>
+<p>We thus build [on the fly] an optimization problem aimed at placing three impulses optimally between the initial and the end state.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf</span><span class="p">,</span> <span class="n">vf</span> <span class="o">=</span> <span class="n">retval</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">vfd</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vf</span><span class="p">,</span> <span class="n">DVk</span><span class="p">)]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">my_udp</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posvel0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">posvel0</span> <span class="o">=</span> <span class="n">posvel0</span>
+    <span class="c1"># x = [u1, v1, V1, u2, v2, V2, a1, a2, a3, a4]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">tofs</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">alpha2direct</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="c1"># Up to the first impulse</span>
+        <span class="n">r1</span><span class="p">,</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">propagate_lagrangian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posvel0</span><span class="p">,</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">stm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Add the first impulse</span>
+        <span class="n">DV1</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">uvV2cartesian</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">v1d</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">DV1</span><span class="p">)]</span>
+        <span class="c1"># Up to the second impulse</span>
+        <span class="n">r2</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">propagate_lagrangian</span><span class="p">([</span><span class="n">r1</span><span class="p">,</span> <span class="n">v1d</span><span class="p">],</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">stm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Add the second impulse</span>
+        <span class="n">DV2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">uvV2cartesian</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
+        <span class="n">v2d</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">DV2</span><span class="p">)]</span>
+        <span class="c1"># Up to the third impulse</span>
+        <span class="n">r3</span><span class="p">,</span> <span class="n">v3</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">propagate_lagrangian</span><span class="p">([</span><span class="n">r2</span><span class="p">,</span> <span class="n">v2d</span><span class="p">],</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">stm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Close with Lambert</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">lambert_problem</span><span class="p">(</span><span class="n">r3</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">DV3</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">v0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v3</span><span class="p">)]</span>
+        <span class="n">DV4</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vfd</span><span class="p">,</span> <span class="n">l</span><span class="o">.</span><span class="n">v1</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="c1"># Using the Multiple Impulsive Trajectory format (mit format)</span>
+        <span class="n">mit</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">posvel0</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="n">r1</span><span class="p">,</span> <span class="n">v1</span><span class="p">],</span> <span class="n">DV1</span><span class="p">,</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="n">r2</span><span class="p">,</span> <span class="n">v2</span><span class="p">],</span> <span class="n">DV2</span><span class="p">,</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="n">r3</span><span class="p">,</span> <span class="n">v3</span><span class="p">],</span> <span class="n">DV3</span><span class="p">,</span> <span class="n">tofs</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+            <span class="p">[[</span><span class="n">rf</span><span class="p">,</span> <span class="n">vf</span><span class="p">],</span> <span class="n">DV4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">mit</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">mit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">norm_DVs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">mit</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">norm_DVs</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lb</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">]</span>
+        <span class="n">ub</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>… and we solve it in multistart</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="c1"># We use CMA-ES </span>
+    <span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">cmaes</span><span class="p">(</span><span class="mi">4500</span><span class="p">,</span> <span class="n">force_bounds</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sigma0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+    <span class="c1"># But if you prefer a self adaptive version of differential evolution thats also OK.</span>
+    <span class="c1">#uda = pg.sade(2500, ftol=1e-4, xtol=1e-4)</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Multi-start:&quot;</span><span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+    <span class="n">best_x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span>  <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">best_f</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">best_x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The best solution found has a DV of </span><span class="si">{</span><span class="n">best_f</span><span class="si">:</span><span class="s2">.5e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best_x</span><span class="p">,</span> <span class="n">best_f</span>
+
+<span class="n">udp</span> <span class="o">=</span> <span class="n">my_udp</span><span class="p">([</span><span class="n">r0</span><span class="p">,</span><span class="n">v0</span><span class="p">])</span>
+<span class="n">best_x</span><span class="p">,</span> <span class="n">best_f</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multi-start:
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.3312983401416194
+The best solution found has a DV of 3.31298e-01
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now plot the trajectory found as a Multiple Impulsive Trajectory (mit).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the axis</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="c1"># Adding the central body</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_sun</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;central body&quot;</span><span class="p">)</span>
+<span class="c1"># Plotting the original trajectory (mono-impulsive)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">retval</span><span class="p">],</span> <span class="p">[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">retval</span><span class="p">],</span> <span class="p">[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">retval</span><span class="p">],</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">Delta V = </span><span class="si">{</span><span class="n">DVk_norm</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">$ (1 impulse)&#39;</span><span class="p">)</span>
+<span class="c1"># Plotting the mit</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_mit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">udp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">best_x</span><span class="p">),</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">c_segments</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;coral&#39;</span><span class="p">],</span><span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Makin the plot prettier</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
+<span class="c1"># access legend objects automatically created from data</span>
+<span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+<span class="n">line</span> <span class="o">=</span> <span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">Delta V = </span><span class="si">{</span><span class="n">best_f</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">$ (3 impulses)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;coral&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-.&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="o">+</span><span class="p">[</span><span class="n">line</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5c61ea9c80f4cc5e5c4c127289d7892eb2f8d3f1bff29ad6e7a55bdf5ed1760c.png" src="../_images/5c61ea9c80f4cc5e5c4c127289d7892eb2f8d3f1bff29ad6e7a55bdf5ed1760c.png" />
+</div>
+</div>
+<p>The <strong>surrogate primer vector</strong> correctly had us try to add impulses and, in this case, halved the needed <span class="math notranslate nohighlight">\(\Delta V\)</span>!</p>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="primer_vector.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Primer Vector</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Surrogate Primer Vector</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#but-is-it-true">But is it true?</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo and Francesco Biscani
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, 2024, Dario Izzo and Francesco Biscani.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
