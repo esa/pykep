@@ -1,3 +1,0 @@
-INSTALL(FILES __init__.py DESTINATION ${PYKEP_INSTALL_PATH}/orbit_plots)
-INSTALL(FILES _plots.py DESTINATION ${PYKEP_INSTALL_PATH}/orbit_plots)
-
