@@ -42,9 +42,5 @@ cmake --build . --target=install --config=Release -- -j 2
 cd /
 python -c "import pykep.test; pykep.test.run_test_suite()"
 
-# Build the documentation.
-cd "${GITHUB_WORKSPACE}/doc"
-make html linkcheck
-
 set +e
 set +x
