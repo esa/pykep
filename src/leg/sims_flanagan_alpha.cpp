@@ -1,11 +1,12 @@
-// Copyright 2023, 2024 Dario Izzo (dario.izzo@gmail.com), Francesco Biscani
-// (bluescarni@gmail.com)
+// Copyright (c) 2023-2026 Dario Izzo (dario.izzo@gmail.com)
+//                          Advanced Concepts Team, European Space Agency (ESA)
 //
 // This file is part of the kep3 library.
 //
-// This Source Code Form is subject to the terms of the Mozilla
-// Public License v. 2.0. If a copy of the MPL was not distributed
-// with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// SPDX-License-Identifier: MPL-2.0
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include <array>
 #include <fmt/base.h>
