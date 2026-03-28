@@ -1825,6 +1825,276 @@ Returns:
 )";
 }
 
+std::string get_zoh_kep_docstring()
+{
+  return R"(ta.get_zoh_kep(tol)
+
+Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold Keplerian low-thrust dynamics,
+retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_kep_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The Taylor adaptive propagator.
+
+Examples:
+  >>> import pykep as pk
+  >>> veff = 1.32
+  >>> controls = [0.022, 0.023, -0.21, 0.1]
+  >>> ta = pk.ta.get_zoh_kep(tol = 1e-16)
+  >>> ta.time = 0.
+  >>> ta.state[:] = [1.2, 0.1, 0.1, 0.1, 1., 0.123, 1.]
+  >>> ta.pars[:] = controls + [1. / veff]
+  >>> ta.propagate_until(1.23)
+)";
+}
+
+std::string get_zoh_kep_var_docstring()
+{
+  return R"(ta.get_zoh_kep_var(tol)
+
+Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
+Keplerian low-thrust dynamics, retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+.. note::
+   Variations are only considered with respect to initial conditions and the thrust parameters
+   :math:`[T, i_x, i_y, i_z]`.
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_kep_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the variational Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The variational Taylor adaptive propagator.
+
+Examples:
+  >>> import pykep as pk
+  >>> veff = 1.32
+  >>> controls = [0.022, 0.023, -0.21, 0.1]
+  >>> ta = pk.ta.get_zoh_kep_var(tol = 1e-16)
+  >>> ta.time = 0.
+  >>> ta.state[:7] = [1.2, 0.1, 0.1, 0.1, 1., 0.123, 1.]
+  >>> ta.pars[:] = controls + [1. / veff]
+  >>> ta.propagate_until(1.23)
+)";
+}
+
+std::string zoh_kep_dyn_docstring()
+{
+  return R"(zoh_kep_dyn()
+
+The dynamics in Cartesian coordinates of a constant-thrust mass-varying spacecraft
+orbiting a central body with unitary gravitational parameter :math:`\mu = 1`.
+
+The electric propulsion is characterized by its effective exhaust velocity
+:math:`v_{eff} = I_{sp} g_0`, with :math:`c = 1 / v_{eff}`.
+
+The state is: :math:`[x, y, z, v_x, v_y, v_z, m]`
+
+The system parameters are (in this order): :math:`[T, i_x, i_y, i_z] + [c]`.
+
+Returns:
+  :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]:
+  The dynamics in the form [(x, dx), ...]
+)";
+}
+
+std::string get_zoh_eq_docstring()
+{
+  return R"(ta.get_zoh_eq(tol)
+
+Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold equinoctial low-thrust dynamics,
+retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_eq_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The Taylor adaptive propagator.
+)";
+}
+
+std::string get_zoh_eq_var_docstring()
+{
+  return R"(ta.get_zoh_eq_var(tol)
+
+Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
+Equinoctial low-thrust dynamics, retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+.. note::
+   Variations are only considered with respect to initial conditions and the thrust parameters
+   :math:`[T, i_r, i_t, i_n]`.
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_eq_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the variational Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The variational Taylor adaptive propagator.
+)";
+}
+
+std::string zoh_eq_dyn_docstring()
+{
+  return R"(zoh_eq_dyn()
+
+The dynamics in equinoctial elements of a constant-thrust mass-varying spacecraft
+orbiting a central body with unitary gravitational parameter :math:`\mu = 1`.
+
+The electric propulsion is characterized by its effective exhaust velocity
+:math:`v_{eff} = I_{sp} g_0`, with :math:`c = 1 / v_{eff}`.
+
+The state is: :math:`[p, f, g, h, k, L, m]`
+
+The system parameters are (in this order): :math:`[T, i_r, i_t, i_n] + [c]`.
+
+Returns:
+  :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]:
+  The dynamics in the form [(x, dx), ...]
+)";
+}
+
+std::string get_zoh_cr3bp_docstring()
+{
+  return R"(ta.get_zoh_cr3bp(tol)
+
+Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold CR3BP low-thrust dynamics,
+retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_cr3bp_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The Taylor adaptive propagator.
+)";
+}
+
+std::string get_zoh_cr3bp_var_docstring()
+{
+  return R"(ta.get_zoh_cr3bp_var(tol)
+
+Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
+CR3BP low-thrust dynamics, retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+.. note::
+   Variations are only considered with respect to initial conditions and the thrust parameters
+   :math:`[T, i_x, i_y, i_z]`.
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_cr3bp_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the variational Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The variational Taylor adaptive propagator.
+)";
+}
+
+std::string zoh_cr3bp_dyn_docstring()
+{
+  return R"(zoh_cr3bp_dyn()
+
+The dynamics of a fixed-thrust mass-varying spacecraft in the circular restricted
+three-body problem (CR3BP), with thrust fixed in the rotating frame.
+
+The state is: :math:`[x, y, z, v_x, v_y, v_z, m]`
+
+The system parameters are (in this order): :math:`[T, i_x, i_y, i_z] + [c, \mu]`.
+
+Returns:
+  :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]:
+  The dynamics in the form [(x, dx), ...]
+)";
+}
+
+std::string get_zoh_ss_docstring()
+{
+  return R"(ta.get_zoh_ss(tol)
+
+Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold solar-sail dynamics,
+retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_ss_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The Taylor adaptive propagator.
+)";
+}
+
+std::string get_zoh_ss_var_docstring()
+{
+  return R"(ta.get_zoh_ss_var(tol)
+
+Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
+solar-sail dynamics, retrieving one from a global cache and making a copy.
+
+If the requested propagator was never created, this creates it; otherwise returns a copy of the cached
+version (avoiding re-jitting while keeping independent runtime state).
+
+.. note::
+   Variations are only considered with respect to initial conditions and the sail-angle parameters
+   :math:`[\alpha, \beta]`.
+
+The specific dynamics used is that returned by :func:`~pykep.ta.zoh_ss_dyn`.
+
+Args:
+  *tol* (:class:`float`): the tolerance of the variational Taylor adaptive propagator.
+
+Returns:
+  :class:`hy::taylor_adaptive`: The variational Taylor adaptive propagator.
+)";
+}
+
+std::string zoh_ss_dyn_docstring()
+{
+  return R"(zoh_ss_dyn()
+
+The dynamics in Cartesian coordinates of a solar-sail spacecraft around a central body
+with unitary gravitational parameter :math:`\mu = 1`.
+
+The state is: :math:`[x, y, z, v_x, v_y, v_z]`
+
+The system parameters are (in this order): :math:`[\alpha, \beta] + [c]`.
+
+Returns:
+  :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]:
+  The dynamics in the form [(x, dx), ...]
+)";
+}
+
 std::string get_bcp_docstring()
 {
     return R"(ta.get_bcp(tol)
