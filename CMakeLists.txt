@@ -140,7 +140,6 @@ set(kep3_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/epoch.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/planet.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lambert_problem.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/zero_hold_kep_problem.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/linalg.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/udpla/keplerian.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/udpla/jpl_lp.cpp"

@@ -36,7 +36,6 @@
 #include <kep3/ta/zero_hold_kep.hpp>
 #include <kep3/udpla/jpl_lp.hpp>
 #include <kep3/udpla/keplerian.hpp>
-#include <kep3/zero_hold_kep_problem.hpp>
 
 #include <pybind11/chrono.h>
 #include <pybind11/detail/common.h>
@@ -630,79 +629,6 @@ PYBIND11_MODULE(core, m) // NOLINT
         }
         , py::arg("rv") = std::array<std::array<double, 3>, 2>{{{1, 0, 0}, {0, 1, 0}}}, py::arg("tofs") = std::vector<double>{kep3::pi / 2,},
         py::arg("mu") = 1, py::arg("stm") = false, pykep::propagate_lagrangian_grid_docstring().c_str());
-
-    // Exposing the zero_hold_kep problem class
-    py::class_<kep3::zero_hold_kep_problem> zero_hold_kep_problem(m, "zero_hold_kep_problem",
-                                                                  pykep::zero_hold_kep_problem_docstring().c_str());
-    zero_hold_kep_problem
-        .def(py::init<double, double, double>(), py::arg("mu") = 1., py::arg("veff") = 1., py::arg("tol") = 1e-16)
-        // repr().
-        .def("__repr__", &pykep::ostream_repr<kep3::zero_hold_kep_problem>)
-        // Copy and deepcopy.
-        .def("__copy__", &pykep::generic_copy_wrapper<kep3::zero_hold_kep_problem>)
-        .def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::zero_hold_kep_problem>)
-        // Pickle support.
-        .def(py::pickle(&pykep::pickle_getstate_wrapper<kep3::zero_hold_kep_problem>,
-                        &pykep::pickle_setstate_wrapper<kep3::zero_hold_kep_problem>))
-        .def_property_readonly("mu", &kep3::zero_hold_kep_problem::get_mu, "The central body gravity parameter.")
-        .def_property_readonly("veff", &kep3::zero_hold_kep_problem::get_veff, "The effective velocity (Isp g0)")
-        .def_property_readonly("tol", &kep3::zero_hold_kep_problem::get_tol, "The Taylor integrator tolerance.")
-        // The actual call to propagators. (we do not here care about copies and allocations as this is 20 times slower
-        // than propagate lagrangian already on c++ side).
-        .def("propagate", &kep3::zero_hold_kep_problem::propagate, py::arg("rvm_state"), py::arg("thrust"),
-             py::arg("tof"), pykep::zero_hold_kep_problem_propagate_docstring().c_str())
-        .def(
-            "propagate_var",
-            [](kep3::zero_hold_kep_problem &sp, const std::array<double, 7> &rvm_state, std::array<double, 3> thrust,
-               double tof) {
-                auto sp_retval = sp.propagate_var(rvm_state, thrust, tof);
-                // Lets transfer ownership of dxdx to python (not sure this is actually needed to
-                // get an efficient return value ... maybe its overkill here). It surely avoid one more copy /
-                // allocation of 49+21 values, but in the overall algorithm maybe irrelevant.
-                const std::array<double, 49> &dxdx = std::get<1>(sp_retval);
-
-                // We create a capsule for the py::array_t to manage ownership change.
-                auto vec_ptr = std::make_unique<std::array<double, 49>>(dxdx);
-
-                py::capsule vec_caps(vec_ptr.get(), [](void *ptr) {
-                    const std::unique_ptr<std::array<double, 49>> vptr(static_cast<std::array<double, 49> *>(ptr));
-                });
-
-                // NOTE: at this point, the capsule has been created successfully (including
-                // the registration of the destructor). We can thus release ownership from vec_ptr,
-                // as now the capsule is responsible for destroying its contents. If the capsule constructor
-                // throws, the destructor function is not registered/invoked, and the destructor
-                // of vec_ptr will take care of cleaning up.
-                auto *ptr = vec_ptr.release();
-
-                auto computed_dxdx = py::array_t<double>(
-                    py::array::ShapeContainer{static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(7)}, // shape
-                    ptr->data(), std::move(vec_caps));
-
-                // Lets transfer ownership of dxdu to python
-                const std::array<double, 21> &dxdu = std::get<2>(sp_retval);
-
-                // We create a capsule for the py::array_t to manage ownership change.
-                auto vec_ptr2 = std::make_unique<std::array<double, 21>>(dxdu);
-
-                py::capsule vec_caps2(vec_ptr2.get(), [](void *ptr) {
-                    const std::unique_ptr<std::array<double, 21>> vec_ptr2(static_cast<std::array<double, 21> *>(ptr));
-                });
-
-                // NOTE: at this point, the capsule has been created successfully (including
-                // the registration of the destructor). We can thus release ownership from vec_ptr,
-                // as now the capsule is responsible for destroying its contents. If the capsule constructor
-                // throws, the destructor function is not registered/invoked, and the destructor
-                // of vec_ptr will take care of cleaning up.
-                auto *ptr2 = vec_ptr2.release();
-
-                auto computed_dxdu = py::array_t<double>(
-                    py::array::ShapeContainer{static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(3)}, // shape
-                    ptr2->data(), std::move(vec_caps2));
-                return py::make_tuple(std::get<0>(sp_retval), computed_dxdx, computed_dxdu);
-            },
-            py::arg("rvm_state"), py::arg("thrust"), py::arg("tof"),
-            pykep::zero_hold_kep_problem_propagate_var_docstring().c_str());
 
     // Exposing fly-by routines
     m.def("fb_con",

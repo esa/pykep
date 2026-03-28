@@ -404,34 +404,6 @@ class propagate_test(_ut.TestCase):
         self.assertTrue(np.allclose(r, r_gt, atol=1e-13))
         self.assertTrue(np.allclose(v, v_gt, atol=1e-13))
 
-    def test_zero_hold_kep(self):
-        import pykep as pk
-        import numpy as np
-
-        sp = pk.zero_hold_kep_problem(mu=1.34)
-        r_gt, v_gt = pk.propagate_lagrangian(
-            rv=[[1.23, 0.12, -0.53], [0.0456, 1.0, 0.2347623]],
-            tof=7.32,
-            mu=1.34,
-            stm=False,
-        )
-        rvm = sp.propagate(
-            rvm_state=[1.23, 0.12, -0.53, 0.0456, 1.0, 0.2347623, 1.0],
-            thrust=[0.0, 0.0, 0.0],
-            tof=7.32,
-        )
-        self.assertTrue(np.allclose(rvm[:3], r_gt, atol=1e-13))
-        self.assertTrue(np.allclose(rvm[3:6], v_gt, atol=1e-13))
-
-        rvm, _, _ = sp.propagate_var(
-            rvm_state=[1.23, 0.12, -0.53, 0.0456, 1.0, 0.2347623, 100.0],
-            thrust=[1e-19, 0.0, 0.0],
-            tof=7.32,
-        )
-        self.assertTrue(np.allclose(rvm[:3], r_gt, atol=1e-13))
-        self.assertTrue(np.allclose(rvm[3:6], v_gt, atol=1e-13))
-
-
 class propagators_test(_ut.TestCase):
     def test_intermodule(self):
         import pykep as pk
