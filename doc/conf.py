@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pykep'
-copyright = '2023, 2024, Dario Izzo and Francesco Biscani'
-author = 'Dario Izzo and Francesco Biscani'
+copyright = 'Copyright (c) 2023-2026 Advanced Concepts Team, European Space Agency (ESA)'
+author = 'Dario Izzo'
 
 import pykep as pk
 release = pk.__version__

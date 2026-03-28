@@ -32,6 +32,10 @@
 #include <kep3/ta/kep.hpp>
 #include <kep3/ta/pontryagin_cartesian.hpp>
 #include <kep3/ta/pontryagin_equinoctial.hpp>
+#include <kep3/ta/zoh_cr3bp.hpp>
+#include <kep3/ta/zoh_eq.hpp>
+#include <kep3/ta/zoh_kep.hpp>
+#include <kep3/ta/zoh_ss.hpp>
 #include <kep3/udpla/jpl_lp.hpp>
 #include <kep3/udpla/keplerian.hpp>
 
@@ -407,6 +411,82 @@ PYBIND11_MODULE(core, m) // NOLINT
         },
         py::arg("tol"), pykep::get_kep_var_docstring().c_str());
     ta.def("kep_dyn", &kep3::ta::kep_dyn, pykep::kep_dyn_docstring().c_str());
+
+    // ZOH KEP
+    ta.def(
+        "get_zoh_kep",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_kep(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_kep_docstring().c_str());
+    ta.def(
+        "get_zoh_kep_var",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_kep_var(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_kep_var_docstring().c_str());
+    ta.def("zoh_kep_dyn", &kep3::ta::zoh_kep_dyn, pykep::zoh_kep_dyn_docstring().c_str());
+
+    // ZOH EQ
+    ta.def(
+        "get_zoh_eq",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_eq(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_eq_docstring().c_str());
+    ta.def(
+        "get_zoh_eq_var",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_eq_var(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_eq_var_docstring().c_str());
+    ta.def("zoh_eq_dyn", &kep3::ta::zoh_eq_dyn, pykep::zoh_eq_dyn_docstring().c_str());
+
+    // ZOH CR3BP
+    ta.def(
+        "get_zoh_cr3bp",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_cr3bp(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_cr3bp_docstring().c_str());
+    ta.def(
+        "get_zoh_cr3bp_var",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_cr3bp_var(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_cr3bp_var_docstring().c_str());
+    ta.def("zoh_cr3bp_dyn", &kep3::ta::zoh_cr3bp_dyn, pykep::zoh_cr3bp_dyn_docstring().c_str());
+
+    // ZOH SS
+    ta.def(
+        "get_zoh_ss",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_ss(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_ss_docstring().c_str());
+    ta.def(
+        "get_zoh_ss_var",
+        [](double tol) {
+            auto ta_cache = kep3::ta::get_ta_zoh_ss_var(tol);
+            heyoka::taylor_adaptive<double> ta(ta_cache);
+            return ta;
+        },
+        py::arg("tol"), pykep::get_zoh_ss_var_docstring().c_str());
+    ta.def("zoh_ss_dyn", &kep3::ta::zoh_ss_dyn, pykep::zoh_ss_dyn_docstring().c_str());
 
     // BCP
     ta.def(

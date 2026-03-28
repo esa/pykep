@@ -117,6 +117,18 @@ std::string get_bcp_docstring();
 std::string get_bcp_var_docstring();
 std::string bcp_dyn_docstring();
 // zero holds
+std::string get_zoh_kep_docstring();
+std::string get_zoh_kep_var_docstring();
+std::string zoh_kep_dyn_docstring();
+std::string get_zoh_eq_docstring();
+std::string get_zoh_eq_var_docstring();
+std::string zoh_eq_dyn_docstring();
+std::string get_zoh_cr3bp_docstring();
+std::string get_zoh_cr3bp_var_docstring();
+std::string zoh_cr3bp_dyn_docstring();
+std::string get_zoh_ss_docstring();
+std::string get_zoh_ss_var_docstring();
+std::string zoh_ss_dyn_docstring();
 // TPBVPs
 std::string get_pc_docstring();
 std::string get_pc_var_docstring();

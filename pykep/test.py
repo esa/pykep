@@ -9,6 +9,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import unittest as _ut
+from .test_ta import *
 from .test_trajopt import *
 from .test_leg_sims_flanagan import *
 from .test_leg_zoh import *
@@ -404,44 +405,6 @@ class propagate_test(_ut.TestCase):
         self.assertTrue(np.allclose(r, r_gt, atol=1e-13))
         self.assertTrue(np.allclose(v, v_gt, atol=1e-13))
 
-class propagators_test(_ut.TestCase):
-    def test_intermodule(self):
-        import pykep as pk
-        _ = pk.ta.get_bcp(tol=1e-16)
-        
-    def test_zoh_ss(self):
-        import pykep as pk
-        # We get the Taylor adaptive integrator for the simple sail (zero-hold) dynamics
-        ta = pk.ta.get_zoh_ss(tol=1e-16)
-        # We define our units
-        MU = 139348062043.343e9  # this is the MU of the ALTAIRA star
-        L = 149597870.691e3  # this is the reference radius (1AU) where th Altaira flux is given
-        V = np.sqrt(MU / L)
-        TIME = L / V
-        ACC = V / TIME
-        MASS = 500
-
-        # These are the sail physical characteristics
-        SAIL_C = 5.4026e-6  # in N/m^2
-        SAIL_A = 15000  # in m^2
-        SAIL_MASS = 500  # in kg
-        
-        # Set the integrator pars
-        c = (2 * SAIL_C * SAIL_A / SAIL_MASS) / ACC
-        ta.pars[2] = c
-        ta.pars[:2] = [np.arctan(1 / np.sqrt(2)), 0.0]
-
-        # Set the integrator
-        ic = [1.4959787069100000e+11 / L, 0.0000000000000000e+00 / L, 0.0000000000000000e+00 / L, 0.0000000000000000e+00 / V, 3.0520227081462453e+04 / V, 0.0000000000000000e+00 / V]
-        tof = 6.1595291581690468e+07 / TIME
-        ta.time = 0
-        ta.state[:] = ic
-        ta.propagate_until(tof)
-        
-        # Gound truth from independent code (from gtoc13)
-        gt = [1.0991008964199088e+11 / L, -1.0318907971048611e+11 / L, 1.2103937089378202e+09 / L, 2.0295741060391072e+04 / V, 2.2479218998905460e+04 / V, -5.0463494709976425e+02 / V]
-        self.assertTrue(np.allclose(gt, ta.state, rtol=1e-13))
-
 
 
 def run_test_suite():
@@ -461,7 +424,6 @@ def run_test_suite():
     suite.addTest(tl.loadTestsFromTestCase(gym_tests))
     suite.addTest(tl.loadTestsFromTestCase(encoding_tests))
     suite.addTest(tl.loadTestsFromTestCase(mit_tests))
-    suite.addTest(tl.loadTestsFromTestCase(propagators_test))
     suite.addTest(tl.loadTestsFromTestCase(trajopt_zoh_point2point_tests))
     suite.addTest(tl.loadTestsFromTestCase(trajopt_zoh_pl2pl_tests))
     

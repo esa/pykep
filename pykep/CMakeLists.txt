@@ -8,6 +8,7 @@ set(PYKEP_PYTHON_FILES
     _patch_epoch.py 
     _version.py 
     test.py 
+    test_ta.py 
     test_trajopt.py 
     test_utils.py 
     test_leg_sims_flanagan.py
