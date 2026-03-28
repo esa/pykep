@@ -117,12 +117,6 @@ std::string get_bcp_docstring();
 std::string get_bcp_var_docstring();
 std::string bcp_dyn_docstring();
 // zero holds
-std::string get_zero_hold_kep_docstring();
-std::string get_zero_hold_kep_var_docstring();
-std::string zero_hold_kep_dyn_docstring();
-std::string get_zero_hold_cr3bp_docstring();
-std::string get_zero_hold_cr3bp_var_docstring();
-std::string zero_hold_cr3bp_dyn_docstring();
 // TPBVPs
 std::string get_pc_docstring();
 std::string get_pc_var_docstring();
@@ -178,37 +172,6 @@ std::string leg_sf_nseg_bck_docstring();
 // Alpha
 std::string leg_sf_alpha_docstring();
 std::string leg_sf_talphas_docstring();
-
-// LEG
-// Sims Flanagan High-Fidelity
-std::string leg_sf_hf_docstring();
-std::string leg_sf_hf_rvs_docstring();
-std::string leg_sf_hf_ms_docstring();
-std::string leg_sf_hf_rvms_docstring();
-std::string leg_sf_hf_throttles_docstring();
-std::string leg_sf_hf_rvf_docstring();
-std::string leg_sf_hf_mf_docstring();
-std::string leg_sf_hf_rvmf_docstring();
-std::string leg_sf_hf_tof_docstring();
-std::string leg_sf_hf_max_thrust_docstring();
-std::string leg_sf_hf_veff_docstring();
-std::string leg_sf_hf_isp_docstring();
-std::string leg_sf_hf_mu_docstring();
-std::string leg_sf_hf_cut_docstring();
-std::string leg_sf_hf_tol_docstring();
-std::string leg_sf_hf_mc_docstring();
-std::string leg_sf_hf_tc_docstring();
-std::string leg_sf_hf_mc_grad_docstring();
-std::string leg_sf_hf_tc_grad_docstring();
-std::string leg_sf_hf_get_state_history_docstring();
-std::string leg_sf_hf_nseg_docstring();
-std::string leg_sf_hf_nseg_fwd_docstring();
-std::string leg_sf_hf_nseg_bck_docstring();
-std::string leg_sf_hf_tas_docstring();
-std::string leg_sf_hf_tas_var_docstring();
-// Alpha
-std::string leg_sf_hf_alpha_docstring();
-std::string leg_sf_hf_talphas_docstring();
 
 
 } // namespace pykep
