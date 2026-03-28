@@ -159,8 +159,6 @@ set(kep3_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/kep.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/cr3bp.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/bcp.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/zero_hold_kep.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/zero_hold_cr3bp.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/pontryagin_cartesian.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ta/pontryagin_equinoctial.cpp"
 )

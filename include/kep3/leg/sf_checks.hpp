@@ -14,7 +14,7 @@
 #include <kep3/detail/visibility.hpp>
 #include <vector>
 
-// These checks are used for the low- and high-fidelity legs (in sims_flanagan.cpp and sims_flanagan_hf.cpp)
+// These checks are used by the sims_flanagan legs (sims_flanagan.cpp and sims_flanagan_alpha.cpp)
 namespace kep3::leg {
 
 kep3_DLL_PUBLIC void _check_tof(double tof);

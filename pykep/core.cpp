@@ -32,8 +32,6 @@
 #include <kep3/ta/kep.hpp>
 #include <kep3/ta/pontryagin_cartesian.hpp>
 #include <kep3/ta/pontryagin_equinoctial.hpp>
-#include <kep3/ta/zero_hold_cr3bp.hpp>
-#include <kep3/ta/zero_hold_kep.hpp>
 #include <kep3/udpla/jpl_lp.hpp>
 #include <kep3/udpla/keplerian.hpp>
 
@@ -493,44 +491,6 @@ PYBIND11_MODULE(core, m) // NOLINT
     ta.def("get_pc_u_cfunc", &kep3::ta::get_pc_u_cfunc, pykep::get_pc_u_cfunc_docstring().c_str());
     ta.def("get_pc_i_vers_cfunc", &kep3::ta::get_pc_i_vers_cfunc, pykep::get_pc_i_vers_cfunc_docstring().c_str());
     ta.def("get_pc_dyn_cfunc", &kep3::ta::get_pc_dyn_cfunc, pykep::get_pc_dyn_cfunc_docstring().c_str());
-
-    // zero_hold_kep
-    ta.def(
-        "get_zero_hold_kep",
-        [](double tol) {
-            auto ta_cache = kep3::ta::get_ta_zero_hold_kep(tol);
-            heyoka::taylor_adaptive<double> ta(ta_cache);
-            return ta;
-        },
-        py::arg("tol"), pykep::get_zero_hold_kep_docstring().c_str());
-    ta.def(
-        "get_zero_hold_kep_var",
-        [](double tol) {
-            auto ta_cache = kep3::ta::get_ta_zero_hold_kep_var(tol);
-            heyoka::taylor_adaptive<double> ta(ta_cache);
-            return ta;
-        },
-        py::arg("tol"), pykep::get_zero_hold_kep_var_docstring().c_str());
-    ta.def("zero_hold_kep_dyn", &kep3::ta::zero_hold_kep_dyn, pykep::zero_hold_kep_dyn_docstring().c_str());
-
-    // zero_hold_cr3bp
-    ta.def(
-        "get_zero_hold_cr3bp",
-        [](double tol) {
-            auto ta_cache = kep3::ta::get_ta_zero_hold_cr3bp(tol);
-            heyoka::taylor_adaptive<double> ta(ta_cache);
-            return ta;
-        },
-        py::arg("tol"), pykep::get_zero_hold_cr3bp_docstring().c_str());
-    ta.def(
-        "get_zero_hold_cr3bp_var",
-        [](double tol) {
-            auto ta_cache = kep3::ta::get_ta_zero_hold_cr3bp_var(tol);
-            heyoka::taylor_adaptive<double> ta(ta_cache);
-            return ta;
-        },
-        py::arg("tol"), pykep::get_zero_hold_cr3bp_var_docstring().c_str());
-    ta.def("zero_hold_cr3bp_dyn", &kep3::ta::zero_hold_cr3bp_dyn, pykep::zero_hold_cr3bp_dyn_docstring().c_str());
 
     // Pontryagin Equinoctial (TPBVP)
     ta.def(
