@@ -685,12 +685,12 @@ Fitness dimension: 40
 Analytical gradient (from variational equations + chain rule):
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.14 ms ± 23.1 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.12 ms ± 2.86 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 
 Numerical gradient (simple finite difference):
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>39.4 ms ± 72.8 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>39.4 ms ± 191 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)
 
 ✓ The analytical gradient is significantly faster!
 </pre></div>
@@ -766,11 +766,14 @@ Numerical gradient (simple finite difference):
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">xs</span><span class="o">=</span><span class="p">[]</span>
 <span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
 <span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="ne">---&gt; </span><span class="mi">11</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="k">if</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
 <span class="g g-Whitespace">     </span><span class="mi">13</span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
 <span class="ne">ValueError</span>: 
 <span class="ne">function</span>: evolve_version

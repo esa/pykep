@@ -58,11 +58,14 @@ best_idx = np.argmax(masses)
 [31m---------------------------------------------------------------------------[39m
 [31mValueError[39m                                Traceback (most recent call last)
 [36mCell[39m[36m [39m[32mIn[6][39m[32m, line 11[39m
-[32m      9[39m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m([32m10[39m):
+[32m      7[39m masses = []
+[32m      8[39m xs=[]
+[32m      9[39m [38;5;28;01mfor[39;00m i [38;5;28;01min[39;00m range([32m10[39m):
 [32m     10[39m     pop_g = pg.population(prob_g_uniform, [32m1[39m)
-[32m---> [39m[32m11[39m     pop_g = [43malgo[49m[43m.[49m[43mevolve[49m[43m([49m[43mpop_g[49m[43m)[49m
+[32m---> [39m[32m11[39m     pop_g = algo.evolve(pop_g)
 [32m     12[39m     [38;5;28;01mif[39;00m(prob_g_uniform.feasibility_f(pop_g.champion_f)):
-[32m     13[39m         [38;5;28mprint[39m([33m"[39m[33m.[39m[33m"[39m, end=[33m"[39m[33m"[39m)
+[32m     13[39m         print([33m"."[39m, end=[33m""[39m)
+[32m     14[39m         masses.append(pop_g.champion_x[[32m1[39m])
 
 [31mValueError[39m: 
 function: evolve_version

@@ -28,41 +28,27 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-pop = pg.population(prob, 1)
-pop = algo.evolve(pop)
-print(prob.feasibility_f(pop.champion_f))
-print("Final mass:", pop.champion_x[0] * MASS)
-print("Final tof:", pop.champion_x[4*nseg+1] * TIME * pk.SEC2DAY)
+ax, (grid, p) = udp4.plot_primer_vector(best_x_4)
 ------------------
 
 
 [31m---------------------------------------------------------------------------[39m
 [31mValueError[39m                                Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[8][39m[32m, line 2[39m
-[32m      1[39m pop = pg.population(prob, [32m1[39m)
-[32m----> [39m[32m2[39m pop = algo.evolve(pop)
-[32m      3[39m print(prob.feasibility_f(pop.champion_f))
-[32m      4[39m print([33m"Final mass:"[39m, pop.champion_x[[32m0[39m] * MASS)
-[32m      5[39m print([33m"Final tof:"[39m, pop.champion_x[[32m4[39m*nseg+[32m1[39m] * TIME * pk.SEC2DAY)
+[36mCell[39m[36m [39m[32mIn[11][39m[32m, line 1[39m
+[32m----> [39m[32m1[39m ax, (grid, p) = udp4.plot_primer_vector(best_x_4)
 
-[31mValueError[39m: 
-function: evolve_version
-where: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 603
-what: 
-An error occurred while loading the snopt7_c library at run-time. This is typically caused by one of the following
-reasons:
+[36mFile [39m[32m~/local/lib/python3.14/site-packages/pykep/trajopt/_pl2pl_N_impulses.py:277[39m, in [36mpl2pl_N_impulses.plot_primer_vector[39m[34m(self, x, N, ax)[39m
+[32m    274[39m posvels = [it[[32m0[39m] [38;5;28;01mfor[39;00m it [38;5;129;01min[39;00m decoded]
+[32m    276[39m [38;5;28;01mif[39;00m [38;5;28mmin[39m(norm_DVs) < [32m1e-3[39m:
+[32m--> [39m[32m277[39m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
+[32m    278[39m         [33m"[39m[33mImpulse magnitude too small, primer vector computation is not possible. Decrease the number of impulses.[39m[33m"[39m
+[32m    279[39m     )
+[32m    281[39m [38;5;66;03m# We create one grid per segment (e.g. part of the trajectory between two impulses)[39;00m
+[32m    282[39m [38;5;66;03m# (this is not guaranteed to have the requested size N, nor has uniform spacing, since all impulses[39;00m
+[32m    283[39m [38;5;66;03m# must belong to the grid points)[39;00m
+[32m    284[39m N = N + [38;5;28mlen[39m(
+[32m    285[39m     DVs
+[32m    286[39m )  [38;5;66;03m# heuristic to make sure we are close to the requested number of points[39;00m
 
-- The file declared to be the snopt7_c library, i.e. /Users/dario.izzo/opt/libsnopt7_c.dylib, is not a shared library containing the necessary C interface symbols (is the file path really pointing to
-a valid shared library?)
- - The library is found and it does contain the C interface symbols, but it needs linking to some additional libraries that are not found
-at run-time.
-
-We report the exact text of the original exception thrown:
-
- 
-function: evolve_version
-where: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 553
-what: The snopt7_c library path was constructed to be: /Users/dario.izzo/opt/libsnopt7_c.dylib and it does not appear to be a file
-
-
+[31mValueError[39m: Impulse magnitude too small, primer vector computation is not possible. Decrease the number of impulses.
 
