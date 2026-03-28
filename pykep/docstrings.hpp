@@ -151,11 +151,6 @@ std::string fb_con_docstring();
 std::string fb_dv_docstring();
 std::string fb_vout_docstring();
 
-// zero_hold_kep problem
-std::string zero_hold_kep_problem_docstring();
-std::string zero_hold_kep_problem_propagate_docstring();
-std::string zero_hold_kep_problem_propagate_var_docstring();
-
 // Propagators
 std::string propagate_lagrangian_docstring();
 std::string propagate_lagrangian_grid_docstring();
