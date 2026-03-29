@@ -3036,7 +3036,123 @@ Examples:
   >>  sf.throttles = [0.8]*3
   >>> sf.compute_tc_grad()
 )";
+
 };
+
+// ------------------- ZOH LEG DOCSTRINGS -------------------
+std::string leg_zoh_docstring() {
+  return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None)
+
+This class implements an interplanetary low-thrust transfer between a starting and final state in the augmented state-space :math:`[\mathbf{r}, \mathbf{v}, m]`. The transfer is modelled as a sequence of non-uniform segments along which a continuous and constant (zero-order hold) control acts. The time intervals defining these segments are also provided in `tgrid`.
+
+The formulation generalises :class:`pykep.leg.sims_flanagan` to arbitrary dynamics and non-uniform time grids. The dynamics are assumed to be zero-order hold and must be provided as compatible Taylor-adaptive integrators (`tas`).
+
+.. note::
+   The requirements on the `tas` passed are: a) the first four *heyoka* parameters must be :math:`T, i_x, i_y, i_z`, b) the system dimension must be 7 c) for the variational integrator, variations on the state and the four parameters only are considered. These requirements are all fulfilled by :class:`pykep.ta.zoh_kep`, :class:`pykep.ta.zoh_eq`, :class:`pykep.ta.zoh_cr3bp` and their variational versions.
+
+A transfer is feasible when the state mismatch equality constraints are satisfied. In the intended usage, throttle equality constraints are also enforced to ensure a proper thrust representation as :math:`T \hat{\mathbf{i}}` with :math:`|\hat{\mathbf{i}}| = 1`.
+
+.. math::
+   i_x^2 + i_y^2 + i_z^2 = 1, \quad \forall \text{segments}
+
+Examples:
+  >>> import numpy as np
+  >>> import heyoka as hy
+  >>> state0 = np.array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0])
+  >>> state1 = np.array([1.2, 0.1, 0.0, 0.0, 0.9, 0.1, 0.95])
+  >>> controls = np.array([0.022, 0.7, 0.7, 0.1, 0.025, -0.3, 0.8, 0.4, 0.015, -0.2, 0.8, 0.4])
+  >>> tgrid = np.array([0.0, 0.5, 1.0, 1.23])
+  >>> ta = pk.ta.get_zoh_eq(tol=1e-16)
+  >>> ta_var = pk.ta.get_zoh_eq_var(tol=1e-16)
+  >>> leg = pk.leg.zoh(state0, controls, state1, tgrid, cut=0.5, tas=(ta, ta_var))
+
+)";
+}
+
+std::string leg_zoh_state0_docstring() {
+  return "Initial state vector [r0, v0, m0] (length 7).";
+}
+std::string leg_zoh_controls_docstring() {
+  return "Control parameters [T, i_x, i_y, i_z] for each segment (length 4*nseg).";
+}
+std::string leg_zoh_state1_docstring() {
+  return "Final state vector [r1, v1, m1] (length 7).";
+}
+std::string leg_zoh_tgrid_docstring() {
+  return "Non-uniform time grid (length nseg+1).";
+}
+std::string leg_zoh_cut_docstring() {
+  return "Forward/backward segment split ratio (0 ≤ cut ≤ 1).";
+}
+std::string leg_zoh_max_steps_docstring() {
+  return "Maximum number of steps for the integrator (optional).";
+}
+std::string leg_zoh_nseg_docstring() {
+  return "The total number of segments.";
+}
+std::string leg_zoh_nseg_fwd_docstring() {
+  return "The total number of forward segments.";
+}
+std::string leg_zoh_nseg_bck_docstring() {
+  return "The total number of backward segments.";
+}
+std::string leg_zoh_mc_docstring() {
+  return R"(compute_mismatch_constraints()
+
+Propagates forward from *state0* and backward from *state1* and returns the 7-component
+state mismatch at the midpoint.
+
+Returns:
+  :class:`list`: Mismatch vector of length 7. All entries are zero for a feasible transfer.
+)";
+}
+std::string leg_zoh_tc_docstring() {
+  return R"(compute_throttle_constraints()
+
+Computes the throttle unit-norm constraints :math:`i_x^2 + i_y^2 + i_z^2 - 1` for every segment.
+
+Returns:
+  :class:`list`: Constraint values of length nseg. All entries are zero when the direction vector is unit-norm on every segment.
+)";
+}
+std::string leg_zoh_mc_grad_docstring() {
+  return R"(compute_mc_grad()
+
+Computes the gradients of the mismatch constraints. Indicating the initial augmented state with :math:`\mathbf x_s = [\mathbf r_s, \mathbf v_s, m_s]`, the final augmented state with :math:`\mathbf x_f = [\mathbf r_f, \mathbf v_f, m_f]`, the time grid as :math:`T_{grid}` and the introducing the control vector :math:`\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, \ldots]`, this method computes the following gradients:
+
+.. math::
+   
+   \frac{\partial \mathbf {mc}}{\partial \mathbf x_s}  \rightarrow (7\times7)
+
+.. math::
+   
+   \frac{\partial \mathbf {mc}}{\partial \mathbf x_f}  \rightarrow (7\times7)
+
+.. math::
+   
+   \frac{\partial \mathbf {mc}}{\partial \mathbf u}  \rightarrow (7\times(4\mathbf{nseg}))
+
+.. math::
+   
+   \frac{\partial \mathbf {mc}}{\partial \mathbf T_{grid}}  \rightarrow (7\times(\mathbf{nseg} + 1))
+
+Returns:
+  :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]: The four gradients. Sizes will be (7,7), (7,7), (7,4nseg), and (7,nseg+1).
+)";
+}
+std::string leg_zoh_tc_grad_docstring() {
+  return R"(compute_tc_grad()
+
+Computes the gradients of the throttle constraints. Introducing the control vector as :math:`\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, ...]`, this method computes the following gradient:
+
+.. math::
+   
+   \frac{\partial \mathbf {tc}}{\partial \mathbf u} \rightarrow (\mathbf{nseg} \times 4\mathbf{nseg})
+
+Returns:
+  :class:`tuple` [:class:`numpy.ndarray`]: The gradient. Size will be (nseg,4nseg).
+)";
+}
 
 std::string fb_con_docstring()
 {

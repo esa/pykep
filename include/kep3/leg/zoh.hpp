@@ -41,8 +41,10 @@ namespace kep3::leg
  * T * hat{i} with |hat{i}| = 1.
  *
  */
+
 class kep3_DLL_PUBLIC zoh
 {
+
 public:
     // Default Constructor.
     zoh() = default;
@@ -91,6 +93,19 @@ public:
     // Compute throttle constraint gradients.
     // Returns a flattened row-major matrix with shape nseg x (4 * nseg).
     [[nodiscard]] std::vector<double> compute_tc_grad() const;
+
+    /**
+     * Returns state histories sampled along each ZOH segment, for both the forward and backward propagation parts of
+     * the leg. The sampling is performed by propagating the nominal integrator on a uniformly-spaced grid of N points
+     * within each segment.
+     *
+     * @param N Number of sampling points per segment (including endpoints). Default is 2.
+     * @return A pair of vectors: (state_fwd, state_bck). Each is a vector of vectors of std::array<double,7> (shape N x
+     * 7 per segment).
+     * @note This method modifies the internal state of the nominal integrator.
+     */
+    std::pair<std::vector<std::vector<std::array<double, 7>>>, std::vector<std::vector<std::array<double, 7>>>>
+    get_state_info(unsigned N = 2) const;
 
 private:
     void update_nseg();

@@ -11,7 +11,6 @@
 #ifndef PYKEP_DOCSTRINGS_HPP
 #define PYKEP_DOCSTRINGS_HPP
 
-#include "kep3/lambert_problem.hpp"
 #include <string>
 
 namespace pykep
@@ -177,6 +176,7 @@ std::string leg_sf_cut_docstring();
 std::string leg_sf_mc_docstring();
 std::string leg_sf_tc_docstring();
 std::string leg_sf_mc_grad_docstring();
+
 std::string leg_sf_tc_grad_docstring();
 std::string leg_sf_nseg_docstring();
 std::string leg_sf_nseg_fwd_docstring();
@@ -184,6 +184,21 @@ std::string leg_sf_nseg_bck_docstring();
 // Alpha
 std::string leg_sf_alpha_docstring();
 std::string leg_sf_talphas_docstring();
+// Zoh
+std::string leg_zoh_docstring();
+std::string leg_zoh_state0_docstring();
+std::string leg_zoh_controls_docstring();
+std::string leg_zoh_state1_docstring();
+std::string leg_zoh_tgrid_docstring();
+std::string leg_zoh_cut_docstring();
+std::string leg_zoh_max_steps_docstring();
+std::string leg_zoh_nseg_docstring();
+std::string leg_zoh_nseg_fwd_docstring();
+std::string leg_zoh_nseg_bck_docstring();
+std::string leg_zoh_mc_docstring();
+std::string leg_zoh_tc_docstring();
+std::string leg_zoh_mc_grad_docstring();
+std::string leg_zoh_tc_grad_docstring();
 
 
 } // namespace pykep
