@@ -17,6 +17,7 @@
 #include <kep3/planet.hpp>
 #include <kep3/ta/zoh_kep.hpp>
 #include <kep3/udpla/jpl_lp.hpp>
+#include <kep3/detail/s11n.hpp>
 
 #include "catch.hpp"
 #include "test_helpers.hpp"
@@ -212,4 +213,29 @@ TEST_CASE("get_state_info")
     for (size_t i = 0; i < 7; ++i) {
         REQUIRE(std::abs(mismatch[i] - constraint[i]) < 1e-8);
     }
+}
+
+TEST_CASE("serialization")
+{
+    // Create a reference zoh leg
+    auto data = make_reference_case();
+    kep3::leg::zoh zoh1{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta};
+
+    // Store the string representation
+    std::stringstream ss;
+    auto before = boost::lexical_cast<std::string>(zoh1);
+    // Serialize
+    {
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << zoh1;
+    }
+    // Deserialize
+    kep3::leg::zoh zoh2{};
+    {
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> zoh2;
+    }
+    auto after = boost::lexical_cast<std::string>(zoh2);
+    // Compare the string representations
+    REQUIRE(before == after);
 }
