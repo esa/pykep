@@ -953,13 +953,18 @@ PYBIND11_MODULE(core, m) // NOLINT
         "compute_tc_grad",
         [](const kep3::leg::zoh &leg) {
             const std::vector<double> tc_cpp = leg.compute_tc_grad();
+            // We create a capsule for the py::array_t to manage ownership change.
             auto tc_ptr = std::make_unique<std::vector<double>>(tc_cpp);
             py::capsule tc_caps(tc_ptr.get(), [](void *ptr) {
                 const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
             });
+            // NOTE: at this point, the capsules have been created successfully (including
+            // the registration of the destructor). We can thus release ownership from vec_ptr_xx,
+            // as now the capsules are responsible for destroying its contents.
+            auto *ptr_tc = tc_ptr.release();
             auto nseg = leg.get_nseg();
             auto tc_py = py::array_t<double>({static_cast<py::ssize_t>(nseg), static_cast<py::ssize_t>(4 * nseg)},
-                                             tc_ptr->data(), std::move(tc_caps));
+                                             ptr_tc->data(), std::move(tc_caps));
             return tc_py;
         },
         pykep::leg_zoh_tc_grad_docstring().c_str());
