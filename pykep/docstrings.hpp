@@ -199,6 +199,7 @@ std::string leg_zoh_mc_docstring();
 std::string leg_zoh_tc_docstring();
 std::string leg_zoh_mc_grad_docstring();
 std::string leg_zoh_tc_grad_docstring();
+std::string leg_zoh_get_state_info_docstring();
 
 
 } // namespace pykep

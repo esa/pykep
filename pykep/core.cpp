@@ -936,7 +936,6 @@ PYBIND11_MODULE(core, m) // NOLINT
             auto *ptr_du = du_ptr.release();
             auto *ptr_dtgrid = dtgrid_ptr.release();
 
-
             auto dx0_py = py::array_t<double>({7, 7}, ptr_dx0->data(), std::move(dx0_caps));
             auto dx1_py = py::array_t<double>({7, 7}, ptr_dx1->data(), std::move(dx1_caps));
             auto du_py = py::array_t<double>({static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(du.size() / 7)},
@@ -968,4 +967,53 @@ PYBIND11_MODULE(core, m) // NOLINT
             return tc_py;
         },
         pykep::leg_zoh_tc_grad_docstring().c_str());
+
+    // Expose get_state_info with array conversion
+    zoh.def(
+        "get_state_info",
+        [](const kep3::leg::zoh &leg, unsigned N) {
+            // Call the C++ method to get the state info nested structure
+            auto [fwd_cpp, bck_cpp] = leg.get_state_info(N);
+
+            // Helper lambda to flatten the nested vector<vector<array<double,7>>> to a contiguous vector<double>
+            auto flatten = [](const std::vector<std::vector<std::array<double, 7>>> &data) {
+                std::vector<double> flat;
+                // Reserve enough space for efficiency
+                if (!data.empty())
+                    flat.reserve(data.size() * data[0].size() * 7);
+                for (const auto &segment : data) {
+                    for (const auto &state : segment) {
+                        flat.insert(flat.end(), state.begin(), state.end());
+                    }
+                }
+                return flat;
+            };
+
+            // Flatten the forward and backward state info
+            auto fwd_flat = std::make_unique<std::vector<double>>(flatten(fwd_cpp));
+            auto bck_flat = std::make_unique<std::vector<double>>(flatten(bck_cpp));
+
+            // Get the number of segments for each direction
+            auto nseg_fwd = static_cast<py::ssize_t>(fwd_cpp.size());
+            auto nseg_bck = static_cast<py::ssize_t>(bck_cpp.size());
+
+            // Create capsules to manage memory ownership for numpy arrays
+            py::capsule fwd_caps(fwd_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+            py::capsule bck_caps(bck_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+
+            // Release ownership to the capsules
+            auto *ptr_fwd = fwd_flat.release();
+            auto *ptr_bck = bck_flat.release();
+
+            // Construct the numpy arrays with shape (nseg, N, 7)
+            py::array fwd_py({nseg_fwd, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(7)}, ptr_fwd->data(),
+                             fwd_caps);
+            py::array bck_py({nseg_bck, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(7)}, ptr_bck->data(),
+                             bck_caps);
+
+            // Return as a tuple (forward, backward)
+            return py::make_tuple(fwd_py, bck_py);
+        }, 
+        py::arg("N") = 100,
+        pykep::leg_zoh_get_state_info_docstring().c_str());
 }

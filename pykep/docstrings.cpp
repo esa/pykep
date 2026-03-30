@@ -968,7 +968,6 @@ std::string par2mee_doc()
 )";
 }
 
-
 std::string bielliptic_doc()
 {
     return R"(bielliptic(r1, r2, rb, mu)
@@ -1827,7 +1826,7 @@ Returns:
 
 std::string get_zoh_kep_docstring()
 {
-  return R"(ta.get_zoh_kep(tol)
+    return R"(ta.get_zoh_kep(tol)
 
 Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold Keplerian low-thrust dynamics,
 retrieving one from a global cache and making a copy.
@@ -1857,7 +1856,7 @@ Examples:
 
 std::string get_zoh_kep_var_docstring()
 {
-  return R"(ta.get_zoh_kep_var(tol)
+    return R"(ta.get_zoh_kep_var(tol)
 
 Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
 Keplerian low-thrust dynamics, retrieving one from a global cache and making a copy.
@@ -1891,7 +1890,7 @@ Examples:
 
 std::string zoh_kep_dyn_docstring()
 {
-  return R"(zoh_kep_dyn()
+    return R"(zoh_kep_dyn()
 
 The dynamics in Cartesian coordinates of a constant-thrust mass-varying spacecraft
 orbiting a central body with unitary gravitational parameter :math:`\mu = 1`.
@@ -1911,7 +1910,7 @@ Returns:
 
 std::string get_zoh_eq_docstring()
 {
-  return R"(ta.get_zoh_eq(tol)
+    return R"(ta.get_zoh_eq(tol)
 
 Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold equinoctial low-thrust dynamics,
 retrieving one from a global cache and making a copy.
@@ -1931,7 +1930,7 @@ Returns:
 
 std::string get_zoh_eq_var_docstring()
 {
-  return R"(ta.get_zoh_eq_var(tol)
+    return R"(ta.get_zoh_eq_var(tol)
 
 Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
 Equinoctial low-thrust dynamics, retrieving one from a global cache and making a copy.
@@ -1955,7 +1954,7 @@ Returns:
 
 std::string zoh_eq_dyn_docstring()
 {
-  return R"(zoh_eq_dyn()
+    return R"(zoh_eq_dyn()
 
 The dynamics in equinoctial elements of a constant-thrust mass-varying spacecraft
 orbiting a central body with unitary gravitational parameter :math:`\mu = 1`.
@@ -1975,7 +1974,7 @@ Returns:
 
 std::string get_zoh_cr3bp_docstring()
 {
-  return R"(ta.get_zoh_cr3bp(tol)
+    return R"(ta.get_zoh_cr3bp(tol)
 
 Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold CR3BP low-thrust dynamics,
 retrieving one from a global cache and making a copy.
@@ -1995,7 +1994,7 @@ Returns:
 
 std::string get_zoh_cr3bp_var_docstring()
 {
-  return R"(ta.get_zoh_cr3bp_var(tol)
+    return R"(ta.get_zoh_cr3bp_var(tol)
 
 Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
 CR3BP low-thrust dynamics, retrieving one from a global cache and making a copy.
@@ -2019,7 +2018,7 @@ Returns:
 
 std::string zoh_cr3bp_dyn_docstring()
 {
-  return R"(zoh_cr3bp_dyn()
+    return R"(zoh_cr3bp_dyn()
 
 The dynamics of a fixed-thrust mass-varying spacecraft in the circular restricted
 three-body problem (CR3BP), with thrust fixed in the rotating frame.
@@ -2036,7 +2035,7 @@ Returns:
 
 std::string get_zoh_ss_docstring()
 {
-  return R"(ta.get_zoh_ss(tol)
+    return R"(ta.get_zoh_ss(tol)
 
 Returns a Taylor adaptive propagator (Heyoka) for the zero-order-hold solar-sail dynamics,
 retrieving one from a global cache and making a copy.
@@ -2056,7 +2055,7 @@ Returns:
 
 std::string get_zoh_ss_var_docstring()
 {
-  return R"(ta.get_zoh_ss_var(tol)
+    return R"(ta.get_zoh_ss_var(tol)
 
 Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the zero-order-hold
 solar-sail dynamics, retrieving one from a global cache and making a copy.
@@ -2080,7 +2079,7 @@ Returns:
 
 std::string zoh_ss_dyn_docstring()
 {
-  return R"(zoh_ss_dyn()
+    return R"(zoh_ss_dyn()
 
 The dynamics in Cartesian coordinates of a solar-sail spacecraft around a central body
 with unitary gravitational parameter :math:`\mu = 1`.
@@ -2135,7 +2134,6 @@ Examples:
 )";
 }
 
-
 std::string get_bcp_var_docstring()
 {
     return R"(ta.get_bcp_var(tol:float)
@@ -2178,7 +2176,6 @@ Examples:
         ta.propagate_until(tof)
 )";
 }
-
 
 std::string bcp_dyn_docstring()
 {
@@ -2551,7 +2548,6 @@ Examples:
     )";
 }
 
-
 std::string get_peq_docstring()
 {
     return R"(ta.get_peq(tol, optimality)
@@ -2733,7 +2729,6 @@ Returns:
     :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]: The dynamics in the form [(x, dx), ...]
 )";
 }
-
 
 std::string propagate_lagrangian_docstring()
 {
@@ -3036,12 +3031,12 @@ Examples:
   >>  sf.throttles = [0.8]*3
   >>> sf.compute_tc_grad()
 )";
-
 };
 
 // ------------------- ZOH LEG DOCSTRINGS -------------------
-std::string leg_zoh_docstring() {
-  return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None)
+std::string leg_zoh_docstring()
+{
+    return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None)
 
 This class implements an interplanetary low-thrust transfer between a starting and final state in the augmented state-space :math:`[\mathbf{r}, \mathbf{v}, m]`. The transfer is modelled as a sequence of non-uniform segments along which a continuous and constant (zero-order hold) control acts. The time intervals defining these segments are also provided in `tgrid`.
 
@@ -3069,35 +3064,45 @@ Examples:
 )";
 }
 
-std::string leg_zoh_state0_docstring() {
-  return "Initial state vector [r0, v0, m0] (length 7).";
+std::string leg_zoh_state0_docstring()
+{
+    return "Initial state vector [r0, v0, m0] (length 7).";
 }
-std::string leg_zoh_controls_docstring() {
-  return "Control parameters [T, i_x, i_y, i_z] for each segment (length 4*nseg).";
+std::string leg_zoh_controls_docstring()
+{
+    return "Control parameters [T, i_x, i_y, i_z] for each segment (length 4*nseg).";
 }
-std::string leg_zoh_state1_docstring() {
-  return "Final state vector [r1, v1, m1] (length 7).";
+std::string leg_zoh_state1_docstring()
+{
+    return "Final state vector [r1, v1, m1] (length 7).";
 }
-std::string leg_zoh_tgrid_docstring() {
-  return "Non-uniform time grid (length nseg+1).";
+std::string leg_zoh_tgrid_docstring()
+{
+    return "Non-uniform time grid (length nseg+1).";
 }
-std::string leg_zoh_cut_docstring() {
-  return "Forward/backward segment split ratio (0 ≤ cut ≤ 1).";
+std::string leg_zoh_cut_docstring()
+{
+    return "Forward/backward segment split ratio (0 ≤ cut ≤ 1).";
 }
-std::string leg_zoh_max_steps_docstring() {
-  return "Maximum number of steps for the integrator (optional).";
+std::string leg_zoh_max_steps_docstring()
+{
+    return "Maximum number of steps for the integrator (optional).";
 }
-std::string leg_zoh_nseg_docstring() {
-  return "The total number of segments.";
+std::string leg_zoh_nseg_docstring()
+{
+    return "The total number of segments.";
 }
-std::string leg_zoh_nseg_fwd_docstring() {
-  return "The total number of forward segments.";
+std::string leg_zoh_nseg_fwd_docstring()
+{
+    return "The total number of forward segments.";
 }
-std::string leg_zoh_nseg_bck_docstring() {
-  return "The total number of backward segments.";
+std::string leg_zoh_nseg_bck_docstring()
+{
+    return "The total number of backward segments.";
 }
-std::string leg_zoh_mc_docstring() {
-  return R"(compute_mismatch_constraints()
+std::string leg_zoh_mc_docstring()
+{
+    return R"(compute_mismatch_constraints()
 
 Propagates forward from *state0* and backward from *state1* and returns the 7-component
 state mismatch at the midpoint.
@@ -3106,8 +3111,9 @@ Returns:
   :class:`list`: Mismatch vector of length 7. All entries are zero for a feasible transfer.
 )";
 }
-std::string leg_zoh_tc_docstring() {
-  return R"(compute_throttle_constraints()
+std::string leg_zoh_tc_docstring()
+{
+    return R"(compute_throttle_constraints()
 
 Computes the throttle unit-norm constraints :math:`i_x^2 + i_y^2 + i_z^2 - 1` for every segment.
 
@@ -3115,8 +3121,9 @@ Returns:
   :class:`list`: Constraint values of length nseg. All entries are zero when the direction vector is unit-norm on every segment.
 )";
 }
-std::string leg_zoh_mc_grad_docstring() {
-  return R"(compute_mc_grad()
+std::string leg_zoh_mc_grad_docstring()
+{
+    return R"(compute_mc_grad()
 
 Computes the gradients of the mismatch constraints. Indicating the initial augmented state with :math:`\mathbf x_s = [\mathbf r_s, \mathbf v_s, m_s]`, the final augmented state with :math:`\mathbf x_f = [\mathbf r_f, \mathbf v_f, m_f]`, the time grid as :math:`T_{grid}` and the introducing the control vector :math:`\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, \ldots]`, this method computes the following gradients:
 
@@ -3140,8 +3147,9 @@ Returns:
   :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]: The four gradients. Sizes will be (7,7), (7,7), (7,4nseg), and (7,nseg+1).
 )";
 }
-std::string leg_zoh_tc_grad_docstring() {
-  return R"(compute_tc_grad()
+std::string leg_zoh_tc_grad_docstring()
+{
+    return R"(compute_tc_grad()
 
 Computes the gradients of the throttle constraints. Introducing the control vector as :math:`\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, ...]`, this method computes the following gradient:
 
@@ -3152,6 +3160,51 @@ Computes the gradients of the throttle constraints. Introducing the control vect
 Returns:
   :class:`tuple` [:class:`numpy.ndarray`]: The gradient. Size will be (nseg,4nseg).
 )";
+}
+
+std::string leg_zoh_get_state_info_docstring()
+{
+    return R"(
+  This method returns state histories sampled along each ZOH segment, for both the forward and backward
+  propagation parts of the leg. The sampling is performed by calling :meth:`heyoka.taylor_adaptive.propagate_grid`
+  on a uniformly-spaced grid of *N* points within each segment.
+
+  Args:
+    *N* (:class:`int`): Number of sampling points per segment (including the segment endpoints). 
+    The default (*N=2*) returns only the segment endpoints.
+
+  Returns:
+    :class:`tuple`: ``(state_fwd, state_bck)`` where:
+
+      - ``state_fwd`` (:class:`list`): List of length ``nseg_fwd``. 
+      Each entry contains the sampled 7D state history over the corresponding forward segment (from ``tgrid[i]`` to ``tgrid[i+1]``).
+      
+      - ``state_bck`` (:class:`list`): List of length ``nseg_bck``. 
+      Each entry contains the sampled 7D state history over the corresponding backward segment (from ``tgrid[-1-i]`` to ``tgrid[-2-i]``).
+
+    .. note::
+       The backward propagation is carried out by integrating from the final time toward earlier times;
+       depending on the backend conventions, the returned grids may thus be time-reversed with respect
+       to a forward-time plot.
+
+    .. note::
+       This method uses the nominal integrator ``self.ta`` and overwrites its internal ``time``,
+       ``state`` and the first four parameters (``T, i_x, i_y, i_z``). If the integrator state
+       must be preserved, call this method on a dedicated copy.
+
+  Examples:
+    .. code-block:: python
+        
+      ax = pk.plot.make_3Daxis()
+      fwd, bck = leg.get_state_info(N=100)
+      for segment in fwd:
+        ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='blue')
+        ax.plot(segment[:,0], segment[:,1], segment[:,2], c='blue')
+      for segment in bck:
+        ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='darkorange')
+        ax.plot(segment[:,0], segment[:,1], segment[:,2], c='darkorange')
+      ax.view_init(90, -90)
+  ")";
 }
 
 std::string fb_con_docstring()

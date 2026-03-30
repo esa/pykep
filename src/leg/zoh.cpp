@@ -516,47 +516,47 @@ void zoh::sanity_checks() const
 std::pair<std::vector<std::vector<std::array<double, 7>>>, std::vector<std::vector<std::array<double, 7>>>>
 zoh::get_state_info(unsigned N) const
 {
-	// Forward segments
-	std::vector<std::vector<std::array<double, 7>>> state_fwd;
-	auto &ta = m_ta;
-	ta.set_time(m_tgrid.front());
-	std::copy(m_state0.begin(), m_state0.end(), ta.get_state_data());
-	for (unsigned i = 0u; i < m_nseg_fwd; ++i) {
-		std::copy(m_controls.begin() + 4 * i, m_controls.begin() + 4 * i + 4, ta.get_pars_data());
-		std::vector<std::array<double, 7>> segment_states;
-		// Uniform grid for this segment
-		double t0 = m_tgrid[i];
-		double t1 = m_tgrid[i + 1];
-		for (unsigned k = 0u; k < N; ++k) {
-			double t = t0 + (t1 - t0) * k / (N - 1);
-			propagate_until_impl(ta, t, m_max_steps);
-			std::array<double, 7> state;
-			std::copy(ta.get_state().begin(), ta.get_state().begin() + 7, state.begin());
-			segment_states.push_back(state);
-		}
-		state_fwd.push_back(segment_states);
-	}
+    // Forward segments
+    std::vector<std::vector<std::array<double, 7>>> state_fwd;
+    auto &ta = m_ta;
+    ta.set_time(m_tgrid.front());
+    std::copy(m_state0.begin(), m_state0.end(), ta.get_state_data());
+    for (unsigned i = 0u; i < m_nseg_fwd; ++i) {
+        std::copy(m_controls.begin() + 4 * i, m_controls.begin() + 4 * i + 4, ta.get_pars_data());
+        std::vector<std::array<double, 7>> segment_states;
+        // Uniform grid for this segment
+        double t0 = m_tgrid[i];
+        double t1 = m_tgrid[i + 1];
+        for (unsigned k = 0u; k < N; ++k) {
+            double t = t0 + (t1 - t0) * k / (N - 1);
+            propagate_until_impl(ta, t, m_max_steps);
+            std::array<double, 7> state;
+            std::copy(ta.get_state().begin(), ta.get_state().begin() + 7, state.begin());
+            segment_states.push_back(state);
+        }
+        state_fwd.push_back(segment_states);
+    }
 
-	// Backward segments
-	std::vector<std::vector<std::array<double, 7>>> state_bck;
-	ta.set_time(m_tgrid.back());
-	std::copy(m_state1.begin(), m_state1.end(), ta.get_state_data());
-	for (unsigned i = 0u; i < m_nseg_bck; ++i) {
-		auto control_idx = m_controls.size() - 4 * (i + 1);
-		std::copy(m_controls.data() + control_idx, m_controls.data() + control_idx + 4, ta.get_pars_data());
-		std::vector<std::array<double, 7>> segment_states;
-		double t0 = m_tgrid[m_tgrid.size() - 1 - i];
-		double t1 = m_tgrid[m_tgrid.size() - 2 - i];
-		for (unsigned k = 0u; k < N; ++k) {
-			double t = t0 + (t1 - t0) * k / (N - 1);
-			propagate_until_impl(ta, t, m_max_steps);
-			std::array<double, 7> state;
-			std::copy(ta.get_state().begin(), ta.get_state().begin() + 7, state.begin());
-			segment_states.push_back(state);
-		}
-		state_bck.push_back(segment_states);
-	}
-	return {state_fwd, state_bck};
+    // Backward segments
+    std::vector<std::vector<std::array<double, 7>>> state_bck;
+    ta.set_time(m_tgrid.back());
+    std::copy(m_state1.begin(), m_state1.end(), ta.get_state_data());
+    for (unsigned i = 0u; i < m_nseg_bck; ++i) {
+        auto control_idx = m_controls.size() - 4 * (i + 1);
+        std::copy(m_controls.data() + control_idx, m_controls.data() + control_idx + 4, ta.get_pars_data());
+        std::vector<std::array<double, 7>> segment_states;
+        double t0 = m_tgrid[m_tgrid.size() - 1 - i];
+        double t1 = m_tgrid[m_tgrid.size() - 2 - i];
+        for (unsigned k = 0u; k < N; ++k) {
+            double t = t0 + (t1 - t0) * k / (N - 1);
+            propagate_until_impl(ta, t, m_max_steps);
+            std::array<double, 7> state;
+            std::copy(ta.get_state().begin(), ta.get_state().begin() + 7, state.begin());
+            segment_states.push_back(state);
+        }
+        state_bck.push_back(segment_states);
+    }
+    return {state_fwd, state_bck};
 }
 
 std::ostream &operator<<(std::ostream &s, const zoh &leg)
