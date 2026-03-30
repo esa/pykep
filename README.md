@@ -1,22 +1,22 @@
-[![codecov](https://codecov.io/gh/esa/kep3/branch/main/graph/badge.svg?token=K49OWJCRB9)](https://codecov.io/gh/esa/kep3)
+[![codecov](https://codecov.io/gh/esa/pykep/branch/main/graph/badge.svg?token=K49OWJCRB9)](https://codecov.io/gh/esa/pykep)
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://esa.github.io/kep3/">
+  <a href="https://esa.github.io/pykep/">
     <img src="doc/_static/pykep_logo.png" alt="Logo" width="280">
   </a>
   <p align="center">
     A coolbox for trajectory design. 
     <br />
-    <a href="https://esa.github.io/kep3/"><strong>Explore the docs »</strong></a>
+    <a href="https://esa.github.io/pykep/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/esa/kep3/issues/new/choose">Report bug</a>
+    <a href="https://github.com/esa/pykep/issues/new/choose">Report bug</a>
     ·
-    <a href="https://github.com/esa/kep3/issues/new/choose">Request feature</a>
+    <a href="https://github.com/esa/pykep/issues/new/choose">Request feature</a>
     ·
-    <a href="https://github.com/esa/kep3/discussions">Discuss</a>
+    <a href="https://github.com/esa/pykep/discussions">Discuss</a>
   </p>
 </p>
 
