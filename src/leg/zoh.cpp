@@ -352,11 +352,11 @@ zoh::compute_mc_grad() const
     ta_var.set_time(m_tgrid.back());
     std::copy(m_state1.begin(), m_state1.end(), ta_var.get_state_data());
 
-    for (unsigned i = 0; i < m_nseg_bck; ++i) {
+    for (decltype(m_nseg_bck) i = 0; i < m_nseg_bck; ++i) {
         std::copy(m_ic_var.begin(), m_ic_var.end(), ta_var.get_state_data() + 7);
         // Controls in reverse order
-        unsigned control_idx = m_controls.size() - 4 * (i + 1);
-        std::copy(m_controls.begin() + control_idx, m_controls.begin() + control_idx + 4, ta_var.get_pars_data());
+        auto control_idx = m_controls.size() - 4 * (i + 1);
+        std::copy(m_controls.data() + control_idx, m_controls.data() + control_idx + 4, ta_var.get_pars_data());
         std::copy(m_pars_no_control.begin(), m_pars_no_control.end(), ta_var.get_pars_data() + 4);
         propagate_until_impl(ta_var, m_tgrid[m_tgrid.size() - 2 - i], m_max_steps);
         auto x_var = adapt(ta_var.get_state(), {84});
@@ -542,8 +542,8 @@ zoh::get_state_info(unsigned N) const
 	ta.set_time(m_tgrid.back());
 	std::copy(m_state1.begin(), m_state1.end(), ta.get_state_data());
 	for (unsigned i = 0u; i < m_nseg_bck; ++i) {
-		unsigned control_idx = m_controls.size() - 4 * (i + 1);
-		std::copy(m_controls.begin() + control_idx, m_controls.begin() + control_idx + 4, ta.get_pars_data());
+		auto control_idx = m_controls.size() - 4 * (i + 1);
+		std::copy(m_controls.data() + control_idx, m_controls.data() + control_idx + 4, ta.get_pars_data());
 		std::vector<std::array<double, 7>> segment_states;
 		double t0 = m_tgrid[m_tgrid.size() - 1 - i];
 		double t1 = m_tgrid[m_tgrid.size() - 2 - i];
