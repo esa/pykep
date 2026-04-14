@@ -32,6 +32,16 @@ using mat74 = xt::xtensor_fixed<double, xt::xshape<7, 4>>;
 using mat71 = xt::xtensor_fixed<double, xt::xshape<7, 1>>;
 using mat17 = xt::xtensor_fixed<double, xt::xshape<1, 7>>;
 
+template <std::size_t n>
+xt::xtensor_fixed<double, xt::xshape<n, n>> _eye()
+{
+    xt::xtensor_fixed<double, xt::xshape<n, n>> I{};
+    for (std::size_t i = 0u; i < n; ++i) {
+        I(i, i) = 1.;
+    }
+    return I;
+}
+
 // -----------------------------------------------------------------------------------------
 // Linear algebra helpers to speed up xtensor when small, fixed size matrices and vectors are involved
 
