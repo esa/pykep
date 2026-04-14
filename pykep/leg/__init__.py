@@ -29,12 +29,12 @@ sims_flanagan_alpha = _core._sims_flanagan_alpha
 sims_flanagan_alpha.__name__ = "sims_flanagan_alpha"
 sims_flanagan_alpha.__module__ = "pykep.leg"
 
-zoh_cpp = _core._zoh_cpp
-zoh_cpp.__name__ = "zoh_cpp"
-zoh_cpp.__module__ = "pykep.leg"
+zoh = _core._zoh_cpp
+zoh.__name__ = "zoh_cpp"
+zoh.__module__ = "pykep.leg"
 
 # Removing core from the list of imported symbols.
 del _core
 
-from ._zoh import zoh
+from ._zoh import zoh as zoh_py
 from ._zoh_ss import zoh_ss

@@ -870,10 +870,11 @@ PYBIND11_MODULE(core, m) // NOLINT
     // Exposing the zoh leg
     py::class_<kep3::leg::zoh> zoh(m, "_zoh_cpp", pykep::leg_zoh_docstring().c_str());
     zoh.def(py::init<const std::array<double, 7> &, const std::vector<double> &, const std::array<double, 7> &,
-                     const std::vector<double> &, double, const heyoka::taylor_adaptive<double> &,
-                     std::optional<heyoka::taylor_adaptive<double>>, std::optional<unsigned>>(),
-            py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"), py::arg("ta"),
-            py::arg("ta_var") = std::nullopt, py::arg("max_steps") = std::nullopt);
+                 const std::vector<double> &, double,
+                 const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &,
+                 std::optional<unsigned>>(),
+            py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"),
+            py::arg("tas"), py::arg("max_steps") = std::nullopt);
     zoh.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh>);
     zoh.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh>);
     zoh.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh>);
