@@ -35,7 +35,7 @@ export LD_LIBRARY_PATH="${PREFIX}/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH:-}"
 
 "${PYBIN}/python" -m pip install --upgrade pip setuptools wheel
 "${PYBIN}/python" -m pip install cmake auditwheel build
-"${PYBIN}/python" -m pip install numpy scipy matplotlib cloudpickle sgp4 spiceypy pygmo heyoka
+"${PYBIN}/python" -m pip install numpy scipy matplotlib cloudpickle sgp4 spiceypy pygmo
 
 cmake_bin="${PYBIN}/cmake"
 
@@ -124,7 +124,8 @@ build_and_install_cmake_repo heyoka \
     -DHEYOKA_BUILD_TESTS=OFF \
     -DHEYOKA_BUILD_BENCHMARKS=OFF \
     -DHEYOKA_BUILD_TUTORIALS=OFF \
-    -DHEYOKA_BUILD_PYTHON_BINDINGS=OFF \
+    -DHEYOKA_BUILD_PYTHON_BINDINGS=ON \
+    -DPython3_EXECUTABLE="${PYBIN}/python" \
     -DHEYOKA_ENABLE_IPO=OFF
 
 # Build and install kep3 + pykep.
