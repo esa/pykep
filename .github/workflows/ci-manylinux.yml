@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build-type: ["Python313", "Python312", "Python311"]
+        build-type: ["Python314t", "Python314", "Python313", "Python312", "Python311"]
     container:
       image: pagmo2/manylinux228_x86_64_with_deps:latest
       env:

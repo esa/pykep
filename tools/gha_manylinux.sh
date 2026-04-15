@@ -13,12 +13,13 @@ echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
 case "${KEP3_BUILD_TYPE}" in
+    *314t*) PYTHON_DIR="cp314-cp314t" ;;
     *314*) PYTHON_DIR="cp314-cp314" ;;
     *313*) PYTHON_DIR="cp313-cp313" ;;
     *312*) PYTHON_DIR="cp312-cp312" ;;
     *311*) PYTHON_DIR="cp311-cp311" ;;
     *)
-        echo "Invalid build type '${KEP3_BUILD_TYPE}'. Supported: Python314, Python313, Python312, Python311"
+        echo "Invalid build type '${KEP3_BUILD_TYPE}'. Supported: Python314t, Python314, Python313, Python312, Python311"
         exit 1
         ;;
 esac
