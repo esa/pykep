@@ -19,7 +19,7 @@ jobs:
       matrix:
         build-type: ["Python313", "Python312", "Python311"]
     container:
-      image: pagmo2/manylinux228_aarch64_with_deps:latest
+      image: pagmo2/manylinux_2_28_aarch64_with_deps:latest
       env:
         KEP3_BUILD_TYPE: ${{ matrix.build-type }}
     steps:
@@ -40,7 +40,7 @@ jobs:
       matrix:
         build-type: ["Python314t", "Python314", "Python313", "Python312", "Python311"]
     container:
-      image: pagmo2/manylinux228_x86_64_with_deps:latest
+      image: pagmo2/manylinux_2_28_x86_64_with_deps:latest
       env:
         KEP3_BUILD_TYPE: ${{ matrix.build-type }}
     steps:
