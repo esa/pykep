@@ -36,7 +36,7 @@ export LD_LIBRARY_PATH="${PREFIX}/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH:-}"
 # Keep Python heyoka.py and C++ heyoka versions intentionally aligned:
 # heyoka.py 7.10.1 is built against heyoka C++ 7.10.0.
 HEYOKA_PYPI_VERSION="${HEYOKA_PYPI_VERSION:-7.10.1}"
-HEYOKA_CPP_VERSION_RELEASE="${HEYOKA_CPP_VERSION_RELEASE:-7.10.0}"
+HEYOKA_CPP_GIT_REF="${HEYOKA_CPP_GIT_REF:-v7.10.0}"
 
 "${PYBIN}/python" -m pip install --upgrade pip setuptools wheel
 "${PYBIN}/python" -m pip install cmake auditwheel build
@@ -122,7 +122,7 @@ clone_at_ref https://github.com/xtensor-stack/xtensor-blas.git xtensor-blas "${X
 build_and_install_cmake_repo xtensor-blas
 
 # Build heyoka C++ package for find_package(heyoka CONFIG REQUIRED).
-clone_at_ref https://github.com/bluescarni/heyoka.git heyoka "${HEYOKA_CPP_VERSION_RELEASE}"
+clone_at_ref https://github.com/bluescarni/heyoka.git heyoka "${HEYOKA_CPP_GIT_REF}"
 build_and_install_cmake_repo heyoka \
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DHEYOKA_BUILD_TESTS=OFF \
