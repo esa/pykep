@@ -54,7 +54,7 @@ jobs:
           KEP3_PYTHON_VERSION: ${{ matrix.python-version }}
 
   macos-arm64:
-    runs-on: macos-latest
+    runs-on: macos-14
     strategy:
       fail-fast: false
       matrix:

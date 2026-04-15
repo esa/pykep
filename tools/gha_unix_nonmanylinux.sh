@@ -11,19 +11,10 @@ conda config --set channel_priority strict
 conda install -y -q \
     c-compiler cxx-compiler ninja "cmake>=3.28,<3.31" \
     "python=${KEP3_PYTHON_VERSION}" \
-    numpy \
-    "libboost>=1.73" "fmt>=10" "heyoka>=7" "heyoka.py>=7" spdlog \
+    "libboost>=1.73" "fmt>=10" "heyoka>=7" spdlog \
     "xtensor>=0.26" xtensor-blas pagmo-devel \
-    pybind11 pygmo sgp4 spiceypy matplotlib scipy \
+    pybind11 sgp4 spiceypy matplotlib scipy \
     "eigen>=3,<5" "nlopt<2.10.1"
-
-# On Apple Silicon, ensure CMake uses the compiler toolchain from the conda
-# environment to avoid accidental fallback to Xcode clang.
-cmake_compiler_args=()
-if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
-    cmake_compiler_args+=("-DCMAKE_C_COMPILER=${CONDA_PREFIX}/bin/clang")
-    cmake_compiler_args+=("-DCMAKE_CXX_COMPILER=${CONDA_PREFIX}/bin/clang++")
-fi
 
 deps_dir="${CONDA_PREFIX}"
 
@@ -36,7 +27,6 @@ cmake ../ \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="${deps_dir}" \
     -DCMAKE_PREFIX_PATH="${deps_dir}" \
-    "${cmake_compiler_args[@]}" \
     -Dkep3_BUILD_TESTS=OFF \
     -Dkep3_BUILD_BENCHMARKS=OFF \
     -Dkep3_BUILD_PYTHON_BINDINGS=ON

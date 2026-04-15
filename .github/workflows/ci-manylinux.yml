@@ -1,0 +1,55 @@
+name: Manylinux CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  arm64-manylinux228:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ["Python313", "Python312", "Python311"]
+    container:
+      image: pagmo2/manylinux228_aarch64_with_deps:latest
+      env:
+        KEP3_BUILD_TYPE: ${{ matrix.build-type }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_manylinux.sh
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: pykep-manylinux228-aarch64-${{ matrix.build-type }}
+          path: build/wheel/dist2/*.whl
+          if-no-files-found: error
+
+  amd64-manylinux228:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ["Python313", "Python312", "Python311"]
+    container:
+      image: pagmo2/manylinux228_x86_64_with_deps:latest
+      env:
+        KEP3_BUILD_TYPE: ${{ matrix.build-type }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_manylinux.sh
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: pykep-manylinux228-x86_64-${{ matrix.build-type }}
+          path: build/wheel/dist2/*.whl
+          if-no-files-found: error
