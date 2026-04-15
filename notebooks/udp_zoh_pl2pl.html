@@ -192,10 +192,10 @@
 <li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 </ul>
@@ -531,6 +531,11 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SNOPT not available, will use IPOPT instead
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="problem-definition">
@@ -677,22 +682,42 @@ The analytical gradients use variational equations integrated alongside the dyna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Gradient Performance Comparison ===
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Create a problem and population to test gradient</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x_test</span> <span class="o">=</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Gradient Performance Comparison ===&quot;</span><span class="p">)</span>
 
-Decision vector dimension: 131
-Fitness dimension: 40
+<span class="nn">File ~/local/lib/python3.13/site-packages/pygmo/__init__.py:313,</span> in <span class="ni">_population_init</span><span class="nt">(self, prob, size, b, seed)</span>
+<span class="g g-Whitespace">    </span><span class="mi">309</span>     <span class="n">seed</span> <span class="o">=</span> <span class="n">_random_device_next</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">311</span> <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">312</span>     <span class="c1"># No bfe specified, init in sequential mode.</span>
+<span class="ne">--&gt; </span><span class="mi">313</span>     <span class="n">__original_population_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">315</span>     <span class="c1"># A bfe was specified. Same as above with the problem.</span>
+<span class="g g-Whitespace">    </span><span class="mi">316</span>     <span class="n">__original_population_init</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="bp">self</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">b</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">bfe</span> <span class="k">else</span> <span class="n">bfe</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">size</span><span class="p">,</span> <span class="n">seed</span>
+<span class="g g-Whitespace">    </span><span class="mi">318</span>     <span class="p">)</span>
 
-Analytical gradient (from variational equations + chain rule):
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.21 ms ± 3.79 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+<span class="nn">File ~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:259,</span> in <span class="ni">zoh_pl2pl.fitness</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span> <span class="k">def</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span>     <span class="c1"># We set the leg using data in the decision vector</span>
+<span class="ne">--&gt; </span><span class="mi">259</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_set_leg_from_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="c1"># We optimize for maximum final mass (minimum propellant)</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">obj</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-Numerical gradient (simple finite difference):
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>38.7 ms ± 144 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+<span class="nn">File ~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:177,</span> in <span class="ni">zoh_pl2pl._set_leg_from_x</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span> <span class="c1"># Set controls</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span> <span class="p">:</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">177</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_thrust</span>
+<span class="g g-Whitespace">    </span><span class="mi">178</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span> <span class="n">tof</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span>  <span class="c1"># non-dimensional</span>
 
-✓ The analytical gradient is significantly faster!
+<span class="ne">TypeError</span>: can&#39;t multiply sequence by non-int of type &#39;numpy.float64&#39;
 </pre></div>
 </div>
 </div>
@@ -761,38 +786,9 @@ Numerical gradient (simple finite difference):
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Uniform) ===
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">xs</span><span class="o">=</span><span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">11</span>     <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="k">if</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span>         <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-<span class="ne">ValueError</span>: 
-<span class="ne">function</span>: evolve_version
-<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 603
-<span class="ne">what</span>: 
-<span class="n">An</span> <span class="n">error</span> <span class="n">occurred</span> <span class="k">while</span> <span class="n">loading</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span> <span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">typically</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">one</span> <span class="n">of</span> <span class="n">the</span> <span class="n">following</span>
-<span class="ne">reasons</span>:
-
-<span class="o">-</span> <span class="n">The</span> <span class="n">file</span> <span class="n">declared</span> <span class="n">to</span> <span class="n">be</span> <span class="n">the</span> <span class="n">snopt7_c</span> <span class="n">library</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">dario</span><span class="o">.</span><span class="n">izzo</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">libsnopt7_c</span><span class="o">.</span><span class="n">dylib</span><span class="p">,</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">shared</span> <span class="n">library</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">necessary</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span> <span class="p">(</span><span class="ow">is</span> <span class="n">the</span> <span class="n">file</span> <span class="n">path</span> <span class="n">really</span> <span class="n">pointing</span> <span class="n">to</span>
-<span class="n">a</span> <span class="n">valid</span> <span class="n">shared</span> <span class="n">library</span><span class="err">?</span><span class="p">)</span>
- <span class="o">-</span> <span class="n">The</span> <span class="n">library</span> <span class="ow">is</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">it</span> <span class="n">does</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">C</span> <span class="n">interface</span> <span class="n">symbols</span><span class="p">,</span> <span class="n">but</span> <span class="n">it</span> <span class="n">needs</span> <span class="n">linking</span> <span class="n">to</span> <span class="n">some</span> <span class="n">additional</span> <span class="n">libraries</span> <span class="n">that</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">found</span>
-<span class="n">at</span> <span class="n">run</span><span class="o">-</span><span class="n">time</span><span class="o">.</span>
-
-<span class="n">We</span> <span class="n">report</span> <span class="n">the</span> <span class="n">exact</span> <span class="n">text</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span> <span class="n">exception</span> <span class="n">thrown</span><span class="p">:</span>
-
- 
-<span class="ne">function</span>: evolve_version
-<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pygmo_plugins_nonfree_1773729372502/work/src/snopt7.cpp, 553
-<span class="ne">what</span>: The snopt7_c library path was constructed to be: /Users/dario.izzo/opt/libsnopt7_c.dylib and it does not appear to be a file
+x.........
+Best mass is:  1233.78782465
+Worst mass is:  1209.72980171
 </pre></div>
 </div>
 </div>

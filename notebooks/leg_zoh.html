@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The Zero Order Hold trajectory leg &#8212; pykep 3.0.0 documentation</title>
+    <title>The Zero-Order-Hold trajectory leg &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/leg_zoh';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Zero Order Hold - Solar Sail" href="leg_zoh_ss.html" />
+    <link rel="next" title="The Zero-Order-Hold trajectory leg for solar sailing" href="leg_zoh_ss.html" />
     <link rel="prev" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -192,10 +192,10 @@
 <li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero Order Hold trajectory leg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 </ul>
@@ -435,7 +435,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Zero Order Hold trajectory leg</h1>
+    <h1>The Zero-Order-Hold trajectory leg</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -445,8 +445,8 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero Order Hold trajectory leg</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-the-zero-hold-leg">1 - Test the zero hold leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-leg">1 - Validate the Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
 </ul>
 
@@ -461,12 +461,19 @@
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-trajectory-leg">
-<h1>The Zero Order Hold trajectory leg<a class="headerlink" href="#the-zero-order-hold-trajectory-leg" title="Link to this heading">#</a></h1>
-<p>The Zero Order Hold (ZOH) trajectory leg is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> in the class <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. Extending the class <a class="reference internal" href="../leg.html#pykep.leg.sims_flanagan" title="pykep.leg.sims_flanagan"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.sims_flanagan</span></code></a>, this leg accounts for a continuous thrust considered fixed in some frame along each segment of predefined length, as well as for a generic dynamics and variable segment lengths.</p>
-<p>Thus, it approximates a thrust strategy via a sequence of continuous, constant thrust arcs (zero order hold). The leg is defined by a starting state <span class="math notranslate nohighlight">\(\mathbf x_0 = [\mathbf r_0, \mathbf v_0, m_0]\)</span>, a final state <span class="math notranslate nohighlight">\(\mathbf x_1 = [\mathbf r_1, \mathbf v_1, m_1]\)</span> and a time grid defining the various segment lengths.</p>
-<p>A sequence of controls <span class="math notranslate nohighlight">\(\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, T_2, i_{x2}, i_{y2}, i_{z2}, ... ]\)</span> define the magnitude and direction of the continuous thrust vector along each segment.</p>
-<p>In this tutorial we show the basic API to interface with the class <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>.</p>
-<p>We start with some imports:</p>
+<h1>The Zero-Order-Hold trajectory leg<a class="headerlink" href="#the-zero-order-hold-trajectory-leg" title="Link to this heading">#</a></h1>
+<p>The Zero-Order-Hold (ZOH, parameterized by the <em>cut</em> parameter) trajectory leg is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> as <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. The method is described in <span id="id1">[<a class="reference internal" href="../bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> as a ZOH <span class="math notranslate nohighlight">\(_\alpha\)</span> transcription. Conceptually, it extends the Sims-Flanagan leg by modeling thrust as a piecewise-constant continuous acceleration over each segment, while supporting generic dynamics and nonuniform segment durations.</p>
+<p>Given an initial state <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span>, a final state <span class="math notranslate nohighlight">\(\mathbf{x}_f\)</span>, and a time grid <span class="math notranslate nohighlight">\(\{t_k\}_{k=0}^{N}\)</span>, the leg is partitioned into <span class="math notranslate nohighlight">\(N\)</span> segments. On each segment <span class="math notranslate nohighlight">\(k\)</span>, the control is represented by
+$<span class="math notranslate nohighlight">\(
+\mathbf{u}_k = [T_k,\ i_{x,k},\ i_{y,k},\ i_{z,k}],
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle magnitude and \)</span>(i_{x,k}, i_{y,k}, i_{z,k})<span class="math notranslate nohighlight">\( defines the throttle direction in the selected frame. The full control vector is
+\)</span><span class="math notranslate nohighlight">\(
+\mathbf{u} = [\mathbf{u}_0,\mathbf{u}_1,\ldots,\mathbf{u}_{N-1}].
+\)</span>$</p>
+<p>A forward-backward shooting construction enforces continuity at the matching point, yielding the <em>mismatch (defect) constraints</em>. The class provides these constraints and their analytical Jacobians with respect to states, controls, and time-grid variables, making it suitable for gradient-based trajectory optimization (including multiphase and moving-endpoint formulations).</p>
+<p><em>Throttle constraints</em>, and corresponding gradients, are also available, in the form <span class="math notranslate nohighlight">\(|\mathbf i_k| \le 1 \)</span></p>
+<p>We start with the required imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -484,15 +491,17 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tolerances used in the numerical integration</span>
-<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
+<span class="c1"># Lower tolerances are faster but less accurate (required tolerance depends on regime).</span>
 <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span>
 <span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
 
-<span class="c1"># We instantiate ZOH Taylor integrators for Keplerian dynamics, shipped in pykep.</span>
+<span class="c1"># Instantiate ZOH Taylor integrators for Keplerian dynamics (provided by pykep).</span>
+<span class="c1"># Contract with leg.zoh: state dimension = 7; first 4 parameters are controls;</span>
+<span class="c1"># variational dynamics are first-order sensitivities w.r.t. state and controls.</span>
 <span class="n">ta_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
 <span class="n">ta_var_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
 
-<span class="c1"># nd units (remember that the ZOH taylor integrator is using non dimensional units expecting MU=1)</span>
+<span class="c1"># Non-dimensional units (the ZOH Taylor integrator in pykep expects MU=1).</span>
 <span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
 <span class="n">MU</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
 <span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="n">MU</span><span class="p">)</span>
@@ -505,11 +514,11 @@
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="test-the-zero-hold-leg">
-<h1>1 - Test the zero hold leg<a class="headerlink" href="#test-the-zero-hold-leg" title="Link to this heading">#</a></h1>
-<p>We compute the gradient of the mismatch and throttle constraints numerically and using the analytical ones provided by <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. We check that they are indeed the same,
-and in the process we learn how to instantiate and use the class.</p>
-<p>We need a small helper to get the numerical gradients easily:</p>
+<section class="tex2jax_ignore mathjax_ignore" id="validate-the-zero-order-hold-leg">
+<h1>1 - Validate the Zero-Order-Hold leg<a class="headerlink" href="#validate-the-zero-order-hold-leg" title="Link to this heading">#</a></h1>
+<p>We first validate the implementation by comparing analytical gradients from <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> against finite-difference estimates.</p>
+<p>This section also illustrates the standard construction workflow: define boundary states, build controls and time grid, instantiate the leg, then query constraints and Jacobians.</p>
+<p>We start with two helper functions used for numerical differentiation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># These assume some copy of the leg as they will modify it.</span>
@@ -528,8 +537,8 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 </div>
-<p>We are now ready to instantiate the leg. We do so by randomly selecting the number of segments, the cut, the effective exhaust velocity, the controls and initializing the remaining quantities.</p>
-<p>To obtain meaningful initial and final states, we compute a Lambert transfer between two Solar System planets. This choice is not essential to the method and is only meant to provide a physically plausible example.</p>
+<p>We now instantiate a representative leg by selecting the number of segments, the cut, the effective exhaust velocity, and the control vector.</p>
+<p>To obtain physically meaningful endpoints, we construct them from a Lambert transfer between two Solar System planets. This choice is only for realism in the example; the method itself is general.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Lambert leg </span>
@@ -546,6 +555,7 @@ and in the process we learn how to instantiate and use the class.</p>
 
 <span class="c1"># leg random data</span>
 <span class="n">nseg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">nseg</span><span class="o">=</span><span class="mi">10</span>
 <span class="n">veff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
 <span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">nseg</span><span class="p">,))</span>
 <span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">]</span> <span class="o">/=</span> <span class="p">(</span><span class="n">F</span><span class="p">)</span>  <span class="c1"># force will be in [-1, 1] N</span>
@@ -564,11 +574,12 @@ and in the process we learn how to instantiate and use the class.</p>
 
 <span class="c1"># Instantiate the leg</span>
 <span class="n">leg</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">cut</span><span class="p">,</span> <span class="n">tas</span> <span class="o">=</span> <span class="p">[</span><span class="n">ta_global</span><span class="p">,</span> <span class="n">ta_var_global</span><span class="p">])</span>
+<span class="c1">#leg = pk.leg.zoh_py(state0, controls.tolist(), state1, tgrid, cut = cut, tas = [ta_global, ta_var_global])</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>We now compute and store the analytical gradient.</p>
+<p>We now compute and store the analytical Jacobians: mismatch-constraint Jacobians and throttle-constraint Jacobian.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grad_an_mc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_mc_grad</span><span class="p">()</span>
@@ -577,7 +588,7 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 </div>
-<p>… and check with the numerically computed one. We compute the numerical gradient using <code class="docutils literal notranslate"><span class="pre">pagmo</span></code> provided routine.</p>
+<p>… and compare with numerical estimates. We use <code class="docutils literal notranslate"><span class="pre">pagmo</span></code> finite differences as a consistency check.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dx0</span>
@@ -588,14 +599,14 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.167380420842258e-06
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.5185239598854033e-06
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Chack on dmc/dxf</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dxf</span>
 <span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
 <span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">state1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -603,14 +614,14 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.6083022073122885e-08
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.2614135971515563e-08
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Chack on dmc/dcontrols</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dcontrols</span>
 <span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
 <span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -618,7 +629,7 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.4262656599349324e-06
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.9535358748943144e-07
 </pre></div>
 </div>
 </div>
@@ -632,7 +643,7 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.1266224650428514e-08
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.8045929986426918e-07
 </pre></div>
 </div>
 </div>
@@ -646,19 +657,19 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.3035309657260818e-08
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.9318091355610703e-08
 </pre></div>
 </div>
 </div>
 </div>
-<p>So … those are small differences, compatible with the numercial gradient low precision (the analytical gradient will be better, and can be made as accurate as needed controlling the precision of the Taylor adaptive integrator)</p>
-<p>We can even plot the leg, in this case overlaying it with pykep planets.</p>
+<p>The differences are small and consistent with finite-difference truncation/roundoff errors. In practice, analytical Jacobians are preferable for accuracy and efficiency.</p>
+<p>We can now visualize the stitched forward/backward trajectory segments, together with the planetary orbits.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
-<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> 
@@ -671,22 +682,21 @@ and in the process we learn how to instantiate and use the class.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ee3d5d248f672b9ccee0220cbebada95b0477185cf4ef121450e8e5b41e91e59.png" src="../_images/ee3d5d248f672b9ccee0220cbebada95b0477185cf4ef121450e8e5b41e91e59.png" />
+<img alt="../_images/5b9b7915c3374a7f29d962795fa4f9a785624500c83f4247364ba8ea8b992e76.png" src="../_images/5b9b7915c3374a7f29d962795fa4f9a785624500c83f4247364ba8ea8b992e76.png" />
 </div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="use-with-arbitrary-dynamics">
 <h1>2 - Use with arbitrary dynamics<a class="headerlink" href="#use-with-arbitrary-dynamics" title="Link to this heading">#</a></h1>
-<p>One of the very, and I mean very, cool things in <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> is the possibility to use arbitrary dynamics. One can then have a leg in the CR3BP, as well as the equinoctial parameter dynamics for Keplerian motion, or a full ephemerides model of N-Body dynamics, and so on…..</p>
-<p>The requirements for a dynamics to be usable in <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> are:</p>
+<p>A key feature of <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> is that it is not restricted to Keplerian Cartesian dynamics. Any dynamics compatible with the interface can be used (e.g., CR3BP, equinoctial dynamics, higher-fidelity models).</p>
+<p>For compatibility with <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>, the dynamics must satisfy:</p>
 <ul class="simple">
-<li><p>The state dimension must be 7 (typically <em>pos</em>, <em>vel</em> and <em>mass</em>, but not necessarily)</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters used in the dynamics must include at least and in this order: hy.par[0] -&gt; <span class="math notranslate nohighlight">\(T\)</span>, hy.par[1] -&gt; <span class="math notranslate nohighlight">\(i_x\)</span>, hy.par[2] -&gt; <span class="math notranslate nohighlight">\(i_y\)</span>, hy.par[3] -&gt; <span class="math notranslate nohighlight">\(i_z\)</span></p></li>
-<li><p>The variational state dimension must be 84 (corresponding to 7 equations for 7 state and 4 parameters 7 + 7<em>7 + 7</em>4). The four parameters must be hy.par[0] .. hy.par[3].</p></li>
+<li><p>State dimension is 7.</p></li>
+<li><p>The first four <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters are, in order: <code class="docutils literal notranslate"><span class="pre">hy.par[0]=T</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[1]=i_x</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[2]=i_y</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[3]=i_z</span></code>.</p></li>
+<li><p>Variational integrator state dimension is 84, corresponding to 7 state equations plus first-order sensitivities with respect to 7 state variables and 4 control parameters: <span class="math notranslate nohighlight">\(7 + 7\times 7 + 7\times 4\)</span>.</p></li>
 </ul>
-<p>In <code class="docutils literal notranslate"><span class="pre">Pykep</span></code> several dynamics are already written which satisfy the above requirements: <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_kep</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_eq</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> and thus can
-be readily used.</p>
-<p>In the following we will, instead, explicitly define a ZOH dynamics for the cr3bp, with the understanding that we could have insted used directly <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code>.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">pykep</span></code>, compatible integrators are already provided (e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_kep</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_eq</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> and their variational counterparts).</p>
+<p>Below, for didactic clarity, we explicitly define a CR3BP ZOH dynamics, even though <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> could be used directly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The symbolic variables.</span>
@@ -695,8 +705,8 @@ be readily used.</p>
 <span class="c1"># Naming the system controls</span>
 <span class="n">T_norm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">i_x</span><span class="p">,</span> <span class="n">i_y</span><span class="p">,</span> <span class="n">i_z</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-
-<span class="c1"># Naming the system parametes</span>
+<span class="c1"># Naming the system parameters</span>
+<span class="c1"># Naming the system parameters</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># 1/veff</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 
@@ -752,8 +762,8 @@ be readily used.</p>
 </div>
 </div>
 </div>
-<p>Note how we wrote the usual CR3BP dynamics, adding some external thrust force and a corresponding (regularized) mass equation. To respect the ZOH requirements on the dynamics we reserved the first four parameters for the differetiable thrust description, and thus used <code class="docutils literal notranslate"><span class="pre">par[4]</span></code> and <code class="docutils literal notranslate"><span class="pre">par[5]</span></code> to store <span class="math notranslate nohighlight">\(I_{sp}g_0\)</span> and <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
-<p>Let us start simulating in this dynamics (always a good check) a periodic orbit in the Lyapunov family of the Earth-Moon system. First we define the exact problem parameters.</p>
+<p>The model is standard CR3BP augmented with thrust acceleration and a (regularized) mass-flow equation. To satisfy the ZOH parameter contract, we reserve <code class="docutils literal notranslate"><span class="pre">par[0:4]</span></code> for thrust controls and use <code class="docutils literal notranslate"><span class="pre">par[4]</span></code>, <code class="docutils literal notranslate"><span class="pre">par[5]</span></code> for additional physical parameters (here <span class="math notranslate nohighlight">\(1/v_\mathrm{eff}\)</span> and <span class="math notranslate nohighlight">\(\mu\)</span>).</p>
+<p>As a sanity check, we first propagate a known periodic Lyapunov-orbit initial condition in zero-thrust mode.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mf">0.01215058560962404</span>
@@ -767,7 +777,7 @@ be readily used.</p>
 </div>
 </div>
 </div>
-<p>Perform the numerical integration</p>
+<p>Propagate the system over one period (zero thrust) to verify the setup.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ta_cr3bp</span><span class="o">.</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span>
@@ -778,7 +788,7 @@ be readily used.</p>
 </div>
 </div>
 </div>
-<p>Confirm the orbit is indeed periodic and we did things correctly.</p>
+<p>Inspect the trajectory to confirm near-periodicity and consistency of the dynamics setup.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
@@ -791,7 +801,7 @@ be readily used.</p>
 <img alt="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" src="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" />
 </div>
 </div>
-<p>We now select two points along the orbit, which we will use as defining bits of our ZOH leg.</p>
+<p>Select two points on the orbit to define initial and final boundary states for a ZOH leg.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="o">-</span><span class="n">period</span><span class="o">/</span><span class="mi">3</span>
@@ -805,7 +815,7 @@ be readily used.</p>
 </div>
 </div>
 </div>
-<p>And we visualize them:</p>
+<p>Visualize these two boundary states on the reference trajectory.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
@@ -820,7 +830,7 @@ be readily used.</p>
 <img alt="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" src="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" />
 </div>
 </div>
-<p>We are ready to instantiate our ZOH leg:</p>
+<p>Instantiate the ZOH leg in the CR3BP dynamics with the selected boundaries and time grid.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate the leg</span>
@@ -832,12 +842,12 @@ be readily used.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [5.8901772348463055e-12, 6.759481863127803e-12, -4.1530983236426766e-42, 5.2288173790771e-12, 5.469291686210909e-12, -3.013229604068458e-41, 0.0]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-7.943090629680682e-13, 1.942890293094024e-12, -7.018753683186928e-42, -1.7552626019323725e-12, 6.261879903490808e-12, -2.4565462728846206e-41, 0.0]
 </pre></div>
 </div>
 </div>
 </div>
-<p>Let us visualize the leg:</p>
+<p>Visualize the forward/backward segment propagation and compare with the reference orbit.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
@@ -858,11 +868,11 @@ be readily used.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6f0c2fa2244c45de8fc3f0764bb739ec6c851b6dac122153b7fd2a10102f22bf.png" src="../_images/6f0c2fa2244c45de8fc3f0764bb739ec6c851b6dac122153b7fd2a10102f22bf.png" />
+<img alt="../_images/0a7eb31e4f3001b24cec8beb656c5a93b31d9e1bcc1a9ba799a2302b0f3862ba.png" src="../_images/0a7eb31e4f3001b24cec8beb656c5a93b31d9e1bcc1a9ba799a2302b0f3862ba.png" />
 </div>
 </div>
-<p>YAY! … feels like we have achieved something ….
-Let see what happens if we add some non-zero controls …</p>
+<p>This no-thrust case yields a near-zero mismatch, as expected from consistency with the reference dynamics.</p>
+<p>Next, apply non-zero controls to observe how the mismatch changes when boundary states and controls are no longer dynamically consistent.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate the leg</span>
@@ -874,7 +884,7 @@ Let see what happens if we add some non-zero controls …</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [0.30254749123484337, 0.10140364379402778, 7.197147687595017e-31, 0.24607887530323047, -0.09781283781561734, 3.5876463502190695e-32, -0.5454498141885178]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [0.2485625026124404, 0.10336254397416478, 6.646237703885278e-31, 0.21632672308980982, -0.04905232084590949, 8.162266473607506e-32, -0.3938851034249786]
 </pre></div>
 </div>
 </div>
@@ -899,10 +909,10 @@ Let see what happens if we add some non-zero controls …</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/65378cd94b2130525706d635256a39552ac971afae59140f137e309f1dbeda7c.png" src="../_images/65378cd94b2130525706d635256a39552ac971afae59140f137e309f1dbeda7c.png" />
+<img alt="../_images/f2231c67a74cd67cac5e64ad6cd67575c89b7a9e384ccc47c2b047c33cc3de03.png" src="../_images/f2231c67a74cd67cac5e64ad6cd67575c89b7a9e384ccc47c2b047c33cc3de03.png" />
 </div>
 </div>
-<p>Makes sense ….</p>
+<p>The result is consistent: introducing non-zero controls with fixed boundaries generally increases mismatch unless controls are optimized.</p>
 </section>
 
 
@@ -930,7 +940,7 @@ Let see what happens if we add some non-zero controls …</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Zero Order Hold - Solar Sail</p>
+        <p class="prev-next-title">The Zero-Order-Hold trajectory leg for solar sailing</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -952,8 +962,8 @@ Let see what happens if we add some non-zero controls …</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero Order Hold trajectory leg</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-the-zero-hold-leg">1 - Test the zero hold leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-leg">1 - Validate the Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
 </ul>
 

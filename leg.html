@@ -192,10 +192,10 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
 </ul>
@@ -434,12 +434,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.sims_flanagan.veff"><code class="docutils literal notranslate"><span class="pre">sims_flanagan.veff</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_mc_grad()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_tc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_tc_grad()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss"><code class="docutils literal notranslate"><span class="pre">zoh_ss</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh_ss.compute_mc_grad()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ss.get_state_info()</span></code></a></li>
@@ -659,285 +654,98 @@ has to be met.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="py class">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pykep.leg.zoh">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh" title="Link to this definition">#</a></dt>
-<dd><p>This class implements an interplanetary low-thrust transfer between a starting and final state
-in the augmented state-space <span class="math notranslate nohighlight">\([\mathbf{r}, \mathbf{v}, m]\)</span>. The transfer is modelled
-as a sequence of non-uniform segments along which a continuous and constant (zero-order hold)
-control acts. The time intervals defining these segments are also provided in <cite>tgrid</cite>.</p>
-<p>The formulation generalises <a class="reference internal" href="#pykep.leg.sims_flanagan" title="pykep.leg.sims_flanagan"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.sims_flanagan</span></code></a> to arbitrary dynamics and non-uniform
-time grids. The dynamics are assumed to be zero-order hold and must be provided as compatible
-Taylor-adaptive integrators (<cite>tas</cite>).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The requirements on the <cite>tas</cite> passed are: a) the first four <em>heyoka</em> parameters
-must be <span class="math notranslate nohighlight">\(T, i_x, i_y, i_z\)</span>, b) the system dimension must be 7 c) for the variational 
-integrator, variations on the state and the four parameters only are considered. These 
-requirements are all fulfilled by <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_kep</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_eq</span></code>,
-<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> and their variational versions.</p>
-</div>
-<p>A transfer is feasible when the state mismatch equality constraints are satisfied. In the
-intended usage, throttle equality constraints are also enforced to ensure a proper thrust
-representation as <span class="math notranslate nohighlight">\(T \hat{\mathbf{i}}\)</span> with <span class="math notranslate nohighlight">\(|\hat{\mathbf{i}}| = 1\)</span>.</p>
-<div class="math notranslate nohighlight">
-\[i_x^2 + i_y^2 + i_z^2 = 1, \quad \forall \text{segments}\]</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The variational integrator <cite>ta_var</cite> can be <code class="docutils literal notranslate"><span class="pre">None</span></code> or must have state dimension 84 (7 + 7x7 STM + 7x4 control
-sensitivity) and with the same dynamics as the nominal integrator <cite>ta</cite>. It is the user
-that must ensure the suitability of the integrators.</p>
-</div>
-<dl>
-<dt>Args:</dt><dd><p><em>state0</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Initial state <span class="math notranslate nohighlight">\([\mathbf{r}_0, \mathbf{v}_0, m_0]\)</span> (length 7)</p>
-<p><em>controls</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Control parameters <span class="math notranslate nohighlight">\([T, i_x, i_y, i_z] \times n_\text{seg}\)</span></p>
-<p><em>state1</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Final state <span class="math notranslate nohighlight">\([\mathbf{r}_1, \mathbf{v}_1, m_1]\)</span> (length 7)</p>
-<p><em>tgrid</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Non-uniform time grid (length nseg+1)</p>
-<p><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Forward/backward segment split ratio (0 ≤ cut ≤ 1)</p>
-<p><em>tas</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>): <cite>(ta, ta_var)</cite> Taylor-adaptive integrators</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><cite>ta</cite>: Nominal dynamics (state dim 7, pars ≥ 4)</p></li>
-<li><p><cite>ta_var</cite>: Variational dynamics (state dim 84, same pars)</p></li>
-</ul>
-</div></blockquote>
-<p><em>max_steps</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): Maximum number of steps for the integrator. If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it is passed to the integrator before each propagation call.</p>
-</dd>
-<dt>Raises:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>: If state/parameter dimensions mismatch or input lengths are incompatible.</p>
-</dd>
-</dl>
-<p>Examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
-<span class="c1"># Define states, controls, time grid</span>
-<span class="n">state0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">state1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
-<span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
-<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.23</span><span class="p">])</span>
-<span class="c1"># Get integrators</span>
-<span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_eq</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">)</span>
-<span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_eq_var</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">)</span>
-<span class="c1"># Construct leg (50/50 split)</span>
-<span class="n">leg</span> <span class="o">=</span> <span class="n">zoh</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">))</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="pykep.leg.zoh.compute_mc_grad">
-<span class="sig-name descname"><span class="pre">compute_mc_grad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh.compute_mc_grad" title="Link to this definition">#</a></dt>
-<dd><p>Computes the gradients of the mismatch constraints. Indicating the initial augmented state with <span class="math notranslate nohighlight">\(\mathbf x_s = [\mathbf r_s, \mathbf v_s, m_s]\)</span>, the
-final augmented state with <span class="math notranslate nohighlight">\(\mathbf x_f = [\mathbf r_f, \mathbf v_f, m_f]\)</span>, the time grid as <span class="math notranslate nohighlight">\(T_{grid}\)</span> and the introducing the control vector
-<span class="math notranslate nohighlight">\(\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, \ldots]\)</span>, this method computes the following gradients:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_s}  \rightarrow (7\times7)\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_f}  \rightarrow (7\times7)\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf u}  \rightarrow (7\times(4\mathbf{nseg}))\]</div>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf T_{grid}}  \rightarrow (7\times(\mathbf{nseg} + 1))\]</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> [<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>]: The four gradients. sizes will be (7,7), (7,7) (7,4nseg) and (7,nseg+1)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pykep.leg.zoh.compute_tc_grad">
-<span class="sig-name descname"><span class="pre">compute_tc_grad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh.compute_tc_grad" title="Link to this definition">#</a></dt>
-<dd><p>Computes the gradients of the throttles constraints. Introducing the control vector as
-<span class="math notranslate nohighlight">\(\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, ...]\)</span>, this method computes the following gradient:</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {tc}}{\partial \mathbf u} \rightarrow (\mathbf{nseg} \times 4\mathbf{nseg}) \]</div>
-<dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> [<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>]: The gradient. Size will be (nseg,4nseg).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pykep.leg.zoh.get_state_info">
-<span class="sig-name descname"><span class="pre">get_state_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh.get_state_info" title="Link to this definition">#</a></dt>
-<dd><p>This method returns state histories sampled along each ZOH segment, for both the
-forward and backward propagation parts of the leg. The sampling is performed by
-calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">heyoka.taylor_adaptive.propagate_grid()</span></code> on a uniformly-spaced grid
-of <em>N</em> points within each segment.</p>
-<dl>
-<dt>Args:</dt><dd><p><em>N</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): Number of sampling points per segment (including the segment
-endpoints). The default (<em>N=2</em>) returns only the segment endpoints.</p>
-</dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: <code class="docutils literal notranslate"><span class="pre">(state_fwd,</span> <span class="pre">state_bck)</span></code> where:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">state_fwd</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of length <code class="docutils literal notranslate"><span class="pre">nseg_fwd</span></code>. Each entry contains
-the sampled 7D state history over the corresponding forward segment (from
-<code class="docutils literal notranslate"><span class="pre">tgrid[i]</span></code> to <code class="docutils literal notranslate"><span class="pre">tgrid[i+1]</span></code>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">state_bck</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of length <code class="docutils literal notranslate"><span class="pre">nseg_bck</span></code>. Each entry contains
-the sampled 7D state history over the corresponding backward segment (from
-<code class="docutils literal notranslate"><span class="pre">tgrid[-1-i]</span></code> to <code class="docutils literal notranslate"><span class="pre">tgrid[-2-i]</span></code>).</p></li>
-</ul>
-</div></blockquote>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The backward propagation is carried out by integrating from the final time toward
-earlier times; depending on the backend conventions, the returned grids may thus be
-time-reversed with respect to a forward-time plot.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method uses the nominal integrator <code class="docutils literal notranslate"><span class="pre">self.ta</span></code> and overwrites its internal
-<code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">state</span></code> and the first four parameters (<code class="docutils literal notranslate"><span class="pre">T,</span> <span class="pre">i_x,</span> <span class="pre">i_y,</span> <span class="pre">i_z</span></code>). If the
-integrator state must be preserved, call this method on a dedicated copy.</p>
-</div>
-</dd>
-</dl>
-<p>Examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
+<span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh</span></span><a class="headerlink" href="#pykep.leg.zoh" title="Link to this definition">#</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">_zoh_cpp</span></code></p>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.leg.zoh_ss">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh_ss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ss" title="Link to this definition">#</a></dt>
-<dd><p>This class implements a simple solar sailing interplanetary leg between a starting and final state
-in the augmented state-space <span class="math notranslate nohighlight">\([\mathbf{r}, \mathbf{v}]\)</span>. The transfer is modelled
-as a sequence of non-uniform segments along which the sail orientation is considered as fixed
-in the RTN frame (zero-order hold).</p>
-<p>The class is thus very similar to <a class="reference internal" href="#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> but has different requirements on the dynamics
-it allows since it represents a solar sail trajectory (i.e. no mass equation and two controls only)</p>
+<dd><p>This class implements a solar-sail low-thrust transfer between a starting and final state in the state-space <span class="math notranslate nohighlight">\([\mathbf{r}, \mathbf{v}]\)</span>. The transfer is modelled as a sequence of non-uniform segments along which the sail orientation controls are kept constant (zero-order hold).</p>
+<p>The class is analogous to <a class="reference internal" href="#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>, but specialized to 6D dynamics and two controls per segment <span class="math notranslate nohighlight">\([\alpha, \beta]\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The requirements on the <cite>tas</cite> passed in construction are: a) the first two <em>heyoka</em> parameters
-must be <span class="math notranslate nohighlight">\(\alpha, \beta\)</span>, b) the system dimension must be 6.</p>
-</div>
-<p>The time intervals defining these segments are also provided in <cite>tgrid</cite>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <cite>tas</cite> requirements are fulfilled by <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_ss</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_ss_var</span></code>.</p>
+<p>The requirements on the <cite>tas</cite> passed are: a) the first two <em>heyoka</em> parameters must be <span class="math notranslate nohighlight">\(\alpha, \beta\)</span>, b) the system dimension must be 6, c) for the variational integrator, variations on the 6 state variables and the two controls only are considered. These requirements are fulfilled by <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_ss</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_ss_var</span></code>.</p>
 </div>
 <p>A transfer is feasible when the state mismatch equality constraints are satisfied.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The variational integrator <cite>ta_var</cite> can be <code class="docutils literal notranslate"><span class="pre">None</span></code> or must have state dimension 54 (6 + 6x6 STM + 6x2 control
-sensitivity) and with the same dynamics as the nominal integrator <cite>ta</cite>. It is the user
-that must ensure the suitability of the integrators.</p>
-</div>
 <dl>
-<dt>Args:</dt><dd><p><em>state0</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Initial state <span class="math notranslate nohighlight">\([\mathbf{r}_0, \mathbf{v}_0]\)</span> (length 6)</p>
-<p><em>controls</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Sail orientation controls <span class="math notranslate nohighlight">\([\alpha, \beta] \times n_\text{seg}\)</span></p>
-<p><em>state1</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Final state <span class="math notranslate nohighlight">\([\mathbf{r}_1, \mathbf{v}_1]\)</span> (length 6)</p>
-<p><em>tgrid</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array-like</span></code>): Non-uniform time grid (length nseg+1)</p>
-<p><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Forward/backward segment split ratio (0 ≤ cut ≤ 1)</p>
-<p><em>tas</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>): <cite>(ta, ta_var)</cite> Taylor-adaptive integrators</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><cite>ta</cite>: Nominal dynamics (state dim 6, pars ≥ 2)</p></li>
-<li><p><cite>ta_var</cite>: Variational dynamics (state dim 54, same pars)</p></li>
-</ul>
-</div></blockquote>
-<p><em>max_steps</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): Maximum number of steps for the integrator. If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it is passed to the integrator before each propagation call.</p>
-</dd>
-<dt>Raises:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a>: If state/parameter dimensions mismatch or input lengths are incompatible.</p>
-</dd>
-</dl>
-<p>Examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
-<span class="c1"># Define states, controls, time grid</span>
-<span class="n">state0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
-<span class="n">state1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
-<span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.23</span><span class="p">])</span>
-<span class="c1"># Get integrators</span>
-<span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">)</span>
-<span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss_var</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">)</span>
-<span class="c1"># Set their params</span>
-<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="n">ta_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="c1"># Construct leg (50/50 split)</span>
-<span class="n">leg</span> <span class="o">=</span> <span class="n">zoh_ss</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">))</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">controls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss</span><span class="p">(</span><span class="mf">1e-16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_ss_var</span><span class="p">(</span><span class="mf">1e-16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">leg</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh_ss</span><span class="p">(</span><span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">))</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pykep.leg.zoh_ss.compute_mc_grad">
 <span class="sig-name descname"><span class="pre">compute_mc_grad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ss.compute_mc_grad" title="Link to this definition">#</a></dt>
-<dd><p>Computes the gradients of the mismatch constraints. Indicating the initial augmented state with <span class="math notranslate nohighlight">\(\mathbf x_s = [\mathbf r_s, \mathbf v_s]\)</span>, the
-final augmented state with <span class="math notranslate nohighlight">\(\mathbf x_f = [\mathbf r_f, \mathbf v_f]\)</span>, the time grid as <span class="math notranslate nohighlight">\(T_{grid}\)</span> and the introducing the control vector
-<span class="math notranslate nohighlight">\(\mathbf u = [\alpha_1, \beta_1, \alpha_2, \beta_2, ...]]\)</span> (note the time of flight at the end), this method computes the following gradients:</p>
+<dd><p>Computes the gradients of the mismatch constraints. Indicating the initial state with <span class="math notranslate nohighlight">\(\mathbf x_s = [\mathbf r_s, \mathbf v_s]\)</span>, the final state with <span class="math notranslate nohighlight">\(\mathbf x_f = [\mathbf r_f, \mathbf v_f]\)</span>, the time grid as <span class="math notranslate nohighlight">\(T_{grid}\)</span> and introducing the control vector <span class="math notranslate nohighlight">\(\mathbf u = [\alpha_0, \beta_0, \alpha_1, \beta_1, \ldots]\)</span>, this method computes the following gradients:</p>
 <div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_s}  \rightarrow (6\times 6)\]</div>
+\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_s}  \rightarrow (6\times6)\]</div>
 <div class="math notranslate nohighlight">
-\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_f}  \rightarrow (6\times 6)\]</div>
+\[\frac{\partial \mathbf {mc}}{\partial \mathbf x_f}  \rightarrow (6\times6)\]</div>
 <div class="math notranslate nohighlight">
 \[\frac{\partial \mathbf {mc}}{\partial \mathbf u}  \rightarrow (6\times(2\mathbf{nseg}))\]</div>
 <div class="math notranslate nohighlight">
 \[\frac{\partial \mathbf {mc}}{\partial \mathbf T_{grid}}  \rightarrow (6\times(\mathbf{nseg} + 1))\]</div>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> [<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>]: The four gradients. 
-sizes will be (6,6), (6,6) (6,2nseg) and (6,nseg+1)</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> [<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>]: The four gradients. Sizes will be (6,6), (6,6), (6,2nseg), and (6,nseg+1).</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pykep.leg.zoh_ss.get_state_info">
-<span class="sig-name descname"><span class="pre">get_state_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ss.get_state_info" title="Link to this definition">#</a></dt>
-<dd><p>This method returns state histories sampled along each ZOH segment, for both the
-forward and backward propagation parts of the leg. The sampling is performed by
-calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">heyoka.taylor_adaptive.propagate_grid()</span></code> on a uniformly-spaced grid
-of <em>N</em> points within each segment.</p>
+<span class="sig-name descname"><span class="pre">get_state_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ss.get_state_info" title="Link to this definition">#</a></dt>
+<dd><p>This method returns state histories sampled along each ZOH segment, for both the forward and backward
+propagation parts of the leg.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>N</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): Number of sampling points per segment (including the segment
-endpoints). The default (<em>N=2</em>) returns only the segment endpoints.</p>
+<dt>Args:</dt><dd><p><em>N</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): Number of sampling points per segment (including the segment endpoints).
+The default (<em>N=2</em>) returns only the segment endpoints.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: <code class="docutils literal notranslate"><span class="pre">(state_fwd,</span> <span class="pre">state_bck)</span></code> where:</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: <code class="docutils literal notranslate"><span class="pre">(state_fwd,</span> <span class="pre">state_bck,</span> <span class="pre">success)</span></code> where:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">state_fwd</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of length <code class="docutils literal notranslate"><span class="pre">nseg_fwd</span></code>. Each entry contains
-the sampled 6D state history over the corresponding forward segment (from
-<code class="docutils literal notranslate"><span class="pre">tgrid[i]</span></code> to <code class="docutils literal notranslate"><span class="pre">tgrid[i+1]</span></code>).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">state_bck</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of length <code class="docutils literal notranslate"><span class="pre">nseg_bck</span></code>. Each entry contains
-the sampled 6D state history over the corresponding backward segment (from
-<code class="docutils literal notranslate"><span class="pre">tgrid[-1-i]</span></code> to <code class="docutils literal notranslate"><span class="pre">tgrid[-2-i]</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state_fwd</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of successfully propagated forward segments.</p></li>
 </ul>
+<p>Each entry contains the sampled 6D state history over the corresponding forward segment.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">state_bck</span></code> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): List of successfully propagated backward segments.</p></li>
+</ul>
+<p>Each entry contains the sampled 6D state history over the corresponding backward segment.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">success</span></code> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>): <code class="docutils literal notranslate"><span class="pre">True</span></code> if all segment propagations completed successfully,</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The backward propagation is carried out by integrating from the final time toward
-earlier times; depending on the backend conventions, the returned grids may thus be
-time-reversed with respect to a forward-time plot.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method uses the nominal integrator <code class="docutils literal notranslate"><span class="pre">self.ta</span></code> and overwrites its internal
-<code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">state</span></code> and the first two parameters (<span class="math notranslate nohighlight">\([\alpha, \beta]\)</span>). If the
-integrator state must be preserved, call this method on a dedicated copy.</p>
+<p>This method uses the nominal integrator and overwrites its internal <code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">state</span></code>
+and first two parameters (<code class="docutils literal notranslate"><span class="pre">alpha,</span> <span class="pre">beta</span></code>).</p>
 </div>
 </dd>
-</dl>
-<p>Examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<dt>Examples:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
+  <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1011,12 +819,7 @@ integrator state must be preserved, call this method on a dedicated copy.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.sims_flanagan.veff"><code class="docutils literal notranslate"><span class="pre">sims_flanagan.veff</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_mc_grad()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_tc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_tc_grad()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss"><code class="docutils literal notranslate"><span class="pre">zoh_ss</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh_ss.compute_mc_grad()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ss.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ss.get_state_info()</span></code></a></li>

@@ -189,10 +189,10 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero Order Hold trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero Order Hold - Solar Sail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
 </ul>
@@ -470,8 +470,6 @@
       <li><a href="leg.html#pykep.leg.sims_flanagan.compute_mc_grad">compute_mc_grad() (pykep.leg.sims_flanagan method)</a>
 
       <ul>
-        <li><a href="leg.html#pykep.leg.zoh.compute_mc_grad">(pykep.leg.zoh method)</a>
-</li>
         <li><a href="leg.html#pykep.leg.zoh_ss.compute_mc_grad">(pykep.leg.zoh_ss method)</a>
 </li>
       </ul></li>
@@ -482,11 +480,7 @@
       <li><a href="utils.html#pykep.utils.compute_softmax_and_jacobian">compute_softmax_and_jacobian() (in module pykep.utils)</a>
 </li>
       <li><a href="leg.html#pykep.leg.sims_flanagan.compute_tc_grad">compute_tc_grad() (pykep.leg.sims_flanagan method)</a>
-
-      <ul>
-        <li><a href="leg.html#pykep.leg.zoh.compute_tc_grad">(pykep.leg.zoh method)</a>
 </li>
-      </ul></li>
       <li><a href="leg.html#pykep.leg.sims_flanagan.compute_throttle_constraints">compute_throttle_constraints() (pykep.leg.sims_flanagan method)</a>
 </li>
       <li><a href="propagation.html#pykep.ta.cr3bp_dyn">cr3bp_dyn() (in module pykep.ta)</a>
@@ -677,12 +671,8 @@
       </ul></li>
       <li><a href="planet.html#pykep.planet.get_safe_radius">get_safe_radius() (pykep.planet method)</a>
 </li>
-      <li><a href="leg.html#pykep.leg.zoh.get_state_info">get_state_info() (pykep.leg.zoh method)</a>
-
-      <ul>
-        <li><a href="leg.html#pykep.leg.zoh_ss.get_state_info">(pykep.leg.zoh_ss method)</a>
+      <li><a href="leg.html#pykep.leg.zoh_ss.get_state_info">get_state_info() (pykep.leg.zoh_ss method)</a>
 </li>
-      </ul></li>
       <li><a href="propagation.html#pykep.ta.get_zoh_cr3bp">get_zoh_cr3bp() (in module pykep.ta)</a>
 </li>
       <li><a href="propagation.html#pykep.ta.get_zoh_cr3bp_var">get_zoh_cr3bp_var() (in module pykep.ta)</a>
@@ -1035,9 +1025,11 @@
 </li>
       <li><a href="udpla.html#pykep.udpla.tle">tle (class in pykep.udpla)</a>
 </li>
+      <li><a href="epoch.html#pykep.epoch.to_datetime">to_datetime() (pykep.epoch method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="epoch.html#pykep.epoch.to_datetime">to_datetime() (pykep.epoch method)</a>
+      <li><a href="trajopt.html#pykep.trajopt.mga.to_planet">to_planet() (pykep.trajopt.mga method)</a>
 </li>
       <li><a href="lambert.html#pykep.lambert_problem.tof">tof (pykep.lambert_problem property)</a>
 
@@ -1091,7 +1083,7 @@
 </li>
       <li><a href="anomalies.html#pykep.zeta2f_v">zeta2f_v() (in module pykep)</a>
 </li>
-      <li><a href="leg.html#pykep.leg.zoh">zoh (class in pykep.leg)</a>
+      <li><a href="leg.html#pykep.leg.zoh">zoh (in module pykep.leg)</a>
 </li>
       <li><a href="propagation.html#pykep.ta.zoh_cr3bp_dyn">zoh_cr3bp_dyn() (in module pykep.ta)</a>
 </li>
