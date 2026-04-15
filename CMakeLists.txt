@@ -273,7 +273,7 @@ endif()
 
 if(kep3_BUILD_PYTHON_BINDINGS)
     # Find python
-    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
     message(VERBOSE "Python3 interpreter: ${Python3_EXECUTABLE}")
     message(VERBOSE "Python3 installation directory: ${Python3_SITEARCH}")
     message(VERBOSE "Python3 include directories: ${Python3_INCLUDE_DIRS}")
