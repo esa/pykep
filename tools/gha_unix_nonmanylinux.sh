@@ -11,7 +11,7 @@ conda config --set channel_priority strict
 conda install -y -q \
     c-compiler cxx-compiler ninja "cmake>=3.28,<3.31" \
     "python=${KEP3_PYTHON_VERSION}" \
-    "libboost>=1.73" "fmt>=10" "heyoka>=7" spdlog \
+    "libboost>=1.73" "fmt>=10" "heyoka>=7" "heyoka.py>=7" spdlog \
     "xtensor>=0.26" xtensor-blas pagmo-devel \
     pybind11 sgp4 spiceypy matplotlib scipy \
     "eigen>=3,<5" "nlopt<2.10.1"

@@ -11,7 +11,7 @@ DEPS_DIR="$HOME/local"
 # Install build and docs deps into a dedicated conda environment.
 conda create -y -q -p "$DEPS_DIR" \
     c-compiler cxx-compiler cmake ninja \
-    "libboost>=1.73" "fmt>=10" "heyoka>=7" spdlog \
+    "libboost>=1.73" "fmt>=10" "heyoka>=7" "heyoka.py>=7" spdlog \
     "xtensor>=0.26" xtensor-blas pagmo-devel \
     pybind11 sgp4 spiceypy matplotlib scipy \
     python=3.13 \
