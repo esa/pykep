@@ -24,7 +24,7 @@ jobs:
             conda_pkgs: c-compiler cxx-compiler cmake ninja 'libboost>=1.73' 'fmt>=10' 'heyoka>=7' spdlog 'xtensor>=0.26' xtensor-blas pagmo-devel 'eigen<5' 'nlopt<2.10.1'
           - label: macos-arm64
             runner: macos-latest
-            conda_pkgs: c-compiler cxx-compiler cmake ninja 'libboost>=1.73' 'fmt>=10' 'heyoka>=7' spdlog 'xtensor>=0.26' xtensor-blas pagmo-devel 'eigen<5' 'nlopt<2.10.1'
+            conda_pkgs: c-compiler cxx-compiler cmake ninja 'libboost>=1.73' 'fmt>=10' 'heyoka>=7,<8' spdlog 'xtensor>=0.26' xtensor-blas pagmo-devel 'eigen<5' 'nlopt<2.10.1'
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
