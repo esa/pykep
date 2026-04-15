@@ -30,6 +30,7 @@
 #include <kep3/leg/sims_flanagan_alpha.hpp>
 #include <kep3/planet.hpp>
 #include <kep3/udpla/vsop2013.hpp>
+#include <kep3/detail/s11n.hpp>
 
 #include "catch.hpp"
 #include "leg_sims_flanagan_alpha_udp.hpp"

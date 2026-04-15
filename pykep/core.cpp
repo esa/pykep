@@ -8,7 +8,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #include <pybind11/pytypes.h>
-#include <string>
 
 #include <fmt/chrono.h>
 
@@ -26,6 +25,7 @@
 #include <kep3/lambert_problem.hpp>
 #include <kep3/leg/sims_flanagan.hpp>
 #include <kep3/leg/sims_flanagan_alpha.hpp>
+#include <kep3/leg/zoh.hpp>
 #include <kep3/planet.hpp>
 #include <kep3/ta/bcp.hpp>
 #include <kep3/ta/cr3bp.hpp>
@@ -603,7 +603,7 @@ PYBIND11_MODULE(core, m) // NOLINT
     m.def(
         "propagate_lagrangian",
         [](const std::array<std::array<double, 3>, 2> &pos_vel, double dt, double mu, bool request_stm) -> py::object {
-        auto pl_retval = kep3::propagate_lagrangian(pos_vel, dt, mu, request_stm);
+            auto pl_retval = kep3::propagate_lagrangian(pos_vel, dt, mu, request_stm);
             if (pl_retval.second) {
                 // The stm was requested lets transfer ownership to python
                 const std::array<double, 36> &stm = pl_retval.second.value();
@@ -736,11 +736,11 @@ PYBIND11_MODULE(core, m) // NOLINT
     sims_flanagan.def(
         "compute_mc_grad",
         [](const kep3::leg::sims_flanagan &leg) {
-            auto tc_cpp = leg.compute_mc_grad();
+            auto mc_cpp = leg.compute_mc_grad();
             // Lets transfer ownership to python of the three
-            const std::array<double, 49> &rs_addr = std::get<0>(tc_cpp);
-            const std::array<double, 49> &rf_addr = std::get<1>(tc_cpp);
-            const std::vector<double> &th_addr = std::get<2>(tc_cpp);
+            const std::array<double, 49> &rs_addr = std::get<0>(mc_cpp);
+            const std::array<double, 49> &rf_addr = std::get<1>(mc_cpp);
+            const std::vector<double> &th_addr = std::get<2>(mc_cpp);
 
             // We create three separate capsules for the py::array_t to manage ownership change.
             auto vec_ptr_rs = std::make_unique<std::array<double, 49>>(rs_addr);
@@ -792,10 +792,9 @@ PYBIND11_MODULE(core, m) // NOLINT
             // of vec_ptr will take care of cleaning up.
             auto *ptr = vec_ptr.release();
 
-            auto tc_python
-                = py::array_t<double>(py::array::ShapeContainer{static_cast<py::ssize_t>(leg.get_nseg()),
-                                                                static_cast<py::ssize_t>(leg.get_nseg() * 3)}, // shape
-                                      ptr->data(), std::move(vec_caps));
+            auto tc_python = py::array_t<double>(
+                {static_cast<py::ssize_t>(leg.get_nseg()), static_cast<py::ssize_t>(leg.get_nseg() * 3)}, // shape
+                ptr->data(), std::move(vec_caps));
             return tc_python;
         },
         pykep::leg_sf_tc_grad_docstring().c_str());
@@ -855,8 +854,6 @@ PYBIND11_MODULE(core, m) // NOLINT
 
 #undef PYKEP3_EXPOSE_LEG_SF_ATTRIBUTES
 
-    using tas_type = std::pair<const heyoka::taylor_adaptive<double> &, const heyoka::taylor_adaptive<double> &>;
-
     sims_flanagan_alpha.def("compute_mismatch_constraints",
                             &kep3::leg::sims_flanagan_alpha::compute_mismatch_constraints,
                             pykep::leg_sf_mc_docstring().c_str());
@@ -869,4 +866,154 @@ PYBIND11_MODULE(core, m) // NOLINT
                                               pykep::leg_sf_nseg_fwd_docstring().c_str());
     sims_flanagan_alpha.def_property_readonly("nseg_bck", &kep3::leg::sims_flanagan_alpha::get_nseg_bck,
                                               pykep::leg_sf_nseg_bck_docstring().c_str());
+
+    // Exposing the zoh leg
+    py::class_<kep3::leg::zoh> zoh(m, "_zoh_cpp", pykep::leg_zoh_docstring().c_str());
+    zoh.def(py::init<const std::array<double, 7> &, const std::vector<double> &, const std::array<double, 7> &,
+                     const std::vector<double> &, double, const heyoka::taylor_adaptive<double> &,
+                     std::optional<heyoka::taylor_adaptive<double>>, std::optional<unsigned>>(),
+            py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"), py::arg("ta"),
+            py::arg("ta_var") = std::nullopt, py::arg("max_steps") = std::nullopt);
+    zoh.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh>);
+    zoh.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh>);
+    zoh.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh>);
+    // Properties (getters/setters)
+    zoh.def_property("state0", &kep3::leg::zoh::get_state0, &kep3::leg::zoh::set_state0,
+                     pykep::leg_zoh_state0_docstring().c_str());
+    zoh.def_property("state1", &kep3::leg::zoh::get_state1, &kep3::leg::zoh::set_state1,
+                     pykep::leg_zoh_state1_docstring().c_str());
+    zoh.def_property("controls", &kep3::leg::zoh::get_controls, &kep3::leg::zoh::set_controls,
+                     pykep::leg_zoh_controls_docstring().c_str());
+    zoh.def_property("tgrid", &kep3::leg::zoh::get_tgrid, &kep3::leg::zoh::set_tgrid,
+                     pykep::leg_zoh_tgrid_docstring().c_str());
+    zoh.def_property("cut", &kep3::leg::zoh::get_cut, &kep3::leg::zoh::set_cut, pykep::leg_zoh_cut_docstring().c_str());
+    zoh.def_property("max_steps", &kep3::leg::zoh::get_max_steps, &kep3::leg::zoh::set_max_steps,
+                     pykep::leg_zoh_max_steps_docstring().c_str());
+    // Readonly properties
+    zoh.def_property_readonly("nseg", &kep3::leg::zoh::get_nseg, pykep::leg_zoh_nseg_docstring().c_str());
+    zoh.def_property_readonly("nseg_fwd", &kep3::leg::zoh::get_nseg_fwd, pykep::leg_zoh_nseg_fwd_docstring().c_str());
+    zoh.def_property_readonly("nseg_bck", &kep3::leg::zoh::get_nseg_bck, pykep::leg_zoh_nseg_bck_docstring().c_str());
+    // Constraint methods
+    zoh.def("compute_mismatch_constraints", &kep3::leg::zoh::compute_mismatch_constraints,
+            pykep::leg_zoh_mc_docstring().c_str());
+    zoh.def("compute_throttle_constraints", &kep3::leg::zoh::compute_throttle_constraints,
+            pykep::leg_zoh_tc_docstring().c_str());
+    // Expose compute_mc_grad with array conversion
+    zoh.def(
+        "compute_mc_grad",
+        [](const kep3::leg::zoh &leg) {
+            auto grad_cpp = leg.compute_mc_grad();
+            // Lets transfer ownership to python
+            const std::array<double, 49> &dx0 = std::get<0>(grad_cpp);
+            const std::array<double, 49> &dx1 = std::get<1>(grad_cpp);
+            const std::vector<double> &du = std::get<2>(grad_cpp);
+            const std::vector<double> &dtgrid = std::get<3>(grad_cpp);
+
+            // We create four separate capsules for the py::array_t to manage ownership change.
+            auto dx0_ptr = std::make_unique<std::array<double, 49>>(dx0);
+            py::capsule dx0_caps(dx0_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::array<double, 49>> vptr(static_cast<std::array<double, 49> *>(ptr));
+            });
+            auto dx1_ptr = std::make_unique<std::array<double, 49>>(dx1);
+
+            py::capsule dx1_caps(dx1_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::array<double, 49>> vptr(static_cast<std::array<double, 49> *>(ptr));
+            });
+            auto du_ptr = std::make_unique<std::vector<double>>(du);
+            py::capsule du_caps(du_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
+            });
+            auto dtgrid_ptr = std::make_unique<std::vector<double>>(dtgrid);
+            py::capsule dtgrid_caps(dtgrid_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
+            });
+
+            // NOTE: at this point, the capsules have been created successfully (including
+            // the registration of the destructor). We can thus release ownership from vec_ptr_xx,
+            // as now the capsules are responsible for destroying its contents.
+            auto *ptr_dx0 = dx0_ptr.release();
+            auto *ptr_dx1 = dx1_ptr.release();
+            auto *ptr_du = du_ptr.release();
+            auto *ptr_dtgrid = dtgrid_ptr.release();
+
+            auto dx0_py = py::array_t<double>({7, 7}, ptr_dx0->data(), std::move(dx0_caps));
+            auto dx1_py = py::array_t<double>({7, 7}, ptr_dx1->data(), std::move(dx1_caps));
+            auto du_py = py::array_t<double>({static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(du.size() / 7)},
+                                             ptr_du->data(), std::move(du_caps));
+            auto dtgrid_py
+                = py::array_t<double>({static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(dtgrid.size() / 7)},
+                                      ptr_dtgrid->data(), std::move(dtgrid_caps));
+            return py::make_tuple(dx0_py, dx1_py, du_py, dtgrid_py);
+        },
+        pykep::leg_zoh_mc_grad_docstring().c_str());
+
+    // Expose compute_tc_grad with array conversion
+    zoh.def(
+        "compute_tc_grad",
+        [](const kep3::leg::zoh &leg) {
+            const std::vector<double> tc_cpp = leg.compute_tc_grad();
+            // We create a capsule for the py::array_t to manage ownership change.
+            auto tc_ptr = std::make_unique<std::vector<double>>(tc_cpp);
+            py::capsule tc_caps(tc_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
+            });
+            // NOTE: at this point, the capsules have been created successfully (including
+            // the registration of the destructor). We can thus release ownership from vec_ptr_xx,
+            // as now the capsules are responsible for destroying its contents.
+            auto *ptr_tc = tc_ptr.release();
+            auto nseg = leg.get_nseg();
+            auto tc_py = py::array_t<double>({static_cast<py::ssize_t>(nseg), static_cast<py::ssize_t>(4 * nseg)},
+                                             ptr_tc->data(), std::move(tc_caps));
+            return tc_py;
+        },
+        pykep::leg_zoh_tc_grad_docstring().c_str());
+
+    // Expose get_state_info with array conversion
+    zoh.def(
+        "get_state_info",
+        [](const kep3::leg::zoh &leg, unsigned N) {
+            // Call the C++ method to get the state info nested structure
+            auto [fwd_cpp, bck_cpp] = leg.get_state_info(N);
+
+            // Helper lambda to flatten the nested vector<vector<array<double,7>>> to a contiguous vector<double>
+            auto flatten = [](const std::vector<std::vector<std::array<double, 7>>> &data) {
+                std::vector<double> flat;
+                // Reserve enough space for efficiency
+                if (!data.empty())
+                    flat.reserve(data.size() * data[0].size() * 7);
+                for (const auto &segment : data) {
+                    for (const auto &state : segment) {
+                        flat.insert(flat.end(), state.begin(), state.end());
+                    }
+                }
+                return flat;
+            };
+
+            // Flatten the forward and backward state info
+            auto fwd_flat = std::make_unique<std::vector<double>>(flatten(fwd_cpp));
+            auto bck_flat = std::make_unique<std::vector<double>>(flatten(bck_cpp));
+
+            // Get the number of segments for each direction
+            auto nseg_fwd = static_cast<py::ssize_t>(fwd_cpp.size());
+            auto nseg_bck = static_cast<py::ssize_t>(bck_cpp.size());
+
+            // Create capsules to manage memory ownership for numpy arrays
+            py::capsule fwd_caps(fwd_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+            py::capsule bck_caps(bck_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+
+            // Release ownership to the capsules
+            auto *ptr_fwd = fwd_flat.release();
+            auto *ptr_bck = bck_flat.release();
+
+            // Construct the numpy arrays with shape (nseg, N, 7)
+            py::array fwd_py({nseg_fwd, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(7)}, ptr_fwd->data(),
+                             fwd_caps);
+            py::array bck_py({nseg_bck, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(7)}, ptr_bck->data(),
+                             bck_caps);
+
+            // Return as a tuple (forward, backward)
+            return py::make_tuple(fwd_py, bck_py);
+        }, 
+        py::arg("N") = 100,
+        pykep::leg_zoh_get_state_info_docstring().c_str());
 }

@@ -32,6 +32,7 @@
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
+#include <boost/serialization/optional.hpp>
 
 // Include the archives.
 #include <boost/archive/binary_iarchive.hpp>
