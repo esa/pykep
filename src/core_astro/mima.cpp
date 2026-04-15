@@ -9,6 +9,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include <cmath>
+#include <limits>
 
 #include <boost/math/tools/roots.hpp>
 
@@ -121,8 +122,7 @@ std::pair<double, double> _mima_compute_transfer(double x, const std::array<std:
     // a1 = dvs[0:3]/tau/tof
     // a2 = dvs[3:6]/(1-tau)/tof
     // err = tau**2*(1-tau)**2*(a2[0]*a2[0]+a2[1]*a2[1]+a2[2]*a2[2]-a1[0]*a1[0]-a1[1]*a1[1]-a1[2]*a1[2])
-    mat66 invM = inv(M);
-    mat61 dvs = _dot(invM, b);
+    mat61 dvs = xt::linalg::solve(M, b);
     mat31 a1 = xt::view(dvs, xt::range(0, 3)) / tau / tof;
     mat31 a2 = xt::view(dvs, xt::range(3, 6)) / (1. - tau) / tof;
 
@@ -139,7 +139,7 @@ kep3_DLL_PUBLIC std::pair<double, double> mima2(const std::array<std::array<doub
 {
     const boost::uintmax_t maxit = 100u;
     boost::uintmax_t it = maxit;
-    unsigned digits = 10u;                                 // No need to compute this approximation precisely
+    unsigned digits = std::numeric_limits<double>::digits - 4u;
     boost::math::tools::eps_tolerance<double> tol(digits); // Set the tolerance.
     double guess = _mima_compute_transfer(0., posvel1, tof, dv1, dv2, mu).first > 0 ? -0.5 : 0.5;
     auto r = boost::math::tools::bracket_and_solve_root(
