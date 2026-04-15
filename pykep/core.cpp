@@ -26,6 +26,7 @@
 #include <kep3/leg/sims_flanagan.hpp>
 #include <kep3/leg/sims_flanagan_alpha.hpp>
 #include <kep3/leg/zoh.hpp>
+#include <kep3/leg/zoh_ss.hpp>
 #include <kep3/planet.hpp>
 #include <kep3/ta/bcp.hpp>
 #include <kep3/ta/cr3bp.hpp>
@@ -870,10 +871,11 @@ PYBIND11_MODULE(core, m) // NOLINT
     // Exposing the zoh leg
     py::class_<kep3::leg::zoh> zoh(m, "_zoh_cpp", pykep::leg_zoh_docstring().c_str());
     zoh.def(py::init<const std::array<double, 7> &, const std::vector<double> &, const std::array<double, 7> &,
-                     const std::vector<double> &, double, const heyoka::taylor_adaptive<double> &,
-                     std::optional<heyoka::taylor_adaptive<double>>, std::optional<unsigned>>(),
-            py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"), py::arg("ta"),
-            py::arg("ta_var") = std::nullopt, py::arg("max_steps") = std::nullopt);
+                 const std::vector<double> &, double,
+                 const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &,
+                 std::optional<unsigned>>(),
+            py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"),
+            py::arg("tas"), py::arg("max_steps") = std::nullopt);
     zoh.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh>);
     zoh.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh>);
     zoh.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh>);
@@ -1016,4 +1018,120 @@ PYBIND11_MODULE(core, m) // NOLINT
         }, 
         py::arg("N") = 100,
         pykep::leg_zoh_get_state_info_docstring().c_str());
+
+    // Exposing the zoh_ss leg
+    py::class_<kep3::leg::zoh_ss> zoh_ss(m, "_zoh_ss_cpp", pykep::leg_zoh_ss_docstring().c_str());
+    zoh_ss.def(py::init<const std::array<double, 6> &, const std::vector<double> &, const std::array<double, 6> &,
+                    const std::vector<double> &, double,
+                    const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &,
+                    std::optional<unsigned>>(),
+               py::arg("state0"), py::arg("controls"), py::arg("state1"), py::arg("tgrid"), py::arg("cut"),
+               py::arg("tas"), py::arg("max_steps") = std::nullopt);
+    zoh_ss.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh_ss>);
+    zoh_ss.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh_ss>);
+    zoh_ss.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh_ss>);
+
+    zoh_ss.def_property("state0", &kep3::leg::zoh_ss::get_state0, &kep3::leg::zoh_ss::set_state0,
+                        pykep::leg_zoh_ss_state0_docstring().c_str());
+    zoh_ss.def_property("state1", &kep3::leg::zoh_ss::get_state1, &kep3::leg::zoh_ss::set_state1,
+                        pykep::leg_zoh_ss_state1_docstring().c_str());
+    zoh_ss.def_property("controls", &kep3::leg::zoh_ss::get_controls, &kep3::leg::zoh_ss::set_controls,
+                        pykep::leg_zoh_ss_controls_docstring().c_str());
+    zoh_ss.def_property("tgrid", &kep3::leg::zoh_ss::get_tgrid, &kep3::leg::zoh_ss::set_tgrid,
+                        pykep::leg_zoh_ss_tgrid_docstring().c_str());
+    zoh_ss.def_property("cut", &kep3::leg::zoh_ss::get_cut, &kep3::leg::zoh_ss::set_cut,
+                        pykep::leg_zoh_ss_cut_docstring().c_str());
+    zoh_ss.def_property("max_steps", &kep3::leg::zoh_ss::get_max_steps, &kep3::leg::zoh_ss::set_max_steps,
+                        pykep::leg_zoh_ss_max_steps_docstring().c_str());
+
+    zoh_ss.def_property_readonly("nseg", &kep3::leg::zoh_ss::get_nseg, pykep::leg_zoh_ss_nseg_docstring().c_str());
+    zoh_ss.def_property_readonly("nseg_fwd", &kep3::leg::zoh_ss::get_nseg_fwd,
+                                 pykep::leg_zoh_ss_nseg_fwd_docstring().c_str());
+    zoh_ss.def_property_readonly("nseg_bck", &kep3::leg::zoh_ss::get_nseg_bck,
+                                 pykep::leg_zoh_ss_nseg_bck_docstring().c_str());
+
+    zoh_ss.def("compute_mismatch_constraints", &kep3::leg::zoh_ss::compute_mismatch_constraints,
+               pykep::leg_zoh_ss_mc_docstring().c_str());
+
+    zoh_ss.def(
+        "compute_mc_grad",
+        [](const kep3::leg::zoh_ss &leg) {
+            auto grad_cpp = leg.compute_mc_grad();
+            const std::array<double, 36> &dx0 = std::get<0>(grad_cpp);
+            const std::array<double, 36> &dx1 = std::get<1>(grad_cpp);
+            const std::vector<double> &du = std::get<2>(grad_cpp);
+            const std::vector<double> &dtgrid = std::get<3>(grad_cpp);
+
+            auto dx0_ptr = std::make_unique<std::array<double, 36>>(dx0);
+            py::capsule dx0_caps(dx0_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::array<double, 36>> vptr(static_cast<std::array<double, 36> *>(ptr));
+            });
+            auto dx1_ptr = std::make_unique<std::array<double, 36>>(dx1);
+            py::capsule dx1_caps(dx1_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::array<double, 36>> vptr(static_cast<std::array<double, 36> *>(ptr));
+            });
+            auto du_ptr = std::make_unique<std::vector<double>>(du);
+            py::capsule du_caps(du_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
+            });
+            auto dtgrid_ptr = std::make_unique<std::vector<double>>(dtgrid);
+            py::capsule dtgrid_caps(dtgrid_ptr.get(), [](void *ptr) {
+                const std::unique_ptr<std::vector<double>> vptr(static_cast<std::vector<double> *>(ptr));
+            });
+
+            auto *ptr_dx0 = dx0_ptr.release();
+            auto *ptr_dx1 = dx1_ptr.release();
+            auto *ptr_du = du_ptr.release();
+            auto *ptr_dtgrid = dtgrid_ptr.release();
+
+            auto dx0_py = py::array_t<double>({6, 6}, ptr_dx0->data(), std::move(dx0_caps));
+            auto dx1_py = py::array_t<double>({6, 6}, ptr_dx1->data(), std::move(dx1_caps));
+            auto du_py = py::array_t<double>({static_cast<py::ssize_t>(6), static_cast<py::ssize_t>(du.size() / 6)},
+                                             ptr_du->data(), std::move(du_caps));
+            auto dtgrid_py
+                = py::array_t<double>({static_cast<py::ssize_t>(6), static_cast<py::ssize_t>(dtgrid.size() / 6)},
+                                      ptr_dtgrid->data(), std::move(dtgrid_caps));
+
+            return py::make_tuple(dx0_py, dx1_py, du_py, dtgrid_py);
+        },
+        pykep::leg_zoh_ss_mc_grad_docstring().c_str());
+
+    zoh_ss.def(
+        "get_state_info",
+        [](const kep3::leg::zoh_ss &leg, unsigned N) {
+            auto [fwd_cpp, bck_cpp, success] = leg.get_state_info(N);
+
+            auto flatten = [](const std::vector<std::vector<std::array<double, 6>>> &data) {
+                std::vector<double> flat;
+                if (!data.empty()) {
+                    flat.reserve(data.size() * data[0].size() * 6);
+                }
+                for (const auto &segment : data) {
+                    for (const auto &state : segment) {
+                        flat.insert(flat.end(), state.begin(), state.end());
+                    }
+                }
+                return flat;
+            };
+
+            auto fwd_flat = std::make_unique<std::vector<double>>(flatten(fwd_cpp));
+            auto bck_flat = std::make_unique<std::vector<double>>(flatten(bck_cpp));
+
+            const auto nseg_fwd = static_cast<py::ssize_t>(fwd_cpp.size());
+            const auto nseg_bck = static_cast<py::ssize_t>(bck_cpp.size());
+
+            py::capsule fwd_caps(fwd_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+            py::capsule bck_caps(bck_flat.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+
+            auto *ptr_fwd = fwd_flat.release();
+            auto *ptr_bck = bck_flat.release();
+
+            py::array fwd_py({nseg_fwd, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(6)}, ptr_fwd->data(),
+                             fwd_caps);
+            py::array bck_py({nseg_bck, static_cast<py::ssize_t>(N), static_cast<py::ssize_t>(6)}, ptr_bck->data(),
+                             bck_caps);
+
+            return py::make_tuple(fwd_py, bck_py, success);
+        },
+        py::arg("N") = 2, pykep::leg_zoh_ss_get_state_info_docstring().c_str());
 }

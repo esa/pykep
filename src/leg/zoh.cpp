@@ -50,10 +50,11 @@ void propagate_until_impl(heyoka::taylor_adaptive<double> &ta, double t, const s
 } // namespace
 
 zoh::zoh(const std::array<double, 7> &state0, const std::vector<double> &controls, const std::array<double, 7> &state1,
-         const std::vector<double> &tgrid, double cut, const heyoka::taylor_adaptive<double> &ta,
-         std::optional<heyoka::taylor_adaptive<double>> ta_var, std::optional<unsigned> max_steps)
+       const std::vector<double> &tgrid, double cut,
+       const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &tas,
+       std::optional<unsigned> max_steps)
     : m_state0(state0), m_controls(controls), m_state1(state1), m_tgrid(tgrid), m_cut(cut), m_max_steps(max_steps),
-      m_ta(ta), m_ta_var(std::move(ta_var))
+    m_ta(tas.first), m_ta_var(tas.second)
 {
     // The integrators are fixed at construction: the object invariants depend on their dimensions and parameter layout.
     update_nseg();
@@ -239,6 +240,7 @@ zoh::compute_mc_grad() const
     using kep3::linalg::mat71;
     using kep3::linalg::mat74;
     using kep3::linalg::mat77;
+    using kep3::linalg::_eye;
     using xt::adapt;
     using xt::all;
     using xt::range;
@@ -313,13 +315,13 @@ zoh::compute_mc_grad() const
         dyn_fwd.push_back(dyn);
     }
     // Compute M_fwd chain
-    mat77 cur = xt::eye<double>(7);
+    mat77 cur = _eye<7>();
     for (auto it = M_seg_fwd.rbegin(); it != M_seg_fwd.rend(); ++it) {
         cur = _dot<7, 7, 7>(cur, *it);
         M_fwd.push_back(cur);
     }
     std::reverse(M_fwd.begin(), M_fwd.end());
-    M_fwd.push_back(xt::eye<double>(7));
+    M_fwd.push_back(_eye<7>());
 
     // 1. dmc/dx0
     std::copy(M_fwd[0].data(), M_fwd[0].data() + 49, dmc_dx0.begin());
@@ -387,13 +389,13 @@ zoh::compute_mc_grad() const
         dyn_bck.push_back(dyn);
     }
     // Compute M_bck chain
-    cur = xt::eye<double>(7);
+    cur = _eye<7>();
     for (auto it = M_seg_bck.rbegin(); it != M_seg_bck.rend(); ++it) {
         cur = _dot<7, 7, 7>(cur, *it);
         M_bck.push_back(cur);
     }
     std::reverse(M_bck.begin(), M_bck.end());
-    M_bck.push_back(xt::eye<double>(7));
+    M_bck.push_back(_eye<7>());
 
     // 4. dmc/dx1
     for (unsigned i = 0; i < 49; ++i)

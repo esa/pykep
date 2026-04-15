@@ -201,6 +201,21 @@ std::string leg_zoh_mc_grad_docstring();
 std::string leg_zoh_tc_grad_docstring();
 std::string leg_zoh_get_state_info_docstring();
 
+// Zoh_ss
+std::string leg_zoh_ss_docstring();
+std::string leg_zoh_ss_state0_docstring();
+std::string leg_zoh_ss_controls_docstring();
+std::string leg_zoh_ss_state1_docstring();
+std::string leg_zoh_ss_tgrid_docstring();
+std::string leg_zoh_ss_cut_docstring();
+std::string leg_zoh_ss_max_steps_docstring();
+std::string leg_zoh_ss_nseg_docstring();
+std::string leg_zoh_ss_nseg_fwd_docstring();
+std::string leg_zoh_ss_nseg_bck_docstring();
+std::string leg_zoh_ss_mc_docstring();
+std::string leg_zoh_ss_mc_grad_docstring();
+std::string leg_zoh_ss_get_state_info_docstring();
+
 
 } // namespace pykep
 

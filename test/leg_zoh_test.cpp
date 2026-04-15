@@ -89,7 +89,7 @@ zoh_reference_case make_reference_case()
 TEST_CASE("compute_throttle_constraints")
 {
     auto data = make_reference_case();
-    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta};
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
     auto const tc = leg.compute_throttle_constraints();
     REQUIRE(tc.size() == 5u);
@@ -101,7 +101,7 @@ TEST_CASE("compute_throttle_constraints")
 TEST_CASE("compute_mismatch_constraints")
 {
     auto data = make_reference_case();
-    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta};
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
     auto const mc = leg.compute_mismatch_constraints();
     std::array<double, 7> const expected = {
@@ -116,7 +116,7 @@ TEST_CASE("compute_mc_grad")
 {
     auto data = make_reference_case();
 
-    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta, data.ta_var};
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, data.ta_var}};
 
     auto [dmc_dx0, dmc_dx1, dmc_dcontrols, dmc_dtgrid] = leg.compute_mc_grad();
 
@@ -184,7 +184,7 @@ TEST_CASE("get_state_info")
     unsigned nseg_fwd = static_cast<unsigned>(nseg * cut);
     unsigned nseg_bck = nseg - nseg_fwd;
 
-    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta};
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
     auto [state_fwd, state_bck] = leg.get_state_info(N);
 
@@ -219,7 +219,7 @@ TEST_CASE("serialization")
 {
     // Create a reference zoh leg
     auto data = make_reference_case();
-    kep3::leg::zoh zoh1{data.state0, data.controls, data.state1, data.tgrid, data.cut, data.ta};
+    kep3::leg::zoh zoh1{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
     // Store the string representation
     std::stringstream ss;

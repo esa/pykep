@@ -14,6 +14,7 @@
 #include <array>
 #include <optional>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 #include <fmt/ostream.h>
@@ -51,8 +52,8 @@ public:
 
     // Constructor
     zoh(const std::array<double, 7> &state0, const std::vector<double> &controls, const std::array<double, 7> &state1,
-        const std::vector<double> &tgrid, double cut, const heyoka::taylor_adaptive<double> &ta,
-        std::optional<heyoka::taylor_adaptive<double>> ta_var = std::nullopt,
+        const std::vector<double> &tgrid, double cut,
+        const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &tas,
         std::optional<unsigned> max_steps = std::nullopt);
 
     // Setters

@@ -141,21 +141,41 @@ class zoh_ss:
         dyn = [it[1] for it in sys]
         self.dyn_cfunc = _hy.cfunc_dbl(dyn, vars, compact_mode=True)
 
+    # The Solar Sail dynamics, specially when the orientation os randomly sampled, can hit singularities.
+    # Think for example of a long segment where the sail is oriented for maximum 
+    # deceleration, which can lead to a full stop and thus
+    # a singularity in the equations. In order to avoid computations to fail because of this,
+    # we implement a simple wrapper around the propagate_until method that restore the previous state of
+    # the integrator in case of failure and return a boolean indicating if the propagation was successful or not.
+    # This allows even to compute the gradients even in cases where singularity is hit, by just stopping at the
+    # failed segments and using the last successful state for the gradient computations.
+    def _propagate_until(self, ta, t_end):
+        previous_time = ta.time
+        previous_state = ta.state.copy()
+        try:
+            if self.max_steps is not None:
+                ta.propagate_until(t_end, max_steps=self.max_steps)
+            else:
+                ta.propagate_until(t_end)
+        except Exception:
+            ta.time = previous_time
+            ta.state[:] = previous_state
+            return False
+        return True
+
     def compute_mismatch_constraints(self):
-        # Forward segments
+        # Forward segments (up to failiure or cut)
         self.ta.time = self.tgrid[0]
         self.ta.state[:] = self.state0
         for i in range(self.nseg_fwd):
             # setting alpha, beta
             self.ta.pars[0:2] = self.controls[2 * i : 2 * i + 2]
             # propagating
-            if self.max_steps is not None:
-                self.ta.propagate_until(self.tgrid[i + 1], max_steps=self.max_steps)
-            else:
-                self.ta.propagate_until(self.tgrid[i + 1])
+            if not self._propagate_until(self.ta, self.tgrid[i + 1]):
+                break
         state_fwd = self.ta.state.copy()
 
-        # Backward segments
+        # Backward segments (up to failiure or cut)
         self.ta.time = self.tgrid[-1]
         self.ta.state[:] = self.state1
         for i in range(self.nseg_bck):
@@ -163,11 +183,9 @@ class zoh_ss:
             self.ta.pars[0] = self.controls[-2 * i - 2]
             self.ta.pars[1] = self.controls[-2 * i - 1]
             # propagating
-            if self.max_steps is not None:
-                self.ta.propagate_until(self.tgrid[-2 - i], max_steps=self.max_steps)
-            else:
-                self.ta.propagate_until(self.tgrid[-2 - i])
-        state_bck = self.ta.state
+            if not self._propagate_until(self.ta, self.tgrid[-2 - i]):
+                break
+        state_bck = self.ta.state.copy()
         return (state_fwd - state_bck).tolist()
 
     def compute_mc_grad(self):
@@ -205,15 +223,14 @@ class zoh_ss:
         dyn_fwd = []
         self.ta_var.time = self.tgrid[0]
         self.ta_var.state[:6] = self.state0
+        successful_fwd = 0
         for i in range(self.nseg_fwd):
             self.ta_var.state[6:] = self.ic_var
             # setting T, ix, iy, iz
             self.ta_var.pars[0:2] = self.controls[2 * i : 2 * i + 2]
             # propagating
-            if self.max_steps is not None:
-                self.ta_var.propagate_until(self.tgrid[i + 1], max_steps=self.max_steps)
-            else:
-                self.ta_var.propagate_until(self.tgrid[i + 1])
+            if not self._propagate_until(self.ta_var, self.tgrid[i + 1]):
+                break
             # extracting the segment STMs
             M_seg_fwd.append(self.ta_var.state[6:].reshape(6, 8)[:, :6].copy())  # 6x6
             # extracting the control sensitivities in across the single segment
@@ -225,6 +242,7 @@ class zoh_ss:
                     pars=self.controls[2 * i : 2 * i + 2] + self.pars_no_control,
                 )
             )
+            successful_fwd += 1
         # We compute the STMs - Mf0, Mf1, Mf2, ...
         cur = _np.eye(6)
         for M in reversed(M_seg_fwd):
@@ -243,11 +261,11 @@ class zoh_ss:
 
         # 3 - dmc/dtgrid
         dmcdtgrid = _np.zeros((6, self.nseg + 1))
-        if self.nseg_fwd > 0:
+        if successful_fwd > 0:
             dmcdtgrid[:, 0] = -M_fwd[1] @ dyn_fwd[0]
-            dmcdtgrid[:, i] = M_fwd[-1] @ dyn_fwd[-1]
+            dmcdtgrid[:, successful_fwd] = M_fwd[-1] @ dyn_fwd[-1]
 
-            for i in range(1, self.nseg_fwd):
+            for i in range(1, successful_fwd):
                 dmcdtgrid[:, i] = M_fwd[i + 1] @ (
                     M_seg_fwd[i] @ dyn_fwd[i - 1] - dyn_fwd[i]
                 )
@@ -260,16 +278,15 @@ class zoh_ss:
         dyn_bck = []
         self.ta_var.time = self.tgrid[-1]
         self.ta_var.state[:6] = self.state1
+        successful_bck = 0
         for i in range(self.nseg_bck):
             self.ta_var.state[6:] = self.ic_var
             # setting T, ix, iy, iz
             self.ta_var.pars[0] = self.controls[-2 * i - 2]
             self.ta_var.pars[1] = self.controls[-2 * i - 1]
             # propagating
-            if self.max_steps is not None:
-                self.ta_var.propagate_until(self.tgrid[-2 - i], max_steps=self.max_steps)
-            else:
-                self.ta_var.propagate_until(self.tgrid[-2 - i])
+            if not self._propagate_until(self.ta_var, self.tgrid[-2 - i]):
+                break
             # extracting the segment STMs
             M_seg_bck.append(self.ta_var.state[6:].reshape(6, 8)[:, :6].copy())
             # extracting the control sensitivities in across the single segment
@@ -283,6 +300,7 @@ class zoh_ss:
                     + self.pars_no_control,
                 )
             )
+            successful_bck += 1
 
         # We compute the STMs - Mf0, Mf1, Mf2, ...
         cur = _np.eye(6)
@@ -302,15 +320,13 @@ class zoh_ss:
             i += 1
 
         # 3 - dmc/dtgrid
-        if (
-            self.nseg_bck > 0
-        ):  # we skip this in the corner case where no bck seg are there
+        if successful_bck > 0:  # we skip this in the corner case where no bck seg are there
             dmcdtgrid[:, -1] = M_bck[1] @ dyn_bck[0]
-            dmcdtgrid[:, self.nseg_fwd] -= (
+            dmcdtgrid[:, self.nseg - successful_bck] -= (
                 M_bck[-1] @ dyn_bck[-1]
             )  # This is for the mid time point shared fwd and bck: we need to subtract to the existing
 
-            for i in range(1, self.nseg_bck):
+            for i in range(1, successful_bck):
                 dmcdtgrid[:, -1 - i] = -M_bck[i + 1] @ (
                     M_seg_bck[i] @ dyn_bck[i - 1] - dyn_bck[i]
                 )
@@ -332,15 +348,22 @@ class zoh_ss:
             endpoints). The default (*N=2*) returns only the segment endpoints.
 
         Returns:
-            :class:`tuple`: ``(state_fwd, state_bck)`` where:
+            :class:`tuple`: ``(state_fwd, state_bck, success)`` where:
 
-                - ``state_fwd`` (:class:`list`): List of length ``nseg_fwd``. Each entry contains
-                  the sampled 6D state history over the corresponding forward segment (from
-                  ``tgrid[i]`` to ``tgrid[i+1]``).
+                - ``state_fwd`` (:class:`list`): List of segments successfully propagated in the
+                  forward direction (length ≤ ``nseg_fwd``). Each entry contains the sampled 6D
+                  state history over the corresponding segment (from ``tgrid[i]`` to
+                  ``tgrid[i+1]``).
 
-                - ``state_bck`` (:class:`list`): List of length ``nseg_bck``. Each entry contains
-                  the sampled 6D state history over the corresponding backward segment (from
-                  ``tgrid[-1-i]`` to ``tgrid[-2-i]``).
+                - ``state_bck`` (:class:`list`): List of segments successfully propagated in the
+                  backward direction (length ≤ ``nseg_bck``). Each entry contains the sampled 6D
+                  state history over the corresponding segment (from ``tgrid[-1-i]`` to
+                  ``tgrid[-2-i]``).
+
+                - ``success`` (:class:`bool`): ``True`` if all segments were propagated without
+                  error; ``False`` if any ``propagate_grid`` call raised an exception (in which
+                  case ``state_fwd`` and/or ``state_bck`` contain only the segments that completed
+                  before the failure).
 
             .. note::
                The backward propagation is carried out by integrating from the final time toward
@@ -357,7 +380,7 @@ class zoh_ss:
         .. code-block:: python 
          
            ax = pk.plot.make_3Daxis()
-           fwd, bck = leg.get_state_info(N=100)
+           fwd, bck, success = leg.get_state_info(N=100)
            for segment in fwd:
                ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='blue')
                ax.plot(segment[:,0], segment[:,1], segment[:,2], c='blue')
@@ -366,6 +389,8 @@ class zoh_ss:
                ax.plot(segment[:,0], segment[:,1], segment[:,2], c='darkorange')
            ax.view_init(90, -90)
         """
+        success = True
+
         # Forward segments
         state_fwd = []
         self.ta.time = self.tgrid[0]
@@ -375,10 +400,14 @@ class zoh_ss:
             self.ta.pars[0:2] = self.controls[2 * i : 2 * i + 2]
             # propagating
             plot_grid_fwd = _np.linspace(self.tgrid[i], self.tgrid[i + 1], N)
-            if self.max_steps is not None:
-                sol_fwd = self.ta.propagate_grid(plot_grid_fwd, max_steps=self.max_steps)[-1]
-            else:
-                sol_fwd = self.ta.propagate_grid(plot_grid_fwd)[-1]
+            try:
+                if self.max_steps is not None:
+                    sol_fwd = self.ta.propagate_grid(plot_grid_fwd, max_steps=self.max_steps)[-1]
+                else:
+                    sol_fwd = self.ta.propagate_grid(plot_grid_fwd)[-1]
+            except Exception:
+                success = False
+                break
             state_fwd.append(sol_fwd)
         
         # Backward segments
@@ -391,10 +420,14 @@ class zoh_ss:
             self.ta.pars[1] = self.controls[-2 * i - 1]
             # propagating
             plot_grid_bck = _np.linspace(self.tgrid[-1 - i], self.tgrid[-2 - i], N)
-            if self.max_steps is not None:
-                sol_bck = self.ta.propagate_grid(plot_grid_bck, max_steps=self.max_steps)[-1]
-            else:
-                sol_bck = self.ta.propagate_grid(plot_grid_bck)[-1]
+            try:
+                if self.max_steps is not None:
+                    sol_bck = self.ta.propagate_grid(plot_grid_bck, max_steps=self.max_steps)[-1]
+                else:
+                    sol_bck = self.ta.propagate_grid(plot_grid_bck)[-1]
+            except Exception:
+                success = False
+                break
             state_bck.append(sol_bck)
         
-        return state_fwd,state_bck
+        return state_fwd, state_bck, success

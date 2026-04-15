@@ -147,6 +147,7 @@ set(kep3_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sims_flanagan.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sims_flanagan_alpha.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/zoh.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/zoh_ss.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sf_checks.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core_astro/flyby.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core_astro/ic2par2ic.cpp"
@@ -189,9 +190,9 @@ target_compile_options(kep3 PRIVATE
     "$<$<CONFIG:MinSizeRel>:${kep3_CXX_FLAGS_RELEASE}>"
 )
 
-# Ensure that C++20 is employed when both compiling and consuming kep3.
+# Ensure that C++23 is employed when both compiling and consuming kep3.
 target_compile_features(kep3 PUBLIC cxx_std_23)
-# Enforce vanilla C++20 when compiling kep3.
+# Enforce vanilla C++23 when compiling kep3.
 set_property(TARGET kep3 PROPERTY CXX_EXTENSIONS NO)
 
 target_include_directories(kep3 PUBLIC
@@ -272,7 +273,7 @@ endif()
 
 if(kep3_BUILD_PYTHON_BINDINGS)
     # Find python
-    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
     message(VERBOSE "Python3 interpreter: ${Python3_EXECUTABLE}")
     message(VERBOSE "Python3 installation directory: ${Python3_SITEARCH}")
     message(VERBOSE "Python3 include directories: ${Python3_INCLUDE_DIRS}")
@@ -282,6 +283,17 @@ if(kep3_BUILD_PYTHON_BINDINGS)
 
     # pybind11.
     find_package(pybind11 REQUIRED)
+
+    if(MINGW OR ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        message(STATUS "Creating the files for the generation of a binary wheel.")
+        set(PYKEP_VERSION ${kep3_VERSION})
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/wheel")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py" @ONLY)
+        if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+            # NOTE: keep this Linux-only to mirror ppnf wheel generation.
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
+        endif()
+    endif()
 
     # Build directory
     add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
