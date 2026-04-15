@@ -190,9 +190,9 @@ target_compile_options(kep3 PRIVATE
     "$<$<CONFIG:MinSizeRel>:${kep3_CXX_FLAGS_RELEASE}>"
 )
 
-# Ensure that C++20 is employed when both compiling and consuming kep3.
+# Ensure that C++23 is employed when both compiling and consuming kep3.
 target_compile_features(kep3 PUBLIC cxx_std_23)
-# Enforce vanilla C++20 when compiling kep3.
+# Enforce vanilla C++23 when compiling kep3.
 set_property(TARGET kep3 PROPERTY CXX_EXTENSIONS NO)
 
 target_include_directories(kep3 PUBLIC

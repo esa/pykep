@@ -8,10 +8,10 @@ set -e
 heyoka_spec="heyoka>=7"
 heyoka_py_spec="heyoka.py>=7"
 if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
-    # On macOS arm64, newer heyoka packages may trigger template-constraint
+    # On macOS arm64, heyoka >= 7.4 may trigger template-constraint
     # failures in callable/event headers with the current toolchain.
-    heyoka_spec="heyoka>=7,<8"
-    heyoka_py_spec="heyoka.py>=7,<8"
+    heyoka_spec="heyoka>=7,<7.4"
+    heyoka_py_spec="heyoka.py>=7,<7.4"
 fi
 
 # Ensure conda-forge is used consistently across all non-manylinux Unix jobs.
