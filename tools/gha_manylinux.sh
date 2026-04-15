@@ -120,6 +120,7 @@ build_and_install_cmake_repo xtensor-blas
 HEYOKA_REF="${HEYOKA_REF:-}"
 clone_at_ref https://github.com/bluescarni/heyoka.git heyoka "${HEYOKA_REF}"
 build_and_install_cmake_repo heyoka \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DHEYOKA_BUILD_TESTS=OFF \
     -DHEYOKA_BUILD_BENCHMARKS=OFF \
     -DHEYOKA_BUILD_TUTORIALS=OFF \
