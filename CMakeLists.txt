@@ -284,6 +284,17 @@ if(kep3_BUILD_PYTHON_BINDINGS)
     # pybind11.
     find_package(pybind11 REQUIRED)
 
+    if(MINGW OR ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        message(STATUS "Creating the files for the generation of a binary wheel.")
+        set(PYKEP_VERSION ${kep3_VERSION})
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/wheel")
+        configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.py" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.py" @ONLY)
+        if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+            # NOTE: keep this Linux-only to mirror ppnf wheel generation.
+            configure_file("${CMAKE_CURRENT_SOURCE_DIR}/tools/wheel_setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}/wheel/setup.cfg" @ONLY)
+        endif()
+    endif()
+
     # Build directory
     add_subdirectory("${CMAKE_SOURCE_DIR}/pykep")
 endif()
