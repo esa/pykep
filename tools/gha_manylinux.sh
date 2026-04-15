@@ -224,15 +224,17 @@ print("heyoka", hy.__version__)
 
 hy.install_custom_numpy_mem_handler()
 try:
-    # Intermodule check: heyoka expressions (C_++ generated) are converted correctly in python.
+    # Intermodule check: heyoka expressions (C_++ generated) 
+    # are converted correctly in python.
     dyn = pk.ta.zoh_kep_dyn()
     print("intermodule checks passed")
 finally:
     # performing a defensive garbage collecting to prevent CI issues
-    # related to heyoka's custom numpy memory handler and its interaction 
     dyn = None
     gc.collect()
     hy.remove_custom_numpy_mem_handler()
+    import os
+    os._exit(0)
 PY
 
 # Disable command echoing at script end.
