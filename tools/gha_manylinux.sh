@@ -33,9 +33,14 @@ PREFIX="${PREFIX:-/usr/local}"
 export CMAKE_PREFIX_PATH="${PREFIX}:${CMAKE_PREFIX_PATH:-}"
 export LD_LIBRARY_PATH="${PREFIX}/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH:-}"
 
+# Keep Python heyoka.py and C++ heyoka versions intentionally aligned:
+# heyoka.py 7.10.1 is built against heyoka C++ 7.10.0.
+HEYOKA_PYPI_VERSION="${HEYOKA_PYPI_VERSION:-7.10.1}"
+HEYOKA_CPP_VERSION_RELEASE="${HEYOKA_CPP_VERSION_RELEASE:-7.10.0}"
+
 "${PYBIN}/python" -m pip install --upgrade pip setuptools wheel
 "${PYBIN}/python" -m pip install cmake auditwheel build
-"${PYBIN}/python" -m pip install numpy scipy matplotlib cloudpickle sgp4 spiceypy pygmo
+"${PYBIN}/python" -m pip install numpy scipy matplotlib cloudpickle sgp4 spiceypy pygmo "heyoka==${HEYOKA_PYPI_VERSION}"
 
 cmake_bin="${PYBIN}/cmake"
 
@@ -117,15 +122,12 @@ clone_at_ref https://github.com/xtensor-stack/xtensor-blas.git xtensor-blas "${X
 build_and_install_cmake_repo xtensor-blas
 
 # Build heyoka C++ package for find_package(heyoka CONFIG REQUIRED).
-HEYOKA_REF="${HEYOKA_REF:-}"
-clone_at_ref https://github.com/bluescarni/heyoka.git heyoka "${HEYOKA_REF}"
+clone_at_ref https://github.com/bluescarni/heyoka.git heyoka "${HEYOKA_CPP_VERSION_RELEASE}"
 build_and_install_cmake_repo heyoka \
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DHEYOKA_BUILD_TESTS=OFF \
     -DHEYOKA_BUILD_BENCHMARKS=OFF \
     -DHEYOKA_BUILD_TUTORIALS=OFF \
-    -DHEYOKA_BUILD_PYTHON_BINDINGS=ON \
-    -DPython3_EXECUTABLE="${PYBIN}/python" \
     -DHEYOKA_ENABLE_IPO=OFF
 
 # Build and install kep3 + pykep.

@@ -28,7 +28,7 @@ INSTALL_REQUIRES = [
     "sgp4",
     "spiceypy",
     "pygmo",
-    "heyoka",
+    "heyoka==7.10.1",
 ]
 
 
