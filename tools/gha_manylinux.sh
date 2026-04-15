@@ -174,6 +174,7 @@ cp -r "${SITE_PACKAGES_DIR}/pykep" "${WHEEL_DIR}/"
 cd /
 "${PYBIN}/python" -m pip install --force-reinstall "${WHEEL_DIR}"/dist2/pykep*.whl
 "${PYBIN}/python" - <<'PY'
+import gc
 import pykep as pk
 import pygmo as pg
 import heyoka as hy
@@ -182,14 +183,15 @@ print("pykep", pk.__version__)
 print("pygmo", pg.__version__)
 print("heyoka", hy.__version__)
 
-# Intermodule check: heyoka expressions (C_++ generated) are converted correctly in python.
-dyn = pk.ta.zoh_kep_dyn()
-
-print("intermodule checks passed")
-
-# Try to shut down worker pools explicitly before interpreter teardown.
-pg.mp_bfe.shutdown_pool()
-
+hy.install_custom_numpy_mem_handler()
+try:
+    # Intermodule check: heyoka expressions (C_++ generated) are converted correctly in python.
+    dyn = pk.ta.zoh_kep_dyn()
+    print("intermodule checks passed")
+finally:
+    dyn = None
+    gc.collect()
+    hy.remove_custom_numpy_mem_handler()
 PY
 
 set +x
