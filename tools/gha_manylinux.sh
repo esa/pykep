@@ -189,6 +189,8 @@ try:
     dyn = pk.ta.zoh_kep_dyn()
     print("intermodule checks passed")
 finally:
+    # performing a defensive garbage collecting to prevent CI issues
+    # related to heyoka's custom numpy memory handler and its interaction 
     dyn = None
     gc.collect()
     hy.remove_custom_numpy_mem_handler()

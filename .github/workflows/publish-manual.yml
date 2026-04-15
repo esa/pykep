@@ -1,0 +1,70 @@
+name: Publish to PyPI (manual)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  arm64-manylinux228:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ["Python313", "Python312", "Python311"]
+    container:
+      image: pagmo2/manylinux_2_28_aarch64_with_deps:latest
+      env:
+        KEP3_BUILD_TYPE: ${{ matrix.build-type }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_manylinux.sh
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manylinux228-aarch64-${{ matrix.build-type }}
+          path: build/wheel/dist2/pykep*.whl
+          if-no-files-found: error
+
+  amd64-manylinux228:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build-type: ["Python313", "Python312", "Python311"]
+    container:
+      image: pagmo2/manylinux_2_28_x86_64_with_deps:latest
+      env:
+        KEP3_BUILD_TYPE: ${{ matrix.build-type }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash tools/gha_manylinux.sh
+      - name: Upload wheel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manylinux228-x86_64-${{ matrix.build-type }}
+          path: build/wheel/dist2/pykep*.whl
+          if-no-files-found: error
+
+  publish-pypi:
+    name: Publish manylinux wheels to PyPI
+    needs:
+      - arm64-manylinux228
+      - amd64-manylinux228
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pykep
+    permissions:
+      id-token: write
+    steps:
+      - name: Download manylinux wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: manylinux228-*
+          path: dist/
+          merge-multiple: true
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/

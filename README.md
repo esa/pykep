@@ -1,3 +1,8 @@
+[![C++ CI](https://github.com/esa/pykep/actions/workflows/ci-cpp.yml/badge.svg)](https://github.com/esa/pykep/actions/workflows/ci-cpp.yml)
+[![Python CI](https://github.com/esa/pykep/actions/workflows/ci-python.yml/badge.svg)](https://github.com/esa/pykep/actions/workflows/ci-python.yml)
+[![Manylinux CI](https://github.com/esa/pykep/actions/workflows/ci-manylinux.yml/badge.svg)](https://github.com/esa/pykep/actions/workflows/ci-manylinux.yml)
+[![PyPI version](https://img.shields.io/pypi/v/pykep)](https://pypi.org/project/pykep/)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/pykep?label=conda-forge)](https://anaconda.org/conda-forge/pykep)
 [![codecov](https://codecov.io/gh/esa/pykep/branch/main/graph/badge.svg?token=K49OWJCRB9)](https://codecov.io/gh/esa/pykep)
 
 <!-- PROJECT LOGO -->
@@ -54,28 +59,51 @@ pykep served the community faithfully for years, but the new version raises the 
 
 ## Installation
 
-Recommended workflow (conda):
+Use one of the following installation paths, in order of preference.
 
-1. Install and activate the conda development environment.
+### 1. Conda (preferred)
+
+Conda is the recommended way to install pykep and its scientific dependencies.
+
+```bash
+conda install -c conda-forge pykep
+```
+
+Note: conda-forge currently provides the stable v1 line. v3 packages are coming soon on conda-forge.
+
+### 2. PyPI (pip)
+
+```bash
+pip install pykep
+```
+
+This provides only wheels for linux arm64 and amd64 architectiures.
+
+### 3. Build from source (recommended for v3 development now)
+
+1. Create and activate the development environment:
 
 ```bash
 conda env create -f kep3_devel.yml
 conda activate kep3_devel
 ```
 
-2. Configure, compile, and install the C++ library into the active conda environment.
+2. Configure and install `kep3` + `pykep`:
 
 ```bash
-mkdir build && cd build
-cmake -S . -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_PREFIX_PATH=$CONDA_PREFIX
-ninja install
+cmake -S . -B build -G Ninja \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+  -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX" \
+  -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+  -Dkep3_BUILD_PYTHON_BINDINGS=ON
+cmake --build build --target install --parallel
 ```
 
-3. Build and install the Python bindings (pykep) in the same environment.
+3. Quick import check:
 
 ```bash
-cmake -S . -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -Dkep3_BUILD_PYTHON_BINDINGS=ON
-ninja install```
+python -c "import pykep; print(pykep.__version__)"
+```
 
 ### Notes On Configure Flags
 
