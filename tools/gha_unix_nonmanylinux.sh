@@ -17,18 +17,13 @@ conda install -y -q \
     pybind11 pygmo sgp4 spiceypy matplotlib scipy \
     "eigen>=3,<5" "nlopt<2.10.1"
 
-# Force CMake to use the exact compiler wrappers selected by the activated conda
-# toolchain. This avoids accidental fallback to system compilers (e.g. Xcode
-# clang on macOS) which can be ABI- or feature-incompatible with conda-forge
-# dependencies. The prefix guard makes such mismatches fail fast.
-: "${CC:?CC must be set by the active conda toolchain}"
-: "${CXX:?CXX must be set by the active conda toolchain}"
-if [[ "${CC}" != "${CONDA_PREFIX}/bin/"* ]] || [[ "${CXX}" != "${CONDA_PREFIX}/bin/"* ]]; then
-    echo "ERROR: expected CC/CXX from ${CONDA_PREFIX}/bin, got CC=${CC} CXX=${CXX}" >&2
-    exit 1
+# On Apple Silicon, ensure CMake uses the compiler toolchain from the conda
+# environment to avoid accidental fallback to Xcode clang.
+cmake_compiler_args=()
+if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
+    cmake_compiler_args+=("-DCMAKE_C_COMPILER=${CONDA_PREFIX}/bin/clang")
+    cmake_compiler_args+=("-DCMAKE_CXX_COMPILER=${CONDA_PREFIX}/bin/clang++")
 fi
-
-cmake_compiler_args=("-DCMAKE_C_COMPILER=${CC}" "-DCMAKE_CXX_COMPILER=${CXX}")
 
 deps_dir="${CONDA_PREFIX}"
 
