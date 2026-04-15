@@ -105,21 +105,8 @@ INSTALL_ROOT="/root/install"
 mkdir -p "${INSTALL_ROOT}"
 cd "${INSTALL_ROOT}"
 
-# New manylinux images may not ship BLAS/LAPACK by default.
-# Ensure they are available before consuming xtensor-blas config dependencies.
-if ! (ls /usr/lib64/libblas.so* /usr/lib64/liblapack.so* /usr/lib64/libopenblas.so* >/dev/null 2>&1 || \
-      ls /usr/local/lib/libblas.so* /usr/local/lib/liblapack.so* /usr/local/lib/libopenblas.so* >/dev/null 2>&1); then
-    if command -v dnf >/dev/null 2>&1; then
-        dnf install -y openblas-devel lapack-devel || dnf install -y openblas lapack
-    elif command -v yum >/dev/null 2>&1; then
-        yum install -y openblas-devel lapack-devel || yum install -y openblas lapack
-    elif command -v microdnf >/dev/null 2>&1; then
-        microdnf install -y openblas-devel lapack-devel || microdnf install -y openblas lapack
-    else
-        echo "No supported package manager found to install BLAS/LAPACK"
-        exit 1
-    fi
-fi
+# Install BLAS/LAPACK dependencies needed by xtensor-blas consumers.
+yum install -y openblas-devel lapack-devel || yum install -y openblas lapack
 
 # Header-only stack required by xtensor/xtensor-blas.
 XTL_REF="${XTL_REF:-0.8.1}"
@@ -199,6 +186,10 @@ print("heyoka", hy.__version__)
 dyn = pk.ta.zoh_kep_dyn()
 
 print("intermodule checks passed")
+
+# Try to shut down worker pools explicitly before interpreter teardown.
+pg.mp_bfe.shutdown_pool()
+
 PY
 
 set +x
