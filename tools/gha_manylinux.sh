@@ -33,6 +33,7 @@ fi
 PREFIX="${PREFIX:-/usr/local}"
 export CMAKE_PREFIX_PATH="${PREFIX}:${CMAKE_PREFIX_PATH:-}"
 export LD_LIBRARY_PATH="${PREFIX}/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH:-}"
+export BLA_VENDOR="${BLA_VENDOR:-OpenBLAS}"
 
 # Keep Python heyoka.py and C++ heyoka versions intentionally aligned:
 # heyoka.py 7.10.1 is built against heyoka C++ 7.10.0.
@@ -104,6 +105,22 @@ INSTALL_ROOT="/root/install"
 mkdir -p "${INSTALL_ROOT}"
 cd "${INSTALL_ROOT}"
 
+# New manylinux images may not ship BLAS/LAPACK by default.
+# Ensure they are available before consuming xtensor-blas config dependencies.
+if ! (ls /usr/lib64/libblas.so* /usr/lib64/liblapack.so* /usr/lib64/libopenblas.so* >/dev/null 2>&1 || \
+      ls /usr/local/lib/libblas.so* /usr/local/lib/liblapack.so* /usr/local/lib/libopenblas.so* >/dev/null 2>&1); then
+    if command -v dnf >/dev/null 2>&1; then
+        dnf install -y openblas-devel lapack-devel || dnf install -y openblas lapack
+    elif command -v yum >/dev/null 2>&1; then
+        yum install -y openblas-devel lapack-devel || yum install -y openblas lapack
+    elif command -v microdnf >/dev/null 2>&1; then
+        microdnf install -y openblas-devel lapack-devel || microdnf install -y openblas lapack
+    else
+        echo "No supported package manager found to install BLAS/LAPACK"
+        exit 1
+    fi
+fi
+
 # Header-only stack required by xtensor/xtensor-blas.
 XTL_REF="${XTL_REF:-0.8.1}"
 XSIMD_REF="${XSIMD_REF:-13.2.0}"
@@ -141,6 +158,7 @@ mkdir -p build
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
         -DCMAKE_PREFIX_PATH="${PREFIX}" \
+        -DBLA_VENDOR="${BLA_VENDOR}" \
         -Dkep3_BUILD_TESTS=OFF \
         -Dkep3_BUILD_BENCHMARKS=OFF \
         -Dkep3_BUILD_PYTHON_BINDINGS=ON \
