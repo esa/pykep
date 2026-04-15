@@ -34,7 +34,7 @@ export CMAKE_PREFIX_PATH="${PREFIX}:${CMAKE_PREFIX_PATH:-}"
 export LD_LIBRARY_PATH="${PREFIX}/lib64:${PREFIX}/lib:${LD_LIBRARY_PATH:-}"
 
 "${PYBIN}/python" -m pip install --upgrade pip setuptools wheel
-"${PYBIN}/python" -m pip install cmake ninja auditwheel build
+"${PYBIN}/python" -m pip install cmake auditwheel build
 "${PYBIN}/python" -m pip install numpy scipy matplotlib cloudpickle sgp4 spiceypy pygmo heyoka
 
 cmake_bin="${PYBIN}/cmake"
@@ -84,7 +84,7 @@ build_and_install_cmake_repo() {
     mkdir -p "${src_dir}/build"
     (
         cd "${src_dir}/build"
-        "${cmake_bin}" -G Ninja \
+        "${cmake_bin}" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
             -DCMAKE_PREFIX_PATH="${PREFIX}" \
@@ -133,7 +133,6 @@ mkdir -p build
 (
     cd build
     "${cmake_bin}" ../ \
-        -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
         -DCMAKE_PREFIX_PATH="${PREFIX}" \
