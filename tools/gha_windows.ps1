@@ -11,7 +11,7 @@ Write-Host "CONDA_PREFIX: $depsDir"
 conda config --set always_yes yes
 conda config --add channels conda-forge
 conda config --set channel_priority strict
-conda install cmake ninja c-compiler cxx-compiler "libboost>=1.73" "fmt>=10" "heyoka>=7" spdlog "xtensor>=0.26" xtensor-blas pagmo-devel pybind11 sgp4 spiceypy matplotlib scipy "eigen>=3,<5" "nlopt<2.10.1"
+conda install cmake ninja c-compiler cxx-compiler "libboost>=1.73" "fmt>=10" "heyoka>=7" "heyoka.py>=7" spdlog "xtensor>=0.26" xtensor-blas pagmo-devel pygmo pybind11 sgp4 spiceypy matplotlib scipy "eigen>=3,<5" "nlopt<2.10.1"
 
 # Build and install kep3 + pykep.
 if (Test-Path build) { Remove-Item -Recurse -Force build }
