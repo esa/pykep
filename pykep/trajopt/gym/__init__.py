@@ -16,9 +16,9 @@ def _load_tops_json(name: str):
             return json.load(_f)
 
 
-zoh_cr3bp = _load_tops_json("_tops_cr3bp.json")
-zoh_twobody = _load_tops_json("_tops_twobody.json")
-zoh_ss = _load_tops_json("_tops_ss.json")
-zoh_mee = _load_tops_json("_tops_mee.json")
+tops_cr3bp = _load_tops_json("_tops_cr3bp.json")
+tops_twobody = _load_tops_json("_tops_twobody.json")
+tops_ss = _load_tops_json("_tops_ss.json")
+tops_mee = _load_tops_json("_tops_mee.json")
 
 del _load_tops_json, resources, json

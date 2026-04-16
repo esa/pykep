@@ -1,12 +1,10 @@
-# Copyright (c) 2023-2026 Dario Izzo (dario.izzo@gmail.com)
-#                          Advanced Concepts Team, European Space Agency (ESA)
-#
-# This file is part of the pykep library.
-#
-# SPDX-License-Identifier: MPL-2.0
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+## Copyright 2023, 2024 Dario Izzo (dario.izzo@gmail.com), Francesco Biscani
+## (bluescarni@gmail.com)
+##
+## This file is part of the kep3 library.##
+## This Source Code Form is subject to the terms of the Mozilla
+## Public License v. 2.0. If a copy of the MPL was not distributed
+## with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import numpy as _np
 import pykep as _pk
@@ -16,7 +14,7 @@ from matplotlib import pyplot as _plt
 class zoh_point2point:
     """Represents the optimal low-thrust transfer between two fixed points using `pykep`'s Zero Order Hold (direct) trajectory legs.
 
-    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its transfer time T,
+    This problem works internally using the :class:`~pykep.leg.sims_flanagan` and manipulates its transfer time T,
     final mass mf and the controls as to link two fixed points in space with a low-thrust trajectory.
 
     It can be used to better profile and understand performances of optimizers on this type of direct approach, but has a limited use
@@ -39,7 +37,7 @@ class zoh_point2point:
         tof_bounds=None,
         mf_bounds=None,
         nseg=10,
-        cut=0.5,
+        cut=0.6,
         tas=(_pk.ta.get_zoh_kep(1e-10), None),
         time_encoding="uniform",
         w_bounds_softmax=None,
@@ -64,11 +62,11 @@ class zoh_point2point:
 
             *nseg* (:class:`int`): Number of segments for the trajectory. Defaults to 10.
 
-            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.zoh`. Defaults to 0.5.
+            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.sims_flanagan`. Defaults to 0.6.
 
             *w_bounds_softmax* (:class:`list`): Bounds for the softmax weights (only used if time_encoding is 'softmax'). Defaults to [-1.0, 1.0].
             
-            *inequalities_for_Tnorm* (:class:`bool`): If True, throttle constraints are exposed as inequalities (|i_u|**2 - 1 <= 0), otherwise as equalities (|i_u|**2 - 1 = 0). Defaults to False.
+            *inequalities_for_Tnorm* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (|i_u|**2 - sss1 <= 0), otherwise they are formulated as equalities (|i_u| = 1). Defaults to False (equality formulation).
             
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
@@ -79,9 +77,6 @@ class zoh_point2point:
             *max_steps* (:class:`int` or None): Maximum number of Taylor integrator steps per propagation call. When None, uses the default integrator behavior.
 
         """
-        if not isinstance(nseg, (int, _np.integer)) or nseg <= 0:
-            raise ValueError("nseg must be a positive integer")
-
         # Initialize defaults for optional constructor arguments.
         if states is None:
             states = [1.2, 0.0, -0.01, 0.01, 1.0, -0.01]
@@ -121,17 +116,15 @@ class zoh_point2point:
 
         # Build and store a ZOH leg instance.
         # Controls, time grid, and final mass are overwritten from the decision vector.
-
         controls = _np.random.uniform(-1, 1, (4 * nseg,))
         controls[0::4] = _np.abs(controls[0::4])  # force will be in [0, 1]
         controls[0::4] *= self.max_thrust  # force will be in [0, max_thrust]
-        self.controls = controls
         tgrid = _np.linspace(
             0, (self.tof_bounds[0] + self.tof_bounds[1]) / 2, self.nseg + 1
         )
         self.leg = _pk.leg.zoh(
             states + [ms],
-            list(controls),
+            controls.tolist(),
             statef + [ms],
             tgrid,
             cut,
@@ -139,23 +132,15 @@ class zoh_point2point:
             max_steps=self.max_steps,
         )
 
-    def _expected_nx(self):
-        nx = 1 + 4 * self.nseg + 1
-        if self.time_encoding == "softmax":
-            nx += self.nseg
-        return nx
-
     def _set_leg_from_x(self, x):
-        if len(x) != self._expected_nx():
-            raise ValueError(
-                f"Invalid decision vector length: got {len(x)}, expected {self._expected_nx()}"
-            )
         # Decode the decision vector into the leg tgrid, mf, and controls.
         # Here: x = [mf] + controls + tof
-        self.leg.state1[-1] = x[0]
-        self.leg.controls = x[1 : 1 + 4 * self.nseg].copy()
-        self.leg.controls[0::4] *= self.max_thrust
-        self.leg.controls = list(self.leg.controls)
+        state1 = list(self.leg.state1)
+        state1[-1] = x[0]
+        self.leg.state1 = state1
+        controls = list(x[1 : 1 + 4 * self.nseg])
+        controls[0::4] = [v * self.max_thrust for v in controls[0::4]]
+        self.leg.controls=controls
         tof = x[1 + 4 * self.nseg]
         # Since we only have tof in the decision vector we assume a uniform epoch grid
         if self.time_encoding == "uniform":
@@ -203,8 +188,7 @@ class zoh_point2point:
         # Optimize for maximum final mass (minimum propellant).
         obj = -x[0]
 
-        # Mismatch constraints are equalities; throttle residuals are interpreted
-        # as equalities or inequalities according to get_nec()/get_nic().
+        # We compute the equality constraints
         ceq = self.leg.compute_mismatch_constraints()
         ceq += self.leg.compute_throttle_constraints()
         retval = _np.array([obj] + ceq)
@@ -220,8 +204,7 @@ class zoh_point2point:
         where:
             - obj = -mf (maximize final mass)
             - mismatch_constraints: 7 equality constraints (position, velocity, mass mismatch)
-                        - throttle_constraints: nseg residuals (|u|^2 - 1), interpreted as
-                            equalities or inequalities according to ``inequalities_for_Tnorm``
+            - throttle_constraints: nseg equality constraints (|u|^2 - 1 = 0 for each segment)
 
         The decision vector is:
             x = [mf] + controls + tof  (+ weights for softmax)
@@ -324,18 +307,17 @@ class zoh_point2point:
     def has_gradient(self):
         return self.with_gradient
 
-    # Mismatch constraints are equalities; throttle constraints can be counted
-    # as equalities or inequalities depending on inequalities_for_Tnorm.
+    # Equality constraints only: mismatches and |i_u| = 1.
     def get_nec(self):
         if self.inequalities_for_Tnorm:
-            # Throttle constraints are exposed as inequalities: |i_u|**2 - 1 <= 0.
+            # We formulate the throttle constraints as inequalities:  |i_u|**2 - sss1 <= 0
             return 7
         else:
             return 7 + self.nseg
     
     def get_nic(self):
         if self.inequalities_for_Tnorm:
-            # Throttle constraints are exposed as inequalities: |i_u|**2 - 1 <= 0.
+            # We formulate the throttle constraints as inequalities:  |i_u|**2 -1 <= 0
             return self.nseg
         else:
             return 0
@@ -388,9 +370,6 @@ class zoh_point2point:
             :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The modified Axes object with the Lambert's problem trajectory added.
         """
         x_arr = _np.asarray(x)
-        self._set_leg_from_x(x_arr)
-        if ax is None:
-            ax = _pk.plot.make_3Daxis()
 
         # We start with the boundaries ....
         if orbit_color is not None:
@@ -414,9 +393,12 @@ class zoh_point2point:
             ax.plot(sol_cart_f[:,0], sol_cart_f[:,1], sol_cart_f[:,2], orbit_color, alpha=0.5)
 
         # And then the trajectory
+        self._set_leg_from_x(x_arr)
         fwd, bck = self.leg.get_state_info(N=N)
         # compute the color scheme
         throttles = x_arr[1 : 1 + 4 * self.nseg : 4]
+        if ax is None:
+            ax = _pk.plot.make_3Daxis()
         # plot
         last_point = None
         for i, segment in enumerate(fwd):

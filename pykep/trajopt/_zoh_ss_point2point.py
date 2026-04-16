@@ -11,9 +11,6 @@
 import numpy as _np
 import pykep as _pk
 
-from zoh.leg import zoh_ss as leg
-
-
 class zoh_ss_point2point:
     """Represents the time optimal Solar Sail transfer between two fixed points using local Zero Order Hold (direct) trajectory legs.
 
@@ -109,7 +106,7 @@ class zoh_ss_point2point:
         tgrid = _np.linspace(
             0, (self.tof_bounds[0] + self.tof_bounds[1]) / 2, self.nseg + 1
         )
-        self.leg = leg(
+        self.leg = _pk.leg.zoh_ss(
             states,
             list(controls),
             statef,
@@ -132,8 +129,8 @@ class zoh_ss_point2point:
             )
         # Decode the decision vector into the leg tgrid and controls.
         # The following is valid for all options of the time encoding assuming x = controls + [tof] + (....)
-        self.leg.controls = x[: 2 * self.nseg].copy()
-        self.leg.controls = list(self.leg.controls)  # Required by the leg API.
+        controls = list(x[: 2 * self.nseg])
+        self.leg.controls=controls
         tof = x[2 * self.nseg]
         # Handle each time encoding separately.
         if self.time_encoding == "uniform":
