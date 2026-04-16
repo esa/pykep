@@ -1,0 +1,74 @@
+{
+  "P0": {
+        "state_s": [1.0,0.0,0.0,0.0,1.0,0.0],
+        "period_s": 6.2831853071795862,
+        "state_f": [1.1,0.0,0.0,0.0,1.0,0.0],
+        "period_f": 8.489949987749644,
+        "c_sail": 0.052476454834170821, 
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "Circular to quasi-circular - 1 rev",
+        "tof_bounds": [7.8, 7.8],
+        "solution_direct": 7.7586540973971587
+    },
+  "P1": {
+        "state_s": [1.0, 0.0, 0.0, 0.0, 1.224744871391589, 0.0],
+        "period_s": 17.771531752633464,
+        "state_f": [1.0, 0.0, 0.0, 0.0, 1.378404875209022, 0.0],
+        "period_f": 198.69176531592203,
+        "c_sail": 0.148, 
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "Eccentric (e=0.5, a=2) to highly-eccentric (e=0.9, a=10) orbit at periapsis (rp=1, nd)",
+        "tof_bounds": [180, 180],
+        "solution_direct": 0.0
+    },
+  "P2": {
+        "state_s": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+        "period_s": 6.2831853071795862,
+        "state_f": [1.2, 0.0, 0.0, 0.0, 0.9659258262890683, 0.25881904510252074],
+        "period_f": 6.2831853071795862,
+        "c_sail": 0.1,
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "15-degree inclination change (nd) - many revs",
+        "tof_bounds": [40, 40],
+        "solution_direct": 0.0
+    },
+  "P3": {
+        "state_s": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+        "period_s": 6.2831853071795862,
+        "state_f": [1.3, 0.0, 0.0, 0.0, 1.0, 0.0],
+        "period_f": 15.90185674810461,
+        "c_sail": 0.052476454834170821,
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "Multi-rev outward spiral r=1 to r=1.3 (nd)",
+        "tof_bounds": [50, 50],
+        "solution_direct": 0.0
+    },
+  "P4": {
+        "state_s": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+        "period_s": 6.2831853071795862,
+        "state_f": [0.7, 0.0, 0.0, 0.0, 1.3627702877384937, 0.0],
+        "period_f": 6.2831853071795862,
+        "c_sail": 0.052476454834170821,
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "Circular to mildly elliptic orbit (e=0.3, a=1) - 2-3 revs",
+        "tof_bounds": [13, 13],
+        "solution_direct": 0.0
+    },
+  "P5": {
+        "state_s": [0.7, 0.0, 0.0, 0.0, 1.3627702877384937, 0.0],
+        "period_s": 6.2831853071795862,
+        "state_f": [0.0, 0.7, 0.0, -1.3627702877384937, 0.0, 0.0],
+        "period_f": 6.2831853071795862,
+        "c_sail": 0.052476454834170821,
+        "mu": 1.0,
+        "L": 1.0,
+        "info": "Argument of periapsis rotation by 90 degrees (e=0.3, a=1) (nd)",
+        "tof_bounds": [53, 53],
+        "solution_direct": 0.0
+    }
+}

@@ -171,8 +171,8 @@ set(kep3_SRC_FILES
 
 # Setup of the kep3 shared library.
 add_library(kep3 SHARED "${kep3_SRC_FILES}")
-set_property(TARGET kep3 PROPERTY VERSION "1.0")
-set_property(TARGET kep3 PROPERTY SOVERSION 1)
+set_property(TARGET kep3 PROPERTY VERSION ${PROJECT_VERSION})
+set_property(TARGET kep3 PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})
 set_target_properties(kep3 PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_target_properties(kep3 PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 

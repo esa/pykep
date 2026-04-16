@@ -25,9 +25,9 @@
   </p>
 </p>
 
-# 🚀 Version 3 is here!
+# 🚀 A new version (3) is here!
 
-This is the official repo for **kep3** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
+This is the official repo for **kep** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
 
 The code is still under development and we will only release the conda packages when we are sure all is well coordinated. In the meantime, feel free to play around discuss API and help us debug :)
 
@@ -37,9 +37,9 @@ If you care about orbital mechanics, trajectory optimization, or spacecraft miss
 
 ---
 
-## What is kep3?
+## What is kep?
 
-kep3 is a C++ library with a rich Python interface (pykep) for **space flight mechanics** research. Built from the ground up with performance, usability, and extensibility in mind, it brings together everything the astrodynamics community has been asking for tailored at scientists who want to perform cutting edge research in space flight mechanics.
+kep is a C++ library with a rich Python interface (pykep) for **space flight mechanics** research. Built from the ground up with performance, usability, and extensibility in mind, it brings together everything the astrodynamics community has been asking for tailored at scientists who want to perform cutting edge research in space flight mechanics.
 
 Whether you're computing **Lambert arcs**, propagating **Keplerian orbits**, or designing complex **multi-gravity-assist trajectories** and designing the next generation solvers for low-thrust optimization, kep3 has you covered with clean APIs, rigorous numerics, and serious speed.
 
@@ -54,6 +54,23 @@ pykep served the community faithfully for years, but the new version raises the 
 - 🔬 **Better numerics** — improved solvers and propagators with higher accuracy
 - 📦 **Modern packaging** — easy installation, better dependency management
 - 📖 **Richer documentation** — with examples, tutorials, and full API reference
+
+---
+
+## Versioning policy
+
+Starting from the v3 line, this project follows [Semantic Versioning](https://semver.org/) for releases:
+
+- `MAJOR`: incompatible API changes.
+- `MINOR`: backward-compatible new features.
+- `PATCH`: backward-compatible bug fixes.
+
+For the C++ shared library (`kep`), we track ABI compatibility with `SOVERSION`:
+
+- `VERSION` is set to the full project version (`MAJOR.MINOR.PATCH`).
+- `SOVERSION` is tied to `MAJOR`.
+
+In practice, if `MAJOR` changes, downstream binaries should expect possible ABI incompatibilities and rebuild/relink.
 
 ---
 

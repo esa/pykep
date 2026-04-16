@@ -895,6 +895,10 @@ PYBIND11_MODULE(core, m) // NOLINT
     zoh.def_property_readonly("nseg", &kep3::leg::zoh::get_nseg, pykep::leg_zoh_nseg_docstring().c_str());
     zoh.def_property_readonly("nseg_fwd", &kep3::leg::zoh::get_nseg_fwd, pykep::leg_zoh_nseg_fwd_docstring().c_str());
     zoh.def_property_readonly("nseg_bck", &kep3::leg::zoh::get_nseg_bck, pykep::leg_zoh_nseg_bck_docstring().c_str());
+    zoh.def_property_readonly("ta", &kep3::leg::zoh::get_ta,
+                              "Nominal Taylor-adaptive integrator used by this ZOH leg.");
+    zoh.def_property_readonly("ta_var", &kep3::leg::zoh::get_ta_var,
+                              "Optional variational Taylor-adaptive integrator used for gradients.");
     // Constraint methods
     zoh.def("compute_mismatch_constraints", &kep3::leg::zoh::compute_mismatch_constraints,
             pykep::leg_zoh_mc_docstring().c_str());
@@ -1049,6 +1053,10 @@ PYBIND11_MODULE(core, m) // NOLINT
                                  pykep::leg_zoh_ss_nseg_fwd_docstring().c_str());
     zoh_ss.def_property_readonly("nseg_bck", &kep3::leg::zoh_ss::get_nseg_bck,
                                  pykep::leg_zoh_ss_nseg_bck_docstring().c_str());
+    zoh_ss.def_property_readonly("ta", &kep3::leg::zoh_ss::get_ta,
+                                 "Nominal Taylor-adaptive integrator used by this ZOH-SS leg.");
+    zoh_ss.def_property_readonly("ta_var", &kep3::leg::zoh_ss::get_ta_var,
+                                 "Optional variational Taylor-adaptive integrator used for gradients.");
 
     zoh_ss.def("compute_mismatch_constraints", &kep3::leg::zoh_ss::compute_mismatch_constraints,
                pykep::leg_zoh_ss_mc_docstring().c_str());
