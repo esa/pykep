@@ -51,7 +51,6 @@ std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::v
 
     // Views/shapes used to map flat state blocks and flattened outputs.
     const std::array<std::size_t, 2u> mat_dd_shape{D, D};
-    const std::array<std::size_t, 2u> mat_dc_shape{D, C};
     const std::array<std::size_t, 2u> stm_shape{D, D + C};
 
     // Forward segments.
