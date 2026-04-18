@@ -38,5 +38,4 @@ astrodynamical notation and computations.
   notebooks/approximations
   notebooks/leg_sims_flanagan
   notebooks/leg_zoh
-  notebooks/leg_zoh_ss
   notebooks/plotting

@@ -14,10 +14,6 @@ def compute_mismatch_constraints_n(leg, state0, controls, state1, tgrid):
    leg.state1 = state1
    return leg.compute_mismatch_constraints()
 
-def compute_throttle_constraints_n(leg, controls):
-    leg.controls = controls
-    return leg.compute_throttle_constraints()
-
 # The actual tests.
 class leg_zoh_test(_ut.TestCase):
     def test_zoh_mc_ballistic(self):
@@ -185,7 +181,6 @@ class leg_zoh_test(_ut.TestCase):
             leg_copy = deepcopy(leg)
             
             dmcdx0, dmcdxf, dmcdcon, dmcdtgrid = leg.compute_mc_grad()
-            dtcdcon = leg.compute_tc_grad()
             
             # Check on dmc/dx0
             dmcdx0_n = pg.estimate_gradient(lambda x: compute_mismatch_constraints_n(leg_copy, x, leg_copy.controls, leg_copy.state1, leg_copy.tgrid), leg.state0).reshape(7,-1)
@@ -203,8 +198,4 @@ class leg_zoh_test(_ut.TestCase):
             dmcdtgrid_n = pg.estimate_gradient(lambda x: compute_mismatch_constraints_n(leg_copy, leg_copy.state0, leg_copy.controls, leg_copy.state1, x), leg.tgrid).reshape(7,-1)
             self.assertTrue(np.linalg.norm(dmcdtgrid_n-dmcdtgrid) < 1e-4)
             
-            # Check on dtc/dtcdcon
-            dtcdtgrid_n = pg.estimate_gradient(lambda x: compute_throttle_constraints_n(leg_copy, x), leg.controls).reshape(leg.nseg,-1)
-            self.assertTrue(np.linalg.norm(dtcdtgrid_n-dtcdcon) < 1e-4)
-
 

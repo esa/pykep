@@ -3036,19 +3036,21 @@ Examples:
 // ------------------- ZOH LEG DOCSTRINGS -------------------
 std::string leg_zoh_docstring()
 {
-    return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None)
+    return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None, dim_dynamics=7, dim_controls=4)
 
 This class implements an interplanetary low-thrust transfer between a starting and final state in the augmented state-space :math:`[\mathbf{r}, \mathbf{v}, m]`. The transfer is modelled as a sequence of non-uniform segments along which a continuous and constant (zero-order hold) control acts. The time intervals defining these segments are also provided in `tgrid`.
 
 The formulation generalises :class:`pykep.leg.sims_flanagan` to arbitrary dynamics and non-uniform time grids. The dynamics are assumed to be zero-order hold and must be provided as compatible Taylor-adaptive integrators (`tas`).
 
 .. note::
-   The requirements on the `tas` passed are: a) the first four *heyoka* parameters must be :math:`T, i_x, i_y, i_z`, b) the system dimension must be 7 c) for the variational integrator, variations on the state and the four parameters only are considered. These requirements are all fulfilled by :class:`pykep.ta.zoh_kep`, :class:`pykep.ta.zoh_eq`, :class:`pykep.ta.zoh_cr3bp` and their variational versions.
+  The requirements on `tas` are: a) the first ``dim_controls`` *heyoka* parameters are the controls,
+  b) the system dimension is ``dim_dynamics``, c) when using a variational integrator, variations are
+  considered with respect to state and controls only. Typical 7D/4D and 6D/2D configurations are
+  fulfilled by :class:`pykep.ta.zoh_kep`, :class:`pykep.ta.zoh_eq`, :class:`pykep.ta.zoh_cr3bp`,
+  :class:`pykep.ta.zoh_ss` and their variational versions.
 
-A transfer is feasible when the state mismatch equality constraints are satisfied. In the intended usage, throttle equality constraints are also enforced to ensure a proper thrust representation as :math:`T \hat{\mathbf{i}}` with :math:`|\hat{\mathbf{i}}| = 1`.
-
-.. math::
-   i_x^2 + i_y^2 + i_z^2 = 1, \quad \forall \text{segments}
+A transfer is feasible when the state mismatch equality constraints are satisfied. Any additional
+constraints on controls (e.g. throttle constraints) are to be enforced by the caller.
 
 Examples:
   >>> import numpy as np
@@ -3174,13 +3176,15 @@ std::string leg_zoh_get_state_info_docstring()
     The default (*N=2*) returns only the segment endpoints.
 
   Returns:
-    :class:`tuple`: ``(state_fwd, state_bck)`` where:
+    :class:`tuple`: ``(state_fwd, state_bck, success)`` where:
 
-      - ``state_fwd`` (:class:`list`): List of length ``nseg_fwd``. 
-      Each entry contains the sampled 7D state history over the corresponding forward segment (from ``tgrid[i]`` to ``tgrid[i+1]``).
+      - ``state_fwd`` (:class:`list`): List of length ``nseg_fwd`` (or less on failure).
+      Each entry contains the sampled ``dim_dynamics`` state history over the corresponding forward segment.
       
-      - ``state_bck`` (:class:`list`): List of length ``nseg_bck``. 
-      Each entry contains the sampled 7D state history over the corresponding backward segment (from ``tgrid[-1-i]`` to ``tgrid[-2-i]``).
+      - ``state_bck`` (:class:`list`): List of length ``nseg_bck`` (or less on failure).
+      Each entry contains the sampled ``dim_dynamics`` state history over the corresponding backward segment.
+
+      - ``success`` (:class:`bool`): ``True`` when all requested segment propagations succeed.
 
     .. note::
        The backward propagation is carried out by integrating from the final time toward earlier times;
@@ -3196,148 +3200,6 @@ std::string leg_zoh_get_state_info_docstring()
     .. code-block:: python
         
       ax = pk.plot.make_3Daxis()
-      fwd, bck = leg.get_state_info(N=100)
-      for segment in fwd:
-        ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='blue')
-        ax.plot(segment[:,0], segment[:,1], segment[:,2], c='blue')
-      for segment in bck:
-        ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='darkorange')
-        ax.plot(segment[:,0], segment[:,1], segment[:,2], c='darkorange')
-      ax.view_init(90, -90)
-  ")";
-}
-
-// ------------------- ZOH_SS LEG DOCSTRINGS -------------------
-std::string leg_zoh_ss_docstring()
-{
-    return R"(__init__(state0, controls, state1, tgrid, cut, tas, max_steps=None)
-
-This class implements a solar-sail low-thrust transfer between a starting and final state in the state-space :math:`[\mathbf{r}, \mathbf{v}]`. The transfer is modelled as a sequence of non-uniform segments along which the sail orientation controls are kept constant (zero-order hold).
-
-The class is analogous to :class:`pykep.leg.zoh`, but specialized to 6D dynamics and two controls per segment :math:`[\alpha, \beta]`.
-
-.. note::
-   The requirements on the `tas` passed are: a) the first two *heyoka* parameters must be :math:`\alpha, \beta`, b) the system dimension must be 6, c) for the variational integrator, variations on the 6 state variables and the two controls only are considered. These requirements are fulfilled by :class:`pykep.ta.zoh_ss` and :class:`pykep.ta.zoh_ss_var`.
-
-A transfer is feasible when the state mismatch equality constraints are satisfied.
-
-Examples:
-  >>> import numpy as np
-  >>> import pykep as pk
-  >>> state0 = np.array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0])
-  >>> state1 = np.array([1.2, 0.1, 0.0, 0.0, 0.9, 0.1])
-  >>> controls = np.array([np.pi/2, 0.0, np.pi/3, 0.1, np.pi/4, -0.1])
-  >>> tgrid = np.array([0.0, 0.5, 1.0, 1.2])
-  >>> ta = pk.ta.get_zoh_ss(1e-16)
-  >>> ta_var = pk.ta.get_zoh_ss_var(1e-16)
-  >>> leg = pk.leg.zoh_ss(state0, controls, state1, tgrid, cut=0.5, tas=(ta, ta_var))
-)";
-}
-
-std::string leg_zoh_ss_state0_docstring()
-{
-    return "Initial state vector [r0, v0] (length 6).";
-}
-std::string leg_zoh_ss_controls_docstring()
-{
-    return "Control parameters [alpha, beta] for each segment (length 2*nseg).";
-}
-std::string leg_zoh_ss_state1_docstring()
-{
-    return "Final state vector [r1, v1] (length 6).";
-}
-std::string leg_zoh_ss_tgrid_docstring()
-{
-    return "Non-uniform time grid (length nseg+1).";
-}
-std::string leg_zoh_ss_cut_docstring()
-{
-    return "Forward/backward segment split ratio (0 ≤ cut ≤ 1).";
-}
-std::string leg_zoh_ss_max_steps_docstring()
-{
-    return "Maximum number of steps for the integrator (optional).";
-}
-std::string leg_zoh_ss_nseg_docstring()
-{
-    return "The total number of segments.";
-}
-std::string leg_zoh_ss_nseg_fwd_docstring()
-{
-    return "The total number of forward segments.";
-}
-std::string leg_zoh_ss_nseg_bck_docstring()
-{
-    return "The total number of backward segments.";
-}
-std::string leg_zoh_ss_mc_docstring()
-{
-    return R"(compute_mismatch_constraints()
-
-Propagates forward from *state0* and backward from *state1* and returns the 6-component
-state mismatch at the midpoint.
-
-Returns:
-  :class:`list`: Mismatch vector of length 6. All entries are zero for a feasible transfer.
-)";
-}
-std::string leg_zoh_ss_mc_grad_docstring()
-{
-    return R"(compute_mc_grad()
-
-Computes the gradients of the mismatch constraints. Indicating the initial state with :math:`\mathbf x_s = [\mathbf r_s, \mathbf v_s]`, the final state with :math:`\mathbf x_f = [\mathbf r_f, \mathbf v_f]`, the time grid as :math:`T_{grid}` and introducing the control vector :math:`\mathbf u = [\alpha_0, \beta_0, \alpha_1, \beta_1, \ldots]`, this method computes the following gradients:
-
-.. math::
-   
-   \frac{\partial \mathbf {mc}}{\partial \mathbf x_s}  \rightarrow (6\times6)
-
-.. math::
-   
-   \frac{\partial \mathbf {mc}}{\partial \mathbf x_f}  \rightarrow (6\times6)
-
-.. math::
-   
-   \frac{\partial \mathbf {mc}}{\partial \mathbf u}  \rightarrow (6\times(2\mathbf{nseg}))
-
-.. math::
-   
-   \frac{\partial \mathbf {mc}}{\partial \mathbf T_{grid}}  \rightarrow (6\times(\mathbf{nseg} + 1))
-
-Returns:
-  :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]: The four gradients. Sizes will be (6,6), (6,6), (6,2nseg), and (6,nseg+1).
-)";
-}
-
-std::string leg_zoh_ss_get_state_info_docstring()
-{
-    return R"(
-  This method returns state histories sampled along each ZOH segment, for both the forward and backward
-  propagation parts of the leg.
-
-  Args:
-    *N* (:class:`int`): Number of sampling points per segment (including the segment endpoints).
-    The default (*N=2*) returns only the segment endpoints.
-
-  Returns:
-    :class:`tuple`: ``(state_fwd, state_bck, success)`` where:
-
-      - ``state_fwd`` (:class:`list`): List of successfully propagated forward segments.
-      Each entry contains the sampled 6D state history over the corresponding forward segment.
-
-      - ``state_bck`` (:class:`list`): List of successfully propagated backward segments.
-      Each entry contains the sampled 6D state history over the corresponding backward segment.
-
-      - ``success`` (:class:`bool`): ``True`` if all segment propagations completed successfully,
-      ``False`` otherwise.
-
-    .. note::
-       This method uses the nominal integrator and overwrites its internal ``time``, ``state``
-       and first two parameters (``alpha, beta``).
-
-  Examples:
-    .. code-block:: python
-
-      ax = pk.plot.make_3Daxis()
       fwd, bck, success = leg.get_state_info(N=100)
       for segment in fwd:
         ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='blue')
@@ -3346,7 +3208,7 @@ std::string leg_zoh_ss_get_state_info_docstring()
         ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='darkorange')
         ax.plot(segment[:,0], segment[:,1], segment[:,2], c='darkorange')
       ax.view_init(90, -90)
-  )";
+  ")";
 }
 
 std::string fb_con_docstring()

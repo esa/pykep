@@ -46,9 +46,10 @@ def zoh_ss_dyn():
     The system parameters are (in this order): :math:`[\\alpha, \\beta] + [c]`
 
     .. note::
-        with respect to other Zero Order Hold integrators the ``zoh_ss``has a smaller dimension (no mass equation) and only two
-        controls. It CANNOT thus be used as Taylor integrator in :func:`~pykep.leg.zoh` as it does not meet its requirements.
-        A dedicated leg, :func:`~pykep.leg.zoh_ss` is instead to be used.
+        With respect to other zero-order-hold integrators, ``zoh_ss`` has a smaller state
+        dimension (no mass equation) and only two controls.
+        It is intended to be used with :func:`~pykep.leg.zoh` configured as
+        ``dim_dynamics=6`` and ``dim_controls=2``.
 
     Returns:
         :class:`list` [ :class:`tuple` (:class:`hy::expression`, :class:`hy::expression` )]: The dynamics in the form [(p, dp), ...]
