@@ -41,7 +41,7 @@ class zoh_point2point:
         tas=(_pk.ta.get_zoh_kep(1e-10), None),
         time_encoding="uniform",
         w_bounds_softmax=None,
-        inequalities_for_Tnorm = False,
+        inequalities_for_tc = False,
         max_steps=None,
     ):
         """
@@ -66,8 +66,8 @@ class zoh_point2point:
 
             *w_bounds_softmax* (:class:`list`): Bounds for the softmax weights (only used if time_encoding is 'softmax'). Defaults to [-1.0, 1.0].
             
-            *inequalities_for_Tnorm* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (|i_u|**2 - sss1 <= 0), otherwise they are formulated as equalities (|i_u| = 1). Defaults to False (equality formulation).
-            
+            *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (|i_u|**2 - 1 <= 0), otherwise they are formulated as equalities (|i_u| = 1). Defaults to False (equality formulation).
+
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
                 - `ta`: Nominal dynamics (state dim 7, pars ≥ 4)
@@ -103,7 +103,7 @@ class zoh_point2point:
         self._softmax_cumsum_matrix = _np.vstack(
             [_np.zeros(self.nseg), _np.tril(_np.ones((self.nseg, self.nseg)))]
         )
-        self.inequalities_for_Tnorm = inequalities_for_Tnorm
+        self.inequalities_for_tc = inequalities_for_tc
 
         supported_time_encodings = [
             "uniform",
@@ -122,7 +122,7 @@ class zoh_point2point:
         tgrid = _np.linspace(
             0, (self.tof_bounds[0] + self.tof_bounds[1]) / 2, self.nseg + 1
         )
-        self.leg = _pk.leg.zoh(
+        self.leg = _pk.leg.zoh_py(
             states + [ms],
             controls.tolist(),
             statef + [ms],
@@ -130,7 +130,37 @@ class zoh_point2point:
             cut,
             tas,
             max_steps=self.max_steps,
+            dim_dynamics=7,
+            dim_controls=4,
         )
+
+    def _compute_throttle_constraints(self):
+        """Computes throttle constraints from the leg controls."""
+        tc = _np.zeros(self.nseg)
+        controls = self.leg.controls
+        for i in range(self.nseg):
+            base = 4 * i
+            tc[i] = (
+                controls[base + 1] ** 2
+                + controls[base + 2] ** 2
+                + controls[base + 3] ** 2
+                - 1.0
+            )
+        return tc.tolist()
+
+    def compute_tc_grad(self):
+        """Computes throttle Jacobian w.r.t. leg controls."""
+        dtc_dcontrols = _np.zeros((self.nseg, 4 * self.nseg))
+        controls = self.leg.controls
+        for i in range(self.nseg):
+            base = 4 * i
+            ix = controls[base + 1]
+            iy = controls[base + 2]
+            iz = controls[base + 3]
+            dtc_dcontrols[i, base + 1] = 2.0 * ix
+            dtc_dcontrols[i, base + 2] = 2.0 * iy
+            dtc_dcontrols[i, base + 3] = 2.0 * iz
+        return dtc_dcontrols
 
     def _set_leg_from_x(self, x):
         # Decode the decision vector into the leg tgrid, mf, and controls.
@@ -140,7 +170,7 @@ class zoh_point2point:
         self.leg.state1 = state1
         controls = list(x[1 : 1 + 4 * self.nseg])
         controls[0::4] = [v * self.max_thrust for v in controls[0::4]]
-        self.leg.controls=controls
+        self.leg.controls = controls
         tof = x[1 + 4 * self.nseg]
         # Since we only have tof in the decision vector we assume a uniform epoch grid
         if self.time_encoding == "uniform":
@@ -188,11 +218,12 @@ class zoh_point2point:
         # Optimize for maximum final mass (minimum propellant).
         obj = -x[0]
 
-        # We compute the equality constraints
-        ceq = self.leg.compute_mismatch_constraints()
-        ceq += self.leg.compute_throttle_constraints()
-        retval = _np.array([obj] + ceq)
-        return retval
+        # We compute all constraints. The tc will be treated as equality or inequality
+        # according to the value of self.inequalities_for_tc.
+        cmc = self.leg.compute_mismatch_constraints()
+        ctc = self._compute_throttle_constraints()
+        
+        return [obj] + cmc + ctc
 
     def gradient(self, x):
         """
@@ -209,7 +240,8 @@ class zoh_point2point:
         The decision vector is:
             x = [mf] + controls + tof  (+ weights for softmax)
 
-        where controls = [T_1, ix_1, iy_1, iz_1, ..., T_nseg, ix_nseg, iy_nseg, iz_nseg]
+        where controls are:
+            - [T_1, ix_1, iy_1, iz_1, ..., T_nseg, ix_nseg, iy_nseg, iz_nseg]
         and weights = [w_1, w_2, ..., w_nseg] (only if time_encoding is 'softmax')
 
         Returns:
@@ -245,14 +277,9 @@ class zoh_point2point:
         gradient[1:8, 0] = dmc_dx1[:, 6]  # mismatch constraints w.r.t mf
         ## Second contribution -> partials of mismatch constraints w.r.t. controls
         for i in range(self.nseg):
-            gradient[1:8, 1 + 4 * i : 1 + 4 * i + 4] = dmc_dcontrols[
-                :, 4 * i : 4 * i + 4
-            ]
-            gradient[
-                1:8, 1 + 4 * i
-            ] *= (
-                self.max_thrust
-            )  # account for the multiplication by max_thrust for the T component of the controls
+            dmc_block = dmc_dcontrols[:, 4 * i : 4 * i + 4]
+            gradient[1:8, 1 + 4 * i : 1 + 4 * i + 4] = dmc_block
+            gradient[1:8, 1 + 4 * i] *= self.max_thrust
         ## Third contribution -> partials of mismatch constraints w.r.t. time grid
         if self.time_encoding == "uniform":
             # note here that what we are after is:
@@ -292,10 +319,13 @@ class zoh_point2point:
         ## First contribution -> partials of throttle constraints w.r.t. final mass
         gradient[8 : 8 + self.nseg, 0] = 0.0  # these are zeros
         ## Second contribution -> partials of throttle constraints w.r.t. controls
-        dtc_dcontrols = self.leg.compute_tc_grad()
-        gradient[8 : 8 + self.nseg, 1 : 1 + 4 * self.nseg] = (
-            dtc_dcontrols  # the partials of the throttle constraints w.r.t. the controls of all segments
-        )
+        dtc_dcontrols = self.compute_tc_grad()
+        for i in range(self.nseg):
+            dtc_block = dtc_dcontrols[i : i + 1, 4 * i : 4 * i + 4]
+            gradient[
+                8 + i : 8 + i + 1, 1 + 4 * i : 1 + 4 * i + 4
+            ] = dtc_block
+            gradient[8 + i : 8 + i + 1, 1 + 4 * i] *= self.max_thrust
         ## Third contribution -> partials of throttle constraints w.r.t. time grid
         # Throttle constraints are independent of the time grid, so this block is zero.
         ## Fourth contribution (softmax only) -> partials of throttle constraints w.r.t. softmax weights
@@ -309,14 +339,14 @@ class zoh_point2point:
 
     # Equality constraints only: mismatches and |i_u| = 1.
     def get_nec(self):
-        if self.inequalities_for_Tnorm:
+        if self.inequalities_for_tc:
             # We formulate the throttle constraints as inequalities:  |i_u|**2 - sss1 <= 0
             return 7
         else:
             return 7 + self.nseg
     
     def get_nic(self):
-        if self.inequalities_for_Tnorm:
+        if self.inequalities_for_tc:
             # We formulate the throttle constraints as inequalities:  |i_u|**2 -1 <= 0
             return self.nseg
         else:
@@ -394,7 +424,7 @@ class zoh_point2point:
 
         # And then the trajectory
         self._set_leg_from_x(x_arr)
-        fwd, bck = self.leg.get_state_info(N=N)
+        fwd, bck, _ = self.leg.get_state_info(N=N)
         # compute the color scheme
         throttles = x_arr[1 : 1 + 4 * self.nseg : 4]
         if ax is None:

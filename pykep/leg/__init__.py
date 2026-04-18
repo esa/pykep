@@ -42,4 +42,3 @@ zoh_ss.__module__ = "pykep.leg"
 del _core
 
 from ._zoh import zoh as zoh_py
-from ._zoh_ss import zoh_ss as zoh_ss_py

@@ -12,9 +12,10 @@ import numpy as _np
 import pykep as _pk
 
 class zoh_ss_point2point:
-    """Represents the time optimal Solar Sail transfer between two fixed points using local Zero Order Hold (direct) trajectory legs.
+    """Represents the time optimal Solar Sail transfer between two fixed points using Zero Order Hold (direct) trajectory legs.
 
-    This problem works internally using :class:`~zoh.leg.zoh_ss` and manipulates its transfer time tof
+    This problem works internally using :class:`~pykep.leg.zoh_py` with
+    ``dim_dynamics=6`` and ``dim_controls=2`` and manipulates its transfer time tof
     and the sail clock and cone angles (controls) as to link two fixed points in space with a Solar Sail trajectory.
 
     It can be used to better profile and understand performances of optimizers on this type of direct approach, but has a limited use
@@ -52,7 +53,7 @@ class zoh_ss_point2point:
 
             *nseg* (:class:`int`): Number of segments for the trajectory. Defaults to 10.
 
-            *cut* (:class:`float`): Cut parameter for :class:`~zoh.leg.zoh_ss`. Defaults to 0.6.
+            *cut* (:class:`float`): Cut parameter for :class:`~pykep.leg.zoh_py`. Defaults to 0.6.
 
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
@@ -106,7 +107,7 @@ class zoh_ss_point2point:
         tgrid = _np.linspace(
             0, (self.tof_bounds[0] + self.tof_bounds[1]) / 2, self.nseg + 1
         )
-        self.leg = _pk.leg.zoh_ss(
+        self.leg = _pk.leg.zoh_py(
             states,
             list(controls),
             statef,
@@ -114,6 +115,8 @@ class zoh_ss_point2point:
             cut,
             tas,
             max_steps=self.max_steps,
+            dim_dynamics=6,
+            dim_controls=2,
         )
 
     def _expected_nx(self):
