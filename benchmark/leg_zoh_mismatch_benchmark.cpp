@@ -90,7 +90,7 @@ std::vector<zoh_case> generate_cases(unsigned ncases, unsigned nseg, std::uint32
         const double dt = tof / static_cast<double>(nseg);
         for (unsigned j = 0u; j <= nseg; ++j) {
             c.tgrid[j] = static_cast<double>(j) * dt;
-        }
+        } 
 
         for (unsigned j = 0u; j < nseg; ++j) {
             const auto dir = random_unit_vector(rng);
