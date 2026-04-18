@@ -195,8 +195,6 @@
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
-
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 </ul>
 </details></li>
@@ -449,7 +447,6 @@
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold UDP: point-to-point trajectory optimization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector-and-time-encoding">Decision vector and time encoding</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-time-grid">Uniform time grid</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax-time-grid">Softmax time grid</a></li>
 </ul>
 </li>
 </ul>
@@ -482,7 +479,7 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="../trajopt.html"><span class="std std-doc">Trajectory optimization API</span></a></p></li>
 <li><p><a class="reference internal" href="leg_zoh.html"><span class="std std-doc">Zero-Order Hold leg tutorial</span></a></p></li>
-<li><p><a class="reference internal" href="leg_zoh_ss.html"><span class="std std-doc">Solar-sail ZOH leg tutorial</span></a></p></li>
+<li><p><a class="reference internal" href="#solar-sail-dynamics"><span class="xref myst">Solar-sail trajectory examples in this notebook</span></a></p></li>
 </ul>
 <section id="decision-vector-and-time-encoding">
 <h2>Decision vector and time encoding<a class="headerlink" href="#decision-vector-and-time-encoding" title="Link to this heading">#</a></h2>
@@ -501,19 +498,6 @@
 <section id="uniform-time-grid">
 <h3>Uniform time grid<a class="headerlink" href="#uniform-time-grid" title="Link to this heading">#</a></h3>
 <p>With <code class="docutils literal notranslate"><span class="pre">time_encoding=&quot;uniform&quot;</span></code>, all segments have equal duration:</p>
-<div class="math notranslate nohighlight">
-\[
-\Delta t = \frac{tof}{N}
-\]</div>
-</section>
-<section id="softmax-time-grid">
-<h3>Softmax time grid<a class="headerlink" href="#softmax-time-grid" title="Link to this heading">#</a></h3>
-<p>With <code class="docutils literal notranslate"><span class="pre">time_encoding=&quot;softmax&quot;</span></code>, segment durations are:</p>
-<div class="math notranslate nohighlight">
-\[
-\alpha_k = \frac{e^{w_k}}{\sum_{j=0}^{N-1} e^{w_j}}, \qquad \Delta t_k = tof\,\alpha_k
-\]</div>
-<p>This enforces positivity and the sum-to-<code class="docutils literal notranslate"><span class="pre">tof</span></code> constraint by construction, while allowing nonuniform time allocation.</p>
 <p>We start with a two-body Cartesian low-thrust case, then repeat the same optimization workflow on MEE, CR3BP, and solar-sail dynamics.</p>
 <p>First, import the required packages.</p>
 <div class="cell docutils container">
@@ -652,7 +636,7 @@ Problem info:  Mildly-elliptic to mildly-elliptic transfer (e_s~0.201, e_f~0.210
     <span class="n">cut</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span>
     <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_twobody</span><span class="p">,</span> <span class="n">ta_twobody_var</span><span class="p">],</span>
     <span class="n">time_encoding</span><span class="o">=</span><span class="n">time_encoding</span><span class="p">,</span>
-    <span class="n">inequalities_for_Tnorm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
  <span class="p">)</span>
 <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
@@ -670,7 +654,7 @@ Problem info:  Mildly-elliptic to mildly-elliptic transfer (e_s~0.201, e_f~0.210
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.5636517653887525e-07, -2.3345935896978975e-07)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3.8730949913912127e-07, -3.0583021247117606e-07)
 </pre></div>
 </div>
 </div>
@@ -686,7 +670,7 @@ Problem info:  Mildly-elliptic to mildly-elliptic transfer (e_s~0.201, e_f~0.210
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Final mass: 0.919666387733
+Final mass: 0.919710082837
 Final tof: 11.0
 </pre></div>
 </div>
@@ -745,7 +729,7 @@ Final tof: 11.0
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
 </pre></div>
 </div>
-<img alt="../_images/fa4be7bc757215493713ff83078d90a3532a3cd70e5579fa94bcda1291c3d33a.png" src="../_images/fa4be7bc757215493713ff83078d90a3532a3cd70e5579fa94bcda1291c3d33a.png" />
+<img alt="../_images/48440fc01566ee5c8d21110f1774c119da79b018af90879d88f9581f270836ab.png" src="../_images/48440fc01566ee5c8d21110f1774c119da79b018af90879d88f9581f270836ab.png" />
 </div>
 </div>
 </section>
@@ -826,7 +810,7 @@ Problem info:  Dionysus problem (doi: 10.2514/1.G000379) - Fixed time
     <span class="n">cut</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span>
     <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_twobody_mee</span><span class="p">,</span> <span class="n">ta_twobody_mee_var</span><span class="p">],</span>
     <span class="n">time_encoding</span><span class="o">=</span><span class="n">time_encoding</span><span class="p">,</span>
-    <span class="n">inequalities_for_Tnorm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
  <span class="p">)</span>
 <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
@@ -843,7 +827,7 @@ Problem info:  Dionysus problem (doi: 10.2514/1.G000379) - Fixed time
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(7.6717547272675546e-06, -5.54870943281216e-06)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.0611357014720111e-06, -1.4823118779705252e-06)
 </pre></div>
 </div>
 </div>
@@ -859,7 +843,7 @@ Problem info:  Dionysus problem (doi: 10.2514/1.G000379) - Fixed time
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Final mass: 0.615843475536
+Final mass: 0.615843476965
 Final tof: 60.7909197787
 </pre></div>
 </div>
@@ -918,7 +902,7 @@ Final tof: 60.7909197787
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
 </pre></div>
 </div>
-<img alt="../_images/eaa6520faedce14c6aef9ad1a9a2cff417abd7ffc7fe4ec873fe684b9edb0a83.png" src="../_images/eaa6520faedce14c6aef9ad1a9a2cff417abd7ffc7fe4ec873fe684b9edb0a83.png" />
+<img alt="../_images/65fe553b6b816dc5c9ef86407eb39895c7e1d0c187b11f1cff808bcf11bd8a0f.png" src="../_images/65fe553b6b816dc5c9ef86407eb39895c7e1d0c187b11f1cff808bcf11bd8a0f.png" />
 </div>
 </div>
 </section>
@@ -983,7 +967,7 @@ Problem info:  Halo 2 Halo in fixed tof
     <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_cr3bp</span><span class="p">,</span> <span class="n">ta_cr3bp_var</span><span class="p">],</span>
     <span class="n">time_encoding</span><span class="o">=</span><span class="n">time_encoding</span><span class="p">,</span>
     <span class="n">max_steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">inequalities_for_Tnorm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
  <span class="p">)</span>
 <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
 <span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
@@ -999,7 +983,7 @@ Problem info:  Halo 2 Halo in fixed tof
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(6.567557713009313e-07, -4.552476077224199e-07)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.4561294462006602e-06, -2.7896538594696096e-06)
 </pre></div>
 </div>
 </div>
@@ -1015,7 +999,7 @@ Problem info:  Halo 2 Halo in fixed tof
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Final mass: 0.983160282079
+Final mass: 0.983160282028
 Final tof: 4.99770747418
 </pre></div>
 </div>
@@ -1073,7 +1057,7 @@ Final tof: 4.99770747418
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
 </pre></div>
 </div>
-<img alt="../_images/0df333e7acb0c5c2ab27bee01f0bf77343128dc7998782c7a75f450e19322cb3.png" src="../_images/0df333e7acb0c5c2ab27bee01f0bf77343128dc7998782c7a75f450e19322cb3.png" />
+<img alt="../_images/29d0e32eb62a8803cd9202e236371e29305b4aed21e97cb48a4a8e0d581f4f09.png" src="../_images/29d0e32eb62a8803cd9202e236371e29305b4aed21e97cb48a4a8e0d581f4f09.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1091,7 +1075,7 @@ Final tof: 4.99770747418
 <h1>Solar-sail dynamics<a class="headerlink" href="#solar-sail-dynamics" title="Link to this heading">#</a></h1>
 <p>For solar sailing, use the dedicated UDP <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_ss_point2point" title="pykep.trajopt.zoh_ss_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_ss_point2point</span></code></a>.
 The workflow is identical: scale units, instantiate integrators, build the UDP, verify gradients, and optimize.</p>
-<p>For sail-leg details, see <a class="reference internal" href="leg_zoh_ss.html"><span class="std std-doc">Solar-sail ZOH leg tutorial</span></a>.</p>
+<p>For sail-leg details, use the generic <a class="reference internal" href="leg_zoh.html"><span class="std std-doc">Zero-Order Hold leg tutorial</span></a> with 6D dynamics and 2 controls, plus the <a class="reference internal" href="../trajopt.html"><span class="std std-doc">Trajectory optimization API</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load a SOLARSAILING instance from the TOPS database</span>
@@ -1175,7 +1159,7 @@ Problem info:  Eccentric (e=0.5, a=2) to highly-eccentric (e=0.9, a=10) orbit at
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3.0417508831703799e-06, -8.4342146422500264e-06)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3.323305667490839e-06, -4.2279427692193394e-06)
 </pre></div>
 </div>
 </div>
@@ -1219,7 +1203,7 @@ Problem info:  Eccentric (e=0.5, a=2) to highly-eccentric (e=0.9, a=10) orbit at
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;3D&#39;)
 </pre></div>
 </div>
-<img alt="../_images/ab6d417342c4aaeb8ccd122fa7cb6551d455411dbb055dde2d7ac03344667130.png" src="../_images/ab6d417342c4aaeb8ccd122fa7cb6551d455411dbb055dde2d7ac03344667130.png" />
+<img alt="../_images/7be09e6058c1771ba886bfa2bb547edcf20af46c15209c0845c2e72cf896f8b5.png" src="../_images/7be09e6058c1771ba886bfa2bb547edcf20af46c15209c0845c2e72cf896f8b5.png" />
 </div>
 </div>
 </section>
@@ -1274,7 +1258,6 @@ Problem info:  Eccentric (e=0.5, a=2) to highly-eccentric (e=0.9, a=10) orbit at
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold UDP: point-to-point trajectory optimization</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector-and-time-encoding">Decision vector and time encoding</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-time-grid">Uniform time grid</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax-time-grid">Softmax time grid</a></li>
 </ul>
 </li>
 </ul>

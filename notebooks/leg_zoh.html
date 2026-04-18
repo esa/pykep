@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/leg_zoh';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Zero-Order-Hold trajectory leg for solar sailing" href="leg_zoh_ss.html" />
+    <link rel="next" title="Plotting" href="plotting.html" />
     <link rel="prev" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -194,8 +194,6 @@
 <li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold trajectory leg</a></li>
 
-
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 </ul>
@@ -588,6 +586,17 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">grad_an_mc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_mc_grad</span><span class="p">()</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">tcgrad_an_tc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_tc_grad</span><span class="p">()</span>
+
+<span class="ne">AttributeError</span>: &#39;zoh&#39; object has no attribute &#39;compute_tc_grad&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <p>… and compare with numerical estimates. We use <code class="docutils literal notranslate"><span class="pre">pagmo</span></code> finite differences as a consistency check.</p>
 <div class="cell docutils container">
@@ -600,7 +609,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.6034665491940111e-08
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.7472969614811818e-07
 </pre></div>
 </div>
 </div>
@@ -615,7 +624,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.2208185810895691e-05
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.3313971559876023e-07
 </pre></div>
 </div>
 </div>
@@ -630,7 +639,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.4322083669635577e-06
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.4101124140165991e-07
 </pre></div>
 </div>
 </div>
@@ -644,7 +653,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.1857765709256628e-06
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.5313263390850063e-08
 </pre></div>
 </div>
 </div>
@@ -658,7 +667,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4.7457376456501942e-08
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.9570551748922567e-08
 </pre></div>
 </div>
 </div>
@@ -683,7 +692,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/822364324d3429b50174ab59b7a5fe55b4c5144e8bf2d10eeeb09fe353449f3a.png" src="../_images/822364324d3429b50174ab59b7a5fe55b4c5144e8bf2d10eeeb09fe353449f3a.png" />
+<img alt="../_images/50af14730bf96f97a4ffe8a274afc88991068d3fa0348f913b4ad637ce2d0a0f.png" src="../_images/50af14730bf96f97a4ffe8a274afc88991068d3fa0348f913b4ad637ce2d0a0f.png" />
 </div>
 </div>
 </section>
@@ -799,7 +808,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" src="../_images/98934fbd09213fd3e81d586fd7c1c9093aa02d450408bfd6ad7cd1141762f502.png" />
+<img alt="../_images/a7f6416012af0333789fcade9fb7c58c55c13259c23788d1730047b1a93b72fe.png" src="../_images/a7f6416012af0333789fcade9fb7c58c55c13259c23788d1730047b1a93b72fe.png" />
 </div>
 </div>
 <p>Select two points on the orbit to define initial and final boundary states for a ZOH leg.</p>
@@ -828,7 +837,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" src="../_images/5c0b24d636a058ca91b56a45c50247c3332f65e8578625caf1e05efc02855675.png" />
+<img alt="../_images/91b5525835ffd478539edcd7baf67f6952699e2831df94a1ddb34e49971608c7.png" src="../_images/91b5525835ffd478539edcd7baf67f6952699e2831df94a1ddb34e49971608c7.png" />
 </div>
 </div>
 <p>Instantiate the ZOH leg in the CR3BP dynamics with the selected boundaries and time grid.</p>
@@ -843,7 +852,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-6.933065233027946e-13, -1.2889689315898067e-12, -7.084965035626275e-42, -4.18420853520729e-12, 2.274291865944633e-13, -1.4967619222069452e-42, 0.0]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-4.168110301350225e-12, -5.252465129501616e-13, -1.0881432900098286e-41, -5.813849401903326e-12, 2.1009860518006462e-12, -9.693482126966922e-42, 0.0]
 </pre></div>
 </div>
 </div>
@@ -869,7 +878,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/334eb1328fec126c66c3944e442728ce6fc6b499b7f7d970e825c398a2261082.png" src="../_images/334eb1328fec126c66c3944e442728ce6fc6b499b7f7d970e825c398a2261082.png" />
+<img alt="../_images/ffb416c148c8885facdc7002025625e8193e8f94973464e53ac4d4579e24b117.png" src="../_images/ffb416c148c8885facdc7002025625e8193e8f94973464e53ac4d4579e24b117.png" />
 </div>
 </div>
 <p>This no-thrust case yields a near-zero mismatch, as expected from consistency with the reference dynamics.</p>
@@ -885,7 +894,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-0.10481785182898598, -0.07725960165143375, -1.394001898887359e-31, -0.04149124809464122, 0.1549966560161603, 1.4428926907872524e-32, -0.42025630757619303]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-0.08237193006874788, 0.005291237018280492, -1.4514539439469395e-31, 0.086780402871281, 0.06605752972759138, -3.16512818033977e-32, -0.4872013925400698]
 </pre></div>
 </div>
 </div>
@@ -910,7 +919,7 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/38513142f9d117c20f42c73759093c85f04d449d051df1d070960e512079267b.png" src="../_images/38513142f9d117c20f42c73759093c85f04d449d051df1d070960e512079267b.png" />
+<img alt="../_images/3862eeca7a669f5edf55868589bfa9e6427e81fe9b2cf5c159d23c83555db59a.png" src="../_images/3862eeca7a669f5edf55868589bfa9e6427e81fe9b2cf5c159d23c83555db59a.png" />
 </div>
 </div>
 <p>The result is consistent: introducing non-zero controls with fixed boundaries generally increases mismatch unless controls are optimized.</p>
@@ -937,11 +946,11 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
       </div>
     </a>
     <a class="right-next"
-       href="leg_zoh_ss.html"
+       href="plotting.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Zero-Order-Hold trajectory leg for solar sailing</p>
+        <p class="prev-next-title">Plotting</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

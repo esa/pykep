@@ -195,8 +195,6 @@
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ss.html">The Zero-Order-Hold trajectory leg for solar sailing</a></li>
-
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 </ul>
 </details></li>
@@ -683,42 +681,22 @@ The analytical gradients use variational equations integrated alongside the dyna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Create a problem and population to test gradient</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x_test</span> <span class="o">=</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> 
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Gradient Performance Comparison ===&quot;</span><span class="p">)</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Gradient Performance Comparison ===
 
-<span class="nn">File ~/local/lib/python3.13/site-packages/pygmo/__init__.py:313,</span> in <span class="ni">_population_init</span><span class="nt">(self, prob, size, b, seed)</span>
-<span class="g g-Whitespace">    </span><span class="mi">309</span>     <span class="n">seed</span> <span class="o">=</span> <span class="n">_random_device_next</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span> <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">312</span>     <span class="c1"># No bfe specified, init in sequential mode.</span>
-<span class="ne">--&gt; </span><span class="mi">313</span>     <span class="n">__original_population_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">315</span>     <span class="c1"># A bfe was specified. Same as above with the problem.</span>
-<span class="g g-Whitespace">    </span><span class="mi">316</span>     <span class="n">__original_population_init</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="bp">self</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">b</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">bfe</span> <span class="k">else</span> <span class="n">bfe</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">size</span><span class="p">,</span> <span class="n">seed</span>
-<span class="g g-Whitespace">    </span><span class="mi">318</span>     <span class="p">)</span>
+Decision vector dimension: 131
+Fitness dimension: 40
 
-<span class="nn">File ~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:259,</span> in <span class="ni">zoh_pl2pl.fitness</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span> <span class="k">def</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span>     <span class="c1"># We set the leg using data in the decision vector</span>
-<span class="ne">--&gt; </span><span class="mi">259</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_set_leg_from_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="c1"># We optimize for maximum final mass (minimum propellant)</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">obj</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+Analytical gradient (from variational equations + chain rule):
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>315 μs ± 831 ns per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 
-<span class="nn">File ~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:177,</span> in <span class="ni">zoh_pl2pl._set_leg_from_x</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">175</span> <span class="c1"># Set controls</span>
-<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span> <span class="p">:</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">177</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">4</span><span class="p">]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_thrust</span>
-<span class="g g-Whitespace">    </span><span class="mi">178</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">180</span> <span class="n">tof</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span>  <span class="c1"># non-dimensional</span>
+Numerical gradient (simple finite difference):
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>12.8 ms ± 57.3 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 
-<span class="ne">TypeError</span>: can&#39;t multiply sequence by non-int of type &#39;numpy.float64&#39;
+✓ The analytical gradient is significantly faster!
 </pre></div>
 </div>
 </div>
@@ -753,7 +731,7 @@ The analytical gradients use variational equations integrated alongside the dyna
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using SNOPT7 optimizer
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using IPOPT optimizer
 </pre></div>
 </div>
 </div>
@@ -787,9 +765,38 @@ The analytical gradients use variational equations integrated alongside the dyna
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Uniform) ===
-x.........
-Best mass is:  1233.78782465
-Worst mass is:  1209.72980171
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit https://github.com/coin-or/Ipopt
+******************************************************************************
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
+Best mass is:  1233.9076753
+Worst mass is:  1209.72980364
 </pre></div>
 </div>
 </div>
@@ -818,9 +825,24 @@ Worst mass is:  1209.72980171
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITHOUT Gradients (Uniform) ===
-..x.x.....
-Best mass is:  1233.19966226
-Worst mass is:  1216.47963104
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITHOUT Gradients (Uniform) ===&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">masses_no_grad</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">7</span>     <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="k">if</span><span class="p">(</span><span class="n">prob_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="n">masses_no_grad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="ne">ValueError</span>: 
+<span class="ne">function</span>: ipopt_nlp
+<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pagmo_1773779991629/work/src/algorithms/ipopt.cpp, 147
+<span class="ne">what</span>: the ipopt algorithm needs the gradient, but the problem named &#39;&lt;class &#39;pykep.trajopt._zoh_pl2pl.zoh_pl2pl&#39;&gt;&#39; does not provide it
 </pre></div>
 </div>
 </div>
@@ -842,7 +864,7 @@ Worst mass is:  1216.47963104
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bc18fc4f68da49a86cf7813c3bef6f0fbb57e4e52689a37631fa0753e18dee42.png" src="../_images/bc18fc4f68da49a86cf7813c3bef6f0fbb57e4e52689a37631fa0753e18dee42.png" />
+<img alt="../_images/18cd3081869308df9fd1a3ab6014df54f150aeb529b3c8d9d9e7c8490fc0e40a.png" src="../_images/18cd3081869308df9fd1a3ab6014df54f150aeb529b3c8d9d9e7c8490fc0e40a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -855,7 +877,7 @@ Worst mass is:  1216.47963104
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/36ee40584da49d97a0b05bfe1debba6bf6282aebdec4a6ec59bc8c346a7fcaba.png" src="../_images/36ee40584da49d97a0b05bfe1debba6bf6282aebdec4a6ec59bc8c346a7fcaba.png" />
+<img alt="../_images/1602d7c5cb249d8d4a9883b09918597f7e40fb9fb21134cbe89e813eb7ee3c3d.png" src="../_images/1602d7c5cb249d8d4a9883b09918597f7e40fb9fb21134cbe89e813eb7ee3c3d.png" />
 </div>
 </div>
 </section>
@@ -939,9 +961,9 @@ Without softmax: 131
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Softmax) ===
-x.....xx.x
-Best mass is:  1233.65545015
-Worst mass is:  1215.44188073
+..x.....x.
+Best mass is:  1233.97957177
+Worst mass is:  1215.06076073
 </pre></div>
 </div>
 </div>
@@ -966,7 +988,7 @@ Worst mass is:  1215.44188073
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/57a82060b5bae8a19184cd84bc175052878af6c58b4547fd08b85ba34f3cd4b5.png" src="../_images/57a82060b5bae8a19184cd84bc175052878af6c58b4547fd08b85ba34f3cd4b5.png" />
+<img alt="../_images/d5a6580d22513458df196ddacac98b12d6f4f085f0e09f6fa3b929dbd567bb90.png" src="../_images/d5a6580d22513458df196ddacac98b12d6f4f085f0e09f6fa3b929dbd567bb90.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -980,28 +1002,42 @@ Worst mass is:  1215.44188073
 Departure: earth(jpl_lp)(K)
 Arrival: mars(jpl_lp)(K)
 
-Launch epoch: 7452.11748 MJD2000, a.k.a. 2020-05-27T02:49:10.229252
-Arrival epoch: 7802.11748 MJD2000, a.k.a. 2021-05-12T02:49:10.229252
+Launch epoch: 7452.11294 MJD2000, a.k.a. 2020-05-27T02:42:37.988699
+Arrival epoch: 7802.11294 MJD2000, a.k.a. 2021-05-12T02:42:37.988699
 Time of flight: 6.02073 (nd), 350.00000 days
 
 Departure excess velocity:
   Magnitude: 0.000000 (nd), 0.000000 km/s
-  Vector (nd): [0.000000, -0.000000, 0.000000]
-  Vector (km/s): [0.000000, -0.000000, 0.000000]
-  Direction: [0.738962, -0.026113, 0.673240], norm: 1.000000
+  Vector (nd): [-0.000000, -0.000000, 0.000000]
+  Vector (km/s): [-0.000000, -0.000000, 0.000000]
+  Direction: [-0.458249, -0.152246, 0.875688], norm: 1.000000
 
 Arrival excess velocity:
   Magnitude: 0.000000 (nd), 0.000000 km/s
-  Vector (nd): [-0.000000, 0.000000, -0.000000]
-  Vector (km/s): [-0.000000, 0.000000, -0.000000]
-  Direction: [-0.728527, 0.489609, -0.479094], norm: 1.000000
+  Vector (nd): [-0.000000, 0.000000, 0.000000]
+  Vector (km/s): [-0.000000, 0.000000, 0.000000]
+  Direction: [-0.145760, 0.987435, 0.061043], norm: 1.000000
 
-Final mass: 0.822437 (nd)
+Final mass: 0.822653 (nd)
 
 Scaling factors: L=149.598 Gm, V=29.785 km/s, TIME=58.132 days
 
 Details on the ZOH leg:
-&lt;pykep.leg._zoh.zoh object at 0x31ff20ad0&gt;
+Dynamics dimension: 7
+Control dimension: 4
+Number of segments: 30
+Number of fwd segments: 18
+Number of bck segments: 12
+Cut parameter: 0.6
+Variational integrator available: true
+Maximum propagation steps: none
+
+Initial state: [-0.41228838581227, -0.925570767758029, 2.8874712003856994e-05, 0.8973183813042093, -0.4107088381114756, 1.2812741965299295e-05, 1]
+Final state: [-1.0344479955409878, 1.2809107326753661, 0.05223326215793006, -0.6021376946466708, -0.44184620554207943, 0.005524194056897131, 0.8226530478482634]
+Time grid: [0, 0.1685490906988014, 0.33732802292945674, 0.503593188137969, 0.6671175546904856, 0.8302544649598823, 0.9933465232375999, 1.1569553904182452, 1.1988311512049292, 1.313949623571403, 1.4302554744611404, 1.6665154548116774, 1.8647987198274172, 2.1423042289218364, 2.447150077222255, 2.6559470918030947, 2.8757686231015436, 3.098569383413903, 3.3776407954400094, 3.563512676366831, 3.8607079525468526, 4.142042764683886, 4.345008366997576, 4.654430712635784, 4.8511154486701225, 5.08037077668507, 5.296174810752023, 5.463525174773438, 5.650075440410627, 5.835537225325473, 6.02073463248503]
+Control values: [0.06745267560754033, 0.9108248640320349, -0.28513347431941516, -0.29849115720547403, 0.06745267560754033, 0.9548049454435172, -0.14201926610668633, -0.26110925770737275, 0.06745267560754033, 0.9760461288945445, 0.005177118466990535, -0.21750207353195697, 0.06745267560754033, 0.973740911554742, 0.15282661848975584, -0.16873844260517037, 0.06745267560754033, 0.9477550579707571, 0.2973243852611719, -0.11557925602030741, 0.06745267560754033, 0.8983118843217188, 0.4354129610071857, -0.05874788177724918, 0.06745267560754033, 0.8265801657065955, 0.5628187248628127, 0.0005600591667233601, 0, 0.5464471413223676, -0.7883826412699249, -0.28257447281180464, 0.06745267560754033, 0.7241542989164973, 0.6863533522427722, 0.06722820453371321, 0.06745267560754033, 0.6484537202463332, 0.7533739850938446, 0.10924933442412793, 0, 0.2562456545193487, 0.9033449912099412, 0.3439563800772957, 0, 0.07885949971211509, 0.8440556644412343, 0.5304255033742449, 0, 0.19203596493002237, 0.9386706458960573, 0.2863906540138387, 0, -0.24138615554125953, 0.4708729904059395, -0.8485348259318405, 0.06745267560754033, -0.22752952087966508, 0.8815545763154753, 0.4136325013739846, 0.06745267560754033, -0.36077440579069525, 0.8239262469475226, 0.4370210152423137, 0.06745267560754033, -0.4845542700275393, 0.7493280416183028, 0.45134759061880986, 0, -0.6131741386631627, 0.6789427432607051, 0.40379973631531735, 0, -0.7834205452466179, 0.4260920205107331, 0.4524354532334673, 0, -0.8532284854340219, 0.326182378872719, 0.40694742579008725, 0, -0.9185736936084746, 0.15421994713434195, 0.36392111413926753, 0, -0.9449751000935996, 0.021033457863548398, 0.3264653945725246, 0, -0.9608982013128101, -0.06713308268988197, 0.26864064458372855, 0, -0.9517989526589168, -0.1455184234778065, 0.270005818726047, 0, -0.9399170869818104, -0.2897698548830744, 0.18052506972902596, 0, -0.9072286308556379, -0.4006918908645311, 0.12799304649554832, 0, -0.8897223216075358, -0.44172327284520796, 0.11521606077379296, 0.06745267560754033, -0.8574394389752797, -0.5071784871419585, 0.0869919122561812, 0.06745267560754033, -0.8097016612572941, -0.5853825636332625, 0.04135789251476087, 0.06745267560754033, -0.7544142325999624, -0.6563904804467803, -0.0032719337987038937]
+
+Mismatch constraints: [-3.4107927593396425e-10, -8.086553648922745e-11, 3.6761030851317766e-11, -2.948822297454967e-10, 1.4732881581380752e-11, 6.848102640510945e-11, -7.053346795515836e-11]
 </pre></div>
 </div>
 </div>
@@ -1016,7 +1052,7 @@ Details on the ZOH leg:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/9e4b56f61e15d707cd44edaaaf7f260d74a3b7d3a762a6438d1ccf252e552f0b.png" src="../_images/9e4b56f61e15d707cd44edaaaf7f260d74a3b7d3a762a6438d1ccf252e552f0b.png" />
+<img alt="../_images/58121dec835036f50b39a2f03aab2d7e029fff0ccbade01ed1b1152010bbd91f.png" src="../_images/58121dec835036f50b39a2f03aab2d7e029fff0ccbade01ed1b1152010bbd91f.png" />
 </div>
 </div>
 </section>

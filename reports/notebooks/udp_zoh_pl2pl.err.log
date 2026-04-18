@@ -28,59 +28,42 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# Create a problem and population to test gradient
-prob_g = pg.problem(udp_g_uniform)
-pop_g = pg.population(prob_g, 1)
-x_test = pop_g.champion_x
-
-print("\n=== Gradient Performance Comparison ===")
-print(f"\nDecision vector dimension: {len(x_test)}")
-print(f"Fitness dimension: {len(prob_g.fitness(x_test))}")
-
-print("\nAnalytical gradient (from variational equations + chain rule):")
-%timeit udp_g_uniform.gradient(x_test)
-
-print("\nNumerical gradient (simple finite difference):")
-%timeit pg.estimate_gradient(udp_g_uniform.fitness, x_test)
-
-print("\n✓ The analytical gradient is significantly faster!")
+prob_uniform = pg.problem(udp_uniform)
+prob_uniform.c_tol = 1e-6
+print("\n=== Optimization WITHOUT Gradients (Uniform) ===")
+masses_no_grad = []
+for i in range(10):
+    pop = pg.population(prob_uniform, 1)
+    pop = algo.evolve(pop)
+    if(prob_uniform.feasibility_f(pop.champion_f)):
+        print(".", end="")
+        masses_no_grad.append(pop.champion_x[1])
+    else:
+        print("x", end ="")
+print("\nBest mass is: ", np.max(masses_no_grad)*MASS)
+print("Worst mass is: ", np.min(masses_no_grad)*MASS)
 ------------------
 
+----- stdout -----
+
+=== Optimization WITHOUT Gradients (Uniform) ===
+------------------
 
 [31m---------------------------------------------------------------------------[39m
-[31mTypeError[39m                                 Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[4][39m[32m, line 3[39m
-[32m      1[39m [38;5;66;03m# Create a problem and population to test gradient[39;00m
-[32m      2[39m prob_g = pg.problem(udp_g_uniform)
-[32m----> [39m[32m3[39m pop_g = pg.population(prob_g, [32m1[39m)
-[32m      4[39m x_test = pop_g.champion_x
-[32m      5[39m 
-[32m      6[39m print([33m"\n=== Gradient Performance Comparison ==="[39m)
+[31mValueError[39m                                Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[7][39m[32m, line 7[39m
+[32m      3[39m print([33m"\n=== Optimization WITHOUT Gradients (Uniform) ==="[39m)
+[32m      4[39m masses_no_grad = []
+[32m      5[39m [38;5;28;01mfor[39;00m i [38;5;28;01min[39;00m range([32m10[39m):
+[32m      6[39m     pop = pg.population(prob_uniform, [32m1[39m)
+[32m----> [39m[32m7[39m     pop = algo.evolve(pop)
+[32m      8[39m     [38;5;28;01mif[39;00m(prob_uniform.feasibility_f(pop.champion_f)):
+[32m      9[39m         print([33m"."[39m, end=[33m""[39m)
+[32m     10[39m         masses_no_grad.append(pop.champion_x[[32m1[39m])
 
-[36mFile [39m[32m~/local/lib/python3.13/site-packages/pygmo/__init__.py:313[39m, in [36m_population_init[39m[34m(self, prob, size, b, seed)[39m
-[32m    309[39m     seed = _random_device_next()
-[32m    311[39m [38;5;28;01mif[39;00m b [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
-[32m    312[39m     [38;5;66;03m# No bfe specified, init in sequential mode.[39;00m
-[32m--> [39m[32m313[39m     [43m__original_population_init[49m[43m([49m[38;5;28;43mself[39;49m[43m,[49m[43m [49m[43mprob[49m[43m,[49m[43m [49m[43msize[49m[43m,[49m[43m [49m[43mseed[49m[43m)[49m
-[32m    314[39m [38;5;28;01melse[39;00m:
-[32m    315[39m     [38;5;66;03m# A bfe was specified. Same as above with the problem.[39;00m
-[32m    316[39m     __original_population_init(
-[32m    317[39m         [38;5;28mself[39m, prob, b [38;5;28;01mif[39;00m [38;5;28mtype[39m(b) == bfe [38;5;28;01melse[39;00m bfe(b), size, seed
-[32m    318[39m     )
+[31mValueError[39m: 
+function: ipopt_nlp
+where: /home/conda/feedstock_root/build_artifacts/pagmo_1773779991629/work/src/algorithms/ipopt.cpp, 147
+what: the ipopt algorithm needs the gradient, but the problem named '<class 'pykep.trajopt._zoh_pl2pl.zoh_pl2pl'>' does not provide it
 
-[36mFile [39m[32m~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:259[39m, in [36mzoh_pl2pl.fitness[39m[34m(self, x)[39m
-[32m    257[39m [38;5;28;01mdef[39;00m[38;5;250m [39m[34mfitness[39m([38;5;28mself[39m, x):
-[32m    258[39m     [38;5;66;03m# We set the leg using data in the decision vector[39;00m
-[32m--> [39m[32m259[39m     [38;5;28;43mself[39;49m[43m.[49m[43m_set_leg_from_x[49m[43m([49m[43mx[49m[43m)[49m
-[32m    261[39m     [38;5;66;03m# We optimize for maximum final mass (minimum propellant)[39;00m
-[32m    262[39m     obj = -x[[32m1[39m]
-
-[36mFile [39m[32m~/local/lib/python3.13/site-packages/pykep/trajopt/_zoh_pl2pl.py:177[39m, in [36mzoh_pl2pl._set_leg_from_x[39m[34m(self, x)[39m
-[32m    175[39m [38;5;66;03m# Set controls[39;00m
-[32m    176[39m [38;5;28mself[39m.leg.controls = x[[32m10[39m : [32m10[39m + [32m4[39m * [38;5;28mself[39m.nseg].copy()
-[32m--> [39m[32m177[39m [38;5;28;43mself[39;49m[43m.[49m[43mleg[49m[43m.[49m[43mcontrols[49m[43m[[49m[32;43m0[39;49m[43m:[49m[43m:[49m[32;43m4[39;49m[43m][49m[43m [49m[43m*[49m[43m=[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mmax_thrust[49m
-[32m    178[39m [38;5;28mself[39m.leg.controls = [38;5;28mlist[39m([38;5;28mself[39m.leg.controls)
-[32m    180[39m tof = x[[32m10[39m + [32m4[39m * [38;5;28mself[39m.nseg]  [38;5;66;03m# non-dimensional[39;00m
-
-[31mTypeError[39m: can't multiply sequence by non-int of type 'numpy.float64'
 
