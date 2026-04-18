@@ -11,6 +11,8 @@
 #ifndef kep3_DETAIL_XTENSOR_HELPERS_HPP
 #define kep3_DETAIL_XTENSOR_HELPERS_HPP
 
+#include <cstddef>
+
 #include <xtensor/containers/xarray.hpp>
 #include <xtensor-blas/xlinalg.hpp>
 #include <xtensor/containers/xarray.hpp>

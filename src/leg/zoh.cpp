@@ -9,6 +9,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <stdexcept>
 #include <vector>
@@ -19,13 +20,265 @@
 #include <heyoka/kw.hpp>
 #include <heyoka/taylor.hpp>
 
+#include <xtensor/containers/xadapt.hpp>
+#include <xtensor/views/xview.hpp>
+
 #include <kep3/leg/zoh.hpp>
+#include <kep3/linalg.hpp>
 
 namespace kep3::leg
 {
 
 namespace
 {
+
+using kep3::linalg::_dot;
+
+bool propagate_until_safe_impl(heyoka::taylor_adaptive<double> &ta, double t, const std::optional<unsigned> &max_steps);
+
+template <std::size_t D, std::size_t C, typename MatDD, typename MatDC, typename MatD1>
+std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>> compute_mc_grad_fixed_impl(
+    heyoka::taylor_adaptive<double> &ta_var, const std::vector<double> &state0, const std::vector<double> &controls,
+    const std::vector<double> &state1, const std::vector<double> &tgrid, const std::vector<double> &ic_var,
+    const std::vector<double> &pars_no_control, const std::optional<unsigned> &max_steps,
+    const heyoka::cfunc<double> &dyn_cfunc, unsigned nseg, unsigned nseg_fwd, unsigned nseg_bck)
+{
+    // Prepare output containers.
+    std::vector<double> dmc_dx0(D * D, 0.0);
+    std::vector<double> dmc_dx1(D * D, 0.0);
+    std::vector<double> dmc_dcontrols(D * C * nseg, 0.0);
+    std::vector<double> dmc_dtgrid(D * (nseg + 1u), 0.0);
+
+    // Views/shapes used to map flat state blocks and flattened outputs.
+    const std::array<std::size_t, 2u> mat_dd_shape{D, D};
+    const std::array<std::size_t, 2u> mat_dc_shape{D, C};
+    const std::array<std::size_t, 2u> stm_shape{D, D + C};
+
+    // Forward segments.
+    std::vector<MatDD> M_seg_fwd;
+    std::vector<MatDC> C_seg_fwd;
+    std::vector<MatD1> dyn_fwd;
+    std::vector<MatDD> M_fwd;
+
+    ta_var.set_time(tgrid.front());
+    std::copy(state0.begin(), state0.end(), ta_var.get_state_data());
+    std::copy(pars_no_control.begin(), pars_no_control.end(), ta_var.get_pars_data() + C);
+
+    unsigned successful_fwd = 0u;
+    for (unsigned i = 0u; i < nseg_fwd; ++i) {
+        std::copy(ic_var.begin(), ic_var.end(), ta_var.get_state_data() + D);
+
+        const auto start = static_cast<std::size_t>(C * i);
+        std::copy(controls.begin() + static_cast<std::ptrdiff_t>(start),
+                  controls.begin() + static_cast<std::ptrdiff_t>(start + C), ta_var.get_pars_data());
+        std::copy(pars_no_control.begin(), pars_no_control.end(), ta_var.get_pars_data() + C);
+
+        if (!propagate_until_safe_impl(ta_var, tgrid[i + 1u], max_steps)) {
+            break;
+        }
+
+        // Extract STM and control sensitivity.
+        const auto &x_var_vec = ta_var.get_state();
+        auto x_var
+            = xt::adapt(x_var_vec.data() + static_cast<std::ptrdiff_t>(D), static_cast<std::size_t>(D * (D + C)),
+                        xt::no_ownership(), stm_shape);
+
+        MatDD M{};
+        MatDC C_mat{};
+        M = xt::eval(xt::view(x_var, xt::all(), xt::range(0u, D)));
+        C_mat = xt::eval(xt::view(x_var, xt::all(), xt::range(D, D + C)));
+        M_seg_fwd.push_back(std::move(M));
+        C_seg_fwd.push_back(std::move(C_mat));
+
+        std::vector<double> state_arr(D, 0.0);
+        std::copy_n(ta_var.get_state().begin(), static_cast<std::ptrdiff_t>(D), state_arr.begin());
+
+        std::vector<double> pars_vec;
+        pars_vec.reserve(C + pars_no_control.size());
+        pars_vec.insert(pars_vec.end(), controls.begin() + static_cast<std::ptrdiff_t>(start),
+                        controls.begin() + static_cast<std::ptrdiff_t>(start + C));
+        pars_vec.insert(pars_vec.end(), pars_no_control.begin(), pars_no_control.end());
+
+        // Compute dynamics at this point using dyn_cfunc.
+        std::vector<double> dyn_out(D, 0.0);
+        dyn_cfunc(dyn_out, state_arr, heyoka::kw::pars = pars_vec);
+
+        MatD1 dyn{};
+        for (std::size_t j = 0u; j < D; ++j) {
+            dyn(j, 0) = dyn_out[j];
+        }
+        dyn_fwd.push_back(std::move(dyn));
+
+        ++successful_fwd;
+    }
+
+    // Compute M_fwd chain.
+    MatDD cur = kep3::linalg::_eye<D>();
+    for (auto it = M_seg_fwd.rbegin(); it != M_seg_fwd.rend(); ++it) {
+        cur = _dot<D, D, D>(cur, *it);
+        M_fwd.push_back(cur);
+    }
+    std::reverse(M_fwd.begin(), M_fwd.end());
+    M_fwd.push_back(kep3::linalg::_eye<D>());
+
+    // 1. dmc/dx0.
+    if (successful_fwd == 0u) {
+        const auto I = kep3::linalg::_eye<D>();
+        std::copy(I.begin(), I.end(), dmc_dx0.begin());
+    } else {
+        std::copy(M_fwd[0].begin(), M_fwd[0].end(), dmc_dx0.begin());
+    }
+
+    // 2. dmc/dcontrols (forward).
+    std::vector<double> C_fwd(D * C * nseg_fwd, 0.0);
+    auto C_fwd_view = xt::adapt(C_fwd, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(C * nseg_fwd)});
+    for (unsigned i = 0u; i < successful_fwd; ++i) {
+        const auto prod = _dot<D, D, C>(M_fwd[i + 1u], C_seg_fwd[i]);
+        xt::view(C_fwd_view, xt::all(), xt::range(C * i, C * (i + 1u))) = prod;
+    }
+
+    // 3. dmc/dtgrid (forward).
+    std::vector<double> dmcdtgrid_fwd(D * (nseg + 1u), 0.0);
+    auto dmcdtgrid_fwd_view
+        = xt::adapt(dmcdtgrid_fwd, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(nseg + 1u)});
+    if (successful_fwd > 0u) {
+        auto tmp = _dot<D, D, 1u>(M_fwd[1u], dyn_fwd[0u]);
+        xt::view(dmcdtgrid_fwd_view, xt::all(), 0u) = -xt::view(tmp, xt::all(), 0u);
+
+        tmp = _dot<D, D, 1u>(M_fwd[successful_fwd], dyn_fwd.back());
+        xt::view(dmcdtgrid_fwd_view, xt::all(), successful_fwd) = xt::view(tmp, xt::all(), 0u);
+
+        for (unsigned i = 1u; i < successful_fwd; ++i) {
+            auto a = _dot<D, D, 1u>(M_seg_fwd[i], dyn_fwd[i - 1u]);
+            a -= dyn_fwd[i];
+            tmp = _dot<D, D, 1u>(M_fwd[i + 1u], a);
+            xt::view(dmcdtgrid_fwd_view, xt::all(), i) = xt::view(tmp, xt::all(), 0u);
+        }
+    }
+
+    // Backward pass.
+    std::vector<MatDD> M_seg_bck;
+    std::vector<MatDC> C_seg_bck;
+    std::vector<MatD1> dyn_bck;
+    std::vector<MatDD> M_bck;
+
+    ta_var.set_time(tgrid.back());
+    std::copy(state1.begin(), state1.end(), ta_var.get_state_data());
+    std::copy(pars_no_control.begin(), pars_no_control.end(), ta_var.get_pars_data() + C);
+
+    unsigned successful_bck = 0u;
+    for (unsigned i = 0u; i < nseg_bck; ++i) {
+        std::copy(ic_var.begin(), ic_var.end(), ta_var.get_state_data() + D);
+
+        const auto start = controls.size() - static_cast<std::size_t>(C * (i + 1u));
+        std::copy(controls.begin() + static_cast<std::ptrdiff_t>(start),
+                  controls.begin() + static_cast<std::ptrdiff_t>(start + C), ta_var.get_pars_data());
+        std::copy(pars_no_control.begin(), pars_no_control.end(), ta_var.get_pars_data() + C);
+
+        if (!propagate_until_safe_impl(ta_var, tgrid[tgrid.size() - static_cast<std::size_t>(2u + i)], max_steps)) {
+            break;
+        }
+
+        const auto &x_var_vec = ta_var.get_state();
+        auto x_var
+            = xt::adapt(x_var_vec.data() + static_cast<std::ptrdiff_t>(D), static_cast<std::size_t>(D * (D + C)),
+                        xt::no_ownership(), stm_shape);
+
+        MatDD M{};
+        MatDC C_mat{};
+        M = xt::eval(xt::view(x_var, xt::all(), xt::range(0u, D)));
+        C_mat = xt::eval(xt::view(x_var, xt::all(), xt::range(D, D + C)));
+        M_seg_bck.push_back(std::move(M));
+        C_seg_bck.push_back(std::move(C_mat));
+
+        std::vector<double> state_arr(D, 0.0);
+        std::copy_n(ta_var.get_state().begin(), static_cast<std::ptrdiff_t>(D), state_arr.begin());
+
+        std::vector<double> pars_vec;
+        pars_vec.reserve(C + pars_no_control.size());
+        pars_vec.insert(pars_vec.end(), controls.begin() + static_cast<std::ptrdiff_t>(start),
+                        controls.begin() + static_cast<std::ptrdiff_t>(start + C));
+        pars_vec.insert(pars_vec.end(), pars_no_control.begin(), pars_no_control.end());
+
+        std::vector<double> dyn_out(D, 0.0);
+        dyn_cfunc(dyn_out, state_arr, heyoka::kw::pars = pars_vec);
+
+        MatD1 dyn{};
+        for (std::size_t j = 0u; j < D; ++j) {
+            dyn(j, 0) = dyn_out[j];
+        }
+        dyn_bck.push_back(std::move(dyn));
+
+        ++successful_bck;
+    }
+
+    cur = kep3::linalg::_eye<D>();
+    for (auto it = M_seg_bck.rbegin(); it != M_seg_bck.rend(); ++it) {
+        cur = _dot<D, D, D>(cur, *it);
+        M_bck.push_back(cur);
+    }
+    std::reverse(M_bck.begin(), M_bck.end());
+    M_bck.push_back(kep3::linalg::_eye<D>());
+
+    // 4. dmc/dx1.
+    if (successful_bck == 0u) {
+        for (std::size_t r = 0u; r < D; ++r) {
+            for (std::size_t cc = 0u; cc < D; ++cc) {
+                dmc_dx1[r * D + cc] = (r == cc) ? -1.0 : 0.0;
+            }
+        }
+    } else {
+        std::copy(M_bck[0].begin(), M_bck[0].end(), dmc_dx1.begin());
+        auto dmc_dx1_view = xt::adapt(dmc_dx1, mat_dd_shape);
+        dmc_dx1_view *= -1.0;
+    }
+
+    // 5. dmc/dcontrols (backward).
+    // Fill C_bck from right to left so that the first backward segment's gradient
+    // appears in the last block (Python-style).
+    std::vector<double> C_bck(D * C * nseg_bck, 0.0);
+    auto C_bck_view = xt::adapt(C_bck, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(C * nseg_bck)});
+    for (unsigned i = 0u; i < successful_bck; ++i) {
+        const auto prod = _dot<D, D, C>(M_bck[i + 1u], C_seg_bck[i]);
+        const auto block = nseg_bck - 1u - i;
+        xt::view(C_bck_view, xt::all(), xt::range(C * block, C * (block + 1u))) = prod;
+    }
+
+    // 6. dmc/dtgrid (backward).
+    std::vector<double> dmcdtgrid_bck(D * (nseg + 1u), 0.0);
+    auto dmcdtgrid_bck_view
+        = xt::adapt(dmcdtgrid_bck, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(nseg + 1u)});
+    if (successful_bck > 0u) {
+        auto tmp = _dot<D, D, 1u>(M_bck[1u], dyn_bck[0u]);
+        xt::view(dmcdtgrid_bck_view, xt::all(), nseg) = xt::view(tmp, xt::all(), 0u);
+
+        tmp = _dot<D, D, 1u>(M_bck[successful_bck], dyn_bck.back());
+        xt::view(dmcdtgrid_bck_view, xt::all(), (nseg - successful_bck)) -= xt::view(tmp, xt::all(), 0u);
+
+        for (unsigned i = 1u; i < successful_bck; ++i) {
+            auto a = _dot<D, D, 1u>(M_seg_bck[i], dyn_bck[i - 1u]);
+            a -= dyn_bck[i];
+            tmp = _dot<D, D, 1u>(M_bck[i + 1u], a);
+            xt::view(dmcdtgrid_bck_view, xt::all(), (nseg - i)) = -xt::view(tmp, xt::all(), 0u);
+        }
+    }
+
+    // 7. Assemble dmc/dcontrols = [C_fwd, -C_bck].
+    auto dmc_dcontrols_view
+        = xt::adapt(dmc_dcontrols, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(C * nseg)});
+    if (nseg_fwd > 0u) {
+        xt::view(dmc_dcontrols_view, xt::all(), xt::range(0u, C * nseg_fwd)) = C_fwd_view;
+    }
+    if (nseg_bck > 0u) {
+        xt::view(dmc_dcontrols_view, xt::all(), xt::range(C * nseg_fwd, C * nseg)) = -C_bck_view;
+    }
+
+    // 8. Assemble dmc/dtgrid.
+    auto dmc_dtgrid_view = xt::adapt(dmc_dtgrid, std::array<std::size_t, 2u>{D, static_cast<std::size_t>(nseg + 1u)});
+    dmc_dtgrid_view = dmcdtgrid_fwd_view + dmcdtgrid_bck_view;
+
+    return {dmc_dx0, dmc_dx1, dmc_dcontrols, dmc_dtgrid};
+}
 
 bool propagate_until_safe_impl(heyoka::taylor_adaptive<double> &ta, double t, const std::optional<unsigned> &max_steps)
 {
@@ -54,41 +307,6 @@ std::vector<double> make_identity(unsigned n)
         out[i * n + i] = 1.0;
     }
     return out;
-}
-
-std::vector<double> matmul(const std::vector<double> &A, const std::vector<double> &B, unsigned m, unsigned n, unsigned p)
-{
-    std::vector<double> out(m * p, 0.0);
-    for (unsigned i = 0u; i < m; ++i) {
-        for (unsigned k = 0u; k < n; ++k) {
-            const auto aik = A[i * n + k];
-            if (aik == 0.0) {
-                continue;
-            }
-            for (unsigned j = 0u; j < p; ++j) {
-                out[i * p + j] += aik * B[k * p + j];
-            }
-        }
-    }
-    return out;
-}
-
-std::vector<double> matvec(const std::vector<double> &A, const std::vector<double> &x, unsigned m, unsigned n)
-{
-    std::vector<double> out(m, 0.0);
-    for (unsigned i = 0u; i < m; ++i) {
-        for (unsigned k = 0u; k < n; ++k) {
-            out[i] += A[i * n + k] * x[k];
-        }
-    }
-    return out;
-}
-
-void axpy_inplace(std::vector<double> &dst, const std::vector<double> &src, double alpha)
-{
-    for (std::size_t i = 0u; i < dst.size(); ++i) {
-        dst[i] += alpha * src[i];
-    }
 }
 
 } // namespace
@@ -282,254 +500,43 @@ std::vector<double> zoh::compute_mismatch_constraints() const
     return retval;
 }
 
-std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>> zoh::compute_mc_grad() const
+std::tuple<std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>>
+zoh::compute_mc_grad() const
 {
+    using kep3::linalg::mat61;
+    using kep3::linalg::mat62;
+    using kep3::linalg::mat66;
+    using kep3::linalg::mat71;
+    using kep3::linalg::mat74;
+    using kep3::linalg::mat77;
+
     if (!m_ta_var) {
         throw std::logic_error("zoh::compute_mc_grad() requires a variational integrator (ta_var)");
     }
 
     const auto d = m_dim_dynamics;
     const auto c = m_dim_controls;
-    const auto stm_cols = d + c;
 
-    if (m_ta_var->get_dim() != d + d * d + d * c) {
-        throw std::logic_error("zoh::compute_mc_grad() requires ta_var with compatible variational state dimension");
+    if (d == 7u && c == 4u) {
+        if (m_ta_var->get_dim() != 7u + 7u * 7u + 7u * 4u) {
+            throw std::logic_error("zoh::compute_mc_grad() requires ta_var with compatible variational state dimension");
+        }
+        return compute_mc_grad_fixed_impl<7u, 4u, mat77, mat74, mat71>(
+            *m_ta_var, m_state0, m_controls, m_state1, m_tgrid, m_ic_var, m_pars_no_control, m_max_steps,
+            m_dyn_cfunc, m_nseg, m_nseg_fwd, m_nseg_bck);
     }
 
-    std::vector<double> dmc_dx0(d * d, 0.0);
-    std::vector<double> dmc_dx1(d * d, 0.0);
-    std::vector<double> dmc_dcontrols(d * c * m_nseg, 0.0);
-    std::vector<double> dmc_dtgrid(d * (m_nseg + 1u), 0.0);
-
-    auto &ta_var = *m_ta_var;
-
-    // Forward pass.
-    std::vector<std::vector<double>> M_seg_fwd;
-    std::vector<std::vector<double>> C_seg_fwd;
-    std::vector<std::vector<double>> dyn_fwd;
-    std::vector<std::vector<double>> M_fwd;
-
-    ta_var.set_time(m_tgrid.front());
-    std::copy(m_state0.begin(), m_state0.end(), ta_var.get_state_data());
-    std::copy(m_pars_no_control.begin(), m_pars_no_control.end(), ta_var.get_pars_data() + c);
-
-    unsigned successful_fwd = 0u;
-    for (unsigned i = 0u; i < m_nseg_fwd; ++i) {
-        std::copy(m_ic_var.begin(), m_ic_var.end(), ta_var.get_state_data() + d);
-
-        const auto start = static_cast<std::size_t>(c * i);
-        std::copy(m_controls.begin() + static_cast<std::ptrdiff_t>(start),
-                  m_controls.begin() + static_cast<std::ptrdiff_t>(start + c), ta_var.get_pars_data());
-        std::copy(m_pars_no_control.begin(), m_pars_no_control.end(), ta_var.get_pars_data() + c);
-
-        if (!propagate_until_safe_impl(ta_var, m_tgrid[i + 1u], m_max_steps)) {
-            break;
+    if (d == 6u && c == 2u) {
+        if (m_ta_var->get_dim() != 6u + 6u * 6u + 6u * 2u) {
+            throw std::logic_error("zoh::compute_mc_grad() requires ta_var with compatible variational state dimension");
         }
-
-        std::vector<double> M(d * d, 0.0);
-        std::vector<double> C(d * c, 0.0);
-        const auto &x_var = ta_var.get_state();
-        for (unsigned r = 0u; r < d; ++r) {
-            for (unsigned cc = 0u; cc < d; ++cc) {
-                M[r * d + cc] = x_var[d + r * stm_cols + cc];
-            }
-            for (unsigned cc = 0u; cc < c; ++cc) {
-                C[r * c + cc] = x_var[d + r * stm_cols + d + cc];
-            }
-        }
-        M_seg_fwd.push_back(std::move(M));
-        C_seg_fwd.push_back(std::move(C));
-
-        std::vector<double> state_arr(d, 0.0);
-        std::copy_n(ta_var.get_state().begin(), static_cast<std::ptrdiff_t>(d), state_arr.begin());
-
-        std::vector<double> pars_vec;
-        pars_vec.reserve(c + m_pars_no_control.size());
-        pars_vec.insert(pars_vec.end(), m_controls.begin() + static_cast<std::ptrdiff_t>(start),
-                        m_controls.begin() + static_cast<std::ptrdiff_t>(start + c));
-        pars_vec.insert(pars_vec.end(), m_pars_no_control.begin(), m_pars_no_control.end());
-
-        std::vector<double> dyn_out(d, 0.0);
-        m_dyn_cfunc(dyn_out, state_arr, heyoka::kw::pars = pars_vec);
-        dyn_fwd.push_back(std::move(dyn_out));
-
-        ++successful_fwd;
+        return compute_mc_grad_fixed_impl<6u, 2u, mat66, mat62, mat61>(
+            *m_ta_var, m_state0, m_controls, m_state1, m_tgrid, m_ic_var, m_pars_no_control, m_max_steps,
+            m_dyn_cfunc, m_nseg, m_nseg_fwd, m_nseg_bck);
     }
 
-    auto cur = make_identity(d);
-    for (auto it = M_seg_fwd.rbegin(); it != M_seg_fwd.rend(); ++it) {
-        cur = matmul(cur, *it, d, d, d);
-        M_fwd.push_back(cur);
-    }
-    std::reverse(M_fwd.begin(), M_fwd.end());
-    M_fwd.push_back(make_identity(d));
-
-    if (successful_fwd == 0u) {
-        dmc_dx0 = make_identity(d);
-    } else {
-        dmc_dx0 = M_fwd[0];
-    }
-
-    std::vector<double> C_fwd(d * c * m_nseg_fwd, 0.0);
-    for (unsigned i = 0u; i < successful_fwd; ++i) {
-        const auto prod = matmul(M_fwd[i + 1u], C_seg_fwd[i], d, d, c);
-        for (unsigned r = 0u; r < d; ++r) {
-            for (unsigned cc = 0u; cc < c; ++cc) {
-                C_fwd[r * (c * m_nseg_fwd) + c * i + cc] = prod[r * c + cc];
-            }
-        }
-    }
-
-    std::vector<double> dmcdtgrid_fwd(d * (m_nseg + 1u), 0.0);
-    if (successful_fwd > 0u) {
-        auto tmp = matvec(M_fwd[1u], dyn_fwd[0u], d, d);
-        for (unsigned r = 0u; r < d; ++r) {
-            dmcdtgrid_fwd[r * (m_nseg + 1u)] = -tmp[r];
-        }
-
-        tmp = matvec(M_fwd[successful_fwd], dyn_fwd.back(), d, d);
-        for (unsigned r = 0u; r < d; ++r) {
-            dmcdtgrid_fwd[r * (m_nseg + 1u) + successful_fwd] = tmp[r];
-        }
-
-        for (unsigned i = 1u; i < successful_fwd; ++i) {
-            auto a = matvec(M_seg_fwd[i], dyn_fwd[i - 1u], d, d);
-            for (unsigned r = 0u; r < d; ++r) {
-                a[r] -= dyn_fwd[i][r];
-            }
-            tmp = matvec(M_fwd[i + 1u], a, d, d);
-            for (unsigned r = 0u; r < d; ++r) {
-                dmcdtgrid_fwd[r * (m_nseg + 1u) + i] = tmp[r];
-            }
-        }
-    }
-
-    // Backward pass.
-    std::vector<std::vector<double>> M_seg_bck;
-    std::vector<std::vector<double>> C_seg_bck;
-    std::vector<std::vector<double>> dyn_bck;
-    std::vector<std::vector<double>> M_bck;
-
-    ta_var.set_time(m_tgrid.back());
-    std::copy(m_state1.begin(), m_state1.end(), ta_var.get_state_data());
-    std::copy(m_pars_no_control.begin(), m_pars_no_control.end(), ta_var.get_pars_data() + c);
-
-    unsigned successful_bck = 0u;
-    for (unsigned i = 0u; i < m_nseg_bck; ++i) {
-        std::copy(m_ic_var.begin(), m_ic_var.end(), ta_var.get_state_data() + d);
-
-        const auto start = m_controls.size() - static_cast<std::size_t>(c * (i + 1u));
-        std::copy(m_controls.begin() + static_cast<std::ptrdiff_t>(start),
-                  m_controls.begin() + static_cast<std::ptrdiff_t>(start + c), ta_var.get_pars_data());
-        std::copy(m_pars_no_control.begin(), m_pars_no_control.end(), ta_var.get_pars_data() + c);
-
-        if (!propagate_until_safe_impl(ta_var, m_tgrid[m_tgrid.size() - static_cast<std::size_t>(2u + i)], m_max_steps)) {
-            break;
-        }
-
-        std::vector<double> M(d * d, 0.0);
-        std::vector<double> C(d * c, 0.0);
-        const auto &x_var = ta_var.get_state();
-        for (unsigned r = 0u; r < d; ++r) {
-            for (unsigned cc = 0u; cc < d; ++cc) {
-                M[r * d + cc] = x_var[d + r * stm_cols + cc];
-            }
-            for (unsigned cc = 0u; cc < c; ++cc) {
-                C[r * c + cc] = x_var[d + r * stm_cols + d + cc];
-            }
-        }
-        M_seg_bck.push_back(std::move(M));
-        C_seg_bck.push_back(std::move(C));
-
-        std::vector<double> state_arr(d, 0.0);
-        std::copy_n(ta_var.get_state().begin(), static_cast<std::ptrdiff_t>(d), state_arr.begin());
-
-        std::vector<double> pars_vec;
-        pars_vec.reserve(c + m_pars_no_control.size());
-        pars_vec.insert(pars_vec.end(), m_controls.begin() + static_cast<std::ptrdiff_t>(start),
-                        m_controls.begin() + static_cast<std::ptrdiff_t>(start + c));
-        pars_vec.insert(pars_vec.end(), m_pars_no_control.begin(), m_pars_no_control.end());
-
-        std::vector<double> dyn_out(d, 0.0);
-        m_dyn_cfunc(dyn_out, state_arr, heyoka::kw::pars = pars_vec);
-        dyn_bck.push_back(std::move(dyn_out));
-
-        ++successful_bck;
-    }
-
-    cur = make_identity(d);
-    for (auto it = M_seg_bck.rbegin(); it != M_seg_bck.rend(); ++it) {
-        cur = matmul(cur, *it, d, d, d);
-        M_bck.push_back(cur);
-    }
-    std::reverse(M_bck.begin(), M_bck.end());
-    M_bck.push_back(make_identity(d));
-
-    if (successful_bck == 0u) {
-        dmc_dx1.assign(d * d, 0.0);
-        for (unsigned i = 0u; i < d; ++i) {
-            dmc_dx1[i * d + i] = -1.0;
-        }
-    } else {
-        dmc_dx1 = M_bck[0];
-        for (auto &v : dmc_dx1) {
-            v = -v;
-        }
-    }
-
-    std::vector<double> C_bck(d * c * m_nseg_bck, 0.0);
-    for (unsigned i = 0u; i < successful_bck; ++i) {
-        const auto prod = matmul(M_bck[i + 1u], C_seg_bck[i], d, d, c);
-        const auto block = m_nseg_bck - 1u - i;
-        for (unsigned r = 0u; r < d; ++r) {
-            for (unsigned cc = 0u; cc < c; ++cc) {
-                C_bck[r * (c * m_nseg_bck) + c * block + cc] = prod[r * c + cc];
-            }
-        }
-    }
-
-    std::vector<double> dmcdtgrid_bck(d * (m_nseg + 1u), 0.0);
-    if (successful_bck > 0u) {
-        auto tmp = matvec(M_bck[1u], dyn_bck[0u], d, d);
-        for (unsigned r = 0u; r < d; ++r) {
-            dmcdtgrid_bck[r * (m_nseg + 1u) + m_nseg] = tmp[r];
-        }
-
-        tmp = matvec(M_bck[successful_bck], dyn_bck.back(), d, d);
-        for (unsigned r = 0u; r < d; ++r) {
-            dmcdtgrid_bck[r * (m_nseg + 1u) + (m_nseg - successful_bck)] -= tmp[r];
-        }
-
-        for (unsigned i = 1u; i < successful_bck; ++i) {
-            auto a = matvec(M_seg_bck[i], dyn_bck[i - 1u], d, d);
-            for (unsigned r = 0u; r < d; ++r) {
-                a[r] -= dyn_bck[i][r];
-            }
-            tmp = matvec(M_bck[i + 1u], a, d, d);
-            for (unsigned r = 0u; r < d; ++r) {
-                dmcdtgrid_bck[r * (m_nseg + 1u) + (m_nseg - i)] = -tmp[r];
-            }
-        }
-    }
-
-    // Assemble dmc/dcontrols = [C_fwd, -C_bck].
-    for (unsigned r = 0u; r < d; ++r) {
-        for (unsigned j = 0u; j < c * m_nseg_fwd; ++j) {
-            dmc_dcontrols[r * (c * m_nseg) + j] = C_fwd[r * (c * m_nseg_fwd) + j];
-        }
-        for (unsigned j = 0u; j < c * m_nseg_bck; ++j) {
-            dmc_dcontrols[r * (c * m_nseg) + (c * m_nseg_fwd + j)] = -C_bck[r * (c * m_nseg_bck) + j];
-        }
-    }
-
-    // Assemble dmc/dtgrid.
-    for (unsigned r = 0u; r < d; ++r) {
-        for (unsigned j = 0u; j < m_nseg + 1u; ++j) {
-            dmc_dtgrid[r * (m_nseg + 1u) + j] = dmcdtgrid_fwd[r * (m_nseg + 1u) + j] + dmcdtgrid_bck[r * (m_nseg + 1u) + j];
-        }
-    }
-
-    return {dmc_dx0, dmc_dx1, dmc_dcontrols, dmc_dtgrid};
+    throw std::logic_error(fmt::format(
+        "zoh::compute_mc_grad() not implemented for dim_dynamics={}, dim_controls={}", d, c));
 }
 
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<std::vector<double>>>, bool>
@@ -665,7 +672,8 @@ void zoh::sanity_checks() const
     }
 
     if (m_tgrid.size() != m_nseg + 1u) {
-        throw std::logic_error("The tgrid and controls have incompatible sizes. They must be nseg + 1 and dim_controls * nseg.");
+        throw std::logic_error(
+            "The tgrid and controls have incompatible sizes. They must be nseg + 1 and dim_controls * nseg.");
     }
 
     if (m_ta_var) {

@@ -22,9 +22,9 @@ bibliography: paper.bib
 
 # Summary
 
-`PyKEP 3` is a Python toolbox developed at the [European Space Agency](https://www.esa.int) by the 
+`PyKEP` is a Python toolbox developed at the [European Space Agency](https://www.esa.int) by the 
 [Advanced Concepts Team](https://www.esa.int/act) to perform
-quick analysis of interplanetary trajectory design problems. It is designed to be used by researchers
+preliminary design of interplanetary trajectory problems. It is designed to be used by researchers
 and engineers to prototype and test new ideas in the field of astrodynamics. The library provides
 efficient implementations of algorithms for solving the multiple revolutions Lambert's problem, low-thrust
 problems, multiple asteroid rendezvous problems, and more. It also provides support for [JPL SPICE](https://naif.jpl.nasa.gov/naif/toolkit.html),
@@ -32,7 +32,7 @@ SGP4 propagation, and the [Heyoka](https://bluescarni.github.io/heyoka.py/index.
 
 # Introduction
 
-`PyKEP 3` is the third iteration of the PyKEP library, which has been used by the [Advanced Concepts Team](https://www.esa.int/act)
+`PyKEP` is the latest iteration of the PyKEP library, which has been used by the [Advanced Concepts Team](https://www.esa.int/act)
 at the European Space Agency for over a decade. The library was originally developed to support the participation
 of non astrodynamics experts in the [Global Trajectory Optimization Competition](http://www.esa.int/gtoc) and has since
 grown into a generic tool for the preliminary analysis of interplanetary trajectory design problems. 
