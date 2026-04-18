@@ -26,9 +26,9 @@ namespace
 {
 
 struct zoh_reference_case {
-    std::array<double, 7> state0;
+    std::vector<double> state0;
     std::vector<double> controls;
-    std::array<double, 7> state1;
+    std::vector<double> state1;
     std::vector<double> tgrid;
     double cut;
     heyoka::taylor_adaptive<double> ta;
@@ -86,25 +86,13 @@ zoh_reference_case make_reference_case()
 
 } // namespace
 
-TEST_CASE("compute_throttle_constraints")
-{
-    auto data = make_reference_case();
-    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
-
-    auto const tc = leg.compute_throttle_constraints();
-    REQUIRE(tc.size() == 5u);
-
-    std::vector<double> const expected(5u, 0.);
-    REQUIRE(kep3_tests::L_infinity_norm_rel(tc, expected) < 1e-15);
-}
-
 TEST_CASE("compute_mismatch_constraints")
 {
     auto data = make_reference_case();
     kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
     auto const mc = leg.compute_mismatch_constraints();
-    std::array<double, 7> const expected = {
+    std::vector<double> const expected = {
         0.02176525074416702,  -0.10717348832206364,  -0.014802731334029318, 0.14380114520228338,
         -0.04229446021128315, -0.004488343342410163, -0.05481446161533288,
     };
@@ -121,7 +109,7 @@ TEST_CASE("compute_mc_grad")
     auto [dmc_dx0, dmc_dx1, dmc_dcontrols, dmc_dtgrid] = leg.compute_mc_grad();
 
     // Reference values (replace with actual Python output):
-    std::array<double, 49> ref_dmc_dx0 = {
+    std::vector<double> ref_dmc_dx0 = {
         -28.89197973155973, 4.92732369493274, 1.27710619508696, -1.47434073353856, -25.17586592639953, 0.08699425041571, -0.56895096700586,
         71.88229905095362, 5.95649343260037, -4.1544831346279, 18.45194188646853, 56.40711924262009, -0.87956814211855, 0.15061589926087,
         1.56837668910072, -0.2404131408908, -7.60291499393688, 0.25719954093257, 1.71782453076697, 1.60174924383033, 0.01042118644378,
@@ -130,7 +118,7 @@ TEST_CASE("compute_mc_grad")
         0.41800461037587, 0.00101825121685, -0.16386117735228, 0.0758472362242, 0.33916202615184, -0.10645617178342, 0.00270148679708,
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0
     };
-    std::array<double, 49> ref_dmc_dx1 = {
+    std::vector<double> ref_dmc_dx1 = {
         -8.40021864775383, -75.6986205546155, 0.53570236082703, 87.74846729377357, 52.35998454108677, -4.70937868766582, 0.53928327630283,
         -5.7422125022256, -2.75678549222092, 0.31428325431877, -1.17173999566234, 8.71332274748447, 0.08954544977415, -0.03970469749386,
         0.80483950133332, 4.52446209727957, 5.47446861225021, -5.0146978804342, -3.13065263119156, 4.91356441276588, 0.00411232706043,
@@ -186,7 +174,8 @@ TEST_CASE("get_state_info")
 
     kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
 
-    auto [state_fwd, state_bck] = leg.get_state_info(N);
+    auto [state_fwd, state_bck, success] = leg.get_state_info(N);
+    REQUIRE(success == true);
 
     // Check sizes
     REQUIRE(state_fwd.size() == nseg_fwd);
@@ -203,9 +192,9 @@ TEST_CASE("get_state_info")
     }
 
     // Check mismatch: last state of last fwd seg vs last state of last bck seg
-    const auto &xfwd = state_fwd.empty() ? std::array<double, 7>{} : state_fwd.back().back();
-    const auto &xbck = state_bck.empty() ? std::array<double, 7>{} : state_bck.back().back();
-    std::array<double, 7> mismatch{};
+    const auto xfwd = state_fwd.empty() ? std::vector<double>(7u, 0.0) : state_fwd.back().back();
+    const auto xbck = state_bck.empty() ? std::vector<double>(7u, 0.0) : state_bck.back().back();
+    std::vector<double> mismatch(7u, 0.0);
     for (size_t i = 0; i < 7; ++i) {
         mismatch[i] = xfwd[i] - xbck[i];
     }

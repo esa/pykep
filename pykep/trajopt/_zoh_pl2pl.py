@@ -145,15 +145,13 @@ class zoh_pl2pl:
 
         tgrid = _np.linspace(0, tof_mid, self.nseg + 1)
 
-        self.leg = _pk.leg.zoh_py(
+        self.leg = _pk.leg.zoh(
             states + [ms],
             list(controls),
             statef + [ms],
             tgrid,
             cut,
             tas,
-            dim_dynamics=7,
-            dim_controls=4,
         )
 
     def _compute_throttle_constraints(self):
@@ -190,7 +188,8 @@ class zoh_pl2pl:
         All quantities are in non-dimensional units.
         """
         t0 = self.compute_t0(x)
-        self.leg.state1[-1] = x[1]  # mf (non-dimensional)
+        state1 = list(self.leg.state1)
+        state1[-1] = x[1]  # mf (non-dimensional)
 
         # Extract velocity magnitudes and directions (non-dimensional)
         vinf_dep_mag = x[2]
@@ -202,10 +201,10 @@ class zoh_pl2pl:
         dv_dep_nd = vinf_dep_mag * _np.array(idep)
         dv_arr_nd = vinf_arr_mag * _np.array(iarr)
 
-        # Set controls
-        self.leg.controls = x[10 : 10 + 4 * self.nseg].copy()
-        self.leg.controls[0::4] *= self.max_thrust
-        self.leg.controls = list(self.leg.controls)
+        # Set controls (scale throttle entries before assigning to the C++ list-backed property)
+        controls = _np.array(x[10 : 10 + 4 * self.nseg], copy=True)
+        controls[0::4] *= self.max_thrust
+        self.leg.controls = controls.tolist()
 
         tof = x[10 + 4 * self.nseg]  # non-dimensional
 
@@ -225,7 +224,8 @@ class zoh_pl2pl:
         v_sc_arr_nd = vf_nd + dv_arr_nd
 
         self.leg.state0 = list(rs_nd) + list(v_sc_dep_nd) + [self.ms]
-        self.leg.state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        self.leg.state1 = state1
 
         # Set time grid based on encoding (non-dimensional time)
         if self.time_encoding == "uniform":

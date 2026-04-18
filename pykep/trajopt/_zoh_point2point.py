@@ -14,7 +14,7 @@ from matplotlib import pyplot as _plt
 class zoh_point2point:
     """Represents the optimal low-thrust transfer between two fixed points using `pykep`'s Zero Order Hold (direct) trajectory legs.
 
-    This problem works internally using the :class:`~pykep.leg.sims_flanagan` and manipulates its transfer time T,
+    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its transfer time T,
     final mass mf and the controls as to link two fixed points in space with a low-thrust trajectory.
 
     It can be used to better profile and understand performances of optimizers on this type of direct approach, but has a limited use
@@ -62,7 +62,7 @@ class zoh_point2point:
 
             *nseg* (:class:`int`): Number of segments for the trajectory. Defaults to 10.
 
-            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.sims_flanagan`. Defaults to 0.6.
+            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.zoh`. Defaults to 0.6.
 
             *w_bounds_softmax* (:class:`list`): Bounds for the softmax weights (only used if time_encoding is 'softmax'). Defaults to [-1.0, 1.0].
             
@@ -122,7 +122,7 @@ class zoh_point2point:
         tgrid = _np.linspace(
             0, (self.tof_bounds[0] + self.tof_bounds[1]) / 2, self.nseg + 1
         )
-        self.leg = _pk.leg.zoh_py(
+        self.leg = _pk.leg.zoh(
             states + [ms],
             controls.tolist(),
             statef + [ms],
@@ -130,8 +130,6 @@ class zoh_point2point:
             cut,
             tas,
             max_steps=self.max_steps,
-            dim_dynamics=7,
-            dim_controls=4,
         )
 
     def _compute_throttle_constraints(self):
