@@ -299,15 +299,6 @@ bool propagate_until_safe_impl(heyoka::taylor_adaptive<double> &ta, double t, co
     return true;
 }
 
-std::vector<double> make_identity(unsigned n)
-{
-    std::vector<double> out(n * n, 0.0);
-    for (unsigned i = 0u; i < n; ++i) {
-        out[i * n + i] = 1.0;
-    }
-    return out;
-}
-
 } // namespace
 
 zoh::zoh(const std::vector<double> &state0, const std::vector<double> &controls, const std::vector<double> &state1,
