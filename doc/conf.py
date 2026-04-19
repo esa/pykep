@@ -57,7 +57,7 @@ html_static_path = ["_static"]
 html_logo = "_static/pykep_logo.png"
 
 html_theme_options = {
-    "repository_url": "https://github.com/esa/kep3",
+    "repository_url": "https://github.com/esa/pykep",
     "repository_branch": "main",
     "path_to_docs": "doc",
     "use_repository_button": True,
@@ -74,6 +74,7 @@ nb_execution_mode = "force"
 nb_execution_excludepatterns = [
     "udp_sf_*",
     "udp_mga*",
+    "udp_zoh*",
     "pontryagin_cartesian*",
     "approximations*",
     "sqp_solver*",
