@@ -3,7 +3,7 @@
 [![Manylinux CI](https://github.com/esa/pykep/actions/workflows/ci-manylinux.yml/badge.svg)](https://github.com/esa/pykep/actions/workflows/ci-manylinux.yml)
 [![PyPI version](https://img.shields.io/pypi/v/pykep)](https://pypi.org/project/pykep/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pykep?label=conda-forge)](https://anaconda.org/conda-forge/pykep)
-[![codecov](https://codecov.io/gh/esa/pykep/branch/main/graph/badge.svg?token=K49OWJCRB9)](https://codecov.io/gh/esa/pykep)
+[![codecov](https://codecov.io/gh/esa/pykep/branch/master/graph/badge.svg)](https://codecov.io/gh/esa/pykep)
 
 <!-- PROJECT LOGO -->
 <br />
