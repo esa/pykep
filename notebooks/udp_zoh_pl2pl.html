@@ -280,7 +280,7 @@
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/esa/kep3/main?urlpath=lab/tree/doc/notebooks/udp_zoh_pl2pl.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/esa/pykep/main?urlpath=lab/tree/doc/notebooks/udp_zoh_pl2pl.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Binder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -311,7 +311,7 @@
       
       
       
-      <li><a href="https://github.com/esa/kep3" target="_blank"
+      <li><a href="https://github.com/esa/pykep" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -328,7 +328,7 @@
       
       
       
-      <li><a href="https://github.com/esa/kep3/issues/new?title=Issue%20on%20page%20%2Fnotebooks/udp_zoh_pl2pl.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Fnotebooks/udp_zoh_pl2pl.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -530,11 +530,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SNOPT not available, will use IPOPT instead
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="problem-definition">
@@ -687,14 +682,10 @@ Decision vector dimension: 131
 Fitness dimension: 40
 
 Analytical gradient (from variational equations + chain rule):
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>315 μs ± 831 ns per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+310 μs ± 1.33 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 
 Numerical gradient (simple finite difference):
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>12.8 ms ± 57.3 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+12.2 ms ± 279 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 
 ✓ The analytical gradient is significantly faster!
 </pre></div>
@@ -731,7 +722,7 @@ Numerical gradient (simple finite difference):
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using IPOPT optimizer
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using SNOPT7 optimizer
 </pre></div>
 </div>
 </div>
@@ -765,38 +756,9 @@ Numerical gradient (simple finite difference):
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Uniform) ===
-
-******************************************************************************
-This program contains Ipopt, a library for large-scale nonlinear optimization.
- Ipopt is released as open source code under the Eclipse Public License (EPL).
-         For more information visit https://github.com/coin-or/Ipopt
-******************************************************************************
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.
-Best mass is:  1233.9076753
-Worst mass is:  1209.72980364
+..........
+Best mass is:  1233.36286109
+Worst mass is:  1207.65469155
 </pre></div>
 </div>
 </div>
@@ -825,24 +787,9 @@ Worst mass is:  1209.72980364
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITHOUT Gradients (Uniform) ===
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITHOUT Gradients (Uniform) ===&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">masses_no_grad</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">7</span>     <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="k">if</span><span class="p">(</span><span class="n">prob_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="n">masses_no_grad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-<span class="ne">ValueError</span>: 
-<span class="ne">function</span>: ipopt_nlp
-<span class="ne">where</span>: /home/conda/feedstock_root/build_artifacts/pagmo_1773779991629/work/src/algorithms/ipopt.cpp, 147
-<span class="ne">what</span>: the ipopt algorithm needs the gradient, but the problem named &#39;&lt;class &#39;pykep.trajopt._zoh_pl2pl.zoh_pl2pl&#39;&gt;&#39; does not provide it
+.x..xx.xx.
+Best mass is:  1229.03971614
+Worst mass is:  1178.63457089
 </pre></div>
 </div>
 </div>
