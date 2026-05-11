@@ -3179,12 +3179,13 @@ std::string leg_zoh_get_state_info_docstring()
     :class:`tuple`: ``(state_fwd, state_bck, success)`` where:
 
       - ``state_fwd`` (:class:`list`): List of length ``nseg_fwd`` (or less on failure).
-      Each entry contains the sampled ``dim_dynamics`` state history over the corresponding forward segment.
+        Each entry contains the sampled ``dim_dynamics`` state history over the corresponding forward segment.
       
       - ``state_bck`` (:class:`list`): List of length ``nseg_bck`` (or less on failure).
-      Each entry contains the sampled ``dim_dynamics`` state history over the corresponding backward segment.
+        Each entry contains the sampled ``dim_dynamics`` state history over the corresponding backward segment.
 
       - ``success`` (:class:`bool`): ``True`` when all requested segment propagations succeed.
+
 
     .. note::
        The backward propagation is carried out by integrating from the final time toward earlier times;
@@ -3197,6 +3198,7 @@ std::string leg_zoh_get_state_info_docstring()
        must be preserved, call this method on a dedicated copy.
 
   Examples:
+
     .. code-block:: python
         
       ax = pk.plot.make_3Daxis()
@@ -3208,6 +3210,7 @@ std::string leg_zoh_get_state_info_docstring()
         ax.scatter(segment[0,0], segment[0,1], segment[0,2], c='darkorange')
         ax.plot(segment[:,0], segment[:,1], segment[:,2], c='darkorange')
       ax.view_init(90, -90)
+
   ")";
 }
 

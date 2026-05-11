@@ -66,7 +66,7 @@ class zoh_point2point:
 
             *w_bounds_softmax* (:class:`list`): Bounds for the softmax weights (only used if time_encoding is 'softmax'). Defaults to [-1.0, 1.0].
             
-            *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (|i_u|**2 - 1 <= 0), otherwise they are formulated as equalities (|i_u| = 1). Defaults to False (equality formulation).
+            *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise they are formulated as equalities (``|i_u| = 1``). Defaults to False (equality formulation).
 
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
@@ -392,7 +392,7 @@ class zoh_point2point:
        
             *tof* (:class:`float`): time of flight for the border trajectories (only used if orbit_color is not None). If None, uses the tof encoded in x.
        
-            **kwargs* (:class:`dict`): Additional keyword arguments to pass to the plotting functions (e.g., marker size, color, etc.)
+            ``**kwargs`` (:class:`dict`): Additional keyword arguments to pass to the plotting functions (e.g., marker size, color, etc.)
        
         Returns:
             :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The modified Axes object with the Lambert's problem trajectory added.
