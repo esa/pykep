@@ -1,4 +1,4 @@
-import pykep as pk
+import pykep as _pk
 from pykep.trajopt import mga_1dsm as _mga_1dsm
 from pykep.trajopt import launchers as _launchers
 
@@ -30,18 +30,18 @@ class _juice_udp(_mga_1dsm):
 
         """
         # Redefining the planets as to change their safe radius
-        udpla = pk.udpla.jpl_lp("earth")
+        udpla = _pk.udpla.jpl_lp("earth")
         udpla.safe_radius = 1.05 * udpla.radius
-        earth = pk.planet(udpla)
+        earth = _pk.planet(udpla)
         # We need the Earth eph in the fitness
-        udpla = pk.udpla.jpl_lp("venus")
+        udpla = _pk.udpla.jpl_lp("venus")
         udpla.safe_radius = 1.05 * udpla.radius
-        venus = pk.planet(udpla)
-        udpla = pk.udpla.jpl_lp("mars")
+        venus = _pk.planet(udpla)
+        udpla = _pk.udpla.jpl_lp("mars")
         udpla.safe_radius = 1.05 * udpla.radius
-        mars = pk.planet(udpla)
-        udpla = pk.udpla.jpl_lp("jupiter")
-        jupiter = pk.planet(udpla)
+        mars = _pk.planet(udpla)
+        udpla = _pk.udpla.jpl_lp("jupiter")
+        jupiter = _pk.planet(udpla)
 
         super().__init__(
             seq=[earth, earth, venus, earth, mars, earth, jupiter],

@@ -1,11 +1,11 @@
-import pykep as pk
+import pykep as _pk
 from pykep.trajopt import mga_1dsm as _mga_1dsm
 
 # Earth-Venus_Earth
 _seq_eve = [
-    pk.planet(pk.udpla.jpl_lp("earth")),
-    pk.planet(pk.udpla.jpl_lp("venus")),
-    pk.planet(pk.udpla.jpl_lp("earth")),
+    _pk.planet(_pk.udpla.jpl_lp("earth")),
+    _pk.planet(_pk.udpla.jpl_lp("venus")),
+    _pk.planet(_pk.udpla.jpl_lp("earth")),
 ]
 
 
@@ -13,7 +13,7 @@ class _eve_mga_1dsm_udp(_mga_1dsm):
     def __init__(
         self,
         tof_encoding="direct",
-        t0=[pk.epoch(0), pk.epoch(3000)],
+        t0=[_pk.epoch(0), _pk.epoch(3000)],
         tof=[[10, 500], [10, 500]],
     ):
         super().__init__(
@@ -41,14 +41,14 @@ class _eve_mga_1dsm_udp(_mga_1dsm):
 # Problem P7: Earth-Venus-Earth MGA1DSM, single objective , direct encoding
 eve_mga1dsm = _eve_mga_1dsm_udp(
     tof_encoding="direct",
-    t0=[pk.epoch(0), pk.epoch(3000)],
+    t0=[_pk.epoch(0), _pk.epoch(3000)],
     tof=[[10, 500], [10, 500]],
 )
 # Problem P8: Earth-Venus-Earth MGA1DSM, single objective , alpha encoding
 eve_mga1dsm_a = _eve_mga_1dsm_udp(
-    tof_encoding="alpha", t0=[pk.epoch(0), pk.epoch(3000)], tof=[300, 700]
+    tof_encoding="alpha", t0=[_pk.epoch(0), _pk.epoch(3000)], tof=[300, 700]
 )
 # Problem P9: Earth-Venus-Earth MGA1DSM, single objective , eta encoding
 eve_mga1dsm_n = _eve_mga_1dsm_udp(
-    tof_encoding="eta", t0=[pk.epoch(0), pk.epoch(3000)], tof=700
+    tof_encoding="eta", t0=[_pk.epoch(0), _pk.epoch(3000)], tof=700
 )

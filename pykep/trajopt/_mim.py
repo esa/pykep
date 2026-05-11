@@ -1,4 +1,4 @@
-import pykep as pk
+import pykep as _pk
 from copy import deepcopy as _deepcopy
 import heyoka as _hy
 import pygmo as _pg
@@ -9,12 +9,12 @@ class _mim:
         self,
         source,
         target,
-        t0=pk.epoch(0),
+        t0=_pk.epoch(0),
         tof_days=250.0,
         T_max=0.6,
-        veff=4000.0 * pk.G0,
-        L=pk.AU,
-        TIME=pk.YEAR2DAY * pk.DAY2SEC,
+        veff=4000.0 * _pk.G0,
+        L=_pk.AU,
+        TIME=_pk.YEAR2DAY * _pk.DAY2SEC,
         MASS=1500,
         with_gradient=False,
     ):
@@ -30,7 +30,7 @@ class _mim:
         self.mu = source.get_mu_central_body() / (L**3 / TIME**2)
         self.c1 = T_max / (MASS * ACC)
         self.c2 = (veff) / VEL
-        self.tof = tof_days * pk.DAY2SEC / TIME
+        self.tof = tof_days * _pk.DAY2SEC / TIME
 
         # Initial position is computed once only upon construction.
         r0, v0 = source.eph(t0)
@@ -49,14 +49,14 @@ class _mim:
         self.target = target
 
         # And the Taylor integrators
-        self.ta = pk.ta.get_pc(1e-16, pk.optimality_type.TIME)
-        dyn = pk.ta.pc_dyn(pk.optimality_type.TIME)
+        self.ta = _pk.ta.get_pc(1e-16, _pk.optimality_type.TIME)
+        dyn = _pk.ta.pc_dyn(_pk.optimality_type.TIME)
         args = _hy.make_vars("lx", "ly", "lz", "lvx", "lvy", "lvz", "lm", "m")
         aug_dyn = _hy.var_ode_sys(sys=dyn, args=args, order=1)
         self.ta_var = _hy.taylor_adaptive(aug_dyn, tol=1e-8, compact_mode=True)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
         # Compiled functions
-        self.dyn_func = pk.ta.get_pc_dyn_cfunc(pk.optimality_type.TIME)
+        self.dyn_func = _pk.ta.get_pc_dyn_cfunc(_pk.optimality_type.TIME)
 
         # Non dimensional units
         self.MASS = MASS

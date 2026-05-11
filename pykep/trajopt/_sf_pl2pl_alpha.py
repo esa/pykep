@@ -9,7 +9,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import numpy as _np
-import pykep as pk
+import pykep as _pk
 import pygmo as _pg
 
 
@@ -30,12 +30,12 @@ class sf_pl2pl_alpha:
 
     def __init__(
         self,
-        pls=pk.planet(pk.udpla.jpl_lp(body="EARTH")),
-        plf=pk.planet(pk.udpla.jpl_lp(body="MARS")),
+        pls=_pk.planet(_pk.udpla.jpl_lp(body="EARTH")),
+        plf=_pk.planet(_pk.udpla.jpl_lp(body="MARS")),
         ms=1500,
-        mu=pk.MU_SUN,
+        mu=_pk.MU_SUN,
         max_thrust=0.12,
-        veff=3000*pk.G0,
+        veff=3000*_pk.G0,
         t0_bounds=[6700.0, 6800.0],
         tof_bounds=[200.0, 300.0],
         mf_bounds=[1300.0, 1500.0],
@@ -44,8 +44,8 @@ class sf_pl2pl_alpha:
         nseg=10,
         cut=0.6,
         mass_scaling=1500,
-        r_scaling=pk.AU,
-        v_scaling=pk.EARTH_VELOCITY
+        r_scaling=_pk.AU,
+        v_scaling=_pk.EARTH_VELOCITY
         ):
         """
 
@@ -84,7 +84,7 @@ class sf_pl2pl_alpha:
 
         """
         # We add as data member one single Sims-Flanagan leg and set it using problem data
-        self.leg = pk.leg.sims_flanagan_alpha()
+        self.leg = _pk.leg.sims_flanagan_alpha()
             
         self.leg.ms = ms
         self.leg.max_thrust = max_thrust
@@ -110,8 +110,8 @@ class sf_pl2pl_alpha:
         
         # Determine range on alphas
         factor = 0.5
-        alpha_low = pk.direct2alpha([1/(self.nseg*factor)] * int(self.nseg*factor))[0][0]
-        alpha_high = pk.direct2alpha([1/(self.nseg/factor)] * int(self.nseg/factor))[0][0]
+        alpha_low = _pk.direct2alpha([1/(self.nseg*factor)] * int(self.nseg*factor))[0][0]
+        alpha_high = _pk.direct2alpha([1/(self.nseg/factor)] * int(self.nseg/factor))[0][0]
 
         lb = (
             [self.t0_bounds[0], self.mf_bounds[0]]
@@ -137,7 +137,7 @@ class sf_pl2pl_alpha:
         rf, vf = self.plf.eph(x[0] + x[-1])
         self.leg.rvs = [rs, [a + b for a, b in zip(vs, x[2:5])]]  # we add vinfs
         self.leg.rvf = [rf, [a + b for a, b in zip(vf, x[5:8])]]  # we add vinff
-        self.leg.tof = x[-1] * pk.DAY2SEC
+        self.leg.tof = x[-1] * _pk.DAY2SEC
         self.leg.mf = x[1]
 
         # Split alphas and throttles
@@ -146,7 +146,7 @@ class sf_pl2pl_alpha:
         throttles = data[self.nseg:]
 
         # Decode alphas to direct
-        T = pk.alpha2direct(alphas, x[-1]*pk.DAY2SEC)
+        T = _pk.alpha2direct(alphas, x[-1]*_pk.DAY2SEC)
 
         # Now save the modified back to self.leg.talphas and self.leg.throttles
         self.leg.talphas = T
@@ -209,10 +209,10 @@ class sf_pl2pl_alpha:
         print(f"\nLow-thrust NEP transfer")
         print(f"Departure: {self.pls.get_name()}\nArrival: {self.plf.get_name()}")
         print(
-            f"\nLaunch epoch: {x[0]:.5f} MJD2000, a.k.a. {pk.epoch(x[0], pk.epoch.julian_type.MJD2000)}"
+            f"\nLaunch epoch: {x[0]:.5f} MJD2000, a.k.a. {_pk.epoch(x[0], _pk.epoch.julian_type.MJD2000)}"
         )
         print(
-            f"Arrival epoch: {x[0]+x[-1]:.5f} MJD2000, a.k.a. {pk.epoch(x[0]+x[-1], pk.epoch.julian_type.MJD2000)}"
+            f"Arrival epoch: {x[0]+x[-1]:.5f} MJD2000, a.k.a. {_pk.epoch(x[0]+x[-1], _pk.epoch.julian_type.MJD2000)}"
         )
 
         print(f"Time of flight (days): {x[-1]:.5f} ")
@@ -230,7 +230,7 @@ class sf_pl2pl_alpha:
         self,
         x,
         ax=None,
-        units=pk.AU,
+        units=_pk.AU,
         show_midpoints=False,
         show_gridpoints=False,
         show_throttles=False,
@@ -267,20 +267,20 @@ class sf_pl2pl_alpha:
         sf = self.leg
         # Making the axis
         if ax is None:
-            ax = pk.plot.make_3Daxis(figsize=(7, 7))
+            ax = _pk.plot.make_3Daxis(figsize=(7, 7))
         rs, _ = sf.rvs
         rf, _ = sf.rvf
-        ax.scatter(rs[0] / pk.AU, rs[1] / units, rs[2] / units, c="k", s=20)
-        ax.scatter(rf[0] / pk.AU, rf[1] / units, rf[2] / units, c="k", s=20)
+        ax.scatter(rs[0] / _pk.AU, rs[1] / units, rs[2] / units, c="k", s=20)
+        ax.scatter(rf[0] / _pk.AU, rf[1] / units, rf[2] / units, c="k", s=20)
 
         # Plotting planets
-        ax = pk.plot.add_planet(ax, self.pls, when=x[0])
-        ax = pk.plot.add_planet_orbit(ax, self.pls, c="gray", alpha=0.5)
-        ax = pk.plot.add_planet(ax, self.plf, when=x[0] + x[-1])
-        ax = pk.plot.add_planet_orbit(ax, self.plf, c="gray", alpha=0.5)
+        ax = _pk.plot.add_planet(ax, self.pls, when=x[0])
+        ax = _pk.plot.add_planet_orbit(ax, self.pls, c="gray", alpha=0.5)
+        ax = _pk.plot.add_planet(ax, self.plf, when=x[0] + x[-1])
+        ax = _pk.plot.add_planet_orbit(ax, self.plf, c="gray", alpha=0.5)
 
         # Plotting the trajctory leg
-        ax = pk.plot.add_sf_leg(
+        ax = _pk.plot.add_sf_leg(
             ax,
             sf,
             units=units,

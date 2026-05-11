@@ -1,5 +1,5 @@
 import numpy as _np
-import pykep as pk
+import pykep as _pk
 
 def primer_vector(DVi, DVj, Mji, Mjk):
     """This function computes the primer vector in a point k, relative
@@ -51,7 +51,7 @@ def primer_vector_surrogate(DVk, Mki, Mkj):
     Akj = -(Mki[3:, 3:] @ Aij + Mkj[3:, 3:])
     B = Aij
     b =  - Akj.T@DVk / _np.linalg.norm(DVk)
-    p_surrogate_norm, u_star = pk.trajopt.minBu_bu_p(B, b)
+    p_surrogate_norm, u_star = _pk.trajopt.minBu_bu_p(B, b)
     p_surrogate = p_surrogate_norm * u_star
     return p_surrogate, Aij, Akj
     

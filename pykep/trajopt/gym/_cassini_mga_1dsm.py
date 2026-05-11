@@ -1,21 +1,21 @@
-import pykep as pk
+import pykep as _pk
 from pykep.trajopt import mga_1dsm as _mga_1dsm
 
 # CASSINI2 (we need to modify the safe radius of the planets to match the wanted problem)
-_earth_cassini2 = pk.udpla.jpl_lp("earth")
+_earth_cassini2 = _pk.udpla.jpl_lp("earth")
 _earth_cassini2.safe_radius = 1.15 * _earth_cassini2.radius
-_venus_cassini2 = pk.udpla.jpl_lp("venus")
+_venus_cassini2 = _pk.udpla.jpl_lp("venus")
 _venus_cassini2.safe_radius = 1.05 * _venus_cassini2.radius
-_jupiter_cassini2 = pk.udpla.jpl_lp("jupiter")
+_jupiter_cassini2 = _pk.udpla.jpl_lp("jupiter")
 _jupiter_cassini2.safe_radius = 1.7 * _jupiter_cassini2.radius
 
 _seq_cassini2 = [
-    pk.planet(_earth_cassini2),
-    pk.planet(_venus_cassini2),
-    pk.planet(_venus_cassini2),
-    pk.planet(_earth_cassini2),
-    pk.planet(_jupiter_cassini2),
-    pk.planet(pk.udpla.jpl_lp("saturn")),
+    _pk.planet(_earth_cassini2),
+    _pk.planet(_venus_cassini2),
+    _pk.planet(_venus_cassini2),
+    _pk.planet(_earth_cassini2),
+    _pk.planet(_jupiter_cassini2),
+    _pk.planet(_pk.udpla.jpl_lp("saturn")),
 ]
 
 

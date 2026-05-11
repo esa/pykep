@@ -1,4 +1,4 @@
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 from math import pi, cos, sin, acos, log, sqrt
 from copy import deepcopy
@@ -47,9 +47,9 @@ class mga_1dsm:
     def __init__(
         self,
         seq=[
-            pk.planet(pk.udpla.jpl_lp("earth")),
-            pk.planet(pk.udpla.jpl_lp("venus")),
-            pk.planet(pk.udpla.jpl_lp("earth")),
+            _pk.planet(_pk.udpla.jpl_lp("earth")),
+            _pk.planet(_pk.udpla.jpl_lp("venus")),
+            _pk.planet(_pk.udpla.jpl_lp("earth")),
         ],
         t0=[0, 1000],
         tof=[[30, 200], [200, 300]],
@@ -138,8 +138,8 @@ class mga_1dsm:
             )
         # 4b - We try to build epochs out of the t0 list (mjd2000 by default)
         for i in range(len(t0)):
-            if type(t0[i]) != type(pk.epoch(0.0)):
-                t0[i] = pk.epoch(t0[i], pk.epoch.julian_type.MJD2000)
+            if type(t0[i]) != type(_pk.epoch(0.0)):
+                t0[i] = _pk.epoch(t0[i], _pk.epoch.julian_type.MJD2000)
 
         # 5 - Check that if orbit insertion is selected e_target and r_p are
         # defined
@@ -220,13 +220,13 @@ class mga_1dsm:
         # 1 - we decode the times of flight
         if self._tof_encoding == "alpha":
             # decision vector is  [t0] + [u, v, Vinf, eta1, a1] + [beta, rp/rV, eta2, a2] + ... + [T]
-            retval_T = pk.alpha2direct(x[5::4], x[-1])
+            retval_T = _pk.alpha2direct(x[5::4], x[-1])
         elif self._tof_encoding == "direct":
             # decision vector is  [t0] + [u, v, Vinf, eta1, T1] + [beta, rp/rV, eta2, T2] + ...
             retval_T = x[5::4]
         elif self._tof_encoding == "eta":
             # decision vector is [t0] + [u, v, Vinf, eta1, n1] + [beta, rp/rV, eta2, n2] + ...
-            retval_T = pk.eta2direct(x[5::4], self._tof)
+            retval_T = _pk.eta2direct(x[5::4], self._tof)
 
         # 2 - We decode the hyperbolic velocity at departure
         theta = 2 * pi * x[1]
@@ -254,7 +254,7 @@ class mga_1dsm:
         """
         # decision vector is  [t0] + [u, v, Vinf, eta1, a1] + [beta, rp/rV, eta2, a2] + ... + [T]
         retval = deepcopy(x)
-        retval[5::4] = pk.alpha2direct(x[5::4], x[-1])
+        retval[5::4] = _pk.alpha2direct(x[5::4], x[-1])
         retval = _np.delete(retval, -1)
         return retval
 
@@ -270,7 +270,7 @@ class mga_1dsm:
         """
         # decision vector is  [t0] + [u, v, Vinf, eta1, T1] + [beta, rp/rV, eta2, T2] + ...
         retval = deepcopy(x)
-        retval[5::4], T = pk.direct2alpha(x[5::4])
+        retval[5::4], T = _pk.direct2alpha(x[5::4])
         retval = _np.append(retval,T)
         return retval
 
@@ -286,7 +286,7 @@ class mga_1dsm:
         """
         # decision vector is [t0] + [u, v, Vinf, eta1, n1] + [beta, rp/rV, eta2, n2] + ...
         retval = deepcopy(x)
-        retval[5::4] = pk.eta2direct(x[5::4], max_tof)
+        retval[5::4] = _pk.eta2direct(x[5::4], max_tof)
         return retval
 
     @staticmethod
@@ -300,7 +300,7 @@ class mga_1dsm:
             :class:`numpy.ndarray`: a chromosome encoding the MGA trajectory using the eta encoding
         """
         retval = deepcopy(x)
-        retval[5::4] = pk.direct2eta(x[5::4], max_tof)
+        retval[5::4] = _pk.direct2eta(x[5::4], max_tof)
         return retval
 
     def _compute_dvs(self, x: List[float]) -> Tuple[
@@ -320,7 +320,7 @@ class mga_1dsm:
         v_P = list([None] * (self.n_legs + 1))
         DV = list([0.0] * (self.n_legs + 1))
         for i in range(len(self._seq)):
-            t_P[i] = pk.epoch(x[0] + sum(T[0:i]))
+            t_P[i] = _pk.epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
         ballistic_legs: List[Tuple[List[float], List[float]]] = []
         ballistic_ep: List[float] = []
@@ -330,13 +330,13 @@ class mga_1dsm:
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
         ballistic_legs.append((r_P[0], v0))
         ballistic_ep.append(t_P[0].mjd2000)
-        r, v = pk.propagate_lagrangian(
-            [r_P[0], v0], x[4] * T[0] * pk.DAY2SEC, self.common_mu
+        r, v = _pk.propagate_lagrangian(
+            [r_P[0], v0], x[4] * T[0] * _pk.DAY2SEC, self.common_mu
         )
 
         # Lambert arc to reach seq[1]
-        dt = (1 - x[4]) * T[0] * pk.DAY2SEC
-        l = pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
+        dt = (1 - x[4]) * T[0] * _pk.DAY2SEC
+        l = _pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
 
         v_end_l = l.v1[0]
         v_beg_l = l.v0[0]
@@ -351,7 +351,7 @@ class mga_1dsm:
         # 4 - And we proceed with each successive leg
         for i in range(1, self.n_legs):
             # Fly-by
-            v_out = pk.fb_vout(
+            v_out = _pk.fb_vout(
                 v_in=v_end_l,
                 v_pla=v_P[i],
                 rp=x[7 + (i - 1) * 4] * self._seq[i].radius,
@@ -361,12 +361,12 @@ class mga_1dsm:
             ballistic_legs.append((r_P[i], v_out))
             ballistic_ep.append(t_P[i].mjd2000)
             # s/c propagation before the DSM
-            r, v = pk.propagate_lagrangian(
-                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * pk.DAY2SEC, self.common_mu
+            r, v = _pk.propagate_lagrangian(
+                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * _pk.DAY2SEC, self.common_mu
             )
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
-            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * pk.DAY2SEC
-            l = pk.lambert_problem(
+            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * _pk.DAY2SEC
+            l = _pk.lambert_problem(
                 r, r_P[i + 1], dt, self.common_mu, cw=False, multi_revs=0
             )
             v_end_l = l.v1[0]
@@ -430,7 +430,7 @@ class mga_1dsm:
         v_P = list([None] * (self.n_legs + 1))
         DV = list([0.0] * (self.n_legs + 1))
         for i in range(len(self._seq)):
-            t_P[i] = pk.epoch(x[0] + sum(T[0:i]))
+            t_P[i] = _pk.epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = self._seq[i].eph(t_P[i])
 
         # 3 - We start with the first leg
@@ -440,15 +440,15 @@ class mga_1dsm:
         print("VINF: " + str(x[3] / 1000) + " km/sec")
 
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = pk.propagate_lagrangian(
-            [r_P[0], v0], x[4] * T[0] * pk.DAY2SEC, self.common_mu
+        r, v = _pk.propagate_lagrangian(
+            [r_P[0], v0], x[4] * T[0] * _pk.DAY2SEC, self.common_mu
         )
 
         print("DSM after " + str(x[4] * T[0]) + " days")
 
         # Lambert arc to reach seq[1]
-        dt = (1 - x[4]) * T[0] * pk.DAY2SEC
-        l = pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
+        dt = (1 - x[4]) * T[0] * _pk.DAY2SEC
+        l = _pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
         v_end_l = l.v1[0]
         v_beg_l = l.v0[0]
 
@@ -468,7 +468,7 @@ class mga_1dsm:
             )
             print("Duration: " + str(T[i]) + "days")
             # Fly-by
-            v_out = pk.fb_vout(
+            v_out = _pk.fb_vout(
                 v_in=v_end_l,
                 v_pla=v_P[i],
                 rp=x[7 + (i - 1) * 4] * self._seq[i].radius,
@@ -484,13 +484,13 @@ class mga_1dsm:
             )
             print("Fly-by radius: " + str(x[7 + (i - 1) * 4]) + " planetary radii")
             # s/c propagation before the DSM
-            r, v = pk.propagate_lagrangian(
-                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * pk.DAY2SEC, self.common_mu
+            r, v = _pk.propagate_lagrangian(
+                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * _pk.DAY2SEC, self.common_mu
             )
             print("DSM after " + str(x[8 + (i - 1) * 4] * T[i]) + " days")
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
-            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * pk.DAY2SEC
-            l = pk.lambert_problem(
+            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * _pk.DAY2SEC
+            l = _pk.lambert_problem(
                 r, r_P[i + 1], dt, self.common_mu, cw=False, multi_revs=0
             )
             v_end_l = l.v1[0]
@@ -536,7 +536,7 @@ class mga_1dsm:
         self,
         x,
         ax=None,
-        units=pk.AU,
+        units=_pk.AU,
         N=60,
         c_orbit="dimgray",
         c_lambert="indianred",
@@ -601,7 +601,7 @@ class mga_1dsm:
         DV = list([None] * (self.n_legs + 1))
 
         for i, item in enumerate(self._seq):
-            t_P[i] = pk.epoch(x[0] + sum(T[0:i]))
+            t_P[i] = _pk.epoch(x[0] + sum(T[0:i]))
             r_P[i], v_P[i] = item.eph(t_P[i])
             if i in leg_ids:
                 add_planet(ax, pla=item, when=t_P[i], units=units, c=c_orbit)
@@ -609,14 +609,14 @@ class mga_1dsm:
 
         # 3 - We start with the first leg
         v0 = [a + b for a, b in zip(v_P[0], [Vinfx, Vinfy, Vinfz])]
-        r, v = pk.propagate_lagrangian(
-            [r_P[0], v0], x[4] * T[0] * pk.DAY2SEC, self.common_mu
+        r, v = _pk.propagate_lagrangian(
+            [r_P[0], v0], x[4] * T[0] * _pk.DAY2SEC, self.common_mu
         )
         if 0 in leg_ids:
             add_ballistic_arc(
                 ax,
                 [r_P[0], v0],
-                x[4] * T[0] * pk.DAY2SEC,
+                x[4] * T[0] * _pk.DAY2SEC,
                 self.common_mu,
                 N=N,
                 units=units,
@@ -625,9 +625,9 @@ class mga_1dsm:
             )
 
         # Lambert arc to reach seq[1]
-        dt = (1 - x[4]) * T[0] * pk.DAY2SEC
+        dt = (1 - x[4]) * T[0] * _pk.DAY2SEC
 
-        l = pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
+        l = _pk.lambert_problem(r, r_P[1], dt, self.common_mu, cw=False, multi_revs=0)
         if 0 in leg_ids:
             add_lambert(ax, lp=l, N=N, sol=0, units=units, c=c_lambert, **kwargs)
         v_end_l = l.v1[0]
@@ -639,7 +639,7 @@ class mga_1dsm:
         # 4 - And we proceed with each successive leg
         for i in range(1, self.n_legs):
             # Fly-by
-            v_out = pk.fb_vout(
+            v_out = _pk.fb_vout(
                 v_end_l,
                 v_P[i],
                 x[7 + (i - 1) * 4] * self._seq[i].radius,
@@ -647,14 +647,14 @@ class mga_1dsm:
                 self._seq[i].mu_self,
             )
             # s/c propagation before the DSM
-            r, v = pk.propagate_lagrangian(
-                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * pk.DAY2SEC, self.common_mu
+            r, v = _pk.propagate_lagrangian(
+                [r_P[i], v_out], x[8 + (i - 1) * 4] * T[i] * _pk.DAY2SEC, self.common_mu
             )
             if i in leg_ids:
                 add_ballistic_arc(
                     ax,
                     [r_P[i], v_out],
-                    x[8 + (i - 1) * 4] * T[i] * pk.DAY2SEC,
+                    x[8 + (i - 1) * 4] * T[i] * _pk.DAY2SEC,
                     self.common_mu,
                     N=N,
                     units=units,
@@ -663,9 +663,9 @@ class mga_1dsm:
                 )
 
             # Lambert arc to reach Earth during (1-nu2)*T2 (second segment)
-            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * pk.DAY2SEC
+            dt = (1 - x[8 + (i - 1) * 4]) * T[i] * _pk.DAY2SEC
 
-            l = pk.lambert_problem(
+            l = _pk.lambert_problem(
                 r, r_P[i + 1], dt, self.common_mu, cw=False, multi_revs=0
             )
             if i in leg_ids:
@@ -737,11 +737,11 @@ class mga_1dsm:
             # get start of ballistic leg
             r_b, v_b = b_legs[i - 1]
 
-            elapsed_seconds = (t - b_ep[i - 1]) * pk.DAY2SEC
+            elapsed_seconds = (t - b_ep[i - 1]) * _pk.DAY2SEC
             assert elapsed_seconds >= 0
 
             # propagate the lagrangian
-            r, v = pk.propagate_lagrangian(
+            r, v = _pk.propagate_lagrangian(
                 [r_b, v_b], elapsed_seconds, self._seq[0].mu_central_body
             )
 

@@ -1,5 +1,5 @@
 import spiceypy as pyspice
-import pykep as pk
+import pykep as _pk
 from pathlib import Path
 
 def spice_version():
@@ -59,10 +59,10 @@ def extract_coverage_window(path, naifid, window_n = 0):
     """
     cover = pyspice.spkcov(path, naifid)
     start, end = pyspice.wnfetd(cover, window_n)
-    start_mjd2000 = (start + 43135.816087188054) * pk.SEC2DAY # magic number is str2et("2000-01-01 00:00:00 UTC")
-    end_mjd2000 = (end + 43135.816087188054) * pk.SEC2DAY # magic number is str2et("2000-01-01 00:00:00 UTC")
+    start_mjd2000 = (start + 43135.816087188054) * _pk.SEC2DAY # magic number is str2et("2000-01-01 00:00:00 UTC")
+    end_mjd2000 = (end + 43135.816087188054) * _pk.SEC2DAY # magic number is str2et("2000-01-01 00:00:00 UTC")
     #(we add/remove 1e-6 seconds as spice has better precision on the time representation and we want to avoid to go out of bunds)
-    return pk.epoch(start_mjd2000)+1e-10, pk.epoch(end_mjd2000)-1e-10 
+    return _pk.epoch(start_mjd2000)+1e-10, _pk.epoch(end_mjd2000)-1e-10 
 
 def epoch2utc(pykep_epoch):
     """Converts a PyKEP epoch (mjd2000) into a SPICE-formatted UTC calendar string.
@@ -81,11 +81,11 @@ def epoch2utc(pykep_epoch):
         :class:`string`: UTC calendar string corresponding to the input epoch.
     """
     # We load the leapsecond kernel to allow exact conversions between 
-    pk_path = Path(pk.__path__[0])
+    pk_path = Path(_pk.__path__[0])
     kernel_leap = str(pk_path / "data" / "naif0012.tls")
-    pk.utils.load_spice_kernels(kernel_leap)
+    _pk.utils.load_spice_kernels(kernel_leap)
     # We convert mjd2000 to et
-    et = -43135.816087188054 + pykep_epoch.mjd2000 * pk.DAY2SEC
+    et = -43135.816087188054 + pykep_epoch.mjd2000 * _pk.DAY2SEC
     return pyspice.et2utc(et, "C", 6)
 
 def name2naifid(name):
@@ -114,7 +114,7 @@ def framename2naifid(name):
         raise NameError(name + " not found in the NAIF frames")
     return retval
 
-def rotation_matrix(origin, destination, ep = pk.epoch(0)):
+def rotation_matrix(origin, destination, ep = _pk.epoch(0)):
     """Rotation matrix between frames at epoch.
 
     Args:
@@ -127,7 +127,7 @@ def rotation_matrix(origin, destination, ep = pk.epoch(0)):
     Returns:
         :class:`npumpy.ndarray`: The rotation matrix.
     """
-    return pyspice.pxform(origin, destination, (ep-0.5).mjd2000*pk.DAY2SEC)
+    return pyspice.pxform(origin, destination, (ep-0.5).mjd2000*_pk.DAY2SEC)
 
 
 # These are taken from:

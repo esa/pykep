@@ -9,7 +9,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import numpy as _np
-import pykep as pk
+import pykep as _pk
 
 
 class sf_pl2pl:
@@ -30,12 +30,12 @@ class sf_pl2pl:
 
     def __init__(
         self,
-        pls=pk.planet(pk.udpla.jpl_lp(body="EARTH")),
-        plf=pk.planet(pk.udpla.jpl_lp(body="MARS")),
+        pls=_pk.planet(_pk.udpla.jpl_lp(body="EARTH")),
+        plf=_pk.planet(_pk.udpla.jpl_lp(body="MARS")),
         ms=1500,
-        mu=pk.MU_SUN,
+        mu=_pk.MU_SUN,
         max_thrust=0.12,
-        veff=3000 * pk.G0,
+        veff=3000 * _pk.G0,
         t0_bounds=[6700.0, 6800.0],
         tof_bounds=[200.0, 300.0],
         mf_bounds=[1300.0, 1500.0],
@@ -44,8 +44,8 @@ class sf_pl2pl:
         nseg=10,
         cut=0.6,
         mass_scaling=1500,
-        r_scaling=pk.AU,
-        v_scaling=pk.EARTH_VELOCITY,
+        r_scaling=_pk.AU,
+        v_scaling=_pk.EARTH_VELOCITY,
         with_gradient=True,
     ):
         """
@@ -87,7 +87,7 @@ class sf_pl2pl:
 
         """
         # We add as data member one single Sims-Flanagan leg and set it using problem data
-        self.leg = pk.leg.sims_flanagan()
+        self.leg = _pk.leg.sims_flanagan()
 
         self.leg.ms = ms
         self.leg.max_thrust = max_thrust
@@ -133,7 +133,7 @@ class sf_pl2pl:
         rf, vf = self.plf.eph(x[0] + x[-1])
         self.leg.rvs = [rs, [a + b for a, b in zip(vs, x[2:5])]]  # we add vinfs
         self.leg.rvf = [rf, [a + b for a, b in zip(vf, x[5:8])]]  # we add vinff
-        self.leg.tof = x[-1] * pk.DAY2SEC
+        self.leg.tof = x[-1] * _pk.DAY2SEC
         self.leg.mf = x[1]
         self.leg.throttles = x[8:-1]
 
@@ -196,7 +196,7 @@ class sf_pl2pl:
                 + _np.dot(mcg_xf[i, :3], vf)
                 - _np.dot(mcg_xf[i, 3:6], rf) * self.leg.mu / (_np.linalg.norm(rf) ** 3)
             )  # here we assumed that the planet is keplerian (with mu), else there will be a small error in this gradient computation as the acceleration will not exactly be central and mu/r^2.
-            retval.append(tmp / scaling / pk.SEC2DAY)
+            retval.append(tmp / scaling / _pk.SEC2DAY)
             # Then w.r.t. mf
             retval.append(mcg_xf[i, -1] / scaling)
             # Then w.r.t vinfs
@@ -209,7 +209,7 @@ class sf_pl2pl:
                 _np.dot(mcg_xf[i, :3], vf)
                 - _np.dot(mcg_xf[i, 3:6], rf) * self.leg.mu / (_np.linalg.norm(rf) ** 3)
             ) / scaling
-            retval[-1] *= pk.DAY2SEC
+            retval[-1] *= _pk.DAY2SEC
         ## mass - mismatch constraint, here there is no dependency
         ## from t0 nor vinfs, vinff (see sparsity structure) so the code is slightly different
         for i in range(6, 7):
@@ -221,7 +221,7 @@ class sf_pl2pl:
                 _np.dot(mcg_xf[i, :3], vf)
                 - _np.dot(mcg_xf[i, 3:6], rf) * self.leg.mu / (_np.linalg.norm(rf) ** 3)
             ) / self.mass_scaling
-            retval[-1] *= pk.DAY2SEC
+            retval[-1] *= _pk.DAY2SEC
 
         ## 3 -  The gradient of the throttle constraints
         for i in range(self.leg.nseg):
@@ -275,10 +275,10 @@ class sf_pl2pl:
         print(f"\nLow-thrust NEP transfer")
         print(f"Departure: {self.pls.get_name()}\nArrival: {self.plf.get_name()}")
         print(
-            f"\nLaunch epoch: {x[0]:.5f} MJD2000, a.k.a. {pk.epoch(x[0], pk.epoch.julian_type.MJD2000)}"
+            f"\nLaunch epoch: {x[0]:.5f} MJD2000, a.k.a. {_pk.epoch(x[0], _pk.epoch.julian_type.MJD2000)}"
         )
         print(
-            f"Arrival epoch: {x[0]+x[-1]:.5f} MJD2000, a.k.a. {pk.epoch(x[0]+x[-1], pk.epoch.julian_type.MJD2000)}"
+            f"Arrival epoch: {x[0]+x[-1]:.5f} MJD2000, a.k.a. {_pk.epoch(x[0]+x[-1], _pk.epoch.julian_type.MJD2000)}"
         )
 
         print(f"Time of flight (days): {x[-1]:.5f} ")
@@ -296,7 +296,7 @@ class sf_pl2pl:
         self,
         x,
         ax=None,
-        units=pk.AU,
+        units=_pk.AU,
         show_midpoints=False,
         show_gridpoints=False,
         show_throttles=False,
@@ -333,21 +333,21 @@ class sf_pl2pl:
         sf = self.leg
         # Making the axis
         if ax is None:
-            ax = pk.plot.make_3Daxis(figsize=(7, 7))
+            ax = _pk.plot.make_3Daxis(figsize=(7, 7))
 
         rs, _ = sf.rvs
         rf, _ = sf.rvf
-        ax.scatter(rs[0] / pk.AU, rs[1] / units, rs[2] / units, c="k", s=20)
-        ax.scatter(rf[0] / pk.AU, rf[1] / units, rf[2] / units, c="k", s=20)
+        ax.scatter(rs[0] / _pk.AU, rs[1] / units, rs[2] / units, c="k", s=20)
+        ax.scatter(rf[0] / _pk.AU, rf[1] / units, rf[2] / units, c="k", s=20)
 
         # Plotting planets
-        ax = pk.plot.add_planet(ax, self.pls, when=x[0])
-        ax = pk.plot.add_planet_orbit(ax, self.pls, c="gray", alpha=0.5)
-        ax = pk.plot.add_planet(ax, self.plf, when=x[0] + x[-1])
-        ax = pk.plot.add_planet_orbit(ax, self.plf, c="gray", alpha=0.5)
+        ax = _pk.plot.add_planet(ax, self.pls, when=x[0])
+        ax = _pk.plot.add_planet_orbit(ax, self.pls, c="gray", alpha=0.5)
+        ax = _pk.plot.add_planet(ax, self.plf, when=x[0] + x[-1])
+        ax = _pk.plot.add_planet_orbit(ax, self.plf, c="gray", alpha=0.5)
 
         # Plotting the trajctory leg
-        ax = pk.plot.add_sf_leg(
+        ax = _pk.plot.add_sf_leg(
             ax,
             sf,
             units=units,

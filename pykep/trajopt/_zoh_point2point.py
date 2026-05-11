@@ -24,8 +24,8 @@ class zoh_point2point:
 
         x = [mf] + controls + tof (+ [weights for softmax])
 
-    where controls is a vector of control parameters :math:`[T, i_x, i_y, i_z] \\times n_\\text{seg}` representing magnitude and direction
-    of the thrust applied in each segment.
+    where controls is a vector of control parameters :math:`[T, i_x, i_y, i_z] \\times n_\\text{seg}` 
+    representing magnitude and direction of the thrust applied in each segment.
     """
 
     def __init__(

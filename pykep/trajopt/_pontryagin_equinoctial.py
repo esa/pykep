@@ -1,5 +1,5 @@
 import numpy as _np
-import pykep as pk
+import pykep as _pk
 from copy import deepcopy as _deepcopy
 
 _posvel0 = [
@@ -32,15 +32,15 @@ class pontryagin_equinoctial_mass:
         posvel0=_posvel0,
         posvelf=_posvelf,
         tof=250,
-        mu=pk.MU_SUN,
+        mu=_pk.MU_SUN,
         eps=1e-4,
         lambda0=None,
         T_max=0.6,
         Isp=3000,
         m0=1500,
         n_rev=-1,
-        L=pk.AU,
-        MU=pk.MU_SUN,
+        L=_pk.AU,
+        MU=_pk.MU_SUN,
         MASS=1500,
         with_gradient=False,
         taylor_tolerance=1e-16,
@@ -91,10 +91,10 @@ class pontryagin_equinoctial_mass:
         self.eps = eps
         self.lambda0 = lambda0
         self.c1 = T_max / (MASS * ACC)
-        self.c2 = (Isp * pk.G0) / VEL
+        self.c2 = (Isp * _pk.G0) / VEL
 
-        self.eq0 = pk.ic2mee(posvel0, mu)
-        self.eqf = pk.ic2mee(posvelf, mu)
+        self.eq0 = _pk.ic2mee(posvel0, mu)
+        self.eqf = _pk.ic2mee(posvelf, mu)
         # We want to define the motion from small to large L (counterclockwise)
         if self.eqf[-1] < self.eq0[-1]:
             self.eqf[-1] += 2.0 * _np.pi
@@ -107,10 +107,10 @@ class pontryagin_equinoctial_mass:
             self.eqf[5] += 2.0 * _np.pi * self.n_rev
 
         self.m0 = m0 / MASS
-        self.tof = tof * pk.DAY2SEC / TIME
+        self.tof = tof * _pk.DAY2SEC / TIME
 
-        self.ta = pk.ta.get_peq(taylor_tolerance, pk.optimality_type.MASS)
-        self.ta_var = pk.ta.get_peq_var(taylor_tolerance_var, pk.optimality_type.MASS)
+        self.ta = _pk.ta.get_peq(taylor_tolerance, _pk.optimality_type.MASS)
+        self.ta_var = _pk.ta.get_peq_var(taylor_tolerance_var, _pk.optimality_type.MASS)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
 
         self.MASS = MASS
@@ -259,24 +259,24 @@ class pontryagin_equinoctial_mass:
         sol = self.ta.propagate_grid(t_grid)
         # We make the axis if needed
         if ax3D is None:
-            ax3D = pk.plot.make_3Daxis()
+            ax3D = _pk.plot.make_3Daxis()
         # Adding the main body
-        pk.plot.add_sun(ax3D)
+        _pk.plot.add_sun(ax3D)
         # Adding the osculating orbits to the initial conditions
-        posvel0 = pk.mee2ic(self.eq0, self.mu)
-        pl1 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=posvel0, mu_central_body=self.mu
+        posvel0 = _pk.mee2ic(self.eq0, self.mu)
+        pl1 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=posvel0, mu_central_body=self.mu
             )
         )
-        posvelf = pk.mee2ic(self.eqf, self.mu)
-        pl2 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=posvelf, mu_central_body=self.mu
+        posvelf = _pk.mee2ic(self.eqf, self.mu)
+        pl2 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=posvelf, mu_central_body=self.mu
             )
         )
-        pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
-        pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
         # Plotting the trajectory
         # Assuming sol[-1] is an array of shape (N, 6)
         state = sol[-1]  # Extract equinoctial coordinates
@@ -285,10 +285,10 @@ class pontryagin_equinoctial_mass:
         z = _np.zeros((state.shape[0],))
 
         for i, equinoctial in enumerate(state):
-            [[x[i], y[i], z[i]], [_, _, _]] = pk.mee2ic(equinoctial[:6], self.mu)
+            [[x[i], y[i], z[i]], [_, _, _]] = _pk.mee2ic(equinoctial[:6], self.mu)
 
         # Compute color values
-        u_func = pk.ta.get_peq_u_cfunc(pk.optimality_type.MASS)
+        u_func = _pk.ta.get_peq_u_cfunc(_pk.optimality_type.MASS)
         c = u_func(
             _np.ascontiguousarray(state.T),
             pars=_np.ascontiguousarray(_np.tile(self.ta.pars, (N, 1)).T),
@@ -335,13 +335,13 @@ class pontryagin_equinoctial_mass:
         sol = self.ta.propagate_grid(t_grid)
         # Retreive useful cfuncs
         # The Hamiltonian
-        H_func = pk.ta.get_peq_H_cfunc(pk.optimality_type.MASS)
+        H_func = _pk.ta.get_peq_H_cfunc(_pk.optimality_type.MASS)
         # The switching function
-        SF_func = pk.ta.get_peq_SF_cfunc(pk.optimality_type.MASS)
+        SF_func = _pk.ta.get_peq_SF_cfunc(_pk.optimality_type.MASS)
         # The magnitude of the throttle
-        u_func = pk.ta.get_peq_u_cfunc(pk.optimality_type.MASS)
+        u_func = _pk.ta.get_peq_u_cfunc(_pk.optimality_type.MASS)
         # The thrust direction
-        i_vers_func = pk.ta.get_peq_i_vers_cfunc(pk.optimality_type.MASS)
+        i_vers_func = _pk.ta.get_peq_i_vers_cfunc(_pk.optimality_type.MASS)
         # Create axis
         _, axs = plt.subplots(3, 2, figsize=(10, 10))
         axs[1, 0].set_title("Mass")
@@ -386,12 +386,12 @@ class pontryagin_equinoctial_mass:
 
 
 # Adding the osculating orbits to the initial conditions
-_pl0 = pk.planet(
-    pk.udpla.keplerian(when=pk.epoch(0), posvel=_posvel0, mu_central_body=pk.MU_SUN)
+_pl0 = _pk.planet(
+    _pk.udpla.keplerian(when=_pk.epoch(0), posvel=_posvel0, mu_central_body=_pk.MU_SUN)
 )
-_plf = pk.planet(
-    pk.udpla.keplerian(
-        when=pk.epoch(0) + 250, posvel=_posvelf, mu_central_body=pk.MU_SUN
+_plf = _pk.planet(
+    _pk.udpla.keplerian(
+        when=_pk.epoch(0) + 250, posvel=_posvelf, mu_central_body=_pk.MU_SUN
     )
 )
 
@@ -415,15 +415,15 @@ class pontryagin_equinoctial_time:
         self,
         source=_pl0,
         target=_plf,
-        t0=pk.epoch(0),
+        t0=_pk.epoch(0),
         tof_guess=250,
         lambda0 = 1.0,
         T_max=0.6,
-        veff=3000*pk.G0,
+        veff=3000*_pk.G0,
         m0=1500,
         n_rev=-1,
-        L=pk.AU,
-        MU= pk.MU_SUN,
+        L=_pk.AU,
+        MU= _pk.MU_SUN,
         MASS=1500,
         with_gradient=False,
         taylor_tolerance=1e-16,
@@ -476,12 +476,12 @@ class pontryagin_equinoctial_time:
         self.c1 = T_max / (MASS * ACC)
         self.c2 = veff / VEL
         self.m0 = m0 / MASS
-        self.tof_guess = tof_guess * pk.DAY2SEC / TIME
+        self.tof_guess = tof_guess * _pk.DAY2SEC / TIME
         
         # Initial elements are computed once only upon construction.
         r0, v0 = source.eph(t0)
         posvel0 = [r0, v0]
-        self.eq0 = pk.ic2mee(posvel0, source.get_mu_central_body()) # we need the mu with SI dimensions
+        self.eq0 = _pk.ic2mee(posvel0, source.get_mu_central_body()) # we need the mu with SI dimensions
 
         # Target elements are computed here once, but the target mean longitude will change
         self.target=target
@@ -491,14 +491,14 @@ class pontryagin_equinoctial_time:
         self.eq0[0] /= L
 
         self.m0 = m0 / MASS
-        self.tof_guess = tof_guess * pk.DAY2SEC / TIME # nd
+        self.tof_guess = tof_guess * _pk.DAY2SEC / TIME # nd
 
-        self.ta = pk.ta.get_peq(taylor_tolerance, pk.optimality_type.TIME)
-        self.ta_var = pk.ta.get_peq_var(taylor_tolerance_var, pk.optimality_type.TIME)
+        self.ta = _pk.ta.get_peq(taylor_tolerance, _pk.optimality_type.TIME)
+        self.ta_var = _pk.ta.get_peq_var(taylor_tolerance_var, _pk.optimality_type.TIME)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
         
         # Compiled functions
-        self.dyn_func = pk.ta.get_peq_dyn_cfunc(pk.optimality_type.TIME)
+        self.dyn_func = _pk.ta.get_peq_dyn_cfunc(_pk.optimality_type.TIME)
 
         # We store the units
         self.MASS = MASS
@@ -559,8 +559,8 @@ class pontryagin_equinoctial_time:
         self.ta.propagate_until(x[-1])
         
         # Target elements are computed here once, but the target mean longitude will change
-        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
-        eqf = pk.ic2mee(posvelf, self.target.get_mu_central_body())
+        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
+        eqf = _pk.ic2mee(posvelf, self.target.get_mu_central_body())
         # We normalize units (only one parameter of the mee is dimensional)
         eqf[0] /= self.L
         # We wrap the L value to the correct nrev
@@ -598,8 +598,8 @@ class pontryagin_equinoctial_time:
         # We compute the dynamics along the optimal trajectory candidate dx/dt
         dyn = self.dyn_func(self.ta_var.state[:14], pars=self.ta_var.pars[:2]) # only 2 parameters
         # We compute the dL/dt of the target body using the augmented dynamics and putting Tmax to 0, mass to 1.0 as its not used anyway (it all a work around, but not too unefficient)
-        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
-        eqf = pk.ic2mee(posvelf, self.target.get_mu_central_body())
+        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
+        eqf = _pk.ic2mee(posvelf, self.target.get_mu_central_body())
         # We normalize units (only one parameter of the mee is dimensional)
         eqf[0] /= self.L
         # No need to wrap L here since only sin cos appear in the equation.
@@ -693,28 +693,28 @@ class pontryagin_equinoctial_time:
         sol = self.ta.propagate_grid(t_grid)
         # We make the axis if needed
         if ax3D is None:
-            ax3D = pk.plot.make_3Daxis()
+            ax3D = _pk.plot.make_3Daxis()
         # Adding the main body
-        pk.plot.add_sun(ax3D)
+        _pk.plot.add_sun(ax3D)
         # Adding the osculating orbits to the initial conditions
-        posvel0 = pk.mee2ic(self.eq0, self.mu)
-        pl1 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=posvel0, mu_central_body=self.mu
+        posvel0 = _pk.mee2ic(self.eq0, self.mu)
+        pl1 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=posvel0, mu_central_body=self.mu
             )
         )
         # Target elements are computed here once, but the target mean longitude will change
-        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
+        posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
         posvelf[0] = [it/self.L for it in posvelf[0]]
         posvelf[1] = [it/self.L*self.TIME for it in posvelf[1]]
 
-        pl2 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=posvelf, mu_central_body=self.mu
+        pl2 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=posvelf, mu_central_body=self.mu
             )
         )
-        pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
-        pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
         # Plotting the trajectory
         # Assuming sol[-1] is an array of shape (N, 6)
         state = sol[-1]  # Extract equinoctial coordinates
@@ -723,7 +723,7 @@ class pontryagin_equinoctial_time:
         zz = _np.zeros((state.shape[0],))
 
         for i, equinoctial in enumerate(state):
-            [[xx[i], yy[i], zz[i]], [_, _, _]] = pk.mee2ic(equinoctial[:6], self.mu)
+            [[xx[i], yy[i], zz[i]], [_, _, _]] = _pk.mee2ic(equinoctial[:6], self.mu)
 
         # Plot the trajectory (time optimal, always red)
         ax3D.plot(xx, yy, zz, 'r')
@@ -753,11 +753,11 @@ class pontryagin_equinoctial_time:
         sol = self.ta.propagate_grid(t_grid)
         # Retreive useful cfuncs
         # The Hamiltonian
-        H_func = pk.ta.get_peq_H_cfunc(pk.optimality_type.TIME)
+        H_func = _pk.ta.get_peq_H_cfunc(_pk.optimality_type.TIME)
         # The magnitude of the throttle
-        u_func = pk.ta.get_peq_u_cfunc(pk.optimality_type.TIME)
+        u_func = _pk.ta.get_peq_u_cfunc(_pk.optimality_type.TIME)
         # The thrust direction
-        i_vers_func = pk.ta.get_peq_i_vers_cfunc(pk.optimality_type.TIME)
+        i_vers_func = _pk.ta.get_peq_i_vers_cfunc(_pk.optimality_type.TIME)
         
         # Create axis
         _, axs = plt.subplots(2, 2, figsize=(10, 7))

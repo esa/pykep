@@ -19,7 +19,7 @@
         "max_thrust": 0.3010999584011414,
         "veff": 11.56499372183432,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Halo to Halo",
         "tof_bounds": [2.0, 15.0],
         "m_s": 1.0
     },
@@ -43,7 +43,7 @@
         "max_thrust": 0.37637494800142672,
         "veff": 11.56499372183432,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "reduced thrust",
+        "info": "Halo to DRO",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -56,7 +56,7 @@
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
         "tof_bounds": [2.0, 10.0],
-        "info": "reduced thrust",
+        "info": "DRO to NHRO",
         "m_s": 1.0
     },
     "P5": {
@@ -67,7 +67,7 @@
         "max_thrust": 0.2,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Transfer between bretzel orbits",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -79,7 +79,7 @@
         "max_thrust": 1.0,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Earth-Moon resonant orbit to high inclination lunar orbit",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -91,7 +91,7 @@
         "max_thrust": 0.25,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "High amplitude planar Earth orbit to high inclination lunar orbit",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -103,7 +103,7 @@
         "max_thrust": 0.04,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Transfer between high inclination lunar orbits",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -115,7 +115,7 @@
         "max_thrust": 0.05,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Transfer between high inclination lunar orbits",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },
@@ -127,7 +127,7 @@
         "max_thrust": 0.15,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "L4 vertical orbit to L4 planar orbits",
         "tof_bounds": [2.0, 15.0],
         "m_s": 1.0
     },
@@ -139,7 +139,7 @@
         "max_thrust": 0.2,
         "veff": 10.0,
         "mu_cr3bp": 0.01215058560962404,
-        "info": "???",
+        "info": "Halo to Halo",
         "tof_bounds": [2.0, 10.0],
         "m_s": 1.0
     },

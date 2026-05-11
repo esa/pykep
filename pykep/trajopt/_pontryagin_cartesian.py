@@ -1,5 +1,5 @@
 import numpy as _np
-import pykep as pk
+import pykep as _pk
 from copy import deepcopy as _deepcopy
 
 _posvel0 = [
@@ -31,14 +31,14 @@ class pontryagin_cartesian_mass:
         posvel0=_posvel0,
         posvelf=_posvelf,
         tof=250,
-        mu=pk.MU_SUN,
+        mu=_pk.MU_SUN,
         lambda0 = 1.0,
         eps=1e-4,
         T_max=0.6,
         Isp=3000,
         m0=1500,
-        L=pk.AU,
-        MU=pk.MU_SUN,
+        L=_pk.AU,
+        MU=_pk.MU_SUN,
         MASS=1500,
         with_gradient=False,
         taylor_tolerance=1e-16,
@@ -87,16 +87,16 @@ class pontryagin_cartesian_mass:
         self.lambda0 = lambda0
         self.eps = eps
         self.c1 = T_max / (MASS * ACC)
-        self.c2 = (Isp * pk.G0) / VEL
+        self.c2 = (Isp * _pk.G0) / VEL
 
         self.posvel0 = [[it / L for it in posvel0[0]], [it / VEL for it in posvel0[1]]]
         self.posvelf = [[it / L for it in posvelf[0]], [it / VEL for it in posvelf[1]]]
 
         self.m0 = m0 / MASS
-        self.tof = tof * pk.DAY2SEC / TIME
+        self.tof = tof * _pk.DAY2SEC / TIME
 
-        self.ta = pk.ta.get_pc(taylor_tolerance, pk.optimality_type.MASS)
-        self.ta_var = pk.ta.get_pc_var(taylor_tolerance_var, pk.optimality_type.MASS)
+        self.ta = _pk.ta.get_pc(taylor_tolerance, _pk.optimality_type.MASS)
+        self.ta_var = _pk.ta.get_pc_var(taylor_tolerance_var, _pk.optimality_type.MASS)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
 
         self.MASS = MASS
@@ -241,29 +241,29 @@ class pontryagin_cartesian_mass:
         sol = self.ta.propagate_grid(t_grid)
         # We make the axis if needed
         if ax3D is None:
-            ax3D = pk.plot.make_3Daxis()
+            ax3D = _pk.plot.make_3Daxis()
         # Adding the main body
-        pk.plot.add_sun(ax3D)
+        _pk.plot.add_sun(ax3D)
         # Adding the osculating orbits to the initial conditions
-        pl1 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=self.posvel0, mu_central_body=self.mu
+        pl1 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=self.posvel0, mu_central_body=self.mu
             )
         )
-        pl2 = pk.planet(
-            pk.udpla.keplerian(
-                when=pk.epoch(0), posvel=self.posvelf, mu_central_body=self.mu
+        pl2 = _pk.planet(
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0), posvel=self.posvelf, mu_central_body=self.mu
             )
         )
-        pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
-        pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl1, c="gray", units=1)
+        _pk.plot.add_planet_orbit(ax3D, pl2, c="gray", units=1)
         # Plotting the trajectory
         # Assuming sol[-1] is an array of shape (N, 3)
         state = sol[-1]  # Extract (x, y, z) coordinates
         x, y, z = state[:, 0], state[:, 1], state[:, 2]
 
         # Compute color values
-        u_func = pk.ta.get_pc_u_cfunc(pk.optimality_type.MASS)
+        u_func = _pk.ta.get_pc_u_cfunc(_pk.optimality_type.MASS)
         c = u_func(
             _np.ascontiguousarray(state.T),
             pars=_np.ascontiguousarray(_np.tile(self.ta.pars, (N, 1)).T),
@@ -310,13 +310,13 @@ class pontryagin_cartesian_mass:
         sol = self.ta.propagate_grid(t_grid)
         # Retreive useful cfuncs
         # The Hamiltonian
-        H_func = pk.ta.get_pc_H_cfunc(pk.optimality_type.MASS)
+        H_func = _pk.ta.get_pc_H_cfunc(_pk.optimality_type.MASS)
         # The switching function
-        SF_func = pk.ta.get_pc_SF_cfunc(pk.optimality_type.MASS)
+        SF_func = _pk.ta.get_pc_SF_cfunc(_pk.optimality_type.MASS)
         # The magnitude of the throttle
-        u_func = pk.ta.get_pc_u_cfunc(pk.optimality_type.MASS)
+        u_func = _pk.ta.get_pc_u_cfunc(_pk.optimality_type.MASS)
         # The thrust direction
-        i_vers_func = pk.ta.get_pc_i_vers_cfunc(pk.optimality_type.MASS)
+        i_vers_func = _pk.ta.get_pc_i_vers_cfunc(_pk.optimality_type.MASS)
         # Create axis
         _, axs = plt.subplots(3, 2, figsize=(10, 10))
         axs[1, 0].set_title("Mass")
@@ -357,12 +357,12 @@ class pontryagin_cartesian_mass:
         return axs
 
 # Adding the osculating orbits to the initial conditions
-_pl0 = pk.planet(
-    pk.udpla.keplerian(when=pk.epoch(0), posvel=_posvel0, mu_central_body=pk.MU_SUN)
+_pl0 = _pk.planet(
+    _pk.udpla.keplerian(when=_pk.epoch(0), posvel=_posvel0, mu_central_body=_pk.MU_SUN)
 )
-_plf = pk.planet(
-    pk.udpla.keplerian(
-        when=pk.epoch(0) + 250, posvel=_posvelf, mu_central_body=pk.MU_SUN
+_plf = _pk.planet(
+    _pk.udpla.keplerian(
+        when=_pk.epoch(0) + 250, posvel=_posvelf, mu_central_body=_pk.MU_SUN
     )
 )
 
@@ -384,14 +384,14 @@ class pontryagin_cartesian_time:
         self,
         source=_pl0,
         target=_plf,
-        t0=pk.epoch(0),
+        t0=_pk.epoch(0),
         tof_guess=250,
         lambda0 = 1.0,
         T_max=0.6,
         Isp=3000,
         m0=1500,
-        L=pk.AU,
-        MU= pk.MU_SUN,
+        L=_pk.AU,
+        MU= _pk.MU_SUN,
         MASS=1500,
         with_gradient=False,
         taylor_tolerance=1e-16,
@@ -441,9 +441,9 @@ class pontryagin_cartesian_time:
         # We redefine the user inputs in non dimensional units.
         self.mu = source.get_mu_central_body() / MU
         self.c1 = T_max / (MASS * ACC)
-        self.c2 = (Isp * pk.G0) / VEL
+        self.c2 = (Isp * _pk.G0) / VEL
         self.m0 = m0 / MASS
-        self.tof_guess = tof_guess * pk.DAY2SEC / TIME
+        self.tof_guess = tof_guess * _pk.DAY2SEC / TIME
 
         # Initial position is computed once only upon construction.
         r0, v0 = source.eph(t0)
@@ -456,12 +456,12 @@ class pontryagin_cartesian_time:
         self.target = target
 
         # And the Taylor integrators
-        self.ta = pk.ta.get_pc(taylor_tolerance, pk.optimality_type.TIME)
-        self.ta_var = pk.ta.get_pc_var(taylor_tolerance_var, pk.optimality_type.TIME)
+        self.ta = _pk.ta.get_pc(taylor_tolerance, _pk.optimality_type.TIME)
+        self.ta_var = _pk.ta.get_pc_var(taylor_tolerance_var, _pk.optimality_type.TIME)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
 
         # Compiled functions
-        self.dyn_func = pk.ta.get_pc_dyn_cfunc(pk.optimality_type.TIME)
+        self.dyn_func = _pk.ta.get_pc_dyn_cfunc(_pk.optimality_type.TIME)
 
         # Non dimensional units
         self.MASS = MASS
@@ -517,7 +517,7 @@ class pontryagin_cartesian_time:
         self.ta.propagate_until(x[-1])
         
         # Computing the target position at epoch
-        rf, vf = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
+        rf, vf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
         rf = [it / self.L for it in rf]
         vf = [it / self.VEL for it in vf]
         
@@ -539,7 +539,7 @@ class pontryagin_cartesian_time:
         self.ta_var.propagate_until(x[-1])
         # Computing the target position, velocity and acceleration at epoch
         # NOTE: if the planet is not keplerian the acceleration will be assumed as Keplerian
-        rf, vf = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
+        rf, vf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
         vf = [it / self.VEL for it in vf]
         rf = [it / self.L for it in rf]
         af = -self.mu / _np.linalg.norm(rf) ** 3 * _np.array(rf)
@@ -625,11 +625,11 @@ class pontryagin_cartesian_time:
         sol = self.ta.propagate_grid(t_grid)
         # We make the axis if needed
         if ax3D is None:
-            ax3D = pk.plot.make_3Daxis()
+            ax3D = _pk.plot.make_3Daxis()
         # Adding the main body
-        pk.plot.add_sun(ax3D)
-        pk.plot.add_planet_orbit(ax3D, self.source, c="gray", units=pk.AU)
-        pk.plot.add_planet_orbit(ax3D, self.target, c="gray", units=pk.AU)
+        _pk.plot.add_sun(ax3D)
+        _pk.plot.add_planet_orbit(ax3D, self.source, c="gray", units=_pk.AU)
+        _pk.plot.add_planet_orbit(ax3D, self.target, c="gray", units=_pk.AU)
         # Plotting the trajectory
         # Assuming sol[-1] is an array of shape (N, 3)
         state = sol[-1]  # Extract (x, y, z) coordinates
@@ -639,7 +639,7 @@ class pontryagin_cartesian_time:
 
         # Plotting the boundary conditions
         ax3D.scatter(self.posvel0[0][0], self.posvel0[0][1], self.posvel0[0][2])
-        rf, _ = self.target.eph(self.t0 + x[-1] * self.TIME * pk.SEC2DAY)
+        rf, _ = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
         rf = [it / self.L for it in rf]
         ax3D.scatter(rf[0], rf[1], rf[2])
         return ax3D
@@ -665,11 +665,11 @@ class pontryagin_cartesian_time:
         sol = self.ta.propagate_grid(t_grid)
         # Retreive useful cfuncs
         # The Hamiltonian
-        H_func = pk.ta.get_pc_H_cfunc(pk.optimality_type.TIME)
+        H_func = _pk.ta.get_pc_H_cfunc(_pk.optimality_type.TIME)
         # The switching function
-        SF_func = pk.ta.get_pc_SF_cfunc(pk.optimality_type.TIME)
+        SF_func = _pk.ta.get_pc_SF_cfunc(_pk.optimality_type.TIME)
         # The thrust direction
-        i_vers_func = pk.ta.get_pc_i_vers_cfunc(pk.optimality_type.TIME)
+        i_vers_func = _pk.ta.get_pc_i_vers_cfunc(_pk.optimality_type.TIME)
 
         # Create axis
         _, axs = plt.subplots(2, 2, **kwargs)
