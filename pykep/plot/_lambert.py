@@ -1,7 +1,7 @@
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 
-def add_lambert(ax, lp, N: int = 60, sol: int = 0, units=pk.AU, **kwargs):
+def add_lambert(ax, lp, N: int = 60, sol: int = 0, units=_pk.AU, **kwargs):
     """Add Lambert's problem solution trajectory to a 3D matplotlib Axes.
 
     Args:
@@ -58,7 +58,7 @@ def add_lambert(ax, lp, N: int = 60, sol: int = 0, units=pk.AU, **kwargs):
         thetagrid = _np.linspace(0, 2 * _np.pi, N)
         
     # Compute the posvel at all points
-    res = pk.plot.propagate_lagrangian_theta_v(
+    res = _pk.plot.propagate_lagrangian_theta_v(
         rv=[r0, v0], thetas=thetagrid, mu=mu, stm=False
     )
     pos = res[:, :3] / units

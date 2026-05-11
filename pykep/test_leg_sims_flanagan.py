@@ -1,11 +1,11 @@
-import pykep as pk
+import pykep as _pk
 import numpy as np
 
 import unittest as _ut
 
 def compute_numerical_gradient(sf_leg):
     import numpy as np
-    import pykep as pk
+    import pykep as _pk
     import pygmo as pg
 
     state_length = np.array(sf_leg.rvs).flatten().size + 1
@@ -18,7 +18,7 @@ def compute_numerical_gradient(sf_leg):
 
     def set_and_compute_constraints(chromosome):
 
-        sf_leg_constraint = pk.leg.sims_flanagan()
+        sf_leg_constraint = _pk.leg.sims_flanagan()
         sf_leg_constraint.cut = 0.5
         sf_leg_constraint.max_thrust = 1
         sf_leg_constraint.mu = 1
@@ -40,18 +40,18 @@ class leg_sims_flanagan_test(_ut.TestCase):
 
     def test_sims_flanagan(self):
         import numpy as np
-        import pykep as pk
+        import pykep as _pk
 
-        udpla_e = pk.udpla.vsop2013("earth_moon", 1e-2)
-        udpla_j = pk.udpla.vsop2013("jupiter", 1e-2)
-        earth = pk.planet(udpla_e)
-        jupiter = pk.planet(udpla_j)
+        udpla_e = _pk.udpla.vsop2013("earth_moon", 1e-2)
+        udpla_j = _pk.udpla.vsop2013("jupiter", 1e-2)
+        earth = _pk.planet(udpla_e)
+        jupiter = _pk.planet(udpla_j)
         dt_days = 1000
-        dt = dt_days * pk.DAY2SEC
+        dt = dt_days * _pk.DAY2SEC
         t0 = 1233.3
         rv0 = earth.eph(t0)
         rv1 = jupiter.eph(t0 + dt_days)
-        lp = pk.lambert_problem(rv0[0], rv1[0], dt, pk.MU_SUN)
+        lp = _pk.lambert_problem(rv0[0], rv1[0], dt, _pk.MU_SUN)
         rv0[1] = lp.v0[0]
         rv1[1] = lp.v1[0]
 
@@ -60,14 +60,14 @@ class leg_sims_flanagan_test(_ut.TestCase):
         for i in range(1, 34):
             for cut in cut_values:
                 throttles = [0.0] * i * 3
-                sf_hf_leg = pk.leg.sims_flanagan(rv0, 1.0, throttles, rv1, 1.0, dt, 1.0, 1.0, pk.MU_SUN, cut)
+                sf_hf_leg = _pk.leg.sims_flanagan(rv0, 1.0, throttles, rv1, 1.0, dt, 1.0, 1.0, _pk.MU_SUN, cut)
                 mc = sf_hf_leg.compute_mismatch_constraints()
-                mc[0] /= pk.AU
-                mc[1] /= pk.AU
-                mc[2] /= pk.AU
-                mc[3] /= pk.EARTH_VELOCITY
-                mc[4] /= pk.EARTH_VELOCITY
-                mc[5] /= pk.EARTH_VELOCITY
+                mc[0] /= _pk.AU
+                mc[1] /= _pk.AU
+                mc[2] /= _pk.AU
+                mc[3] /= _pk.EARTH_VELOCITY
+                mc[4] /= _pk.EARTH_VELOCITY
+                mc[5] /= _pk.EARTH_VELOCITY
                 mc[6] /= 1000
                 mc_list.append(mc)
                 
@@ -75,9 +75,9 @@ class leg_sims_flanagan_test(_ut.TestCase):
 
     def test_mc_grad(self):
         import numpy as np
-        import pykep as pk
+        import pykep as _pk
 
-        sf_leg = pk.leg.sims_flanagan()
+        sf_leg = _pk.leg.sims_flanagan()
         sf_leg.cut = 0.5
         sf_leg.throttles = np.array([0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24,
         0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3, 0.31, 0.32, 0.33, 0.34])
@@ -108,10 +108,10 @@ class leg_sims_flanagan_test(_ut.TestCase):
     def test_pickling(self):
         import pickle
         import io
-        import pykep as pk
+        import pykep as _pk
 
         # An example object
-        data = pk.leg.sims_flanagan()
+        data = _pk.leg.sims_flanagan()
         data.cut = 0.5
         data.throttles = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         data.rvs = np.array([[1, 0.1, -0.1], [0.2, 1.0, -0.2]])

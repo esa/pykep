@@ -10,11 +10,11 @@
 
 from sgp4.api import Satrec
 from sgp4 import exporter
-import pykep as pk
+import pykep as _pk
 
 from sgp4.api import Satrec
 from sgp4 import exporter
-import pykep as pk
+import pykep as _pk
 import numpy as np
 
 class tle:
@@ -40,10 +40,10 @@ class tle:
       >>> pla.eph(pk.epoch("2023-10-31"))
     """
     def __init__(self, line1, line2):
-        import pykep as pk
+        import pykep as _pk
         self.satellite = Satrec.twoline2rv(line1, line2)
         self.e = 0
-        self.ref_epoch = pk.epoch(self.satellite.jdsatepoch + self.satellite.jdsatepochF, pk.epoch.julian_type.JD)
+        self.ref_epoch = _pk.epoch(self.satellite.jdsatepoch + self.satellite.jdsatepochF, _pk.epoch.julian_type.JD)
 
     def eph(self, mjd2000):
         """Mandatory method of the :class:`~pykep.planet` interface.
@@ -99,4 +99,4 @@ class tle:
         Returns:
             :class:`float`: the graviational parameter of the Earth.
         """
-        return pk.MU_EARTH
+        return _pk.MU_EARTH

@@ -1,12 +1,12 @@
-import pykep as pk
+import pykep as _pk
 from pykep.trajopt import pl2pl_N_impulses as _pl2pl_N_impulses
 
 
 class _emNimp_udp(_pl2pl_N_impulses):
     def __init__(self, N=3):
         super().__init__(
-            start=pk.planet(pk.udpla.jpl_lp('earth')),
-            target=pk.planet(pk.udpla.jpl_lp('mars')),
+            start=_pk.planet(_pk.udpla.jpl_lp('earth')),
+            target=_pk.planet(_pk.udpla.jpl_lp('mars')),
             N_max=N,
             tof_bounds=[200., 700.],
             DV_max_bounds=[0., 4.],

@@ -7,6 +7,7 @@ set(PYKEP_GYM_PYTHON_FILES
     _juice_mga_1dsm.py 
     _messenger.py
     _rosetta_mga_1dsm.py
+    _tops.py
     )
 
 file(GLOB PYKEP_GYM_TOPS_JSON_FILES tops/*.json)

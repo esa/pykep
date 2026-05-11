@@ -8,6 +8,7 @@ from ._em_Nimp import em3imp, em5imp, em7imp
 
 
 # Load TOPS benchmark --------------------------------------------------------
+# This loads the raw data; the actual TOPS problems are constructed in tops.py, which imports these variables.
 import json
 from importlib import resources
 def _load_tops_json(name: str):
@@ -15,10 +16,11 @@ def _load_tops_json(name: str):
         with _path.open("r", encoding="utf-8") as _f:
             return json.load(_f)
 
+tops_cr3bp_json = _load_tops_json("_tops_cr3bp.json")
+tops_twobody_json = _load_tops_json("_tops_twobody.json")
+tops_ss_json = _load_tops_json("_tops_ss.json")
+tops_mee_json = _load_tops_json("_tops_mee.json")
 
-tops_cr3bp = _load_tops_json("_tops_cr3bp.json")
-tops_twobody = _load_tops_json("_tops_twobody.json")
-tops_ss = _load_tops_json("_tops_ss.json")
-tops_mee = _load_tops_json("_tops_mee.json")
+from ._tops import tops_twobody, tops_mee, tops_cr3bp, tops_ss
 
 del _load_tops_json, resources, json

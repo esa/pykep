@@ -1,7 +1,7 @@
-import pykep as pk
+import pykep as _pk
 from copy import deepcopy as _deepcopy
 
-def add_ballistic_arc(ax, rv0, tof, mu, units=pk.AU, N=60, **kwargs):
+def add_ballistic_arc(ax, rv0, tof, mu, units=_pk.AU, N=60, **kwargs):
     """
     Add a ballistic trajectory arc to a 3D matplotlib Axes.
 
@@ -42,7 +42,7 @@ def add_ballistic_arc(ax, rv0, tof, mu, units=pk.AU, N=60, **kwargs):
         x[i] = rv[0][0] / units
         y[i] = rv[0][1] / units
         z[i] = rv[0][2] / units
-        rv = pk.propagate_lagrangian(rv, dt, mu, False)
+        rv = _pk.propagate_lagrangian(rv, dt, mu, False)
 
     # And plot
     ax.plot(x, y, z, **kwargs)

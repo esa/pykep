@@ -1,12 +1,12 @@
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 from copy import deepcopy as _deepcopy
 
 
 def add_sf_leg(
     ax,
-    sf: pk.leg.sims_flanagan,
-    units=pk.AU,
+    sf: _pk.leg.sims_flanagan,
+    units=_pk.AU,
     N=30,
     show_midpoints=False,
     show_gridpoints=False,
@@ -82,11 +82,11 @@ def add_sf_leg(
             0.41 + (0.36 - 0.41) * min(1.0, _np.linalg.norm(throttles)),
             0.88 + (0.36 - 0.88) * min(1.0, _np.linalg.norm(throttles)),
         )
-        pk.plot.add_ballistic_arc(
+        _pk.plot.add_ballistic_arc(
             ax, rv, dt / 2, sf.mu, units=units, N=N, c=color, **kwargs
         )
         # propagate for dt/2
-        rv = list(pk.propagate_lagrangian(rv, tof=dt / 2, mu=sf.mu, stm=False))
+        rv = list(_pk.propagate_lagrangian(rv, tof=dt / 2, mu=sf.mu, stm=False))
         # register the position as a mid-point state
         pos_m_fwd.append(rv[0])
         # add dv to the state (now dimensional)
@@ -94,10 +94,10 @@ def add_sf_leg(
         # update the mass (increases)
         mass_fwd *= _np.exp(-dv / sf.veff)
         # 2 - propagate for dt/2
-        pk.plot.add_ballistic_arc(
+        _pk.plot.add_ballistic_arc(
             ax, rv, dt / 2, sf.mu, units=units, N=N, c=color, **kwargs
         )
-        rv = pk.propagate_lagrangian(rv, tof=dt / 2, mu=sf.mu, stm=False)
+        rv = _pk.propagate_lagrangian(rv, tof=dt / 2, mu=sf.mu, stm=False)
         pos_fwd.append(rv[0])
     pos_fwd = _np.array(pos_fwd)
     pos_m_fwd = _np.array(pos_m_fwd)
@@ -151,11 +151,11 @@ def add_sf_leg(
             0.41 + (0.36 - 0.41) * min(1.0, _np.linalg.norm(throttles)),
             0.88 + (0.36 - 0.88) * min(1.0, _np.linalg.norm(throttles)),
         )
-        pk.plot.add_ballistic_arc(
+        _pk.plot.add_ballistic_arc(
             ax, rv, -dt / 2, sf.mu, units=units, N=N, c=color, **kwargs
         )
         # propagate for dt/2
-        rv = list(pk.propagate_lagrangian(rv, tof=-dt / 2, mu=sf.mu, stm=False))
+        rv = list(_pk.propagate_lagrangian(rv, tof=-dt / 2, mu=sf.mu, stm=False))
         # register the position as a mid-point state
         pos_bck_m.append(rv[0])
         # add it to the state (now dimensional)
@@ -163,10 +163,10 @@ def add_sf_leg(
         # update the mass
         mass_bck *= _np.exp(dv / sf.veff)
         # 2 - propagate for dt/2
-        pk.plot.add_ballistic_arc(
+        _pk.plot.add_ballistic_arc(
             ax, rv, -dt / 2, sf.mu, units=units, N=N, c=color, **kwargs
         )
-        rv = pk.propagate_lagrangian(rv, tof=-dt / 2, mu=sf.mu, stm=False)
+        rv = _pk.propagate_lagrangian(rv, tof=-dt / 2, mu=sf.mu, stm=False)
         pos_bck.append(rv[0])
     pos_bck = _np.array(pos_bck)
     pos_bck_m = _np.array(pos_bck_m)

@@ -117,3 +117,33 @@ Multiple impulse problem
 
 .. autoattribute:: pykep.trajopt.gym.em7imp
 
+TOPS problems
+************************
+
+The TOPS (Trajectory Optimisation Problems in Space) database
+:cite:p:`izzo2026zoh` collects benchmark low-thrust trajectory optimization problems transcribed into
+nonlinear programs by a direct method. The pykep gym exposes these benchmarks
+as parameterized UDP classes, covering two-body dynamics in Cartesian
+coordinates, two-body dynamics in modified equinoctial elements, solar-sail
+problems, and CR3BP dynamics.
+
+All TOPS formulations rely on a zero-order-hold transcription of the control
+over a user-defined number of segments. They use a forward-backward shooting
+scheme, which results in highly nonlinear mismatch constraints, and in the non
+solar-sail formulations they also include throttle constraints. The size and
+difficulty of the resulting NLP can therefore be regulated through the number
+of segments and through the selected time-grid encoding, such as ``uniform``
+or ``softmax``. The non solar-sail benchmarks are built on
+:class:`~pykep.trajopt.zoh_point2point`, while the solar-sail benchmark is
+built on :class:`~pykep.trajopt.zoh_ss_point2point`. As a consequence, the
+departure and arrival states are fixed and moving-end effects are not
+accounted for.
+
+.. autoclass:: pykep.trajopt.gym.tops_twobody
+
+.. autoclass:: pykep.trajopt.gym.tops_mee
+
+.. autoclass:: pykep.trajopt.gym.tops_ss
+
+.. autoclass:: pykep.trajopt.gym.tops_cr3bp
+

@@ -1,10 +1,10 @@
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 
 def add_mit(ax,
     mit,
     mu,
-    units=pk.AU,
+    units=_pk.AU,
     N=60,
     c_segments=["royalblue", "indianred"],
     figsize=(5, 5),
@@ -37,7 +37,7 @@ def add_mit(ax,
         :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The 3D axis where the trajectory was plotted.
     """
     if ax is None:
-        ax = pk.plot.make_3Daxis(figsize=figsize)
+        ax = _pk.plot.make_3Daxis(figsize=figsize)
 
     DVs = [_np.linalg.norm(node[1]) for node in mit]
     maxDV = max(DVs)
@@ -55,7 +55,7 @@ def add_mit(ax,
 
         r_after_dsm = node[0][0]
         v_after_dsm = [a + b for a, b in zip(node[0][1], node[1])]
-        pk.plot.add_ballistic_arc(
+        _pk.plot.add_ballistic_arc(
             ax,
             [r_after_dsm, v_after_dsm],
             node[2],

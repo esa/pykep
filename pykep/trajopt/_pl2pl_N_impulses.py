@@ -1,4 +1,4 @@
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 import matplotlib.pyplot as _plt
 
@@ -30,8 +30,8 @@ class pl2pl_N_impulses:
 
     def __init__(
         self,
-        start=pk.planet(pk.udpla.jpl_lp("earth")),
-        target=pk.planet(pk.udpla.jpl_lp("venus")),
+        start=_pk.planet(_pk.udpla.jpl_lp("earth")),
+        target=_pk.planet(_pk.udpla.jpl_lp("venus")),
         N_max=3,
         tof_bounds=[20.0, 400.0],
         DV_max_bounds=[0.0, 4.0],
@@ -75,14 +75,14 @@ class pl2pl_N_impulses:
             raise ValueError("Number of impulses N is less than 2")
         # 3) If phase_free is True, t0 does not make sense
         if t0_bounds is None and not phase_free:
-            t0 = [pk.epoch(0), pk.epoch(1000)]
+            t0 = [_pk.epoch(0), _pk.epoch(1000)]
         if t0_bounds is not None and phase_free:
             raise ValueError("When phase_free is True no t0 can be specified")
         if not phase_free:
-            if type(t0_bounds[0]) != type(pk.epoch(0)):
-                t0_bounds[0] = pk.epoch(t0_bounds[0])
-            if type(t0_bounds[1]) != type(pk.epoch(0)):
-                t0_bounds[1] = pk.epoch(t0_bounds[1])
+            if type(t0_bounds[0]) != type(_pk.epoch(0)):
+                t0_bounds[0] = _pk.epoch(t0_bounds[0])
+            if type(t0_bounds[1]) != type(_pk.epoch(0)):
+                t0_bounds[1] = _pk.epoch(t0_bounds[1])
 
         self.obj_dim = multi_objective + 1
         # We then define all class data members
@@ -104,10 +104,10 @@ class pl2pl_N_impulses:
                 + [0]
             )
             self._ub = (
-                [2 * start.period() * pk.SEC2DAY, tof_bounds[1]]
+                [2 * start.period() * _pk.SEC2DAY, tof_bounds[1]]
                 + [1.0, 1.0, 1.0, DV_max_bounds[1] * 1000] * (N_max - 2)
                 + [1.0]
-                + [2 * target.period() * pk.SEC2DAY]
+                + [2 * target.period() * _pk.SEC2DAY]
             )
         else:
             self._lb = (
@@ -134,38 +134,38 @@ class pl2pl_N_impulses:
         """
         retval = []
         # 1 We decode the tofs
-        T = pk.alpha2direct(x[2::4], x[1])
+        T = _pk.alpha2direct(x[2::4], x[1])
 
         # 2 - We compute the starting and ending position
-        r_start, v_start = self.start.eph(pk.epoch(x[0]))
+        r_start, v_start = self.start.eph(_pk.epoch(x[0]))
         if self.phase_free:
-            r_target, v_target = self.target.eph(pk.epoch(x[-1]))
+            r_target, v_target = self.target.eph(_pk.epoch(x[-1]))
         else:
-            r_target, v_target = self.target.eph(pk.epoch(x[0] + x[1]))
+            r_target, v_target = self.target.eph(_pk.epoch(x[0] + x[1]))
 
         # 3 - We loop across inner impulses
         rsc = r_start
         vsc = v_start
         for i, time in enumerate(T[:-1]):
-            DV = pk.utils.uvV2cartesian(x[3 + 4 * i : 6 + 4 * i])
-            retval.append([[rsc, vsc], DV, T[i] * pk.DAY2SEC])
+            DV = _pk.utils.uvV2cartesian(x[3 + 4 * i : 6 + 4 * i])
+            retval.append([[rsc, vsc], DV, T[i] * _pk.DAY2SEC])
 
             # We apply the (i+1)-th impulse
             vsc = [a + b for a, b in zip(vsc, DV)]
-            rsc, vsc = pk.propagate_lagrangian(
-                [rsc, vsc], T[i] * pk.DAY2SEC, self._common_mu
+            rsc, vsc = _pk.propagate_lagrangian(
+                [rsc, vsc], T[i] * _pk.DAY2SEC, self._common_mu
             )
-        cw = pk.ic2par([rsc, vsc], self.start.mu_central_body)[2] > pi / 2
+        cw = _pk.ic2par([rsc, vsc], self.start.mu_central_body)[2] > pi / 2
 
         # We now compute the remaining two final impulses
         # Lambert arc to reach seq[1]
-        dt = T[-1] * pk.DAY2SEC
-        l = pk.lambert_problem(rsc, r_target, dt, self._common_mu, cw, False)
+        dt = T[-1] * _pk.DAY2SEC
+        l = _pk.lambert_problem(rsc, r_target, dt, self._common_mu, cw, False)
         v_beg_l = l.v0[0]
         v_end_l = l.v1[0]
 
         DV1 = [a - b for a, b in zip(v_beg_l, vsc)]
-        retval.append([[rsc, vsc], DV1, T[-1] * pk.DAY2SEC])
+        retval.append([[rsc, vsc], DV1, T[-1] * _pk.DAY2SEC])
 
         DV2 = [a - b for a, b in zip(v_target, v_end_l)]
         retval.append([[r_target, v_end_l], DV2, 0])
@@ -184,7 +184,7 @@ class pl2pl_N_impulses:
         self,
         x,
         ax=None,
-        units=pk.AU,
+        units=_pk.AU,
         N=60,
         c_orbit="dimgray",
         c_segments=["royalblue", "indianred"],
@@ -215,22 +215,22 @@ class pl2pl_N_impulses:
             :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The 3D axis where the trajectory was plotted.
         """
         if ax is None:
-            ax = pk.plot.make_3Daxis(figsize=figsize)
+            ax = _pk.plot.make_3Daxis(figsize=figsize)
 
         # Adding the main central body (Sun-like)
-        ax = pk.plot.add_sun(ax=ax)
+        ax = _pk.plot.add_sun(ax=ax)
 
-        ax = pk.plot.add_planet_orbit(
+        ax = _pk.plot.add_planet_orbit(
             pla=self.start, ax=ax, units=units, N=N, c=c_orbit, label=self.start.name
         )
-        ax = pk.plot.add_planet_orbit(
+        ax = _pk.plot.add_planet_orbit(
             pla=self.target, ax=ax, units=units, N=N, c=c_orbit, label=self.target.name
         )
 
         # We decode the chromosome
         mit = self.decode(x)  # [[r,v], DV, DT]
 
-        ax = pk.plot.add_mit(
+        ax = _pk.plot.add_mit(
             ax, mit, self._common_mu, units=units, c_segments=c_segments, N=N, **kwargs
         )
         return ax
@@ -309,7 +309,7 @@ class pl2pl_N_impulses:
         for posvel, DV, tgrid in zip(posvels, DVs, tgrids):
             ic = [posvel[0], [a + b for a, b in zip(posvel[1], DV)]]
             retvals.append(
-                pk.propagate_lagrangian_grid(ic, tgrid, mu=pk.MU_SUN, stm=True)
+                _pk.propagate_lagrangian_grid(ic, tgrid, mu=_pk.MU_SUN, stm=True)
             )
 
         # And now assemble them in correspondance to the final_grid and in the Mn0 form.
@@ -334,7 +334,7 @@ class pl2pl_N_impulses:
             Mji = stms[idx_j] @ _np.linalg.inv(stms[idx_i])
             Mjk = stms[idx_j] @ _np.linalg.inv(stms[idx_k])
             res.append(
-                _np.linalg.norm(pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)[0])
+                _np.linalg.norm(_pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)[0])
             )
 
         if ax is None:

@@ -8,7 +8,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import pykep as pk
+import pykep as _pk
 import pygmo as pg
 import numpy as np
 
@@ -22,11 +22,11 @@ def float_rel_error(a: float, b: float):
 
 class trajopt_mga_tests(_ut.TestCase):
     def test_construction(self):
-        import pykep as pk
+        import pykep as _pk
 
-        earth = pk.planet(pk.udpla.jpl_lp("earth"))
-        venus = pk.planet(pk.udpla.jpl_lp("venus"))
-        udp = pk.trajopt.mga(
+        earth = _pk.planet(_pk.udpla.jpl_lp("earth"))
+        venus = _pk.planet(_pk.udpla.jpl_lp("venus"))
+        udp = _pk.trajopt.mga(
             seq=[earth, venus, earth, venus, earth],
             tof_encoding="direct",
             t0=[0, 1000],
@@ -37,11 +37,11 @@ class trajopt_mga_tests(_ut.TestCase):
         pop = pg.population(prob, 100)
 
     def test_encoding_to_encoding(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp_direct = pk.trajopt.mga(tof_encoding="direct", tof=[[30, 200], [200, 300]])
-        udp_alpha = pk.trajopt.mga(tof_encoding="alpha", tof=[230, 500])
-        udp_eta = pk.trajopt.mga(tof_encoding="eta", tof=500)
+        udp_direct = _pk.trajopt.mga(tof_encoding="direct", tof=[[30, 200], [200, 300]])
+        udp_alpha = _pk.trajopt.mga(tof_encoding="alpha", tof=[230, 500])
+        udp_eta = _pk.trajopt.mga(tof_encoding="eta", tof=500)
         prob = pg.problem(udp_direct)
         pop = pg.population(prob, 100)
         x_direct = pop.champion_x
@@ -62,9 +62,9 @@ class trajopt_mga_tests(_ut.TestCase):
 
 class gym_tests(_ut.TestCase):
     def test_cassini1(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.cassini1
+        udp = _pk.trajopt.gym.cassini1
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             -554.5189290104555,
@@ -100,9 +100,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 107218.08496509642) < 1e-12)
 
     def test_cassini2(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.cassini2
+        udp = _pk.trajopt.gym.cassini2
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             -7.75699976e02,
@@ -133,9 +133,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 1511.7317645968126) < 1e-12)
 
     def test_rosetta(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.rosetta
+        udp = _pk.trajopt.gym.rosetta
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             1.53488329e03,
@@ -166,9 +166,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 1371.4992633334382) < 1e-12)
 
     def test_eve_mga1dsm(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.eve_mga1dsm
+        udp = _pk.trajopt.gym.eve_mga1dsm
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             7.31864730e02,
@@ -186,9 +186,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 47456.939061940415) < 1e-12)
 
     def test_eve_mga1dsm_a(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.eve_mga1dsm_a
+        udp = _pk.trajopt.gym.eve_mga1dsm_a
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             1.12861301e02,
@@ -207,9 +207,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 1101622.7179572878) < 1e-12)
 
     def test_eve_mga1dsm_n(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.eve_mga1dsm_n
+        udp = _pk.trajopt.gym.eve_mga1dsm_n
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             5.86500918e02,
@@ -227,9 +227,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, 1917650.9004062244) < 1e-12)
 
     def test_juice(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.juice
+        udp = _pk.trajopt.gym.juice
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             8.25587848945082e03,
@@ -297,9 +297,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f, -7.987614927397559) < 1e-12)
 
     def test_juice_mo(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.juice_mo
+        udp = _pk.trajopt.gym.juice_mo
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             8.08458777709711e03,
@@ -336,9 +336,9 @@ class gym_tests(_ut.TestCase):
         self.assertTrue(float_rel_error(f[1], 2270.0472019876433) < 1e-12)
 
     def test_messenger(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp = pk.trajopt.gym.messenger
+        udp = _pk.trajopt.gym.messenger
         # Ground truth checked by the old pykep code (up to 8 digits only as per differences with constants and all)
         x = [
             2.03241398e03,
@@ -375,11 +375,11 @@ class gym_tests(_ut.TestCase):
 
 class trajopt_mga1dsm_tests(_ut.TestCase):
     def test_construction(self):
-        import pykep as pk
+        import pykep as _pk
 
-        earth = pk.planet(pk.udpla.jpl_lp("earth"))
-        venus = pk.planet(pk.udpla.jpl_lp("venus"))
-        udp = pk.trajopt.mga_1dsm(
+        earth = _pk.planet(_pk.udpla.jpl_lp("earth"))
+        venus = _pk.planet(_pk.udpla.jpl_lp("venus"))
+        udp = _pk.trajopt.mga_1dsm(
             seq=[
                 earth,
                 venus,
@@ -402,13 +402,13 @@ class trajopt_mga1dsm_tests(_ut.TestCase):
         pop = pg.population(prob, 100)
 
     def test_encoding_to_encoding(self):
-        import pykep as pk
+        import pykep as _pk
 
-        udp_direct = pk.trajopt.mga_1dsm(
+        udp_direct = _pk.trajopt.mga_1dsm(
             tof_encoding="direct", tof=[[30, 200], [200, 300]]
         )
-        udp_alpha = pk.trajopt.mga_1dsm(tof_encoding="alpha", tof=[230, 500])
-        udp_eta = pk.trajopt.mga_1dsm(tof_encoding="eta", tof=500)
+        udp_alpha = _pk.trajopt.mga_1dsm(tof_encoding="alpha", tof=[230, 500])
+        udp_eta = _pk.trajopt.mga_1dsm(tof_encoding="eta", tof=500)
         prob = pg.problem(udp_direct)
         pop = pg.population(prob, 100)
         x_direct = pop.champion_x
@@ -435,7 +435,7 @@ class trajopt_mga1dsm_tests(_ut.TestCase):
 
 class mit_tests(_ut.TestCase):
     def test_primer_vector(self):
-        import pykep as pk
+        import pykep as _pk
 
         DVi = np.random.random((3,)) / 2 - 1
         DVj = np.random.random((3,)) / 2 - 1
@@ -443,7 +443,7 @@ class mit_tests(_ut.TestCase):
         # Test the primer vector at k=i
         Mji = np.random.random((6, 6)) / 2 - 1
         Mjk = Mji
-        p, Aik, Ajk = pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
+        p, Aik, Ajk = _pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
         self.assertTrue(float_rel_error(np.linalg.norm(p), 1) < 1e-12)
         self.assertTrue(
             float_rel_error(np.linalg.norm(Aik), np.linalg.norm(np.eye(3))) < 1e-12
@@ -453,7 +453,7 @@ class mit_tests(_ut.TestCase):
         # Test the primer vector at k=j
         Mji = np.random.random((6, 6)) / 2 - 1
         Mjk = np.eye(6)
-        p, Aik, Ajk = pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
+        p, Aik, Ajk = _pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
         self.assertTrue(float_rel_error(np.linalg.norm(p), 1) < 1e-12)
         self.assertTrue(
             float_rel_error(np.linalg.norm(Ajk), np.linalg.norm(np.eye(3))) < 1e-12
@@ -479,16 +479,16 @@ class mit_tests(_ut.TestCase):
             [ 0.07784766, -0.64352802, -0.84122326, -0.32708089,  0.27241266, 0.86394226],
             [ 0.44508538, -0.63388016,  0.84706968, -0.71098094,  0.5239476 , 0.19557921]
         ])
-        p, Aik, Ajk = pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
+        p, Aik, Ajk = _pk.trajopt.primer_vector(DVi, DVj, Mji, Mjk)
         self.assertTrue(float_rel_error(np.linalg.norm(p), 2.6981957244221193) < 1e-12)
         self.assertTrue(float_rel_error(np.linalg.norm(Aik), 3.7165788775706137) < 1e-12)
         self.assertTrue(float_rel_error(np.linalg.norm(Ajk), 5.1268002110392725) < 1e-12)
 class trajopt_zoh_point2point_tests(_ut.TestCase):
     def test_gradient_uniform(self):
-        ta = pk.ta.get_zoh_kep(1e-14)
-        ta_var = pk.ta.get_zoh_kep_var(1e-10)
+        ta = _pk.ta.get_zoh_kep(1e-14)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-10)
 
-        udp = pk.trajopt.zoh_point2point(
+        udp = _pk.trajopt.zoh_point2point(
             nseg=5,
             tas=(ta, ta_var),
             time_encoding='uniform',
@@ -510,10 +510,10 @@ class trajopt_zoh_point2point_tests(_ut.TestCase):
         self.assertTrue(np.allclose(J_analytical, J_numerical, atol=1e-5, rtol=1e-5))
 
     def test_gradient_softmax(self):
-        ta = pk.ta.get_zoh_kep(1e-14)
-        ta_var = pk.ta.get_zoh_kep_var(1e-10)
+        ta = _pk.ta.get_zoh_kep(1e-14)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-10)
 
-        udp = pk.trajopt.zoh_point2point(
+        udp = _pk.trajopt.zoh_point2point(
             nseg=5,
             tas=(ta, ta_var),
             time_encoding='softmax',
@@ -536,11 +536,11 @@ class trajopt_zoh_point2point_tests(_ut.TestCase):
 class trajopt_zoh_pl2pl_tests(_ut.TestCase):
     def test_gradient_uniform(self):
         # Build the variational integrators needed for gradients
-        ta = pk.ta.get_zoh_kep(1e-14)
-        ta_var = pk.ta.get_zoh_kep_var(1e-10)
+        ta = _pk.ta.get_zoh_kep(1e-14)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-10)
 
         # Create a small instance for testing
-        udp = pk.trajopt.zoh_pl2pl(
+        udp = _pk.trajopt.zoh_pl2pl(
             nseg=5,
             tas=(ta, ta_var),
             time_encoding='uniform',
@@ -571,11 +571,11 @@ class trajopt_zoh_pl2pl_tests(_ut.TestCase):
         self.assertTrue(np.allclose(J_analytical, J_numerical, atol=1e-4, rtol=1e-4))
     def test_gradient_softmax(self):
         # Build the variational integrators needed for gradients
-        ta = pk.ta.get_zoh_kep(1e-14)
-        ta_var = pk.ta.get_zoh_kep_var(1e-10)
+        ta = _pk.ta.get_zoh_kep(1e-14)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-10)
         
         #now for the softmax:
-        udp_softmax = pk.trajopt.zoh_pl2pl(
+        udp_softmax = _pk.trajopt.zoh_pl2pl(
             nseg=5,
             tas=(ta, ta_var),
             time_encoding='softmax',

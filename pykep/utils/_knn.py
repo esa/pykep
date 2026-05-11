@@ -8,7 +8,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import pykep as pk
+import pykep as _pk
 
 class knn:
     R"""
@@ -77,7 +77,7 @@ class knn:
         Returns:
             :class:`tuple`[:class:`list`, :class:`list`]: (DV1, DV2) where DV1 and DV2 are components of the orbital metric.
         """
-        DV2 = [a / (self._tof * pk.DAY2SEC) for a in r]
+        DV2 = [a / (self._tof * _pk.DAY2SEC) for a in r]
         DV1 = [a + b for a, b in zip(DV2, v)]
         return (DV1, DV2)
 
@@ -126,8 +126,8 @@ class knn:
         planet_list,
         when,
         metric="orbital",
-        ref_r=pk.AU,
-        ref_v=pk.EARTH_VELOCITY,
+        ref_r=_pk.AU,
+        ref_v=_pk.EARTH_VELOCITY,
         tof=180.0,
     ):
         """

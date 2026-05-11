@@ -8,7 +8,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import pykep as pk
+import pykep as _pk
 import numpy as _np
 
 from typing import Any, Dict, List, Tuple
@@ -53,9 +53,9 @@ class mga:
     def __init__(
         self,
         seq=[
-            pk.planet(pk.udpla.jpl_lp("earth")),
-            pk.planet(pk.udpla.jpl_lp("venus")),
-            pk.planet(pk.udpla.jpl_lp("earth")),
+            _pk.planet(_pk.udpla.jpl_lp("earth")),
+            _pk.planet(_pk.udpla.jpl_lp("venus")),
+            _pk.planet(_pk.udpla.jpl_lp("earth")),
         ],
         t0=[0, 1000],
         tof=[[30, 200], [200, 300]],
@@ -102,8 +102,8 @@ class mga:
 
         # 2 - We try to build epochs out of the t0 list (mjd2000 by default)
         for i in range(len(t0)):
-            if type(t0[i]) != type(pk.epoch(0.0)):
-                t0[i] = pk.epoch(t0[i], pk.epoch.julian_type.MJD2000)
+            if type(t0[i]) != type(_pk.epoch(0.0)):
+                t0[i] = _pk.epoch(t0[i], _pk.epoch.julian_type.MJD2000)
 
         # 3 - Check the tof bounds
         if tof_encoding == "alpha":
@@ -197,13 +197,13 @@ class mga:
     def _decode_tofs(self, x: List[float]) -> List[float]:
         if self.tof_encoding == "alpha":
             # decision vector is  [t0, T, a1, a2, ....]
-            return pk.alpha2direct(x[2:], x[1])
+            return _pk.alpha2direct(x[2:], x[1])
         elif self.tof_encoding == "direct":
             # decision vector is  [t0, T1, T2, T3, ... ]
             return x[1:]
         elif self.tof_encoding == "eta":
             # decision vector is  [t0, n1, n2, n3, ... ]
-            return pk.eta2direct(x[1:], self.tof)
+            return _pk.eta2direct(x[1:], self.tof)
 
     @staticmethod
     def alpha2direct(x):
@@ -217,7 +217,7 @@ class mga:
         Returns:
             :class:`numpy.ndarray`: a chromosome encoding the MGA trajectory using the direct encoding
         """
-        retval = pk.alpha2direct(x[2:], x[1])
+        retval = _pk.alpha2direct(x[2:], x[1])
         retval = _np.insert(retval, 0, x[0])
         return retval
 
@@ -231,7 +231,7 @@ class mga:
         Returns:
             :class:`numpy.ndarray`: a chromosome encoding the MGA trajectory using the alpha encoding
         """
-        alphas, T = pk.direct2alpha(x[1:])
+        alphas, T = _pk.direct2alpha(x[1:])
         retval = _np.insert(alphas, 0, [x[0], T])
         return retval
 
@@ -251,7 +251,7 @@ class mga:
             raise ValueError("cannot call this method if the tof_encoding is not 'eta'")
 
         # decision vector is  [t0, n1, n2, n3, ... ]
-        T = pk.eta2direct(x[1:], self.tof)
+        T = _pk.eta2direct(x[1:], self.tof)
         T = _np.insert(T, 0, x[0])
         return T
 
@@ -272,7 +272,7 @@ class mga:
         from copy import deepcopy
 
         retval = deepcopy(x)
-        retval[1:] = pk.direct2eta(x[1:], self.tof)
+        retval[1:] = _pk.direct2eta(x[1:], self.tof)
         return retval
 
     def _compute_dvs(self, x: List[float]) -> Tuple[
@@ -300,10 +300,10 @@ class mga:
         # 3 - we solve the lambert problems (and store trajectory r,v)
         lps = list()
         for i in range(self._n_legs):
-            lp = pk.lambert_problem(
+            lp = _pk.lambert_problem(
                 r0=r[i],
                 r1=r[i + 1],
-                tof=T[i] * pk.DAY2SEC,
+                tof=T[i] * _pk.DAY2SEC,
                 mu=self._common_mu,
                 cw=False,
                 multi_revs=0,
@@ -316,7 +316,7 @@ class mga:
         for i in range(len(lps) - 1):
             v_rel_in = [a - b for a, b in zip(lps[i].v1[0], v[i + 1])]
             v_rel_out = [a - b for a, b in zip(lps[i + 1].v0[0], v[i + 1])]
-            DVfb.append(pk.fb_dv(v_rel_in, v_rel_out, self.seq[i + 1]))
+            DVfb.append(_pk.fb_dv(v_rel_in, v_rel_out, self.seq[i + 1]))
 
         # 5 - we add the departure and arrival dVs
         DVlaunch_tot = _np.linalg.norm([a - b for a, b in zip(v[0], lps[0].v0[0])])
@@ -392,10 +392,10 @@ class mga:
 
                 # the starting conditions of the leg
                 r0, v0 = self.lambert_legs[i - 1].r0, self.lambert_legs[i - 1].v0[0]
-                elapsed_seconds = (mjd2000 - mjd2000s[i - 1]) * pk.DAY2SEC
+                elapsed_seconds = (mjd2000 - mjd2000s[i - 1]) * _pk.DAY2SEC
 
                 # propagate ballistically the starting conditions
-                r1, v1 = pk.propagate_lagrangian(
+                r1, v1 = _pk.propagate_lagrangian(
                     rv=[r0, v0],
                     tof=elapsed_seconds,
                     mu=self.seq[0].get_mu_central_body(),
@@ -415,7 +415,7 @@ class mga:
             )
 
         _, _, _, lambert_legs, _, mjd2000s, _ = self._compute_dvs(x)
-        return pk.planet(mga_udpla(self.seq, lambert_legs, mjd2000s))
+        return _pk.planet(mga_udpla(self.seq, lambert_legs, mjd2000s))
 
     def pretty(self, x):
         """
@@ -456,7 +456,7 @@ class mga:
         self,
         x,
         ax=None,
-        units=pk.AU,
+        units=_pk.AU,
         N=60,
         c_orbit="dimgray",
         c_lambert="indianred",
@@ -492,7 +492,7 @@ class mga:
         import matplotlib.pyplot as plt
 
         if ax is None:
-            ax = pk.plot.make_3Daxis(figsize=figsize)
+            ax = _pk.plot.make_3Daxis(figsize=figsize)
             
         # Plot of leg unless specified
         if len(leg_ids) == 0:
@@ -501,12 +501,12 @@ class mga:
         _, _, _, lps, _, mjd2000s, _ = self._compute_dvs(x)
         for i, item in enumerate(self.seq):
             if i in leg_ids:
-                pk.plot.add_planet(pla=item, ax=ax, when=mjd2000s[i], c=c_orbit, units=units)
-                pk.plot.add_lambert(
+                _pk.plot.add_planet(pla=item, ax=ax, when=mjd2000s[i], c=c_orbit, units=units)
+                _pk.plot.add_lambert(
                     ax, lps[i], N=60, sol=0, units=units, c=c_lambert, **kwargs
                 )
-            pk.plot.add_planet_orbit(pla=item, ax=ax, units=units, N=N, c=c_orbit)
-        pk.plot.add_sun(ax=ax)
+            _pk.plot.add_planet_orbit(pla=item, ax=ax, units=units, N=N, c=c_orbit)
+        _pk.plot.add_sun(ax=ax)
 
         return ax
 

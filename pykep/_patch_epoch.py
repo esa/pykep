@@ -10,7 +10,7 @@
 
 from .core import epoch
 from datetime import datetime, timezone, timedelta
-import pykep as pk
+import pykep as _pk
 
 
 def _to_datetime(self):

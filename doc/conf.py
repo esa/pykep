@@ -10,8 +10,8 @@ project = 'pykep'
 copyright = 'Copyright (c) 2023-2026 Advanced Concepts Team, European Space Agency (ESA)'
 author = 'Dario Izzo'
 
-import pykep as pk
-release = pk.__version__
+import pykep as _pk
+release = _pk.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

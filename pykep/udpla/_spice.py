@@ -9,7 +9,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import spiceypy as pyspice
-import pykep as pk
+import pykep as _pk
 import numpy as np
 from pathlib import Path
 
@@ -40,14 +40,14 @@ class spice:
         # If not the conversions will fail and rise and exception.
         # This may be too restrictive and maybe lifted in the future.
         if type(body) == str:
-            self.naifid = pk.utils.name2naifid(body)
+            self.naifid = _pk.utils.name2naifid(body)
         elif type(body) == int:
             self.naifid = body
         else:
             raise ValueError("body must be either a string or an integer (NAIF id)")
         
-        self.frame_naifid = pk.utils.framename2naifid(ref_frame)
-        self.obs_naifid = pk.utils.name2naifid(obs)
+        self.frame_naifid = _pk.utils.framename2naifid(ref_frame)
+        self.obs_naifid = _pk.utils.name2naifid(obs)
         # Store the inputs
         self.body = body
         self.ref_frame = ref_frame
@@ -68,12 +68,12 @@ class spice:
         Returns:
             :class:`list` [:class:`list`, :class:`list`]: the planet ephemerides.
         """
-        et = -43135.816087188054 + mjd2000 * pk.DAY2SEC # magic number is str2et("2000-01-01 00:00:00 UTC")
+        et = -43135.816087188054 + mjd2000 * _pk.DAY2SEC # magic number is str2et("2000-01-01 00:00:00 UTC")
         rv, _ = pyspice.spkez(self.naifid, et, self.ref_frame, "NONE", self.obs_naifid)
         return [rv[:3] * 1000, rv[3:] * 1000]
     
     def eph_v(self, mjd2000s):
-        ets = -43135.816087188054 + mjd2000s * pk.DAY2SEC # magic number is str2et("2000-01-01 00:00:00 UTC")
+        ets = -43135.816087188054 + mjd2000s * _pk.DAY2SEC # magic number is str2et("2000-01-01 00:00:00 UTC")
         rvs = [pyspice.spkez(self.naifid, et, self.ref_frame, "NONE", self.obs_naifid)[0] for et in ets]
         return np.array(rvs) * 1000
 
@@ -108,16 +108,16 @@ class de440s(spice):
         *obs* (:class:`str`): NAIF name of the observer. For example: "SSB" (solar system barycenter).
     """
     def __init__(self, body = "EARTH BARYCENTER", ref_frame = "ECLIPJ2000", obs = "SSB"):
-        pk_path = Path(pk.__path__[0])
+        pk_path = Path(_pk.__path__[0])
         self.kernel = str(pk_path / "data" / "de440s.bsp")
-        pk.utils.load_spice_kernels(self.kernel)
+        _pk.utils.load_spice_kernels(self.kernel)
         spice.__init__(self, body, ref_frame = ref_frame, obs = obs)
 
     def __del__(self):
         """Destructor.
        Unloads the kernel from memory as not needed anymore.
         """
-        pk.utils.unload_spice_kernels(self.kernel)
+        _pk.utils.unload_spice_kernels(self.kernel)
 
     def get_name(self):
         """Optional method of the :class:`~pykep.planet` interface.
@@ -133,7 +133,7 @@ class de440s(spice):
         Returns:
             :class:`str`: The full file name.
         """
-        pk_path = Path(pk.__path__[0])
+        pk_path = Path(_pk.__path__[0])
         path = str(pk_path / "data" /"de440s.bsp")
         return path
     
@@ -144,7 +144,7 @@ class de440s(spice):
         Returns:
             :class:`list`: The list of possible body names.
         """
-        kernel_file = pk.udpla.de440s.kernel_file()
-        list = pk.utils.inspect_spice_kernel(kernel_file)
-        return [pk.utils.naifid2name(item) for item in list]
+        kernel_file = _pk.udpla.de440s.kernel_file()
+        list = _pk.utils.inspect_spice_kernel(kernel_file)
+        return [_pk.utils.naifid2name(item) for item in list]
     

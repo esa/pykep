@@ -1,7 +1,7 @@
-import pykep as pk
+import pykep as _pk
 
 
-def planet_to_keplerian(pla, when: pk.epoch, mu=None):
+def planet_to_keplerian(pla, when: _pk.epoch, mu=None):
     """Transforms a planet to its Keplerian version
 
     The :class:`~pykep.planet` returned will be Keplerian, with elements identical to
@@ -28,11 +28,11 @@ def planet_to_keplerian(pla, when: pk.epoch, mu=None):
             )
             raise ValueError
     posvel = pla.eph(when)
-    udpla = pk.udpla.keplerian(
+    udpla = _pk.udpla.keplerian(
         when=when,
         posvel=posvel,
         mu_central_body=mu,
         name=pla.get_name() + "(K)",
         added_params=[pla.get_mu_self(), pla.get_radius(), pla.get_safe_radius()],
     )
-    return pk.planet(udpla)
+    return _pk.planet(udpla)
