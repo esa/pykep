@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -530,7 +530,7 @@ speed up the plot creation.</p>
 <li><p>Fix some time of flight <span class="math notranslate nohighlight">\(T\)</span> and solve all Lambert transfers to all targets. Consider the resulting <span class="math notranslate nohighlight">\(\Delta V\)</span> as a ranking of good transfer options. (This option is actually not bad, but is very sensitive to the chosen <span class="math notranslate nohighlight">\(T\)</span>, requires to solve a lot of Lambert Problems and is not a metric: thus it does not possess a number of nice and useful properties)</p></li>
 <li><p>Define a concept of metric between orbiting objects, one that accounts for physical proximity (in the phase space) as well as directionality, and use that to find neighbours and clusters.</p></li>
 </ul>
-<p>In the work <span id="id1">[<a class="reference internal" href="../bibliography.html#id18" title="Dario Izzo, Daniel Hennes, Luís F Simões, and Marcus Märtens. Designing complex interplanetary trajectories for the global trajectory optimization competitions. Space Engineering: Modeling and Optimization with Case Studies, pages 151–176, 2016.">IHSimoesMartens16</a>]</span> the concept of an <em>orbital metric</em> is introduced, which is a metric in the phase space of the two-body problem that is able to capture the physical proximity of two objects, including phasing.</p>
+<p>In the work <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id18" title="Dario Izzo, Daniel Hennes, Luís F Simões, and Marcus Märtens. Designing complex interplanetary trajectories for the global trajectory optimization competitions. Space Engineering: Modeling and Optimization with Case Studies, pages 151–176, 2016.">IHSimoesMartens16</a>]</span> the concept of an <em>orbital metric</em> is introduced, which is a metric in the phase space of the two-body problem that is able to capture the physical proximity of two objects, including phasing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We check what asteroids are close to each other at epoch mjd2000 = 5500 under the orbital metric</span>

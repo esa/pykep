@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -467,7 +467,7 @@
 \end{array}
 \end{split}\]</div>
 <p>Analytical expressions for these coefficients are available in terms of the True Anomaly difference, the Eccentric Anomaly difference, as well as the Hyperbolic Anomaly difference or the Universal Anomaly difference between the state <span class="math notranslate nohighlight">\(\mathbf r_0, \mathbf v_0\)</span> and the state <span class="math notranslate nohighlight">\(\mathbf r, \mathbf v\)</span>.</p>
-<p>The details on these analytical expressions and their derivation can be found, for example, in the seminal book by Richard Battin: “Fundamentals of Astrodynamics.” <span id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="Richard H Battin. An introduction to the mathematics and methods of astrodynamics. AIAA, 1999.">Bat99</a>]</span>.</p>
+<p>The details on these analytical expressions and their derivation can be found, for example, in the seminal book by Richard Battin: “Fundamentals of Astrodynamics.” <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id3" title="Richard H Battin. An introduction to the mathematics and methods of astrodynamics. AIAA, 1999.">Bat99</a>]</span>.</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">pykep</span></code> the <a class="reference internal" href="../propagation.html#pykep.propagate_lagrangian" title="pykep.propagate_lagrangian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pykep.propagate_lagrangian()</span></code></a> <code class="xref py py-func docutils literal notranslate"><span class="pre">pykep.propagate_lagrangian_v()</span></code> implement the keplerian propagation algorithm based on the Lagrange coefficients, as well as the analytical computation of the resulting State Transition Matrix.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -503,7 +503,7 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Only Keplerian Propagations
- Real time: 0.07996 seconds
+ Real time: 0.08347 seconds
 </pre></div>
 </div>
 </div>
@@ -522,7 +522,7 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Keplerian Propagations with the STM computations
- Real time: 0.19254 seconds
+ Real time: 0.19945 seconds
 </pre></div>
 </div>
 </div>
@@ -565,7 +565,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a25951c88766d5d5e90597a62d87fd9d0dc0824366e70d86b5ac45e4cbef35be.png" src="../_images/a25951c88766d5d5e90597a62d87fd9d0dc0824366e70d86b5ac45e4cbef35be.png" />
+<img alt="../_images/2ef2a127cdd46910a75f9780524437726882ad3a624a75edd42e84ac23b01f95.png" src="../_images/2ef2a127cdd46910a75f9780524437726882ad3a624a75edd42e84ac23b01f95.png" />
 </div>
 </div>
 <p>Ok, this is admittedly underwhelming and very basic ……. lets try to do something a bit more advanced.</p>
@@ -582,7 +582,7 @@
 <img alt="../_images/8e7887e6bab5040cf5bf2a12d75dd547ad8c9ce3e9ea2c6afd70903c5e5b8ae3.png" src="../_images/8e7887e6bab5040cf5bf2a12d75dd547ad8c9ce3e9ea2c6afd70903c5e5b8ae3.png" />
 </div>
 </div>
-<p>With reference to the diagram above (a common block present, for example, in the Sims-Flanagan <span id="id2">[<a class="reference internal" href="../bibliography.html#id7" title="Jon A. Sims and Steve N. Flanagan. Preliminary design of low-thrust interplanetary missions. Paper AAS 99-338, AAS/AIAA Astrodynamics Specialist Conference, Girdwood, Alaska, August 16-18, 1999, 1997.">SF97</a>]</span> model for low-thrust orbital transfers), we consider a three segment leg and we assume the ballistic arc to have length <span class="math notranslate nohighlight">\(\frac{dt}{2}, dt\)</span> and <span class="math notranslate nohighlight">\(\frac{dt}{2}\)</span>
+<p>With reference to the diagram above (a common block present, for example, in the Sims-Flanagan <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../bibliography.html#id7" title="Jon A. Sims and Steve N. Flanagan. Preliminary design of low-thrust interplanetary missions. Paper AAS 99-338, AAS/AIAA Astrodynamics Specialist Conference, Girdwood, Alaska, August 16-18, 1999, 1997.">SF97</a>]</span> model for low-thrust orbital transfers), we consider a three segment leg and we assume the ballistic arc to have length <span class="math notranslate nohighlight">\(\frac{dt}{2}, dt\)</span> and <span class="math notranslate nohighlight">\(\frac{dt}{2}\)</span>
 we now use <a class="reference internal" href="../propagation.html#pykep.propagate_lagrangian" title="pykep.propagate_lagrangian"><code class="xref py py-func docutils literal notranslate"><span class="pre">pykep.propagate_lagrangian()</span></code></a> to compute the gradient of the final state [<span class="math notranslate nohighlight">\(\mathbf r_f, \mathbf v_f\)</span>] with respect to the initial state [<span class="math notranslate nohighlight">\(\mathbf x_f = \mathbf r_0, \mathbf v_0\)</span>] as well as of the applied <span class="math notranslate nohighlight">\(\Delta \mathbf v_i\)</span>.  That is, as we shall see, all information stored in the STMs of this bi-impulsive transfer.</p>
 <p>This is actually rather straightforward after we get convinced that, indicating with <span class="math notranslate nohighlight">\(\mathbf M_{i}\)</span> the state transition matrix between the states [<span class="math notranslate nohighlight">\(\mathbf r_{i-1}^+, \mathbf v_{i-1}^+\)</span>] and [<span class="math notranslate nohighlight">\(\mathbf r_{i}^-, \mathbf v_{i}^-\)</span>], then the first order variations of the final state w.r.t. variations of the state at the nodes are:</p>
 <div class="math notranslate nohighlight">

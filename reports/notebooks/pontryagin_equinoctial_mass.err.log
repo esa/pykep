@@ -28,7 +28,7 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import pykep as pk
+import pykep as _pk
 import numpy as np
 import heyoka as hy
 import pygmo as pg
@@ -42,7 +42,7 @@ from matplotlib import pyplot as plt
 [31m---------------------------------------------------------------------------[39m
 [31mModuleNotFoundError[39m                       Traceback (most recent call last)
 [36mCell[39m[36m [39m[32mIn[1][39m[32m, line 5[39m
-[32m      1[39m [38;5;28;01mimport[39;00m pykep [38;5;28;01mas[39;00m pk
+[32m      1[39m [38;5;28;01mimport[39;00m pykep [38;5;28;01mas[39;00m _pk
 [32m      2[39m [38;5;28;01mimport[39;00m numpy [38;5;28;01mas[39;00m np
 [32m      3[39m [38;5;28;01mimport[39;00m heyoka [38;5;28;01mas[39;00m hy
 [32m      4[39m [38;5;28;01mimport[39;00m pygmo [38;5;28;01mas[39;00m pg

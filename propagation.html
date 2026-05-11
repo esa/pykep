@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -492,7 +492,7 @@
 <span id="propagation"></span><h1>Numerical Propagation<a class="headerlink" href="#numerical-propagation" title="Link to this heading">#</a></h1>
 <p>The backbone of numerical propagation in <cite>pykep</cite> is based on Lagrangian coefficients for
 Kepler’s  dynamics and Taylor numerical integration, as implemented in the
-<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span id="id1">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package, for all
+<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package, for all
 other cases. The state transition matrix is also available and provided, in the case of numerical integration,
 seamlessly via variational equations.</p>
 <p>The main routines are listed here:</p>
@@ -566,10 +566,10 @@ and velocity after the propagation and the flattened stm (if requested).</p>
 <h2>Taylor adaptive propagators<a class="headerlink" href="#taylor-adaptive-propagators" title="Link to this heading">#</a></h2>
 <p>In addition to the above mentioned propagators,
 Taylor adaptive integrators are offered in <cite>pykep</cite> wrapping some of the functionalities of
-<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span id="id3">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package.
+<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package.
 Their variational version is also offered (at order one) as to be able to produce stms and, where needed,
 other useful quantities. Higher order variational equations can also be obtained directly using the available dynamics and
-using <a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span id="id5">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> syntax.</p>
+using <a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> syntax.</p>
 <p>Some of the Taylor integrators are “zero hold” versions of a given dynamics, meaning that they
 consider a constant thrust vector in some frame and include the mass variation due to said thrust.
 These are intended to be used to build “zero hold” trajectory legs and direct methods to optimally
@@ -776,7 +776,7 @@ The effective potential is defined as:</p>
 </section>
 <section id="bicircular-problem">
 <h3>Bicircular Problem<a class="headerlink" href="#bicircular-problem" title="Link to this heading">#</a></h3>
-<p>Introduced by Simo’ et al. in his ‘97 paper <span id="id6">[<a class="reference internal" href="bibliography.html#id19" title="Carles Simó, Gerard Gómez, Àngel Jorba, and Josep Masdemont. The bicircular model near the triangular libration points of the rtbp. In From Newton to Chaos: modern techniques for understanding and coping with chaos in n-body dynamical systems, pages 343–370. Springer, 1995.">SimoGomezJM95</a>]</span>.</p>
+<p>Introduced by Simo’ et al. in his ‘97 paper <span class="bibtex-citation" id="id6">[<a class="reference internal" href="bibliography.html#id19" title="Carles Simó, Gerard Gómez, Àngel Jorba, and Josep Masdemont. The bicircular model near the triangular libration points of the rtbp. In From Newton to Chaos: modern techniques for understanding and coping with chaos in n-body dynamical systems, pages 343–370. Springer, 1995.">SimoGomezJM95</a>]</span>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_bcp">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_bcp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_bcp" title="Link to this definition">#</a></dt>

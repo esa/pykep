@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Low-thrust transfers via indirect methods IV (time, mean equinoctial elements) &#8212; pykep 3.0.0 documentation</title>
+    <title>Indirect methods IV (minimum time, MEE) &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -50,7 +50,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Primer Vector" href="primer_vector.html" />
-    <link rel="prev" title="Low-thrust transfers via indirect methods III (mass, fixed time, mee)" href="pontryagin_equinoctial_mass.html" />
+    <link rel="prev" title="Indirect methods III (minimum propellant, fixed time, MEE)" href="pontryagin_equinoctial_mass.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -434,7 +434,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</h1>
+    <h1>Indirect methods IV (minimum time, MEE)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -458,11 +458,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="low-thrust-transfers-via-indirect-methods-iv-time-mean-equinoctial-elements">
-<h1>Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)<a class="headerlink" href="#low-thrust-transfers-via-indirect-methods-iv-time-mean-equinoctial-elements" title="Link to this heading">#</a></h1>
-<p>In this notebook we show how to solve the <strong>minimum time</strong> Optimal Control Problem (OCP) for a low-thrust interplanetary transfer employing an indirect method and using</p>
-<p>Indirect methods follow rather mechanic developments: starting from the dynamics a TPBVP (Two-Point-Boundary-Value-Problem) is built applying Pontryagin maximum (minimum, in our case) principle (PMP). The TPBVP is defined on an augmented ODE system and solved by means of single or multiple shooting methods.</p>
-<p>In this notebook we guide, step-by-step, the reader in the application of such a method in a widely encountered case in space flight mechanics. Eventually use <code class="docutils literal notranslate"><span class="pre">pykep</span></code> native tools to quickly skip the tedious parts.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="indirect-methods-iv-minimum-time-mee">
+<h1>Indirect methods IV (minimum time, MEE)<a class="headerlink" href="#indirect-methods-iv-minimum-time-mee" title="Link to this heading">#</a></h1>
+<p>This notebook presents a minimum-time low-thrust transfer solved with an indirect method in modified equinoctial elements (MEE).</p>
+<p>As in the Cartesian time-optimal case, PMP yields full throttle in this formulation, so homotopy on <span class="math notranslate nohighlight">\(\epsilon\)</span> is not needed.</p>
+<p>For comparison, see <a class="reference internal" href="pontryagin_cartesian_time.html"><span class="std std-doc">Cartesian time-optimal notebook</span></a> and <a class="reference internal" href="pontryagin_equinoctial_mass.html"><span class="std std-doc">equinoctial mass-optimal notebook</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -496,75 +496,71 @@
 </div>
 <section id="manual-construction-of-the-tpbvp">
 <h2>Manual construction of the TPBVP<a class="headerlink" href="#manual-construction-of-the-tpbvp" title="Link to this heading">#</a></h2>
-<p>We consider the motion of a spacecraft of mass <span class="math notranslate nohighlight">\(m\)</span> with a position <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> and velocity <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> subject only to the Sun’s gravitational attraction in some inertial reference frame. The spacecraft also has an ion thruster with a specific impulse <span class="math notranslate nohighlight">\(I_{sp}\)</span> and a maximum thrust <span class="math notranslate nohighlight">\(T_{max} = c_1\)</span> independent from solar distance.
-We describe the spacecraft state via its mass <span class="math notranslate nohighlight">\(m\)</span> and the (prograde) modified equinoctial elements <span class="math notranslate nohighlight">\(\mathbf{x}=\left[p,f,g,h,k,L\right]^T\)</span> (See the <a class="reference internal" href="../elements.html"><span class="std std-doc">Elements page</span></a> for their exact definition within <code class="docutils literal notranslate"><span class="pre">pykep</span></code>).</p>
+<p>We consider a spacecraft of mass <span class="math notranslate nohighlight">\(m\)</span> under central gravity with parameter <span class="math notranslate nohighlight">\(\mu\)</span>, equipped with low-thrust propulsion of maximum thrust <span class="math notranslate nohighlight">\(T_{\max}=c_1\)</span> and effective exhaust velocity <span class="math notranslate nohighlight">\(c_2=I_{sp}g_0\)</span>.</p>
+<p>The state is <span class="math notranslate nohighlight">\([p,f,g,h,k,L,m]^T\)</span>, where <span class="math notranslate nohighlight">\([p,f,g,h,k,L]^T\)</span> are prograde modified equinoctial elements (see <a class="reference internal" href="../elements.html"><span class="std std-doc">Elements page</span></a>).</p>
+<p>The controlled dynamics are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{l}
-\dot p = \sqrt{\frac p\mu} \frac{2p}{w} i_t \cdot c_1 \frac um \\
-\dot f = \sqrt{\frac p\mu} \left\{i_r \sin L + \left[ (1+w)\cos L + f \right] \frac{i_t}{w} - (h\sin L-k\cos L)\frac{g\cdot i_n}{w} \right\} \cdot c_1\frac um \\
-\dot g = \sqrt{\frac p\mu} \left\{ - i_r\cos L + \left[ (1+w)\sin L + g \right] \frac{i_t}{w} + (h\sin L-k\cos L)\frac{f\cdot i_n}{w} \right\} \cdot c_1\frac um \\
-\dot h = \sqrt{\frac p\mu} \frac{s^2i_n}{2w}\cos L \cdot c_1\frac um \\
-\dot k = \sqrt{\frac p\mu} \frac{s^2i_n}{2w}\sin L \cdot c_1\frac um \\
-\dot L = \sqrt{\frac p\mu}\left\{\mu\left(\frac wp\right)^2 + \frac 1w\left(h\sin L-k\cos L\right) i_n\cdot c_1\frac um \right\} \\
-\dot m = - \frac{c_1}{c_2} \cdot u \\
+\dot p = \sqrt{\frac p\mu} \frac{2p}{w} i_t\, c_1 \frac{u}{m} \\
+\dot f = \sqrt{\frac p\mu} \left\{i_r \sin L + \left[ (1+w)\cos L + f \right] \frac{i_t}{w} - (h\sin L-k\cos L)\frac{g i_n}{w} \right\} c_1\frac{u}{m} \\
+\dot g = \sqrt{\frac p\mu} \left\{ - i_r\cos L + \left[ (1+w)\sin L + g \right] \frac{i_t}{w} + (h\sin L-k\cos L)\frac{f i_n}{w} \right\} c_1\frac{u}{m} \\
+\dot h = \sqrt{\frac p\mu} \frac{s^2 i_n}{2w}\cos L\, c_1\frac{u}{m} \\
+\dot k = \sqrt{\frac p\mu} \frac{s^2 i_n}{2w}\sin L\, c_1\frac{u}{m} \\
+\dot L = \sqrt{\frac p\mu}\left\{\mu\left(\frac wp\right)^2 + \frac{1}{w}\left(h\sin L-k\cos L\right)i_n c_1\frac{u}{m} \right\} \\
+\dot m = -\frac{c_1}{c_2}u
 \end{array}
 \end{split}\]</div>
-<p>where, <span class="math notranslate nohighlight">\(w = 1 + f\cos L + g\sin L\)</span>, <span class="math notranslate nohighlight">\(s^2 = 1 + h^2 + k^2\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf i}_\tau = [i_r, i_t, i_n]\)</span> are the radial, tangential and normal components of thrust direction, while <span class="math notranslate nohighlight">\(u \in [0,1]\)</span> is the throttle. As in the Cartesian case, <span class="math notranslate nohighlight">\(T_{max}=c_1\)</span> and <span class="math notranslate nohighlight">\(I_{sp}g_0 = c_2\)</span>. The gravitational parameter is denoted with <span class="math notranslate nohighlight">\(\mu\)</span>. We can rewrite the above equations in a more compact form:</p>
+<p>with <span class="math notranslate nohighlight">\(w = 1 + f\cos L + g\sin L\)</span>, <span class="math notranslate nohighlight">\(s^2 = 1 + h^2 + k^2\)</span>, control constraints <span class="math notranslate nohighlight">\(0\le u\le1\)</span>, and <span class="math notranslate nohighlight">\(\hat{\mathbf i}_{\tau}=[i_r,i_t,i_n]^T\)</span> such that <span class="math notranslate nohighlight">\(\|\hat{\mathbf i}_{\tau}\|=1\)</span>.</p>
+<p>A compact form is</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \left\{
 \begin{array}{l}
-\dot {\mathbf x} =  \frac {c_1 u(t)} m \mathbf B(\mathbf x)  \mathbf{\hat i_\tau}  + \mathbf D(\mathbf x) \\
-\dot m = -c_2 u(t)
+\dot{\mathbf x} = \frac{c_1u(t)}{m}\mathbf B(\mathbf x)\hat{\mathbf i}_{\tau} + \mathbf D(\mathbf x) \\
+\dot m = -\frac{c_1}{c_2}u(t)
 \end{array}
-\right.
+\right.,
 \end{split}\]</div>
-<p>where:</p>
+<p>where</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\sqrt{\frac \mu p} \mathbf B(\mathbf x) = 
+\sqrt{\frac{\mu}{p}}\mathbf B(\mathbf x)=
 \left[
 \begin{array}{ccc}
-0 &amp; \frac {2p}w &amp; 0 \\
- \sin L &amp; [(1+w)\cos L + f]\frac 1w  &amp; - \frac gw (h\sin L-k\cos L)  \\
-- \cos L &amp; [(1+w)\sin L + g]\frac 1w  &amp; \frac fw (h\sin L-k\cos L) \\
-0 &amp; 0  &amp; \frac 1w \frac{s^2}{2}\cos L \\
-0 &amp; 0  &amp; \frac 1w \frac{s^2}{2}\sin L \\
-0 &amp; 0  &amp; \frac 1w (h\sin L - k\cos L) \\
+0 &amp; \frac{2p}{w} &amp; 0 \\
+\sin L &amp; \frac{(1+w)\cos L + f}{w} &amp; -\frac{g}{w}(h\sin L-k\cos L) \\
+-\cos L &amp; \frac{(1+w)\sin L + g}{w} &amp; \frac{f}{w}(h\sin L-k\cos L) \\
+0 &amp; 0 &amp; \frac{s^2}{2w}\cos L \\
+0 &amp; 0 &amp; \frac{s^2}{2w}\sin L \\
+0 &amp; 0 &amp; \frac{1}{w}(h\sin L-k\cos L)
 \end{array}
-\right]
+\right],
 \end{split}\]</div>
-<p>and:</p>
+<p>and</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf D(\mathbf x) = 
-\left[
-\begin{array}{cccccc}
-0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \sqrt{\frac{\mu}{p^3}}w^2
-\end{array}
-\right]^T
+\mathbf D(\mathbf x)=\left[0,0,0,0,0,\sqrt{\frac{\mu}{p^3}}w^2\right]^T.
 \]</div>
-<p>Let us use <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> to work with the above equations. We will use the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> library to define the state variables, the control and the time variable.
-We also introduce as many auxiliary functions <span class="math notranslate nohighlight">\(\mathbf \lambda\)</span> (the co-states) are there are state variables.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">heyoka</span></code>, we now define symbolic variables for states, controls, and costates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The state</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># State variables</span>
 <span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
-<span class="c1"># The costate</span>
+<span class="c1"># Costate variables</span>
 <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span>
     <span class="s2">&quot;lp&quot;</span><span class="p">,</span> <span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;lg&quot;</span><span class="p">,</span> <span class="s2">&quot;lh&quot;</span><span class="p">,</span> <span class="s2">&quot;lk&quot;</span><span class="p">,</span> <span class="s2">&quot;lL&quot;</span><span class="p">,</span> <span class="s2">&quot;lm&quot;</span>
 <span class="p">)</span>
-<span class="c1"># The controls</span>
+<span class="c1"># Control variables: throttle and RTN thrust direction</span>
 <span class="n">u</span><span class="p">,</span> <span class="n">i_r</span><span class="p">,</span> <span class="n">i_t</span><span class="p">,</span> <span class="n">i_n</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;ir&quot;</span><span class="p">,</span> <span class="s2">&quot;it&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>As to write comfortably the various developments, we introduce some useful expressions and regroup some of our variable into 3D vectors:</p>
+<p>To keep the derivation readable, we define compact expressions and vectorized groupings.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Useful expressions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reusable scalar expressions</span>
 <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">f</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 <span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">k</span>
 <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -604,16 +600,16 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>We introduce the Hamiltonian (<span class="math notranslate nohighlight">\(\mathbf x\)</span> is the whole state, <span class="math notranslate nohighlight">\(\mathbf \lambda\)</span> is the whole co-state, and <span class="math notranslate nohighlight">\(\mathbf u\)</span> represent are all the controls),</p>
+<p>We introduce the Hamiltonian (<span class="math notranslate nohighlight">\(\mathbf x\)</span> is the full state and <span class="math notranslate nohighlight">\(\boldsymbol\lambda\)</span> the full costate):</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal H(\mathbf x, \mathbf \lambda, \mathbf u) = \mathbf \lambda_x \cdot \mathbf f_x + \lambda_m  f_m + \lambda_0 \frac {c_1}{c_2}
+\mathcal H(\mathbf x, \boldsymbol\lambda, \mathbf u) = \boldsymbol\lambda_x\cdot\mathbf f_x + \lambda_m f_m + \lambda_0\frac{c_1}{c_2}.
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hamiltonian</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time-optimal Hamiltonian</span>
 <span class="n">H_full</span> <span class="o">=</span> <span class="p">(</span><span class="n">lx</span> <span class="o">@</span> <span class="n">fx</span> <span class="o">+</span> <span class="n">lm</span> <span class="o">*</span> <span class="n">fm</span> <span class="o">+</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="c1"># Switching function (this must be found by hand)</span>
+<span class="c1"># Switching function rho (negative in this setting, giving full throttle)</span>
 <span class="n">BTlam</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="nd">@lx</span> 
 <span class="n">BTlam_norm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">BTlam</span> <span class="o">@</span> <span class="n">BTlam</span><span class="p">)</span>
 <span class="n">rho</span> <span class="o">=</span> <span class="o">-</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">BTlam_norm</span> <span class="o">/</span> <span class="n">m</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">lm</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
@@ -621,7 +617,8 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>Note how the various constants of our problem are considered as heyoka parameters in the following order: <span class="math notranslate nohighlight">\([\mu, c_1, c_2, \epsilon, \lambda_0]\)</span>, <span class="math notranslate nohighlight">\(c_1 = T_{max}\)</span>, <span class="math notranslate nohighlight">\(c_2 = v_{eff}\)</span>. It is to be noted here that the continuation parameter <span class="math notranslate nohighlight">\(\epsilon\)</span> is actually not in here and that also <span class="math notranslate nohighlight">\(\lambda_0\)</span> plays no role in the dynamics.</p>
+<p>Constants are passed as <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters in the order <span class="math notranslate nohighlight">\([\mu, c_1, c_2, \epsilon, \lambda_0]\)</span>, with <span class="math notranslate nohighlight">\(c_1=T_{\max}\)</span> and <span class="math notranslate nohighlight">\(c_2=I_{sp}g_0\)</span>.</p>
+<p>As in the Cartesian time-optimal notebook, <span class="math notranslate nohighlight">\(\epsilon\)</span> is retained only for API consistency with the mass-optimal formulation and does not enter the objective in this case. <span class="math notranslate nohighlight">\(\lambda_0\)</span> can be used for normalization but does not change the nature of the minimum-time objective.</p>
 <p>And write the resulting Hamiltonian system:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -644,12 +641,13 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>The minimum principle from Pontryagin requires to find the mimimum in the admissible control space of the Hamiltonian:</p>
+<p>Pontryagin’s minimum principle requires pointwise minimization over admissible controls</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf u^* = \argmin_{\mathbf u \in \mathcal U} \mathcal H(\mathbf x, \mathbf \lambda, \mathbf u)
+\mathbf u^*(t)=\arg\min_{\mathbf u\in\mathcal U}\mathcal H(\mathbf x,\boldsymbol\lambda,\mathbf u),
 \]</div>
-<p>which, in our case, results in:</p>
+<p>with <span class="math notranslate nohighlight">\(\mathcal U=\{(u,\hat{\mathbf i}_{\tau})\,|\,0\le u\le 1,\ \|\hat{\mathbf i}_{\tau}\|=1\}\)</span>.</p>
+<p>For this time-optimal problem, the minimizer is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We apply Pontryagin minimum principle (primer vector and u^* = 2eps / (rho + 2eps + sqrt(rho^2+4*eps^2)))</span>
@@ -663,7 +661,7 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>Thanks to the above relations, the control is now a continuous differentiable function of the states and costates and thus the dynamics as well as the Hamiltonian can be reworked:</p>
+<p>After substitution, controls become explicit functions of state and costate and the augmented dynamics close in <span class="math notranslate nohighlight">\((\mathbf x,\boldsymbol\lambda)\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rhs</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">argmin_H_full</span><span class="p">)</span>
@@ -675,22 +673,22 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>The following code block thus instantiate the heyoka integrator as well as other convenience functions.</p>
+<p>The next block instantiates the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> integrator and helper evaluators used for the shooting implementation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We compile the Hamiltonian into a C function (to be called with pars = [mu, c1, c2, eps, l0], but epsilon does not really matter)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compile Hamiltonian evaluator (pars = [mu, c1, c2, eps, lambda0]; eps unused here)</span>
 <span class="n">H_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">H</span><span class="p">],</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="p">])</span>
-<span class="c1"># We compile the thrust direction</span>
+<span class="c1"># Compile optimal throttle evaluator</span>
 <span class="n">u_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span>
     <span class="p">[</span><span class="n">argmin_H_full</span><span class="p">[</span><span class="n">u</span><span class="p">]],</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="p">]</span>
 <span class="p">)</span>
-<span class="c1"># We compile the SF</span>
+<span class="c1"># Compile switching-function evaluator</span>
 <span class="n">rho_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">rho</span><span class="p">],</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="p">])</span>
-<span class="c1"># We compile also the thrust direction</span>
+<span class="c1"># Compile optimal RTN thrust-direction evaluator</span>
 <span class="n">i_vers_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span>
     <span class="p">[</span><span class="n">argmin_H_full</span><span class="p">[</span><span class="n">i_r</span><span class="p">],</span> <span class="n">argmin_H_full</span><span class="p">[</span><span class="n">i_t</span><span class="p">],</span> <span class="n">argmin_H_full</span><span class="p">[</span><span class="n">i_n</span><span class="p">]],</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="p">]</span>
 <span class="p">)</span>
-<span class="c1"># We assemble the Taylor adaptive integrator</span>
+<span class="c1"># Assemble Taylor adaptive integrator</span>
 <span class="n">full_state</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="p">]</span>
 <span class="n">sys</span> <span class="o">=</span> <span class="p">[(</span><span class="n">var</span><span class="p">,</span> <span class="n">dvar</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">full_state</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)]</span>
 <span class="n">ta</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">14</span><span class="p">,</span> <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -711,8 +709,8 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </section>
 <section id="constructing-the-tpbvp-using-pykep">
 <h2>Constructing the TPBVP using pykep<a class="headerlink" href="#constructing-the-tpbvp-using-pykep" title="Link to this heading">#</a></h2>
-<p>For the specific case outlined above pykep offers a convenient series of pre-assembled functions and objects which basically construct the same objects as above.</p>
-<p>These can turn out to be useful or analysis of specific cases, but in general they are used internally by various UDP provided in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> hence the user in most cases does not need to care.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pykep</span></code> provides pre-assembled components equivalent to the manually derived objects above.</p>
+<p>In practice, these are preferred for robust workflows, while manual derivations remain useful for understanding and debugging.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The Taylor integrator</span>
@@ -736,9 +734,8 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </section>
 <section id="solving-in-single-shooting">
 <h2>Solving in single shooting<a class="headerlink" href="#solving-in-single-shooting" title="Link to this heading">#</a></h2>
-<p>All the code above was merely showed for tutorial purposes.</p>
-<p>Now we scratch all of that and use dedicated <code class="docutils literal notranslate"><span class="pre">pykep</span></code> clsses to construct, based on the TPVP described in detail above, a shoting problem.</p>
-<p>We use, as a test case, the very same simple transfer used in a previous <a class="reference internal" href="pontryagin_equinoctial_mass.html"><span class="std std-doc">notebook on the mass optimal</span></a>. The transfer is simple enough to allow fast convergence.</p>
+<p>The previous section was primarily pedagogical. From here onward, we use dedicated <code class="docutils literal notranslate"><span class="pre">pykep</span></code> classes to assemble and solve the shooting problem.</p>
+<p>As a test case, we use the same baseline transfer as in the <a class="reference internal" href="pontryagin_equinoctial_mass.html"><span class="std std-doc">equinoctial mass-optimal notebook</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testcase 1 </span>
@@ -790,20 +787,23 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>To solve this problem, we can use SPQ methods, interior point methods as well as root finders. In this notebook, we make use of the widely available IPOPT interior-point method and of the minpack routines. Both are open-source initiatives and require no license.</p>
-<p>IPOPT is natively available in pagmo, thus we can instantiate it as:</p>
+<p>The resulting TPBVP can be solved with interior-point optimizers or root-finding methods on boundary residuals.</p>
+<p>Here we use IPOPT (via <code class="docutils literal notranslate"><span class="pre">pagmo</span></code>) and a MINPACK wrapper (via <code class="docutils literal notranslate"><span class="pre">scipy.optimize.root</span></code>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ip</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">)</span>  <span class="c1"># Change the relative convergence tolerance</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Change the maximum iterations</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Makes Ipopt unverbose</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">)</span>  <span class="c1"># Relative convergence tolerance</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Maximum iterations</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Suppress IPOPT console output</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
+    <span class="s2">&quot;sb&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span>
+<span class="p">)</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
     <span class="s2">&quot;nlp_scaling_method&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span>
-<span class="p">)</span>  <span class="c1"># Removes any scaling made in auto mode</span>
+<span class="p">)</span>  <span class="c1"># Disable IPOPT automatic scaling</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
     <span class="s2">&quot;mu_strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;adaptive&quot;</span>
-<span class="p">)</span>  <span class="c1"># Alternative is to tune the initial mu value</span>
+<span class="p">)</span>  <span class="c1"># Adaptive barrier update strategy</span>
 <span class="n">ipopt</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -839,7 +839,7 @@ We also introduce as many auxiliary functions <span class="math notranslate nohi
 </div>
 </div>
 </div>
-<p>To solve the problem here we use a multi-start teachnique, since this is in general a good practice. In this specific case convergence is immediate and multiple starts are not strictly necessary.</p>
+<p>We use a multi-start strategy, which is generally good practice for indirect shooting due to sensitivity to initialization. In this easy case, multiple starts are mainly used to report robustness.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multistart</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
@@ -945,7 +945,7 @@ Number of successes: 9 over 10 trials (90.0 %)
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</p>
+        <p class="prev-next-title">Indirect methods III (minimum propellant, fixed time, MEE)</p>
       </div>
     </a>
     <a class="right-next"

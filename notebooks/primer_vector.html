@@ -50,7 +50,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Surrogate Primer Vector" href="surrogate_primer_vector.html" />
-    <link rel="prev" title="Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)" href="pontryagin_equinoctial_time.html" />
+    <link rel="prev" title="Indirect methods IV (minimum time, MEE)" href="pontryagin_equinoctial_time.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -450,7 +450,7 @@
 <h1>Primer Vector<a class="headerlink" href="#primer-vector" title="Link to this heading">#</a></h1>
 <p>In this notebook we revisit the primer vector theory from Lawden from the lens of first order variations. We then construct manually, for a specific test case, the state transition matrices needed to call <a class="reference internal" href="../trajopt.html#pykep.trajopt.primer_vector" title="pykep.trajopt.primer_vector"><code class="xref py py-func docutils literal notranslate"><span class="pre">pykep.trajopt.primer_vector()</span></code></a> and show
 its use. The same plot can also be obtained, without having to go through the math intensive developments, using the <a class="reference internal" href="../trajopt.html#pykep.trajopt.pl2pl_N_impulses.plot_primer_vector" title="pykep.trajopt.pl2pl_N_impulses.plot_primer_vector"><code class="xref py py-func docutils literal notranslate"><span class="pre">pykep.trajopt.pl2pl_N_impulses.plot_primer_vector()</span></code></a> method of the Multiple Impulse Transfer UDP <code class="docutils literal notranslate"><span class="pre">pykep.trajopt.pl2pl_N_impulses</span></code></p>
-<p>Classically, the result of the primer vector is derived using Pontryagin maximum principle, here we present an original derivation building on the work from Bauregard, Acciarini and Izzo <span id="id1">[<a class="reference internal" href="../bibliography.html#id14" title="Laurent Beauregard, Dario Izzo, and Giacomo Acciarini. Breaking traditions: introducing a surrogate Primer Vector in non Keplerian dynamics. arXiv preprint arXiv:2405.18903, 2024.">BIA24</a>]</span>, which allows also to extend the primer vector to new, previously untreated, cases (see the notebook <a class="reference internal" href="surrogate_primer_vector.html"><span class="std std-doc">A primer vector surrogate</span></a>).</p>
+<p>Classically, the result of the primer vector is derived using Pontryagin maximum principle, here we present an original derivation building on the work from Bauregard, Acciarini and Izzo <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id14" title="Laurent Beauregard, Dario Izzo, and Giacomo Acciarini. Breaking traditions: introducing a surrogate Primer Vector in non Keplerian dynamics. arXiv preprint arXiv:2405.18903, 2024.">BIA24</a>]</span>, which allows also to extend the primer vector to new, previously untreated, cases (see the notebook <a class="reference internal" href="surrogate_primer_vector.html"><span class="std std-doc">A primer vector surrogate</span></a>).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The developments are here shown in details as they can be extended to more generic cases that use different dynamics and number of impulses. The user must in that case provide the state ransition matrices and DVs on a time grid as constructed below.</p>
@@ -683,7 +683,7 @@ We need to propagate at each impulse, add the impulse, then proceed. The various
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fb51ed0928a26eb8add373a4645fe77b8089190ce8a44ba26623dc79786b2596.png" src="../_images/fb51ed0928a26eb8add373a4645fe77b8089190ce8a44ba26623dc79786b2596.png" />
+<img alt="../_images/0c43051247d676609d5b4d7eeef0c409e7e59e1d852ed233e6d78a4e34ad7871.png" src="../_images/0c43051247d676609d5b4d7eeef0c409e7e59e1d852ed233e6d78a4e34ad7871.png" />
 </div>
 </div>
 <p>We are ready to compute the primer vector.</p>
@@ -717,10 +717,10 @@ We need to propagate at each impulse, add the impulse, then proceed. The various
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fd59a164050&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f596e20c830&gt;
 </pre></div>
 </div>
-<img alt="../_images/5f534c4440fe7f2346f51dc4efd00a32c3a85f428eef0000ddaab99bb655b607.png" src="../_images/5f534c4440fe7f2346f51dc4efd00a32c3a85f428eef0000ddaab99bb655b607.png" />
+<img alt="../_images/7de8479becaf5a3f8fc1d7739ed453e1b5f5fe69a1226042476f9bed75d89b04.png" src="../_images/7de8479becaf5a3f8fc1d7739ed453e1b5f5fe69a1226042476f9bed75d89b04.png" />
 </div>
 </div>
 <p>In this case the trajectory looks quite optimal as shown by the primer vector magnitude being consistently less than one.
@@ -745,7 +745,7 @@ The fact this is not the case at the starting and ending conditions, hints to th
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</p>
+        <p class="prev-next-title">Indirect methods IV (minimum time, MEE)</p>
       </div>
     </a>
     <a class="right-next"

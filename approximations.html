@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -452,7 +452,7 @@ that can be used as surrogates of the actual complete computation. These can be 
 a large number of possible transfers, to then focus on the most promising ones.
 Many of these approximations have been used and developed during the various edition of the
 [GTOC competition](<a class="reference external" href="https://sophia.estec.esa.int/gtoc_portal/">https://sophia.estec.esa.int/gtoc_portal/</a>) and can
-be found in our papers, e.g. <span id="id1">[<a class="reference internal" href="bibliography.html#id15" title="Daniel Hennes, Dario Izzo, and Damon Landau. Fast approximators for optimal low-thrust hops between main belt asteroids. In 2016 IEEE Symposium Series on Computational Intelligence (SSCI), 1–7. IEEE, 2016.">HIL16</a>]</span>, <span id="id2">[<a class="reference internal" href="bibliography.html#id16" title="Dario Izzo, Marcus Märtens, Laurent Beauregard, Max Bannach, Giacomo Acciarini, Emmanuel Blazquez, Alexander Hadjiivanov, Jai Grover, Gernot Heißel, Yuri Shimane, and others. Asteroid mining: ACT&amp;Friends’ results for the GTOC12 problem. Astrodynamics, 9(1):19–40, 2025.">IMartensB+25</a>]</span>.</p>
+be found in our papers, e.g. <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliography.html#id15" title="Daniel Hennes, Dario Izzo, and Damon Landau. Fast approximators for optimal low-thrust hops between main belt asteroids. In 2016 IEEE Symposium Series on Computational Intelligence (SSCI), 1–7. IEEE, 2016.">HIL16</a>]</span>, <span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliography.html#id16" title="Dario Izzo, Marcus Märtens, Laurent Beauregard, Max Bannach, Giacomo Acciarini, Emmanuel Blazquez, Alexander Hadjiivanov, Jai Grover, Gernot Heißel, Yuri Shimane, and others. Asteroid mining: ACT&amp;Friends’ results for the GTOC12 problem. Astrodynamics, 9(1):19–40, 2025.">IMartensB+25</a>]</span>.</p>
 <section id="basic-transfers">
 <h2>Basic transfers<a class="headerlink" href="#basic-transfers" title="Link to this heading">#</a></h2>
 <p>Sometimes basic ideal transfers models can be used to get some bounds or information on the possible
@@ -524,7 +524,7 @@ difficulty of a certain orbital geometry.</p>
 <p>If we are computing the low-thrust transfer between two arbitrary orbits and we know the starting and final time of arrival,
 these approximations can be used to compute the maximum initial mass (MIM) that will result in a feasible transfer.
 In other words if our spacecraft is fat (heavier than the MIM), the transfer will not be feasible.
-In general the best way to approximate the MIM is via neural method and machine learning <span id="id3">[<a class="reference internal" href="bibliography.html#id17" title="Giacomo Acciarini, Laurent Beauregard, and Dario Izzo. Computing low-thrust transfers in the asteroid belt, a comparison between astrodynamical manipulations and a machine learning approach. arXiv preprint arXiv:2405.18918, 2024.">ABI24</a>]</span>,
+In general the best way to approximate the MIM is via neural method and machine learning <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliography.html#id17" title="Giacomo Acciarini, Laurent Beauregard, and Dario Izzo. Computing low-thrust transfers in the asteroid belt, a comparison between astrodynamical manipulations and a machine learning approach. arXiv preprint arXiv:2405.18918, 2024.">ABI24</a>]</span>,
 but that requires learning from a vast database of precomputed trajectories and sometimes we do not have that luxury.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.mim_from_hop">
@@ -693,7 +693,7 @@ that transfer in low-thrust.</p>
 <h2>Phasing indicators<a class="headerlink" href="#phasing-indicators" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.utils.knn">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planet_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orbital'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">pk.AU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">pk.EARTH_VELOCITY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.knn" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">planet_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orbital'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">_pk.AU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">_pk.EARTH_VELOCITY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">180.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.knn" title="Link to this definition">#</a></dt>
 <dd><p>The class finds the k-nearest neighbours to a given planet
 at some epoch from a list of planets.
 The idea being that under some definition of “closeness”

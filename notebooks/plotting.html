@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -487,7 +487,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/62bd1e8da0ce4eb00a64316eca731caccc1fb802f2d675d9b39b90c3995ae44d.png" src="../_images/62bd1e8da0ce4eb00a64316eca731caccc1fb802f2d675d9b39b90c3995ae44d.png" />
+<img alt="../_images/30bd9e5088d10dfb14fe28882dd0ccd6d2ad75efe768091794a63dc5c8a8038c.png" src="../_images/30bd9e5088d10dfb14fe28882dd0ccd6d2ad75efe768091794a63dc5c8a8038c.png" />
 </div>
 </div>
 <p>We may then add the Sun and a few planets easily … in the code below we will make use of the JPL low precision ephemerides, and thus use the <a class="reference internal" href="../udpla.html#pykep.udpla.jpl_lp" title="pykep.udpla.jpl_lp"><code class="xref py py-class docutils literal notranslate"><span class="pre">jpl_lp</span></code></a> User Defined Planet, but any other udpla would work.</p>
@@ -527,7 +527,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5b0a28fda0256692f551a04fd349dacd588f430cf9cc8a4828e5076f908a5e7e.png" src="../_images/5b0a28fda0256692f551a04fd349dacd588f430cf9cc8a4828e5076f908a5e7e.png" />
+<img alt="../_images/4299e1e179e8457b417914a86d8fe36125332d49391109e7067638b0540a0900.png" src="../_images/4299e1e179e8457b417914a86d8fe36125332d49391109e7067638b0540a0900.png" />
 </div>
 </div>
 <p>In some cases it may be useful to add solar system planets at once to a plot. The <a class="reference internal" href="../plot.html#pykep.plot.add_solar_system" title="pykep.plot.add_solar_system"><code class="xref py py-class docutils literal notranslate"><span class="pre">add_solar_system</span></code></a> does just that:</p>
@@ -547,7 +547,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8c6ef87a8af5cd2d55292be690ca9ccbbb340b65381f8928c56d391618dafac5.png" src="../_images/8c6ef87a8af5cd2d55292be690ca9ccbbb340b65381f8928c56d391618dafac5.png" />
+<img alt="../_images/cd5aa5a787c12ba8d8d32233d186fc8fd3a41aaa64f00c8e1fbe5c497947f035.png" src="../_images/cd5aa5a787c12ba8d8d32233d186fc8fd3a41aaa64f00c8e1fbe5c497947f035.png" />
 </div>
 </div>
 </section>
@@ -594,7 +594,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/452d719a750c0045e81556aaaae8f9840c6c9609d00f0b597d0183c768f653c3.png" src="../_images/452d719a750c0045e81556aaaae8f9840c6c9609d00f0b597d0183c768f653c3.png" />
+<img alt="../_images/381908172b247b1bd1cc478aeec4b2cb1db937ad435341e6d26b302c330d21f3.png" src="../_images/381908172b247b1bd1cc478aeec4b2cb1db937ad435341e6d26b302c330d21f3.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -640,7 +640,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a5aaca9108fb6502b30c69749521c1077813efad20a18181c52637de00af58a3.png" src="../_images/a5aaca9108fb6502b30c69749521c1077813efad20a18181c52637de00af58a3.png" />
+<img alt="../_images/d17099d7f79d6d9d9c10dab00db168c3ccc2f803babba0dc35268fc2b3b2199f.png" src="../_images/d17099d7f79d6d9d9c10dab00db168c3ccc2f803babba0dc35268fc2b3b2199f.png" />
 </div>
 </div>
 </section>
@@ -684,7 +684,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3ab4ee460badd400547bdd1e9a4a93da56071ea1493e85492f9c9e93bd11eaae.png" src="../_images/3ab4ee460badd400547bdd1e9a4a93da56071ea1493e85492f9c9e93bd11eaae.png" />
+<img alt="../_images/e1c78d204d7a14ea91d76500a74749c2131881ba54b8c0977255e138bd57ee5b.png" src="../_images/e1c78d204d7a14ea91d76500a74749c2131881ba54b8c0977255e138bd57ee5b.png" />
 </div>
 </div>
 </section>

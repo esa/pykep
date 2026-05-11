@@ -201,7 +201,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -211,10 +211,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Surrogate Primer Vector</a></li>
 
@@ -464,7 +464,7 @@ to a trajectory where we can control one single existing impulse (as opposed to 
 <p>While the developments are similar, please note that the index <span class="math notranslate nohighlight">\(k\)</span> was before reserved to indicate the only node (of three, ijk) where no finite impulse was given. In this developments it indicates, instead, the only node (of three, ijk) where a finite impulse is given.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The developments as well as the test case used are taken from the work from Bauregard, Acciarini and Izzo <span id="id1">[<a class="reference internal" href="../bibliography.html#id14" title="Laurent Beauregard, Dario Izzo, and Giacomo Acciarini. Breaking traditions: introducing a surrogate Primer Vector in non Keplerian dynamics. arXiv preprint arXiv:2405.18903, 2024.">BIA24</a>]</span>.
+<p>The developments as well as the test case used are taken from the work from Bauregard, Acciarini and Izzo <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id14" title="Laurent Beauregard, Dario Izzo, and Giacomo Acciarini. Breaking traditions: introducing a surrogate Primer Vector in non Keplerian dynamics. arXiv preprint arXiv:2405.18903, 2024.">BIA24</a>]</span>.
 The developments are shown in details as they can be extended to more generic cases that use different dynamics and number of impulses. The user must in that case provide the state ransition matrices and DVs on a time grid as constructed below.</p>
 <p class="rubric" id="theory-and-notation">Theory and notation</p>
 <p>a) Consider the following definition of the State Transition Matrix, <span class="math notranslate nohighlight">\(\mathbf M_{fs}\)</span>:</p>
@@ -677,10 +677,10 @@ Larger then one! -&gt; Trajectory can be improved
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f2a45bafa10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa35f5141a0&gt;
 </pre></div>
 </div>
-<img alt="../_images/c04d324e1afff12a114f9068b83d4996cb467179249107f8999b6cd2edc9e09d.png" src="../_images/c04d324e1afff12a114f9068b83d4996cb467179249107f8999b6cd2edc9e09d.png" />
+<img alt="../_images/73295af66ef266bae2e8485db766abab49fb727ee37d8bf9483299f2339688bf.png" src="../_images/73295af66ef266bae2e8485db766abab49fb727ee37d8bf9483299f2339688bf.png" />
 </div>
 </div>
 <p>Revealing all areas where adding two impulses would improve the trajectory leaving all boundary conditions unchanged.</p>
@@ -772,8 +772,8 @@ Larger then one! -&gt; Trajectory can be improved
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multi-start:
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.6324555320336755
-The best solution found has a DV of 6.32456e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.3105384590876521
+The best solution found has a DV of 3.10538e-01
 </pre></div>
 </div>
 </div>
@@ -802,7 +802,7 @@ The best solution found has a DV of 6.32456e-01
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ff396d1ce90bc17d3b8ac3f1811f263019cc4dcd178cbd957a1c6954d0357f1d.png" src="../_images/ff396d1ce90bc17d3b8ac3f1811f263019cc4dcd178cbd957a1c6954d0357f1d.png" />
+<img alt="../_images/de8fa81cee60e83620f07681aa1cad8b7d98edb55f27bc9a5f85a7f17ccaaa3a.png" src="../_images/de8fa81cee60e83620f07681aa1cad8b7d98edb55f27bc9a5f85a7f17ccaaa3a.png" />
 </div>
 </div>
 <p>The <strong>surrogate primer vector</strong> correctly had us try to add impulses and, in this case, halved the needed <span class="math notranslate nohighlight">\(\Delta V\)</span>!</p>

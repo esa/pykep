@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Low-thrust transfers via indirect methods I (mass, fixed time) &#8212; pykep 3.0.0 documentation</title>
+    <title>Indirect methods I (minimum propellant, fixed time) &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/pontryagin_cartesian_mass';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Low-thrust transfers via indirect methods II (time)" href="pontryagin_cartesian_time.html" />
+    <link rel="next" title="Indirect methods II (minimum time, Cartesian)" href="pontryagin_cartesian_time.html" />
     <link rel="prev" title="Multiple impulses: planet to planet transfer" href="udp_pl2pl_N_impulses.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -434,7 +434,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Low-thrust transfers via indirect methods I (mass, fixed time)</h1>
+    <h1>Indirect methods I (minimum propellant, fixed time)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -444,6 +444,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reusable-workflow-for-other-ocps">Reusable workflow (for other OCPs)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-construction-of-the-tpbvp">Manual construction of the TPBVP</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-the-tpbvp-using-pykep">Constructing the TPBVP using pykep</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-in-single-shooting">Solving in single shooting</a></li>
@@ -461,11 +462,24 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="low-thrust-transfers-via-indirect-methods-i-mass-fixed-time">
-<h1>Low-thrust transfers via indirect methods I (mass, fixed time)<a class="headerlink" href="#low-thrust-transfers-via-indirect-methods-i-mass-fixed-time" title="Link to this heading">#</a></h1>
-<p>In this notebook we show how to solve the minimum mass Optimal Control Problem (OCP) for a fixed time low-thrust interplanetary transfer employing an indirect method.</p>
-<p>Indirect methods are follow rather mechanic developments: starting from the dynamics a TPBVP (Two-Point-Boundary-Value-Problem) is built applying Pontryagin maximum (minimum, in our case) principle. The TPBVP is defined on an augmented ODE system and solved by means of single or multiple shooting methods.</p>
-<p>In this notebook we guide, step-by-step, the reader in the application of such a method in a widely encountered case in space flight mechanics, the low-thrust minimum time problem. Eventually use <code class="docutils literal notranslate"><span class="pre">pykep</span></code> native tools to quickly skip the tedious parts.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="indirect-methods-i-minimum-propellant-fixed-time">
+<h1>Indirect methods I (minimum propellant, fixed time)<a class="headerlink" href="#indirect-methods-i-minimum-propellant-fixed-time" title="Link to this heading">#</a></h1>
+<p>This notebook presents a fixed-time, minimum-propellant low-thrust transfer solved with an indirect method.</p>
+<p>We derive a TPBVP (Two-Point Boundary Value Problem) from Pontryagin’s Minimum Principle (PMP), solve it with single shooting, and then introduce continuation strategies for harder cases.</p>
+<p>The goal is not only to solve one transfer, but to provide a reusable workflow that can be adapted to other optimal-control problems by changing dynamics, boundary conditions, and optimality conditions.</p>
+<p>Most symbolic and differentiation steps can be automated using <code class="docutils literal notranslate"><span class="pre">heyoka</span></code>, and many of the resulting building blocks are already exposed in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> for production use.</p>
+<p>A companion tutorial for the time-optimal variant is available here: <a class="reference internal" href="pontryagin_cartesian_time.html"><span class="std std-doc">time-optimal case</span></a>.</p>
+<section id="reusable-workflow-for-other-ocps">
+<h2>Reusable workflow (for other OCPs)<a class="headerlink" href="#reusable-workflow-for-other-ocps" title="Link to this heading">#</a></h2>
+<p>Use the same pattern when adapting this strategy to a different optimization problem:</p>
+<ol class="arabic simple">
+<li><p>Define dynamics, boundary conditions, and admissible controls.</p></li>
+<li><p>Build the Hamiltonian and derive the minimizing control law (and switching function).</p></li>
+<li><p>Substitute optimal controls to obtain a closed state-costate TPBVP.</p></li>
+<li><p>Solve with single shooting plus multi-start.</p></li>
+<li><p>Add continuation on a homotopy parameter when direct convergence fails.</p></li>
+<li><p>Validate feasibility, control bounds, and Hamiltonian consistency before interpreting optimality.</p></li>
+</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -480,43 +494,44 @@
 </div>
 </div>
 </div>
+</section>
 <section id="manual-construction-of-the-tpbvp">
 <h2>Manual construction of the TPBVP<a class="headerlink" href="#manual-construction-of-the-tpbvp" title="Link to this heading">#</a></h2>
-<p>We consider the dynamics:</p>
+<p>We consider the dynamics</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \left\{
 \begin{array}{l}
-\dot{\mathbf r}  = \mathbf v \\
-\dot{\mathbf v} = -\frac{\mu}{r^3}\mathbf r + c_1 \frac um \hat{\mathbf i}\\
-\dot{m} = - \frac{c_1}{c_2} u
+\dot{\mathbf r} = \mathbf v \\
+\dot{\mathbf v} = -\frac{\mu}{r^3}\mathbf r + c_1\frac{u}{m}\hat{\mathbf i} \\
+\dot{m} = -\frac{c_1}{c_2}u
 \end{array}
-\right.
+\right.,
 \end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(c_1=T_{max}\)</span> is the maximum thrust that the spacecarft propulsion can deliver, while <span class="math notranslate nohighlight">\(c_2 = I_{sp} g_0\)</span>.</p>
-<p>We also introduce as many auxiliary functions <span class="math notranslate nohighlight">\(\mathbf \lambda\)</span> (the co-states) are there are state variables. Using <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> as a symbolic manipulator, let us introduce symbols for all the time dependent quantities:</p>
+<p>with control constraints <span class="math notranslate nohighlight">\(0 \le u \le 1\)</span> and <span class="math notranslate nohighlight">\(\|\hat{\mathbf i}\| = 1\)</span>. Here <span class="math notranslate nohighlight">\(c_1 = T_{\max}\)</span> and <span class="math notranslate nohighlight">\(c_2 = I_{sp}g_0\)</span>.</p>
+<p>To apply PMP, we introduce one costate per state variable. Using <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> as a symbolic manipulator, we define symbols for all time-dependent quantities:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The state</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># State variables</span>
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
-<span class="c1"># The costate</span>
+<span class="c1"># Costate variables</span>
 <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">,</span> <span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">,</span> <span class="n">lm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span>
-    <span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ly&quot;</span><span class="p">,</span> <span class="s2">&quot;lz&quot;</span><span class="p">,</span> <span class="s2">&quot;lvx&quot;</span><span class="p">,</span> <span class="s2">&quot;lvy&quot;</span><span class="p">,</span> <span class="s2">&quot;lvz&quot;</span><span class="p">,</span> <span class="s2">&quot;lm&quot;</span>
+    <span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ly&quot;</span><span class="p">,</span> <span class="s2">&quot;lz&quot;</span><span class="p">,</span> <span class="s2">&quot;lvx&quot;</span><span class="p">,</span> <span class="s2">&quot;lvy&quot;</span><span class="p">,</span> <span class="s2">&quot;lvz&quot;</span><span class="p">,</span> <span class="s2">&quot;lm&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="c1"># The controls</span>
+<span class="c1"># Control variables: throttle and thrust direction</span>
 <span class="n">u</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="s2">&quot;ix&quot;</span><span class="p">,</span> <span class="s2">&quot;iy&quot;</span><span class="p">,</span> <span class="s2">&quot;iz&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>As to write comfortably the various developments, we introduce some useful expressions and regroup some of our variable into 3D vectors:</p>
+<p>To keep the derivation readable, we define compact expressions and group state/costate components into 3D vectors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Useful expressions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reusable scalar expressions</span>
 <span class="n">r3</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">lv_norm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">lvx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">lvy</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">lvz</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="c1"># Vectors for convenience of math manipulation</span>
+<span class="c1"># Vectorized groupings for compact Hamiltonian expressions</span>
 <span class="n">lr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">])</span>
 <span class="n">lv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">])</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
@@ -537,22 +552,23 @@
 </div>
 </div>
 </div>
-<p>We introduce the Hamiltonian (<span class="math notranslate nohighlight">\(\mathbf x\)</span> is the whole state, <span class="math notranslate nohighlight">\(\mathbf \lambda\)</span> is the whole co-state, and <span class="math notranslate nohighlight">\(\mathbf u\)</span> represent are all the controls),</p>
+<p>We introduce the regularized Hamiltonian (with <span class="math notranslate nohighlight">\(\mathbf x\)</span> the full state, <span class="math notranslate nohighlight">\(\boldsymbol\lambda\)</span> the full costate, and <span class="math notranslate nohighlight">\(\mathbf u\)</span> the control tuple):</p>
 <div class="math notranslate nohighlight">
 \[
-\mathcal H(\mathbf x, \mathbf \lambda, \mathbf u) = \mathbf \lambda_r \cdot \mathbf f_r + \mathbf \lambda_v \cdot \mathbf f_v + \lambda_m  f_m + \lambda_0 \frac{c_1}{c_2} \left(u + \epsilon\log(u(1-u))\right)
+\mathcal H(\mathbf x, \boldsymbol\lambda, \mathbf u) = \boldsymbol\lambda_r \cdot \mathbf f_r + \boldsymbol\lambda_v \cdot \mathbf f_v + \lambda_m f_m + \lambda_0\frac{c_1}{c_2}\left(u - \epsilon\log\left(u(1-u)\right)\right).
 \]</div>
+<p>The logarithmic barrier regularizes the bang-bang throttle law, enforces interior controls during continuation, and recovers near bang-bang behavior as <span class="math notranslate nohighlight">\(\epsilon \to 0^+\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hamiltonian</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Regularized Hamiltonian</span>
 <span class="n">H_full</span> <span class="o">=</span> <span class="n">lr</span> <span class="o">@</span> <span class="n">fr</span> <span class="o">+</span> <span class="n">lv</span> <span class="o">@</span> <span class="n">fv</span> <span class="o">+</span> <span class="n">lm</span> <span class="o">*</span> <span class="n">fm</span> <span class="o">+</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">)))</span>
-<span class="c1"># Switching function (this must be found by hand)</span>
+<span class="c1"># Switching function rho from first-order optimality conditions</span>
 <span class="n">rho</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">lv_norm</span> <span class="o">/</span> <span class="n">m</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">lm</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Note how the various constants of our problem are considered as heyoka parameters in the following order: <span class="math notranslate nohighlight">\([\mu, c_1, c_2, \epsilon, \lambda_0]\)</span>, <span class="math notranslate nohighlight">\(c_1 = T_{max}\)</span>, <span class="math notranslate nohighlight">\(c_2 = \frac{T_{max}}{I_{sp}g_0}\)</span></p>
+<p>In the code, constants are passed as <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters in the order <span class="math notranslate nohighlight">\([\mu, c_1, c_2, \epsilon, \lambda_0]\)</span>, with <span class="math notranslate nohighlight">\(c_1 = T_{\max}\)</span> and <span class="math notranslate nohighlight">\(c_2 = I_{sp}g_0\)</span>. Consequently, <span class="math notranslate nohighlight">\(\frac{c_1}{c_2} = \frac{T_{\max}}{I_{sp}g_0}\)</span>.</p>
 <p>We write the resulting Hamiltonian system:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -575,15 +591,17 @@
 </div>
 </div>
 </div>
-<p>The minimum principle from Pontryagin requires to find the mimimum in the admissible control space of the Hamiltonian:</p>
+<p>Pontryagin’s minimum principle requires pointwise minimization of the Hamiltonian over the admissible control set</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf u^* = \argmin_{\mathbf u \in \mathcal U} \mathcal H(\mathbf x, \mathbf \lambda, \mathbf u)
+\mathbf u^*(t) = \arg\min_{\mathbf u \in \mathcal U} \mathcal H(\mathbf x, \boldsymbol\lambda, \mathbf u),
 \]</div>
-<p>which, in our case, results in:</p>
+<p>with <span class="math notranslate nohighlight">\(\quad\mathcal U = \{(u, \hat{\mathbf i})\,|\,0 \le u \le 1,\ \|\hat{\mathbf i}\|=1\}\)</span>.</p>
+<p>For this problem, the minimizer is:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We apply Pontryagin minimum principle (primer vector and u^* = 2eps / (rho + 2eps + sqrt(rho^2+4*eps^2)))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PMP minimizer: thrust direction anti-parallel to lambda_v</span>
+<span class="c1"># Smoothed throttle law from regularized Hamiltonian minimization</span>
 <span class="n">argmin_H_full</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">ix</span><span class="p">:</span> <span class="o">-</span><span class="n">lvx</span> <span class="o">/</span> <span class="n">lv_norm</span><span class="p">,</span>
     <span class="n">iy</span><span class="p">:</span> <span class="o">-</span><span class="n">lvy</span> <span class="o">/</span> <span class="n">lv_norm</span><span class="p">,</span>
@@ -596,7 +614,7 @@
 </div>
 </div>
 </div>
-<p>Thanks to the above relations, the control is now a continuous differentiable function of the states and costates and thus the dynamics as well as the Hamiltonian can be reworked:</p>
+<p>Using these relations, controls become smooth functions of state and costate. Substituting them into the dynamics yields a closed Hamiltonian system in <span class="math notranslate nohighlight">\((\mathbf x, \boldsymbol\lambda)\)</span>, which is the TPBVP solved by shooting.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rhs</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">argmin_H_full</span><span class="p">)</span>
@@ -608,22 +626,22 @@
 </div>
 </div>
 </div>
-<p>The following code block thus instantiate the heyoka integrator as well as other convenience functions.</p>
+<p>The next block instantiates the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> integrator and helper evaluators used for diagnostics (Hamiltonian, switching function, and control law).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We compile the Hamiltonian into a C function (to be called with pars = [mu, c1, c2, eps, l0])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compile Hamiltonian evaluator (pars = [mu, c1, c2, eps, lambda0])</span>
 <span class="n">H_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">H</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">,</span> <span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">,</span> <span class="n">lm</span><span class="p">])</span>
-<span class="c1"># We compile the thrust direction</span>
+<span class="c1"># Compile optimal throttle evaluator</span>
 <span class="n">u_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span>
     <span class="p">[</span><span class="n">argmin_H_full</span><span class="p">[</span><span class="n">u</span><span class="p">]],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">,</span> <span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">,</span> <span class="n">lm</span><span class="p">]</span>
 <span class="p">)</span>
-<span class="c1"># We compile the SF</span>
+<span class="c1"># Compile switching-function evaluator</span>
 <span class="n">rho_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">rho</span><span class="p">],</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">,</span> <span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">,</span> <span class="n">lm</span><span class="p">])</span>
-<span class="c1"># We compile also the thrust direction</span>
+<span class="c1"># Compile optimal thrust-direction evaluator</span>
 <span class="n">i_vers_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span>
     <span class="p">[</span><span class="n">argmin_H_full</span><span class="p">[</span><span class="n">ix</span><span class="p">],</span> <span class="n">argmin_H_full</span><span class="p">[</span><span class="n">iy</span><span class="p">],</span> <span class="n">argmin_H_full</span><span class="p">[</span><span class="n">iz</span><span class="p">]],</span> <span class="p">[</span><span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">]</span>
 <span class="p">)</span>
-<span class="c1"># We assemble the Taylor adaptive integrator</span>
+<span class="c1"># Assemble Taylor adaptive integrator</span>
 <span class="n">full_state</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lx</span><span class="p">,</span> <span class="n">ly</span><span class="p">,</span> <span class="n">lz</span><span class="p">,</span> <span class="n">lvx</span><span class="p">,</span> <span class="n">lvy</span><span class="p">,</span> <span class="n">lvz</span><span class="p">,</span> <span class="n">lm</span><span class="p">]</span>
 <span class="n">sys</span> <span class="o">=</span> <span class="p">[(</span><span class="n">var</span><span class="p">,</span> <span class="n">dvar</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">dvar</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">full_state</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)]</span>
 <span class="n">ta</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">14</span><span class="p">)</span>
@@ -634,23 +652,23 @@
 </section>
 <section id="constructing-the-tpbvp-using-pykep">
 <h2>Constructing the TPBVP using pykep<a class="headerlink" href="#constructing-the-tpbvp-using-pykep" title="Link to this heading">#</a></h2>
-<p>For the specific case outlined above pykep offers a convenient series of pre-assembled functions and objects which basically construct the same objects as above. These can turn out to be useful
-for analysis of specific cases, but in general they are used internally by the various UDP provided in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> hence the user in most cases does not need to care.</p>
+<p>For this specific formulation, <code class="docutils literal notranslate"><span class="pre">pykep</span></code> provides pre-assembled building blocks that reproduce the same mathematical objects derived manually above.</p>
+<p>In practice, this is the recommended route: the manual derivation is useful to understand and debug the method, while <code class="docutils literal notranslate"><span class="pre">pykep</span></code> utilities are preferable for robust and repeatable workflows.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The Taylor integrator</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Taylor integrator</span>
 <span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc</span><span class="p">(</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The Variational Taylor integrator</span>
+<span class="c1"># Variational Taylor integrator for sensitivities</span>
 <span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_var</span><span class="p">(</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The Hamiltonian</span>
+<span class="c1"># Hamiltonian evaluator</span>
 <span class="n">H_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_H_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The switching function</span>
+<span class="c1"># Switching-function evaluator</span>
 <span class="n">SF_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_SF_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The magnitude of the throttle</span>
+<span class="c1"># Optimal throttle magnitude evaluator</span>
 <span class="n">u_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_u_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The thrust direction</span>
+<span class="c1"># Optimal thrust-direction evaluator</span>
 <span class="n">i_vers_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_i_vers_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
-<span class="c1"># The dynamics cfunc</span>
+<span class="c1"># Dynamics evaluator</span>
 <span class="n">dyn_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_pc_dyn_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -659,12 +677,12 @@ for analysis of specific cases, but in general they are used internally by the v
 </section>
 <section id="solving-in-single-shooting">
 <h2>Solving in single shooting<a class="headerlink" href="#solving-in-single-shooting" title="Link to this heading">#</a></h2>
-<p>All the code above was merely used for explanatory purposes. Now we scratch all of that and use the dedicated <code class="docutils literal notranslate"><span class="pre">pykep</span></code> clsses.</p>
-<p>We use, as a test case, a simple transfer between two orbits at 1AU. The transfer is simple enough to allow fast convergence and to directly go for a mass optimal trajectory, without using continuation, so that we can directly start using a value <span class="math notranslate nohighlight">\(\epsilon &lt;&lt; 1\)</span>.</p>
-<p>Later, we will also study a case where we need a continuation technique to bring <span class="math notranslate nohighlight">\(\epsilon\)</span> to low values.</p>
+<p>The previous section was mainly pedagogical. From this point onward, we use dedicated <code class="docutils literal notranslate"><span class="pre">pykep</span></code> classes directly.</p>
+<p>As a first test case, we solve a relatively easy transfer between two 1 AU-class heliocentric orbits. Because this case is well-conditioned, we can target a small regularization parameter from the start (<span class="math notranslate nohighlight">\(\epsilon \ll 1\)</span>), without continuation.</p>
+<p>A harder case requiring continuation is addressed later.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testcase 1 (easy, no homotopy)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test case 1: direct solve at small epsilon (no continuation)</span>
 <span class="n">posvel0</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">[</span><span class="mf">34110913367.783306</span><span class="p">,</span> <span class="o">-</span><span class="mf">139910016918.87585</span><span class="p">,</span> <span class="o">-</span><span class="mf">14037825669.025244</span><span class="p">],</span>
     <span class="p">[</span><span class="mf">29090.9902134693</span><span class="p">,</span> <span class="mf">10000.390168313803</span><span class="p">,</span> <span class="mf">1003.3858682643288</span><span class="p">],</span>
@@ -675,6 +693,7 @@ for analysis of specific cases, but in general they are used internally by the v
 <span class="p">]</span>
 <span class="n">tof</span> <span class="o">=</span> <span class="mi">250</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="c1"># Small epsilon approximates bang-bang mass-optimal structure</span>
 <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-5</span>
 </pre></div>
 </div>
@@ -697,7 +716,7 @@ for analysis of specific cases, but in general they are used internally by the v
     <span class="n">MU</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span>
     <span class="n">MASS</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
     <span class="n">with_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">taylor_tolerance</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="c1"># low tolerances for this simple problem enhance speed greatly</span>
+    <span class="n">taylor_tolerance</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>  <span class="c1"># Looser tolerance is sufficient for this easy case and improves runtime</span>
     <span class="n">taylor_tolerance_var</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
@@ -706,20 +725,24 @@ for analysis of specific cases, but in general they are used internally by the v
 </div>
 </div>
 </div>
-<p>To solve this problem, we can use SPQ methods, interior point methods as well as root finders. In this notebook, we make use of the widely available IPOPT interior-point method and of the minpack routines. Both are open-source initiatives and require no license.</p>
-<p>IPOPT is natively available in pagmo, thus we can instantiate it as:</p>
+<p>The resulting nonlinear TPBVP can be attacked with different numerical tools: SQP/interior-point optimizers or direct root-finding methods on boundary residuals.</p>
+<p>Here we use IPOPT (interior-point, via <code class="docutils literal notranslate"><span class="pre">pagmo</span></code>) and a MINPACK wrapper (via <code class="docutils literal notranslate"><span class="pre">scipy.optimize.root</span></code>). Both are open-source and widely available.</p>
+<p>IPOPT is natively exposed in <code class="docutils literal notranslate"><span class="pre">pagmo</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ip</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>  <span class="c1"># Change the relative convergence tolerance</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Change the maximum iterations</span>
-<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Makes Ipopt unverbose</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>  <span class="c1"># Relative convergence tolerance</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Maximum iterations</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;print_level&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># Suppress IPOPT console output</span>
+<span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
+    <span class="s2">&quot;sb&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span>
+<span class="p">)</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
     <span class="s2">&quot;nlp_scaling_method&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span>
-<span class="p">)</span>  <span class="c1"># Removes any scaling made in auto mode</span>
+<span class="p">)</span>  <span class="c1"># Disable IPOPT automatic scaling</span>
 <span class="n">ip</span><span class="o">.</span><span class="n">set_string_option</span><span class="p">(</span>
     <span class="s2">&quot;mu_strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;adaptive&quot;</span>
-<span class="p">)</span>  <span class="c1"># Alternative is to tune the initial mu value</span>
+<span class="p">)</span>  <span class="c1"># Adaptive barrier update strategy</span>
 <span class="n">ipopt</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -737,9 +760,9 @@ for analysis of specific cases, but in general they are used internally by the v
         <span class="n">x0</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">get_nx</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">},</span> <span class="n">jac</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>  <span class="c1"># factor=1 is very important for convergence</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">},</span> <span class="n">jac</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>  <span class="c1"># factor=1.0 is critical for robustness</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">})</span>  <span class="c1"># factor=1 is very important for convergence</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">prob</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">})</span>  <span class="c1"># factor=1.0 is critical for robustness</span>
         <span class="n">pop</span><span class="o">.</span><span class="n">set_x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">pop</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -751,7 +774,7 @@ for analysis of specific cases, but in general they are used internally by the v
 </div>
 </div>
 </div>
-<p>To solve the problem here we use a multi-start teachnique, since this is in general a good practice. In this specific case convergence is immediate and multiple starts are not strictly necessary.</p>
+<p>We use a multi-start strategy, which is generally good practice in indirect optimization due to sensitivity to initialization. In this easy case, convergence is often immediate, but we still report robustness statistics.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multistart</span><span class="p">(</span><span class="n">algo</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
@@ -790,12 +813,12 @@ for analysis of specific cases, but in general they are used internally by the v
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>......x..........x............x..x......
-Final mass is: 1259.9009127384545
-Hamiltonian at the final point is: [-0.05597387] 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>...x..x..x.......x...x...xx.............
+Final mass is: 1259.9009185958457
+Hamiltonian at the final point is: [-0.05597389] 
 
-Total time to success: 7.245 seconds
-Number of successes: 36 over 40 trials (90.0 %)
+Total time to success: 6.927 seconds
+Number of successes: 33 over 40 trials (82.5 %)
 </pre></div>
 </div>
 </div>
@@ -807,17 +830,17 @@ Number of successes: 36 over 40 trials (90.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..xx..x.x..xx.xx......xxxxxxx.x.x.xxxx.x
-Final mass is: 1259.900918578598
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x..xxx...xxx.xx.......xx.xx..xx.xx.x.x..
+Final mass is: 1259.9009186158119
 Hamiltonian at the final point is: [-0.05597388] 
 
-Total time to success: 0.713 seconds
-Number of successes: 18 over 40 trials (45.0 %)
+Total time to success: 0.574 seconds
+Number of successes: 21 over 40 trials (52.5 %)
 </pre></div>
 </div>
 </div>
 </div>
-<p>Let us visualize what we found ….</p>
+<p>We now inspect the trajectory geometry obtained by the solver.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax3D</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
@@ -826,10 +849,10 @@ Number of successes: 18 over 40 trials (45.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/54444ac288a5edc548df4f9fdbfccf8338c3e04fd7cc423d3ea9b233320e6c13.png" src="../_images/54444ac288a5edc548df4f9fdbfccf8338c3e04fd7cc423d3ea9b233320e6c13.png" />
+<img alt="../_images/cee1750fca52f709d4a3e2b8e70cea8cc9dc292fc62a3b68403531c17452fe07.png" src="../_images/cee1750fca52f709d4a3e2b8e70cea8cc9dc292fc62a3b68403531c17452fe07.png" />
 </div>
 </div>
-<p>Thrust arcs are indicated with a red color, ballistic with blue.</p>
+<p>In these plots, thrust arcs are shown in red and coast (ballistic) arcs in blue.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_misc</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">);</span>
@@ -837,16 +860,15 @@ Number of successes: 18 over 40 trials (45.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7de4a7abf17a622f5d8d72bfe605444faa9788f2f1708c7e30bce6c81004348d.png" src="../_images/7de4a7abf17a622f5d8d72bfe605444faa9788f2f1708c7e30bce6c81004348d.png" />
+<img alt="../_images/287594212fcfc4a59ae8b6f3898700514d5316516391a6a92de64c16a991b994.png" src="../_images/287594212fcfc4a59ae8b6f3898700514d5316516391a6a92de64c16a991b994.png" />
 </div>
 </div>
 </section>
 <section id="homotopy">
 <h2>Homotopy<a class="headerlink" href="#homotopy" title="Link to this heading">#</a></h2>
-<p>The case above was an easy solve for our single shooting technique. In may cases, especially when multiple revolutions appear or intricate switching functions describe the optimal solution, this will not be the case.
-In that case homotopy (continuation) methods can help to find a solution.</p>
-<p>Here we show how to implement such methods. We use, as test case, a more complex case (coming from an Earth-Mars transfer) where solving directly for mass optimality (e.g. <span class="math notranslate nohighlight">\(\epsilon = 1e-4\)</span> would not work).</p>
-<p>The conditions are as follows:</p>
+<p>The previous case is comparatively easy for single shooting. In many practical transfers (especially with multiple revolutions or complex switching structures), direct convergence at small <span class="math notranslate nohighlight">\(\epsilon\)</span> is unreliable.</p>
+<p>Continuation (homotopy) helps by solving a sequence of nearby problems and using each solution to warm-start the next one.</p>
+<p>As a second test case, we use a harder Earth-Mars-like transfer for which direct solution at mass-optimal regularization (e.g., <span class="math notranslate nohighlight">\(\epsilon = 10^{-4}\)</span>) typically fails.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testcase 2 (less easy, homotopy needed) [Earth-Mars]</span>
@@ -868,8 +890,8 @@ In that case homotopy (continuation) methods can help to find a solution.</p>
 </section>
 <section id="exponential-homotopy-on-epsilon">
 <h2>Exponential homotopy on <span class="math notranslate nohighlight">\(\epsilon\)</span><a class="headerlink" href="#exponential-homotopy-on-epsilon" title="Link to this heading">#</a></h2>
-<p>Here we decrease the <span class="math notranslate nohighlight">\(\epsilon\)</span> parameter exponentially and use as predictor for the new decision vector corresponding to each successive new value of <span class="math notranslate nohighlight">\(\epsilon\)</span>, the previous decision vector. This method forces the step size on the epsilon exponential decrease to
-small values.</p>
+<p>We decrease <span class="math notranslate nohighlight">\(\epsilon\)</span> geometrically and use the converged decision vector at step <span class="math notranslate nohighlight">\(k\)</span> as the predictor (initial guess) for step <span class="math notranslate nohighlight">\(k+1\)</span>.
+If convergence fails, we backtrack by increasing <span class="math notranslate nohighlight">\(\epsilon\)</span> and continue from the last successful point.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We instantiate a new optimzation roblem (a pygmo UDP) with the new parameters:</span>
@@ -992,16 +1014,16 @@ small values.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>. Success!! | Error: 4.19e-10 | CPU time: 1.72e-02 | Epsilon = 1.0854e-04
-Desired epsilon reached ! | Error: 4.19e-10 | CPU time: 1.72e-02 | Epsilon = 9.2260e-05
-Total CPU time: 1.57e+00
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>. Success!! | Error: 4.18e-10 | CPU time: 1.26e-02 | Epsilon = 1.0854e-04
+Desired epsilon reached ! | Error: 4.18e-10 | CPU time: 1.26e-02 | Epsilon = 9.2260e-05
+Total CPU time: 1.01e+00
 </pre></div>
 </div>
 </div>
 </div>
-<p>We could obtain a better total computational time if we could just use a higher exponential decrease factor … but we cannot as
-the initial guess (the predictor used) is poor, so that we are stuck with this (you can try to decrease the decrease_factor and will see how failures in convergence appear and <span class="math notranslate nohighlight">\(\epsilon\)</span> gets to be increased.)</p>
-<p>Let us plot what we found …</p>
+<p>A larger decrease factor would reduce total runtime, but only if the predictor remains accurate enough for convergence.</p>
+<p>With a simple previous-solution predictor, aggressive steps tend to fail, forcing backtracking. This motivates a better predictor based on tangent continuation.</p>
+<p>Let us plot the converged solution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax3D</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
@@ -1026,29 +1048,31 @@ the initial guess (the predictor used) is poor, so that we are stuck with this (
 </section>
 <section id="continuation-along-the-tangent-direction">
 <h2>Continuation along the tangent direction<a class="headerlink" href="#continuation-along-the-tangent-direction" title="Link to this heading">#</a></h2>
-<p>Here we decrease the <span class="math notranslate nohighlight">\(\epsilon\)</span> parameter exponentially and use as predictor the tangent vector along the solution curve.
-In our case the details are as follows.
-Assume the final constraints of TPBVB to be indicated with:</p>
+<p>Here we still decrease <span class="math notranslate nohighlight">\(\epsilon\)</span> geometrically, but we compute a first-order predictor from the tangent to the solution manifold.</p>
+<p>Let the TPBVP terminal constraints be</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf c(\mathbf \lambda, \epsilon) = 0
+\mathbf c(\boldsymbol\lambda, \epsilon) = \mathbf 0,
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf \lambda = [\lambda_x, ..., \lambda_0]\)</span>. When <span class="math notranslate nohighlight">\(\epsilon\)</span> is changed slightly so must <span class="math notranslate nohighlight">\(\mathbf \lambda\)</span> change:</p>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol\lambda = [\lambda_x, \lambda_y, \lambda_z, \lambda_{vx}, \lambda_{vy}, \lambda_{vz}, \lambda_m, \lambda_0]^T\)</span>.
+For a small parameter change <span class="math notranslate nohighlight">\((\delta\boldsymbol\lambda, \delta\epsilon)\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf c(\mathbf \lambda + \delta\mathbf\lambda, \epsilon + \delta\epsilon) = 0
+\mathbf c(\boldsymbol\lambda + \delta\boldsymbol\lambda, \epsilon + \delta\epsilon) = \mathbf 0.
 \]</div>
-<p>In the linear world this is:
-$$</p>
-<p>\frac{\partial \mathbf c}{\partial \mathbf \lambda}\delta\mathbf\lambda + \frac{\partial \mathbf c}{\partial \mathbf \epsilon}\delta\epsilon=0
-$$</p>
-<p>hence:
-$$</p>
-<p>\delta \lambda = - \mathbf A^{-1}\mathbf B \delta \epsilon
-$$</p>
-<p>where <span class="math notranslate nohighlight">\(\mathbf A = \frac{\partial \mathbf c}{\partial \mathbf \lambda}\)</span> and <span class="math notranslate nohighlight">\(\mathbf B = \frac{\partial \mathbf c}{\partial \mathbf \epsilon}\)</span>.</p>
-<p>Since the constraints are given directly on values of the final state, the matrices above can be computed seamlessly from a variational Taylor system. Only the last constraint <span class="math notranslate nohighlight">\(|\lambda_0|\)</span> is a exception but its gradient is also easily computed.</p>
-<p>So lets build a variational integrator that helps here. <code class="docutils literal notranslate"><span class="pre">pykep</span></code> has the dynamics at hand in its <code class="docutils literal notranslate"><span class="pre">pykep.ta</span></code> module. We need to build a first order integrator to study variation of the variables: <span class="math notranslate nohighlight">\([\lambda_x, \lambda_y, \lambda_z, \lambda_{vx}, \lambda_{vy},\lambda_{vz}, \lambda_{m}, \lambda_{0}, \epsilon]\)</span>.</p>
+<p>Linearizing gives</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathbf c}{\partial \boldsymbol\lambda}\,\delta\boldsymbol\lambda + \frac{\partial \mathbf c}{\partial \epsilon}\,\delta\epsilon = \mathbf 0,
+\]</div>
+<p>hence</p>
+<div class="math notranslate nohighlight">
+\[
+\delta\boldsymbol\lambda = -\mathbf A^{-1}\mathbf B\,\delta\epsilon,
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(\mathbf A = \frac{\partial \mathbf c}{\partial \boldsymbol\lambda}\)</span> and <span class="math notranslate nohighlight">\(\mathbf B = \frac{\partial \mathbf c}{\partial \epsilon}\)</span>.</p>
+<p>Most entries in <span class="math notranslate nohighlight">\(\mathbf A\)</span> and <span class="math notranslate nohighlight">\(\mathbf B\)</span> are obtained directly from a variational Taylor integrator. The normalization constraint involving <span class="math notranslate nohighlight">\(\lambda_0\)</span> is handled analytically.</p>
+<p>We now build a first-order variational system with variables <span class="math notranslate nohighlight">\([\lambda_x, \lambda_y, \lambda_z, \lambda_{vx}, \lambda_{vy}, \lambda_{vz}, \lambda_m, \lambda_0, \epsilon]\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">pc_dyn</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">MASS</span><span class="p">)</span>
@@ -1060,7 +1084,7 @@ $$</p>
 </div>
 </div>
 </div>
-<p>We use the following small helper function to set the state for this new variational integrator, from some chromosome.</p>
+<p>The helper below initializes the variational integrator state from a given decision vector.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ta_var_state</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">,</span> <span class="n">ic_var</span><span class="p">):</span>
@@ -1184,14 +1208,14 @@ $$</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>. Success!! | Error: 3.23e-12 | CPU time: 1.64e-02 | Epsilon = 7.5254e-05
-Desired epsilon reached ! | Error: 3.23e-12 | CPU time: 1.64e-02 | Epsilon = 7.5254e-05
-Total CPU time: 1.51e+00
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>. Success!! | Error: 3.74e-12 | CPU time: 1.23e-02 | Epsilon = 7.5254e-05
+Desired epsilon reached ! | Error: 3.74e-12 | CPU time: 1.23e-02 | Epsilon = 7.5254e-05
+Total CPU time: 1.16e+00
 </pre></div>
 </div>
 </div>
 </div>
-<p>We may obtain like this a smoother and faster method as our predictor is much better and allows for a more rapid exponential decrease (i.e. factor <span class="math notranslate nohighlight">\(0.75\)</span>).</p>
+<p>With tangent prediction, continuation is typically smoother and faster because each warm start better follows the local solution manifold.</p>
 </section>
 </section>
 
@@ -1220,7 +1244,7 @@ Total CPU time: 1.51e+00
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Low-thrust transfers via indirect methods II (time)</p>
+        <p class="prev-next-title">Indirect methods II (minimum time, Cartesian)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1242,6 +1266,7 @@ Total CPU time: 1.51e+00
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reusable-workflow-for-other-ocps">Reusable workflow (for other OCPs)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-construction-of-the-tpbvp">Manual construction of the TPBVP</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-the-tpbvp-using-pykep">Constructing the TPBVP using pykep</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-in-single-shooting">Solving in single shooting</a></li>

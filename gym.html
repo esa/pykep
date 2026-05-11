@@ -202,7 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold UDP: point-to-point trajectory optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
 
 
 
@@ -212,10 +212,10 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Low-thrust transfers via indirect methods I (mass, fixed time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Low-thrust transfers via indirect methods II (time)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Low-thrust transfers via indirect methods III (mass, fixed time, mee)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Low-thrust transfers via indirect methods IV (time, mean equinoctial elements)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
 
@@ -436,6 +436,13 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em7imp"><code class="docutils literal notranslate"><span class="pre">gym.em7imp</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tops-problems">TOPS problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_twobody"><code class="docutils literal notranslate"><span class="pre">tops_twobody</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_mee"><code class="docutils literal notranslate"><span class="pre">tops_mee</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_ss"><code class="docutils literal notranslate"><span class="pre">tops_ss</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_cr3bp"><code class="docutils literal notranslate"><span class="pre">tops_cr3bp</span></code></a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -450,7 +457,7 @@
   <section id="trajectory-optimization-gym">
 <span id="gym"></span><h1>Trajectory Optimization Gym<a class="headerlink" href="#trajectory-optimization-gym" title="Link to this heading">#</a></h1>
 <p>A number of interplanetary trajectory problems are provided in <cite>pykep</cite> in the form of
-User Defined Problems (UDP) compatible with the <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> <span id="id1">[<a class="reference internal" href="bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> python package.
+User Defined Problems (UDP) compatible with the <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> python package.
 All of the problems are instantiated upon import of the <cite>pykep</cite> module and can be used directly. The collection of all
 problems is called the “pykep gym” and hopes to become an established benchmark set to test the performances of evolutionary
 and traditional optimisation techniques on trajectory design problems.</p>
@@ -591,6 +598,116 @@ use of additional problem knowledge is challenging but possible, but limiting th
 <dd></dd></dl>
 
 </section>
+<section id="tops-problems">
+<h2>TOPS problems<a class="headerlink" href="#tops-problems" title="Link to this heading">#</a></h2>
+<p>The TOPS (Trajectory Optimisation Problems in Space) database
+<span class="bibtex-citation" id="id2">[<a class="reference internal" href="bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> collects benchmark low-thrust trajectory optimization problems transcribed into
+nonlinear programs by a direct method. The pykep gym exposes these benchmarks
+as parameterized UDP classes, covering two-body dynamics in Cartesian
+coordinates, two-body dynamics in modified equinoctial elements, solar-sail
+problems, and CR3BP dynamics.</p>
+<p>All TOPS formulations rely on a zero-order-hold transcription of the control
+over a user-defined number of segments. They use a forward-backward shooting
+scheme, which results in highly nonlinear mismatch constraints, and in the non
+solar-sail formulations they also include throttle constraints. The size and
+difficulty of the resulting NLP can therefore be regulated through the number
+of segments and through the selected time-grid encoding, such as <code class="docutils literal notranslate"><span class="pre">uniform</span></code>
+or <code class="docutils literal notranslate"><span class="pre">softmax</span></code>. The non solar-sail benchmarks are built on
+<a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a>, while the solar-sail benchmark is
+built on <a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_ss_point2point" title="pykep.trajopt.zoh_ss_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a>. As a consequence, the
+departure and arrival states are fixed and moving-end effects are not
+accounted for.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.tops_twobody">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.trajopt.gym.</span></span><span class="sig-name descname"><span class="pre">tops_twobody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prob_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nseg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym.tops_twobody" title="Link to this definition">#</a></dt>
+<dd><p>Two-body low-thrust benchmark from the TOPS
+(Trajectory Optimisation Problems in Space) database.</p>
+<p>The TOPS benchmark problems, from Trajectory Optimisation Problems in
+Space, are low-thrust trajectory optimization
+problems transcribed into nonlinear programs by a direct method. In this
+instance the spacecraft dynamics are modeled in Cartesian coordinates under
+two-body motion. The transcription uses a forward-backward shooting scheme,
+which introduces highly nonlinear mismatch constraints, together with
+throttle constraints on the segment controls.</p>
+<p>The control is represented with a zero-order hold over each segment, so the
+resulting NLP size and difficulty depend on the number of segments and on
+the selected time encoding. Different choices of <code class="docutils literal notranslate"><span class="pre">nseg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">time_encoding</span></code> therefore provide a convenient way to regulate the
+dimensionality and complexity of the benchmark. The formulation is built on
+<a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a>, so the departure and arrival
+states are fixed and moving-end effects are not accounted for.</p>
+<p>Construct a two-body TOPS instance from a predefined gym case.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.tops_mee">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.trajopt.gym.</span></span><span class="sig-name descname"><span class="pre">tops_mee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prob_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nseg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym.tops_mee" title="Link to this definition">#</a></dt>
+<dd><p>Two-body low-thrust benchmark in modified equinoctial elements from the
+TOPS (Trajectory Optimisation Problems in Space) database.</p>
+<p>The TOPS benchmark problems, from Trajectory Optimisation Problems in
+Space, are low-thrust trajectory optimization
+problems transcribed into nonlinear programs by a direct method. In this
+instance the spacecraft dynamics are modeled in modified equinoctial
+elements under two-body motion. The transcription uses a forward-backward
+shooting scheme, which introduces highly nonlinear mismatch constraints,
+together with throttle constraints on the segment controls.</p>
+<p>The control is represented with a zero-order hold over each segment, so the
+resulting NLP size and difficulty depend on the number of segments and on
+the selected time encoding. Different choices of <code class="docutils literal notranslate"><span class="pre">nseg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">time_encoding</span></code> therefore provide a convenient way to regulate the
+dimensionality and complexity of the benchmark. The formulation is built on
+<a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a>, so the departure and arrival
+states are fixed and moving-end effects are not accounted for.</p>
+<p>Construct a two-body MEE TOPS instance from a predefined gym case.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.tops_ss">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.trajopt.gym.</span></span><span class="sig-name descname"><span class="pre">tops_ss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prob_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nseg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym.tops_ss" title="Link to this definition">#</a></dt>
+<dd><p>Solar-sailing benchmark from the TOPS
+(Trajectory Optimisation Problems in Space) database.</p>
+<p>The TOPS benchmark problems, from Trajectory Optimisation Problems in
+Space, are low-thrust trajectory optimization
+problems transcribed into nonlinear programs by a direct method. In this
+instance the spacecraft is controlled by a solar sail and the transcription
+uses a forward-backward shooting scheme, which introduces highly nonlinear
+mismatch constraints.</p>
+<p>The control is represented with a zero-order hold over each segment, so the
+resulting NLP size and difficulty depend on the number of segments and on
+the selected time encoding. Different choices of <code class="docutils literal notranslate"><span class="pre">nseg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">time_encoding</span></code> therefore provide a convenient way to regulate the
+dimensionality and complexity of the benchmark. Unlike the non solar-sail
+TOPS instances, this formulation does not include throttle constraints. The
+formulation is built on <a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_ss_point2point" title="pykep.trajopt.zoh_ss_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a>, so the
+departure and arrival states are fixed and moving-end effects are not
+accounted for.</p>
+<p>Construct a solar-sailing TOPS instance from a predefined gym case.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.trajopt.gym.tops_cr3bp">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.trajopt.gym.</span></span><span class="sig-name descname"><span class="pre">tops_cr3bp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prob_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nseg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.trajopt.gym.tops_cr3bp" title="Link to this definition">#</a></dt>
+<dd><p>CR3BP low-thrust benchmark from the TOPS
+(Trajectory Optimisation Problems in Space) database.</p>
+<p>The TOPS benchmark problems, from Trajectory Optimisation Problems in
+Space, are low-thrust trajectory optimization
+problems transcribed into nonlinear programs by a direct method. In this
+instance the spacecraft dynamics are modeled in the circular restricted
+three-body problem. The transcription uses a forward-backward shooting
+scheme, which introduces highly nonlinear mismatch constraints.</p>
+<p>The control is represented with a zero-order hold over each segment, so the
+resulting NLP size and difficulty depend on the number of segments and on
+the selected time encoding. Different choices of <code class="docutils literal notranslate"><span class="pre">nseg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">time_encoding</span></code> therefore provide a convenient way to regulate the
+dimensionality and complexity of the benchmark. In this CR3BP formulation
+throttle constraints are not exposed as separate inequalities. The
+formulation is built on <a class="reference internal" href="trajopt.html#pykep.trajopt.zoh_point2point" title="pykep.trajopt.zoh_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a>, so the
+departure and arrival states are fixed and moving-end effects are not
+accounted for.</p>
+<p>Construct a CR3BP TOPS instance from a predefined gym case.</p>
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -661,6 +778,13 @@ use of additional problem knowledge is challenging but possible, but limiting th
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em3imp"><code class="docutils literal notranslate"><span class="pre">gym.em3imp</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em5imp"><code class="docutils literal notranslate"><span class="pre">gym.em5imp</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.em7imp"><code class="docutils literal notranslate"><span class="pre">gym.em7imp</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tops-problems">TOPS problems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_twobody"><code class="docutils literal notranslate"><span class="pre">tops_twobody</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_mee"><code class="docutils literal notranslate"><span class="pre">tops_mee</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_ss"><code class="docutils literal notranslate"><span class="pre">tops_ss</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.gym.tops_cr3bp"><code class="docutils literal notranslate"><span class="pre">tops_cr3bp</span></code></a></li>
 </ul>
 </li>
 </ul>
