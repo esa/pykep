@@ -27,7 +27,10 @@ the retrogade version of the elements is to be used.
     In `pykep` the convention :math:`a<0` for hyperbolas is enforced. The user will thus not be able to instantiate
     orbital elements where :math:`a(1-e) < 0`
 
-A number of functions are provided to convert to and from the various orbital parameters.
+A number of functions are provided to convert to and from the various orbital parameters. SOme also have the symbolic 
+version, which can be used to compute the Jacobian of the transformation. The symbolic version of the functions
+return a pair of vectors, the first one is the transformation itself, while the second one is the Jacobian,
+optionally returned if the user set the flag ``jacobian`` to ``True``. 
 
 .. currentmodule:: pykep
 
