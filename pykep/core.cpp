@@ -138,12 +138,12 @@ PYBIND11_MODULE(core, m) // NOLINT
           pk::ic2mee_doc().c_str());
     m.def("ic2mee", py::overload_cast<bool>(&kep3::ic2mee), py::arg("jacobian") = false,
           pk::ic2mee_2_doc().c_str());
-    m.def("mee2ic", py::overload_cast<const std::array<double, 6> &, double, bool>(&kep3::mee2ic), py::arg("eq_elem"), py::arg("mu"), py::arg("retrogde") = false,
+    m.def("mee2ic", py::overload_cast<const std::array<double, 6> &, double, bool>(&kep3::mee2ic), py::arg("mee"), py::arg("mu"), py::arg("retrogde") = false,
           pk::mee2ic_doc().c_str());
     m.def("mee2ic", py::overload_cast<bool>(&kep3::mee2ic), py::arg("jacobian") = false,
           pk::mee2ic_2_doc().c_str());
     m.def("par2mee", &kep3::par2mee, py::arg("elem"), py::arg("retrogde") = false, pk::par2mee_doc().c_str());
-    m.def("mee2par", &kep3::mee2par, py::arg("eq_elem"), py::arg("retrogde") = false, pk::mee2par_doc().c_str());
+    m.def("mee2par", &kep3::mee2par, py::arg("mee"), py::arg("retrogde") = false, pk::mee2par_doc().c_str());
 
     // Exposing mima functions and basic transfer functionalities
     m.def("mima", &kep3::mima, py::arg("dv1"), py::arg("dv2"), py::arg("tof"), py::arg("Tmax"), py::arg("veff"),

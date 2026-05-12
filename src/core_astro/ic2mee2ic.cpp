@@ -124,7 +124,7 @@ std::array<double, 6> ic2mee(const std::array<std::array<double, 3>, 2> &pos_vel
 
 
 
-std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &eq, double mu, bool retrogade)
+std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &mee, double mu, bool retrogade)
 {
     std::array<std::array<double, 3>, 2> retval{};
     int I = 0;
@@ -136,12 +136,12 @@ std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &eq, dou
 
     // p = a (1-e^2) will be negative for eccentricities > 1, we here need a
     // positive number for the following computations to make sense
-    double par = std::abs(eq[0]);
-    double f = eq[1];
-    double g = eq[2];
-    double h = eq[3];
-    double k = eq[4];
-    double L = eq[5];
+    double par = std::abs(mee[0]);
+    double f = mee[1];
+    double g = mee[2];
+    double h = mee[3];
+    double k = mee[4];
+    double L = mee[5];
 
     // We compute the equinoctial reference frame
     double den = k * k + h * h + 1;

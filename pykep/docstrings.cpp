@@ -842,8 +842,8 @@ std::string ic2mee_doc()
       >>> v = [0.0, 7.5e3, 1.0e3]
       >>> mu = pk.MU_EARTH
       >>> retro = False
-      >>> eq = pk.ic2mee([r, v], mu, retro)
-      >>> print("Equinoctial elements:", eq)
+      >>> mee = pk.ic2mee([r, v], mu, retro)
+      >>> print("Equinoctial elements:", mee)
 )";
 }
 
@@ -884,7 +884,7 @@ std::string ic2mee_2_doc()
 
 std::string mee2ic_doc()
 {
-    return R"(mee2ic(eq_elem, mu, retrogade)
+    return R"(mee2ic(mee, mu, retrogade)
 
     Converts equinoctial orbital elements to Cartesian state vectors (position and velocity).
 
@@ -893,7 +893,7 @@ std::string mee2ic_doc()
     retrograde equinoctial frames. These last are not singular for inclinations of \pi.
 
     Args:
-        *eq_elem* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
+        *mee* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
             - *p*: semi-latus rectum (in units L)  
             - *f*: eccentricity vector times cos(Ω+ω)
             - *g*: eccentricity vector times sin(Ω+ω)
@@ -914,10 +914,10 @@ std::string mee2ic_doc()
 
     Examples:
       >>> import pykep as pk
-      >>> eq = [7000e3, 0.01, 0.01, 0.01, 0.01, 0.0]
+      >>> mee = [7000e3, 0.01, 0.01, 0.01, 0.01, 0.0]
       >>> mu = pk.MU_EARTH
       >>> retro = False
-      >>> r, v = pk.mee2ic(eq, mu, retro)
+      >>> r, v = pk.mee2ic(mee, mu, retro)
       >>> print("Position:", r)
       >>> print("Velocity:", v)
 )";
@@ -960,7 +960,7 @@ std::string mee2ic_2_doc()
 
 std::string mee2par_doc()
 {
-    return R"(mee2par(eq_elem, retrogade)
+    return R"(mee2par(mee, retrogade)
 
     Converts equinoctial orbital elements to classical Keplerian elements.
 
@@ -969,7 +969,7 @@ std::string mee2par_doc()
     the appropriate transformation for orbits with inclination near \pi.
 
     Args:
-        *eq_elem* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
+        *mee* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
             - *p*: semi-latus rectum (in units L)  
             - *f*: eccentricity vector times cos(Ω+ω)
             - *g*: eccentricity vector times sin(Ω+ω)
@@ -991,9 +991,9 @@ std::string mee2par_doc()
             - *f*: true anomaly (radians, in [0, 2π])
 
     Examples:
-      >>> eq = [7000e3, 0.01, 0.02, 0.001, 0.002, 0.5]
+      >>> mee = [7000e3, 0.01, 0.02, 0.001, 0.002, 0.5]
       >>> retro = False
-      >>> par = mee2par(eq, retro)
+      >>> par = mee2par(mee, retro)
       >>> print("Keplerian elements:", par)
 )";
 }
@@ -1033,8 +1033,8 @@ std::string par2mee_doc()
     Examples:
       >>> par = [7000e3, 0.01, 0.1, 1.0, 0.5, 0.3]
       >>> retro = False
-      >>> eq = par2mee(par, retro)
-      >>> print("Equinoctial elements:", eq)
+      >>> mee = par2mee(par, retro)
+      >>> print("Equinoctial elements:", mee)
 )";
 }
 
