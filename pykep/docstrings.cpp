@@ -847,6 +847,41 @@ std::string ic2mee_doc()
 )";
 }
 
+std::string ic2mee_2_doc()
+{
+    return R"(ic2mee(jacobian = False)
+
+    Assembles and returns the ``heyoka`` symbolic expressions for the transformation between
+    Cartesian state vectors and modified equinoctial elements.
+
+    The symbolic variables are, in order: ``[x, y, z, vx, vy, vz]``.
+    The symbolic parameters are ``[par[0], par[1]] = [mu, I]``, where ``I`` selects the equinoctial frame
+    (``I = 1`` for standard/prograde, ``I = -1`` for retrograde).
+
+    Args:
+        *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of the
+        transformation with respect to ``[x, y, z, vx, vy, vz]``.
+
+    Returns:
+        [:class:`list`, :class:`list` or :class:`None`]:
+            A pair ``(expr, jac)`` where:
+
+            - *expr* is a list of six ``heyoka.expression`` objects representing
+              ``[p, f, g, h, k, L]``
+            - *jac* is either ``None`` (if ``jacobian=False``) or a list of 36
+              ``heyoka.expression`` objects representing the 6x6 Jacobian
+
+    Examples:
+      >>> import pykep as pk
+      >>> expr, jac = pk.ic2mee()
+      >>> len(expr), jac is None
+      (6, True)
+      >>> expr, jac = pk.ic2mee(True)
+      >>> len(expr), len(jac)
+      (6, 36)
+)";
+}
+
 std::string mee2ic_doc()
 {
     return R"(mee2ic(eq_elem, mu, retrogade)
@@ -885,6 +920,41 @@ std::string mee2ic_doc()
       >>> r, v = pk.mee2ic(eq, mu, retro)
       >>> print("Position:", r)
       >>> print("Velocity:", v)
+)";
+}
+
+std::string mee2ic_2_doc()
+{
+    return R"(mee2ic(jacobian = False)
+
+    Assembles and returns the ``heyoka`` symbolic expressions for the transformation between
+    modified equinoctial elements and Cartesian state vectors.
+
+    The symbolic variables are, in order: ``[p, f, g, h, k, L]``.
+    The symbolic parameters are ``[par[0], par[1]] = [mu, I]``, where ``I`` selects the equinoctial frame
+    (``I = 1`` for standard/prograde, ``I = -1`` for retrograde).
+
+    Args:
+        *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of the
+        transformation with respect to ``[p, f, g, h, k, L]``.
+
+    Returns:
+        [:class:`list`, :class:`list` or :class:`None`]:
+            A pair ``(expr, jac)`` where:
+
+            - *expr* is a list of six ``heyoka.expression`` objects representing
+              ``[x, y, z, vx, vy, vz]``
+            - *jac* is either ``None`` (if ``jacobian=False``) or a list of 36
+              ``heyoka.expression`` objects representing the 6x6 Jacobian
+
+    Examples:
+      >>> import pykep as pk
+      >>> expr, jac = pk.mee2ic()
+      >>> len(expr), jac is None
+      (6, True)
+      >>> expr, jac = pk.mee2ic(True)
+      >>> len(expr), len(jac)
+      (6, 36)
 )";
 }
 

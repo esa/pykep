@@ -58,7 +58,9 @@ std::string f2zeta_v_doc();
 std::string ic2par_doc();
 std::string par2ic_doc();
 std::string ic2mee_doc();
+std::string ic2mee_2_doc();
 std::string mee2ic_doc();
+std::string mee2ic_2_doc();
 std::string par2mee_doc();
 std::string mee2par_doc();
 

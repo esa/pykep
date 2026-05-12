@@ -12,6 +12,10 @@
 #define kep3_IC2mee2IC_H
 
 #include <array>
+#include <optional>
+#include <utility>
+
+#include <heyoka/expression.hpp>
 
 #include <kep3/detail/visibility.hpp>
 
@@ -23,6 +27,11 @@ kep3_DLL_PUBLIC std::array<double, 6> ic2mee(const std::array<std::array<double,
 
 kep3_DLL_PUBLIC std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &eq, double mu,
                                                            bool retrogade = false);
+
+kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>> ic2mee(bool jacobian = false);
+
+kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>> mee2ic(bool jacobian = false);                                    
+
 
 } // namespace kep3
 #endif // kep3_IC2mee2IC_H

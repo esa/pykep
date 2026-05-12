@@ -19,6 +19,13 @@
 #include <xtensor/containers/xadapt.hpp>
 #include <xtensor/containers/xarray.hpp>
 
+#include <heyoka/expression.hpp>
+#include <heyoka/math/atan2.hpp>
+#include <heyoka/kw.hpp>
+#include <heyoka/math/cos.hpp>
+#include <heyoka/math/sin.hpp>
+#include <heyoka/math/sqrt.hpp>
+
 #include <kep3/core_astro/constants.hpp>
 #include <kep3/core_astro/ic2mee2ic.hpp>
 
@@ -115,6 +122,8 @@ std::array<double, 6> ic2mee(const std::array<std::array<double, 3>, 2> &pos_vel
     }
 }
 
+
+
 std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &eq, double mu, bool retrogade)
 {
     std::array<std::array<double, 3>, 2> retval{};
@@ -163,4 +172,104 @@ std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &eq, dou
 
     return retval;
 }
+using namespace heyoka;
+
+// The code in this symbolic transformation is from Laurent Beauregard (ESOC). Its adds differentiability
+// to the branch witching version of the non symbolic version.
+kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>>
+ic2mee(bool jacobian)
+{
+    // The symbolic variables.
+    auto [x, y, z, vx, vy, vz] = heyoka::make_vars("x", "y", "z", "vx", "vy", "vz");
+    auto mu = heyoka::par[0];
+    auto I = heyoka::par[1];
+
+    // Auxiliary position/velocity scalars.
+    auto r2 = x * x + y * y + z * z;
+    auto v2 = vx * vx + vy * vy + vz * vz;
+    auto sigma = x * vx + y * vy + z * vz;
+
+    auto r_norm = heyoka::sqrt(r2);
+
+    // Angular momentum and semilatus rectum.
+    auto lx = y * vz - z * vy;
+    auto ly = z * vx - x * vz;
+    auto lz = x * vy - y * vx;
+    auto l2 = lx * lx + ly * ly + lz * lz;
+    auto l_norm = heyoka::sqrt(l2);
+    auto p = l2 / mu;
+
+    // Equinoctial frame parameters.
+    auto h = -ly / (l_norm + I * lz);
+    auto k = lx / (l_norm + I * lz);
+
+    auto h2 = h * h;
+    auto k2 = k * k;
+    auto hk = h * k;
+    auto s2 = 1. + h2 + k2;
+
+    // Eccentricity and d vectors.
+    auto ex = x * (v2 / mu - 1. / r_norm) - vx * sigma / mu;
+    auto ey = y * (v2 / mu - 1. / r_norm) - vy * sigma / mu;
+
+    auto d_pref = ((r2 * v2 - sigma * sigma) / mu - r_norm);
+    auto dx = (vx * d_pref + x * sigma / r_norm) / l_norm;
+    auto dy = (vy * d_pref + y * sigma / r_norm) / l_norm;
+
+    auto f = (s2 * (ex + I * dy)) / 2.;
+    auto g = (s2 * (ey - I * dx)) / 2.;
+
+    // True longitude from branch-free projection.
+    auto cosL = ((1. + h2 - k2) * (x / r_norm) + (2. * hk) * (y / r_norm) + (-2. * I * k) * (z / r_norm)) / s2;
+    auto sinL = ((2. * I * hk) * (x / r_norm) + (I * (1. - h2 + k2)) * (y / r_norm) + (2. * h) * (z / r_norm)) / s2;
+    auto L = heyoka::atan2(sinL, cosL);
+
+    std::vector<heyoka::expression> retval_1{p, f, g, h, k, L};
+    if (jacobian) {
+        auto dt = diff_tensors(retval_1, {x, y, z, vx, vy, vz}, kw::diff_order = 1);
+        return {retval_1, dt.get_jacobian()};
+    } else {
+        return {retval_1, std::nullopt};
+    }
+}
+
+kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>>
+mee2ic(bool jacobian)
+{
+    // The symbolic variables.
+    auto [p, f, g, h, k, L] = heyoka::make_vars("p", "f", "g", "h", "k", "L");
+    auto mu = heyoka::par[0];
+    auto I = heyoka::par[1];
+
+    // We compute the equinoctial reference frame
+    auto den = k * k + h * h + 1.;
+    auto fx = (1. - k * k + h * h) / den;
+    auto fy = (2. * k * h) / den;
+    auto fz = (-2. * I * k) / den;
+
+    auto gx = (2. * I * k * h) / den;
+    auto gy = (1. + k * k - h * h) * I / den;
+    auto gz = (2. * h) / den;
+
+    // Auxiliary
+    auto radius = p / (1. + g * heyoka::sin(L) + f * heyoka::cos(L));
+    // In the equinoctial reference frame
+    auto X = radius * heyoka::cos(L);
+    auto Y = radius * heyoka::sin(L);
+    auto VX = -heyoka::sqrt(mu / p) * (g + heyoka::sin(L));
+    auto VY = heyoka::sqrt(mu / p) * (f + heyoka::cos(L));
+
+    // Results
+    std::vector<heyoka::expression> retval_1{X * fx + Y * gx,   X * fy + Y * gy,   X * fz + Y * gz,
+                                             VX * fx + VY * gx, VX * fy + VY * gy, VX * fz + VY * gz};
+    if (jacobian) {
+        std::array<heyoka::expression, 36> retval_2{};
+        auto dt = diff_tensors(retval_1, {p, f, g, h, k, L}, kw::diff_order = 1);
+
+        return {retval_1, dt.get_jacobian()};
+    } else {
+        return {retval_1, std::nullopt};
+    }
+}
+
 } // namespace kep3
