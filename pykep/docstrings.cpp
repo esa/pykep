@@ -3290,17 +3290,21 @@ std::string fb_con_docstring()
 Alternative signature: fb_con(v_rel_in, v_rel_out, planet)
 
 Computes the constraint violation during a fly-by modelled as an instantaneous rotation of the incoming and outgoing relative velocities (Mivovitch).
-The two must be identical in magnitude (equality constraint) and the angle :math:`\alpha` between them must be less than the 
-:math:`\alpha_{max}`: the maximum value allowed for that particular *planet* (inequality constraint), as computed from its gravitational
-parameter and safe radius using the formula:
+The two relative velocities must be identical in magnitude (equality constraint). The inequality constraint is defined in a differentiable
+form as:
 
 .. math::
-  \alpha_{max} = - 2 \arcsin\left(\frac{1}{e_{min}}\right)
+  ineq = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha
 
 where:
 
 .. math::
   e_{min} = 1 + V_{\infty}^2 \frac{R_{safe}}{\mu}
+
+and:
+
+.. math::
+  \cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}
 
 .. note::
   This function is often used in the multiple gravity assist low-thrust (MGA-LT) encoding of an interplanetary trajectory where multiple
@@ -3328,6 +3332,56 @@ Examples:
 )";
 };
 
+std::string fb_con_2_docstring()
+{
+    return R"(fb_con(jacobian = False)
+
+Assembles and returns the ``heyoka`` symbolic expressions for the fly-by constraints.
+
+The symbolic variables are, in order: ``[vx_i, vy_i, vz_i, vx_o, vy_o, vz_o]``.
+The symbolic parameters are ``[par[0], par[1]] = [mu, safe_radius]``.
+
+The returned constraints are:
+
+.. math::
+  eq\_V2 = V_{in}^2 - V_{out}^2
+
+.. math::
+  ineq\_\delta = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha
+
+where:
+
+.. math::
+  e_{min} = 1 + \frac{safe\_radius}{\mu} V_{in}^2
+
+and:
+
+.. math::
+  \cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}
+
+Args:
+    *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of
+    ``[eq_V2, ineq_delta]`` with respect to ``[vx_i, vy_i, vz_i, vx_o, vy_o, vz_o]``.
+
+Returns:
+    [:class:`list`, :class:`list` or :class:`None`]:
+        A pair ``(expr, jac)`` where:
+
+        - *expr* is a list of two ``heyoka.expression`` objects representing
+          ``[eq_V2, ineq_delta]``
+        - *jac* is either ``None`` (if ``jacobian=False``) or a list of 12
+          ``heyoka.expression`` objects representing the 2x6 Jacobian
+
+Examples:
+  >>> import pykep as pk
+  >>> expr, jac = pk.fb_con()
+  >>> len(expr), jac is None
+  (2, True)
+  >>> expr, jac = pk.fb_con(True)
+  >>> len(expr), len(jac)
+  (2, 12)
+)";
+}
 std::string fb_dv_docstring()
 {
     return R"(fb_dv(v_rel_in, v_rel_out, mu, safe_radius)

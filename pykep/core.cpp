@@ -683,6 +683,9 @@ PYBIND11_MODULE(core, m) // NOLINT
         "fb_con",
         py::overload_cast<const std::array<double, 3> &, const std::array<double, 3> &, double, double>(&kep3::fb_con),
         py::arg("v_rel_in"), py::arg("v_rel_out"), py::arg("mu"), py::arg("safe_radius"));
+    m.def(
+        "fb_con", py::overload_cast<bool>(&kep3::fb_con), py::arg("jacobian") = false, pykep::fb_con_2_docstring().c_str()
+    );
 
     m.def("fb_dv",
           py::overload_cast<const std::array<double, 3> &, const std::array<double, 3> &, const kep3::planet &>(

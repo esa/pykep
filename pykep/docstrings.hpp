@@ -155,6 +155,7 @@ std::string lambert_problem_docstring();
 
 // Flybys
 std::string fb_con_docstring();
+std::string fb_con_2_docstring();
 std::string fb_dv_docstring();
 std::string fb_vout_docstring();
 

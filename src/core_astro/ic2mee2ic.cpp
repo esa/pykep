@@ -172,15 +172,15 @@ std::array<std::array<double, 3>, 2> mee2ic(const std::array<double, 6> &mee, do
 
     return retval;
 }
-using namespace heyoka;
 
 // The code in this symbolic transformation is from Laurent Beauregard (ESOC). Its adds differentiability
 // to the branch witching version of the non symbolic version.
 kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>>
 ic2mee(bool jacobian)
 {
+    using namespace heyoka;
     // The symbolic variables.
-    auto [x, y, z, vx, vy, vz] = heyoka::make_vars("x", "y", "z", "vx", "vy", "vz");
+    auto [x, y, z, vx, vy, vz] = make_vars("x", "y", "z", "vx", "vy", "vz");
     auto mu = heyoka::par[0];
     auto I = heyoka::par[1];
 
@@ -189,14 +189,14 @@ ic2mee(bool jacobian)
     auto v2 = vx * vx + vy * vy + vz * vz;
     auto sigma = x * vx + y * vy + z * vz;
 
-    auto r_norm = heyoka::sqrt(r2);
+    auto r_norm = sqrt(r2);
 
     // Angular momentum and semilatus rectum.
     auto lx = y * vz - z * vy;
     auto ly = z * vx - x * vz;
     auto lz = x * vy - y * vx;
     auto l2 = lx * lx + ly * ly + lz * lz;
-    auto l_norm = heyoka::sqrt(l2);
+    auto l_norm = sqrt(l2);
     auto p = l2 / mu;
 
     // Equinoctial frame parameters.
@@ -222,7 +222,7 @@ ic2mee(bool jacobian)
     // True longitude from branch-free projection.
     auto cosL = ((1. + h2 - k2) * (x / r_norm) + (2. * hk) * (y / r_norm) + (-2. * I * k) * (z / r_norm)) / s2;
     auto sinL = ((2. * I * hk) * (x / r_norm) + (I * (1. - h2 + k2)) * (y / r_norm) + (2. * h) * (z / r_norm)) / s2;
-    auto L = heyoka::atan2(sinL, cosL);
+    auto L = atan2(sinL, cosL);
 
     std::vector<heyoka::expression> retval_1{p, f, g, h, k, L};
     if (jacobian) {
@@ -236,10 +236,11 @@ ic2mee(bool jacobian)
 kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>>
 mee2ic(bool jacobian)
 {
+    using namespace heyoka;
     // The symbolic variables.
-    auto [p, f, g, h, k, L] = heyoka::make_vars("p", "f", "g", "h", "k", "L");
-    auto mu = heyoka::par[0];
-    auto I = heyoka::par[1];
+    auto [p, f, g, h, k, L] = make_vars("p", "f", "g", "h", "k", "L");
+    auto mu = par[0];
+    auto I = par[1];
 
     // We compute the equinoctial reference frame
     auto den = k * k + h * h + 1.;
@@ -252,12 +253,12 @@ mee2ic(bool jacobian)
     auto gz = (2. * h) / den;
 
     // Auxiliary
-    auto radius = p / (1. + g * heyoka::sin(L) + f * heyoka::cos(L));
+    auto radius = p / (1. + g * sin(L) + f * cos(L));
     // In the equinoctial reference frame
-    auto X = radius * heyoka::cos(L);
-    auto Y = radius * heyoka::sin(L);
-    auto VX = -heyoka::sqrt(mu / p) * (g + heyoka::sin(L));
-    auto VY = heyoka::sqrt(mu / p) * (f + heyoka::cos(L));
+    auto X = radius * cos(L);
+    auto Y = radius * sin(L);
+    auto VX = -sqrt(mu / p) * (g + sin(L));
+    auto VY = sqrt(mu / p) * (f + cos(L));
 
     // Results
     std::vector<heyoka::expression> retval_1{X * fx + Y * gx,   X * fy + Y * gy,   X * fz + Y * gz,
