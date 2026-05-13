@@ -14,26 +14,75 @@ from matplotlib import pyplot as _plt
 
 
 class zoh_pl2pl:
-    """Represents the optimal low-thrust transfer between two :class:`~pykep.planet` using the Zero Order Hold (direct) method with free departure and arrival velocities.
+    """Represents the optimal low-thrust transfer between two :class:`~pykep.planet` using the Zero Order Hold (direct) method with free
+    departure and arrival velocities.
 
-    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its initial and final states, as well as its transfer time T, final mass mf
-    and the controls as to link the two planets with a low-thrust trajectory. The spacecraft can depart and arrive with velocities different from the planets.
+    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its initial and final states, as well as its transfer time T, 
+    final mass mf and the controls as to link two orbits described via planets to a low-thrust trajectory. The spacecraft can also be allowed to depart
+    and arrive with residual relative velocities.
 
-    The problem works in non-dimensional units internally, while planets return SI units. The user must provide scaling factors (L, V, MASS) for proper conversion.
+    **Unit Systems**
+    
+    This class manages two distinct and independent unit systems:
+
+    1. **Ephemeris Units** (from planet providers ``pls`` and ``plf``)
+        - Time input: MJD2000 days
+        - Position/velocity output: user-defined (e.g., SI: meters, meters/second)
+        - **Critical contract:** velocities and accelerations must be per *second* (not per day)
+
+    2. **Integrator Units** (from heyoka ``tas``)
+        - All internal state and time are dimensionless
+        - Typically assumes μ = 1 and some implicit length scale
+
+    **Scaling Parameters**
+
+    The transition between systems is controlled by three user-supplied parameters:
+
+    - ``L`` (default: AU): length scale mapping ephemeris position to Integrator Units
+    - ``V`` (default: EARTH_VELOCITY): velocity scale mapping ephemeris velocity to Integrator Units
+    - ``TIME = L / V``: derived time scale (in SI seconds) converting MJD2000 days to Integrator Units
+    - ``ACC = V² / L``: derived acceleration scale converting ephemeris acceleration Integrator Units
+
+    **Unit Conversions**
+
+    The class applies these standardized conversions to the units used in the backbone numerical integration:
+
+    - Position: $r_{tas} = r_{pla} / L$
+    - Velocity: $v_{tas} = v_{pla} / V$
+    - Acceleration: $a_{tas} = a_{pla} / \\text{ACC}$
+    - Time: $t_{tas} = t_{pla} \\cdot \\text{DAY2SEC} / \\text{TIME}$
+
+    where $t_{pla}$ is in MJD2000 days and ``DAY2SEC = 86400`` (seconds per day).
+
+    **Planet Ephemeris Contract**
+
+    Planets must provide methods respecting this interface:
+
+    - ``eph(t_mjd2000_days)`` → returns ``(r, v)`` in the chosen units (default: SI meters, meters/second)
+    - ``acc(t_mjd2000_days)`` → returns ``a`` in the chosen acceleration units (default: SI m/s²)
+
+    **Critical requirement:** both velocities and accelerations must be per *second*, not per day.
+    If a planet returns velocities per day, gradient computations will be incorrect.
 
     The decision vector is::
 
         x = [t0_fractional, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights] for softmax)
 
     where:
-    - t0_fractional is in non-dimensional (fraction of the t0 bounds)
-    - mf is non-dimensional (scaled by MASS)
-    - vinf_dep, vinf_arr are non-dimensional (scaled by V)
-    - idep, iarr are unit direction vectors
-    - controls = [T, i_x, i_y, i_z] × nseg (T non-dimensional, directions unit vectors)
-    - tof is non-dimensional (scaled by TIME = sqrt(L³/MU))
 
-    .. note: the API is slightly different than the point2point problem, and the units for the non-dimensionalization must be passed here.
+    - ``t0_fractional``: non-dimensional, fraction of the ``t0_bounds`` range
+    - ``mf``: non-dimensional final mass (scaled by ``MASS``)
+    - ``vinf_dep``, ``vinf_arr``: non-dimensional excess velocity magnitudes (scaled by ``V``)
+    - ``idep``, ``iarr``: unit direction vectors (magnitude = 1)
+    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle, directions are unit vectors
+    - ``tof``: non-dimensional time of flight (scaled by ``TIME``)
+    - ``weights``: softmax weights (only if ``time_encoding='softmax'``)
+
+    .. note::
+
+        The API differs from the ``point2point`` problem: unit scales (``L``, ``V``) must be explicitly 
+        provided to correctly bridge ephemeris and integrator unit systems. Mismatched scales will silently 
+        produce incorrect trajectories and gradients.
     """
 
     def __init__(
@@ -360,8 +409,8 @@ class zoh_pl2pl:
         # d(vs_nd)/dt0 = (1/V) * as * DAY2SEC = (as_nd * V/TIME) / V * DAY2SEC = as_nd * DAY2SEC / TIME
         dx0_dt0_nd = _np.concatenate(
             [
-                vs_nd * (self.V / self.L) * _pk.DAY2SEC,
-                as_nd * (_pk.DAY2SEC / self.TIME),
+                vs_nd * _pk.DAY2SEC / self.TIME,
+                as_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
@@ -371,8 +420,8 @@ class zoh_pl2pl:
         # dtf/dt0 = 1, so d(rf_nd)/dt0 = vf_nd * (V/L) * DAY2SEC, d(vf_nd)/dt0 = af_nd * DAY2SEC/TIME
         dx1_dt0_nd = _np.concatenate(
             [
-                vf_nd * (self.V / self.L) * _pk.DAY2SEC,
-                af_nd * (_pk.DAY2SEC / self.TIME),
+                vf_nd * _pk.DAY2SEC / self.TIME,
+                af_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
@@ -410,7 +459,7 @@ class zoh_pl2pl:
             # d(rf_nd)/d(tof_nd) = vf_nd * (V/L) * TIME  [simplifies to vf_nd for V = L/TIME]
             # d(vf_nd)/d(tof_nd) = af_nd
             dx1_dtof_nd = _np.concatenate(
-                [vf_nd * (self.V / self.L) * self.TIME, af_nd, [0.0]]
+                [vf_nd, af_nd, [0.0]]
             )
             gradient[1:8, -1] += dmc_dx1 @ dx1_dtof_nd
 
@@ -425,7 +474,7 @@ class zoh_pl2pl:
 
             # Add contribution from final state change
             dx1_dtof_nd = _np.concatenate(
-                [vf_nd * (self.V / self.L) * self.TIME, af_nd, [0.0]]
+                [vf_nd, af_nd, [0.0]]
             )
             gradient[1:8, 10 + 4 * self.nseg] += dmc_dx1 @ dx1_dtof_nd
 
