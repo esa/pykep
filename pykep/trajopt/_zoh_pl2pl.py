@@ -59,8 +59,10 @@ class zoh_pl2pl:
     - ``t0_fractional``: non-dimensional, fraction of the ``t0_bounds`` range
     - ``mf``: non-dimensional final mass
     - ``vinf_dep``, ``vinf_arr``: non-dimensional excess velocity magnitudes (scaled by ``V``)
-    - ``idep``, ``iarr``: direction vectors
-    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle
+    - ``idep``, ``iarr``: unit Cartesian direction vectors of the relative velocities.
+    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle.
+        The interpretation of ``i_x, i_y, i_z`` is dynamics-dependent: any frame is admissible,
+        as long as they are constrained compatibly with throttle constraints.
     - ``tof``: non-dimensional time of flight (scaled by ``TIME``)
     - ``weights``: softmax weights (only if ``time_encoding='softmax'``)
 
