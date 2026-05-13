@@ -47,10 +47,10 @@ TEST_CASE("mee2par2mee")
             double Omega = Omega_d(rng_engine);
             double omega = omega_d(rng_engine);
             double ni = ni_d(rng_engine);
-            // Compute the initial eq
-            auto eq = kep3::par2mee({sma, ecc, incl, Omega, omega, ni});
+            // Compute the initial mee
+            auto mee = kep3::par2mee({sma, ecc, incl, Omega, omega, ni});
             // Test mee2par2mee
-            auto par = kep3::mee2par(eq);
+            auto par = kep3::mee2par(mee);
 
             // Here we do not use catch matchers to test floating point as for small
             // numbers (<1) we care about absolute while for large (>1) we care for
@@ -78,10 +78,10 @@ TEST_CASE("mee2par2mee")
             if (std::cos(ni) < -1 / ecc + 0.1) {
                 continue;
             }
-            // Compute the initial eq
-            auto eq = kep3::par2mee({sma, ecc, incl, Omega, omega, ni});
+            // Compute the initial mee
+            auto mee = kep3::par2mee({sma, ecc, incl, Omega, omega, ni});
             // Test mee2par2mee
-            auto par = kep3::mee2par(eq);
+            auto par = kep3::mee2par(mee);
 
             // Here we do not use catch matchers to test floating point as for small
             // numbers (<1) we care about absolute while for large (>1) we care for
@@ -121,10 +121,10 @@ TEST_CASE("mee2par2mee_retrogade")
             double Omega = Omega_d(rng_engine);
             double omega = omega_d(rng_engine);
             double ni = ni_d(rng_engine);
-            // Compute the initial eq
-            auto eq = kep3::par2mee({sma, ecc, incl, Omega, omega, ni}, true);
+            // Compute the initial mee
+            auto mee = kep3::par2mee({sma, ecc, incl, Omega, omega, ni}, true);
             // Test mee2par2mee
-            auto par = kep3::mee2par(eq, true);
+            auto par = kep3::mee2par(mee, true);
 
             // Here we do not use catch matchers to test floating point as for small
             // numbers (<1) we care about absolute while for large (>1) we care for
@@ -155,10 +155,10 @@ TEST_CASE("mee2par2mee_retrogade")
             if (std::cos(ni) < -1 / ecc + 0.1) {
                 continue;
             }
-            // Compute the initial eq
-            auto eq = kep3::par2mee({sma, ecc, incl, Omega, omega, ni}, true);
+            // Compute the initial mee
+            auto mee = kep3::par2mee({sma, ecc, incl, Omega, omega, ni}, true);
             // Test mee2par2mee
-            auto par = kep3::mee2par(eq, true);
+            auto par = kep3::mee2par(mee, true);
 
             // Here we do not use catch matchers to test floating point as for small
             // numbers (<1) we care about absolute while for large (>1) we care for

@@ -58,7 +58,9 @@ std::string f2zeta_v_doc();
 std::string ic2par_doc();
 std::string par2ic_doc();
 std::string ic2mee_doc();
+std::string ic2mee_2_doc();
 std::string mee2ic_doc();
+std::string mee2ic_2_doc();
 std::string par2mee_doc();
 std::string mee2par_doc();
 
@@ -153,6 +155,7 @@ std::string lambert_problem_docstring();
 
 // Flybys
 std::string fb_con_docstring();
+std::string fb_con_2_docstring();
 std::string fb_dv_docstring();
 std::string fb_vout_docstring();
 

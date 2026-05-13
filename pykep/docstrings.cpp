@@ -842,14 +842,49 @@ std::string ic2mee_doc()
       >>> v = [0.0, 7.5e3, 1.0e3]
       >>> mu = pk.MU_EARTH
       >>> retro = False
-      >>> eq = pk.ic2mee([r, v], mu, retro)
-      >>> print("Equinoctial elements:", eq)
+      >>> mee = pk.ic2mee([r, v], mu, retro)
+      >>> print("Equinoctial elements:", mee)
+)";
+}
+
+std::string ic2mee_2_doc()
+{
+    return R"(ic2mee(jacobian = False)
+
+    Assembles and returns the ``heyoka`` symbolic expressions for the transformation between
+    Cartesian state vectors and modified equinoctial elements.
+
+    The symbolic variables are, in order: ``[x, y, z, vx, vy, vz]``.
+    The symbolic parameters are ``[par[0], par[1]] = [mu, I]``, where ``I`` selects the equinoctial frame
+    (``I = 1`` for standard/prograde, ``I = -1`` for retrograde).
+
+    Args:
+        *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of the
+        transformation with respect to ``[x, y, z, vx, vy, vz]``.
+
+    Returns:
+        [:class:`list`, :class:`list` or :class:`None`]:
+            A pair ``(expr, jac)`` where:
+
+            - *expr* is a list of six ``heyoka.expression`` objects representing
+              ``[p, f, g, h, k, L]``
+            - *jac* is either ``None`` (if ``jacobian=False``) or a list of 36
+              ``heyoka.expression`` objects representing the 6x6 Jacobian
+
+    Examples:
+      >>> import pykep as pk
+      >>> expr, jac = pk.ic2mee()
+      >>> len(expr), jac is None
+      (6, True)
+      >>> expr, jac = pk.ic2mee(True)
+      >>> len(expr), len(jac)
+      (6, 36)
 )";
 }
 
 std::string mee2ic_doc()
 {
-    return R"(mee2ic(eq_elem, mu, retrogade)
+    return R"(mee2ic(mee, mu, retrogade)
 
     Converts equinoctial orbital elements to Cartesian state vectors (position and velocity).
 
@@ -858,7 +893,7 @@ std::string mee2ic_doc()
     retrograde equinoctial frames. These last are not singular for inclinations of \pi.
 
     Args:
-        *eq_elem* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
+        *mee* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
             - *p*: semi-latus rectum (in units L)  
             - *f*: eccentricity vector times cos(Ω+ω)
             - *g*: eccentricity vector times sin(Ω+ω)
@@ -879,18 +914,53 @@ std::string mee2ic_doc()
 
     Examples:
       >>> import pykep as pk
-      >>> eq = [7000e3, 0.01, 0.01, 0.01, 0.01, 0.0]
+      >>> mee = [7000e3, 0.01, 0.01, 0.01, 0.01, 0.0]
       >>> mu = pk.MU_EARTH
       >>> retro = False
-      >>> r, v = pk.mee2ic(eq, mu, retro)
+      >>> r, v = pk.mee2ic(mee, mu, retro)
       >>> print("Position:", r)
       >>> print("Velocity:", v)
 )";
 }
 
+std::string mee2ic_2_doc()
+{
+    return R"(mee2ic(jacobian = False)
+
+    Assembles and returns the ``heyoka`` symbolic expressions for the transformation between
+    modified equinoctial elements and Cartesian state vectors.
+
+    The symbolic variables are, in order: ``[p, f, g, h, k, L]``.
+    The symbolic parameters are ``[par[0], par[1]] = [mu, I]``, where ``I`` selects the equinoctial frame
+    (``I = 1`` for standard/prograde, ``I = -1`` for retrograde).
+
+    Args:
+        *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of the
+        transformation with respect to ``[p, f, g, h, k, L]``.
+
+    Returns:
+        [:class:`list`, :class:`list` or :class:`None`]:
+            A pair ``(expr, jac)`` where:
+
+            - *expr* is a list of six ``heyoka.expression`` objects representing
+              ``[x, y, z, vx, vy, vz]``
+            - *jac* is either ``None`` (if ``jacobian=False``) or a list of 36
+              ``heyoka.expression`` objects representing the 6x6 Jacobian
+
+    Examples:
+      >>> import pykep as pk
+      >>> expr, jac = pk.mee2ic()
+      >>> len(expr), jac is None
+      (6, True)
+      >>> expr, jac = pk.mee2ic(True)
+      >>> len(expr), len(jac)
+      (6, 36)
+)";
+}
+
 std::string mee2par_doc()
 {
-    return R"(mee2par(eq_elem, retrogade)
+    return R"(mee2par(mee, retrogade)
 
     Converts equinoctial orbital elements to classical Keplerian elements.
 
@@ -899,7 +969,7 @@ std::string mee2par_doc()
     the appropriate transformation for orbits with inclination near \pi.
 
     Args:
-        *eq_elem* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
+        *mee* (:class:`list` [:class:`float`]): A list of six equinoctial elements:
             - *p*: semi-latus rectum (in units L)  
             - *f*: eccentricity vector times cos(Ω+ω)
             - *g*: eccentricity vector times sin(Ω+ω)
@@ -921,9 +991,9 @@ std::string mee2par_doc()
             - *f*: true anomaly (radians, in [0, 2π])
 
     Examples:
-      >>> eq = [7000e3, 0.01, 0.02, 0.001, 0.002, 0.5]
+      >>> mee = [7000e3, 0.01, 0.02, 0.001, 0.002, 0.5]
       >>> retro = False
-      >>> par = mee2par(eq, retro)
+      >>> par = mee2par(mee, retro)
       >>> print("Keplerian elements:", par)
 )";
 }
@@ -963,8 +1033,8 @@ std::string par2mee_doc()
     Examples:
       >>> par = [7000e3, 0.01, 0.1, 1.0, 0.5, 0.3]
       >>> retro = False
-      >>> eq = par2mee(par, retro)
-      >>> print("Equinoctial elements:", eq)
+      >>> mee = par2mee(par, retro)
+      >>> print("Equinoctial elements:", mee)
 )";
 }
 
@@ -3220,17 +3290,21 @@ std::string fb_con_docstring()
 Alternative signature: fb_con(v_rel_in, v_rel_out, planet)
 
 Computes the constraint violation during a fly-by modelled as an instantaneous rotation of the incoming and outgoing relative velocities (Mivovitch).
-The two must be identical in magnitude (equality constraint) and the angle :math:`\alpha` between them must be less than the 
-:math:`\alpha_{max}`: the maximum value allowed for that particular *planet* (inequality constraint), as computed from its gravitational
-parameter and safe radius using the formula:
+The two relative velocities must be identical in magnitude (equality constraint). The inequality constraint is defined in a differentiable
+form as:
 
 .. math::
-  \alpha_{max} = - 2 \arcsin\left(\frac{1}{e_{min}}\right)
+  ineq = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha
 
 where:
 
 .. math::
   e_{min} = 1 + V_{\infty}^2 \frac{R_{safe}}{\mu}
+
+and:
+
+.. math::
+  \cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}
 
 .. note::
   This function is often used in the multiple gravity assist low-thrust (MGA-LT) encoding of an interplanetary trajectory where multiple
@@ -3258,6 +3332,56 @@ Examples:
 )";
 };
 
+std::string fb_con_2_docstring()
+{
+    return R"(fb_con(jacobian = False)
+
+Assembles and returns the ``heyoka`` symbolic expressions for the fly-by constraints.
+
+The symbolic variables are, in order: ``[vx_i, vy_i, vz_i, vx_o, vy_o, vz_o]``.
+The symbolic parameters are ``[par[0], par[1]] = [mu, safe_radius]``.
+
+The returned constraints are:
+
+.. math::
+  eq\_V2 = V_{in}^2 - V_{out}^2
+
+.. math::
+  ineq\_\delta = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha
+
+where:
+
+.. math::
+  e_{min} = 1 + \frac{safe\_radius}{\mu} V_{in}^2
+
+and:
+
+.. math::
+  \cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}
+
+Args:
+    *jacobian* (:class:`bool`, optional): If ``True``, also returns the Jacobian matrix of
+    ``[eq_V2, ineq_delta]`` with respect to ``[vx_i, vy_i, vz_i, vx_o, vy_o, vz_o]``.
+
+Returns:
+    [:class:`list`, :class:`list` or :class:`None`]:
+        A pair ``(expr, jac)`` where:
+
+        - *expr* is a list of two ``heyoka.expression`` objects representing
+          ``[eq_V2, ineq_delta]``
+        - *jac* is either ``None`` (if ``jacobian=False``) or a list of 12
+          ``heyoka.expression`` objects representing the 2x6 Jacobian
+
+Examples:
+  >>> import pykep as pk
+  >>> expr, jac = pk.fb_con()
+  >>> len(expr), jac is None
+  (2, True)
+  >>> expr, jac = pk.fb_con(True)
+  >>> len(expr), len(jac)
+  (2, 12)
+)";
+}
 std::string fb_dv_docstring()
 {
     return R"(fb_dv(v_rel_in, v_rel_out, mu, safe_radius)

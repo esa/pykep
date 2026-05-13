@@ -18,7 +18,7 @@
 namespace kep3
 {
 
-kep3_DLL_PUBLIC std::array<double, 6> mee2par(const std::array<double, 6> &eq, bool retrogade = false);
+kep3_DLL_PUBLIC std::array<double, 6> mee2par(const std::array<double, 6> &mee, bool retrogade = false);
 
 kep3_DLL_PUBLIC std::array<double, 6> par2mee(const std::array<double, 6> &par, bool retrogade = false);
 

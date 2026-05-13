@@ -17,24 +17,24 @@
 namespace kep3
 {
 
-std::array<double, 6> mee2par(const std::array<double, 6> &eq, bool retrogade)
+std::array<double, 6> mee2par(const std::array<double, 6> &mee, bool retrogade)
 {
     std::array<double, 6> retval{};
     int I = 1;
     if (retrogade) {
         I = -1;
     }
-    double ecc = std::sqrt(eq[1] * eq[1] + eq[2] * eq[2]);
-    double tmp = std::sqrt(eq[3] * eq[3] + eq[4] * eq[4]);
-    double zita = std::atan2(eq[2] / ecc, eq[1] / ecc); // [-pi, pi]
+    double ecc = std::sqrt(mee[1] * mee[1] + mee[2] * mee[2]);
+    double tmp = std::sqrt(mee[3] * mee[3] + mee[4] * mee[4]);
+    double zita = std::atan2(mee[2] / ecc, mee[1] / ecc); // [-pi, pi]
     if (zita < 0) {
         zita += 2 * pi; // [0, 2*pi]
     }
 
     retval[1] = ecc;
-    retval[0] = eq[0] / (1. - ecc * ecc);
+    retval[0] = mee[0] / (1. - ecc * ecc);
     retval[2] = half_pi * (1. - I) + 2. * I * std::atan(tmp);
-    retval[3] = std::atan2(eq[4] / tmp, eq[3] / tmp); // [-pi, pi]
+    retval[3] = std::atan2(mee[4] / tmp, mee[3] / tmp); // [-pi, pi]
     if (retval[3] < 0) {
         retval[3] += 2 * pi; // [0, 2*pi]
     }
@@ -44,27 +44,27 @@ std::array<double, 6> mee2par(const std::array<double, 6> &eq, bool retrogade)
     } else if (retval[4] > 2 * pi) {
         retval[4] -= 2 * pi;
     }
-    retval[5] = eq[5] - I * retval[3] - retval[4];
+    retval[5] = mee[5] - I * retval[3] - retval[4];
     return retval;
 }
 
 std::array<double, 6> par2mee(const std::array<double, 6> &par, bool retrogade)
 {
-    std::array<double, 6> eq{};
+    std::array<double, 6> mee{};
     int I = 0;
     if (retrogade) {
         I = -1;
-        eq[3] = 1. / std::tan(par[2] / 2) * std::cos(par[3]);
-        eq[4] = 1. / std::tan(par[2] / 2) * std::sin(par[3]);
+        mee[3] = 1. / std::tan(par[2] / 2) * std::cos(par[3]);
+        mee[4] = 1. / std::tan(par[2] / 2) * std::sin(par[3]);
     } else {
         I = 1;
-        eq[3] = std::tan(par[2] / 2) * std::cos(par[3]);
-        eq[4] = std::tan(par[2] / 2) * std::sin(par[3]);
+        mee[3] = std::tan(par[2] / 2) * std::cos(par[3]);
+        mee[4] = std::tan(par[2] / 2) * std::sin(par[3]);
     }
-    eq[0] = par[0] * (1 - par[1] * par[1]);
-    eq[1] = par[1] * std::cos(par[4] + I * par[3]);
-    eq[2] = par[1] * std::sin(par[4] + I * par[3]);
-    eq[5] = par[5] + par[4] + I * par[3];
-    return eq;
+    mee[0] = par[0] * (1 - par[1] * par[1]);
+    mee[1] = par[1] * std::cos(par[4] + I * par[3]);
+    mee[2] = par[1] * std::sin(par[4] + I * par[3]);
+    mee[5] = par[5] + par[4] + I * par[3];
+    return mee;
 }
 } // namespace kep3

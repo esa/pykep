@@ -29,6 +29,7 @@ astrodynamical notation and computations.
   :maxdepth: 1
 
   notebooks/anomalies
+  notebooks/equinoctial_elements
   notebooks/epochs
   notebooks/planet
   notebooks/interface_to_spice

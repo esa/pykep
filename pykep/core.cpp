@@ -134,12 +134,16 @@ PYBIND11_MODULE(core, m) // NOLINT
     // Exposing element conversions
     m.def("ic2par", &kep3::ic2par, py::arg("posvel"), py::arg("mu"), pk::ic2par_doc().c_str());
     m.def("par2ic", &kep3::par2ic, py::arg("elem"), py::arg("mu"), pk::par2ic_doc().c_str());
-    m.def("ic2mee", &kep3::ic2mee, py::arg("posvel"), py::arg("mu"), py::arg("retrogde") = false,
+    m.def("ic2mee", py::overload_cast<const std::array<std::array<double, 3>, 2> &, double, bool>(&kep3::ic2mee), py::arg("posvel"), py::arg("mu"), py::arg("retrogade") = false,
           pk::ic2mee_doc().c_str());
-    m.def("mee2ic", &kep3::mee2ic, py::arg("eq_elem"), py::arg("mu"), py::arg("retrogde") = false,
+    m.def("ic2mee", py::overload_cast<bool>(&kep3::ic2mee), py::arg("jacobian") = false,
+          pk::ic2mee_2_doc().c_str());
+    m.def("mee2ic", py::overload_cast<const std::array<double, 6> &, double, bool>(&kep3::mee2ic), py::arg("mee"), py::arg("mu"), py::arg("retrogade") = false,
           pk::mee2ic_doc().c_str());
-    m.def("par2mee", &kep3::par2mee, py::arg("elem"), py::arg("retrogde") = false, pk::par2mee_doc().c_str());
-    m.def("mee2par", &kep3::mee2par, py::arg("eq_elem"), py::arg("retrogde") = false, pk::mee2par_doc().c_str());
+    m.def("mee2ic", py::overload_cast<bool>(&kep3::mee2ic), py::arg("jacobian") = false,
+          pk::mee2ic_2_doc().c_str());
+    m.def("par2mee", &kep3::par2mee, py::arg("elem"), py::arg("retrogade") = false, pk::par2mee_doc().c_str());
+    m.def("mee2par", &kep3::mee2par, py::arg("mee"), py::arg("retrogade") = false, pk::mee2par_doc().c_str());
 
     // Exposing mima functions and basic transfer functionalities
     m.def("mima", &kep3::mima, py::arg("dv1"), py::arg("dv2"), py::arg("tof"), py::arg("Tmax"), py::arg("veff"),
@@ -679,6 +683,9 @@ PYBIND11_MODULE(core, m) // NOLINT
         "fb_con",
         py::overload_cast<const std::array<double, 3> &, const std::array<double, 3> &, double, double>(&kep3::fb_con),
         py::arg("v_rel_in"), py::arg("v_rel_out"), py::arg("mu"), py::arg("safe_radius"));
+    m.def(
+        "fb_con", py::overload_cast<bool>(&kep3::fb_con), py::arg("jacobian") = false, pykep::fb_con_2_docstring().c_str()
+    );
 
     m.def("fb_dv",
           py::overload_cast<const std::array<double, 3> &, const std::array<double, 3> &, const kep3::planet &>(
