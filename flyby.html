@@ -177,6 +177,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
 
@@ -444,14 +445,16 @@ In <cite>pykep</cite> we offer the basic routines that allow to use this techniq
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">fb_con</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_rel_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_rel_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.fb_con" title="Link to this definition">#</a></dt>
 <dd><p>Alternative signature: fb_con(v_rel_in, v_rel_out, planet)</p>
 <p>Computes the constraint violation during a fly-by modelled as an instantaneous rotation of the incoming and outgoing relative velocities (Mivovitch).
-The two must be identical in magnitude (equality constraint) and the angle <span class="math notranslate nohighlight">\(\alpha\)</span> between them must be less than the 
-<span class="math notranslate nohighlight">\(\alpha_{max}\)</span>: the maximum value allowed for that particular <em>planet</em> (inequality constraint), as computed from its gravitational
-parameter and safe radius using the formula:</p>
+The two relative velocities must be identical in magnitude (equality constraint). The inequality constraint is defined in a differentiable
+form as:</p>
 <div class="math notranslate nohighlight">
-\[\alpha_{max} = - 2 \arcsin\left(\frac{1}{e_{min}}\right)\]</div>
+\[ineq = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha\]</div>
 <p>where:</p>
 <div class="math notranslate nohighlight">
 \[e_{min} = 1 + V_{\infty}^2 \frac{R_{safe}}{\mu}\]</div>
+<p>and:</p>
+<div class="math notranslate nohighlight">
+\[\cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}\]</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function is often used in the multiple gravity assist low-thrust (MGA-LT) encoding of an interplanetary trajectory where multiple
@@ -469,6 +472,47 @@ low-thrust legs are patched at the fly-by planets by forcing satisfaction for th
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">eq</span><span class="p">,</span> <span class="n">ineq</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">fb_con</span><span class="p">(</span><span class="n">v_rel_in</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">4.</span><span class="p">],</span> <span class="n">v_rel_out</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">4.</span><span class="p">],</span> <span class="n">mu</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">safe_radius</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>fb_con(jacobian = False)</p>
+<p>Assembles and returns the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> symbolic expressions for the fly-by constraints.</p>
+<p>The symbolic variables are, in order: <code class="docutils literal notranslate"><span class="pre">[vx_i,</span> <span class="pre">vy_i,</span> <span class="pre">vz_i,</span> <span class="pre">vx_o,</span> <span class="pre">vy_o,</span> <span class="pre">vz_o]</span></code>.
+The symbolic parameters are <code class="docutils literal notranslate"><span class="pre">[par[0],</span> <span class="pre">par[1]]</span> <span class="pre">=</span> <span class="pre">[mu,</span> <span class="pre">safe_radius]</span></code>.</p>
+<p>The returned constraints are:</p>
+<div class="math notranslate nohighlight">
+\[eq\_V2 = V_{in}^2 - V_{out}^2\]</div>
+<div class="math notranslate nohighlight">
+\[ineq\_\delta = \left(1 - \frac{2}{e_{min}^2}\right) - \cos\alpha\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[e_{min} = 1 + \frac{safe\_radius}{\mu} V_{in}^2\]</div>
+<p>and:</p>
+<div class="math notranslate nohighlight">
+\[\cos\alpha = \frac{\mathbf v_{rel,in} \cdot \mathbf v_{rel,out}}{\sqrt{V_{in}^2 V_{out}^2}}\]</div>
+<dl>
+<dt>Args:</dt><dd><p><em>jacobian</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, also returns the Jacobian matrix of
+<code class="docutils literal notranslate"><span class="pre">[eq_V2,</span> <span class="pre">ineq_delta]</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">[vx_i,</span> <span class="pre">vy_i,</span> <span class="pre">vz_i,</span> <span class="pre">vx_o,</span> <span class="pre">vy_o,</span> <span class="pre">vz_o]</span></code>.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code>]:</dt><dd><p>A pair <code class="docutils literal notranslate"><span class="pre">(expr,</span> <span class="pre">jac)</span></code> where:</p>
+<ul class="simple">
+<li><p><em>expr</em> is a list of two <code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing
+<code class="docutils literal notranslate"><span class="pre">[eq_V2,</span> <span class="pre">ineq_delta]</span></code></p></li>
+<li><p><em>jac</em> is either <code class="docutils literal notranslate"><span class="pre">None</span></code> (if <code class="docutils literal notranslate"><span class="pre">jacobian=False</span></code>) or a list of 12
+<code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing the 2x6 Jacobian</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">fb_con</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">jac</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">(2, True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">fb_con</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">jac</span><span class="p">)</span>
+<span class="go">(2, 12)</span>
 </pre></div>
 </div>
 </dd>

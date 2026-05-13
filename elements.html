@@ -177,6 +177,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
 
@@ -455,7 +456,10 @@ the retrogade version of the elements is to be used.</p>
 <p>In <cite>pykep</cite> the convention <span class="math notranslate nohighlight">\(a&lt;0\)</span> for hyperbolas is enforced. The user will thus not be able to instantiate
 orbital elements where <span class="math notranslate nohighlight">\(a(1-e) &lt; 0\)</span></p>
 </div>
-<p>A number of functions are provided to convert to and from the various orbital parameters.</p>
+<p>A number of functions are provided to convert to and from the various orbital parameters. SOme also have the symbolic
+version, which can be used to compute the Jacobian of the transformation. The symbolic version of the functions
+return a pair of vectors, the first one is the transformation itself, while the second one is the Jacobian,
+optionally returned if the user set the flag <code class="docutils literal notranslate"><span class="pre">jacobian</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.el_type">
@@ -557,7 +561,8 @@ orbital elements where <span class="math notranslate nohighlight">\(a(1-e) &lt; 
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ic2mee">
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">ic2mee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posvel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrogade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ic2mee" title="Link to this definition">#</a></dt>
-<dd><p>Converts Cartesian state vectors (position and velocity) to equinoctial orbital elements.</p>
+<dd><blockquote>
+<div><p>Converts Cartesian state vectors (position and velocity) to equinoctial orbital elements.</p>
 <p>Equinoctial elements provide a non-singular representation of orbital motion, especially useful for
 near-circular or near-equatorial orbits. The retrograde flag allows switching between the standard and
 retrograde equinoctial elements. These last are not singular for inclinations of π.</p>
@@ -584,24 +589,60 @@ retrograde equinoctial elements. These last are not singular for inclinations of
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">7.5e3</span><span class="p">,</span> <span class="mf">1.0e3</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">retro</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eq</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">mu</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equinoctial elements:&quot;</span><span class="p">,</span> <span class="n">eq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mee</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">mu</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equinoctial elements:&quot;</span><span class="p">,</span> <span class="n">mee</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
 </dl>
+</div></blockquote>
+<p>ic2mee(jacobian = False)</p>
+<blockquote>
+<div><p>Assembles and returns the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> symbolic expressions for the transformation between
+Cartesian state vectors and modified equinoctial elements.</p>
+<p>The symbolic variables are, in order: <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">vx,</span> <span class="pre">vy,</span> <span class="pre">vz]</span></code>.
+The symbolic parameters are <code class="docutils literal notranslate"><span class="pre">[par[0],</span> <span class="pre">par[1]]</span> <span class="pre">=</span> <span class="pre">[mu,</span> <span class="pre">I]</span></code>, where <code class="docutils literal notranslate"><span class="pre">I</span></code> selects the equinoctial frame
+(<code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">=</span> <span class="pre">1</span></code> for standard/prograde, <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">=</span> <span class="pre">-1</span></code> for retrograde).</p>
+<dl>
+<dt>Args:</dt><dd><p><em>jacobian</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, also returns the Jacobian matrix of the
+transformation with respect to <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">vx,</span> <span class="pre">vy,</span> <span class="pre">vz]</span></code>.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code>]:</dt><dd><p>A pair <code class="docutils literal notranslate"><span class="pre">(expr,</span> <span class="pre">jac)</span></code> where:</p>
+<ul class="simple">
+<li><p><em>expr</em> is a list of six <code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing
+<code class="docutils literal notranslate"><span class="pre">[p,</span> <span class="pre">f,</span> <span class="pre">g,</span> <span class="pre">h,</span> <span class="pre">k,</span> <span class="pre">L]</span></code></p></li>
+<li><p><em>jac</em> is either <code class="docutils literal notranslate"><span class="pre">None</span></code> (if <code class="docutils literal notranslate"><span class="pre">jacobian=False</span></code>) or a list of 36
+<code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing the 6x6 Jacobian</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">jac</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">(6, True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">jac</span><span class="p">)</span>
+<span class="go">(6, 36)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.mee2ic">
-<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mee2ic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq_elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrogade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mee2ic" title="Link to this definition">#</a></dt>
-<dd><p>Converts equinoctial orbital elements to Cartesian state vectors (position and velocity).</p>
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mee2ic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mee</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrogade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mee2ic" title="Link to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Converts equinoctial orbital elements to Cartesian state vectors (position and velocity).</p>
 <p>Equinoctial elements provide a non-singular representation of orbital motion, especially useful for
 near-circular or near-equatorial orbits. The retrograde flag allows switching between the standard and
 retrograde equinoctial frames. These last are not singular for inclinations of pi.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>eq_elem</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]): A list of six equinoctial elements:</dt><dd><ul class="simple">
+<dt><em>mee</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]): A list of six equinoctial elements:</dt><dd><ul class="simple">
 <li><p><em>p</em>: semi-latus rectum (in units L)</p></li>
 <li><p><em>f</em>: eccentricity vector times cos(Ω+ω)</p></li>
 <li><p><em>g</em>: eccentricity vector times sin(Ω+ω)</p></li>
@@ -624,28 +665,63 @@ retrograde equinoctial frames. These last are not singular for inclinations of p
 </dl>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7000e3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mee</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7000e3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">retro</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">mee</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Position:&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Velocity:&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
 </dl>
+</div></blockquote>
+<p>mee2ic(jacobian = False)</p>
+<blockquote>
+<div><p>Assembles and returns the <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> symbolic expressions for the transformation between
+modified equinoctial elements and Cartesian state vectors.</p>
+<p>The symbolic variables are, in order: <code class="docutils literal notranslate"><span class="pre">[p,</span> <span class="pre">f,</span> <span class="pre">g,</span> <span class="pre">h,</span> <span class="pre">k,</span> <span class="pre">L]</span></code>.
+The symbolic parameters are <code class="docutils literal notranslate"><span class="pre">[par[0],</span> <span class="pre">par[1]]</span> <span class="pre">=</span> <span class="pre">[mu,</span> <span class="pre">I]</span></code>, where <code class="docutils literal notranslate"><span class="pre">I</span></code> selects the equinoctial frame
+(<code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">=</span> <span class="pre">1</span></code> for standard/prograde, <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">=</span> <span class="pre">-1</span></code> for retrograde).</p>
+<dl>
+<dt>Args:</dt><dd><p><em>jacobian</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, also returns the Jacobian matrix of the
+transformation with respect to <code class="docutils literal notranslate"><span class="pre">[p,</span> <span class="pre">f,</span> <span class="pre">g,</span> <span class="pre">h,</span> <span class="pre">k,</span> <span class="pre">L]</span></code>.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code>]:</dt><dd><p>A pair <code class="docutils literal notranslate"><span class="pre">(expr,</span> <span class="pre">jac)</span></code> where:</p>
+<ul class="simple">
+<li><p><em>expr</em> is a list of six <code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing
+<code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">vx,</span> <span class="pre">vy,</span> <span class="pre">vz]</span></code></p></li>
+<li><p><em>jac</em> is either <code class="docutils literal notranslate"><span class="pre">None</span></code> (if <code class="docutils literal notranslate"><span class="pre">jacobian=False</span></code>) or a list of 36
+<code class="docutils literal notranslate"><span class="pre">heyoka.expression</span></code> objects representing the 6x6 Jacobian</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">jac</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">(6, True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expr</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">jac</span><span class="p">)</span>
+<span class="go">(6, 36)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.mee2par">
-<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mee2par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eq_elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrogade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mee2par" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">mee2par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mee</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrogade</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.mee2par" title="Link to this definition">#</a></dt>
 <dd><p>Converts equinoctial orbital elements to classical Keplerian elements.</p>
 <p>This function transforms the non-singular equinoctial elements into classical orbital elements, which are 
 more intuitive but can be singular for certain inclinations or eccentricities. The retrograde flag selects
 the appropriate transformation for orbits with inclination near pi.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>eq_elem</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]): A list of six equinoctial elements:</dt><dd><ul class="simple">
+<dt><em>mee</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]): A list of six equinoctial elements:</dt><dd><ul class="simple">
 <li><p><em>p</em>: semi-latus rectum (in units L)</p></li>
 <li><p><em>f</em>: eccentricity vector times cos(Ω+ω)</p></li>
 <li><p><em>g</em>: eccentricity vector times sin(Ω+ω)</p></li>
@@ -670,9 +746,9 @@ the appropriate transformation for orbits with inclination near pi.</p>
 </dd>
 </dl>
 </dd>
-<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7000e3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mee</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7000e3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">retro</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">mee2par</span><span class="p">(</span><span class="n">eq</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">mee2par</span><span class="p">(</span><span class="n">mee</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keplerian elements:&quot;</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -716,8 +792,8 @@ inclinations near pi.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7000e3</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">retro</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eq</span> <span class="o">=</span> <span class="n">par2mee</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equinoctial elements:&quot;</span><span class="p">,</span> <span class="n">eq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mee</span> <span class="o">=</span> <span class="n">par2mee</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">retro</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equinoctial elements:&quot;</span><span class="p">,</span> <span class="n">mee</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
