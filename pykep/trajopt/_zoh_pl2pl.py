@@ -15,72 +15,58 @@ from matplotlib import pyplot as _plt
 
 class zoh_pl2pl:
     """Represents the optimal low-thrust transfer between two :class:`~pykep.planet` using the Zero Order Hold (direct) method with free
-    departure and arrival velocities.
+    departure and arrival velocities and under a generic (low-thrust) dynamics.
 
     This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its initial and final states, as well as its transfer time T, 
     final mass mf and the controls as to link two orbits described via planets to a low-thrust trajectory. The spacecraft can also be allowed to depart
     and arrive with residual relative velocities.
-
-    **Unit Systems**
-    
+  
     This class manages two distinct and independent unit systems:
 
-    1. **Ephemeris Units** (from planet providers ``pls`` and ``plf``)
+    1. **Ephemeris Units** (from :class:`~pykep.planet`)
         - Time input: MJD2000 days
         - Position/velocity output: user-defined (e.g., SI: meters, meters/second)
-        - **Critical contract:** velocities and accelerations must be per *second* (not per day)
+        - **Critical contract:** velocities and accelerations must be per *second*
 
-    2. **Integrator Units** (from heyoka ``tas``)
-        - All internal state and time are dimensionless
-        - Typically assumes μ = 1 and some implicit length scale
-
-    **Scaling Parameters**
+    2. **Integrator Units** (from the Taylor adaptive integrator ``tas``)
+        - These are free, typically assuming μ = 1 as well as a length scale
 
     The transition between systems is controlled by three user-supplied parameters:
 
     - ``L`` (default: AU): length scale mapping ephemeris position to Integrator Units
     - ``V`` (default: EARTH_VELOCITY): velocity scale mapping ephemeris velocity to Integrator Units
-    - ``TIME = L / V``: derived time scale (in SI seconds) converting MJD2000 days to Integrator Units
-    - ``ACC = V² / L``: derived acceleration scale converting ephemeris acceleration Integrator Units
+    - ``TIME = L / V``: derived time scale (in SI seconds) converting seconds to Integrator Units
+    - ``ACC = V² / L``: derived acceleration scale converting ephemeris acceleration to Integrator Units
 
-    **Unit Conversions**
-
-    The class applies these standardized conversions to the units used in the backbone numerical integration:
+    As a consequence, the class applies these standardized conversions to the units used in the backbone numerical integration:
 
     - Position: $r_{tas} = r_{pla} / L$
     - Velocity: $v_{tas} = v_{pla} / V$
     - Acceleration: $a_{tas} = a_{pla} / \\text{ACC}$
     - Time: $t_{tas} = t_{pla} \\cdot \\text{DAY2SEC} / \\text{TIME}$
 
-    where $t_{pla}$ is in MJD2000 days and ``DAY2SEC = 86400`` (seconds per day).
+    where $t_{pla}$ is in days.
 
-    **Planet Ephemeris Contract**
+    In a nuthsell: choose L and V to match the units returned by pls/plf, but those ephemeris
+    rates must be per second (not per day or something else).
 
-    Planets must provide methods respecting this interface:
-
-    - ``eph(t_mjd2000_days)`` → returns ``(r, v)`` in the chosen units (default: SI meters, meters/second)
-    - ``acc(t_mjd2000_days)`` → returns ``a`` in the chosen acceleration units (default: SI m/s²)
-
-    **Critical requirement:** both velocities and accelerations must be per *second*, not per day.
-    If a planet returns velocities per day, gradient computations will be incorrect.
-
-    The decision vector is::
+        The decision vector is::
 
         x = [t0_fractional, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights] for softmax)
 
     where:
 
     - ``t0_fractional``: non-dimensional, fraction of the ``t0_bounds`` range
-    - ``mf``: non-dimensional final mass (scaled by ``MASS``)
+    - ``mf``: non-dimensional final mass
     - ``vinf_dep``, ``vinf_arr``: non-dimensional excess velocity magnitudes (scaled by ``V``)
-    - ``idep``, ``iarr``: unit direction vectors (magnitude = 1)
-    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle, directions are unit vectors
+    - ``idep``, ``iarr``: direction vectors
+    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle
     - ``tof``: non-dimensional time of flight (scaled by ``TIME``)
     - ``weights``: softmax weights (only if ``time_encoding='softmax'``)
 
     .. note::
 
-        The API differs from the ``point2point`` problem: unit scales (``L``, ``V``) must be explicitly 
+        The API differs from the :class:`~pykep.trajopt.point2point` problem: unit scales (``L``, ``V``) must be explicitly 
         provided to correctly bridge ephemeris and integrator unit systems. Mismatched scales will silently 
         produce incorrect trajectories and gradients.
     """
@@ -105,30 +91,51 @@ class zoh_pl2pl:
         V=_pk.EARTH_VELOCITY,
     ):
         """
-        Initializes the zoh_pl2pl_free_v instance with given parameters.
+        Initializes a planet-to-planet ZOH low-thrust transfer problem with free departure and arrival excess velocities.
 
         Args:
-            *pls* (:class:`~pykep.planet`): Initial planet. Defaults to jpl_lp Earth.
+            *pls* (:class:`~pykep.planet`): Departure planet or ephemeris provider.
+                It must implement ``eph(t_mjd2000)`` and, if gradients are requested,
+                also ``acc(t_mjd2000)``. The returned position, velocity and acceleration
+                units must be consistent with ``L`` and ``V``. Defaults to JPL low-precision Earth.
 
-            *plf* (:class:`~pykep.planet`): Final planet. Defaults to jpl_lp Mars.
+            *plf* (:class:`~pykep.planet`): Arrival planet or ephemeris provider.
+                It follows the same contract as ``pls``. Defaults to JPL low-precision Mars.
 
-            *ms* (:class:`float`): Initial spacecraft mass (non-dimensional). Defaults to 1.0.
+            *ms* (:class:`float`): Initial spacecraft mass in integrator units.
+                This is the mass used in ``self.leg.state0`` and therefore must match the
+                mass normalization assumed by the chosen dynamics in ``tas``. Defaults to 1.0.
 
-            *max_thrust* (:class:`float`): Maximum thrust (non-dimensional). Defaults to 0.22.
+            *max_thrust* (:class:`float`): Maximum thrust magnitude in integrator units.
+                The throttle component stored in each segment of the decision vector is scaled
+                by this value before being assigned to the ZOH leg. Defaults to 0.22.
 
-            *t0_bounds* (:class:`list`): Bounds for departure epoch in MJD2000. Defaults to [6700.0, 6800.0].
+            *t0_bounds* (:class:`list`): Lower and upper bounds for the departure epoch,
+                expressed in MJD2000 days. The first decision variable is a fractional value in
+                ``[0, 1]`` that is mapped into this interval. Defaults to ``[6700.0, 6800.0]``.
 
-            *tof_bounds* (:class:`list`): Bounds for time of flight (non-dimensional). Defaults to [3.4, 8.6].
+            *tof_bounds* (:class:`list`): Bounds for the time of flight in integrator time units.
+                Conversion to days is performed internally using ``TIME / DAY2SEC`` when querying
+                the arrival ephemeris. Defaults to ``[3.4, 8.6]``.
 
-            *mf_bounds* (:class:`list`): Bounds for final mass (non-dimensional). Defaults to [0.2, 1.0].
+            *mf_bounds* (:class:`list`): Bounds for the final spacecraft mass in integrator units.
+                The optimization objective is ``-mf``. Defaults to ``[0.2, 1.0]``.
 
-            *vinf_dep_bounds* (:class:`list`): Bounds for departure excess velocity magnitude (non-dimensional). Defaults to [0.0, 0.2].
+            *vinf_dep_bounds* (:class:`list`): Bounds for the magnitude of the departure excess
+                velocity in integrator velocity units, that is, after division by ``V``.
+                Defaults to ``[0.0, 0.2]``.
 
-            *vinf_arr_bounds* (:class:`list`): Bounds for arrival excess velocity magnitude (non-dimensional). Defaults to [0.0, 0.2].
+            *vinf_arr_bounds* (:class:`list`): Bounds for the magnitude of the arrival excess
+                velocity in integrator velocity units, that is, after division by ``V``.
+                Defaults to ``[0.0, 0.2]``.
 
-            *nseg* (:class:`int`): Number of segments for the trajectory. Defaults to 10.
+            *nseg* (:class:`int`): Number of constant-control segments used by the ZOH transcription.
+                Each segment contributes four decision variables: throttle magnitude and a direction vector.
+                Defaults to 10.
 
-            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.zoh`. Defaults to 0.6.
+            *cut* (:class:`float`): Cut parameter passed to :class:`~pykep.leg.zoh`.
+                It defines the internal forward/backward split used by the transcription.
+                Defaults to 0.6.
 
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
@@ -136,13 +143,21 @@ class zoh_pl2pl:
 
                 - `ta_var`: Variational dynamics (state dim 84, same pars). When None, no gradients will be used.
 
-            *time_encoding* (:class:`str`): Time encoding scheme. Defaults to 'uniform'. Options: 'uniform', 'softmax'.
+            *time_encoding* (:class:`str`): Time-grid encoding scheme.
+                ``'uniform'`` uses equally spaced segment boundaries over the total time of flight.
+                ``'softmax'`` adds ``nseg`` weights to the decision vector and maps them to positive
+                segment durations summing to the total time of flight. Defaults to ``'uniform'``.
 
-            *w_bounds_softmax* (:class:`list`): Bounds for softmax weights. Defaults to [-1., 1.].
+            *w_bounds_softmax* (:class:`list`): Lower and upper bounds for the softmax weights.
+                These bounds are used only when ``time_encoding='softmax'``. Defaults to ``[-1.0, 1.0]``.
 
-            *L* (:class:`float`): Length units. Defaults to AU. (user must ensure consistency with the tas assumptions)
+            *L* (:class:`float`): Length scale used to map ephemeris positions to integrator units.
+                If ``pls`` and ``plf`` return positions in meters, a typical choice is ``pykep.AU``
+                or another length unit consistent with the integrator dynamics.
 
-            *V* (:class:`float`): Velocity units. Defaults to EARTH_VELOCITY. (user must ensure consistency with the tas assumptions)
+            *V* (:class:`float`): Velocity scale used to map ephemeris velocities to integrator units.
+                If ephemeris velocities are returned in meters per second, ``V`` must also be expressed
+                in meters per second. 
         """
         # We define some additional datamembers useful later-on
         self.pls = pls
