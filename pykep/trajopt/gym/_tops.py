@@ -7,13 +7,17 @@ class tops_twobody:
     Two-body low-thrust benchmark from the TOPS
     (Trajectory Optimisation Problems in Space) database.
 
+    .. note::
+        These instances have fixed end-points and (mostly) fixed time of flight, 
+        so they are not moving-end problems.
+
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
     Space, are low-thrust trajectory optimization
-    problems transcribed into nonlinear programs by a direct method. In this
+    problems described in json format. In this specific
     instance the spacecraft dynamics are modeled in Cartesian coordinates under
-    two-body motion. The transcription uses a forward-backward shooting scheme,
-    which introduces highly nonlinear mismatch constraints, together with
-    throttle constraints on the segment controls.
+    two-body motion and. The transcription to a Non Linear Programming priblem (NLP) uses
+    a forward-backward shooting scheme, which introduces highly nonlinear
+    mismatch constraints, together with throttle constraints on the segment controls.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
@@ -25,7 +29,26 @@ class tops_twobody:
     """
 
     def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
-        """Construct a two-body TOPS instance from a predefined gym case."""
+        """Construct a two-body TOPS instance from a predefined gym case.
+        
+        Args:
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+                (two-body Cartesian dynamics). Available problem names can be found in the keys of
+                :data:`~pykep.trajopt.gym.tops_twobody_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
+
+            *cut* (:class:`float`, optional): Cut parameter for the forward/backward split in the ZOH transcription.
+                Defaults to 0.5.
+
+            *nseg* (:class:`int`, optional): Number of constant-control segments for the zero-order hold transcription.
+                Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
+
+            *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
+                
+                - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
+                - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
+                
+                Defaults to ``'uniform'``.
+        """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
         self.name = "Two-body Keplerian: " + prob_name
@@ -83,54 +106,19 @@ class tops_twobody:
         """Return additional information for the selected gym case."""
         return self.extra_info
     
-    def known_hessians(self, x):
-        """
-        Return known constraint Hessians as ``(k, hess_func)`` pairs.
-
-        Index contract:
-        - ``k`` is the index in the full fitness ordering
-          ``[obj, eq_0, ..., eq_{nec-1}, ineq_0, ..., ineq_{nic-1}]``.
-        - The API is agnostic to equality/inequality type at this level.
-
-        Sparse contract:
-                - ``hess_func(x)`` can return any sparse structure agreed with the
-                    consumer (solver-side adapter).
-                - For this UDP we return a SciPy ``csc_matrix``.
-
-        In this two-body formulation the known Hessians are those of throttle
-        constraints, each depending only on ``(ix, iy, iz)`` of one segment and
-        equal to ``2 * I_3`` on that block.
-        """
-        first_throttle_idx = 1 + self.udp.get_nec()
-        known_idxs = [first_throttle_idx + i for i in range(self.udp.nseg - 1)]
-        throttle_diag = _np.array([2.0, 2.0, 2.0], dtype=float)
-        retval = []
-        for i in known_idxs:
-            def hess_func(x, idx=i):
-                # Segment control is (T, ix, iy, iz); Hessian is nonzero only on ix,iy,iz.
-                control_start_idx = 1 + (idx - first_throttle_idx) * 4
-                rows = _np.array(
-                    [control_start_idx + 1, control_start_idx + 2, control_start_idx + 3],
-                    dtype=int,
-                )
-                cols = rows.copy()
-                return sparse.csc_matrix(
-                    (throttle_diag.copy(), (rows, cols)), shape=(len(x), len(x))
-                )
-            retval.append((i, hess_func))
-        return retval
-
-
     def __getattr__(self, name):
         """Forward any undefined attribute/method calls to self.udp."""
         udp = object.__getattribute__(self, 'udp')
         return getattr(udp, name)
 
-
 class tops_mee:
     """
     Two-body low-thrust benchmark in modified equinoctial elements from the
     TOPS (Trajectory Optimisation Problems in Space) database.
+
+    .. note::
+        These instances have fixed end-points and (mostly) fixed time of flight, 
+        so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
     Space, are low-thrust trajectory optimization
@@ -150,7 +138,26 @@ class tops_mee:
     """
 
     def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
-        """Construct a two-body MEE TOPS instance from a predefined gym case."""
+        """Construct a two-body MEE TOPS instance from a predefined gym case.
+        
+        Args:
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+                (two-body dynamics in modified equinoctial elements). Available problem names can be found in the keys of
+                :data:`~pykep.trajopt.gym.tops_mee_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
+
+            *cut* (:class:`float`, optional): Cut parameter for the forward/backward split in the ZOH transcription.
+                Defaults to 0.5.
+
+            *nseg* (:class:`int`, optional): Number of constant-control segments for the zero-order hold transcription.
+                Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
+
+            *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
+                
+                - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
+                - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
+                
+                Defaults to ``'uniform'``.
+        """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
         self.name = "Two-body MEE: " + prob_name
@@ -259,6 +266,10 @@ class tops_ss:
     Solar-sailing benchmark from the TOPS
     (Trajectory Optimisation Problems in Space) database.
 
+    .. note::
+        These instances have fixed end-points and (mostly) fixed time of flight, 
+        so they are not moving-end problems.
+
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
     Space, are low-thrust trajectory optimization
     problems transcribed into nonlinear programs by a direct method. In this
@@ -278,7 +289,26 @@ class tops_ss:
     """
 
     def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
-        """Construct a solar-sailing TOPS instance from a predefined gym case."""
+        """Construct a solar-sailing TOPS instance from a predefined gym case.
+        
+        Args:
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+                (solar sail dynamics). Available problem names can be found in the keys of
+                :data:`~pykep.trajopt.gym.tops_ss_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
+
+            *cut* (:class:`float`, optional): Cut parameter for the forward/backward split in the ZOH transcription.
+                Defaults to 0.5.
+
+            *nseg* (:class:`int`, optional): Number of constant-control segments for the zero-order hold transcription.
+                Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
+
+            *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
+                
+                - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
+                - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
+                
+                Defaults to ``'uniform'``.
+        """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
         self.name = "Solar sailing: " + prob_name
@@ -346,6 +376,10 @@ class tops_cr3bp:
     CR3BP low-thrust benchmark from the TOPS
     (Trajectory Optimisation Problems in Space) database.
 
+    .. note::
+        These instances have fixed end-points and (mostly) fixed time of flight, 
+        so they are not moving-end problems.
+
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
     Space, are low-thrust trajectory optimization
     problems transcribed into nonlinear programs by a direct method. In this
@@ -365,7 +399,27 @@ class tops_cr3bp:
     """
 
     def __init__(self, prob_name, cut=0.5, nseg=60, time_encoding="uniform"):
-        """Construct a CR3BP TOPS instance from a predefined gym case."""
+        """Construct a CR3BP TOPS instance from a predefined gym case.
+        
+        Args:
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+                (circular restricted three-body problem dynamics). Available problem names can be found in the keys of
+                :data:`~pykep.trajopt.gym.tops_cr3bp_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
+
+            *cut* (:class:`float`, optional): Cut parameter for the forward/backward split in the ZOH transcription.
+                Defaults to 0.5.
+
+            *nseg* (:class:`int`, optional): Number of constant-control segments for the zero-order hold transcription.
+                Each segment contributes to the NLP dimensionality and complexity. CR3BP problems typically require
+                more segments than two-body problems. Defaults to 60.
+
+            *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
+                
+                - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
+                - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
+                
+                Defaults to ``'uniform'``.
+        """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
         self.name = "CR3BP: " + prob_name

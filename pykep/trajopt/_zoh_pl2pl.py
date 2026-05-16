@@ -87,6 +87,9 @@ class zoh_pl2pl:
         nseg=10,
         cut=0.6,
         tas=(_pk.ta.get_zoh_kep(1e-10), None),
+        cart2state = None,
+        state2cart = None,
+        inequalities_for_tc = False,
         time_encoding="uniform",
         w_bounds_softmax=[-1.0, 1.0],
         L=_pk.AU,
@@ -139,11 +142,28 @@ class zoh_pl2pl:
                 It defines the internal forward/backward split used by the transcription.
                 Defaults to 0.6.
 
+            *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are
+                formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise they are formulated
+                as equalities (``|i_u| = 1``). Defaults to False (equality formulation).
+
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
                 - `ta`: Nominal dynamics (state dim 7, pars ≥ 4)
 
                 - `ta_var`: Variational dynamics (state dim 84, same pars). When None, no gradients will be used.
+
+            *cart2state* (:class:`list`): Optional list ``[transform, jacobian]`` for non-Cartesian dynamics.
+                ``transform`` is a callable that maps a 6D Cartesian state (in integrator units) to the
+                6D state expected by the dynamics. ``jacobian`` is a callable that returns the 6×6 derivative
+                of ``transform`` w.r.t. the Cartesian state, as a flattened 36-element array (row-major order).
+                When provided, the class applies this transformation to boundary states before propagation,
+                and uses the Jacobian for gradient computation. Both functions receive the state as a 1D array.
+                Defaults to ``None`` (Cartesian dynamics).
+
+            *state2cart* (:class:`callable`): Optional callable for converting dynamics states back to Cartesian.
+                It maps a 6D state (in the dynamics' representation) to 6D Cartesian positions and velocities
+                (in integrator units). Used by ``plot()`` and ``pretty()`` methods for visualization.
+                Ignored if ``cart2state`` is not provided. Defaults to ``None``.
 
             *time_encoding* (:class:`str`): Time-grid encoding scheme.
                 ``'uniform'`` uses equally spaced segment boundaries over the total time of flight.
@@ -159,7 +179,7 @@ class zoh_pl2pl:
 
             *V* (:class:`float`): Velocity scale used to map ephemeris velocities to integrator units.
                 If ephemeris velocities are returned in meters per second, ``V`` must also be expressed
-                in meters per second. 
+                in meters per second.
         """
         # We define some additional datamembers useful later-on
         self.pls = pls
@@ -175,7 +195,25 @@ class zoh_pl2pl:
         self.with_gradient = tas[1] is not None
         self.time_encoding = time_encoding
         self.w_bounds_softmax = w_bounds_softmax
+        self.inequalities_for_tc = inequalities_for_tc
+        self.cart2state = cart2state
+        self.state2cart = state2cart
 
+        # Check user provided functions for cartesian-state conversions if provided
+        if self.cart2state is not None:
+            if not isinstance(self.cart2state, list):
+                raise ValueError("cart2state must be a list containing the conversion and optionally its Jacobian")
+            if len(self.cart2state) == 0 or len(self.cart2state) > 2:
+                raise ValueError("cart2state must contain at least the conversion function and at most its Jacobian")       
+            if not callable(self.cart2state[0]):
+                raise ValueError("The first element of cart2state must be a callable function")
+            if tas[1] is not None and not callable(self.cart2state[1]):
+                raise ValueError("cart2state Jacobian function must be provided when using gradients")
+            
+        if self.state2cart is not None:
+            if not callable(self.state2cart):
+                raise ValueError("state2cart must be a callable function")
+            
         # Non dimensional units
         # (these are needed to bridge to the calls to the eph method: mjd2000 -> SI, and the dynamics which may be written in non dimensional units)
         self.L = L
@@ -289,8 +327,18 @@ class zoh_pl2pl:
         v_sc_dep_nd = vs_nd + dv_dep_nd
         v_sc_arr_nd = vf_nd + dv_arr_nd
 
-        self.leg.state0 = list(rs_nd) + list(v_sc_dep_nd) + [self.ms]
-        state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        # Apply coordinate transformation if provided
+        if self.cart2state is not None:
+            cart_state0 = list(rs_nd) + list(v_sc_dep_nd)
+            cart_state1 = list(rf_nd) + list(v_sc_arr_nd)
+            state0_transformed = self.cart2state[0](cart_state0)
+            state1_transformed = self.cart2state[0](cart_state1)
+            self.leg.state0 = list(state0_transformed) + [self.ms]
+            state1[:6] = list(state1_transformed)
+        else:
+            self.leg.state0 = list(rs_nd) + list(v_sc_dep_nd) + [self.ms]
+            state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        
         self.leg.state1 = state1
 
         # Set time grid based on encoding (non-dimensional time)
@@ -424,37 +472,72 @@ class zoh_pl2pl:
         # Partials of mismatch constraints w.r.t. t0
         # d(rs_nd)/dt0 = d(rs/L)/dt0_days = vs * DAY2SEC / L = vs_nd * (V/L) * DAY2SEC
         # d(vs_nd)/dt0 = (1/V) * as * DAY2SEC = (as_nd * V/TIME) / V * DAY2SEC = as_nd * DAY2SEC / TIME
-        dx0_dt0_nd = _np.concatenate(
+        dx0_dt0_cart = _np.concatenate(
             [
                 vs_nd * _pk.DAY2SEC / self.TIME,
                 as_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
+        
+        # Apply Jacobian of cart2state transformation if provided
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            dx0_dt0_nd = J0 @ dx0_dt0_cart[:6]
+            dx0_dt0_nd = _np.concatenate([dx0_dt0_nd, [0.0]])
+        else:
+            dx0_dt0_nd = dx0_dt0_cart
+        
         gradient[1:8, 0] = dmc_dx0 @ dx0_dt0_nd
 
         # Also account for final state change through t0 (since tf = t0 + tof * TIME / DAY2SEC)
         # dtf/dt0 = 1, so d(rf_nd)/dt0 = vf_nd * (V/L) * DAY2SEC, d(vf_nd)/dt0 = af_nd * DAY2SEC/TIME
-        dx1_dt0_nd = _np.concatenate(
+        dx1_dt0_cart = _np.concatenate(
             [
                 vf_nd * _pk.DAY2SEC / self.TIME,
                 af_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
+        
+        # Apply Jacobian of cart2state transformation if provided
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            dx1_dt0_nd = J1 @ dx1_dt0_cart[:6]
+            dx1_dt0_nd = _np.concatenate([dx1_dt0_nd, [0.0]])
+        else:
+            dx1_dt0_nd = dx1_dt0_cart
+        
         gradient[1:8, 0] += dmc_dx1 @ dx1_dt0_nd
 
         # Partials w.r.t. final mass
         gradient[1:8, 1] = dmc_dx1[:, 6]
 
         # Partials w.r.t. departure velocity magnitude
-        gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            gradient[1:8, 2] = (dmc_dx0 @ _np.vstack([_np.zeros((3, 6)), J0 @ _np.eye(6)[:, 3:6]])) @ idep
+        else:
+            gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
 
         # Partials w.r.t. departure direction
-        gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            gradient[1:8, 3:6] = (dmc_dx0 @ _np.vstack([_np.zeros((3, 6)), J0 @ _np.eye(6)[:, 3:6]])) * vinf_dep_mag
+        else:
+            gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
 
         # Partials w.r.t. arrival velocity magnitude
-        gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            gradient[1:8, 6] = (dmc_dx1 @ _np.vstack([_np.zeros((3, 6)), J1 @ _np.eye(6)[:, 3:6]])) @ iarr
+        else:
+            gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
 
         # Partials w.r.t. arrival direction
         gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
@@ -521,7 +604,18 @@ class zoh_pl2pl:
         return self.with_gradient
 
     def get_nec(self):
-        return 7 + self.nseg + 2
+        if self.inequalities_for_tc:
+            # Throttle constraints and boundary impulses are inequalities: |i_u|^2 - 1 <= 0
+            return 7 
+        else:
+            return 7 + self.nseg + 2
+        
+    def get_nic(self):
+        if self.inequalities_for_tc:
+            # Throttle constraints and boundary impulses are inequalities: |i_u|^2 - 1 <= 0
+            return self.nseg + 2
+        else:
+            return 0
 
     def pretty(self, x):
         """
@@ -617,6 +711,21 @@ class zoh_pl2pl:
         # to be replaced with a plot method akin the sims-flanagan point2point one
         self._set_leg_from_x(x_arr)
         fwd, bck, _ = self.leg.get_state_info(N=N)
+        
+        # Convert trajectories back to Cartesian if needed
+        if self.state2cart is not None:
+            fwd_cart = []
+            for segment in fwd:
+                segment_cart = _np.array([_np.concatenate([self.state2cart(state[:6]), state[6:]]) for state in segment])
+                fwd_cart.append(segment_cart)
+            fwd = fwd_cart
+            
+            bck_cart = []
+            for segment in bck:
+                segment_cart = _np.array([_np.concatenate([self.state2cart(state[:6]), state[6:]]) for state in segment])
+                bck_cart.append(segment_cart)
+            bck = bck_cart
+        
         # compute the color scheme
         throttles = x_arr[10 : 10 + 4 * self.nseg : 4]
         if ax is None:
