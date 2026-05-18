@@ -25,11 +25,11 @@
   </p>
 </p>
 
-# 🚀 A new version (3) is here!
+# Pykep version 3
 
 This is the official repo for **kep** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
 
-The code is still under development and we will only release the conda packages when we are sure all is well coordinated. In the meantime, feel free to play around discuss API and help us debug :)
+The code is still under development and we will only release the conda and PyPi packages when we are confidnt all is well coordinated. In the meantime, feel free to play around discuss API and help us debug :)
 
 If you care about orbital mechanics, trajectory optimization, or spacecraft mission design — **pykep belongs in your toolkit**. From students and researchers to mission designers and competition participants (hello, GTOC!), pykep is the Swiss Army knife of astrodynamics.
 
@@ -42,18 +42,6 @@ If you care about orbital mechanics, trajectory optimization, or spacecraft miss
 kep is a C++ library with a rich Python interface (pykep) for **space flight mechanics** research. Built from the ground up with performance, usability, and extensibility in mind, it brings together everything the astrodynamics community has been asking for tailored at scientists who want to perform cutting edge research in space flight mechanics.
 
 Whether you're computing **Lambert arcs**, propagating **Keplerian orbits**, or designing complex **multi-gravity-assist trajectories** and designing the next generation solvers for low-thrust optimization, kep3 has you covered with clean APIs, rigorous numerics, and serious speed.
-
----
-
-## Why switch from version 2?
-
-pykep served the community faithfully for years, but the new version raises the bar across the board:
-
-- ⚡ **Faster** — rewritten for increased performance
-- 🧼 **Cleaner API** — more intuitive, consistent, and Pythonic interfaces
-- 🔬 **Better numerics** — improved solvers and propagators with higher accuracy
-- 📦 **Modern packaging** — easy installation, better dependency management
-- 📖 **Richer documentation** — with examples, tutorials, and full API reference
 
 ---
 
@@ -76,27 +64,33 @@ In practice, if `MAJOR` changes, downstream binaries should expect possible ABI 
 
 ## Installation
 
-Use one of the following installation paths, in order of preference.
+Choose one of the following installation paths, depending on your use case.
 
 ### 1. Conda (preferred)
 
-Conda is the recommended way to install pykep and its scientific dependencies.
+Conda is the recommended option for a fully managed scientific Python stack.
 
 ```bash
 conda install -c conda-forge pykep
 ```
 
-Note: conda-forge currently provides the stable v1 line. v3 packages are coming soon on conda-forge.
+Current status: conda-forge currently provides the stable v1 line. v3 packages will be published once the v3 API is stabilized.
 
 ### 2. PyPI (pip)
+
+Use pip if you prefer Python wheels from PyPI.
 
 ```bash
 pip install pykep
 ```
 
-This provides only wheels for linux arm64 and amd64 architectiures.
+Current status: PyPI currently provides the stable v1 line.
+
+Wheel availability: currently Linux `arm64` and `amd64`.
 
 ### 3. Build from source (recommended for v3 development now)
+
+Building from source is currently the recommended path for v3 development and testing.
 
 1. Create and activate the development environment:
 
@@ -105,7 +99,7 @@ conda env create -f kep3_devel.yml
 conda activate kep3_devel
 ```
 
-2. Configure and install `kep3` + `pykep`:
+2. Configure and install `kep3` and `pykep`:
 
 ```bash
 cmake -S . -B build -G Ninja \
@@ -116,40 +110,71 @@ cmake -S . -B build -G Ninja \
 cmake --build build --target install --parallel
 ```
 
-3. Quick import check:
+3. Validate the installation:
 
 ```bash
 python -c "import pykep; print(pykep.__version__)"
 ```
 
-### Notes On Configure Flags
+### Configure Flags Reference
 
-The flag -DCMAKE_EXPORT_COMPILE_COMMANDS=1 tells CMake to generate a compile_commands.json file in the build directory. This file contains the exact compiler invocation used for each translation unit and is commonly used by IDE tooling, language servers, static analyzers, and code quality tools.
+The configure step controls where `kep3` is installed, where dependencies are discovered, and which optional targets are generated.
 
-Flags used in the commands above:
+#### Core flags used above
 
-- -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-  Installs headers, libraries, and package config files into the currently active conda environment.
+```cmake
+-DCMAKE_EXPORT_COMPILE_COMMANDS=1
+-DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"
+-DCMAKE_PREFIX_PATH="$CONDA_PREFIX"
+-Dkep3_BUILD_PYTHON_BINDINGS=ON
+```
 
-- -DCMAKE_PREFIX_PATH=$CONDA_PREFIX
-  Tells CMake where to search for dependencies first (for example Boost, fmt, heyoka, xtensor, xtensor-blas) inside the active conda environment.
+1. `-DCMAKE_EXPORT_COMPILE_COMMANDS=1`
+   Produces `build/compile_commands.json`, a machine-readable compilation database used by IDEs, language servers, static analyzers, and refactoring tools.
 
-Common optional project flags:
+2. `-DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"`
+   Installs headers, libraries, CMake package files, and Python artifacts into the active conda environment, avoiding contamination of system paths.
 
-- -Dkep3_BUILD_TESTS=ON
-  Builds C++ unit tests.
+3. `-DCMAKE_PREFIX_PATH="$CONDA_PREFIX"`
+   Prioritizes dependency resolution from the active conda environment (for example `Boost`, `fmt`, `heyoka`, `xtensor`, `xtensor-blas`). This improves reproducibility across machines.
 
-- -Dkep3_BUILD_BENCHMARKS=ON
-  Builds benchmark executables.
+4. `-Dkep3_BUILD_PYTHON_BINDINGS=ON`
+   Enables build and installation of the `pykep` Python extension module.
 
-- -Dkep3_BUILD_PYTHON_BINDINGS=ON
-  Builds and installs the pykep Python module.
+#### Optional project flags
 
-- -DKEP3_VERBOSE_CONFIGURE=ON
-  Enables more detailed configure-time diagnostics.
+```cmake
+-Dkep3_BUILD_TESTS=ON
+-Dkep3_BUILD_BENCHMARKS=ON
+-DKEP3_VERBOSE_CONFIGURE=ON
+```
 
-Common optional CMake flags:
+1. `-Dkep3_BUILD_TESTS=ON`
+   Builds the C++ unit-test targets.
 
-- -DCMAKE_BUILD_TYPE=Debug
-  Useful for debugging builds on single-config generators (for example Ninja and Unix Makefiles).
+2. `-Dkep3_BUILD_BENCHMARKS=ON`
+   Builds benchmark executables under `benchmark/`.
+
+3. `-DKEP3_VERBOSE_CONFIGURE=ON`
+   Emits additional configure-time diagnostics useful for dependency and toolchain troubleshooting.
+
+#### Common CMake build-type flag
+
+```cmake
+-DCMAKE_BUILD_TYPE=Debug
+```
+
+Use this with single-config generators (for example `Ninja` and `Unix Makefiles`) when you need debug symbols and lower optimization.
+
+#### Example: full configure command with common optional targets
+
+```bash
+cmake -S . -B build -G Ninja \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+  -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX" \
+  -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+  -Dkep3_BUILD_PYTHON_BINDINGS=ON \
+  -Dkep3_BUILD_TESTS=ON \
+  -Dkep3_BUILD_BENCHMARKS=ON
+```
 
