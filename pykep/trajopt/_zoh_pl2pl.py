@@ -75,23 +75,24 @@ class zoh_pl2pl:
 
     def __init__(
         self,
-        pls=_pk.planet(_pk.udpla.jpl_lp(body="EARTH")),
-        plf=_pk.planet(_pk.udpla.jpl_lp(body="MARS")),
+        pls=None,
+        plf=None,
         ms=1.0,
         max_thrust=0.22,
-        t0_bounds=[6700.0, 6800.0],
-        tof_bounds=[3.4, 8.6],
-        mf_bounds=[0.2, 1.0],
-        vinf_dep_bounds=[0.0, 0.2],
-        vinf_arr_bounds=[0.0, 0.2],
+        t0_bounds=None,
+        tof_bounds=None,
+        mf_bounds=None,
+        vinf_dep_bounds=None,
+        vinf_arr_bounds=None,
         nseg=10,
         cut=0.6,
-        tas=(_pk.ta.get_zoh_kep(1e-10), None),
+        tas=None,
         cart2state = None,
         state2cart = None,
         inequalities_for_tc = False,
         time_encoding="uniform",
-        w_bounds_softmax=[-1.0, 1.0],
+        w_bounds_softmax=None,
+        nrevs = None,
         L=_pk.AU,
         V=_pk.EARTH_VELOCITY,
     ):
@@ -170,6 +171,10 @@ class zoh_pl2pl:
                 ``'softmax'`` adds ``nseg`` weights to the decision vector and maps them to positive
                 segment durations summing to the total time of flight. Defaults to ``'uniform'``.
 
+            *nrevs* (:class:`int`): Use only in case the dynamics is in mean orbital elements (MEE) form, this
+                parameter specifies the number of revolutions to be completed. It is used to add a mean longitude
+                 offset to the final state to enforce the desired number of revolutions.
+
             *w_bounds_softmax* (:class:`list`): Lower and upper bounds for the softmax weights.
                 These bounds are used only when ``time_encoding='softmax'``. Defaults to ``[-1.0, 1.0]``.
 
@@ -181,6 +186,26 @@ class zoh_pl2pl:
                 If ephemeris velocities are returned in meters per second, ``V`` must also be expressed
                 in meters per second.
         """
+        # Initialize defaults for optional constructor arguments.
+        if pls is None:
+            pls = _pk.planet(_pk.udpla.jpl_lp(body="EARTH"))
+        if plf is None:
+            plf = _pk.planet(_pk.udpla.jpl_lp(body="MARS"))
+        if t0_bounds is None:
+            t0_bounds = [6700.0, 6800.0]
+        if tof_bounds is None:
+            tof_bounds = [3.4, 8.6]
+        if mf_bounds is None:
+            mf_bounds = [0.2, 1.0]
+        if vinf_dep_bounds is None:
+            vinf_dep_bounds = [0.0, 0.2]
+        if vinf_arr_bounds is None:
+            vinf_arr_bounds = [0.0, 0.2]
+        if tas is None:
+            tas = (_pk.ta.get_zoh_kep(1e-10), None)
+        if w_bounds_softmax is None:
+            w_bounds_softmax = [-1.0, 1.0]
+
         # We define some additional datamembers useful later-on
         self.pls = pls
         self.plf = plf
@@ -198,13 +223,12 @@ class zoh_pl2pl:
         self.inequalities_for_tc = inequalities_for_tc
         self.cart2state = cart2state
         self.state2cart = state2cart
+        self.nrevs = nrevs
 
         # Check user provided functions for cartesian-state conversions if provided
         if self.cart2state is not None:
-            if not isinstance(self.cart2state, list):
-                raise ValueError("cart2state must be a list containing the conversion and optionally its Jacobian")
-            if len(self.cart2state) == 0 or len(self.cart2state) > 2:
-                raise ValueError("cart2state must contain at least the conversion function and at most its Jacobian")       
+            if len(self.cart2state) != 2:
+                raise ValueError("cart2state must be contain two callables, the conversion and optionally its Jacobian")     
             if not callable(self.cart2state[0]):
                 raise ValueError("The first element of cart2state must be a callable function")
             if tas[1] is not None and not callable(self.cart2state[1]):
@@ -333,6 +357,13 @@ class zoh_pl2pl:
             cart_state1 = list(rf_nd) + list(v_sc_arr_nd)
             state0_transformed = self.cart2state[0](cart_state0)
             state1_transformed = self.cart2state[0](cart_state1)
+            if self.nrevs is not None:
+                # If number of revolutions is specified, we assume the state is mee
+                # and add the corresponding mean longitude offset to the final state
+                if state1_transformed[-1] < state0_transformed[-1]:
+                    # We make sure the final longitude is larger than the initial one before adding the offset
+                    state1_transformed[-1] += 2 * _np.pi   
+                state1_transformed[-1] += self.nrevs * 2 * _np.pi
             self.leg.state0 = list(state0_transformed) + [self.ms]
             state1[:6] = list(state1_transformed)
         else:
@@ -519,7 +550,9 @@ class zoh_pl2pl:
         if self.cart2state is not None:
             cart_state0 = _np.concatenate([rs_nd, vs_nd])
             J0 = self.cart2state[1](cart_state0).reshape((6, 6))
-            gradient[1:8, 2] = (dmc_dx0 @ _np.vstack([_np.zeros((3, 6)), J0 @ _np.eye(6)[:, 3:6]])) @ idep
+            dx0_dvinf_dep_nd = _np.zeros(7)
+            dx0_dvinf_dep_nd[:6] = J0[:, 3:6] @ idep
+            gradient[1:8, 2] = dmc_dx0 @ dx0_dvinf_dep_nd
         else:
             gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
 
@@ -527,7 +560,9 @@ class zoh_pl2pl:
         if self.cart2state is not None:
             cart_state0 = _np.concatenate([rs_nd, vs_nd])
             J0 = self.cart2state[1](cart_state0).reshape((6, 6))
-            gradient[1:8, 3:6] = (dmc_dx0 @ _np.vstack([_np.zeros((3, 6)), J0 @ _np.eye(6)[:, 3:6]])) * vinf_dep_mag
+            dx0_ddir_nd = _np.zeros((7, 3))
+            dx0_ddir_nd[:6, :] = J0[:, 3:6] * vinf_dep_mag
+            gradient[1:8, 3:6] = dmc_dx0 @ dx0_ddir_nd
         else:
             gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
 
@@ -535,12 +570,21 @@ class zoh_pl2pl:
         if self.cart2state is not None:
             cart_state1 = _np.concatenate([rf_nd, vf_nd])
             J1 = self.cart2state[1](cart_state1).reshape((6, 6))
-            gradient[1:8, 6] = (dmc_dx1 @ _np.vstack([_np.zeros((3, 6)), J1 @ _np.eye(6)[:, 3:6]])) @ iarr
+            dx1_dvinf_arr_nd = _np.zeros(7)
+            dx1_dvinf_arr_nd[:6] = J1[:, 3:6] @ iarr
+            gradient[1:8, 6] = dmc_dx1 @ dx1_dvinf_arr_nd
         else:
             gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
 
         # Partials w.r.t. arrival direction
-        gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            dx1_ddir_nd = _np.zeros((7, 3))
+            dx1_ddir_nd[:6, :] = J1[:, 3:6] * vinf_arr_mag
+            gradient[1:8, 7:10] = dmc_dx1 @ dx1_ddir_nd
+        else:
+            gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
 
         # Partials w.r.t. controls
         for i in range(self.nseg):

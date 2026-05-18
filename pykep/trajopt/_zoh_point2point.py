@@ -43,6 +43,7 @@ class zoh_point2point:
         w_bounds_softmax=None,
         inequalities_for_tc = False,
         max_steps=None,
+        state2cart=None,
     ):
         """
         Initializes the zoh_point2point instance with given parameters.
@@ -65,6 +66,10 @@ class zoh_point2point:
             *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.zoh`. Defaults to 0.6.
 
             *w_bounds_softmax* (:class:`list`): Bounds for the softmax weights (only used if time_encoding is 'softmax'). Defaults to [-1.0, 1.0].
+
+            *state2cart* (:class:`callable`): Optional callable for converting dynamics states back to Cartesian.
+                It maps a 6D state (in the dynamics' representation) to 6D Cartesian positions and velocities
+                (in integrator units). Used by ``plot()`` and ``pretty()`` methods for visualization.
             
             *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise they are formulated as equalities (``|i_u| = 1``). Defaults to False (equality formulation).
 
@@ -88,6 +93,8 @@ class zoh_point2point:
             mf_bounds = [0.2, 1]
         if w_bounds_softmax is None:
             w_bounds_softmax = [-1.0, 1.0]
+        if state2cart is not None and not callable(state2cart):
+            raise ValueError("state2cart must be a callable function")
 
         self.nseg = nseg
         self.tof_bounds = tof_bounds
@@ -96,6 +103,7 @@ class zoh_point2point:
         self.with_gradient = tas[1] is not None
         self.time_encoding = time_encoding
         self.w_bounds_softmax = w_bounds_softmax
+        self.state2cart = state2cart
         self.max_steps = max_steps
         # Precompute nseg-dependent helpers reused in gradient() to avoid
         # rebuilding identical arrays at every optimizer call.
@@ -365,7 +373,6 @@ class zoh_point2point:
         x,
         ax=None,
         N=30,
-        to_cartesian=lambda state: state,
         mark_segments=True,
         mark_mismatch=True,
         orbit_color = None,
@@ -382,8 +389,6 @@ class zoh_point2point:
             
             *N* (:class:`int`): The number of points to plot along the trajectory.
             
-            *to_cartesian* (:class:`~collections.abc.Callable`): A function that converts whatever state is used in the internal Taylor integrator to Cartesian (r,v).
-            
             *mark_segments* (:class:`bool`): adds markers at each segment edge
 
             *mark_mismatch* (:class:`bool`): highlights mismatch constraints
@@ -398,6 +403,7 @@ class zoh_point2point:
             :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The modified Axes object with the Lambert's problem trajectory added.
         """
         x_arr = _np.asarray(x)
+        state2cart = self.state2cart if self.state2cart is not None else (lambda state: state)
 
         # We start with the boundaries ....
         if orbit_color is not None:
@@ -410,14 +416,14 @@ class zoh_point2point:
             ta.pars[0] = 0.
             ta.time=0
             sol_s = ta.propagate_grid(_np.linspace(0, tof, N * self.nseg))[-1]
-            sol_cart_s = _np.array([to_cartesian(it) for it in sol_s])
+            sol_cart_s = _np.array([state2cart(it) for it in sol_s])
             ax.plot(sol_cart_s[:,0], sol_cart_s[:,1], sol_cart_s[:,2], orbit_color, alpha=0.5)
 
             # End orbit (backpropagated)
             ta.state[:] = self.leg.state1
             ta.time=0
             sol_f = ta.propagate_grid(_np.linspace(0, -tof, N * self.nseg))[-1]
-            sol_cart_f = _np.array([to_cartesian(it) for it in sol_f])
+            sol_cart_f = _np.array([state2cart(it) for it in sol_f])
             ax.plot(sol_cart_f[:,0], sol_cart_f[:,1], sol_cart_f[:,2], orbit_color, alpha=0.5)
 
         # And then the trajectory
@@ -436,7 +442,7 @@ class zoh_point2point:
                 0.88 + (0.36 - 0.88) * throttles[i],
             )
             # We obtain the state in Cartesian
-            segment_cart = _np.array([to_cartesian(it) for it in segment])
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
                     segment_cart[0, 0],
@@ -461,7 +467,7 @@ class zoh_point2point:
                 0.88 + (0.36 - 0.88) * throttles[-1 - i],
             )
             # We obtain the state in Cartesian
-            segment_cart = _np.array([to_cartesian(it) for it in segment])
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
                     segment_cart[0, 0],

@@ -94,6 +94,9 @@ class tops_twobody:
             cut=cut,
             tas=[ta_twobody, ta_twobody_var],
             time_encoding=time_encoding,
+            state2cart=lambda x, L=self.L, V=self.V: _np.asarray(
+                [x[0] * L, x[1] * L, x[2] * L, x[3] * V, x[4] * V, x[5] * V]
+            ),
             inequalities_for_tc=True,
             max_steps=1000,
         )
@@ -206,6 +209,9 @@ class tops_mee:
             cut=cut,
             tas=[ta_twobody_mee, ta_twobody_mee_var],
             time_encoding=time_encoding,
+            state2cart=lambda x, L=self.L: _np.array(
+                _pk.mee2ic([x[0] * L, x[1], x[2], x[3], x[4], x[5]], mu=1.0)
+            ).flatten(),
             inequalities_for_tc=True,
             max_steps=1000,
         )
