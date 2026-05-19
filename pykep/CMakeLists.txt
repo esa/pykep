@@ -12,7 +12,9 @@ set(PYKEP_PYTHON_FILES
     test_trajopt.py 
     test_utils.py 
     test_leg_sims_flanagan.py
-    test_leg_zoh.py)
+    test_leg_zoh.py
+    test_core.py
+    test_udplas.py)
 
 # Core module.
 Python3_add_library(core MODULE WITH_SOABI 

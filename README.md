@@ -33,7 +33,7 @@ The code is still under development and we will only release the conda and PyPi 
 
 If you care about orbital mechanics, trajectory optimization, or spacecraft mission design — **pykep belongs in your toolkit**. From students and researchers to mission designers and competition participants (hello, GTOC!), pykep is the Swiss Army knife of astrodynamics.
 
-> ⚠️ The old pykep version is no longer be actively maintained. **version 3 is the future.**
+> ⚠️ The old pykep version is no longer actively maintained. **version 3 is the future.**
 
 ---
 

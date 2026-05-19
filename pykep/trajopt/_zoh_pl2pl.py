@@ -734,71 +734,94 @@ class zoh_pl2pl:
         N=30,
         mark_segments=True,
         mark_mismatch=True,
+        orbit_color = None,
+        tof=None,
         **kwargs,
     ):
         """
         Plots the trajectory of the zero order hold point to point problem.
 
         Args:
-            *x* (:class:`list`): The decision vector containins: final mass, thrust direction, time of flight and (if time encoding is softmax) the weights for the softmax time grid.
+            *x* (:class:`list`): The decision vector. Layout: ``[t0_frac, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights])`` in non-dimensional units.
 
             *ax* (:class:`matplotlib.axes.Axes`): The matplotlib axes to plot on. If None, a new figure and axes will be created.
 
-            *N* (:class:`int`): The number of points to plot along the trajectory.
+            *N* (:class:`int`): Number of points per segment used when sampling the propagated trajectory.
 
-            *mark_segments* (:class:`bool`): adds markers ath each segment edge
+            *mark_segments* (:class:`bool`): Adds markers at each segment boundary.
+
+            *mark_mismatch* (:class:`bool`): If True, highlights the mismatch point between forward and backward integrations.
+
+            *orbit_color* (:class:`str` or None): If provided, plots the departure and arrival reference orbits (propagated without thrust) using this color.
+
+            *tof* (:class:`float` or None): If ``orbit_color`` is provided, this overrides the tof extracted from ``x`` for plotting the border orbits.
+
+            ``**kwargs`` (:class:`dict`): Additional keyword arguments passed to the underlying matplotlib plotting calls (e.g., marker size, color for markers).
 
         Returns:
-            :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The modified Axes object with the Lambert's problem trajectory added.
+            The matplotlib Axes object with the trajectory added.
         """
         x_arr = _np.asarray(x)
-        # to be replaced with a plot method akin the sims-flanagan point2point one
+        state2cart = self.state2cart if self.state2cart is not None else (lambda state: state)
+        if self.state2cart is None:
+            state2cart = lambda state: state  # Identity if no conversion provided
+        else:
+            # We need to append the mass to the state after conversion since self.state2cart uses a state vector without mass
+            state2cart = lambda state: list(self.state2cart(state[:-1])) + [state[-1]]
+
+        # We start with the boundaries ....
+        if orbit_color is not None:
+            if tof is None:
+                # tof lives after controls: index depends on decision vector layout
+                tof = x_arr[10 + 4 * self.nseg]
+
+            # Start orbit
+            ta = self.leg.ta
+            ta.state[:] = self.leg.state0
+            ta.pars[0] = 0.
+            ta.time=0
+            sol_s = ta.propagate_grid(_np.linspace(0, tof, N * self.nseg))[-1]
+            sol_cart_s = _np.array([state2cart(it) for it in sol_s])
+            ax.plot(sol_cart_s[:,0], sol_cart_s[:,1], sol_cart_s[:,2], orbit_color, alpha=0.5)
+
+            # End orbit (backpropagated)
+            ta.state[:] = self.leg.state1
+            ta.time=0
+            sol_f = ta.propagate_grid(_np.linspace(0, -tof, N * self.nseg))[-1]
+            sol_cart_f = _np.array([state2cart(it) for it in sol_f])
+            ax.plot(sol_cart_f[:,0], sol_cart_f[:,1], sol_cart_f[:,2], orbit_color, alpha=0.5)
+
+        # And then the trajectory
         self._set_leg_from_x(x_arr)
         fwd, bck, _ = self.leg.get_state_info(N=N)
-        
-        # Convert trajectories back to Cartesian if needed
-        if self.state2cart is not None:
-            fwd_cart = []
-            for segment in fwd:
-                segment_cart = _np.array([_np.concatenate([self.state2cart(state[:6]), state[6:]]) for state in segment])
-                fwd_cart.append(segment_cart)
-            fwd = fwd_cart
-            
-            bck_cart = []
-            for segment in bck:
-                segment_cart = _np.array([_np.concatenate([self.state2cart(state[:6]), state[6:]]) for state in segment])
-                bck_cart.append(segment_cart)
-            bck = bck_cart
-        
         # compute the color scheme
         throttles = x_arr[10 : 10 + 4 * self.nseg : 4]
         if ax is None:
             ax = _pk.plot.make_3Daxis()
         # plot
+        last_point = None
         for i, segment in enumerate(fwd):
             color = (
                 0.25 + (0.80 - 0.25) * throttles[i],
                 0.41 + (0.36 - 0.41) * throttles[i],
                 0.88 + (0.36 - 0.88) * throttles[i],
             )
+            # We obtain the state in Cartesian
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
-                    segment[0, 0] * self.L,
-                    segment[0, 1] * self.L,
-                    segment[0, 2] * self.L,
+                    segment_cart[0, 0],
+                    segment_cart[0, 1],
+                    segment_cart[0, 2],
                     **kwargs,
                 )
-            ax.plot(
-                segment[:, 0] * self.L,
-                segment[:, 1] * self.L,
-                segment[:, 2] * self.L,
-                c=color,
-            )
-        if mark_mismatch:
+            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
+            last_point = segment_cart[-1, :3]
+        if mark_mismatch and last_point is not None:
             ax.scatter(
-                segment[-1, 0] * self.L,
-                segment[-1, 1] * self.L,
-                segment[-1, 2] * self.L,
+                last_point[0],
+                last_point[1],
+                last_point[2],
                 marker="^",
                 **kwargs,
             )
@@ -808,18 +831,27 @@ class zoh_pl2pl:
                 0.41 + (0.36 - 0.41) * throttles[-1 - i],
                 0.88 + (0.36 - 0.88) * throttles[-1 - i],
             )
+            # We obtain the state in Cartesian
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
-                    segment[0, 0] * self.L,
-                    segment[0, 1] * self.L,
-                    segment[0, 2] * self.L,
+                    segment_cart[0, 0],
+                    segment_cart[0, 1],
+                    segment_cart[0, 2],
                     **kwargs,
                 )
-            ax.plot(segment[:, 0] * self.L, segment[:, 1] * self.L, segment[:, 2] * self.L, c=color)
-        if mark_mismatch:
+            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
+            last_point = segment_cart[-1, :3]
+        if mark_mismatch and last_point is not None:
             ax.scatter(
-                segment[-1, 0] * self.L, segment[-1, 1] * self.L, segment[-1, 2] * self.L, marker="^", **kwargs
+                last_point[0],
+                last_point[1],
+                last_point[2],
+                marker="^",
+                **kwargs
             )
+
+
         return ax
 
     def plot_throttle(self, x, ax=None, **kwargs):

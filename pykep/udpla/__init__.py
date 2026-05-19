@@ -1,6 +1,7 @@
 from .. import core as _core
 from ._tle import tle
 from ._spice import spice, de440s
+from ._cr3bp import cr3bp
 
 # expose original names for pickle and imports
 _keplerian = _core._keplerian

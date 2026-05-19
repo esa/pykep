@@ -26,3 +26,6 @@ User defined planets (UDPLAs)
 .. autoclass:: de440s
    :members:
 
+.. autoclass:: cr3bp
+   :members:
+

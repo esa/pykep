@@ -404,6 +404,11 @@ class zoh_point2point:
         """
         x_arr = _np.asarray(x)
         state2cart = self.state2cart if self.state2cart is not None else (lambda state: state)
+        if self.state2cart is None:
+            state2cart = lambda state: state  # Identity if no conversion provided
+        else:
+            # We need to append the mass to the state after conversion since self.state2cart uses a state vector without mass
+            state2cart = lambda state: list(self.state2cart(state[:-1])) + [state[-1]]
 
         # We start with the boundaries ....
         if orbit_color is not None:
