@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/udp_zoh_point2point';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Zero Order Hold: planet to planet low thrust transfer" href="udp_zoh_pl2pl.html" />
+    <link rel="next" title="Zero-Order Hold: Planet-to-Planet Transfers" href="udp_zoh_pl2pl.html" />
     <link rel="prev" title="Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)" href="udp_sf_pl2pl_alpha.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -208,7 +208,11 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold: Planet-to-Planet Transfers</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
@@ -538,7 +542,6 @@ and all follow the same workflow:</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span> 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 </pre></div>
@@ -613,7 +616,7 @@ and all follow the same workflow:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3.1769320388286282e-07, -3.4741706667062999e-07)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(3.6446017148694665e-07, -2.7905344757161998e-07)
 </pre></div>
 </div>
 </div>
@@ -631,8 +634,8 @@ and all follow the same workflow:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Objective: -0.919693557996
-Final mass: 0.919693557996
+Objective: -0.919693557939
+Final mass: 0.919693557939
 Final tof: 11.0
 </pre></div>
 </div>
@@ -640,59 +643,25 @@ Final tof: 11.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multi-view plotting helper for quick geometric inspection</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
-
-<span class="n">ax3d</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-<span class="n">ax_xy</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-<span class="n">ax_xz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-<span class="n">ax_yz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-
-<span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax3d</span><span class="p">,</span> <span class="n">ax_xy</span><span class="p">,</span> <span class="n">ax_xz</span><span class="p">,</span> <span class="n">ax_yz</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span>
-        <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-        <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
-        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-        <span class="n">to_cartesian</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">V</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">V</span><span class="p">]</span>
-        <span class="p">),</span>
-        <span class="n">orbit_color</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="c1"># Keep only boundary ticks to emphasize shape over scale details</span>
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-
-<span class="n">ax3d</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">270</span><span class="p">)</span>
-<span class="n">ax3d</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
-<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_sun</span><span class="p">(</span><span class="n">ax3d</span><span class="p">)</span>
-
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-
-<span class="n">ax3d</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xy - view&quot;</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xz - view&quot;</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;yz - view&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
+<img alt="../_images/a09701c22d4fce1d1b20570fcee98e1e6bea0087b3c95c00ab92d74dcd231f3e.png" src="../_images/a09701c22d4fce1d1b20570fcee98e1e6bea0087b3c95c00ab92d74dcd231f3e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/8ff453d43b3b02b354b54cc44186e13fa989d303d5346a05bbce56ea998c7556.png" src="../_images/8ff453d43b3b02b354b54cc44186e13fa989d303d5346a05bbce56ea998c7556.png" />
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/cfb1bcf28b301c3bf59c87836165b66c3bb9570c0ed85cb13fbc3669f7b14f1c.png" src="../_images/cfb1bcf28b301c3bf59c87836165b66c3bb9570c0ed85cb13fbc3669f7b14f1c.png" />
 </div>
 </div>
 </section>
@@ -730,7 +699,7 @@ Final tof: 11.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(4.1686385043870899e-06, -3.254859859065087e-06)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.643901670478527e-06, -1.9111350484379841e-06)
 </pre></div>
 </div>
 </div>
@@ -748,8 +717,8 @@ Final tof: 11.0
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Objective: -0.593644774818
-Final mass: 0.593644774818
+Objective: -0.589100288319
+Final mass: 0.589100288319
 Final tof: 60.7909197787
 </pre></div>
 </div>
@@ -757,58 +726,25 @@ Final tof: 60.7909197787
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
-
-<span class="n">ax3d</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># 3D view</span>
-<span class="n">ax_xy</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +z (XY plane)</span>
-<span class="n">ax_xz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +y (XZ plane)</span>
-<span class="n">ax_yz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +x (YZ plane)</span>
-
-<span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax3d</span><span class="p">,</span> <span class="n">ax_xy</span><span class="p">,</span> <span class="n">ax_xz</span><span class="p">,</span> <span class="n">ax_yz</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span>
-        <span class="n">N</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-        <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
-        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-        <span class="n">to_cartesian</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]],</span> <span class="n">mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
-        <span class="n">orbit_color</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="c1"># We remove the ticks for clarity</span>
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-
-<span class="c1"># Main 3D view</span>
-<span class="n">ax3d</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">270</span><span class="p">)</span>
-
-<span class="c1"># Plane-aligned views</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-
-<span class="n">ax3d</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xy - view&quot;</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xz - view&quot;</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;yz - view&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
+<img alt="../_images/765dd209fb0248434c1f154062e9744d28494b8fa9989f9ed1b31313dda042d1.png" src="../_images/765dd209fb0248434c1f154062e9744d28494b8fa9989f9ed1b31313dda042d1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/405091775ab1e5e8a991c9726b6956a37ad7e22d2ec3a30fb9fd04a70d67aa04.png" src="../_images/405091775ab1e5e8a991c9726b6956a37ad7e22d2ec3a30fb9fd04a70d67aa04.png" />
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/d7d941119db3988375ea6dc9706cde4e656fd8394d4daf5335baf1403435b1ef.png" src="../_images/d7d941119db3988375ea6dc9706cde4e656fd8394d4daf5335baf1403435b1ef.png" />
 </div>
 </div>
 </section>
@@ -846,7 +782,7 @@ Final tof: 60.7909197787
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.1350187586051108e-06, -1.1262136617104512e-06)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.4835070419449287e-06, -1.1432011767231742e-06)
 </pre></div>
 </div>
 </div>
@@ -857,15 +793,15 @@ Final tof: 60.7909197787
 <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Objective:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">udp</span><span class="p">,</span> <span class="s2">&quot;MASS&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">udp</span><span class="o">.</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final mass:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final tof:&quot;</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">udp</span><span class="o">.</span><span class="n">nseg</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-Objective: -0.983739104542
-Final mass: 0.983739104542
+Objective: -0.946927194474
+Final mass: 0.946927194474
 Final tof: 5.0
 </pre></div>
 </div>
@@ -873,57 +809,12 @@ Final tof: 5.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
-
-<span class="n">ax3d</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># 3D view</span>
-<span class="n">ax_xy</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +z (XY plane)</span>
-<span class="n">ax_xz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +y (XZ plane)</span>
-<span class="n">ax_yz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>  <span class="c1"># look along +x (YZ plane)</span>
-
-<span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax3d</span><span class="p">,</span> <span class="n">ax_xy</span><span class="p">,</span> <span class="n">ax_xz</span><span class="p">,</span> <span class="n">ax_yz</span><span class="p">]</span>
-<span class="c1">#xmin, xmax = 0.8, 1.3</span>
-<span class="c1">#ymin, ymax = -0.3, 0.3</span>
-<span class="c1">#zmin, zmax = -0.2, 0.2</span>
-
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span>
-        <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
-        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-        <span class="n">orbit_color</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="c1"># We remove the ticks for clarity</span>
-<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-
-
-<span class="n">ax3d</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">270</span><span class="p">)</span>
-
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-
-<span class="n">ax3d</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
-<span class="n">ax_xy</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xy - view&quot;</span><span class="p">)</span>
-<span class="n">ax_xz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;xz - view&quot;</span><span class="p">)</span>
-<span class="n">ax_yz</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;yz - view&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;yz - view&#39;)
-</pre></div>
-</div>
-<img alt="../_images/0504ed556fa3b34e62f132c6d04216125983c1e42b8a1232a49b2e8e2d9e400f.png" src="../_images/0504ed556fa3b34e62f132c6d04216125983c1e42b8a1232a49b2e8e2d9e400f.png" />
+<img alt="../_images/5e9c49dd7d9edb877ad5a54f2b5a18c4fb83b81d5ff8a6ddc7d827d741fdf704.png" src="../_images/5e9c49dd7d9edb877ad5a54f2b5a18c4fb83b81d5ff8a6ddc7d827d741fdf704.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -933,7 +824,7 @@ Final tof: 5.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d0152f4d3d781508b1cf638bb26305c63030c564a479a58c6818a3e5609e5c44.png" src="../_images/d0152f4d3d781508b1cf638bb26305c63030c564a479a58c6818a3e5609e5c44.png" />
+<img alt="../_images/0b1684549596a159989e28c50a269c359db8672a7548a538f33e47f8288ef874.png" src="../_images/0b1684549596a159989e28c50a269c359db8672a7548a538f33e47f8288ef874.png" />
 </div>
 </div>
 </section>
@@ -971,7 +862,7 @@ Final tof: 5.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.712249601799499e-06, -1.5312661858501997e-06)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.6336881770939726e-05, -7.4573648817022331e-05)
 </pre></div>
 </div>
 </div>
@@ -996,27 +887,12 @@ Final tof: 180.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single 3D view for the solar-sail trajectory</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
-
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
-
-<span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">sail_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_zticks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">270</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;3D&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sail_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.92, &#39;3D&#39;)
-</pre></div>
-</div>
-<img alt="../_images/2f672472cf1ba6dc188e4e2b0e7ca0e6df3fc0294ff79a2e51c96cc53d466bed.png" src="../_images/2f672472cf1ba6dc188e4e2b0e7ca0e6df3fc0294ff79a2e51c96cc53d466bed.png" />
+<img alt="../_images/51e18db6b0254d88d762207625204ee7c96f092e938de1729841cb229350547d.png" src="../_images/51e18db6b0254d88d762207625204ee7c96f092e938de1729841cb229350547d.png" />
 </div>
 </div>
 </section>
@@ -1046,7 +922,7 @@ Final tof: 180.0
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Zero Order Hold: planet to planet low thrust transfer</p>
+        <p class="prev-next-title">Zero-Order Hold: Planet-to-Planet Transfers</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

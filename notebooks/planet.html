@@ -208,7 +208,11 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold: Planet-to-Planet Transfers</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
@@ -666,54 +670,76 @@ call to *elements* makes use of the user provided mu: [0.0, nan, nan, nan, nan, 
 <section class="tex2jax_ignore mathjax_ignore" id="custom-udplas-an-example-in-the-cr3bp">
 <h1>Custom UDPLAs: an example in the CR3BP<a class="headerlink" href="#custom-udplas-an-example-in-the-cr3bp" title="Link to this heading">#</a></h1>
 <p>Lets say we want to define a <a class="reference internal" href="../planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> in the CR3BP. For example we may have an object <em>station</em> moving along a periodic orbit around L1.
-We need to define an udpla able to compute <span class="math notranslate nohighlight">\(r,v\)</span> and possibly <span class="math notranslate nohighlight">\(a\)</span> at some given epoch. We assume non dimensional units for the <em>state</em>.</p>
+We need to define an udpla able to compute <span class="math notranslate nohighlight">\(r,v\)</span> and possibly <span class="math notranslate nohighlight">\(a\)</span> at some given epoch.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">cr3bp_udpla</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_mjd2000</span><span class="p">,</span> <span class="n">state_nd</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">T_units</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;station&quot;</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">state_nd</span><span class="p">,</span> <span class="n">mu_cr3bp</span><span class="p">,</span> <span class="n">TIME</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;An unkown body in the CR3BP with mu = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mu_cr3bp</span><span class="p">)</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">=</span> <span class="n">ref_mjd2000</span>
+
+        <span class="c1"># When can be a mjd2000 or a pykep epoch, consistently with other pykep planet interfaces.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">when</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">=</span> <span class="n">when</span><span class="o">.</span><span class="n">mjd2000</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">=</span> <span class="n">when</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span> <span class="o">=</span> <span class="n">state_nd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span> <span class="o">=</span> <span class="n">T_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_cr3bp</span> <span class="o">=</span> <span class="n">mu_cr3bp</span>
+        <span class="c1"># These are the nd units declared by the user.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span> <span class="o">=</span> <span class="n">TIME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ACC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c1"># We use the nd numerical integrator of the cr3bp given by pykep.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_cr3bp</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
-        <span class="n">dyn</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">cr3bp_dyn</span><span class="p">()</span>
-        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">vz</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dyn</span><span class="p">[</span><span class="mi">3</span><span class="p">:]],</span> <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">vx</span><span class="p">,</span><span class="n">vy</span><span class="p">,</span><span class="n">vz</span><span class="p">])</span>
-        
-    <span class="k">def</span><span class="w"> </span><span class="nf">eph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
-        <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">mjd2000</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
+        <span class="c1"># Set the parameters and the initial state of the integrator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_cr3bp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_for</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">:]]</span> <span class="c1"># these will be casted to list by the pykep planet iface.</span>
-    
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span>
+        <span class="c1"># The cfunc for the acceleration to implement the acc method of the pykep planet interface.</span>
+        <span class="n">dyn</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">cr3bp_dyn</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">dyn</span><span class="p">[</span><span class="mi">3</span><span class="p">:]],</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">eph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
+        <span class="n">epoch_nd</span> <span class="o">=</span> <span class="n">mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">epoch_nd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">]</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjd2000</span><span class="p">):</span>
-        <span class="n">epoch</span> <span class="o">=</span> <span class="n">mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_units</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span> <span class="c1"># We use propagate until so that if eph was called just before we avoid propagating.</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">pars</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">)</span>
-    
+        <span class="n">epoch_nd</span> <span class="o">=</span> <span class="n">mjd2000</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TIME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">epoch_nd</span><span class="p">)</span>  <span class="c1"># avoid double propagation when possible</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_cfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ACC</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;A body under nd CR3BP dynamics&quot;</span>
-    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">retval</span> <span class="o">=</span> <span class="s2">&quot;Reference state (nd): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_state</span><span class="p">)</span>
         <span class="n">retval</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reference epoch (mjd2000): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_mjd2000</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">retval</span>
-        
-<span class="n">L_Units</span> <span class="o">=</span> <span class="mi">384400000</span>
-<span class="n">T_Units</span> <span class="o">=</span> <span class="mf">4.35</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span>
-<span class="n">state</span> <span class="o">=</span> <span class="p">[</span> <span class="mf">0.99263187</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15446297</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">,</span> <span class="o">-</span><span class="mf">0.74481059</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.53599621</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
-<span class="n">station</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">cr3bp_udpla</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">CR3BP_MU_EARTH_MOON</span><span class="p">,</span> <span class="n">T_Units</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;station&quot;</span><span class="p">))</span>
+
+<span class="c1"># We instantiate it as a UDPla</span>
+<span class="n">udpla</span> <span class="o">=</span> <span class="n">cr3bp_udpla</span><span class="p">(</span>
+    <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mf">1.0809931218390707</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20235953267405354</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.19895001215078018</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">CR3BP_MU_EARTH_MOON</span><span class="p">,</span>
+    <span class="n">L</span><span class="o">=</span><span class="mi">384400000</span><span class="p">,</span>
+    <span class="n">TIME</span><span class="o">=</span><span class="mi">375000</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># And cancel its type to a pk.planet, which is the only thing that pykep functions will see.</span>
+<span class="n">station</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">udpla</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s call the ephemerides at the reference epoch, which should be the same as the reference state, but in dimensional units.</span>
+<span class="n">r</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">station</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">station</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">station</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ephemerides at epoch: &quot;</span><span class="p">,</span> <span class="n">epoch</span><span class="p">)</span>
@@ -723,12 +749,27 @@ We need to define an udpla able to compute <span class="math notranslate nohighl
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A body under nd CR3BP dynamics
-Reference state (nd): [0.99263187, -0.15446297, 0.0, -0.74481059, -0.53599621, 0.0]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>An unkown body in the CR3BP with mu = 0.01215058439470971
+Reference state (nd): [1.0809931218390707, 0.0, -0.20235953267405354, 0.0, -0.19895001215078018, 0.0]
 Reference epoch (mjd2000): 0.0
 Ephemerides at epoch:  2026-10-22T00:00:00.000000
-r: [0.07233978305614301, -0.8336255008104227, 0.0]
-v: [-0.47833877065155095, 0.8387520292044038, 0.0]
+r: [391975414.64036447, -40215343.553091094, -26478840.474551987]
+v: [-119.30550871978843, 49.025077996573835, 337.59994073443704]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The above udpla is actually provided for your convenience already in pykep as pk.udpla.cr3bp</span>
+<span class="n">station</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">cr3bp</span><span class="p">(</span>
+    <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">[</span><span class="mf">1.0809931218390707</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20235953267405354</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.19895001215078018</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">CR3BP_MU_EARTH_MOON</span><span class="p">,</span>
+    <span class="n">L</span><span class="o">=</span><span class="mi">384400000</span><span class="p">,</span>
+    <span class="n">TIME</span><span class="o">=</span><span class="mi">375000</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>

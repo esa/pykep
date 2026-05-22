@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Zero Order Hold: planet to planet low thrust transfer &#8212; pykep 3.0.0 documentation</title>
+    <title>Zero-Order Hold: Planet-to-Planet Transfers &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -208,7 +208,11 @@
 
 
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
@@ -435,7 +439,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Zero Order Hold: planet to planet low thrust transfer</h1>
+    <h1>Zero-Order Hold: Planet-to-Planet Transfers</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -445,27 +449,20 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision Vector</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-imports">Basic Imports</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gradient-vs-no-gradient-comparison">Part 1: Gradient vs No-Gradient Comparison</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-performance-analysis">Gradient Performance Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-with-and-without-gradients">Solving with and without Gradients</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-gradients">Optimization with Gradients</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-without-gradients">Optimization without Gradients</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision vector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-vs-softmax-time-grids">Uniform vs softmax time grids</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-earthmars-transfer">An Earth–Mars transfer</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-time-encoding-comparison-uniform-vs-softmax">Part 2: Time Encoding Comparison (Uniform vs Softmax)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-encoding-explanation">Time Encoding Explanation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-udp-with-softmax-encoding">Create UDP with Softmax Encoding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-with-softmax-encoding">Solve with Softmax Encoding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#display-best-solution-with-softmax">Display Best Solution with Softmax</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-dynamics-cartesian">Two-body dynamics (Cartesian)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-dynamics-modified-equinoctial-elements">Two-body dynamics (Modified Equinoctial Elements)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem-cr3bp">Circular Restricted Three-Body Problem (CR3BP)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solar-sail-dynamics">Solar-sail dynamics</a></li>
 </ul>
-</li>
-</ul>
+
             </nav>
         </div>
     </div>
@@ -476,111 +473,147 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-planet-to-planet-low-thrust-transfer">
-<h1>Zero Order Hold: planet to planet low thrust transfer<a class="headerlink" href="#zero-order-hold-planet-to-planet-low-thrust-transfer" title="Link to this heading">#</a></h1>
-<p>In this tutorial we demonstrate the use of the <code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code> class to find a low-thrust trajectory connecting two moving planets using the <strong>Zero-Order Hold (ZOH)</strong> direct method with free departure and arrival velocities.</p>
-<section id="key-features">
-<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code> class offers several features that make it a powerful tool for low-thrust trajectory optimization:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-planet-to-planet-transfers">
+<h1>Zero-Order Hold: Planet-to-Planet Transfers<a class="headerlink" href="#zero-order-hold-planet-to-planet-transfers" title="Link to this heading">#</a></h1>
+<p>This tutorial shows how to solve low-thrust trajectory optimisation problems using the <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a> class, which wraps a Zero-Order Hold (ZOH) transcription <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> for planet-to-planet transfers with a free departure epoch.</p>
+<p>We cover two complementary use cases:</p>
+<p><strong>1. Custom Earth–Mars transfer</strong> — the primary intended use of <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a>, illustrating how to set up physical units, Taylor-adaptive integrators, and bounds for a realistic mission.</p>
+<p><strong>2. TOPS moving-boundary benchmarks</strong> — four benchmark families from the TOPS database where boundary states are retrieved from planetary ephemerides at the optimised departure epoch:</p>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_twobody_mb</span></code> (two-body, Cartesian state)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_mee_mb</span></code> (two-body, modified equinoctial elements)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_cr3bp_mb</span></code> (CR3BP)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_ss_mb</span></code> (solar sailing)</p></li>
+</ul>
+<p>All problems are Non-Linear Programming Problems in a UDP format compatible with pygmo <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span>, and follow the same workflow:</p>
 <ol class="arabic simple">
-<li><p><strong>Free departure and arrival velocities</strong> - The spacecraft can depart and arrive with excess velocity relative to the planets</p></li>
-<li><p><strong>Non-dimensional formulation</strong> - Works internally with non-dimensional units for better numerical conditioning</p></li>
-<li><p><strong>Taylor-adaptive integration</strong> - Uses heyoka as Taylor propagator for accurate trajectory propagation</p></li>
-<li><p><strong>Analytical gradients</strong> - Optional analytical gradient computation for faster optimization</p></li>
-<li><p><strong>Flexible time encoding</strong> - Supports both <code class="docutils literal notranslate"><span class="pre">uniform</span></code> and <code class="docutils literal notranslate"><span class="pre">softmax</span></code> time grid encodings</p></li>
+<li><p>instantiate a UDP,</p></li>
+<li><p>build <code class="docutils literal notranslate"><span class="pre">pg.problem</span></code>,</p></li>
+<li><p>verify analytical gradients against finite differences,</p></li>
+<li><p>solve with IPOPT via multiple random restarts,</p></li>
+<li><p>inspect the trajectory and controls.</p></li>
 </ol>
-</section>
+<p>For API details and background material, see:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../trajopt.html"><span class="std std-doc">Trajectory optimization API</span></a></p></li>
+<li><p><a class="reference internal" href="../gym.html"><span class="std std-doc">TOPS benchmark overview</span></a></p></li>
+<li><p><a class="reference internal" href="leg_zoh.html"><span class="std std-doc">Zero-Order Hold leg tutorial</span></a></p></li>
+</ul>
 <section id="decision-vector">
-<h2>Decision Vector<a class="headerlink" href="#decision-vector" title="Link to this heading">#</a></h2>
-<p>The decision vector for this class is:</p>
+<h2>Decision vector<a class="headerlink" href="#decision-vector" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a> decision vector is:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbf{x} = [t_0, m_f, v^{\infty}_{\text{dep}}, \hat{i}_{\text{dep},x}, \hat{i}_{\text{dep},y}, \hat{i}_{\text{dep},z}, v^{\infty}_{\text{arr}}, \hat{i}_{\text{arr},x}, \hat{i}_{\text{arr},y}, \hat{i}_{\text{arr},z}, \text{controls}, T_{\text{tof}}] (+ [\mathbf{w}] \text{ for softmax})
+\mathbf{x} = [t_0, m_f] + [T_0, i_{x0}, i_{y0}, i_{z0}] + \cdots + [T_{N-1}, i_{x,N-1}, i_{y,N-1}, i_{z,N-1}] + [tof] (+ [w_0,\ldots,w_{N-1}])
 \]</div>
-<p>Where:</p>
+<p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(t_0\)</span> is the departure epoch (MJD2000, in days)</p></li>
-<li><p><span class="math notranslate nohighlight">\(m_f\)</span> is the final spacecraft mass (non-dimensional)</p></li>
-<li><p><span class="math notranslate nohighlight">\(v^{\infty}_{\text{dep/arr}}\)</span> are the magnitudes of departure/arrival excess velocities (non-dimensional)</p></li>
-<li><p><span class="math notranslate nohighlight">\(\hat{i}_{\text{dep/arr}}\)</span> are unit direction vectors for the excess velocities</p></li>
-<li><p>controls = <span class="math notranslate nohighlight">\([T, \hat{i}_x, \hat{i}_y, \hat{i}_z] \times n_{\text{seg}}\)</span> where <span class="math notranslate nohighlight">\(T\)</span> is thrust magnitude and <span class="math notranslate nohighlight">\(\hat{i}\)</span> is thrust direction</p></li>
-<li><p><span class="math notranslate nohighlight">\(T_{\text{tof}}\)</span> is the time of flight (non-dimensional)</p></li>
-<li><p><span class="math notranslate nohighlight">\(\mathbf{w}\)</span> are softmax weights (only for softmax encoding)</p></li>
+<li><p><span class="math notranslate nohighlight">\(t_0\)</span> is the departure epoch (MJD2000),</p></li>
+<li><p><span class="math notranslate nohighlight">\(m_f\)</span> is the final mass,</p></li>
+<li><p><span class="math notranslate nohighlight">\((T_k, i_{xk}, i_{yk}, i_{zk})\)</span> is the segment thrust magnitude and direction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(tof\)</span> is total time of flight,</p></li>
+<li><p><span class="math notranslate nohighlight">\(w_k\)</span> are optional softmax weights (only for <code class="docutils literal notranslate"><span class="pre">time_encoding=&quot;softmax&quot;</span></code>).</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This notebook can use the commercial solver SNOPT 7 or the open-source IPOPT solver. Both are demonstrated below.</p>
-</div>
-</section>
-<section id="basic-imports">
-<h2>Basic Imports<a class="headerlink" href="#basic-imports" title="Link to this heading">#</a></h2>
+<section id="uniform-vs-softmax-time-grids">
+<h3>Uniform vs softmax time grids<a class="headerlink" href="#uniform-vs-softmax-time-grids" title="Link to this heading">#</a></h3>
+<p>With <code class="docutils literal notranslate"><span class="pre">time_encoding=&quot;uniform&quot;</span></code>, segment durations are equal. With <code class="docutils literal notranslate"><span class="pre">time_encoding=&quot;softmax&quot;</span></code>, durations are learned via weights and satisfy positivity and partition of unity:</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta t_k = tof\,\mathrm{softmax}(\mathbf{w})_k, \qquad t_{k+1}=t_k+\Delta t_k.
+\]</div>
+<p>We start with the Earth–Mars custom example and then repeat the same solver pipeline on the TOPS moving-boundary benchmarks.</p>
+<p>This makes the notebook useful as both:</p>
+<ul class="simple">
+<li><p>a practical guide for setting up <code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code> from scratch with real ephemerides, and</p></li>
+<li><p>a template for TOPS moving-boundary optimisation studies.</p></li>
+</ul>
+<p>First, import the required packages.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Core numerics, optimization, and plotting imports used throughout the tutorial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
-    <span class="n">has_snopt</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="n">has_snopt</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNOPT not available, will use IPOPT instead&quot;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="problem-definition">
-<h2>Problem Definition<a class="headerlink" href="#problem-definition" title="Link to this heading">#</a></h2>
-<p>We define the problem parameters including planets, spacecraft characteristics, and non-dimensional scaling factors.</p>
+<p>Lets setup the solver</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># IPOPT reference setup used consistently across all sections</span>
+<span class="n">ipopt_integer_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_iter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">ipopt_numeric_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">ipopt_string_options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sb&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">ipopt</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
+<span class="n">ipopt</span><span class="o">.</span><span class="n">set_integer_options</span><span class="p">(</span><span class="n">ipopt_integer_options</span><span class="p">)</span>
+<span class="n">ipopt</span><span class="o">.</span><span class="n">set_numeric_options</span><span class="p">(</span><span class="n">ipopt_numeric_options</span><span class="p">)</span>
+<span class="n">ipopt</span><span class="o">.</span><span class="n">set_string_options</span><span class="p">(</span><span class="n">ipopt_string_options</span><span class="p">)</span>
+
+<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">ipopt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="an-earthmars-transfer">
+<h2>An Earth–Mars transfer<a class="headerlink" href="#an-earthmars-transfer" title="Link to this heading">#</a></h2>
+<p>We demonstrate <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a> on a realistic Earth-to-Mars transfer. This is the primary use case of the class.</p>
+<p>The main setup effort lies in non-dimensionalising the problem: the Taylor-adaptive integrators require that the central-body gravitational parameter equals 1, so all physical quantities must be expressed in a consistent set of units built around <span class="math notranslate nohighlight">\(L = 1\,\text{AU}\)</span> and <span class="math notranslate nohighlight">\(\mu_\odot\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem data (SI units)</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
-<span class="n">max_thrust</span> <span class="o">=</span> <span class="mf">0.6</span>
-<span class="n">isp</span> <span class="o">=</span> <span class="mi">3000</span>
-<span class="n">veff</span> <span class="o">=</span> <span class="n">isp</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
+<span class="n">max_thrust</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># (N)</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># (s)</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="n">isp</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span>  <span class="c1"># (m/s)</span>
 <span class="c1"># Initial mass</span>
-<span class="n">ms</span> <span class="o">=</span> <span class="mf">1500.0</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="mf">1500.0</span>  <span class="c1"># (kg)</span>
+<span class="c1"># tof bounds (in days)</span>
+<span class="n">tof_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">350.0</span><span class="p">]</span>
 <span class="c1"># Number of segments</span>
-<span class="n">nseg</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">nseg</span> <span class="o">=</span> <span class="mi">10</span>
 
-<span class="c1"># Non dimensional units</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
-<span class="n">MU</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># (central body mu must be 1 in these units as a requirement of the ZOH integrator used)</span>
-<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>
-<span class="n">V</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">TIME</span>
-<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">TIME</span>
-<span class="n">MASS</span> <span class="o">=</span> <span class="n">ms</span>
-<span class="n">F</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
-<span class="n">ms_nd</span> <span class="o">=</span> <span class="n">ms</span> <span class="o">/</span> <span class="n">MASS</span>
+<span class="c1"># Source and destination planets (return m, m/s as a function of an epoch (days))</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;EARTH&quot;</span><span class="p">))</span>
+<span class="n">mars</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;MARS&quot;</span><span class="p">))</span>
 
-<span class="c1"># Source and destination planets</span>
-<span class="n">earth</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
-    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;EARTH&quot;</span><span class="p">)),</span> 
-    <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span>
-<span class="p">)</span>
-<span class="n">mars</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet_to_keplerian</span><span class="p">(</span>
-    <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">&quot;MARS&quot;</span><span class="p">)),</span> 
-    <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">5000</span><span class="p">),</span>
-<span class="p">)</span>
-
-<span class="c1"># Low tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
+<span class="c1"># Lower tolerances result in higher speed (the needed tolerance depends on the orbital regime)</span>
 <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
 <span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
-
 <span class="c1"># We instantiate ZOH Taylor integrators for Keplerian dynamics.</span>
 <span class="n">ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
 <span class="n">ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
 
-<span class="c1"># We set the Taylor integrator parameters</span>
+<span class="c1"># Units that will be used in the ZOH Taylor integrator.</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>  <span class="c1"># eph will return SI units, we divide by this number.</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># (central body mu must be 1 as a requirement of pk.ta.get_zoh_kep)</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">MU</span> <span class="o">/</span> <span class="n">L</span><span class="p">)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">L</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="n">ms</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
+
+<span class="c1"># Non dimensional quantities.</span>
+<span class="n">ms_nd</span> <span class="o">=</span> <span class="n">ms</span> <span class="o">/</span> <span class="n">MASS</span>
 <span class="n">veff_nd</span> <span class="o">=</span> <span class="n">veff</span> <span class="o">/</span> <span class="n">V</span>
+<span class="n">tof_bounds_nd</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">tof_bounds</span><span class="p">]</span>
+<span class="n">max_thrust_nd</span> <span class="o">=</span> <span class="n">max_thrust</span> <span class="o">/</span> <span class="n">F</span>
 
 <span class="c1"># Creating Taylor-Adaptive Integrators</span>
-<span class="c1"># The ZOH method requires Taylor-adaptive integrators for high-precision trajectory propagation. We create two integrators:</span>
+<span class="c1"># The zoh_pl2pl class requires Taylor-adaptive integrators for trajectory propagation.</span>
 <span class="c1"># 1. Nominal dynamics integrator (for fitness evaluation)</span>
 <span class="c1"># 2. Variational dynamics integrator (for gradient computation)</span>
 <span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">veff_nd</span>
@@ -599,198 +632,90 @@ Variational integrator state dimension: 84
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_uniform</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
     <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
     <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
     <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
     <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
-    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
-    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
-    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="kc">None</span><span class="p">),</span>
-    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
-    <span class="c1"># w_bounds_softmax=[-1., 1.],</span>
-    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>  <span class="c1"># (MJD2000)</span>
+    <span class="n">tof_bounds</span><span class="o">=</span><span class="n">tof_bounds_nd</span><span class="p">,</span>
+    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="n">vinf_dep_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.033574293988433881</span><span class="p">],</span>  <span class="c1"># (1.0 km/s in non dimensional units)</span>
+    <span class="n">vinf_arr_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="c1"># a randevouz</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">ta_var</span><span class="p">),</span>
+    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust_nd</span><span class="p">,</span>
+    <span class="n">time_encoding</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+    <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+    <span class="n">V</span><span class="o">=</span><span class="n">V</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">udp_g_uniform</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
-    <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
-    <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
-    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
-    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
-    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
-    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
-    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="n">ta_var</span><span class="p">),</span>
-    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
-    <span class="c1"># w_bounds_softmax=[-1., 1.],</span>
-    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UDP instances created successfully&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;With gradient: </span><span class="si">{</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">has_gradient</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Without gradient: </span><span class="si">{</span><span class="n">udp_uniform</span><span class="o">.</span><span class="n">has_gradient</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UDP instance created successfully&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gradient: </span><span class="si">{</span><span class="n">udp</span><span class="o">.</span><span class="n">has_gradient</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inequality constraints:&quot;</span><span class="p">,</span> <span class="n">udp</span><span class="o">.</span><span class="n">inequalities_for_tc</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UDP instances created successfully
-With gradient: True
-Without gradient: False
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UDP instance created successfully
+Gradient: True
+Inequality constraints: True
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="part-1-gradient-vs-no-gradient-comparison">
-<h2>Part 1: Gradient vs No-Gradient Comparison<a class="headerlink" href="#part-1-gradient-vs-no-gradient-comparison" title="Link to this heading">#</a></h2>
-<p>We first compare the performance of the UDP with and without analytical gradients. Both use uniform time encoding.</p>
-<section id="gradient-performance-analysis">
-<h3>Gradient Performance Analysis<a class="headerlink" href="#gradient-performance-analysis" title="Link to this heading">#</a></h3>
-<p>Let’s compare the performance of analytical gradients versus numerical gradients.
-The analytical gradients use variational equations integrated alongside the dynamics, providing exact derivatives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a problem and population to test gradient</span>
-<span class="n">prob_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
-<span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Gradient Performance Comparison ===&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Decision vector dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitness dimension: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prob_g</span><span class="o">.</span><span class="n">fitness</span><span class="p">(</span><span class="n">x_test</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Analytical gradient (from variational equations + chain rule):&quot;</span><span class="p">)</span>
-<span class="o">%</span><span class="k">timeit</span> udp_g_uniform.gradient(x_test)
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Numerical gradient (simple finite difference):&quot;</span><span class="p">)</span>
-<span class="o">%</span><span class="k">timeit</span> pg.estimate_gradient(udp_g_uniform.fitness, x_test)
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ The analytical gradient is significantly faster!&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrap into a pygmo problem and set feasibility tolerance for reporting</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># This affects pagmo feasibility checks, not IPOPT&#39;s internal tol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical and finite-difference gradients at a random initial point</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grad_err</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-</span> <span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+<span class="n">grad_err</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">grad_err</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Gradient Performance Comparison ===
-
-Decision vector dimension: 131
-Fitness dimension: 40
-
-Analytical gradient (from variational equations + chain rule):
-310 μs ± 1.33 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-
-Numerical gradient (simple finite difference):
-12.2 ms ± 279 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-
-✓ The analytical gradient is significantly faster!
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.5247036198994266e-05, -1.4880462563482411e-05)
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="solving-with-and-without-gradients">
-<h3>Solving with and without Gradients<a class="headerlink" href="#solving-with-and-without-gradients" title="Link to this heading">#</a></h3>
-<p>Now we solve the optimization problem using both approaches to compare convergence.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup optimization algorithm</span>
-<span class="k">if</span> <span class="n">has_snopt</span><span class="p">:</span>
-    <span class="c1"># Use SNOPT if available</span>
-    <span class="n">library_snopt72</span> <span class="o">=</span> <span class="s2">&quot;/Users/dario.izzo/opt/libsnopt7_c.dylib&quot;</span>
-    <span class="n">uda</span> <span class="o">=</span> <span class="n">ppnf</span><span class="o">.</span><span class="n">snopt7</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">library_snopt72</span><span class="p">,</span> <span class="n">minor_version</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">screen_output</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Major iterations limit&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;Iterations limit&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major optimality tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;Major feasibility tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-9</span><span class="p">)</span>
-    <span class="n">algo_name</span> <span class="o">=</span> <span class="s2">&quot;SNOPT7&quot;</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="c1"># Use IPOPT as fallback</span>
-    <span class="n">uda</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ipopt</span><span class="p">()</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_numeric_option</span><span class="p">(</span><span class="s2">&quot;constr_viol_tol&quot;</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
-    <span class="n">uda</span><span class="o">.</span><span class="n">set_integer_option</span><span class="p">(</span><span class="s2">&quot;max_iter&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
-    <span class="n">algo_name</span> <span class="o">=</span> <span class="s2">&quot;IPOPT&quot;</span>
-
-<span class="n">algo</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">uda</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using </span><span class="si">{</span><span class="n">algo_name</span><span class="si">}</span><span class="s2"> optimizer&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using SNOPT7 optimizer
-</pre></div>
-</div>
-</div>
-</div>
-<section id="optimization-with-gradients">
-<h4>Optimization with Gradients<a class="headerlink" href="#optimization-with-gradients" title="Link to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve with gradients</span>
-<span class="n">prob_g_uniform</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="p">)</span>
-<span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITH Gradients (Uniform) ===&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve via multiple random restarts; collect feasible results</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">pseudorandom</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="mi">1103515245</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12345</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
 
 <span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">xs</span><span class="o">=</span><span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pop_g</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g</span><span class="p">)</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">prob_g_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">pseudorandom</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span> <span class="o">*</span> <span class="n">MASS</span><span class="p">)</span>
 <span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Uniform) ===
-..........
-Best mass is:  1233.36286109
-Worst mass is:  1207.65469155
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="optimization-without-gradients">
-<h4>Optimization without Gradients<a class="headerlink" href="#optimization-without-gradients" title="Link to this heading">#</a></h4>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prob_uniform</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_uniform</span><span class="p">)</span>
-<span class="n">prob_uniform</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITHOUT Gradients (Uniform) ===&quot;</span><span class="p">)</span>
-<span class="n">masses_no_grad</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_uniform</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">prob_uniform</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">masses_no_grad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses_no_grad</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses_no_grad</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITHOUT Gradients (Uniform) ===
-.x..xx.xx.
-Best mass is:  1229.03971614
-Worst mass is:  1178.63457089
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x.........
+Best mass is:  1275.38212059
+Worst mass is:  1255.85320061
 </pre></div>
 </div>
 </div>
@@ -798,201 +723,37 @@ Worst mass is:  1178.63457089
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>  
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">compute_t0</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mars&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="o">+</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">][</span><span class="mi">10</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">*</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">TIME</span><span class="o">/</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Best ZOH Transfer Trajectory (with gradients, uniform)&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>    
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/18cd3081869308df9fd1a3ab6014df54f150aeb529b3c8d9d9e7c8490fc0e40a.png" src="../_images/18cd3081869308df9fd1a3ab6014df54f150aeb529b3c8d9d9e7c8490fc0e40a.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
-</pre></div>
-</div>
-<img alt="../_images/1602d7c5cb249d8d4a9883b09918597f7e40fb9fb21134cbe89e813eb7ee3c3d.png" src="../_images/1602d7c5cb249d8d4a9883b09918597f7e40fb9fb21134cbe89e813eb7ee3c3d.png" />
-</div>
-</div>
-</section>
-</section>
-</section>
-<section id="part-2-time-encoding-comparison-uniform-vs-softmax">
-<h2>Part 2: Time Encoding Comparison (Uniform vs Softmax)<a class="headerlink" href="#part-2-time-encoding-comparison-uniform-vs-softmax" title="Link to this heading">#</a></h2>
-<p>Now we compare the two time encoding methods: <code class="docutils literal notranslate"><span class="pre">uniform</span></code> and <code class="docutils literal notranslate"><span class="pre">softmax</span></code>.</p>
-<section id="time-encoding-explanation">
-<h3>Time Encoding Explanation<a class="headerlink" href="#time-encoding-explanation" title="Link to this heading">#</a></h3>
-<p><strong>Uniform Encoding:</strong> Time grid nodes are evenly spaced from 0 to TOF:
-$<span class="math notranslate nohighlight">\(t_i = \frac{i \cdot T_{\text{tof}}}{n_{\text{seg}}}, \quad i = 0, 1, ..., n_{\text{seg}}\)</span>$</p>
-<p><strong>Softmax Encoding:</strong> Time grid nodes are determined by learnable weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:
-$<span class="math notranslate nohighlight">\(\Delta t_i = T_{\text{tof}} \cdot \text{softmax}(\mathbf{w})_i, \quad t_i = \sum_{j=0}^{i-1} \Delta t_j\)</span>$</p>
-<p>The softmax encoding adds <span class="math notranslate nohighlight">\(n_{\text{seg}}\)</span> additional decision variables but allows the optimizer to adaptively distribute time where it’s most needed.
-For a better discussion on the softmax encoding see also the tutorial: <code class="docutils literal notranslate"><span class="pre">udp_zoh_point2point.ipynb</span></code>.</p>
-</section>
-<section id="create-udp-with-softmax-encoding">
-<h3>Create UDP with Softmax Encoding<a class="headerlink" href="#create-udp-with-softmax-encoding" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">zoh_pl2pl</span><span class="p">(</span>
-    <span class="n">pls</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span>
-    <span class="n">plf</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
-    <span class="n">ms</span><span class="o">=</span><span class="n">ms_nd</span><span class="p">,</span>
-    <span class="n">nseg</span><span class="o">=</span><span class="n">nseg</span><span class="p">,</span>
-    <span class="n">cut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-    <span class="n">t0_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">7360</span><span class="p">,</span> <span class="mf">8300.0</span><span class="p">],</span>
-    <span class="n">tof_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">100.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">,</span> <span class="mf">350.</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="o">/</span><span class="n">TIME</span><span class="p">],</span>
-    <span class="n">mf_bounds</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
-    <span class="n">vinf_dep_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">vinf_arr_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
-    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="n">ta_var</span><span class="p">),</span>
-    <span class="n">max_thrust</span><span class="o">=</span><span class="n">max_thrust</span><span class="o">/</span><span class="n">F</span><span class="p">,</span>
-    <span class="n">w_bounds_softmax</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
-    <span class="n">time_encoding</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">compute_t0</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;earth&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span>
     <span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UDP with softmax encoding created successfully&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decision vector size:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;With softmax: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> (includes softmax weights)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Without softmax: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">udp_g_uniform</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;mars&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgray&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">when</span><span class="o">=</span><span class="n">t0</span> <span class="o">+</span> <span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">][</span><span class="mi">10</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span> <span class="o">*</span> <span class="n">udp</span><span class="o">.</span><span class="n">TIME</span> <span class="o">/</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span>
+        <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Best Transfer Trajectory&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>UDP with softmax encoding created successfully
-Decision vector size:
-With softmax: 161 (includes softmax weights)
-Without softmax: 131
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="solve-with-softmax-encoding">
-<h3>Solve with Softmax Encoding<a class="headerlink" href="#solve-with-softmax-encoding" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#solve with gradients:</span>
-<span class="n">prob_g_softmax</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp_g_softmax</span><span class="p">)</span>
-<span class="n">prob_g_softmax</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization WITH Gradients (Softmax) ===&quot;</span><span class="p">)</span>
-<span class="n">masses_softmax</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">xs_softmax</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">pop_g_sm</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob_g_softmax</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pop_g_sm</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="p">)</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">prob_g_softmax</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_f</span><span class="p">)):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">masses_softmax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">xs_softmax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_g_sm</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span><span class="o">*</span><span class="n">MASS</span><span class="p">)</span>
-<span class="n">best_idx_sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses_softmax</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Optimization WITH Gradients (Softmax) ===
-..x.....x.
-Best mass is:  1233.97957177
-Worst mass is:  1215.06076073
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="display-best-solution-with-softmax">
-<h3>Display Best Solution with Softmax<a class="headerlink" href="#display-best-solution-with-softmax" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>  
-    <span class="n">t0</span> <span class="o">=</span> <span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">compute_t0</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mars&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">earth</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgreen&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="o">+</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">][</span><span class="mi">10</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">nseg</span><span class="p">]</span><span class="o">*</span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">TIME</span><span class="o">/</span><span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span><span class="p">,</span> <span class="n">pla</span><span class="o">=</span><span class="n">mars</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Best ZOH Transfer Trajectory (with gradients, uniform)&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>    
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/d5a6580d22513458df196ddacac98b12d6f4f085f0e09f6fa3b929dbd567bb90.png" src="../_images/d5a6580d22513458df196ddacac98b12d6f4f085f0e09f6fa3b929dbd567bb90.png" />
+<img alt="../_images/7086a53cdf16fe2a0a049e119fb70e804e9dbdac72c5a387bbae54f714676bb8.png" src="../_images/7086a53cdf16fe2a0a049e119fb70e804e9dbdac72c5a387bbae54f714676bb8.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">pretty</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Low-thrust ZOH transfer (free velocities, non-dimensional formulation)
-Departure: earth(jpl_lp)(K)
-Arrival: mars(jpl_lp)(K)
-
-Launch epoch: 7452.11294 MJD2000, a.k.a. 2020-05-27T02:42:37.988699
-Arrival epoch: 7802.11294 MJD2000, a.k.a. 2021-05-12T02:42:37.988699
-Time of flight: 6.02073 (nd), 350.00000 days
-
-Departure excess velocity:
-  Magnitude: 0.000000 (nd), 0.000000 km/s
-  Vector (nd): [-0.000000, -0.000000, 0.000000]
-  Vector (km/s): [-0.000000, -0.000000, 0.000000]
-  Direction: [-0.458249, -0.152246, 0.875688], norm: 1.000000
-
-Arrival excess velocity:
-  Magnitude: 0.000000 (nd), 0.000000 km/s
-  Vector (nd): [-0.000000, 0.000000, 0.000000]
-  Vector (km/s): [-0.000000, 0.000000, 0.000000]
-  Direction: [-0.145760, 0.987435, 0.061043], norm: 1.000000
-
-Final mass: 0.822653 (nd)
-
-Scaling factors: L=149.598 Gm, V=29.785 km/s, TIME=58.132 days
-
-Details on the ZOH leg:
-Dynamics dimension: 7
-Control dimension: 4
-Number of segments: 30
-Number of fwd segments: 18
-Number of bck segments: 12
-Cut parameter: 0.6
-Variational integrator available: true
-Maximum propagation steps: none
-
-Initial state: [-0.41228838581227, -0.925570767758029, 2.8874712003856994e-05, 0.8973183813042093, -0.4107088381114756, 1.2812741965299295e-05, 1]
-Final state: [-1.0344479955409878, 1.2809107326753661, 0.05223326215793006, -0.6021376946466708, -0.44184620554207943, 0.005524194056897131, 0.8226530478482634]
-Time grid: [0, 0.1685490906988014, 0.33732802292945674, 0.503593188137969, 0.6671175546904856, 0.8302544649598823, 0.9933465232375999, 1.1569553904182452, 1.1988311512049292, 1.313949623571403, 1.4302554744611404, 1.6665154548116774, 1.8647987198274172, 2.1423042289218364, 2.447150077222255, 2.6559470918030947, 2.8757686231015436, 3.098569383413903, 3.3776407954400094, 3.563512676366831, 3.8607079525468526, 4.142042764683886, 4.345008366997576, 4.654430712635784, 4.8511154486701225, 5.08037077668507, 5.296174810752023, 5.463525174773438, 5.650075440410627, 5.835537225325473, 6.02073463248503]
-Control values: [0.06745267560754033, 0.9108248640320349, -0.28513347431941516, -0.29849115720547403, 0.06745267560754033, 0.9548049454435172, -0.14201926610668633, -0.26110925770737275, 0.06745267560754033, 0.9760461288945445, 0.005177118466990535, -0.21750207353195697, 0.06745267560754033, 0.973740911554742, 0.15282661848975584, -0.16873844260517037, 0.06745267560754033, 0.9477550579707571, 0.2973243852611719, -0.11557925602030741, 0.06745267560754033, 0.8983118843217188, 0.4354129610071857, -0.05874788177724918, 0.06745267560754033, 0.8265801657065955, 0.5628187248628127, 0.0005600591667233601, 0, 0.5464471413223676, -0.7883826412699249, -0.28257447281180464, 0.06745267560754033, 0.7241542989164973, 0.6863533522427722, 0.06722820453371321, 0.06745267560754033, 0.6484537202463332, 0.7533739850938446, 0.10924933442412793, 0, 0.2562456545193487, 0.9033449912099412, 0.3439563800772957, 0, 0.07885949971211509, 0.8440556644412343, 0.5304255033742449, 0, 0.19203596493002237, 0.9386706458960573, 0.2863906540138387, 0, -0.24138615554125953, 0.4708729904059395, -0.8485348259318405, 0.06745267560754033, -0.22752952087966508, 0.8815545763154753, 0.4136325013739846, 0.06745267560754033, -0.36077440579069525, 0.8239262469475226, 0.4370210152423137, 0.06745267560754033, -0.4845542700275393, 0.7493280416183028, 0.45134759061880986, 0, -0.6131741386631627, 0.6789427432607051, 0.40379973631531735, 0, -0.7834205452466179, 0.4260920205107331, 0.4524354532334673, 0, -0.8532284854340219, 0.326182378872719, 0.40694742579008725, 0, -0.9185736936084746, 0.15421994713434195, 0.36392111413926753, 0, -0.9449751000935996, 0.021033457863548398, 0.3264653945725246, 0, -0.9608982013128101, -0.06713308268988197, 0.26864064458372855, 0, -0.9517989526589168, -0.1455184234778065, 0.270005818726047, 0, -0.9399170869818104, -0.2897698548830744, 0.18052506972902596, 0, -0.9072286308556379, -0.4006918908645311, 0.12799304649554832, 0, -0.8897223216075358, -0.44172327284520796, 0.11521606077379296, 0.06745267560754033, -0.8574394389752797, -0.5071784871419585, 0.0869919122561812, 0.06745267560754033, -0.8097016612572941, -0.5853825636332625, 0.04135789251476087, 0.06745267560754033, -0.7544142325999624, -0.6563904804467803, -0.0032719337987038937]
-
-Mismatch constraints: [-3.4107927593396425e-10, -8.086553648922745e-11, 3.6761030851317766e-11, -2.948822297454967e-10, 1.4732881581380752e-11, 6.848102640510945e-11, -7.053346795515836e-11]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp_g_softmax</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs_softmax</span><span class="p">[</span><span class="n">best_idx_sm</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1000,11 +761,414 @@ Mismatch constraints: [-3.4107927593396425e-10, -8.086553648922745e-11, 3.676103
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
 </pre></div>
 </div>
-<img alt="../_images/58121dec835036f50b39a2f03aab2d7e029fff0ccbade01ed1b1152010bbd91f.png" src="../_images/58121dec835036f50b39a2f03aab2d7e029fff0ccbade01ed1b1152010bbd91f.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/6377ca7a2ba85d7315805d9c5539c2466a2ab438c18bf060890d82ddfceb3f54.png" src="../_images/6377ca7a2ba85d7315805d9c5539c2466a2ab438c18bf060890d82ddfceb3f54.png" />
 </div>
 </div>
 </section>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="two-body-dynamics-cartesian">
+<h1>Two-body dynamics (Cartesian)<a class="headerlink" href="#two-body-dynamics-cartesian" title="Link to this heading">#</a></h1>
+<p>This section uses a TOPS two-body moving-boundary benchmark wrapped by <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_twobody_mb</span></code>, which solves the same benchmark with a free departure epoch.</p>
+<p>Workflow:</p>
+<ol class="arabic simple">
+<li><p>load a named TOPS case (<code class="docutils literal notranslate"><span class="pre">P0</span></code>, <code class="docutils literal notranslate"><span class="pre">P1</span></code>, …),</p></li>
+<li><p>build the pygmo problem and set feasibility tolerance,</p></li>
+<li><p>verify analytical gradients,</p></li>
+<li><p>solve with IPOPT via multiple random restarts and inspect mass / time-of-flight / geometry.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Select a TOPS benchmark case and build the wrapped UDP</span>
+<span class="n">prob_name</span> <span class="o">=</span> <span class="s2">&quot;P0&quot;</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">tops_twobody_mb</span><span class="p">(</span><span class="n">prob_name</span><span class="p">,</span> <span class="n">nseg</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">time_encoding</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mildly-elliptic to mildly-elliptic transfer (e_s~0.201, e_f~0.210) in fixed tof -&gt; T=0.22N, Isp=3000s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Wrap into a pygmo problem and set feasibility tolerance for reporting</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># This affects pagmo feasibility checks, not IPOPT&#39;s internal tol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical and finite-difference gradients at a random initial point</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grad_err</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-</span> <span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+<span class="n">grad_err</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">grad_err</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.380128642700402e-07, -2.3552069690346844e-07)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve via multiple random restarts; collect feasible results</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">pseudorandom</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="mi">1103515245</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12345</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
+
+<span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">pseudorandom</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..........
+Best mass is:  0.927473080115
+Worst mass is:  0.919774415651
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multi-view plotting helper for quick geometric inspection</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e72c80a288c6ed1185f457c345718e2a94798201f570b13b55f4b5a8b0f4f6be.png" src="../_images/e72c80a288c6ed1185f457c345718e2a94798201f570b13b55f4b5a8b0f4f6be.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/cfa67285c4df70dae69ba191f3bacf5494f9c0aa82beadb6ddab4f0ee8031661.png" src="../_images/cfa67285c4df70dae69ba191f3bacf5494f9c0aa82beadb6ddab4f0ee8031661.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="two-body-dynamics-modified-equinoctial-elements">
+<h1>Two-body dynamics (Modified Equinoctial Elements)<a class="headerlink" href="#two-body-dynamics-modified-equinoctial-elements" title="Link to this heading">#</a></h1>
+<p>We now solve the MEE moving-boundary variant through <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_mee_mb</span></code>, reusing the exact same numerical pipeline.</p>
+<p>Only the internal dynamics/state representation changes; the user-facing optimization workflow remains identical.</p>
+<p>For element definitions and conversions, see <a class="reference internal" href="../elements.html"><span class="std std-doc">Elements and conversions</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Load a TOPS MEE moving-boundary benchmark and inspect its metadata</span>
+<span class="n">prob_name</span> <span class="o">=</span> <span class="s2">&quot;P0&quot;</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">tops_mee_mb</span><span class="p">(</span><span class="n">prob_name</span><span class="p">,</span> <span class="n">nseg</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">time_encoding</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dionysus problem (doi: 10.2514/1.G000379) - Fixed time
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Wrap into a pygmo problem and set feasibility tolerance for reporting</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-7</span>  <span class="c1"># This affects pagmo feasibility checks, not IPOPT&#39;s internal tol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical and finite-difference gradients at a random initial point</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grad_err</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-</span> <span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+<span class="n">grad_err</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">grad_err</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.32638969140670759, -5.9453881122793515)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve via multiple random restarts; collect feasible results</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">pseudorandom</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="mi">1103515245</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12345</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
+
+<span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">pseudorandom</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..........
+Best mass is:  0.593691946213
+Worst mass is:  0.574606213845
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multi-view plotting helper for quick geometric inspection</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/88a9a84794e888cab03d646756f01e4dafd386ff173aaa80d05751612f2edd32.png" src="../_images/88a9a84794e888cab03d646756f01e4dafd386ff173aaa80d05751612f2edd32.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/01d197ce70efbd4eca32d43668d289c1febae794af2f791d73dbcd651c45303a.png" src="../_images/01d197ce70efbd4eca32d43668d289c1febae794af2f791d73dbcd651c45303a.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="circular-restricted-three-body-problem-cr3bp">
+<h1>Circular Restricted Three-Body Problem (CR3BP)<a class="headerlink" href="#circular-restricted-three-body-problem-cr3bp" title="Link to this heading">#</a></h1>
+<p>This section uses <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_cr3bp_mb</span></code>.</p>
+<p>The wrapper configures the CR3BP-specific dynamics and parameters internally, while keeping the same optimizer and validation structure used in previous sections.</p>
+<p>For model background, see <a class="reference internal" href="../propagation.html"><span class="std std-doc">CR3BP dynamics</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Load a TOPS CR3BP moving-boundary benchmark</span>
+<span class="n">prob_name</span> <span class="o">=</span> <span class="s2">&quot;P0&quot;</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">tops_cr3bp_mb</span><span class="p">(</span><span class="n">prob_name</span><span class="p">,</span> <span class="n">nseg</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">time_encoding</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Halo 2 Halo in fixed tof
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Wrap into a pygmo problem and set feasibility tolerance for reporting</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-7</span>  <span class="c1"># This affects pagmo feasibility checks, not IPOPT&#39;s internal tol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical and finite-difference gradients at a random initial point</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grad_err</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-</span> <span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+<span class="n">grad_err</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">grad_err</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1.1840403081886386e-06, -1.0073217962952574e-06)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve via multiple random restarts; collect feasible results</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">pseudorandom</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="mi">1103515245</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12345</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
+
+<span class="n">masses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">pseudorandom</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">masses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst mass is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">masses</span><span class="p">))</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>..........
+Best mass is:  0.983423556625
+Worst mass is:  0.943672823814
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multi-view plotting helper for quick geometric inspection</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/249e6859dba59f55874708f4db6a15ea48dd9224e6ad111750f4686316c3eca9.png" src="../_images/249e6859dba59f55874708f4db6a15ea48dd9224e6ad111750f4686316c3eca9.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">udp</span><span class="o">.</span><span class="n">plot_throttle</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;time grid&#39;, ylabel=&#39;throttle value (nd)&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/15a69a7205e67bc4dbc7823f767ca77fd7bf7caf37739c450f6c7a89906f79e4.png" src="../_images/15a69a7205e67bc4dbc7823f767ca77fd7bf7caf37739c450f6c7a89906f79e4.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="solar-sail-dynamics">
+<h1>Solar-sail dynamics<a class="headerlink" href="#solar-sail-dynamics" title="Link to this heading">#</a></h1>
+<p>Finally, we solve a TOPS solar-sail moving-boundary benchmark with <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.gym.tops_ss_mb</span></code>, internally based on <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_ss_point2point" title="pykep.trajopt.zoh_ss_point2point"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_ss_point2point</span></code></a>.</p>
+<p>As above, we keep the same verification-and-solve protocol (gradient check, IPOPT solve, trajectory inspection), so results are directly comparable across dynamics.</p>
+<p>For additional sail-leg details, see the <a class="reference internal" href="leg_zoh.html"><span class="std std-doc">Zero-Order Hold leg tutorial</span></a> and <a class="reference internal" href="../trajopt.html"><span class="std std-doc">Trajectory optimization API</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Load a TOPS solar-sail moving-boundary benchmark</span>
+<span class="n">prob_name</span> <span class="o">=</span> <span class="s2">&quot;P1&quot;</span>
+<span class="n">udp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">gym</span><span class="o">.</span><span class="n">tops_ss_mb</span><span class="p">(</span><span class="n">prob_name</span><span class="p">,</span> <span class="n">nseg</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">time_encoding</span><span class="o">=</span><span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="n">inequalities_for_tc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">extra_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eccentric (e=0.5, a=2) to highly-eccentric (e=0.9, a=10) orbit at periapsis (rp=1, nd)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Wrap into a pygmo problem and set feasibility tolerance for reporting</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># This affects pagmo feasibility checks, not IPOPT&#39;s internal tol</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical and finite-difference gradients at a random initial point</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">grad_err</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="n">udp</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-</span> <span class="n">udp</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+<span class="n">grad_err</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">grad_err</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2.9871855176111239e-06, -1.4333349298567555e-05)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve via multiple random restarts; collect feasible results</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">pseudorandom</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="mi">1103515245</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12345</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span>
+
+<span class="n">tofs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">population</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">pseudorandom</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prob</span><span class="o">.</span><span class="n">feasibility_f</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_f</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">tofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">[</span><span class="mi">9</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">udp</span><span class="o">.</span><span class="n">nseg</span><span class="p">])</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">champion_x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best tof is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">tofs</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst tof is: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">tofs</span><span class="p">))</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">tofs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x....xxx.x
+Best tof is:  180.0
+Worst tof is:  180.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multi-view plotting helper for quick geometric inspection</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">udp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">],</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">mark_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">sail_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/92375be8e3f13bfb1eee81a22e11418302ae09d86f19bb355244f1e70e00823c.png" src="../_images/92375be8e3f13bfb1eee81a22e11418302ae09d86f19bb355244f1e70e00823c.png" />
+</div>
+</div>
 </section>
 
 
@@ -1054,27 +1218,20 @@ Mismatch constraints: [-3.4107927593396425e-10, -8.086553648922745e-11, 3.676103
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision Vector</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-imports">Basic Imports</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-gradient-vs-no-gradient-comparison">Part 1: Gradient vs No-Gradient Comparison</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-performance-analysis">Gradient Performance Analysis</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-with-and-without-gradients">Solving with and without Gradients</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-gradients">Optimization with Gradients</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-without-gradients">Optimization without Gradients</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision vector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-vs-softmax-time-grids">Uniform vs softmax time grids</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-earthmars-transfer">An Earth–Mars transfer</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-time-encoding-comparison-uniform-vs-softmax">Part 2: Time Encoding Comparison (Uniform vs Softmax)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-encoding-explanation">Time Encoding Explanation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-udp-with-softmax-encoding">Create UDP with Softmax Encoding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-with-softmax-encoding">Solve with Softmax Encoding</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#display-best-solution-with-softmax">Display Best Solution with Softmax</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-dynamics-cartesian">Two-body dynamics (Cartesian)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-dynamics-modified-equinoctial-elements">Two-body dynamics (Modified Equinoctial Elements)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem-cr3bp">Circular Restricted Three-Body Problem (CR3BP)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solar-sail-dynamics">Solar-sail dynamics</a></li>
 </ul>
-</li>
-</ul>
+
   </nav></div>
 
 </div></div>

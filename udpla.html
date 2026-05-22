@@ -206,7 +206,11 @@
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_pl2pl.html">Zero Order Hold: planet to planet low thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/udp_zoh_pl2pl.html">Zero-Order Hold: Planet-to-Planet Transfers</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
@@ -440,6 +444,13 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.body_list"><code class="docutils literal notranslate"><span class="pre">de440s.body_list()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.get_name"><code class="docutils literal notranslate"><span class="pre">de440s.get_name()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.kernel_file"><code class="docutils literal notranslate"><span class="pre">de440s.kernel_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp"><code class="docutils literal notranslate"><span class="pre">cr3bp</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.acc"><code class="docutils literal notranslate"><span class="pre">cr3bp.acc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.eph"><code class="docutils literal notranslate"><span class="pre">cr3bp.eph()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.get_extra_info"><code class="docutils literal notranslate"><span class="pre">cr3bp.get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.get_name"><code class="docutils literal notranslate"><span class="pre">cr3bp.get_name()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -746,6 +757,73 @@ This is a static method and can be queried before constructing the object.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.udpla.cr3bp">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.udpla.</span></span><span class="sig-name descname"><span class="pre">cr3bp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_nd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_cr3bp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TIME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp" title="Link to this definition">#</a></dt>
+<dd><p>User-defined planet-like interface for a CR3BP reference trajectory.</p>
+<p>This UDPLA exposes a simple planet-like interface backed by a CR3BP
+integrator. It returns ephemerides in SI units consistent with the
+length/time scales supplied at construction, and implements the
+optional <code class="docutils literal notranslate"><span class="pre">acc</span></code> method required by gradient-enabled problems.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a>): Reference epoch (MJD2000) for the provided</dt><dd><p>reference state. If a <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a> is provided, its <code class="docutils literal notranslate"><span class="pre">mjd2000</span></code> value is used.</p>
+</dd>
+<dt><em>state_nd</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): Reference 6D state in non-dimensional</dt><dd><p>CR3BP units used to initialize the internal integrator: <code class="docutils literal notranslate"><span class="pre">[x,y,z,vx,vy,vz]</span></code>.</p>
+</dd>
+</dl>
+<p><em>mu_cr3bp</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): The CR3BP mass parameter (non-dimensional).</p>
+<dl class="simple">
+<dt><em>TIME</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Time scale (non-dimensional seconds) used to convert between</dt><dd><p>MJD2000/seconds and the integrator’s internal time units.</p>
+</dd>
+</dl>
+<p><em>L</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Length scale used to map integrator positions to SI units.</p>
+<dl class="simple">
+<dt><em>name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Human-readable name for the UDPLA. If omitted a default</dt><dd><p>descriptive name containing <code class="docutils literal notranslate"><span class="pre">mu_cr3bp</span></code> is assigned.</p>
+</dd>
+</dl>
+<p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Tolerance passed to the internal Taylor adaptive integrator.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.udpla.cr3bp.acc">
+<span class="sig-name descname"><span class="pre">acc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.acc" title="Link to this definition">#</a></dt>
+<dd><p>Return acceleration from the CR3BP dynamics at the requested epoch.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>: Acceleration at the epoch, returned in SI units (meters/second^2).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.udpla.cr3bp.eph">
+<span class="sig-name descname"><span class="pre">eph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.eph" title="Link to this definition">#</a></dt>
+<dd><p>Return position and velocity at the requested epoch.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: Position and velocity in SI units (meters, meters/second).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.udpla.cr3bp.get_extra_info">
+<span class="sig-name descname"><span class="pre">get_extra_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.get_extra_info" title="Link to this definition">#</a></dt>
+<dd><p>Return a short string with extra information about the UDPLA.</p>
+<p>Typically includes the reference state and epoch used to initialize the integrator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.udpla.cr3bp.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.get_name" title="Link to this definition">#</a></dt>
+<dd><p>Return the human-readable name for this UDPLA.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -823,6 +901,13 @@ This is a static method and can be queried before constructing the object.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.body_list"><code class="docutils literal notranslate"><span class="pre">de440s.body_list()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.get_name"><code class="docutils literal notranslate"><span class="pre">de440s.get_name()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.de440s.kernel_file"><code class="docutils literal notranslate"><span class="pre">de440s.kernel_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp"><code class="docutils literal notranslate"><span class="pre">cr3bp</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.acc"><code class="docutils literal notranslate"><span class="pre">cr3bp.acc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.eph"><code class="docutils literal notranslate"><span class="pre">cr3bp.eph()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.get_extra_info"><code class="docutils literal notranslate"><span class="pre">cr3bp.get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.cr3bp.get_name"><code class="docutils literal notranslate"><span class="pre">cr3bp.get_name()</span></code></a></li>
 </ul>
 </li>
 </ul>
