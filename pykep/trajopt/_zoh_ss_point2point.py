@@ -61,6 +61,14 @@ class zoh_ss_point2point:
 
                 - `ta_var`: Variational dynamics (54, same pars). When None, no gradients will be used.
 
+            *time_encoding* (:class:`str`): Time-grid encoding scheme.
+                ``'uniform'`` uses equally spaced segment boundaries over the total time of flight.
+                ``'softmax'`` adds ``nseg`` weights to the decision vector and maps them to positive
+                segment durations summing to the total time of flight. Defaults to ``'uniform'``.
+
+            *w_bounds_softmax* (:class:`list`): Lower and upper bounds for the softmax weights.
+                These bounds are used only when ``time_encoding='softmax'``. Defaults to ``[-1.0, 1.0]``.
+
             *max_steps* (:class:`int` or None): Maximum number of Taylor integrator steps per propagation call. When None, uses the default integrator behavior.
 
         """

@@ -3,113 +3,133 @@
 Trajectory Optimization Gym
 ###########################
 
-A number of interplanetary trajectory problems are provided in `pykep` in the form of 
-User Defined Problems (UDP) compatible with the `pygmo <https://esa.github.io/pygmo2/>`_ :cite:p:`pagmo` python package.
-All of the problems are instantiated upon import of the `pykep` module and can be used directly. The collection of all
-problems is called the "pykep gym" and hopes to become an established benchmark set to test the performances of evolutionary
-and traditional optimisation techniques on trajectory design problems.
+A number of interplanetary trajectory optimization benchmarks are provided in
+``pykep`` as User Defined Problems (UDPs), compatible with
+`pygmo <https://esa.github.io/pygmo2/>`_ :cite:p:`pagmo`.
+
+All gym problems are instantiated when importing ``pykep`` and can therefore be
+used directly. The full collection is referred to as the ``pykep`` gym and is
+intended as a consistent benchmark set for both evolutionary and gradient-based
+trajectory optimization methods.
 
 .. currentmodule:: pykep.trajopt.gym
  
-MGA problems
-************************
+MGA Problems
+************
+
+The following problems are based on Multiple Gravity Assist (MGA)
+transcriptions.
 
 .. autoattribute:: pykep.trajopt.gym.cassini1
 
-This is an MGA problem inspired to the Cassini spacecraft interplanetary transfer to Saturn. 
-The objective of this mission is to reach Saturn and to be captured by its gravity into an orbit having pericenter
-radius :math:`r_p=108950` km, and eccentricity :math:`e=0.98`. The planetary fly-by sequence considered
-is E-VVEJ-S (as the one used by Cassini spacecraft). As objective function we use the total :math:`\Delta V`
-accumulated during the mission, including the launch :math:`\Delta V` (exceeding a value provided for free by the launcher)
-and the various :math:`\Delta V` one needs to give at the planets and upon arrival to perform the final orbit injection. 
+MGA benchmark inspired by the historical Cassini-Huygens interplanetary
+transfer to Saturn. The trajectory combines inner-planet gravity assists to
+increase heliocentric energy before the final outer-planet leg.
+The fly-by sequence is ``E-VVEJ-S`` and reproduces the classic mission-design
+logic of chaining resonant planetary encounters to reduce propellant demand.
+The objective is the total :math:`\Delta V`, including launch excess
+:math:`\Delta V`, intermediate maneuvers, and final Saturn orbit insertion
+(:math:`r_p = 108950\ \mathrm{km}`, :math:`e = 0.98`).
 
 .. autoattribute:: pykep.trajopt.gym.cassini1_a
 
-This is the same MGA problem as :class:`~pykep.trajopt.gym.cassini1`, but with using
-a different encoding of the decision variables. In this case, the decision variables are no longer directly
-the times of flight but an equivalent set called the alpha encoding. This encoding is particularly useful
-when bounds on the times of flight are not known a priori. It creates a less evolvable problem, albeit a less biased one,
-or at least one that is not using any apriori knowledge on the final solution. The decision vector is also augmented with one
-more variable: the total time of flight which is thus controlled via its bounds, making the encoding particularly suitable
-for multi-objective optimization problems where the total time of flight is a second objective for which we want to search solutions
-on the pareto front.
+Same physical problem as :class:`~pykep.trajopt.gym.cassini1`, but using
+``alpha`` time-of-flight encoding.
+This encoding is useful when per-leg time-of-flight bounds are not known
+a priori. It introduces an additional decision variable for total
+time-of-flight, making it convenient for multi-objective formulations where
+total mission duration is an explicit objective.
 
 .. autoattribute:: pykep.trajopt.gym.cassini1_n
 
-This is the same MGA problem as :class:`~pykep.trajopt.gym.cassini1`, but with using
-a different encoding of the decision variables. In this case, the decision variables are no longer directly
-the times of flight but an equivalent set called the eta encoding. This encoding is particularly useful
-when bounds on the times of flight are not known a priori. It creates a less evolvable problem, albeit a less biased one.
+Same physical problem as :class:`~pykep.trajopt.gym.cassini1`, but using
+``eta`` time-of-flight encoding.
+As with the alpha variant, this parametrization is useful when direct,
+per-leg time-of-flight bounds are not available a priori.
 
-MGA-1DSM problems
-************************
+MGA-1DSM Problems
+*****************
+
+The following benchmarks are MGA problems with one Deep Space Maneuver (DSM)
+per leg.
 
 .. autoattribute:: pykep.trajopt.gym.cassini2
 
-This is an MGA-1DSM problem inspired to the Cassini spacecraft interplanetary transfer to Saturn. 
-It is fundamentally similar to :class:`~pykep.trajopt.gym.cassini1`, but it allows for one deep space maneuver (DSM) at any point
-of each trajectory leg, and does not account for the launch :math:`\Delta V` which is bounded instead to a maximum value.
+MGA-1DSM benchmark inspired by the Cassini transfer to Saturn.
+Compared to :class:`~pykep.trajopt.gym.cassini1`, one DSM is allowed on each
+leg, and launch :math:`\Delta V` is modeled as a bounded quantity rather than
+being directly minimized. This shifts more optimization freedom to in-flight
+control decisions, making the benchmark representative of preliminary design
+studies where launch capability is preallocated and cruise shaping is critical.
 
 .. autoattribute:: pykep.trajopt.gym.rosetta
 
-This is an MGA-1DSM problem inspired to the Rosetta spacecraft interplanetary transfer to comet 67P/Churyumov-Gerasimenko.
-The objective of this mission is to rendezvous with the comet matching its heliocentric position and velocity exactly.
-The planetary fly-by sequence considered is E-EMEE-comet (as the one used by Rosetta spacecraft). 
-As objective function we use the total :math:`\Delta V` computed as the sum of all the :math:`\Delta V` needed to perform the various
-maneuvers and fly-bys. The launch :math:`\Delta V` is not accounted for, as it is bounded to a maximum value.
+MGA-1DSM benchmark inspired by Rosetta's transfer to comet
+67P/Churyumov-Gerasimenko.
+The fly-by sequence is ``E-EMEE-comet``.
+The objective is rendezvous (position and velocity matching at arrival) while
+minimizing total maneuver :math:`\Delta V`; launch :math:`\Delta V` is bounded.
+The instance captures a key challenge of small-body rendezvous missions:
+constructing a long, weakly forced transfer that arrives with low relative
+velocity after multiple inner-Solar-System gravity assists.
 
 .. autoattribute:: pykep.trajopt.gym.eve_mga1dsm
 
-This is an MGA-1DSM problem useful to test the performance of evolutionary algorithms on a simpe trajectory problem.
-The planetary encounter sequence is E-V-E, and the objective is to rendezvous with the Earth matching its heliocentric
-position and velocity exactly. As objective function we use the total :math:`\Delta V` computed as the sum of all the :math:`\Delta V` needed to perform the various
-maneuvers and fly-bys. The launch :math:`\Delta V` is not accounted for, as it is bounded to a maximum value.
+Compact MGA-1DSM benchmark for algorithm testing.
+The planetary sequence is ``E-V-E``.
+The objective is Earth rendezvous (position and velocity matching) with minimum
+total maneuver :math:`\Delta V`; launch :math:`\Delta V` is bounded.
+Despite its compact size, this benchmark preserves the main coupling patterns
+of larger MGA-1DSM problems and is therefore useful for rapid solver
+prototyping, tuning, and regression testing.
 
 .. autoattribute:: pykep.trajopt.gym.eve_mga1dsm_a
 
-This is the same MGA-1DSM problem as :class:`~pykep.trajopt.gym.eve_mga_1dsm`, but with using
-a different encoding of the decision variables. In this case, the decision variables are no longer directly
-the times of flight but an equivalent set called the alpha encoding (see :class:`~pykep.trajopt.gym.cassini1_a`).
+Same physical problem as :class:`~pykep.trajopt.gym.eve_mga1dsm`, with
+``alpha`` time-of-flight encoding (see
+:class:`~pykep.trajopt.gym.cassini1_a`).
 
 .. autoattribute:: pykep.trajopt.gym.eve_mga1dsm_n
 
-This is the same MGA-1DSM problem as :class:`~pykep.trajopt.gym.eve_mga_1dsm`, but with using
-a different encoding of the decision variables. In this case, the decision variables are no longer directly
-the times of flight but an equivalent set called the eta encoding (see :class:`~pykep.trajopt.gym.cassini1_n`).
+Same physical problem as :class:`~pykep.trajopt.gym.eve_mga1dsm`, with
+``eta`` time-of-flight encoding (see
+:class:`~pykep.trajopt.gym.cassini1_n`).
 
 .. autoattribute:: pykep.trajopt.gym.juice
 
-This is an MGA-1DSM problem inspired to the JUICE spacecraft interplanetary transfer to Jupiter. 
-The selected fly-by sequence, E-EVEME-J, and other parameters are inspired by the ESA Juice mission. 
-A launcher model is included, namely an Ariane5 launch from Kourou. 
-JUICE - JUpiter ICy moons Explorer - is the first large-class mission in ESA's Cosmic Vision 2015-2025 programme.
-Launched on the 14th of April 2023, ESA’s Jupiter Icy Moons Explorer, Juice, will make detailed observations
-of the giant gas planet and its three large ocean-bearing moons – Ganymede, Callisto and Europa – with a suite of
-remote sensing, geophysical and in situ instruments. The mission will characterise these moons as both
-planetary objects and possible habitats, explore Jupiter’s complex environment in depth, and study the wider
-Jupiter system as an archetype for gas giants across the Universe.
+MGA-1DSM benchmark inspired by ESA's JUICE transfer to Jupiter.
+The sequence is ``E-EVEME-J`` and includes an Ariane 5 launcher model from
+Kourou. The instance reflects the mission-design context of delivering a large
+science payload to the Jovian system through an energy-constrained,
+multi-assist trajectory with strict launch and cruise trade-offs.
 
 .. autoattribute:: pykep.trajopt.gym.juice_mo
 
-This is the same MGA-1DSM problem as :class:`~pykep.trajopt.gym.juice`, but with using
-the alpha encoding for the time of flight variables (see :class:`~pykep.trajopt.gym.cassini1_a`).
-The problem is also multi-objective, with the total time of flight as a second objective, leveraging the 
-alpha encoding to control the total time of flight (at the cost of evolvability).
+Multi-objective variant of :class:`~pykep.trajopt.gym.juice`.
+It uses ``alpha`` encoding for time-of-flight variables (see
+:class:`~pykep.trajopt.gym.cassini1_a`) and includes total mission
+time-of-flight as a second objective. This formulation is aimed at constructing
+trade-off fronts between propellant usage and transfer duration in the same
+mission context.
 
 .. autoattribute:: pykep.trajopt.gym.messenger
 
-This an MGA-1DSM problem inspired by the messenger mission that orbited the planet Mercury between 2011 and 2015, studying Mercury's chemical composition,
-geology, and magnetic field. The name is a backronym for Mercury Surface, Space Environment, Geochemistry, and Ranging, and a reference to the messenger
-god Mercury from Roman mythology. The selected fly-by sequence, E-VVMeMeMe-Me, and other parameters are coincident to the actual Messenger mission.
-We have only omitted the first Earth fly-by that was used to correct for launcher performances, since we here do not make use of a launcher model.
-As far as chemical propelled interplanetary trajectories go, this particular one is particularly complex and difficult to design. 
-The time of flights among successive Mercury fly-bys allow for multiple rvolutions and resonances, making optimization techniques struggle to find the correct combination.
-The amount of specialistic knowledge that needs to be used to obtain a successful design is significant.
-Finding a global optimization approach able to find a good trajectory in complete autonomy without making
-use of additional problem knowledge is challenging but possible, but limiting the number of fitness call is difficult.
+MGA-1DSM benchmark inspired by the MESSENGER transfer to Mercury.
+The fly-by sequence is ``E-VVMeMeMe-Me`` (with the first Earth correction
+fly-by omitted because no launcher model is used).
+This benchmark is intentionally difficult: resonant Mercury fly-bys and
+multiple-revolution opportunities create a rugged optimization landscape and
+high sensitivity to time-of-flight choices. It is a representative stress test
+for global optimization methods in chemically propelled, gravity-assist-heavy
+inner-planet missions.
 
-Multiple impulse problem
-************************
+Multiple-Impulse Problems
+*************************
+
+These benchmarks represent Earth-Moon transfer problems with a fixed number of
+impulses.
+They provide compact testbeds for studying how optimization difficulty scales
+with control dimensionality as the number of allowed impulses increases.
 
 .. autoattribute:: pykep.trajopt.gym.em3imp
 
@@ -117,27 +137,40 @@ Multiple impulse problem
 
 .. autoattribute:: pykep.trajopt.gym.em7imp
 
-TOPS problems
-************************
+TOPS Problems
+*************
 
-The TOPS (Trajectory Optimisation Problems in Space) database
-:cite:p:`izzo2026zoh` collects benchmark low-thrust trajectory optimization problems transcribed into
-nonlinear programs by a direct method. The pykep gym exposes these benchmarks
-as parameterized UDP classes, covering two-body dynamics in Cartesian
-coordinates, two-body dynamics in modified equinoctial elements, solar-sail
-problems, and CR3BP dynamics.
+The TOPS (Trajectory Optimisation Problems in Space) benchmarks
+:cite:p:`izzo2026zoh` are a collection of low-thrust trajectory optimization problems
+specified in JSON format.
 
-All TOPS formulations rely on a zero-order-hold transcription of the control
-over a user-defined number of segments. They use a forward-backward shooting
-scheme, which results in highly nonlinear mismatch constraints, and in the non
-solar-sail formulations they also include throttle constraints. The size and
-difficulty of the resulting NLP can therefore be regulated through the number
-of segments and through the selected time-grid encoding, such as ``uniform``
-or ``softmax``. The non solar-sail benchmarks are built on
-:class:`~pykep.trajopt.zoh_point2point`, while the solar-sail benchmark is
-built on :class:`~pykep.trajopt.zoh_ss_point2point`. As a consequence, the
-departure and arrival states are fixed and moving-end effects are not
-accounted for.
+In ``pykep`` these datasets are available as dictionaries under:
+:data:`~pykep.trajopt.gym.tops_twobody_json`,
+:data:`~pykep.trajopt.gym.tops_mee_json`,
+:data:`~pykep.trajopt.gym.tops_ss_json`, and
+:data:`~pykep.trajopt.gym.tops_cr3bp_json`, corresponding to two-body
+Cartesian, two-body MEE, solar-sail, and CR3BP dynamics.
+
+NLP transcriptions of selected TOPS instances are also provided as UDP classes
+in ``pykep.trajopt.gym``.
+
+All formulations use zero-order-hold control over a user-defined number of
+segments and a forward-backward shooting scheme (:cite:p:`izzo2026zoh`). 
+This induces nonlinear mismatch constraints; non-solar-sail variants
+also include throttle constraints. The resulting NLP size and difficulty
+can be tuned through ``nseg`` and the time-grid encoding
+(for example ``uniform`` or ``softmax``).
+
+Fixed Boundaries
+----------------
+
+A first set of TOPS instances as NLPs is provided with fixed initial/final
+states and, in most cases, fixed time-of-flight.
+These benchmarks are suitable for controlled algorithm comparisons and as an
+entry point to the ``pykep`` gym.
+Non-solar-sail variants are built on :class:`~pykep.trajopt.zoh_point2point`,
+while the solar-sail variant is built on
+:class:`~pykep.trajopt.zoh_ss_point2point`.
 
 .. autoclass:: pykep.trajopt.gym.tops_twobody
 
@@ -147,3 +180,21 @@ accounted for.
 
 .. autoclass:: pykep.trajopt.gym.tops_cr3bp
 
+Moving Boundaries
+-----------------
+
+Moving-boundary NLP formulations extend the fixed-boundary setting by allowing
+departure and arrival epochs to vary, with endpoint states tied to
+:class:`~pykep.planet` ephemerides and optional relative-velocity constraints.
+This setup is closer to preliminary mission design use cases and introduces a
+harder optimization problem because boundary epochs become decision variables and
+two constraints are added to control the relative velocity at both endpoints.
+
+In terms of base transcriptions, non-solar-sail variants are formulated on
+:class:`~pykep.trajopt.zoh_pl2pl`, while solar-sail variants use
+:class:`~pykep.trajopt.zoh_ss_pl2pl`.
+
+.. note::
+
+	At the moment, only the fixed-boundary TOPS classes are exposed under
+	:mod:`pykep.trajopt.gym`.

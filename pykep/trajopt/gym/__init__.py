@@ -22,5 +22,6 @@ tops_ss_json = _load_tops_json("_tops_ss.json")
 tops_mee_json = _load_tops_json("_tops_mee.json")
 
 from ._tops import tops_twobody, tops_mee, tops_cr3bp, tops_ss
+from ._tops import tops_twobody_mb, tops_mee_mb, tops_cr3bp_mb, tops_ss_mb
 
 del _load_tops_json, resources, json

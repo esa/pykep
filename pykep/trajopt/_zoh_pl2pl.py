@@ -14,72 +14,140 @@ from matplotlib import pyplot as _plt
 
 
 class zoh_pl2pl:
-    """Represents the optimal low-thrust transfer between two :class:`~pykep.planet` using the Zero Order Hold (direct) method with free departure and arrival velocities.
+    """Represents the optimal low-thrust transfer between two :class:`~pykep.planet` using the Zero Order Hold (direct) method with free
+    departure and arrival velocities and under a generic (low-thrust) dynamics.
 
-    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its initial and final states, as well as its transfer time T, final mass mf
-    and the controls as to link the two planets with a low-thrust trajectory. The spacecraft can depart and arrive with velocities different from the planets.
+    This problem works internally using the :class:`~pykep.leg.zoh` and manipulates its initial and final states, as well as its transfer time T, 
+    final mass mf and the controls as to link two orbits described via planets to a low-thrust trajectory. The spacecraft can also be allowed to depart
+    and arrive with residual relative velocities.
+  
+    This class manages two distinct and independent unit systems:
 
-    The problem works in non-dimensional units internally, while planets return SI units. The user must provide scaling factors (L, V, MASS) for proper conversion.
+    1. **Ephemeris Units** (from :class:`~pykep.planet`)
+        - Time input: MJD2000 days
+        - Position/velocity output: user-defined (e.g., SI: meters, meters/second)
+        - **Critical contract:** velocities and accelerations must be per *second*
 
-    The decision vector is::
+    2. **Integrator Units** (from the Taylor adaptive integrator ``tas``)
+        - These are free, typically assuming μ = 1 as well as a length scale
+
+    The transition between systems is controlled by three user-supplied parameters:
+
+    - ``L`` (default: AU): length scale mapping ephemeris position to Integrator Units
+    - ``V`` (default: EARTH_VELOCITY): velocity scale mapping ephemeris velocity to Integrator Units
+    - ``TIME = L / V``: derived time scale (in SI seconds) converting seconds to Integrator Units
+    - ``ACC = V² / L``: derived acceleration scale converting ephemeris acceleration to Integrator Units
+
+    As a consequence, the class applies these standardized conversions to the units used in the backbone numerical integration:
+
+    - Position: $r_{tas} = r_{pla} / L$
+    - Velocity: $v_{tas} = v_{pla} / V$
+    - Acceleration: $a_{tas} = a_{pla} / \\text{ACC}$
+    - Time: $t_{tas} = t_{pla} \\cdot \\text{DAY2SEC} / \\text{TIME}$
+
+    where $t_{pla}$ is in days.
+
+    In a nuthsell: choose L and V to match the units returned by pls/plf, but those ephemeris
+    rates must be per second (not per day or something else).
+
+        The decision vector is::
 
         x = [t0_fractional, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights] for softmax)
 
     where:
-    - t0_fractional is in non-dimensional (fraction of the t0 bounds)
-    - mf is non-dimensional (scaled by MASS)
-    - vinf_dep, vinf_arr are non-dimensional (scaled by V)
-    - idep, iarr are unit direction vectors
-    - controls = [T, i_x, i_y, i_z] × nseg (T non-dimensional, directions unit vectors)
-    - tof is non-dimensional (scaled by TIME = sqrt(L³/MU))
 
-    .. note: the API is slightly different than the point2point problem, and the units for the non-dimensionalization must be passed here.
+    - ``t0_fractional``: non-dimensional departure time offset in integrator time units (``TIME``); maps to MJD2000 via ``t0 = t0_bounds[0] + x[0] * TIME * SEC2DAY``
+    - ``mf``: non-dimensional final mass
+    - ``vinf_dep``, ``vinf_arr``: non-dimensional excess velocity magnitudes (scaled by ``V``)
+    - ``idep``, ``iarr``: unit Cartesian direction vectors of the relative velocities.
+    - ``controls``: ``[T, i_x, i_y, i_z] * nseg`` where ``T`` is non-dimensional throttle.
+        The interpretation of ``i_x, i_y, i_z`` is dynamics-dependent: any frame is admissible,
+        as long as they are constrained compatibly with throttle constraints.
+    - ``tof``: non-dimensional time of flight (scaled by ``TIME``)
+    - ``weights``: softmax weights (only if ``time_encoding='softmax'``)
+
+    .. note::
+
+        The API differs from the :class:`~pykep.trajopt.point2point` problem: unit scales (``L``, ``V``) must be explicitly 
+        provided to correctly bridge ephemeris and integrator unit systems. Mismatched scales will silently 
+        produce incorrect trajectories and gradients.
     """
 
     def __init__(
         self,
-        pls=_pk.planet(_pk.udpla.jpl_lp(body="EARTH")),
-        plf=_pk.planet(_pk.udpla.jpl_lp(body="MARS")),
+        pls=None,
+        plf=None,
         ms=1.0,
         max_thrust=0.22,
-        t0_bounds=[6700.0, 6800.0],
-        tof_bounds=[3.4, 8.6],
-        mf_bounds=[0.2, 1.0],
-        vinf_dep_bounds=[0.0, 0.2],
-        vinf_arr_bounds=[0.0, 0.2],
+        t0_bounds=None,
+        tof_bounds=None,
+        mf_bounds=None,
+        vinf_dep_bounds=None,
+        vinf_arr_bounds=None,
         nseg=10,
         cut=0.6,
-        tas=(_pk.ta.get_zoh_kep(1e-10), None),
+        tas=None,
+        cart2state = None,
+        state2cart = None,
+        inequalities_for_tc = False,
         time_encoding="uniform",
-        w_bounds_softmax=[-1.0, 1.0],
+        w_bounds_softmax=None,
+        max_steps=None,
+        nrevs = None,
         L=_pk.AU,
         V=_pk.EARTH_VELOCITY,
     ):
         """
-        Initializes the zoh_pl2pl_free_v instance with given parameters.
+        Initializes a planet-to-planet ZOH low-thrust transfer problem with free departure and arrival excess velocities.
 
         Args:
-            *pls* (:class:`~pykep.planet`): Initial planet. Defaults to jpl_lp Earth.
+            *pls* (:class:`~pykep.planet`): Departure planet or ephemeris provider.
+                It must implement ``eph(t_mjd2000)`` and, if gradients are requested,
+                also ``acc(t_mjd2000)``. The returned position, velocity and acceleration
+                units must be consistent with ``L`` and ``V``. Defaults to JPL low-precision Earth.
 
-            *plf* (:class:`~pykep.planet`): Final planet. Defaults to jpl_lp Mars.
+            *plf* (:class:`~pykep.planet`): Arrival planet or ephemeris provider.
+                It follows the same contract as ``pls``. Defaults to JPL low-precision Mars.
 
-            *ms* (:class:`float`): Initial spacecraft mass (non-dimensional). Defaults to 1.0.
+            *ms* (:class:`float`): Initial spacecraft mass in integrator units.
+                This is the mass used in ``self.leg.state0`` and therefore must match the
+                mass normalization assumed by the chosen dynamics in ``tas``. Defaults to 1.0.
 
-            *max_thrust* (:class:`float`): Maximum thrust (non-dimensional). Defaults to 0.22.
+            *max_thrust* (:class:`float`): Maximum thrust magnitude in integrator units.
+                The throttle component stored in each segment of the decision vector is scaled
+                by this value before being assigned to the ZOH leg. Defaults to 0.22.
 
-            *t0_bounds* (:class:`list`): Bounds for departure epoch in MJD2000. Defaults to [6700.0, 6800.0].
+            *t0_bounds* (:class:`list`): Lower and upper bounds for the departure epoch,
+                expressed in MJD2000 days. The first decision variable is a non-dimensional time
+                in integrator units (``TIME``), bounded by ``[0, (t0_bounds[1]-t0_bounds[0]) * DAY2SEC / TIME]``
+                and mapped to MJD2000 via ``t0 = t0_bounds[0] + x[0] * TIME * SEC2DAY``. Defaults to ``[6700.0, 6800.0]``.
 
-            *tof_bounds* (:class:`list`): Bounds for time of flight (non-dimensional). Defaults to [3.4, 8.6].
+            *tof_bounds* (:class:`list`): Bounds for the time of flight in integrator time units.
+                Conversion to days is performed internally using ``TIME / DAY2SEC`` when querying
+                the arrival ephemeris. Defaults to ``[3.4, 8.6]``.
 
-            *mf_bounds* (:class:`list`): Bounds for final mass (non-dimensional). Defaults to [0.2, 1.0].
+            *mf_bounds* (:class:`list`): Bounds for the final spacecraft mass in integrator units.
+                The optimization objective is ``-mf``. Defaults to ``[0.2, 1.0]``.
 
-            *vinf_dep_bounds* (:class:`list`): Bounds for departure excess velocity magnitude (non-dimensional). Defaults to [0.0, 0.2].
+            *vinf_dep_bounds* (:class:`list`): Bounds for the magnitude of the departure excess
+                velocity in integrator velocity units, that is, after division by ``V``.
+                Defaults to ``[0.0, 0.2]``.
 
-            *vinf_arr_bounds* (:class:`list`): Bounds for arrival excess velocity magnitude (non-dimensional). Defaults to [0.0, 0.2].
+            *vinf_arr_bounds* (:class:`list`): Bounds for the magnitude of the arrival excess
+                velocity in integrator velocity units, that is, after division by ``V``.
+                Defaults to ``[0.0, 0.2]``.
 
-            *nseg* (:class:`int`): Number of segments for the trajectory. Defaults to 10.
+            *nseg* (:class:`int`): Number of constant-control segments used by the ZOH transcription.
+                Each segment contributes four decision variables: throttle magnitude and a direction vector.
+                Defaults to 10.
 
-            *cut* (:class:`float`): Cut parameter for the :class:`~pykep.leg.zoh`. Defaults to 0.6.
+            *cut* (:class:`float`): Cut parameter passed to :class:`~pykep.leg.zoh`.
+                It defines the internal forward/backward split used by the transcription.
+                Defaults to 0.6.
+
+            *inequalities_for_tc* (:class:`bool`): If True, the throttle constraints are
+                formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise they are formulated
+                as equalities (``|i_u| = 1``). Defaults to False (equality formulation).
 
             *tas* (:class:`tuple`): `(ta, ta_var)` Taylor-adaptive integrators
 
@@ -87,14 +155,65 @@ class zoh_pl2pl:
 
                 - `ta_var`: Variational dynamics (state dim 84, same pars). When None, no gradients will be used.
 
-            *time_encoding* (:class:`str`): Time encoding scheme. Defaults to 'uniform'. Options: 'uniform', 'softmax'.
+            *cart2state* (:class:`list`): Optional list ``[transform, jacobian]`` for non-Cartesian dynamics.
+                ``transform`` is a callable that maps a 6D Cartesian state (in integrator units) to the
+                6D state expected by the dynamics. ``jacobian`` is a callable that returns the 6×6 derivative
+                of ``transform`` w.r.t. the Cartesian state, as a flattened 36-element array (row-major order).
+                When provided, the class applies this transformation to boundary states before propagation,
+                and uses the Jacobian for gradient computation. Both functions receive the state as a 1D array.
+                Defaults to ``None`` (Cartesian dynamics).
 
-            *w_bounds_softmax* (:class:`list`): Bounds for softmax weights. Defaults to [-1., 1.].
+            *state2cart* (:class:`callable`): Optional callable for converting dynamics states back to Cartesian.
+                It maps a 6D state (in the dynamics' representation) to 6D Cartesian positions and velocities
+                (in integrator units). Used by ``plot()`` and ``pretty()`` methods for visualization.
+                Ignored if ``cart2state`` is not provided. Defaults to ``None``.
 
-            *L* (:class:`float`): Length units. Defaults to AU. (user must ensure consistency with the tas assumptions)
+            *time_encoding* (:class:`str`): Time-grid encoding scheme.
+                ``'uniform'`` uses equally spaced segment boundaries over the total time of flight.
+                ``'softmax'`` adds ``nseg`` weights to the decision vector and maps them to positive
+                segment durations summing to the total time of flight. Defaults to ``'uniform'``.
 
-            *V* (:class:`float`): Velocity units. Defaults to EARTH_VELOCITY. (user must ensure consistency with the tas assumptions)
+            *nrevs* (:class:`int`): Use only in case the dynamics is in mean orbital elements (MEE) form, this
+                parameter specifies the number of revolutions to be completed. It is used to add a mean longitude
+                 offset to the final state to enforce the desired number of revolutions.
+
+            *w_bounds_softmax* (:class:`list`): Lower and upper bounds for the softmax weights.
+                These bounds are used only when ``time_encoding='softmax'``. Defaults to ``[-1.0, 1.0]``.
+
+            *max_steps* (:class:`int` or ``None``): Maximum number of internal integrator steps
+                allowed by :class:`~pykep.leg.zoh`. If ``None``, the integrator default is used.
+
+            *L* (:class:`float`): Length scale used to map ephemeris positions to integrator units.
+                If ``pls`` and ``plf`` return positions in meters, a typical choice is ``pykep.AU``
+                or another length unit consistent with the integrator dynamics.
+
+            *V* (:class:`float`): Velocity scale used to map ephemeris velocities to integrator units.
+                If ephemeris velocities are returned in meters per second, ``V`` must also be expressed
+                in meters per second.
         """
+        if not isinstance(nseg, (int, _np.integer)) or nseg <= 0:
+            raise ValueError("nseg must be a positive integer")
+
+        # Initialize defaults for optional constructor arguments.
+        if pls is None:
+            pls = _pk.planet(_pk.udpla.jpl_lp(body="EARTH"))
+        if plf is None:
+            plf = _pk.planet(_pk.udpla.jpl_lp(body="MARS"))
+        if t0_bounds is None:
+            t0_bounds = [6700.0, 6800.0]
+        if tof_bounds is None:
+            tof_bounds = [3.4, 8.6]
+        if mf_bounds is None:
+            mf_bounds = [0.2, 1.0]
+        if vinf_dep_bounds is None:
+            vinf_dep_bounds = [0.0, 0.2]
+        if vinf_arr_bounds is None:
+            vinf_arr_bounds = [0.0, 0.2]
+        if tas is None:
+            tas = (_pk.ta.get_zoh_kep(1e-10), None)
+        if w_bounds_softmax is None:
+            w_bounds_softmax = [-1.0, 1.0]
+
         # We define some additional datamembers useful later-on
         self.pls = pls
         self.plf = plf
@@ -109,7 +228,25 @@ class zoh_pl2pl:
         self.with_gradient = tas[1] is not None
         self.time_encoding = time_encoding
         self.w_bounds_softmax = w_bounds_softmax
+        self.max_steps = max_steps
+        self.inequalities_for_tc = inequalities_for_tc
+        self.cart2state = cart2state
+        self.state2cart = state2cart
+        self.nrevs = nrevs
 
+        # Check user provided functions for cartesian-state conversions if provided
+        if self.cart2state is not None:
+            if len(self.cart2state) != 2:
+                raise ValueError("cart2state must be contain two callables, the conversion and optionally its Jacobian")     
+            if not callable(self.cart2state[0]):
+                raise ValueError("The first element of cart2state must be a callable function")
+            if tas[1] is not None and not callable(self.cart2state[1]):
+                raise ValueError("cart2state Jacobian function must be provided when using gradients")
+            
+        if self.state2cart is not None:
+            if not callable(self.state2cart):
+                raise ValueError("state2cart must be a callable function")
+            
         # Non dimensional units
         # (these are needed to bridge to the calls to the eph method: mjd2000 -> SI, and the dynamics which may be written in non dimensional units)
         self.L = L
@@ -152,7 +289,17 @@ class zoh_pl2pl:
             tgrid,
             cut,
             tas,
+            max_steps=self.max_steps,
+            dim_dynamics=7,
+            dim_controls=4,
         )
+
+    def _expected_nx(self):
+        # [t0_frac, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights])
+        nx = 10 + 4 * self.nseg + 1
+        if self.time_encoding == "softmax":
+            nx += self.nseg
+        return nx
 
     def _compute_throttle_constraints(self):
         tc = _np.zeros(self.nseg)
@@ -178,7 +325,7 @@ class zoh_pl2pl:
         return dtc_dcontrols
 
     def compute_t0(self, x):
-        return self.t0_bounds[0] + x[0] * (self.t0_bounds[1] - self.t0_bounds[0])
+        return self.t0_bounds[0] + x[0] * self.TIME * _pk.SEC2DAY
 
     def _set_leg_from_x(self, x):
         """
@@ -187,6 +334,11 @@ class zoh_pl2pl:
 
         All quantities are in non-dimensional units.
         """
+        if len(x) != self._expected_nx():
+            raise ValueError(
+                f"Invalid decision vector length: got {len(x)}, expected {self._expected_nx()}"
+            )
+
         t0 = self.compute_t0(x)
         state1 = list(self.leg.state1)
         state1[-1] = x[1]  # mf (non-dimensional)
@@ -223,8 +375,25 @@ class zoh_pl2pl:
         v_sc_dep_nd = vs_nd + dv_dep_nd
         v_sc_arr_nd = vf_nd + dv_arr_nd
 
-        self.leg.state0 = list(rs_nd) + list(v_sc_dep_nd) + [self.ms]
-        state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        # Apply coordinate transformation if provided
+        if self.cart2state is not None:
+            cart_state0 = list(rs_nd) + list(v_sc_dep_nd)
+            cart_state1 = list(rf_nd) + list(v_sc_arr_nd)
+            state0_transformed = self.cart2state[0](cart_state0)
+            state1_transformed = self.cart2state[0](cart_state1)
+            if self.nrevs is not None:
+                # If number of revolutions is specified, we assume the state is mee
+                # and add the corresponding mean longitude offset to the final state
+                if state1_transformed[-1] < state0_transformed[-1]:
+                    # We make sure the final longitude is larger than the initial one before adding the offset
+                    state1_transformed[-1] += 2 * _np.pi   
+                state1_transformed[-1] += self.nrevs * 2 * _np.pi
+            self.leg.state0 = list(state0_transformed) + [self.ms]
+            state1[:6] = list(state1_transformed)
+        else:
+            self.leg.state0 = list(rs_nd) + list(v_sc_dep_nd) + [self.ms]
+            state1[:6] = list(rf_nd) + list(v_sc_arr_nd)
+        
         self.leg.state1 = state1
 
         # Set time grid based on encoding (non-dimensional time)
@@ -253,7 +422,7 @@ class zoh_pl2pl:
                 + [self.tof_bounds[0]]
             )
             ub = (
-                [1.0, self.mf_bounds[1]]
+                [(self.t0_bounds[1]-self.t0_bounds[0]) * _pk.DAY2SEC / self.TIME, self.mf_bounds[1]]
                 + [self.vinf_dep_bounds[1]]
                 + [1.0, 1.0, 1.0]
                 + [self.vinf_arr_bounds[1]]
@@ -273,7 +442,7 @@ class zoh_pl2pl:
                 + [self.w_bounds_softmax[0]] * self.nseg
             )
             ub = (
-                [1.0, self.mf_bounds[1]]
+                [(self.t0_bounds[1]-self.t0_bounds[0]) * _pk.DAY2SEC / self.TIME, self.mf_bounds[1]]
                 + [self.vinf_dep_bounds[1]]
                 + [1.0, 1.0, 1.0]
                 + [self.vinf_arr_bounds[1]]
@@ -292,17 +461,17 @@ class zoh_pl2pl:
         obj = -x[1]
 
         # We compute the equality constraints
-        ceq = self.leg.compute_mismatch_constraints()
-        ceq += self._compute_throttle_constraints()
+        c = self.leg.compute_mismatch_constraints()
+        c += self._compute_throttle_constraints()
 
-        # Add direction normalization constraints
+        # Direction normalization constraints (always present in the return vector;
+        # whether they are equalities or inequalities is decided by get_nec/get_nic)
         idep = x[3:6]
         iarr = x[7:10]
-        ceq += [_np.dot(idep, idep) - 1.0]
-        ceq += [_np.dot(iarr, iarr) - 1.0]
+        c += [idep[0] * idep[0] + idep[1] * idep[1] + idep[2] * idep[2] - 1.0]
+        c += [iarr[0] * iarr[0] + iarr[1] * iarr[1] + iarr[2] * iarr[2] - 1.0]
 
-        retval = _np.array([obj] + ceq)
-        return retval
+        return [obj] + c
 
     def gradient(self, x):
         """
@@ -332,9 +501,7 @@ class zoh_pl2pl:
 
         # Initialize the gradient matrix
         nf = 1 + 7 + self.nseg + 2
-        nx = 10 + 4 * self.nseg + 1
-        if self.time_encoding == "softmax":
-            nx += self.nseg
+        nx = self._expected_nx()
 
         gradient = _np.zeros((nf, nx))
 
@@ -358,40 +525,88 @@ class zoh_pl2pl:
         # Partials of mismatch constraints w.r.t. t0
         # d(rs_nd)/dt0 = d(rs/L)/dt0_days = vs * DAY2SEC / L = vs_nd * (V/L) * DAY2SEC
         # d(vs_nd)/dt0 = (1/V) * as * DAY2SEC = (as_nd * V/TIME) / V * DAY2SEC = as_nd * DAY2SEC / TIME
-        dx0_dt0_nd = _np.concatenate(
+        dx0_dt0_cart = _np.concatenate(
             [
-                vs_nd * (self.V / self.L) * _pk.DAY2SEC,
-                as_nd * (_pk.DAY2SEC / self.TIME),
+                vs_nd * _pk.DAY2SEC / self.TIME,
+                as_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
+        
+        # Apply Jacobian of cart2state transformation if provided
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            dx0_dt0_nd = J0 @ dx0_dt0_cart[:6]
+            dx0_dt0_nd = _np.concatenate([dx0_dt0_nd, [0.0]])
+        else:
+            dx0_dt0_nd = dx0_dt0_cart
+        
         gradient[1:8, 0] = dmc_dx0 @ dx0_dt0_nd
 
         # Also account for final state change through t0 (since tf = t0 + tof * TIME / DAY2SEC)
         # dtf/dt0 = 1, so d(rf_nd)/dt0 = vf_nd * (V/L) * DAY2SEC, d(vf_nd)/dt0 = af_nd * DAY2SEC/TIME
-        dx1_dt0_nd = _np.concatenate(
+        dx1_dt0_cart = _np.concatenate(
             [
-                vf_nd * (self.V / self.L) * _pk.DAY2SEC,
-                af_nd * (_pk.DAY2SEC / self.TIME),
+                vf_nd * _pk.DAY2SEC / self.TIME,
+                af_nd * _pk.DAY2SEC / self.TIME,
                 [0.0],
             ]
         )
+        
+        # Apply Jacobian of cart2state transformation if provided
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            dx1_dt0_nd = J1 @ dx1_dt0_cart[:6]
+            dx1_dt0_nd = _np.concatenate([dx1_dt0_nd, [0.0]])
+        else:
+            dx1_dt0_nd = dx1_dt0_cart
+        
         gradient[1:8, 0] += dmc_dx1 @ dx1_dt0_nd
 
         # Partials w.r.t. final mass
         gradient[1:8, 1] = dmc_dx1[:, 6]
 
         # Partials w.r.t. departure velocity magnitude
-        gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            dx0_dvinf_dep_nd = _np.zeros(7)
+            dx0_dvinf_dep_nd[:6] = J0[:, 3:6] @ idep
+            gradient[1:8, 2] = dmc_dx0 @ dx0_dvinf_dep_nd
+        else:
+            gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
 
         # Partials w.r.t. departure direction
-        gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
+        if self.cart2state is not None:
+            cart_state0 = _np.concatenate([rs_nd, vs_nd])
+            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
+            dx0_ddir_nd = _np.zeros((7, 3))
+            dx0_ddir_nd[:6, :] = J0[:, 3:6] * vinf_dep_mag
+            gradient[1:8, 3:6] = dmc_dx0 @ dx0_ddir_nd
+        else:
+            gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
 
         # Partials w.r.t. arrival velocity magnitude
-        gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            dx1_dvinf_arr_nd = _np.zeros(7)
+            dx1_dvinf_arr_nd[:6] = J1[:, 3:6] @ iarr
+            gradient[1:8, 6] = dmc_dx1 @ dx1_dvinf_arr_nd
+        else:
+            gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
 
         # Partials w.r.t. arrival direction
-        gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
+        if self.cart2state is not None:
+            cart_state1 = _np.concatenate([rf_nd, vf_nd])
+            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
+            dx1_ddir_nd = _np.zeros((7, 3))
+            dx1_ddir_nd[:6, :] = J1[:, 3:6] * vinf_arr_mag
+            gradient[1:8, 7:10] = dmc_dx1 @ dx1_ddir_nd
+        else:
+            gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
 
         # Partials w.r.t. controls
         for i in range(self.nseg):
@@ -410,7 +625,7 @@ class zoh_pl2pl:
             # d(rf_nd)/d(tof_nd) = vf_nd * (V/L) * TIME  [simplifies to vf_nd for V = L/TIME]
             # d(vf_nd)/d(tof_nd) = af_nd
             dx1_dtof_nd = _np.concatenate(
-                [vf_nd * (self.V / self.L) * self.TIME, af_nd, [0.0]]
+                [vf_nd, af_nd, [0.0]]
             )
             gradient[1:8, -1] += dmc_dx1 @ dx1_dtof_nd
 
@@ -425,7 +640,7 @@ class zoh_pl2pl:
 
             # Add contribution from final state change
             dx1_dtof_nd = _np.concatenate(
-                [vf_nd * (self.V / self.L) * self.TIME, af_nd, [0.0]]
+                [vf_nd, af_nd, [0.0]]
             )
             gradient[1:8, 10 + 4 * self.nseg] += dmc_dx1 @ dx1_dtof_nd
 
@@ -447,7 +662,7 @@ class zoh_pl2pl:
         gradient[9 + self.nseg, 7:10] = 2.0 * iarr
 
         # Scaling the gradient to t_fractional d/dt_frac = d/dt0 * dt0/dt_frac
-        gradient[:, 0] *= self.t0_bounds[1] - self.t0_bounds[0]
+        gradient[:, 0] *= self.TIME * _pk.SEC2DAY
 
         return gradient.flatten()
 
@@ -455,7 +670,18 @@ class zoh_pl2pl:
         return self.with_gradient
 
     def get_nec(self):
-        return 7 + self.nseg + 2
+        if self.inequalities_for_tc:
+            # Throttle constraints and boundary impulses are inequalities: |i_u|^2 - 1 <= 0
+            return 7 
+        else:
+            return 7 + self.nseg + 2
+        
+    def get_nic(self):
+        if self.inequalities_for_tc:
+            # Throttle constraints and boundary impulses are inequalities: |i_u|^2 - 1 <= 0
+            return self.nseg + 2
+        else:
+            return 0
 
     def pretty(self, x):
         """
@@ -530,25 +756,64 @@ class zoh_pl2pl:
         N=30,
         mark_segments=True,
         mark_mismatch=True,
+        orbit_color = None,
+        tof=None,
         **kwargs,
     ):
         """
         Plots the trajectory of the zero order hold point to point problem.
 
         Args:
-            *x* (:class:`list`): The decision vector containins: final mass, thrust direction, time of flight and (if time encoding is softmax) the weights for the softmax time grid.
+            *x* (:class:`list`): The decision vector. Layout: ``[t0_frac, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights])`` in non-dimensional units.
 
             *ax* (:class:`matplotlib.axes.Axes`): The matplotlib axes to plot on. If None, a new figure and axes will be created.
 
-            *N* (:class:`int`): The number of points to plot along the trajectory.
+            *N* (:class:`int`): Number of points per segment used when sampling the propagated trajectory.
 
-            *mark_segments* (:class:`bool`): adds markers ath each segment edge
+            *mark_segments* (:class:`bool`): Adds markers at each segment boundary.
+
+            *mark_mismatch* (:class:`bool`): If True, highlights the mismatch point between forward and backward integrations.
+
+            *orbit_color* (:class:`str` or None): If provided, plots the departure and arrival reference orbits (propagated without thrust) using this color.
+
+            *tof* (:class:`float` or None): If ``orbit_color`` is provided, this overrides the tof extracted from ``x`` for plotting the border orbits.
+
+            ``**kwargs`` (:class:`dict`): Additional keyword arguments passed to the underlying matplotlib plotting calls (e.g., marker size, color for markers).
 
         Returns:
-            :class:`mpl_toolkits.mplot3d.axes3d.Axes3D`: The modified Axes object with the Lambert's problem trajectory added.
+            The matplotlib Axes object with the trajectory added.
         """
         x_arr = _np.asarray(x)
-        # to be replaced with a plot method akin the sims-flanagan point2point one
+        state2cart = self.state2cart if self.state2cart is not None else (lambda state: state)
+        if self.state2cart is None:
+            state2cart = lambda state: state  # Identity if no conversion provided
+        else:
+            # We need to append the mass to the state after conversion since self.state2cart uses a state vector without mass
+            state2cart = lambda state: list(self.state2cart(state[:-1])) + [state[-1]]
+
+        # We start with the boundaries ....
+        if orbit_color is not None:
+            if tof is None:
+                # tof lives after controls: index depends on decision vector layout
+                tof = x_arr[10 + 4 * self.nseg]
+
+            # Start orbit
+            ta = self.leg.ta
+            ta.state[:] = self.leg.state0
+            ta.pars[0] = 0.
+            ta.time=0
+            sol_s = ta.propagate_grid(_np.linspace(0, tof, N * self.nseg))[-1]
+            sol_cart_s = _np.array([state2cart(it) for it in sol_s])
+            ax.plot(sol_cart_s[:,0], sol_cart_s[:,1], sol_cart_s[:,2], orbit_color, alpha=0.5)
+
+            # End orbit (backpropagated)
+            ta.state[:] = self.leg.state1
+            ta.time=0
+            sol_f = ta.propagate_grid(_np.linspace(0, -tof, N * self.nseg))[-1]
+            sol_cart_f = _np.array([state2cart(it) for it in sol_f])
+            ax.plot(sol_cart_f[:,0], sol_cart_f[:,1], sol_cart_f[:,2], orbit_color, alpha=0.5)
+
+        # And then the trajectory
         self._set_leg_from_x(x_arr)
         fwd, bck, _ = self.leg.get_state_info(N=N)
         # compute the color scheme
@@ -556,30 +821,29 @@ class zoh_pl2pl:
         if ax is None:
             ax = _pk.plot.make_3Daxis()
         # plot
+        last_point = None
         for i, segment in enumerate(fwd):
             color = (
                 0.25 + (0.80 - 0.25) * throttles[i],
                 0.41 + (0.36 - 0.41) * throttles[i],
                 0.88 + (0.36 - 0.88) * throttles[i],
             )
+            # We obtain the state in Cartesian
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
-                    segment[0, 0] * self.L,
-                    segment[0, 1] * self.L,
-                    segment[0, 2] * self.L,
+                    segment_cart[0, 0],
+                    segment_cart[0, 1],
+                    segment_cart[0, 2],
                     **kwargs,
                 )
-            ax.plot(
-                segment[:, 0] * self.L,
-                segment[:, 1] * self.L,
-                segment[:, 2] * self.L,
-                c=color,
-            )
-        if mark_mismatch:
+            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
+            last_point = segment_cart[-1, :3]
+        if mark_mismatch and last_point is not None:
             ax.scatter(
-                segment[-1, 0] * self.L,
-                segment[-1, 1] * self.L,
-                segment[-1, 2] * self.L,
+                last_point[0],
+                last_point[1],
+                last_point[2],
                 marker="^",
                 **kwargs,
             )
@@ -589,18 +853,27 @@ class zoh_pl2pl:
                 0.41 + (0.36 - 0.41) * throttles[-1 - i],
                 0.88 + (0.36 - 0.88) * throttles[-1 - i],
             )
+            # We obtain the state in Cartesian
+            segment_cart = _np.array([state2cart(it) for it in segment])
             if mark_segments:
                 ax.scatter(
-                    segment[0, 0] * self.L,
-                    segment[0, 1] * self.L,
-                    segment[0, 2] * self.L,
+                    segment_cart[0, 0],
+                    segment_cart[0, 1],
+                    segment_cart[0, 2],
                     **kwargs,
                 )
-            ax.plot(segment[:, 0] * self.L, segment[:, 1] * self.L, segment[:, 2] * self.L, c=color)
-        if mark_mismatch:
+            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
+            last_point = segment_cart[-1, :3]
+        if mark_mismatch and last_point is not None:
             ax.scatter(
-                segment[-1, 0] * self.L, segment[-1, 1] * self.L, segment[-1, 2] * self.L, marker="^", **kwargs
+                last_point[0],
+                last_point[1],
+                last_point[2],
+                marker="^",
+                **kwargs
             )
+
+
         return ax
 
     def plot_throttle(self, x, ax=None, **kwargs):
