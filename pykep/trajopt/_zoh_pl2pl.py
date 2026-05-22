@@ -56,7 +56,7 @@ class zoh_pl2pl:
 
     where:
 
-    - ``t0_fractional``: non-dimensional, fraction of the ``t0_bounds`` range
+    - ``t0_fractional``: non-dimensional departure time offset in integrator time units (``TIME``); maps to MJD2000 via ``t0 = t0_bounds[0] + x[0] * TIME * SEC2DAY``
     - ``mf``: non-dimensional final mass
     - ``vinf_dep``, ``vinf_arr``: non-dimensional excess velocity magnitudes (scaled by ``V``)
     - ``idep``, ``iarr``: unit Cartesian direction vectors of the relative velocities.
@@ -92,6 +92,7 @@ class zoh_pl2pl:
         inequalities_for_tc = False,
         time_encoding="uniform",
         w_bounds_softmax=None,
+        max_steps=None,
         nrevs = None,
         L=_pk.AU,
         V=_pk.EARTH_VELOCITY,
@@ -117,8 +118,9 @@ class zoh_pl2pl:
                 by this value before being assigned to the ZOH leg. Defaults to 0.22.
 
             *t0_bounds* (:class:`list`): Lower and upper bounds for the departure epoch,
-                expressed in MJD2000 days. The first decision variable is a fractional value in
-                ``[0, 1]`` that is mapped into this interval. Defaults to ``[6700.0, 6800.0]``.
+                expressed in MJD2000 days. The first decision variable is a non-dimensional time
+                in integrator units (``TIME``), bounded by ``[0, (t0_bounds[1]-t0_bounds[0]) * DAY2SEC / TIME]``
+                and mapped to MJD2000 via ``t0 = t0_bounds[0] + x[0] * TIME * SEC2DAY``. Defaults to ``[6700.0, 6800.0]``.
 
             *tof_bounds* (:class:`list`): Bounds for the time of flight in integrator time units.
                 Conversion to days is performed internally using ``TIME / DAY2SEC`` when querying
@@ -178,6 +180,9 @@ class zoh_pl2pl:
             *w_bounds_softmax* (:class:`list`): Lower and upper bounds for the softmax weights.
                 These bounds are used only when ``time_encoding='softmax'``. Defaults to ``[-1.0, 1.0]``.
 
+            *max_steps* (:class:`int` or ``None``): Maximum number of internal integrator steps
+                allowed by :class:`~pykep.leg.zoh`. If ``None``, the integrator default is used.
+
             *L* (:class:`float`): Length scale used to map ephemeris positions to integrator units.
                 If ``pls`` and ``plf`` return positions in meters, a typical choice is ``pykep.AU``
                 or another length unit consistent with the integrator dynamics.
@@ -186,6 +191,9 @@ class zoh_pl2pl:
                 If ephemeris velocities are returned in meters per second, ``V`` must also be expressed
                 in meters per second.
         """
+        if not isinstance(nseg, (int, _np.integer)) or nseg <= 0:
+            raise ValueError("nseg must be a positive integer")
+
         # Initialize defaults for optional constructor arguments.
         if pls is None:
             pls = _pk.planet(_pk.udpla.jpl_lp(body="EARTH"))
@@ -220,6 +228,7 @@ class zoh_pl2pl:
         self.with_gradient = tas[1] is not None
         self.time_encoding = time_encoding
         self.w_bounds_softmax = w_bounds_softmax
+        self.max_steps = max_steps
         self.inequalities_for_tc = inequalities_for_tc
         self.cart2state = cart2state
         self.state2cart = state2cart
@@ -280,7 +289,17 @@ class zoh_pl2pl:
             tgrid,
             cut,
             tas,
+            max_steps=self.max_steps,
+            dim_dynamics=7,
+            dim_controls=4,
         )
+
+    def _expected_nx(self):
+        # [t0_frac, mf, vinf_dep, idep_x, idep_y, idep_z, vinf_arr, iarr_x, iarr_y, iarr_z] + controls + [tof] (+ [weights])
+        nx = 10 + 4 * self.nseg + 1
+        if self.time_encoding == "softmax":
+            nx += self.nseg
+        return nx
 
     def _compute_throttle_constraints(self):
         tc = _np.zeros(self.nseg)
@@ -306,7 +325,7 @@ class zoh_pl2pl:
         return dtc_dcontrols
 
     def compute_t0(self, x):
-        return self.t0_bounds[0] + x[0] * (self.t0_bounds[1] - self.t0_bounds[0])
+        return self.t0_bounds[0] + x[0] * self.TIME * _pk.SEC2DAY
 
     def _set_leg_from_x(self, x):
         """
@@ -315,6 +334,11 @@ class zoh_pl2pl:
 
         All quantities are in non-dimensional units.
         """
+        if len(x) != self._expected_nx():
+            raise ValueError(
+                f"Invalid decision vector length: got {len(x)}, expected {self._expected_nx()}"
+            )
+
         t0 = self.compute_t0(x)
         state1 = list(self.leg.state1)
         state1[-1] = x[1]  # mf (non-dimensional)
@@ -398,7 +422,7 @@ class zoh_pl2pl:
                 + [self.tof_bounds[0]]
             )
             ub = (
-                [1.0, self.mf_bounds[1]]
+                [(self.t0_bounds[1]-self.t0_bounds[0]) * _pk.DAY2SEC / self.TIME, self.mf_bounds[1]]
                 + [self.vinf_dep_bounds[1]]
                 + [1.0, 1.0, 1.0]
                 + [self.vinf_arr_bounds[1]]
@@ -418,7 +442,7 @@ class zoh_pl2pl:
                 + [self.w_bounds_softmax[0]] * self.nseg
             )
             ub = (
-                [1.0, self.mf_bounds[1]]
+                [(self.t0_bounds[1]-self.t0_bounds[0]) * _pk.DAY2SEC / self.TIME, self.mf_bounds[1]]
                 + [self.vinf_dep_bounds[1]]
                 + [1.0, 1.0, 1.0]
                 + [self.vinf_arr_bounds[1]]
@@ -437,17 +461,17 @@ class zoh_pl2pl:
         obj = -x[1]
 
         # We compute the equality constraints
-        ceq = self.leg.compute_mismatch_constraints()
-        ceq += self._compute_throttle_constraints()
+        c = self.leg.compute_mismatch_constraints()
+        c += self._compute_throttle_constraints()
 
-        # Add direction normalization constraints
+        # Direction normalization constraints (always present in the return vector;
+        # whether they are equalities or inequalities is decided by get_nec/get_nic)
         idep = x[3:6]
         iarr = x[7:10]
-        ceq += [_np.dot(idep, idep) - 1.0]
-        ceq += [_np.dot(iarr, iarr) - 1.0]
+        c += [idep[0] * idep[0] + idep[1] * idep[1] + idep[2] * idep[2] - 1.0]
+        c += [iarr[0] * iarr[0] + iarr[1] * iarr[1] + iarr[2] * iarr[2] - 1.0]
 
-        retval = _np.array([obj] + ceq)
-        return retval
+        return [obj] + c
 
     def gradient(self, x):
         """
@@ -477,9 +501,7 @@ class zoh_pl2pl:
 
         # Initialize the gradient matrix
         nf = 1 + 7 + self.nseg + 2
-        nx = 10 + 4 * self.nseg + 1
-        if self.time_encoding == "softmax":
-            nx += self.nseg
+        nx = self._expected_nx()
 
         gradient = _np.zeros((nf, nx))
 
@@ -640,7 +662,7 @@ class zoh_pl2pl:
         gradient[9 + self.nseg, 7:10] = 2.0 * iarr
 
         # Scaling the gradient to t_fractional d/dt_frac = d/dt0 * dt0/dt_frac
-        gradient[:, 0] *= self.t0_bounds[1] - self.t0_bounds[0]
+        gradient[:, 0] *= self.TIME * _pk.SEC2DAY
 
         return gradient.flatten()
 
