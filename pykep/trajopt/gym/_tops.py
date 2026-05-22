@@ -1,15 +1,15 @@
 import pykep as _pk
 import numpy as _np
 import heyoka as _hy
-from scipy import sparse
 from matplotlib import pyplot as _plt
+
 
 class tops_twobody:
     """
     Two-body problems from TOPS (Trajectory Optimisation Problems in Space).
 
     .. note::
-        These instances have fixed end-points and (mostly) fixed time of flight, 
+        These instances have fixed end-points and (mostly) fixed time of flight,
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
@@ -29,11 +29,18 @@ class tops_twobody:
     states are fixed and moving-end effects are not accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a two-body TOPS instance from a predefined gym case.
-        
+
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (two-body Cartesian dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_twobody_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -44,10 +51,10 @@ class tops_twobody:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints and
@@ -78,16 +85,20 @@ class tops_twobody:
         self.F = self.MASS * self.ACC
 
         # Scaling the problem to these units (mu will be 1. -> as expected from the pykep ta_twobody)
-        states = [it / self.L for it in gym_problem["state_s"][:3]] + [it / self.V for it in gym_problem["state_s"][3:6]]
-        statef = [it / self.L for it in gym_problem["state_f"][:3]] + [it / self.V for it in gym_problem["state_f"][3:6]]
+        states = [it / self.L for it in gym_problem["state_s"][:3]] + [
+            it / self.V for it in gym_problem["state_s"][3:6]
+        ]
+        statef = [it / self.L for it in gym_problem["state_f"][:3]] + [
+            it / self.V for it in gym_problem["state_f"][3:6]
+        ]
         ms = gym_problem["m_s"] / self.MASS
         max_thrust = gym_problem["max_thrust"] / self.F
         tof_bounds = [it / self.TIME for it in gym_problem["tof_bounds"]]
 
         # We set the Taylor integrators parameters (veff and mu in this case)
         veff_nd = gym_problem["veff"] / self.V
-        ta_twobody.pars[4] = 1.0 / veff_nd 
-        ta_twobody_var.pars[4] = 1.0 / veff_nd 
+        ta_twobody.pars[4] = 1.0 / veff_nd
+        ta_twobody_var.pars[4] = 1.0 / veff_nd
 
         self.udp = _pk.trajopt.zoh_point2point(
             states=states,  # 6D state only (mass handled separately)
@@ -110,15 +121,59 @@ class tops_twobody:
     def get_name(self):
         """Return the problem name."""
         return self.name
-    
+
     def get_extra_info(self):
         """Return additional information for the selected gym case."""
         return self.extra_info
-    
+
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        add_sun=True,
+        orbit_color="lightgray",
+        figsize=(15, 4),
+        **kwargs,
+    ):
+        """Four-view plot of the TOPS two-body solution."""
+        x_arr = _np.asarray(x)
+        fig = _plt.figure(figsize=figsize, layout="constrained")
+        ax3d = fig.add_subplot(1, 4, 1, projection="3d")
+        ax_xy = fig.add_subplot(1, 4, 2, projection="3d")
+        ax_xz = fig.add_subplot(1, 4, 3, projection="3d")
+        ax_yz = fig.add_subplot(1, 4, 4, projection="3d")
+        axes = (ax3d, ax_xy, ax_xz, ax_yz)
+        for axis in axes:
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, orbit_color=orbit_color, **kwargs
+            )
+        for axis in axes:
+            axis.set_xticks([axis.get_xticks()[0], axis.get_xticks()[-1]])
+            axis.set_yticks([axis.get_yticks()[0], axis.get_yticks()[-1]])
+            axis.set_zticks([axis.get_zticks()[0], axis.get_zticks()[-1]])
+        ax_xy.set_zticks([])
+        ax_xz.set_yticks([])
+        ax_yz.set_xticks([])
+        ax3d.view_init(elev=20, azim=270)
+        ax3d.set_aspect("equal")
+        if add_sun:
+            _pk.plot.add_sun(ax3d)
+        ax_xy.view_init(elev=90, azim=-90)
+        ax_xz.view_init(elev=0, azim=-90)
+        ax_yz.view_init(elev=0, azim=180)
+        ax3d.set_title("3D")
+        ax_xy.set_title("xy - view")
+        ax_xz.set_title("xz - view")
+        ax_yz.set_title("yz - view")
+        return axes
+
     def __getattr__(self, name):
         """Forward any undefined attribute/method calls to self.udp."""
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
+
 
 class tops_twobody_mb:
     """
@@ -145,11 +200,18 @@ class tops_twobody_mb:
     states are moving boundaries and moving-end effects are accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a two-body TOPS instance with moving boundaries from a predefined gym case.
 
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (two-body Cartesian dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_twobody_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -160,10 +222,10 @@ class tops_twobody_mb:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints and
@@ -190,13 +252,17 @@ class tops_twobody_mb:
         rs = [it * L for it in gym_problem["state_s"][0:3]]
         vs = [it * V for it in gym_problem["state_s"][3:6]]
         self.pls = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(0.0), posvel=[rs, vs], mu_central_body=MU)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0.0), posvel=[rs, vs], mu_central_body=MU
+            )
         )
         tof_days = gym_problem["tof_bounds"][0] * TIME * _pk.SEC2DAY
         rf = [it * L for it in gym_problem["state_f"][0:3]]
         vf = [it * V for it in gym_problem["state_f"][3:6]]
         self.plf = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(tof_days), posvel=[rf, vf], mu_central_body=MU)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(tof_days), posvel=[rf, vf], mu_central_body=MU
+            )
         )
         # To define a consistent version of the point w point problems as moving ends, we set the bounds
         # on the departure epochs to allow for a movement of half an orbit
@@ -210,7 +276,7 @@ class tops_twobody_mb:
         L_ta = _np.linalg.norm(gym_problem["state_s"][0:3]) * L
         MU_ta = gym_problem["mu"] * MU
         MASS_ta = gym_problem["m_s"] * MASS
-        TIME_ta = _np.sqrt(L_ta**3/ MU_ta)
+        TIME_ta = _np.sqrt(L_ta**3 / MU_ta)
         V_ta = L_ta / TIME_ta
         ACC_ta = V_ta**2 / L_ta
         F_ta = MASS_ta * ACC_ta
@@ -230,21 +296,20 @@ class tops_twobody_mb:
             pls=self.pls,
             plf=self.plf,
             ms=1.0,
-            nseg=10,
-            cut=0.5,
-            t0_bounds=[-bound,bound],  # (MJD2000)
+            nseg=nseg,
+            cut=cut,
+            t0_bounds=[-bound, bound],  # (MJD2000)
             tof_bounds=[it * TIME / TIME_ta for it in gym_problem["tof_bounds"]],
-            mf_bounds=[2/3, 1.0],
+            mf_bounds=[2 / 3, 1.0],
             vinf_dep_bounds=[0.0 * V / V_ta, 0.0 * V / V_ta],
             vinf_arr_bounds=[0.0 * V / V_ta, 0.0 * V / V_ta],
             tas=(ta, ta_var),
             max_thrust=gym_problem["max_thrust"] * F / F_ta,
-            time_encoding="uniform",
+            time_encoding=time_encoding,
             inequalities_for_tc=inequalities_for_tc,
             L=L_ta,
             V=V_ta,
         )
-
 
     def get_name(self):
         return self.name
@@ -282,11 +347,21 @@ class tops_twobody_mb:
         tof_days = x_arr[10 + 4 * self.udp.nseg] * self.udp.TIME / _pk.DAY2SEC
 
         for axis in axes:
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color)
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color)
-            _pk.plot.add_planet(ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20)
-            _pk.plot.add_planet(ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20)
-            self.udp.plot(x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs)
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color
+            )
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20
+            )
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs
+            )
 
         for axis in axes:
             xticks = axis.get_xticks()
@@ -320,15 +395,16 @@ class tops_twobody_mb:
         return axes
 
     def __getattr__(self, name):
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
+
 
 class tops_mee:
     """
     Mean equinoctial elements problems from TOPS.
 
     .. note::
-        These instances have fixed end-points and (mostly) fixed time of flight, 
+        These instances have fixed end-points and (mostly) fixed time of flight,
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
@@ -348,11 +424,18 @@ class tops_mee:
     states are fixed and moving-end effects are not accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a two-body MEE TOPS instance from a predefined gym case.
-        
+
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (two-body dynamics in modified equinoctial elements). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_mee_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -363,10 +446,10 @@ class tops_mee:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
@@ -399,8 +482,12 @@ class tops_mee:
         self.F = self.MASS * self.ACC
 
         # Scaling the problem to these units (mu will be 1. -> as expected from pykep ta_twobody_mee)
-        states = [it / self.L for it in gym_problem["state_s"][:1]] + [it for it in gym_problem["state_s"][1:6]]
-        statef = [it / self.L for it in gym_problem["state_f"][:1]] + [it for it in gym_problem["state_f"][1:6]]
+        states = [it / self.L for it in gym_problem["state_s"][:1]] + [
+            it for it in gym_problem["state_s"][1:6]
+        ]
+        statef = [it / self.L for it in gym_problem["state_f"][:1]] + [
+            it for it in gym_problem["state_f"][1:6]
+        ]
         ms = gym_problem["m_s"] / self.MASS
         max_thrust = gym_problem["max_thrust"] / self.F
         tof_bounds = [it / self.TIME for it in gym_problem["tof_bounds"]]
@@ -436,9 +523,52 @@ class tops_mee:
         """Return additional information for the selected gym case."""
         return self.extra_info
 
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        add_sun=True,
+        orbit_color="lightgray",
+        figsize=(15, 4),
+        **kwargs,
+    ):
+        """Four-view plot of the TOPS MEE solution."""
+        x_arr = _np.asarray(x)
+        fig = _plt.figure(figsize=figsize, layout="constrained")
+        ax3d = fig.add_subplot(1, 4, 1, projection="3d")
+        ax_xy = fig.add_subplot(1, 4, 2, projection="3d")
+        ax_xz = fig.add_subplot(1, 4, 3, projection="3d")
+        ax_yz = fig.add_subplot(1, 4, 4, projection="3d")
+        axes = (ax3d, ax_xy, ax_xz, ax_yz)
+        for axis in axes:
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, orbit_color=orbit_color, **kwargs
+            )
+        for axis in axes:
+            axis.set_xticks([axis.get_xticks()[0], axis.get_xticks()[-1]])
+            axis.set_yticks([axis.get_yticks()[0], axis.get_yticks()[-1]])
+            axis.set_zticks([axis.get_zticks()[0], axis.get_zticks()[-1]])
+        ax_xy.set_zticks([])
+        ax_xz.set_yticks([])
+        ax_yz.set_xticks([])
+        ax3d.view_init(elev=20, azim=270)
+        ax3d.set_aspect("equal")
+        if add_sun:
+            _pk.plot.add_sun(ax3d)
+        ax_xy.view_init(elev=90, azim=-90)
+        ax_xz.view_init(elev=0, azim=-90)
+        ax_yz.view_init(elev=0, azim=180)
+        ax3d.set_title("3D")
+        ax_xy.set_title("xy - view")
+        ax_xz.set_title("xz - view")
+        ax_yz.set_title("yz - view")
+        return axes
+
     def __getattr__(self, name):
         """Forward any undefined attribute/method calls to self.udp."""
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
 
 
@@ -467,11 +597,18 @@ class tops_mee_mb:
     states are moving boundaries and moving-end effects are accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a two-body MEE TOPS instance with moving boundaries from a predefined gym case.
 
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (two-body dynamics in modified equinoctial elements). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_mee_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -482,10 +619,10 @@ class tops_mee_mb:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
@@ -498,7 +635,9 @@ class tops_mee_mb:
         self.extra_info = gym_problem["info"]
 
         # Since these are mee problems we compute the number of revolutions as the difference in mean longitude divided by 2pi
-        nrevs = (gym_problem["state_f"][-1] - gym_problem["state_s"][-1]) // (_np.pi * 2)
+        nrevs = (gym_problem["state_f"][-1] - gym_problem["state_s"][-1]) // (
+            _np.pi * 2
+        )
 
         # We define the units declared in the TOPS problem definition
         L = gym_problem["L"]
@@ -510,19 +649,29 @@ class tops_mee_mb:
         F = MASS * ACC
 
         # And instantiate the moving ends as planets
-        # We scale the non dimensional MEE state by the units to get physical units, 
+        # We scale the non dimensional MEE state by the units to get physical units,
         # then we create the planet objects for the initial and final states.
         mees = gym_problem["state_s"].copy()
-        mees[0]*=gym_problem["L"]
+        mees[0] *= gym_problem["L"]
         self.pls = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(0.0), elem=mees, mu_central_body=gym_problem["mu"] * MU, el_type=_pk.el_type.MEE)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0.0),
+                elem=mees,
+                mu_central_body=gym_problem["mu"] * MU,
+                el_type=_pk.el_type.MEE,
+            )
         )
         # Same for the final state
         tof_days = gym_problem["tof_bounds"][0] * TIME * _pk.SEC2DAY
         meef = gym_problem["state_f"].copy()
-        meef[0]*=gym_problem["L"]
+        meef[0] *= gym_problem["L"]
         self.plf = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(tof_days), elem=meef, mu_central_body=gym_problem["mu"] * MU, el_type=_pk.el_type.MEE)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(tof_days),
+                elem=meef,
+                mu_central_body=gym_problem["mu"] * MU,
+                el_type=_pk.el_type.MEE,
+            )
         )
 
         # To let boundary move we set the bounds on the departure epoch to allow for movement of hal an orbit
@@ -536,7 +685,7 @@ class tops_mee_mb:
         L_ta = _np.linalg.norm(gym_problem["state_s"][0]) * L
         MU_ta = gym_problem["mu"] * MU
         MASS_ta = gym_problem["m_s"] * MASS
-        TIME_ta = _np.sqrt(L_ta**3/ MU_ta)
+        TIME_ta = _np.sqrt(L_ta**3 / MU_ta)
         V_ta = L_ta / TIME_ta
         ACC_ta = V_ta**2 / L_ta
         F_ta = MASS_ta * ACC_ta
@@ -554,26 +703,30 @@ class tops_mee_mb:
         ta_var.pars[4] = 1.0 / veff_nd
 
         # We get the symbolic expressions
-        cart2state, cart2state_J = _pk.ic2mee(jacobian=True) # The API also requires the Jacobian
-        state2cart, _ = _pk.mee2ic(jacobian=False) # The API does not require the Jacobian
+        cart2state, cart2state_J = _pk.ic2mee(
+            jacobian=True
+        )  # The API also requires the Jacobian
+        state2cart, _ = _pk.mee2ic(
+            jacobian=False
+        )  # The API does not require the Jacobian
         # We jit them into cfuncs
-        x,y,z,vx,vy,vz = _hy.make_vars("x", "y", "z", "vx", "vy", "vz")
+        x, y, z, vx, vy, vz = _hy.make_vars("x", "y", "z", "vx", "vy", "vz")
         p, f, g, h, k, L_anom = _hy.make_vars("p", "f", "g", "h", "k", "L")
-        cart2state_cfunc = _hy.cfunc(cart2state, vars=[x,y,z,vx,vy,vz])
-        cart2state_J_cfunc = _hy.cfunc(cart2state_J, vars=[x,y,z,vx,vy,vz])
+        cart2state_cfunc = _hy.cfunc(cart2state, vars=[x, y, z, vx, vy, vz])
+        cart2state_J_cfunc = _hy.cfunc(cart2state_J, vars=[x, y, z, vx, vy, vz])
         state2cart_cfunc = _hy.cfunc(state2cart, vars=[p, f, g, h, k, L_anom])
         # We create the call signature required by the API of the zoh_pl2pl class and
         # account here for the nrevs in the mean longitude.
-        cart2state_zoh = lambda x: cart2state_cfunc(x, pars = [1, 1]) 
-        cart2state_J_zoh = lambda x: cart2state_J_cfunc(x, pars = [gym_problem["mu"], 1])
-        state2cart_zoh = lambda x: state2cart_cfunc(x, pars = [1, 1])
+        cart2state_zoh = lambda x: cart2state_cfunc(x, pars=[1, 1])
+        cart2state_J_zoh = lambda x: cart2state_J_cfunc(x, pars=[gym_problem["mu"], 1])
+        state2cart_zoh = lambda x: state2cart_cfunc(x, pars=[1, 1])
 
         self.udp = _pk.trajopt.zoh_pl2pl(
             pls=self.pls,
             plf=self.plf,
             ms=gym_problem["m_s"] * MASS / MASS_ta,
-            nseg=10,
-            cut=0.5,
+            nseg=nseg,
+            cut=cut,
             t0_bounds=[-0, 0],  # (MJD2000)
             tof_bounds=[it * TIME / TIME_ta for it in gym_problem["tof_bounds"]],
             mf_bounds=[0.5, 1.0],
@@ -581,13 +734,13 @@ class tops_mee_mb:
             vinf_arr_bounds=[0.0 * V / V_ta, 0.0 * V / V_ta],
             tas=(ta, ta_var),
             max_thrust=gym_problem["max_thrust"] * F / F_ta,
-            time_encoding="uniform",
+            time_encoding=time_encoding,
             inequalities_for_tc=inequalities_for_tc,
-            cart2state = (cart2state_zoh, cart2state_J_zoh),
+            cart2state=(cart2state_zoh, cart2state_J_zoh),
             state2cart=state2cart_zoh,
             L=L_ta,
             V=V_ta,
-            nrevs=nrevs
+            nrevs=nrevs,
         )
 
     def get_name(self):
@@ -596,9 +749,18 @@ class tops_mee_mb:
     def get_extra_info(self):
         return self.extra_info
 
-    def plot(self, x, N=100, mark_segments=True, mark_mismatch=True,
-             add_sun=True, orbit_color="lightgray", planet_color="gray",
-             figsize=(15, 4), **kwargs):
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        add_sun=True,
+        orbit_color="lightgray",
+        planet_color="gray",
+        figsize=(15, 4),
+        **kwargs,
+    ):
         x_arr = _np.asarray(x)
         fig = _plt.figure(figsize=figsize, layout="constrained")
         ax3d = fig.add_subplot(1, 4, 1, projection="3d")
@@ -609,25 +771,49 @@ class tops_mee_mb:
         t0 = self.udp.compute_t0(x_arr)
         tof_days = x_arr[10 + 4 * self.udp.nseg] * self.udp.TIME / _pk.DAY2SEC
         for axis in axes:
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color)
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color)
-            _pk.plot.add_planet(ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20)
-            _pk.plot.add_planet(ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20)
-            self.udp.plot(x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs)
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color
+            )
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20
+            )
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs
+            )
         for axis in axes:
-            xticks = axis.get_xticks(); yticks = axis.get_yticks(); zticks = axis.get_zticks()
-            if len(xticks) >= 2: axis.set_xticks([xticks[0], xticks[-1]])
-            if len(yticks) >= 2: axis.set_yticks([yticks[0], yticks[-1]])
-            if len(zticks) >= 2: axis.set_zticks([zticks[0], zticks[-1]])
-        ax_xy.set_zticks([]); ax_xz.set_yticks([]); ax_yz.set_xticks([])
-        ax3d.view_init(elev=20, azim=270); ax3d.set_aspect("equal")
-        if add_sun: _pk.plot.add_sun(ax3d)
-        ax_xy.view_init(elev=90, azim=-90); ax_xz.view_init(elev=0, azim=-90); ax_yz.view_init(elev=0, azim=180)
-        ax3d.set_title("3D"); ax_xy.set_title("xy - view"); ax_xz.set_title("xz - view"); ax_yz.set_title("yz - view")
+            xticks = axis.get_xticks()
+            yticks = axis.get_yticks()
+            zticks = axis.get_zticks()
+            if len(xticks) >= 2:
+                axis.set_xticks([xticks[0], xticks[-1]])
+            if len(yticks) >= 2:
+                axis.set_yticks([yticks[0], yticks[-1]])
+            if len(zticks) >= 2:
+                axis.set_zticks([zticks[0], zticks[-1]])
+        ax_xy.set_zticks([])
+        ax_xz.set_yticks([])
+        ax_yz.set_xticks([])
+        ax3d.view_init(elev=20, azim=270)
+        ax3d.set_aspect("equal")
+        if add_sun:
+            _pk.plot.add_sun(ax3d)
+        ax_xy.view_init(elev=90, azim=-90)
+        ax_xz.view_init(elev=0, azim=-90)
+        ax_yz.view_init(elev=0, azim=180)
+        ax3d.set_title("3D")
+        ax_xy.set_title("xy - view")
+        ax_xz.set_title("xz - view")
+        ax_yz.set_title("yz - view")
         return axes
 
     def __getattr__(self, name):
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
 
 
@@ -636,7 +822,7 @@ class tops_ss:
     Solar sailing problems from TOPS.
 
     .. note::
-        These instances have fixed end-points and (mostly) fixed time of flight, 
+        These instances have fixed end-points and (mostly) fixed time of flight,
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
@@ -659,9 +845,9 @@ class tops_ss:
 
     def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
         """Construct a solar-sailing TOPS instance from a predefined gym case.
-        
+
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (solar sail dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_ss_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -672,10 +858,10 @@ class tops_ss:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
         """
         self.prob_name = prob_name
@@ -702,8 +888,12 @@ class tops_ss:
         self.ACC = self.V / self.TIME
 
         # Scaling the problem to these units (mu will be 1. -> as expected from pykep ta_ss)
-        states = [it / self.L for it in gym_problem["state_s"][:3]] + [it / self.V for it in gym_problem["state_s"][3:6]]
-        statef = [it / self.L for it in gym_problem["state_f"][:3]] + [it / self.V for it in gym_problem["state_f"][3:6]]
+        states = [it / self.L for it in gym_problem["state_s"][:3]] + [
+            it / self.V for it in gym_problem["state_s"][3:6]
+        ]
+        statef = [it / self.L for it in gym_problem["state_f"][:3]] + [
+            it / self.V for it in gym_problem["state_f"][3:6]
+        ]
         c_sail = gym_problem["c_sail"] / self.ACC
         tof_bounds = [it / self.TIME for it in gym_problem["tof_bounds"]]
 
@@ -734,9 +924,24 @@ class tops_ss:
         """Return additional information for the selected gym case."""
         return self.extra_info
 
+    def plot(self, x, N=100, mark_segments=True, figsize=(6, 6), **kwargs):
+        """Single-view plot of the TOPS solar sail solution."""
+        x_arr = _np.asarray(x)
+        fig = _plt.figure(figsize=figsize, layout="constrained")
+        ax = fig.add_subplot(1, 1, 1, projection="3d")
+        self.udp.plot(
+            x=x_arr, ax=ax, N=N, mark_segments=mark_segments, **kwargs
+        )
+        ax.set_xticks([ax.get_xticks()[0], ax.get_xticks()[-1]])
+        ax.set_yticks([ax.get_yticks()[0], ax.get_yticks()[-1]])
+        ax.set_zticks([ax.get_zticks()[0], ax.get_zticks()[-1]])
+        ax.view_init(elev=45, azim=270)
+        ax.set_title("3D")
+        return ax
+
     def __getattr__(self, name):
         """Forward any undefined attribute/method calls to self.udp."""
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
 
 
@@ -766,11 +971,18 @@ class tops_ss_mb:
     accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a solar-sailing TOPS instance with moving boundaries from a predefined gym case.
 
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (solar sail dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_ss_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -781,10 +993,10 @@ class tops_ss_mb:
                 Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, boundary relative-velocity
@@ -808,13 +1020,17 @@ class tops_ss_mb:
         rs = [it * L for it in gym_problem["state_s"][0:3]]
         vs = [it * V for it in gym_problem["state_s"][3:6]]
         self.pls = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(0.0), posvel=[rs, vs], mu_central_body=MU)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(0.0), posvel=[rs, vs], mu_central_body=MU
+            )
         )
         tof_days = gym_problem["tof_bounds"][0] * TIME * _pk.SEC2DAY
         rf = [it * L for it in gym_problem["state_f"][0:3]]
         vf = [it * V for it in gym_problem["state_f"][3:6]]
         self.plf = _pk.planet(
-            _pk.udpla.keplerian(when=_pk.epoch(tof_days), posvel=[rf, vf], mu_central_body=MU)
+            _pk.udpla.keplerian(
+                when=_pk.epoch(tof_days), posvel=[rf, vf], mu_central_body=MU
+            )
         )
         # To define a consistent version of the point w point problems as moving ends, we set the bounds
         # on the departure epochs to allow for a movement of half an orbit
@@ -854,30 +1070,56 @@ class tops_ss_mb:
     def get_extra_info(self):
         return self.extra_info
 
-    def plot(self, x, N=100, mark_segments=True, mark_mismatch=True,
-             add_sun=True, orbit_color="lightgray", planet_color="gray",
-             figsize=(6, 6), **kwargs):
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        add_sun=True,
+        orbit_color="lightgray",
+        planet_color="gray",
+        figsize=(6, 6),
+        **kwargs,
+    ):
         x_arr = _np.asarray(x)
         fig = _plt.figure(figsize=figsize, layout="constrained")
         ax = fig.add_subplot(1, 1, 1, projection="3d")
         t0 = self.udp.compute_t0(x_arr)
         tof_days = x_arr[9 + 2 * self.udp.nseg] * self.udp.TIME / _pk.DAY2SEC
-        _pk.plot.add_planet_orbit(ax=ax, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color)
-        _pk.plot.add_planet_orbit(ax=ax, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color)
-        _pk.plot.add_planet(ax=ax, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20)
-        _pk.plot.add_planet(ax=ax, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20)
-        self.udp.plot(x=x_arr, ax=ax, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs)
-        xticks = ax.get_xticks(); yticks = ax.get_yticks(); zticks = ax.get_zticks()
-        if len(xticks) >= 2: ax.set_xticks([xticks[0], xticks[-1]])
-        if len(yticks) >= 2: ax.set_yticks([yticks[0], yticks[-1]])
-        if len(zticks) >= 2: ax.set_zticks([zticks[0], zticks[-1]])
-        ax.view_init(elev=45, azim=270); ax.set_aspect("equal")
-        if add_sun: _pk.plot.add_sun(ax)
+        _pk.plot.add_planet_orbit(
+            ax=ax, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color
+        )
+        _pk.plot.add_planet_orbit(
+            ax=ax, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color
+        )
+        _pk.plot.add_planet(
+            ax=ax, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20
+        )
+        _pk.plot.add_planet(
+            ax=ax, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20
+        )
+        self.udp.plot(
+            x=x_arr, ax=ax, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs
+        )
+        xticks = ax.get_xticks()
+        yticks = ax.get_yticks()
+        zticks = ax.get_zticks()
+        if len(xticks) >= 2:
+            ax.set_xticks([xticks[0], xticks[-1]])
+        if len(yticks) >= 2:
+            ax.set_yticks([yticks[0], yticks[-1]])
+        if len(zticks) >= 2:
+            ax.set_zticks([zticks[0], zticks[-1]])
+        ax.view_init(elev=45, azim=270)
+        ax.set_aspect("equal")
+        if add_sun:
+            _pk.plot.add_sun(ax)
         ax.set_title("3D")
         return ax
 
     def __getattr__(self, name):
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
 
 
@@ -886,7 +1128,7 @@ class tops_cr3bp:
     CR3BP problems from TOPS.
 
     .. note::
-        These instances have fixed end-points and (mostly) fixed time of flight, 
+        These instances have fixed end-points and (mostly) fixed time of flight,
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
@@ -907,11 +1149,18 @@ class tops_cr3bp:
     accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=60, time_encoding="uniform", inequalities_for_tc=False):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=60,
+        time_encoding="uniform",
+        inequalities_for_tc=False,
+    ):
         """Construct a CR3BP TOPS instance from a predefined gym case.
-        
+
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (circular restricted three-body problem dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_cr3bp_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -923,10 +1172,10 @@ class tops_cr3bp:
                 more segments than two-body problems. Defaults to 60.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
@@ -946,8 +1195,8 @@ class tops_cr3bp:
 
         # For consistency we provide units (these are not the final ones rather the ones
         # transforming data to the usual cr3bp units)
-        self.L = 1.
-        self.V = 1.
+        self.L = 1.0
+        self.V = 1.0
         self.TIME = self.L / self.V
         self.ACC = self.V / self.TIME
 
@@ -985,10 +1234,50 @@ class tops_cr3bp:
     def get_extra_info(self):
         """Return additional information for the selected gym case."""
         return self.extra_info
-    
+
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        orbit_color="lightgray",
+        figsize=(15, 4),
+        **kwargs,
+    ):
+        """Four-view plot of the TOPS CR3BP solution."""
+        x_arr = _np.asarray(x)
+        fig = _plt.figure(figsize=figsize, layout="constrained")
+        ax3d = fig.add_subplot(1, 4, 1, projection="3d")
+        ax_xy = fig.add_subplot(1, 4, 2, projection="3d")
+        ax_xz = fig.add_subplot(1, 4, 3, projection="3d")
+        ax_yz = fig.add_subplot(1, 4, 4, projection="3d")
+        axes = (ax3d, ax_xy, ax_xz, ax_yz)
+        for axis in axes:
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, orbit_color=orbit_color, **kwargs
+            )
+        for axis in axes:
+            axis.set_xticks([axis.get_xticks()[0], axis.get_xticks()[-1]])
+            axis.set_yticks([axis.get_yticks()[0], axis.get_yticks()[-1]])
+            axis.set_zticks([axis.get_zticks()[0], axis.get_zticks()[-1]])
+        ax_xy.set_zticks([])
+        ax_xz.set_yticks([])
+        ax_yz.set_xticks([])
+        ax3d.view_init(elev=20, azim=270)
+        ax3d.set_aspect("equal")
+        ax_xy.view_init(elev=90, azim=-90)
+        ax_xz.view_init(elev=0, azim=-90)
+        ax_yz.view_init(elev=0, azim=180)
+        ax3d.set_title("3D")
+        ax_xy.set_title("xy - view")
+        ax_xz.set_title("xz - view")
+        ax_yz.set_title("yz - view")
+        return axes
+
     def __getattr__(self, name):
         """Forward any undefined attribute/method calls to self.udp."""
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
 
 
@@ -1018,11 +1307,18 @@ class tops_cr3bp_mb:
     accounted for.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", inequalities_for_tc=True):
+    def __init__(
+        self,
+        prob_name,
+        cut=0.5,
+        nseg=10,
+        time_encoding="uniform",
+        inequalities_for_tc=True,
+    ):
         """Construct a CR3BP TOPS instance with moving boundaries from a predefined gym case.
 
         Args:
-            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database 
+            *prob_name* (:class:`str`): Name of the predefined gym problem case from the TOPS database
                 (circular restricted three-body problem dynamics). Available problem names can be found in the keys of
                 :data:`~pykep.trajopt.gym.tops_cr3bp_json`. For example: ``'P0'``, ``'P1'``, ``'P2'``, etc.
 
@@ -1034,10 +1330,10 @@ class tops_cr3bp_mb:
                 more segments than two-body problems. Defaults to 10.
 
             *time_encoding* (:class:`str`, optional): Time-grid encoding scheme. Options are:
-                
+
                 - ``'uniform'``: equally spaced segment boundaries over the total time of flight.
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
-                
+
                 Defaults to ``'uniform'``.
 
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints and
@@ -1060,9 +1356,29 @@ class tops_cr3bp_mb:
         F = MASS * ACC
 
         # We now need to define planets in the CR3BP
-        self.pls = _pk.planet(_pk.udpla.cr3bp(when=_pk.epoch(0.0), state_nd=gym_problem["state_s"], mu_cr3bp=gym_problem["mu_cr3bp"], TIME=TIME, L=L, name="pls", tol=1e-16))
+        self.pls = _pk.planet(
+            _pk.udpla.cr3bp(
+                when=_pk.epoch(0.0),
+                state_nd=gym_problem["state_s"],
+                mu_cr3bp=gym_problem["mu_cr3bp"],
+                TIME=TIME,
+                L=L,
+                name="pls",
+                tol=1e-16,
+            )
+        )
         tof_days = gym_problem["tof_bounds"][0] * TIME * _pk.SEC2DAY
-        self.plf = _pk.planet(_pk.udpla.cr3bp(when=_pk.epoch(tof_days), state_nd=gym_problem["state_f"], mu_cr3bp=gym_problem["mu_cr3bp"], TIME=TIME, L=L, name="plf", tol=1e-16))
+        self.plf = _pk.planet(
+            _pk.udpla.cr3bp(
+                when=_pk.epoch(tof_days),
+                state_nd=gym_problem["state_f"],
+                mu_cr3bp=gym_problem["mu_cr3bp"],
+                TIME=TIME,
+                L=L,
+                name="plf",
+                tol=1e-16,
+            )
+        )
 
         # To let boundary move we set the bounds on the departure epoch to allow for movement of hal an orbit
         period_s_day = gym_problem["period_s"] * TIME * _pk.SEC2DAY
@@ -1091,7 +1407,7 @@ class tops_cr3bp_mb:
             cut=cut,
             t0_bounds=[-bound, bound],
             tof_bounds=gym_problem["tof_bounds"],
-            mf_bounds=[gym_problem["m_s"] / 2., gym_problem["m_s"]],
+            mf_bounds=[gym_problem["m_s"] / 2.0, gym_problem["m_s"]],
             vinf_dep_bounds=[0.0, 0.0],
             vinf_arr_bounds=[0.0, 0.0],
             tas=(ta, ta_var),
@@ -1108,9 +1424,17 @@ class tops_cr3bp_mb:
     def get_extra_info(self):
         return self.extra_info
 
-    def plot(self, x, N=100, mark_segments=True, mark_mismatch=True,
-             orbit_color="lightgray", planet_color="gray",
-             figsize=(15, 4), **kwargs):
+    def plot(
+        self,
+        x,
+        N=100,
+        mark_segments=True,
+        mark_mismatch=True,
+        orbit_color="lightgray",
+        planet_color="gray",
+        figsize=(15, 4),
+        **kwargs,
+    ):
         x_arr = _np.asarray(x)
         fig = _plt.figure(figsize=figsize, layout="constrained")
         ax3d = fig.add_subplot(1, 4, 1, projection="3d")
@@ -1125,22 +1449,45 @@ class tops_cr3bp_mb:
         t0 = self.udp.compute_t0(x_arr)
         tof_days = x_arr[10 + 4 * self.udp.nseg] * self.udp.TIME / _pk.DAY2SEC
         for axis in axes:
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color, plot_range=(0, period_s_days), N=N*5)
-            _pk.plot.add_planet_orbit(ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color, plot_range=(0, period_f_days), N=N*5)
-            _pk.plot.add_planet(ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20)
-            _pk.plot.add_planet(ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20)
-            self.udp.plot(x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs)
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.pls, label="pls", units=self.udp.L, color=orbit_color, plot_range=(0, period_s_days), N=N * 5
+            )
+            _pk.plot.add_planet_orbit(
+                ax=axis, pla=self.plf, label="plf", units=self.udp.L, color=orbit_color, plot_range=(0, period_f_days), N=N * 5
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0, pla=self.pls, units=self.udp.L, color=planet_color, s=20
+            )
+            _pk.plot.add_planet(
+                ax=axis, when=t0 + tof_days, pla=self.plf, units=self.udp.L, color=planet_color, s=20
+            )
+            self.udp.plot(
+                x=x_arr, ax=axis, N=N, mark_segments=mark_segments, mark_mismatch=mark_mismatch, **kwargs
+            )
         for axis in axes:
-            xticks = axis.get_xticks(); yticks = axis.get_yticks(); zticks = axis.get_zticks()
-            if len(xticks) >= 2: axis.set_xticks([xticks[0], xticks[-1]])
-            if len(yticks) >= 2: axis.set_yticks([yticks[0], yticks[-1]])
-            if len(zticks) >= 2: axis.set_zticks([zticks[0], zticks[-1]])
-        ax_xy.set_zticks([]); ax_xz.set_yticks([]); ax_yz.set_xticks([])
-        ax3d.view_init(elev=20, azim=270); ax3d.set_aspect("equal")
-        ax_xy.view_init(elev=90, azim=-90); ax_xz.view_init(elev=0, azim=-90); ax_yz.view_init(elev=0, azim=180)
-        ax3d.set_title("3D"); ax_xy.set_title("xy - view"); ax_xz.set_title("xz - view"); ax_yz.set_title("yz - view")
+            xticks = axis.get_xticks()
+            yticks = axis.get_yticks()
+            zticks = axis.get_zticks()
+            if len(xticks) >= 2:
+                axis.set_xticks([xticks[0], xticks[-1]])
+            if len(yticks) >= 2:
+                axis.set_yticks([yticks[0], yticks[-1]])
+            if len(zticks) >= 2:
+                axis.set_zticks([zticks[0], zticks[-1]])
+        ax_xy.set_zticks([])
+        ax_xz.set_yticks([])
+        ax_yz.set_xticks([])
+        ax3d.view_init(elev=20, azim=270)
+        ax3d.set_aspect("equal")
+        ax_xy.view_init(elev=90, azim=-90)
+        ax_xz.view_init(elev=0, azim=-90)
+        ax_yz.view_init(elev=0, azim=180)
+        ax3d.set_title("3D")
+        ax_xy.set_title("xy - view")
+        ax_xz.set_title("xz - view")
+        ax_yz.set_title("yz - view")
         return axes
 
     def __getattr__(self, name):
-        udp = object.__getattribute__(self, 'udp')
+        udp = object.__getattribute__(self, "udp")
         return getattr(udp, name)
