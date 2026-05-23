@@ -1,9 +1,7 @@
-:orphan:
-
 .. _api:
 
-API
-#######
+Basic API
+#########
 
 pykep API is striving to maximize its usability. Let us know what you think about it!
 

@@ -199,8 +199,7 @@ target_include_directories(kep3 PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 # Boost.
-# NOTE: need 1.69 for safe numerics.
-set(_kep3_MIN_BOOST_VERSION "1.69")
+set(_kep3_MIN_BOOST_VERSION "1.73")
 set(_kep3_MIN_FMT_VERSION "10")
 set(_kep3_MIN_HEYOKA_VERSION "7")
 

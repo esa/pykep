@@ -1,4 +1,4 @@
-## Copyright 2023, 2024 Dario Izzo (dario.izzo@gmail.com), Francesco Biscani
+## Copyright (c) 2023-2026 Dario Izzo (dario.izzo@gmail.com), Francesco Biscani
 ## (bluescarni@gmail.com)
 ##
 ## This file is part of the kep3 library.##
