@@ -111,9 +111,21 @@ approximation, or a user-supplied function. This makes all higher-level trajecto
 ephemeris-agnostic and straightforward to test with analytical models before switching to full SPICE
 data.
 
+A deliberate architectural choice that runs throughout the library is the complete avoidance of
+inheritance. Rather than requiring users to subclass abstract base classes—a pattern that introduces
+coupling, fragile hierarchies, and verbose boilerplate, `pykep` relies on *type erasure*: any object
+that satisfies a documented concept (i.e., exposes the right methods with the right signatures) is
+accepted by the corresponding algorithm or container, regardless of its type. This gives rise to the
+pervasive *user-defined* vocabulary in the API: `udpla` (user-defined planet-like object), `udp`
+(user-defined problem), `uda` (user-defined algorithm), and so on. Each prefix signals that the
+corresponding slot in the system accepts any conforming type, not a prescribed class hierarchy. The
+result is an interface that is simultaneously extensible, a researcher can plug in a custom ephemeris,
+propagator, or objective function with a handful of Python lines—and free from the cognitive overhead
+of classical object-oriented inheritance patterns.
+
 Trajectory optimization problems are exposed as *user-defined problem* (`udp`) objects compatible
-with `pagmo` [@pagmo], so that any optimizer in the `pagmo` ecosystem—differential evolution,
-particle swarm, self-adaptive evolution strategies, and branch-and-bound—can be applied without
+with `pagmo` [@pagmo], so that any optimizer in the `pagmo` ecosystem (e.g. differential evolution,
+particle swarm, self-adaptive evolution strategies, and branch-and-bound) can be applied without
 modification. The design separates the mathematical primitives (C++) from the optimization problem
 definitions (Python/C++) and auxiliary tools such as visualization and low-thrust approximations
 [@approximations] (pure Python). This layering keeps the library maintainable and makes it
@@ -154,9 +166,10 @@ and verified by the authors.
 # Acknowledgements
 
 The authors thank the many ACT researchers and interns who have used and improved `pykep` over the
-years. Special thanks are due to Francesco Biscani for the co-development of `pagmo` and `Heyoka`, and
-to the open-source communities behind `pybind11` and `spiceypy`. Development has been supported by
-the European Space Agency through the Advanced Concepts Team's internal research programme.
+years. Special thanks are due to Francesco Biscani in particular for the co-development of `pagmo`
+and `Heyoka`, his early interest in `pykep` and to the open-source communities behind `pybind11`
+and `spiceypy`. Development has been supported by the European Space Agency through the Advanced
+Concepts Team's internal research programme.
 
 # References
 
