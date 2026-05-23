@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Basic &#8212; pykep 3.0.0 documentation</title>
+    <title>Installation &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -44,11 +44,11 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tut_basic';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'installation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The various anomalies in pykep" href="notebooks/anomalies.html" />
-    <link rel="prev" title="Bibliography" href="bibliography.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Welcome to pykep’s documentation!" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -145,14 +145,14 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
@@ -302,7 +302,7 @@
       
       
       
-      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Ftut_basic.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Finstallation.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -332,7 +332,7 @@
       
       
       
-      <li><a href="_sources/tut_basic.rst" target="_blank"
+      <li><a href="_sources/installation.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -395,7 +395,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -406,11 +408,27 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Basic</h1>
+    <h1>Installation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#packages">Packages</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">conda</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pip">pip</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verifying-the-installation">Verifying the installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">Getting help</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -420,49 +438,141 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="admonition important" id="tut-basic">
-<p class="admonition-title">Important</p>
-<p>
-Most of these tutorials can be launched as online interactive notebooks
-thanks to the infrastructure provided by <a href="https://mybinder.org/">binder</a>.
-Look for the rocket icon <i class="fas fa-rocket"></i> on top of each page!
-</p></div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Some tutorials may use features not available yet in the latest stable release
-of pykep, and thus might fail to execute correctly in the online interactive
-notebooks.</p>
-</div>
-<hr class="docutils" />
-<section id="basic">
-<h1>Basic<a class="headerlink" href="#basic" title="Link to this heading">#</a></h1>
-<p>Start with these tutorials to get the basic gist of how <cite>pykep</cite> works and its conventions when dealing with
-astrodynamical notation and computations.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/anomalies.html">The various anomalies in pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/epochs.html">Epochs and Julian Dates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/planet.html#udplas-in-pykep">UDPLAs in pykep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/planet.html#custom-udplas-a-tutorial">Custom UDPLAs: a tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/planet.html#custom-udplas-an-example-in-the-cr3bp">Custom UDPLAs: an example in the CR3BP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/propagate_lagrangian.html">Lagrange Propagation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_zoh_ss.html#system-definition">System definition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_zoh_ss.html#id1"></a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_zoh_ss.html#simulating-with-no-sail-acceleration">Simulating with no sail acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_zoh_ss.html#simulating-some-sail-action">Simulating some sail action</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/leg_zoh.html#validate-the-zero-order-hold-leg">1 - Validate the Zero-Order-Hold leg</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/leg_zoh.html#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
+  <section id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
+<section id="dependencies">
+<span id="installation-deps"></span><h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
+<p>pykep has both C++ and Python dependencies.</p>
+<p>On the <strong>C++ side</strong>, pykep depends on:</p>
+<ul class="simple">
+<li><p>the <a class="reference external" href="https://github.com/bluescarni/heyoka">heyoka C++ library</a> (version ≥ 7, mandatory),</p></li>
+<li><p>the <a class="reference external" href="https://www.boost.org/">Boost</a> C++ libraries (version ≥ 1.73, mandatory),</p></li>
+<li><p>the <a class="reference external" href="https://fmt.dev/">{fmt}</a> library (version ≥ 10, mandatory),</p></li>
+<li><p>the <a class="reference external" href="https://github.com/gabime/spdlog">spdlog</a> library (version ≥ 1.12, mandatory),</p></li>
+<li><p>the <a class="reference external" href="https://xtensor.readthedocs.io/">xtensor</a> and <code class="docutils literal notranslate"><span class="pre">xtensor-blas</span></code> libraries (version ≥ 0.26, mandatory),</p></li>
+<li><p>the <a class="reference external" href="https://nlopt.readthedocs.io/">NLopt</a> nonlinear optimization library (mandatory).</p></li>
 </ul>
+<p>On the <strong>Python side</strong>, pykep requires Python ≥ 3.8 and depends on:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://numpy.org/">NumPy</a> (mandatory),</p></li>
+<li><p><a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> (mandatory, for trajectory optimization problem interfaces),</p></li>
+<li><p><a class="reference external" href="https://bluescarni.github.io/heyoka.py/">heyoka.py</a> (version ≥ 7, mandatory, for Taylor integration),</p></li>
+<li><p><a class="reference external" href="https://spiceypy.readthedocs.io/">spiceypy</a> (optional, for JPL SPICE ephemeris support),</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/sgp4/">sgp4</a> (optional, for SGP4 propagation of Earth-orbiting objects),</p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/">matplotlib</a> (optional, for the built-in plotting utilities),</p></li>
+<li><p><a class="reference external" href="https://scipy.org/">scipy</a> (optional, for certain utility functions).</p></li>
+</ul>
+</section>
+<section id="packages">
+<span id="installation-packages"></span><h2>Packages<a class="headerlink" href="#packages" title="Link to this heading">#</a></h2>
+<section id="conda">
+<span id="installation-conda"></span><h3>conda<a class="headerlink" href="#conda" title="Link to this heading">#</a></h3>
+<p>conda is the <strong>recommended</strong> installation method, as it provides a fully managed
+scientific Python stack with all C++ dependencies resolved automatically.</p>
+<p>Add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> to your channels (if not already present) and install:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
+<span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>channel_priority<span class="w"> </span>strict
+<span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>pykep
+</pre></div>
 </div>
+<p>The conda packages are maintained by the core development team and updated with
+each new release.</p>
+</section>
+<section id="pip">
+<span id="installation-pip"></span><h3>pip<a class="headerlink" href="#pip" title="Link to this heading">#</a></h3>
+<p>Binary wheels for pykep are also available on <a class="reference external" href="https://pypi.org/project/pykep/">PyPI</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pykep
+</pre></div>
+</div>
+<p>Prebuilt wheels are currently provided for Linux (x86-64 and arm64).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>pykep bundles several C++ libraries inside its pip wheels. There is a
+non-negligible chance of conflicts with other packages that bundle the same
+C++ libraries. Installing via conda is strongly preferred whenever possible.</p>
+</div>
+</section>
+</section>
+<section id="installation-from-source">
+<span id="installation-source"></span><h2>Installation from source<a class="headerlink" href="#installation-from-source" title="Link to this heading">#</a></h2>
+<p>Building from source is the recommended path when working on the development
+version of pykep or when you need a custom build configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When building from source, make sure the compiler used is ABI-compatible
+with the compilers used to build pykep’s dependencies. Mixing incompatible
+compilers can cause hard-to-diagnose build or runtime errors.</p>
+</div>
+<p>pykep requires a compiler supporting <strong>C++23</strong> and CMake ≥ 3.28.</p>
+<p><strong>Step 1</strong> — Create and activate the development environment:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>kep3_devel.yml
+<span class="gp">$ </span>conda<span class="w"> </span>activate<span class="w"> </span>kep3_devel
+</pre></div>
+</div>
+<p>This installs all mandatory C++ and Python dependencies into an isolated conda
+environment.</p>
+<p><strong>Step 2</strong> — Configure and build:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-G<span class="w"> </span>Ninja<span class="w">              </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span><span class="m">1</span><span class="w">        </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CONDA_PREFIX</span><span class="s2">&quot;</span><span class="w">   </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CONDA_PREFIX</span><span class="s2">&quot;</span><span class="w">      </span><span class="se">\</span>
+<span class="w">    </span>-Dkep3_BUILD_PYTHON_BINDINGS<span class="o">=</span>ON
+<span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>install<span class="w"> </span>--parallel
+</pre></div>
+</div>
+<p><strong>Step 3</strong> — Verify the installation:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pykep; print(pykep.__version__)&quot;</span>
+</pre></div>
+</div>
+<p class="rubric">CMake flags reference</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX=&quot;$CONDA_PREFIX&quot;</span></code></p></td>
+<td><p>Install into the active conda environment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_PREFIX_PATH=&quot;$CONDA_PREFIX&quot;</span></code></p></td>
+<td><p>Resolve dependencies from the active conda environment.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_PYTHON_BINDINGS=ON</span></code></p></td>
+<td><p>Build and install the <code class="docutils literal notranslate"><span class="pre">pykep</span></code> Python extension module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_TESTS=ON</span></code></p></td>
+<td><p>Build the C++ unit-test suite.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_BENCHMARKS=ON</span></code></p></td>
+<td><p>Build the benchmark executables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DKEP3_VERBOSE_CONFIGURE=ON</span></code></p></td>
+<td><p>Emit additional configure-time diagnostics.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code></p></td>
+<td><p>Enable debug symbols (single-config generators only).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="verifying-the-installation">
+<span id="installation-verify"></span><h2>Verifying the installation<a class="headerlink" href="#verifying-the-installation" title="Link to this heading">#</a></h2>
+<p>After installation, confirm pykep is working correctly:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pykep; print(pykep.__version__)&quot;</span>
+</pre></div>
+</div>
+<p>To run the full test suite:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>/path/to/pykep/tests
+</pre></div>
+</div>
+</section>
+<section id="getting-help">
+<h2>Getting help<a class="headerlink" href="#getting-help" title="Link to this heading">#</a></h2>
+<p>If you encounter problems during installation, please open an issue on the
+<a class="reference external" href="https://github.com/esa/pykep/issues">GitHub issue tracker</a>.</p>
+</section>
 </section>
 
 
@@ -477,20 +587,20 @@ astrodynamical notation and computations.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="bibliography.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Bibliography</p>
+        <p class="prev-next-title">Welcome to pykep’s documentation!</p>
       </div>
     </a>
     <a class="right-next"
-       href="notebooks/anomalies.html"
+       href="changelog.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The various anomalies in pykep</p>
+        <p class="prev-next-title">Changelog</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -500,6 +610,31 @@ astrodynamical notation and computations.</p>
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#packages">Packages</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">conda</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pip">pip</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-from-source">Installation from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verifying-the-installation">Verifying the installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-help">Getting help</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
