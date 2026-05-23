@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Zero-Order Hold: Planet-to-Planet Transfers &#8212; pykep 3.0.0 documentation</title>
+    <title>Zero-Order Hold: TOPS problems II (free boundaries) &#8212; pykep 3.0.0 documentation</title>
   
   
   
@@ -50,7 +50,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Multiple Gravity Assist (MGA)" href="udp_mga.html" />
-    <link rel="prev" title="Zero-Order Hold: TOPS problems." href="udp_zoh_point2point.html" />
+    <link rel="prev" title="Zero-Order Hold: TOPS problems I" href="udp_zoh_point2point.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -182,12 +182,12 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems I</a></li>
 
 
 
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero-Order Hold: TOPS problems II (free boundaries)</a></li>
 
 
 
@@ -208,26 +208,29 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">Basic API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="../constants.html">Global constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../planet.html">Planet class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../plot.html">The plot module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
 
 
 
+</ul>
+</details></li>
 </ul>
 
     </div>
@@ -441,7 +444,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Zero-Order Hold: Planet-to-Planet Transfers</h1>
+    <h1>Zero-Order Hold: TOPS problems II (free boundaries)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -451,7 +454,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: TOPS problems II (free boundaries)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision vector</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-vs-softmax-time-grids">Uniform vs softmax time grids</a></li>
 </ul>
@@ -475,8 +478,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-planet-to-planet-transfers">
-<h1>Zero-Order Hold: Planet-to-Planet Transfers<a class="headerlink" href="#zero-order-hold-planet-to-planet-transfers" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-tops-problems-ii-free-boundaries">
+<h1>Zero-Order Hold: TOPS problems II (free boundaries)<a class="headerlink" href="#zero-order-hold-tops-problems-ii-free-boundaries" title="Link to this heading">#</a></h1>
 <p>This tutorial shows how to solve low-thrust trajectory optimisation problems using the <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a> class, which wraps a Zero-Order Hold (ZOH) transcription <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> for planet-to-planet transfers with a free departure epoch.</p>
 <p>We cover two complementary use cases:</p>
 <p><strong>1. Custom Earth–Mars transfer</strong> — the primary intended use of <a class="reference internal" href="../trajopt.html#pykep.trajopt.zoh_pl2pl" title="pykep.trajopt.zoh_pl2pl"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.trajopt.zoh_pl2pl</span></code></a>, illustrating how to set up physical units, Taylor-adaptive integrators, and bounds for a realistic mission.</p>
@@ -1190,7 +1193,7 @@ Worst tof is:  180.0
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Zero-Order Hold: TOPS problems.</p>
+        <p class="prev-next-title">Zero-Order Hold: TOPS problems I</p>
       </div>
     </a>
     <a class="right-next"
@@ -1220,7 +1223,7 @@ Worst tof is:  180.0
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: Planet-to-Planet Transfers</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order Hold: TOPS problems II (free boundaries)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-vector">Decision vector</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-vs-softmax-time-grids">Uniform vs softmax time grids</a></li>
 </ul>
