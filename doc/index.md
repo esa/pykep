@@ -18,8 +18,7 @@ and for preliminary mission analysis of the HERA mission.
 ```{note}
 If you use **pykep** in your research, please cite:
 
-*Izzo, D. (2026). pykep: A coolbox for space flight mechanics. In preparation.*
-[paper PDF](https://github.com/esa/pykep/blob/master/paper/paper.pdf)
+*Izzo, D. (2026). pykep: A research toolbox for space flight mechanics and interplanetary trajectory design.* [paper PDF](https://github.com/esa/pykep/blob/master/paper/paper.pdf)
 ```
 
 ```{toctree}
@@ -46,21 +45,7 @@ tut_trajopt
 :hidden:
 :caption: API
 
-anomalies
-constants
-elements
-epoch
-planet
-udpla
-lambert
-flyby
-approximations
-propagation
-leg
-trajopt
-gym
-plot
-utils
+api
 ```
 
 ```{image} _static/esa_logo.png
