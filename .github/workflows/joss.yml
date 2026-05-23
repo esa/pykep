@@ -1,6 +1,8 @@
 name: Paper Draft PDF
 on:
   push:
+    branches:
+      - '**'
     paths:
       - paper/paper.bib
       - paper/paper.md
