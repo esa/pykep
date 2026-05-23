@@ -19,7 +19,7 @@ On the **C++ side**, pykep depends on:
 * the `xtensor <https://xtensor.readthedocs.io/>`_ and ``xtensor-blas`` libraries (version ≥ 0.26, mandatory),
 * the `NLopt <https://nlopt.readthedocs.io/>`_ nonlinear optimization library (mandatory).
 
-On the **Python side**, pykep requires Python ≥ 3.8 and depends on:
+On the **Python side**, pykep requires Python ≥ 3.11 and depends on:
 
 * `NumPy <https://numpy.org/>`_ (mandatory),
 * `pygmo <https://esa.github.io/pygmo2/>`_ (mandatory, for trajectory optimization problem interfaces),
