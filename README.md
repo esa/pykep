@@ -27,7 +27,7 @@
 
 # Pykep version 3
 
-This is the official repo for **kep** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
+This is the official repo for **kep3** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
 
 The code is still under development and we will only release the conda and PyPi packages when we are confidnt all is well coordinated. In the meantime, feel free to play around discuss API and help us debug :)
 
@@ -37,9 +37,9 @@ If you care about orbital mechanics, trajectory optimization, or spacecraft miss
 
 ---
 
-## What is kep?
+## What is kep3?
 
-kep is a C++ library with a rich Python interface (pykep) for **space flight mechanics** research. Built from the ground up with performance, usability, and extensibility in mind, it brings together everything the astrodynamics community has been asking for tailored at scientists who want to perform cutting edge research in space flight mechanics.
+kep3 is a C++ library with a rich Python interface (pykep) for **space flight mechanics** research. Built from the ground up with performance, usability, and extensibility in mind, it brings together everything the astrodynamics community has been asking for tailored at scientists who want to perform cutting edge research in space flight mechanics.
 
 Whether you're computing **Lambert arcs**, propagating **Keplerian orbits**, or designing complex **multi-gravity-assist trajectories** and designing the next generation solvers for low-thrust optimization, kep3 has you covered with clean APIs, rigorous numerics, and serious speed.
 

@@ -1,5 +1,5 @@
 ---
-title: 'PyKEP 3: A coolbox for interplanetary trajectory design'
+title: 'pykep: A research toolbox for space flight mechanics and interplanetary trajectory design'
 tags:
   - Python
   - astrodynamics
@@ -9,89 +9,167 @@ tags:
 authors:
   - name: Dario Izzo
     orcid: 0000-0002-9846-8423
-    equal-contrib: false
-    affiliation: "1," # (Multiple affiliations must be quoted)
+    affiliation: 1
 affiliations:
- - name: European Space Agency's Advanced Concepts Team, The Netherlands
-   index: 1
- - name: European Space Agency's Advanced Concepts Team, The Netherlands
-   index: 2
-date: 28 March 2025
+  - name: European Space Agency's Advanced Concepts Team, The Netherlands
+    index: 1
+date: 23 May 2026
 bibliography: paper.bib
 ---
 
 # Summary
 
-`PyKEP` is a Python toolbox developed at the [European Space Agency](https://www.esa.int) by the 
-[Advanced Concepts Team](https://www.esa.int/act) to perform
-preliminary design of interplanetary trajectory problems. It is designed to be used by researchers
-and engineers to prototype and test new ideas in the field of astrodynamics. The library provides
-efficient implementations of algorithms for solving the multiple revolutions Lambert's problem, low-thrust
-problems, multiple asteroid rendezvous problems, and more. It also provides support for [JPL SPICE](https://naif.jpl.nasa.gov/naif/toolkit.html),
-SGP4 propagation, and the [Heyoka](https://bluescarni.github.io/heyoka.py/index.html) Taylor integration suite.
+`pykep` is a Python research library covering a broad range of space flight mechanics problems, with its
+current emphasis on the preliminary analysis of interplanetary spacecraft trajectories. It provides
+the mathematical building blocks for orbit propagation, orbital element conversions, Lambert arc
+solvers, gravity-assist flyby modelling, and both direct and indirect low-thrust transcriptions.
+Given a mission scenario—a spacecraft departing from one body in the solar system and arriving at
+another, possibly via intermediate gravity-assist flybys and with low-thrust propulsion phases—`pykep`
+allows researchers to compute transfer costs (in terms of propellant mass and time of flight), set
+up the corresponding optimization problems, and interface with state-of-the-art numerical optimizers.
+The library's C++ core can evaluate thousands of candidate trajectories per second, enabling the
+large-scale search over launch dates, flyby sequences, and thrust profiles that is essential during
+the earliest stages of mission design. `pykep` is not an operational flight dynamics tool; it is a
+research instrument designed to let scientists and engineers prototype new ideas and push the
+frontier of what is feasible across the full landscape of space flight mechanics problems.
 
-# Introduction
+# Statement of Need
 
-`PyKEP` is the latest iteration of the PyKEP library, which has been used by the [Advanced Concepts Team](https://www.esa.int/act)
-at the European Space Agency for over a decade. The library was originally developed to support the participation
-of non astrodynamics experts in the [Global Trajectory Optimization Competition](http://www.esa.int/gtoc) and has since
-grown into a generic tool for the preliminary analysis of interplanetary trajectory design problems. 
-Previous versions of the code were used internally to perform some preliminary analysis for the design of the 
-[Hera mission](https://www.heramission.space), the M-ARGO interplanetary cubesat concept,
-the preliminary analysis of the the initial concepts for the Titan and Enceladus Mission (TandEM) as well as the Laplace mission.
-At the core of the library are the necessary building blocks to perform a preliminary design of interplanetary trajectory design problems,
-with the aim to provide the general scientific community with a tool to prototype and test new ideas in the field of
-astrodynamics focussing on novel ideas rather than on on the implementation of known algorithms. Most
-techniques implemented in the library are largely based on original research performed at the ACT, as well as on the state-of-the art
-algorithms available from the literature. A Lambert solver as well as low-thrust optimization algorithms (both based on direct and indirect methods)
-are available together with a number of approximate methods to estimate transfer costs. 
-The library interfaces to a number of open source projects providing relevant functionalities including [spicepy](https://spiceypy.readthedocs.io/en/stable/) for interfacing to JPL SPICE,
-[SGP4](https://pypi.org/project/sgp4/) to get standard Low Earth Orbit orbits, 
-[Heyoka](https://bluescarni.github.io/heyoka.py/) to perform efficient Taylor integration and [pygmo](https://esa.github.io/pygmo2/) to interface to state-of-the art optimization algorithms.
+The preliminary design of an interplanetary mission is fundamentally an exploration problem: analysts
+must survey a vast combinatorial space of departure dates, planetary flyby sequences, and propulsion
+strategies to identify the most promising candidates before committing to costly detailed analysis.
+Certified tools for operational flight dynamics prioritize physical fidelity and validated models over
+the speed and composability needed to iterate over millions of trajectory options rapidly.
 
-# Mathematics
+`pykep` was developed at the European Space Agency's Advanced Concepts Team (ACT) specifically to
+fill this gap. Its target audience is researchers and scientists working on astrodynamics, orbital
+mechanics, space flight mechanics, and related computational fields who need a flexible, Pythonic
+toolkit to prototype algorithms, benchmark new methods, and conduct large-scale parametric studies.
+While the library's current focus lies on the preliminary analysis of interplanetary trajectories,
+its scope is deliberately broader: the same core primitives—propagators, element conversions, and
+trajectory leg models—are equally applicable to Earth-orbit problems, lunar transfers, and other
+space flight mechanics domains. The library is explicitly *not* intended for operational mission
+design or for use in certified flight dynamics pipelines; it is a research tool for pushing the
+frontier of what is computable at the earliest stages of mission analysis.
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+`pykep` deliberately exposes its mathematical primitives—Lambert arc solvers, low-thrust trajectory
+legs, orbital element conversions—as first-class objects that can be composed freely and embedded in
+optimization loops. By integrating natively with `pagmo` [@pagmo] (a parallel global optimization
+library) and `Heyoka` [@biscaniheyoka1] (a Taylor integration suite), `pykep` provides a full stack
+from ephemeris evaluation to global trajectory search within a single Python environment—a
+coherent collection of well-defined, composable primitives ready to be assembled into novel
+research workflows. The many algorithms available in the library are largely the result of original
+research carried out at the ACT over more than a decade, complemented by implementations of
+best-in-class methods from the broader astrodynamics literature.
 
-Double dollars make self-standing equations:
+# State of the Field
 
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
+Several open-source tools address related aspects of spacecraft trajectory design, and it is
+important to articulate how `pykep` relates to and differs from each.
 
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
+**Orekit** [@orekit] is a Java-based orbital mechanics library (with a Python facade) targeted at
+operational applications. It provides high-fidelity force models and validated propagators, making
+it the tool of choice when a precise, certified answer to a specific trajectory question is required.
+Its design is not optimized for the rapid, repeated evaluations over large search spaces that
+characterize preliminary mission design.
 
-# Citations
+**GMAT** [@gmat] is NASA's General Mission Analysis Tool, a comprehensive high-fidelity simulator
+for a wide range of mission types. It is primarily a GUI- and script-driven application oriented
+toward operational analysis rather than algorithmic exploration and programmatic access.
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
+**GPOPS-II** [@gpops2] is a MATLAB-based optimal control software using hp-adaptive Gaussian
+quadrature collocation. It excels at locally converging a single, complex continuous trajectory but
+is proprietary and not designed for global search over mission scenarios or large parameter sweeps.
 
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
+**poliastro** [@poliastro] is a Python library for general orbital mechanics. It shares some
+features with `pykep` (orbit propagation, Lambert solvers) but is oriented toward education and
+general orbital analysis rather than the specialized requirements of preliminary interplanetary
+mission design, specifically multi-gravity-assist sequences, low-thrust transcriptions, and tight
+integration with global optimization algorithms.
 
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+`pykep` occupies a distinct niche by combining, in a single research-oriented Python package: fast
+multi-revolution Lambert solvers [@izzolambert]; both direct
+(Sims-Flanagan [@sims], zero-order-hold [@izzo2026zoh]) and indirect (Pontryagin-based) low-thrust
+transcriptions; native coupling with `pagmo` for global and multi-objective optimization;
+Taylor-based high-accuracy propagation via `Heyoka` [@biscaniheyoka1; @biscaniheyoka2]; and a
+growing benchmark suite (`gym`) enabling reproducible comparisons of trajectory optimization
+algorithms. No existing open-source package provides this combination in a research-grade Python
+library explicitly designed to support the development of novel algorithms.
 
-# Figures
+# Software Design
 
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
+`pykep 3` represents a complete redesign of the library from its earlier Python 2 origins. The
+computational core is implemented in modern C++23 and exposed to Python via `pybind11`. This
+architecture ensures that the innermost evaluation loops—Lambert arcs, Sims-Flanagan mismatch
+constraints [@sims], zero-order-hold propagation [@izzo2026zoh], orbital element conversions
+[@equinoctialelems]—run at native speed while remaining fully accessible from Python.
 
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
+A central abstraction is the *user-defined planet-like object* (`udpla`): any object that provides
+position and velocity as a function of epoch can serve as a trajectory endpoint or flyby body,
+regardless of whether it is backed by SPICE kernels, the SGP4 model, an analytic Keplerian
+approximation, or a user-supplied function. This makes all higher-level trajectory solvers
+ephemeris-agnostic and straightforward to test with analytical models before switching to full SPICE
+data.
+
+A deliberate architectural choice that runs throughout the library is the complete avoidance of
+inheritance. Rather than requiring users to subclass abstract base classes—a pattern that introduces
+coupling, fragile hierarchies, and verbose boilerplate, `pykep` relies on *type erasure*: any object
+that satisfies a documented concept (i.e., exposes the right methods with the right signatures) is
+accepted by the corresponding algorithm or container, regardless of its type. This gives rise to the
+pervasive *user-defined* vocabulary in the API: `udpla` (user-defined planet-like object), `udp`
+(user-defined problem), `uda` (user-defined algorithm), and so on. Each prefix signals that the
+corresponding slot in the system accepts any conforming type, not a prescribed class hierarchy. The
+result is an interface that is simultaneously extensible, a researcher can plug in a custom ephemeris,
+propagator, or objective function with a handful of Python lines—and free from the cognitive overhead
+of classical object-oriented inheritance patterns.
+
+Trajectory optimization problems are exposed as *user-defined problem* (`udp`) objects compatible
+with `pagmo` [@pagmo], so that any optimizer in the `pagmo` ecosystem (e.g. differential evolution,
+particle swarm, self-adaptive evolution strategies, and branch-and-bound) can be applied without
+modification. The design separates the mathematical primitives (C++) from the optimization problem
+definitions (Python/C++) and auxiliary tools such as visualization and low-thrust approximations
+[@approximations] (pure Python). This layering keeps the library maintainable and makes it
+straightforward for researchers to contribute new trajectory models or problem formulations. A set
+of benchmark problems (`gym`), modeled on challenges from the Global Trajectory Optimization
+Competitions [@izzo2016designing], is included to support reproducible algorithm development and
+direct comparison of competing approaches.
+
+# Research Impact Statement
+
+`pykep` and its predecessors have been the primary computational tool of the ACT for over a decade
+of competition-level and research-grade interplanetary trajectory work. The library was instrumental
+in the ACT's participation in multiple editions of the Global Trajectory Optimization Competition
+(GTOC) [@izzo2016designing; @izzo2013search; @gtoc12]—a series of open benchmarks widely regarded
+as among the most demanding trajectory optimization problems in the field, and a venue where the
+library has consistently enabled top-tier results against leading astrodynamics teams worldwide.
+
+Beyond competition, `pykep` has underpinned preliminary mission analysis for several ESA concepts,
+including the Hera asteroid deflection mission, the M-ARGO interplanetary CubeSat, and early
+feasibility studies for the Titan and Enceladus Mission (TandEM) and the Laplace mission to the
+outer solar system. It has supported peer-reviewed research on novel indirect methods via surrogate
+primer vectors [@beauregard], comparative studies of machine-learning and astrodynamical approaches
+to low-thrust transfers [@acciarini2024computing], approximation methods for asteroid-belt transfer
+cost estimation [@approximations], and high-order Taylor methods for astrodynamics
+[@biscaniheyoka1; @biscaniheyoka2].
+
+The library is distributed under an open-source license, available on PyPI and conda-forge, and
+is actively maintained. Its documentation includes tutorials covering basic propagation, Lambert
+problems, multi-gravity-assist trajectory optimization, and low-thrust mission design, lowering the
+barrier for adoption by the broader research community.
+
+# AI Usage Disclosure
+
+AI-assisted writing tools (GitHub Copilot) were used in an assistive capacity during the drafting
+of this paper. All technical content, bibliographic references, and scientific claims were reviewed
+and verified by the authors.
 
 # Acknowledgements
 
-We acknowledge contributions from .... and support from ...
+The authors thank the many ACT researchers and interns who have used and improved `pykep` over the
+years. Special thanks are due to Francesco Biscani in particular for the co-development of `pagmo`
+and `Heyoka`, his early interest in `pykep` and to the open-source communities behind `pybind11`
+and `spiceypy`. Development has been supported by the European Space Agency through the Advanced
+Concepts Team's internal research programme.
 
 # References
 
