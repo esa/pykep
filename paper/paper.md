@@ -1,5 +1,5 @@
 ---
-title: 'pykep: A coolbox for space flight mechanics'
+title: 'pykep: A research toolbox for space flight mechanics and interplanetary trajectory design'
 tags:
   - Python
   - astrodynamics
@@ -19,7 +19,7 @@ bibliography: paper.bib
 
 # Summary
 
-`pykep` is a Python coolbox covering a broad range of space flight mechanics problems, with its
+`pykep` is a Python research library covering a broad range of space flight mechanics problems, with its
 current emphasis on the preliminary analysis of interplanetary spacecraft trajectories. It provides
 the mathematical building blocks for orbit propagation, orbital element conversions, Lambert arc
 solvers, gravity-assist flyby modelling, and both direct and indirect low-thrust transcriptions.
@@ -57,7 +57,7 @@ legs, orbital element conversions—as first-class objects that can be composed 
 optimization loops. By integrating natively with `pagmo` [@pagmo] (a parallel global optimization
 library) and `Heyoka` [@biscaniheyoka1] (a Taylor integration suite), `pykep` provides a full stack
 from ephemeris evaluation to global trajectory search within a single Python environment—a
-coolbox where each tool is a well-defined, composable primitive ready to be assembled into novel
+coherent collection of well-defined, composable primitives ready to be assembled into novel
 research workflows. The many algorithms available in the library are largely the result of original
 research carried out at the ACT over more than a decade, complemented by implementations of
 best-in-class methods from the broader astrodynamics literature.
