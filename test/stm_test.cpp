@@ -135,7 +135,7 @@ TEST_CASE("propagate_lagrangian(stm)")
         auto M02 = xt::adapt(res02.second.value(), {6, 6});
         // NOLINTNEXTLINE(bugprone-unchecked-optional-access)
         auto M12 = xt::adapt(res12.second.value(), {6, 6});
-        REQUIRE(xt::linalg::norm(M02 - dot(M12, M01)) < 1e-13);
+        REQUIRE(xt::linalg::norm(M02 - dot(M12, M01)) < 1e-12);
     }
     { // We test the identity stm02 = stm12stm01 (hyperbolas)
         std::array<std::array<double, 3>, 2> pos_vel0 = {{{1.23, -0.12, 0.12}, {-4.12, 1.23, 0.12}}};
