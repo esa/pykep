@@ -144,18 +144,22 @@ The configure step controls where `kep3` is installed, where dependencies are di
 #### Optional project flags
 
 ```cmake
--Dkep3_BUILD_TESTS=ON
--Dkep3_BUILD_BENCHMARKS=ON
--DKEP3_VERBOSE_CONFIGURE=ON
+-Dkep3_BUILD_CPP_LIBRARY
+-Dkep3_BUILD_TESTS
+-Dkep3_BUILD_BENCHMARKS
+-DKEP3_VERBOSE_CONFIGURE
 ```
 
-1. `-Dkep3_BUILD_TESTS=ON`
+1. `-Dkep3_BUILD_CPP_LIBRARY=OFF`
+   Controls whether the `kep3` C++ library is built from source (default). When set to `OFF`, CMake will instead locate an already-installed `kep3` via `find_package` and report a fatal error if it is not found. This is useful when you only want to build the Python bindings (or tests/benchmarks) against a `kep3` that has already been installed.
+
+2. `-Dkep3_BUILD_TESTS=ON`
    Builds the C++ unit-test targets.
 
-2. `-Dkep3_BUILD_BENCHMARKS=ON`
+3. `-Dkep3_BUILD_BENCHMARKS=ON`
    Builds benchmark executables under `benchmark/`.
 
-3. `-DKEP3_VERBOSE_CONFIGURE=ON`
+4. `-DKEP3_VERBOSE_CONFIGURE=ON`
    Emits additional configure-time diagnostics useful for dependency and toolchain troubleshooting.
 
 #### Common CMake build-type flag
