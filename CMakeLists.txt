@@ -17,7 +17,7 @@ if(NOT CMAKE_BUILD_TYPE)
 	FORCE)
 endif()
 
-project(kep3 VERSION 3.0.0 LANGUAGES CXX C)
+project(kep3 VERSION 3.0.1 LANGUAGES CXX C)
 
 option(KEP3_VERBOSE_CONFIGURE "Enable detailed configure-time logging." OFF)
 if(KEP3_VERBOSE_CONFIGURE)
