@@ -421,6 +421,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog-3-0-0">3.0.0 (23-05-2026)</a></li>
 </ul>
             </nav>
@@ -435,6 +436,17 @@
                   
   <section id="changelog">
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="unreleased">
+<span id="changelog-3-1-0"></span><h2>3.1.0 (unreleased)<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Added CMake option <code class="docutils literal notranslate"><span class="pre">kep3_BUILD_CPP_LIBRARY</span></code> (default <code class="docutils literal notranslate"><span class="pre">ON</span></code>). When set to
+<code class="docutils literal notranslate"><span class="pre">OFF</span></code>, the C++ library is not built from source and CMake will instead
+locate an existing installation via <code class="docutils literal notranslate"><span class="pre">find_package</span></code>. A descriptive
+<code class="docutils literal notranslate"><span class="pre">FATAL_ERROR</span></code> is emitted if the library cannot be found. This makes it
+possible to build only the Python bindings, tests, or benchmarks against an
+already-installed <code class="docutils literal notranslate"><span class="pre">kep3</span></code>.</p></li>
+</ul>
+</section>
 <section id="changelog-3-0-0">
 <span id="id2"></span><h2>3.0.0 (23-05-2026)<a class="headerlink" href="#changelog-3-0-0" title="Link to this heading">#</a></h2>
 <p>pykep 3 is a complete reimagination of the library: a new C++23 core, a clean
@@ -491,6 +503,7 @@ set of low-thrust transcriptions and benchmark problems.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog-3-0-0">3.0.0 (23-05-2026)</a></li>
 </ul>
   </nav></div>

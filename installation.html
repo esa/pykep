@@ -541,19 +541,24 @@ environment.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_PREFIX_PATH=&quot;$CONDA_PREFIX&quot;</span></code></p></td>
 <td><p>Resolve dependencies from the active conda environment.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_PYTHON_BINDINGS=ON</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_CPP_LIBRARY=ON</span></code></p></td>
+<td><p>Build the <code class="docutils literal notranslate"><span class="pre">kep3</span></code> C++ library from source (default).
+Set to <code class="docutils literal notranslate"><span class="pre">OFF</span></code> to use an already-installed <code class="docutils literal notranslate"><span class="pre">kep3</span></code>
+located via <code class="docutils literal notranslate"><span class="pre">find_package</span></code> instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_PYTHON_BINDINGS=ON</span></code></p></td>
 <td><p>Build and install the <code class="docutils literal notranslate"><span class="pre">pykep</span></code> Python extension module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_TESTS=ON</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_TESTS=ON</span></code></p></td>
 <td><p>Build the C++ unit-test suite.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_BENCHMARKS=ON</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-Dkep3_BUILD_BENCHMARKS=ON</span></code></p></td>
 <td><p>Build the benchmark executables.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DKEP3_VERBOSE_CONFIGURE=ON</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DKEP3_VERBOSE_CONFIGURE=ON</span></code></p></td>
 <td><p>Emit additional configure-time diagnostics.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Debug</span></code></p></td>
 <td><p>Enable debug symbols (single-config generators only).</p></td>
 </tr>
 </tbody>
@@ -566,9 +571,25 @@ environment.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pykep; print(pykep.__version__)&quot;</span>
 </pre></div>
 </div>
-<p>To run the full test suite:</p>
+<p>To run the Python test suite:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>/path/to/pykep/tests
 </pre></div>
+</div>
+<p class="rubric">Running the C++ test suite</p>
+<p>To verify the C++ library itself, configure a build with <code class="docutils literal notranslate"><span class="pre">kep3_BUILD_TESTS=ON</span></code>
+and run the tests via CTest:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-G<span class="w"> </span>Ninja<span class="w">              </span><span class="se">\</span>
+<span class="w">    </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CONDA_PREFIX</span><span class="s2">&quot;</span><span class="w">      </span><span class="se">\</span>
+<span class="w">    </span>-Dkep3_BUILD_TESTS<span class="o">=</span>ON
+<span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--parallel
+<span class="gp">$ </span>ctest<span class="w"> </span>--test-dir<span class="w"> </span>build<span class="w"> </span>--output-on-failure
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX</span></code> flag is not required when building tests
+only — nothing is installed. CTest discovers the test executables directly
+from the build tree.</p>
 </div>
 </section>
 <section id="getting-help">

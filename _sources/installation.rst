@@ -124,6 +124,10 @@ environment.
 +-------------------------------------------+----------------------------------------------------------+
 | ``-DCMAKE_PREFIX_PATH="$CONDA_PREFIX"``   | Resolve dependencies from the active conda environment.  |
 +-------------------------------------------+----------------------------------------------------------+
+| ``-Dkep3_BUILD_CPP_LIBRARY=ON``           | Build the ``kep3`` C++ library from source (default).    |
+|                                           | Set to ``OFF`` to use an already-installed ``kep3``      |
+|                                           | located via ``find_package`` instead.                    |
++-------------------------------------------+----------------------------------------------------------+
 | ``-Dkep3_BUILD_PYTHON_BINDINGS=ON``       | Build and install the ``pykep`` Python extension module. |
 +-------------------------------------------+----------------------------------------------------------+
 | ``-Dkep3_BUILD_TESTS=ON``                 | Build the C++ unit-test suite.                           |
@@ -146,11 +150,30 @@ After installation, confirm pykep is working correctly:
 
    $ python -c "import pykep; print(pykep.__version__)"
 
-To run the full test suite:
+To run the Python test suite:
 
 .. code-block:: console
 
    $ python -m pytest /path/to/pykep/tests
+
+.. rubric:: Running the C++ test suite
+
+To verify the C++ library itself, configure a build with ``kep3_BUILD_TESTS=ON``
+and run the tests via CTest:
+
+.. code-block:: console
+
+   $ cmake -S . -B build -G Ninja              \
+       -DCMAKE_PREFIX_PATH="$CONDA_PREFIX"      \
+       -Dkep3_BUILD_TESTS=ON
+   $ cmake --build build --parallel
+   $ ctest --test-dir build --output-on-failure
+
+.. note::
+
+   The ``-DCMAKE_INSTALL_PREFIX`` flag is not required when building tests
+   only — nothing is installed. CTest discovers the test executables directly
+   from the build tree.
 
 Getting help
 ============
