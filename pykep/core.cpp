@@ -886,6 +886,10 @@ PYBIND11_MODULE(core, m) // NOLINT
     zoh.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh>);
     zoh.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh>);
     zoh.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh>);
+ // Pickle support.
+    zoh.def(py::pickle(&pykep::pickle_getstate_wrapper<kep3::leg::zoh>,
+                                 &pykep::pickle_setstate_wrapper<kep3::leg::zoh>));
+    // The rest
     // Properties (getters/setters)
     zoh.def_property("state0", &kep3::leg::zoh::get_state0, &kep3::leg::zoh::set_state0,
                      pykep::leg_zoh_state0_docstring().c_str());

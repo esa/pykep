@@ -8,12 +8,25 @@ Changelog
 3.1.0 (unreleased)
 ==================
 
+Build system
+------------
+
 - Added CMake option ``kep3_BUILD_CPP_LIBRARY`` (default ``ON``). When set to
   ``OFF``, the C++ library is not built from source and CMake will instead
   locate an existing installation via ``find_package``. A descriptive
   ``FATAL_ERROR`` is emitted if the library cannot be found. This makes it
   possible to build only the Python bindings, tests, or benchmarks against an
   already-installed ``kep3``.
+
+Bug fixes
+---------
+
+- Fixed pickling of :class:`~pykep.leg.zoh`. The C++ class is bound as
+  ``_zoh_cpp`` in ``pykep.core``, so pickle looked for ``pykep.leg._zoh_cpp``
+  when reconstructing objects. The alias was missing from ``pykep/leg/__init__.py``
+  (only ``_zoh`` was defined). Added ``_zoh_cpp = _core._zoh_cpp`` to make the
+  lookup succeed, consistent with the existing ``_sims_flanagan`` and
+  ``_sims_flanagan_alpha`` aliases.
 
 - Fixed several bugs in :class:`~pykep.trajopt.pl2pl_N_impulses`: a crash when
   ``phase_free=False`` and ``t0_bounds=None`` (``t0`` was assigned instead of
