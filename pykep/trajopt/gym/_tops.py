@@ -63,6 +63,10 @@ class tops_twobody:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
         self.name = "Two-body Keplerian: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -117,6 +121,9 @@ class tops_twobody:
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -234,6 +241,10 @@ class tops_twobody_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
         self.name = "Two-body Keplerian (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -310,6 +321,9 @@ class tops_twobody_mb:
             L=L_ta,
             V=V_ta,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -457,6 +471,10 @@ class tops_mee:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
         self.name = "Two-body MEE: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -514,6 +532,9 @@ class tops_mee:
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -630,6 +651,10 @@ class tops_mee_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
         self.name = "Two-body MEE (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -742,6 +767,9 @@ class tops_mee_mb:
             V=V_ta,
             nrevs=nrevs,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -865,6 +893,9 @@ class tops_ss:
                 Defaults to ``'uniform'``.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
         self.name = "Solar sailing: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -915,6 +946,9 @@ class tops_ss:
     def get_nic(self):
         """Override: solar_sailing problems have no inequality constraints."""
         return 0
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding))
 
     def get_name(self):
         """Return the problem name."""
@@ -1004,6 +1038,10 @@ class tops_ss_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
         self.name = "Solar Sailing (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1063,6 +1101,9 @@ class tops_ss_mb:
             L=L,
             V=V,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -1183,6 +1224,10 @@ class tops_cr3bp:
                 Defaults to False.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
         self.name = "CR3BP: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1226,6 +1271,9 @@ class tops_cr3bp:
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -1342,6 +1390,10 @@ class tops_cr3bp_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
+        self.cut = cut
+        self.nseg = nseg
+        self.time_encoding = time_encoding
+        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
         self.name = "CR3BP (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1417,6 +1469,9 @@ class tops_cr3bp_mb:
             L=L,
             V=V,
         )
+
+    def __reduce__(self):
+        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
