@@ -122,6 +122,7 @@ class tops_twobody:
             max_steps=1000,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -322,6 +323,7 @@ class tops_twobody_mb:
             V=V_ta,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -533,6 +535,7 @@ class tops_mee:
             max_steps=1000,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -768,6 +771,7 @@ class tops_mee_mb:
             nrevs=nrevs,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -947,6 +951,7 @@ class tops_ss:
         """Override: solar_sailing problems have no inequality constraints."""
         return 0
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding))
 
@@ -1102,6 +1107,7 @@ class tops_ss_mb:
             V=V,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -1272,6 +1278,7 @@ class tops_cr3bp:
             max_steps=1000,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
@@ -1470,6 +1477,7 @@ class tops_cr3bp_mb:
             V=V,
         )
 
+    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
     def __reduce__(self):
         return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
