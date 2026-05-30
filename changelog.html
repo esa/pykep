@@ -445,6 +445,14 @@ locate an existing installation via <code class="docutils literal notranslate"><
 <code class="docutils literal notranslate"><span class="pre">FATAL_ERROR</span></code> is emitted if the library cannot be found. This makes it
 possible to build only the Python bindings, tests, or benchmarks against an
 already-installed <code class="docutils literal notranslate"><span class="pre">kep3</span></code>.</p></li>
+<li><p>Fixed several bugs in <a class="reference internal" href="trajopt.html#pykep.trajopt.pl2pl_N_impulses" title="pykep.trajopt.pl2pl_N_impulses"><code class="xref py py-class docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a>: a crash when
+<code class="docutils literal notranslate"><span class="pre">phase_free=False</span></code> and <code class="docutils literal notranslate"><span class="pre">t0_bounds=None</span></code> (<code class="docutils literal notranslate"><span class="pre">t0</span></code> was assigned instead of
+<code class="docutils literal notranslate"><span class="pre">t0_bounds</span></code>); a dead/unreachable <code class="docutils literal notranslate"><span class="pre">N_max</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> guard; <code class="docutils literal notranslate"><span class="pre">plot_primer_vector</span></code>
+using <code class="docutils literal notranslate"><span class="pre">MU_SUN</span></code> instead of <code class="docutils literal notranslate"><span class="pre">self._common_mu</span></code>; alpha lower bounds of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>
+in phase-free mode (now <code class="docutils literal notranslate"><span class="pre">1e-3</span></code>, consistent with the non-phase-free path, to
+avoid <code class="docutils literal notranslate"><span class="pre">log(0)</span></code> in <code class="docutils literal notranslate"><span class="pre">alpha2direct</span></code>). The <code class="docutils literal notranslate"><span class="pre">pretty</span></code> method was also corrected
+to print times-of-flight in days (the internal <code class="docutils literal notranslate"><span class="pre">decode</span></code> stores durations in
+seconds, and the conversion was missing).</p></li>
 </ul>
 </section>
 <section id="changelog-3-0-0">

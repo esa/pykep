@@ -15,6 +15,15 @@ Changelog
   possible to build only the Python bindings, tests, or benchmarks against an
   already-installed ``kep3``.
 
+- Fixed several bugs in :class:`~pykep.trajopt.pl2pl_N_impulses`: a crash when
+  ``phase_free=False`` and ``t0_bounds=None`` (``t0`` was assigned instead of
+  ``t0_bounds``); a dead/unreachable ``N_max < 2`` guard; ``plot_primer_vector``
+  using ``MU_SUN`` instead of ``self._common_mu``; alpha lower bounds of ``0.0``
+  in phase-free mode (now ``1e-3``, consistent with the non-phase-free path, to
+  avoid ``log(0)`` in ``alpha2direct``). The ``pretty`` method was also corrected
+  to print times-of-flight in days (the internal ``decode`` stores durations in
+  seconds, and the conversion was missing).
+
 .. _changelog_3_0_0:
 
 3.0.0 (23-05-2026)
