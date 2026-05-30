@@ -63,19 +63,16 @@ class pl2pl_N_impulses:
         # 0) This is not working for only two impulses
         if N_max <= 2:
             raise ValueError(
-                "This UDP is not wsuitable for only two impulse trajectories. Lambert multiple revolutions should be allowed for that (to be implemented)."
+                "This UDP is not suitable for only two impulse trajectories. Lambert multiple revolutions should be allowed for that (to be implemented)."
             )
         # 1) all planets need to have the same mu_central_body
         if start.mu_central_body != target.mu_central_body:
             raise ValueError(
                 "Starting and ending pykep.planet must have the same mu_central_body"
             )
-        # 2) Number of impulses must be at least 2
-        if N_max < 2:
-            raise ValueError("Number of impulses N is less than 2")
-        # 3) If phase_free is True, t0 does not make sense
+        # 2) If phase_free is True, t0 does not make sense
         if t0_bounds is None and not phase_free:
-            t0 = [_pk.epoch(0), _pk.epoch(1000)]
+            t0_bounds = [_pk.epoch(0), _pk.epoch(1000)]
         if t0_bounds is not None and phase_free:
             raise ValueError("When phase_free is True no t0 can be specified")
         if not phase_free:
@@ -99,14 +96,14 @@ class pl2pl_N_impulses:
         if phase_free:
             self._lb = (
                 [0, tof_bounds[0]]
-                + [0.0, 0.0, 0.0, DV_max_bounds[0] * 1000] * (N_max - 2)
-                + [0]
+                + [1e-3, 0.0, 0.0, DV_max_bounds[0] * 1000] * (N_max - 2)
+                + [1e-3]
                 + [0]
             )
             self._ub = (
                 [2 * start.period() * _pk.SEC2DAY, tof_bounds[1]]
-                + [1.0, 1.0, 1.0, DV_max_bounds[1] * 1000] * (N_max - 2)
-                + [1.0]
+                + [1.0 - 1e-3, 1.0, 1.0, DV_max_bounds[1] * 1000] * (N_max - 2)
+                + [1.0 - 1e-3]
                 + [2 * target.period() * _pk.SEC2DAY]
             )
         else:
@@ -244,9 +241,9 @@ class pl2pl_N_impulses:
 
         print("Total DV (m/s): ", sum(DVs))
         print("Dvs (m/s): ", [float(it) for it in DVs])
-        print("Total DT (m/s): ", sum(T))
+        print("Total DT (days): ", sum(T) * _pk.SEC2DAY)
         print(
-            "Tofs (days): ", [float(it) for it in T[:-1]]
+            "Tofs (days): ", [float(it) * _pk.SEC2DAY for it in T[:-1]]
         )  # last node has a zero TOF by convention
 
     def plot_primer_vector(self, x, N=200, ax=None):
@@ -309,7 +306,7 @@ class pl2pl_N_impulses:
         for posvel, DV, tgrid in zip(posvels, DVs, tgrids):
             ic = [posvel[0], [a + b for a, b in zip(posvel[1], DV)]]
             retvals.append(
-                _pk.propagate_lagrangian_grid(ic, tgrid, mu=_pk.MU_SUN, stm=True)
+                _pk.propagate_lagrangian_grid(ic, tgrid, mu=self._common_mu, stm=True)
             )
 
         # And now assemble them in correspondance to the final_grid and in the Mn0 form.
