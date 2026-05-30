@@ -21,6 +21,12 @@ Build system
 Bug fixes
 ---------
 
+- Fixed pickling of TOPS gym classes. The lambdas passed as ``state2cart``
+  and equivalent callbacks to the internal UDP prevented serialization. They were
+  replaced with :func:`functools.partial` wrapping small module-level helper
+  functions (``_cart_scale``, ``_mee_to_cart``, ``_cfunc_call``), which are
+  picklable by name.
+
 - Fixed pickling of :class:`~pykep.leg.zoh`. The C++ class is bound as
   ``_zoh_cpp`` in ``pykep.core``, so pickle looked for ``pykep.leg._zoh_cpp``
   when reconstructing objects. The alias was missing from ``pykep/leg/__init__.py``

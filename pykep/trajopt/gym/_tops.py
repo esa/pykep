@@ -1,7 +1,21 @@
 import pykep as _pk
 import numpy as _np
 import heyoka as _hy
+import functools as _functools
 from matplotlib import pyplot as _plt
+
+
+
+def _cart_scale(x, L, V):
+    return _np.asarray([x[0] * L, x[1] * L, x[2] * L, x[3] * V, x[4] * V, x[5] * V])
+
+
+def _mee_to_cart(x, L):
+    return _np.array(_pk.mee2ic([x[0] * L, x[1], x[2], x[3], x[4], x[5]], mu=1.0)).flatten()
+
+
+def _cfunc_call(cfunc, pars, x):
+    return cfunc(x, pars=pars)
 
 
 class tops_twobody:
@@ -63,10 +77,6 @@ class tops_twobody:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
         self.name = "Two-body Keplerian: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -115,16 +125,10 @@ class tops_twobody:
             cut=cut,
             tas=[ta_twobody, ta_twobody_var],
             time_encoding=time_encoding,
-            state2cart=lambda x, L=self.L, V=self.V: _np.asarray(
-                [x[0] * L, x[1] * L, x[2] * L, x[3] * V, x[4] * V, x[5] * V]
-            ),
+            state2cart=_functools.partial(_cart_scale, L=self.L, V=self.V),
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -242,10 +246,6 @@ class tops_twobody_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
         self.name = "Two-body Keplerian (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -322,10 +322,6 @@ class tops_twobody_mb:
             L=L_ta,
             V=V_ta,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -473,10 +469,6 @@ class tops_mee:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
         self.name = "Two-body MEE: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -528,16 +520,10 @@ class tops_mee:
             cut=cut,
             tas=[ta_twobody_mee, ta_twobody_mee_var],
             time_encoding=time_encoding,
-            state2cart=lambda x, L=self.L: _np.array(
-                _pk.mee2ic([x[0] * L, x[1], x[2], x[3], x[4], x[5]], mu=1.0)
-            ).flatten(),
+            state2cart=_functools.partial(_mee_to_cart, L=self.L),
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -654,10 +640,6 @@ class tops_mee_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
         self.name = "Two-body MEE (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -745,9 +727,9 @@ class tops_mee_mb:
         state2cart_cfunc = _hy.cfunc(state2cart, vars=[p, f, g, h, k, L_anom])
         # We create the call signature required by the API of the zoh_pl2pl class and
         # account here for the nrevs in the mean longitude.
-        cart2state_zoh = lambda x: cart2state_cfunc(x, pars=[1, 1])
-        cart2state_J_zoh = lambda x: cart2state_J_cfunc(x, pars=[gym_problem["mu"], 1])
-        state2cart_zoh = lambda x: state2cart_cfunc(x, pars=[1, 1])
+        cart2state_zoh = _functools.partial(_cfunc_call, cart2state_cfunc, [1, 1])
+        cart2state_J_zoh = _functools.partial(_cfunc_call, cart2state_J_cfunc, [gym_problem["mu"], 1])
+        state2cart_zoh = _functools.partial(_cfunc_call, state2cart_cfunc, [1, 1])
 
         self.udp = _pk.trajopt.zoh_pl2pl(
             pls=self.pls,
@@ -770,10 +752,6 @@ class tops_mee_mb:
             V=V_ta,
             nrevs=nrevs,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -897,9 +875,6 @@ class tops_ss:
                 Defaults to ``'uniform'``.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
         self.name = "Solar sailing: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -950,10 +925,6 @@ class tops_ss:
     def get_nic(self):
         """Override: solar_sailing problems have no inequality constraints."""
         return 0
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding))
 
     def get_name(self):
         """Return the problem name."""
@@ -1043,10 +1014,6 @@ class tops_ss_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
         self.name = "Solar Sailing (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1106,10 +1073,6 @@ class tops_ss_mb:
             L=L,
             V=V,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
@@ -1230,10 +1193,6 @@ class tops_cr3bp:
                 Defaults to False.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
         self.name = "CR3BP: " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1277,10 +1236,6 @@ class tops_cr3bp:
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         """Return the problem name."""
@@ -1397,10 +1352,6 @@ class tops_cr3bp_mb:
                 Defaults to True.
         """
         self.prob_name = prob_name
-        self.cut = cut
-        self.nseg = nseg
-        self.time_encoding = time_encoding
-        self.inequalities_for_tc = inequalities_for_tc
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
         self.name = "CR3BP (Moving Boundaries): " + prob_name
         self.extra_info = gym_problem["info"]
@@ -1476,10 +1427,6 @@ class tops_cr3bp_mb:
             L=L,
             V=V,
         )
-
-    # __reduce__ is needed because lambdas passed to self.udp are not picklable.
-    def __reduce__(self):
-        return (self.__class__, (self.prob_name, self.cut, self.nseg, self.time_encoding, self.inequalities_for_tc))
 
     def get_name(self):
         return self.name
