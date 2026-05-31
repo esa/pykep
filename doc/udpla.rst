@@ -5,6 +5,9 @@ User defined planets (UDPLAs)
 
 .. currentmodule:: pykep.udpla
 
+Basic
+##########
+
 .. autoclass:: null_udpla
    :members:
 
@@ -13,6 +16,9 @@ User defined planets (UDPLAs)
 
 .. autoclass:: jpl_lp
    :members:
+
+Advanced
+##########
 
 .. autoclass:: vsop2013
    :members:
