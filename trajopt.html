@@ -214,15 +214,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -423,102 +432,104 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct">Direct</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sims-flanagan">Sims-Flanagan</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point"><code class="docutils literal notranslate"><span class="pre">sf_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.plot"><code class="docutils literal notranslate"><span class="pre">sf_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">sf_point2point.pretty()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Trajectory Optimization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#direct">Direct</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sims-flanagan">Sims-Flanagan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point"><code class="docutils literal notranslate"><span class="pre">sf_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.plot"><code class="docutils literal notranslate"><span class="pre">sf_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">sf_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.pretty()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold">Zero-Order-Hold</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.pretty()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold">Zero-Order-Hold</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect">Indirect</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot_misc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot_misc()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot_misc()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot_misc()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evolutionary-encodings">Evolutionary Encodings</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga"><code class="docutils literal notranslate"><span class="pre">mga</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.plot"><code class="docutils literal notranslate"><span class="pre">mga.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.pretty"><code class="docutils literal notranslate"><span class="pre">mga.pretty()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.to_planet"><code class="docutils literal notranslate"><span class="pre">mga.to_planet()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm"><code class="docutils literal notranslate"><span class="pre">mga_1dsm</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.plot"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.pretty"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot_primer_vector"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot_primer_vector()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector"><code class="docutils literal notranslate"><span class="pre">primer_vector()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector_surrogate"><code class="docutils literal notranslate"><span class="pre">primer_vector_surrogate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers"><code class="docutils literal notranslate"><span class="pre">_launchers</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane5"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane5()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane64"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane64()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas501"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas501()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas551"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas551()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.falcon9"><code class="docutils literal notranslate"><span class="pre">_launchers.falcon9()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.soyuzf"><code class="docutils literal notranslate"><span class="pre">_launchers.soyuzf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect">Indirect</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot_misc()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#evolutionary-encodings">Evolutionary Encodings</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga"><code class="docutils literal notranslate"><span class="pre">mga</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.plot"><code class="docutils literal notranslate"><span class="pre">mga.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.pretty"><code class="docutils literal notranslate"><span class="pre">mga.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.to_planet"><code class="docutils literal notranslate"><span class="pre">mga.to_planet()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm"><code class="docutils literal notranslate"><span class="pre">mga_1dsm</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.plot"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.pretty"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.pretty()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot_primer_vector"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot_primer_vector()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector"><code class="docutils literal notranslate"><span class="pre">primer_vector()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector_surrogate"><code class="docutils literal notranslate"><span class="pre">primer_vector_surrogate()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers"><code class="docutils literal notranslate"><span class="pre">_launchers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane5"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane5()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane64"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane64()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas501"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas501()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas551"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas551()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.falcon9"><code class="docutils literal notranslate"><span class="pre">_launchers.falcon9()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.soyuzf"><code class="docutils literal notranslate"><span class="pre">_launchers.soyuzf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -539,8 +550,9 @@ performed at <a class="reference external" href="https://www.esa.int/gsp/ACT/">E
 <p>Most of the classes in this Trajectory Optimization module are provided as
 optimization problems (NLPs) in the for of User Defined Problems (UDP) compatible
 with the <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> <span class="bibtex-citation" id="id4">[<a class="reference internal" href="bibliography.html#id9" title="Francesco Biscani and Dario Izzo. A parallel global multiobjective framework for optimization: pagmo. Journal of Open Source Software, 5(53):2338, 2020.">BI20</a>]</span> python package.</p>
+</section>
 <section id="direct">
-<h2>Direct<a class="headerlink" href="#direct" title="Link to this heading">#</a></h2>
+<h1>Direct<a class="headerlink" href="#direct" title="Link to this heading">#</a></h1>
 <p>When solving optimal control problems (OCPs), the unknown is a function (i.e. the control),
 hence one is dealing with an infinite dimensional search space.
 A common approach to overcome this difficulty is to use direct methods.
@@ -548,7 +560,7 @@ These are based on the idea of discretizing the problem introducing some time gr
 and thus transforming the OCP into a NLP (Non Linear Programming) problem
 to then solve it using numerical solvers available for the task.</p>
 <section id="sims-flanagan">
-<h3>Sims-Flanagan<a class="headerlink" href="#sims-flanagan" title="Link to this heading">#</a></h3>
+<h2>Sims-Flanagan<a class="headerlink" href="#sims-flanagan" title="Link to this heading">#</a></h2>
 <p>One of pykep’s historical favourite transcription methods is the Sims
 <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliography.html#id7" title="Jon A. Sims and Steve N. Flanagan. Preliminary design of low-thrust interplanetary missions. Paper AAS 99-338, AAS/AIAA Astrodynamics Specialist Conference, Girdwood, Alaska, August 16-18, 1999, 1997.">SF97</a>]</span> transcription which is called Sims-Flanagan as per the authorship
 of the first brief conference paper introducing it (anecdotically the work was, though, entirely done by Sims).</p>
@@ -747,7 +759,7 @@ and the controls as to link the two planets with a low-thrust trajectory.</p>
 
 </section>
 <section id="zero-order-hold">
-<h3>Zero-Order-Hold<a class="headerlink" href="#zero-order-hold" title="Link to this heading">#</a></h3>
+<h2>Zero-Order-Hold<a class="headerlink" href="#zero-order-hold" title="Link to this heading">#</a></h2>
 <p>The <cite>pykep</cite> original extension to the original Sims-Flanagan model is called the Zero-Order-Hold
 transcription method as it substitutes impulses with constant control segments. It has been
 developed and constantly refined throughout years starting from the early appearence in 2010
@@ -1092,7 +1104,7 @@ users can visually inspect where and how the trajectory integration breaks.</p>
 </section>
 </section>
 <section id="indirect">
-<h2>Indirect<a class="headerlink" href="#indirect" title="Link to this heading">#</a></h2>
+<h1>Indirect<a class="headerlink" href="#indirect" title="Link to this heading">#</a></h1>
 <p>Indirect methods are based on the Pontryagin Maximum Principle (PMP), which provides necessary conditions
 for optimality. These methods involve deriving the optimal control laws and
 the corresponding state trajectories by solving a two point boundary value problem
@@ -1352,7 +1364,7 @@ of the trajectory encoded in the decision vector x.</p>
 </section>
 <hr class="docutils" />
 <section id="evolutionary-encodings">
-<h2>Evolutionary Encodings<a class="headerlink" href="#evolutionary-encodings" title="Link to this heading">#</a></h2>
+<h1>Evolutionary Encodings<a class="headerlink" href="#evolutionary-encodings" title="Link to this heading">#</a></h1>
 <p>Some type of interplanetary trajectories can be <em>evolved</em>: shocking?.
 This AI approach to trajectory design resulted in two silver (<span class="bibtex-citation" id="id7">[<a class="reference internal" href="bibliography.html#id10" title="Richard J Terrile, Hrand Aghazarian, Michael I Ferguson, Wolfgang Fink, Terrance L Huntsberger, Didier Keymeulen, Gerhard Klimeck, Mark A Kordon, Seungwon Lee, and Paul von Allmen. Evolutionary computation technologies for the automated design of space systems. 2005 NASA/DoD Conference on Evolvable Hardware (EH'05), pages 131–138, 2005.">TAF+05</a>]</span>, <span class="bibtex-citation" id="id8">[<a class="reference internal" href="bibliography.html#id11" title="Anastassios Petropoulos, Daniel Grebow, Drew Jones, Gregory Lantoine, Austin Nicholas, Javier Roa, Juan Senent, Jeffrey Stuart, Nitin Arora, Thomas Pavlak, and others. GTOC9: Methods and results from the Jet Propulsion Laboratory team. Acta Futura, 11:25–35, 2018.">PGJ+18</a>]</span>)
 and one gold (<span class="bibtex-citation" id="id9">[<a class="reference internal" href="bibliography.html#id12" title="Dario Izzo, Luis F Simoes, Marcus Martens, Guido CHE de Croon, Aurelie Heritier, and Chit Hong Yam. Search for a grand tour of the jupiter galilean moons. Proceedings of the 15th annual conference on Genetic and evolutionary computation, pages 1301–1308, 2013.">ISM+13</a>]</span>)
@@ -1595,7 +1607,7 @@ between two planets allowing up to a maximum number of impulsive Deep Space Mane
 
 </section>
 <section id="utilities">
-<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h2>
+<h1>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h1>
 <p>In order to facilitate the use of the classes in this module, some utilities are provided.</p>
 <hr class="docutils" />
 <dl class="py function">
@@ -1753,7 +1765,6 @@ If the inputs are arrays, then a mesh is constructed and the mass is returned on
 </dd></dl>
 
 </section>
-</section>
 
 
                 </article>
@@ -1802,102 +1813,104 @@ If the inputs are arrays, then a mesh is constructed and the mass is returned on
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct">Direct</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sims-flanagan">Sims-Flanagan</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point"><code class="docutils literal notranslate"><span class="pre">sf_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.plot"><code class="docutils literal notranslate"><span class="pre">sf_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">sf_point2point.pretty()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Trajectory Optimization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#direct">Direct</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sims-flanagan">Sims-Flanagan</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point"><code class="docutils literal notranslate"><span class="pre">sf_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.plot"><code class="docutils literal notranslate"><span class="pre">sf_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">sf_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.pretty()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold">Zero-Order-Hold</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.plot()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.plot"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.sf_pl2pl_alpha.pretty"><code class="docutils literal notranslate"><span class="pre">sf_pl2pl_alpha.pretty()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold">Zero-Order-Hold</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect">Indirect</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot_misc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.plot"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_pl2pl.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_pl2pl.pretty()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot_misc()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot_misc()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot_misc()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evolutionary-encodings">Evolutionary Encodings</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga"><code class="docutils literal notranslate"><span class="pre">mga</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.plot"><code class="docutils literal notranslate"><span class="pre">mga.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.pretty"><code class="docutils literal notranslate"><span class="pre">mga.pretty()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.to_planet"><code class="docutils literal notranslate"><span class="pre">mga.to_planet()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm"><code class="docutils literal notranslate"><span class="pre">mga_1dsm</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.plot"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.pretty"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.pretty()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot_primer_vector"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot_primer_vector()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector"><code class="docutils literal notranslate"><span class="pre">primer_vector()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector_surrogate"><code class="docutils literal notranslate"><span class="pre">primer_vector_surrogate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers"><code class="docutils literal notranslate"><span class="pre">_launchers</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane5"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane5()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane64"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane64()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas501"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas501()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas551"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas551()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.falcon9"><code class="docutils literal notranslate"><span class="pre">_launchers.falcon9()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.soyuzf"><code class="docutils literal notranslate"><span class="pre">_launchers.soyuzf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.plot"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.zoh_ss_point2point.pretty"><code class="docutils literal notranslate"><span class="pre">zoh_ss_point2point.pretty()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indirect">Indirect</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_cartesian_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_mass.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass.plot_misc()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pontryagin_equinoctial_time.plot_misc"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time.plot_misc()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#evolutionary-encodings">Evolutionary Encodings</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga"><code class="docutils literal notranslate"><span class="pre">mga</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.plot"><code class="docutils literal notranslate"><span class="pre">mga.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.pretty"><code class="docutils literal notranslate"><span class="pre">mga.pretty()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga.to_planet"><code class="docutils literal notranslate"><span class="pre">mga.to_planet()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm"><code class="docutils literal notranslate"><span class="pre">mga_1dsm</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.plot"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.mga_1dsm.pretty"><code class="docutils literal notranslate"><span class="pre">mga_1dsm.pretty()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.pl2pl_N_impulses.plot_primer_vector"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses.plot_primer_vector()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector"><code class="docutils literal notranslate"><span class="pre">primer_vector()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt.primer_vector_surrogate"><code class="docutils literal notranslate"><span class="pre">primer_vector_surrogate()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers"><code class="docutils literal notranslate"><span class="pre">_launchers</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane5"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane5()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.ariane64"><code class="docutils literal notranslate"><span class="pre">_launchers.ariane64()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas501"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas501()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.atlas551"><code class="docutils literal notranslate"><span class="pre">_launchers.atlas551()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.falcon9"><code class="docutils literal notranslate"><span class="pre">_launchers.falcon9()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.trajopt._launchers.soyuzf"><code class="docutils literal notranslate"><span class="pre">_launchers.soyuzf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

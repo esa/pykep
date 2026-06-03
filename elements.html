@@ -214,15 +214,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -423,7 +432,8 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Orbital Elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conversions">Conversions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ic2par"><code class="docutils literal notranslate"><span class="pre">ic2par()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.par2ic"><code class="docutils literal notranslate"><span class="pre">par2ic()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ic2mee"><code class="docutils literal notranslate"><span class="pre">ic2mee()</span></code></a></li>
@@ -431,6 +441,13 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mee2par"><code class="docutils literal notranslate"><span class="pre">mee2par()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.par2mee"><code class="docutils literal notranslate"><span class="pre">par2mee()</span></code></a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -469,20 +486,9 @@ orbital elements where <span class="math notranslate nohighlight">\(a(1-e) &lt; 
 version, which can be used to compute the Jacobian of the transformation. The symbolic version of the functions
 return a pair of vectors, the first one is the transformation itself, while the second one is the Jacobian,
 optionally returned if the user set the flag <code class="docutils literal notranslate"><span class="pre">jacobian</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<hr class="docutils" />
-<dl class="py class">
-<dt class="sig sig-object py" id="pykep.el_type">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">el_type</span></span><a class="headerlink" href="#pykep.el_type" title="Link to this definition">#</a></dt>
-<dd><p>Members:</p>
-<blockquote>
-<div><p>KEP_M : Keplerian Elements <span class="math notranslate nohighlight">\([a,e,i,\Omega,\omega,M]\)</span> (Mean anomaly)</p>
-<p>KEP_F : Keplerian Elements <span class="math notranslate nohighlight">\([a,e,i,\Omega,\omega,f]\)</span> (True anomaly)</p>
-<p>MEE : Modified Equinoctial Elements <span class="math notranslate nohighlight">\([p,f,g,h,k,L]\)</span> (Mean Longitude)</p>
-<p>MEE_R : Modified Equinoctial Elements (retrograde) <span class="math notranslate nohighlight">\([p,f,g,h,k,L]\)</span> (Mean Longitude)</p>
-<p>POSVEL : Position and Velocity</p>
-</div></blockquote>
-</dd></dl>
-
+</section>
+<section id="conversions">
+<h1>Conversions<a class="headerlink" href="#conversions" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ic2par">
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">ic2par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posvel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ic2par" title="Link to this definition">#</a></dt>
@@ -810,6 +816,22 @@ inclinations near pi.</p>
 </dd></dl>
 
 </section>
+<section id="types">
+<h1>Types<a class="headerlink" href="#types" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.el_type">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">el_type</span></span><a class="headerlink" href="#pykep.el_type" title="Link to this definition">#</a></dt>
+<dd><p>Members:</p>
+<blockquote>
+<div><p>KEP_M : Keplerian Elements <span class="math notranslate nohighlight">\([a,e,i,\Omega,\omega,M]\)</span> (Mean anomaly)</p>
+<p>KEP_F : Keplerian Elements <span class="math notranslate nohighlight">\([a,e,i,\Omega,\omega,f]\)</span> (True anomaly)</p>
+<p>MEE : Modified Equinoctial Elements <span class="math notranslate nohighlight">\([p,f,g,h,k,L]\)</span> (Mean Longitude)</p>
+<p>MEE_R : Modified Equinoctial Elements (retrograde) <span class="math notranslate nohighlight">\([p,f,g,h,k,L]\)</span> (Mean Longitude)</p>
+<p>POSVEL : Position and Velocity</p>
+</div></blockquote>
+</dd></dl>
+
+</section>
 
 
                 </article>
@@ -858,7 +880,8 @@ inclinations near pi.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Orbital Elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conversions">Conversions</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ic2par"><code class="docutils literal notranslate"><span class="pre">ic2par()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.par2ic"><code class="docutils literal notranslate"><span class="pre">par2ic()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ic2mee"><code class="docutils literal notranslate"><span class="pre">ic2mee()</span></code></a></li>
@@ -866,6 +889,13 @@ inclinations near pi.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.mee2par"><code class="docutils literal notranslate"><span class="pre">mee2par()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.par2mee"><code class="docutils literal notranslate"><span class="pre">par2mee()</span></code></a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#types">Types</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

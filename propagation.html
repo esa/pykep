@@ -214,15 +214,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -428,63 +437,60 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.propagate_lagrangian_grid"><code class="docutils literal notranslate"><span class="pre">propagate_lagrangian_grid()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taylor-adaptive-propagators">Taylor adaptive propagators</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-problem-kepler">Two Body Problem (Kepler)</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep"><code class="docutils literal notranslate"><span class="pre">get_kep()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep_var"><code class="docutils literal notranslate"><span class="pre">get_kep_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.kep_dyn"><code class="docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-problem-kepler">Two Body Problem (Kepler)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep"><code class="docutils literal notranslate"><span class="pre">get_kep()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep_var"><code class="docutils literal notranslate"><span class="pre">get_kep_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.kep_dyn"><code class="docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem">Circular Restricted Three Body Problem</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_cr3bp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_cr3bp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_jacobi_C"><code class="docutils literal notranslate"><span class="pre">cr3bp_jacobi_C()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_effective_potential_U"><code class="docutils literal notranslate"><span class="pre">cr3bp_effective_potential_U()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem">Circular Restricted Three Body Problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_cr3bp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_cr3bp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_jacobi_C"><code class="docutils literal notranslate"><span class="pre">cr3bp_jacobi_C()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_effective_potential_U"><code class="docutils literal notranslate"><span class="pre">cr3bp_effective_potential_U()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bicircular-problem">Bicircular Problem</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp"><code class="docutils literal notranslate"><span class="pre">get_bcp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp_var"><code class="docutils literal notranslate"><span class="pre">get_bcp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.bcp_dyn"><code class="docutils literal notranslate"><span class="pre">bcp_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bicircular-problem">Bicircular Problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp"><code class="docutils literal notranslate"><span class="pre">get_bcp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp_var"><code class="docutils literal notranslate"><span class="pre">get_bcp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.bcp_dyn"><code class="docutils literal notranslate"><span class="pre">bcp_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-keplerian-propagator-in-cartesian-coordinates">Zero Hold Keplerian Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_kep_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-keplerian-propagator-in-cartesian-coordinates">Zero-Order Hold Keplerian Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_kep_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-keplerian-propagator-in-equinoctial-elements">Zero Hold Keplerian Propagator in Equinoctial elements</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_eq_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-keplerian-propagator-in-equinoctial-elements">Zero-Order Hold Keplerian Propagator in Equinoctial Elements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_eq_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-cr3bp-propagator-in-cartesian-coordinates">Zero Hold CR3BP Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-cr3bp-propagator-in-cartesian-coordinates">Zero-Order Hold CR3BP Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-solar-sail-propagator-in-cartesian-coordinates">Zero Hold Solar Sail Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_ss_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-solar-sail-propagator-in-cartesian-coordinates">Zero-Order Hold Solar Sail Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_ss_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-cartesian-tpbvp">Low-thrust Pontryagin Cartesian TPBVP</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc"><code class="docutils literal notranslate"><span class="pre">get_pc()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc_var"><code class="docutils literal notranslate"><span class="pre">get_pc_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.pc_dyn"><code class="docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-cartesian-tpbvp">Low-Thrust Pontryagin Cartesian TPBVP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc"><code class="docutils literal notranslate"><span class="pre">get_pc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc_var"><code class="docutils literal notranslate"><span class="pre">get_pc_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.pc_dyn"><code class="docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-equinoctial-tpbvp">Low-thrust Pontryagin Equinoctial TPBVP</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq"><code class="docutils literal notranslate"><span class="pre">get_peq()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq_var"><code class="docutils literal notranslate"><span class="pre">get_peq_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.peq_dyn"><code class="docutils literal notranslate"><span class="pre">peq_dyn()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-equinoctial-tpbvp">Low-Thrust Pontryagin Equinoctial TPBVP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq"><code class="docutils literal notranslate"><span class="pre">get_peq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq_var"><code class="docutils literal notranslate"><span class="pre">get_peq_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.peq_dyn"><code class="docutils literal notranslate"><span class="pre">peq_dyn()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -505,7 +511,21 @@ Kepler’s  dynamics and Taylor numerical integration, as implemented in the
 <a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id1">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package, for all
 other cases. The state transition matrix is also available and provided, in the case of numerical integration,
 seamlessly via variational equations.</p>
-<p>The main routines are listed here:</p>
+<p>In addition to the Keplerian propagators below, Taylor adaptive integrators are offered in <cite>pykep</cite>
+wrapping some of the functionalities of the
+<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package.
+Their variational version is also offered (at order one) so as to produce STMs and, where needed,
+other useful quantities. Higher order variational equations can also be obtained directly using the
+available dynamics and <a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> syntax.</p>
+<p>Some of the Taylor integrators are “zero-order hold” versions of a given dynamics, meaning that they
+consider a constant thrust vector in some frame and include the mass variation due to said thrust.
+These are intended to be used to build ZOH trajectory legs and direct methods to optimally
+control the spacecraft.</p>
+<p>Some of the Taylor adaptive integrators are associated to OCPs (Optimal Control Problems) of
+relevance to interplanetary flight. In particular they are born when applying the Pontryagin
+principle to dynamics of interest and result in two-point boundary value problems (TPBVP).
+In these cases, a number of auxiliary functions describing
+the control, the Hamiltonian, the switching function, etc., are also provided.</p>
 <section id="keplerian">
 <h2>Keplerian<a class="headerlink" href="#keplerian" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -571,27 +591,8 @@ and velocity after the propagation and the flattened stm (if requested).</p>
 </dd></dl>
 
 </section>
-<hr class="docutils" />
-<section id="taylor-adaptive-propagators">
-<h2>Taylor adaptive propagators<a class="headerlink" href="#taylor-adaptive-propagators" title="Link to this heading">#</a></h2>
-<p>In addition to the above mentioned propagators,
-Taylor adaptive integrators are offered in <cite>pykep</cite> wrapping some of the functionalities of
-<a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id3">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> python package.
-Their variational version is also offered (at order one) as to be able to produce stms and, where needed,
-other useful quantities. Higher order variational equations can also be obtained directly using the available dynamics and
-using <a class="reference external" href="https://bluescarni.github.io/heyoka.py/index.html">Heyoka</a> <span class="bibtex-citation" id="id5">[<a class="reference internal" href="bibliography.html#id5" title="Francesco Biscani and Dario Izzo. Revisiting high-order taylor methods for astrodynamics and celestial mechanics. Monthly Notices of the Royal Astronomical Society, 504(2):2614–2628, 2021.">BI21</a>]</span> syntax.</p>
-<p>Some of the Taylor integrators are “zero hold” versions of a given dynamics, meaning that they
-consider a constant thrust vector in some frame and include the mass variation due to said thrust.
-These are intended to be used to build “zero hold” trajectory legs and direct methods to optimally
-control the spacecraft.</p>
-<p>Some of the Taylor adaptive integrators are associated to OCPs (Optimal Control Problems) of
-relevance to interplanetary flight. In particular they are born when applying Pontryagin
-principle to dynamics of interests and result in two point boundary value problems (TPBVP).
-In these cases, a number of auxiliary functiond describing
-the control, the Hamiltonian, the switching function, etc., are also provided.</p>
-<hr class="docutils" />
 <section id="two-body-problem-kepler">
-<h3>Two Body Problem (Kepler)<a class="headerlink" href="#two-body-problem-kepler" title="Link to this heading">#</a></h3>
+<h2>Two Body Problem (Kepler)<a class="headerlink" href="#two-body-problem-kepler" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_kep">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_kep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_kep" title="Link to this definition">#</a></dt>
@@ -671,7 +672,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 
 </section>
 <section id="circular-restricted-three-body-problem">
-<h3>Circular Restricted Three Body Problem<a class="headerlink" href="#circular-restricted-three-body-problem" title="Link to this heading">#</a></h3>
+<h2>Circular Restricted Three Body Problem<a class="headerlink" href="#circular-restricted-three-body-problem" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_cr3bp">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_cr3bp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_cr3bp" title="Link to this definition">#</a></dt>
@@ -785,7 +786,7 @@ The effective potential is defined as:</p>
 
 </section>
 <section id="bicircular-problem">
-<h3>Bicircular Problem<a class="headerlink" href="#bicircular-problem" title="Link to this heading">#</a></h3>
+<h2>Bicircular Problem<a class="headerlink" href="#bicircular-problem" title="Link to this heading">#</a></h2>
 <p>Introduced by Simo’ et al. in his ‘97 paper <span class="bibtex-citation" id="id6">[<a class="reference internal" href="bibliography.html#id19" title="Carles Simó, Gerard Gómez, Àngel Jorba, and Josep Masdemont. The bicircular model near the triangular libration points of the rtbp. In From Newton to Chaos: modern techniques for understanding and coping with chaos in n-body dynamical systems, pages 343–370. Springer, 1995.">SimoGomezJM95</a>]</span>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_bcp">
@@ -986,8 +987,8 @@ angular velocity <span class="math notranslate nohighlight">\(\omega_s\)</span>:
 </dd></dl>
 
 </section>
-<section id="zero-hold-keplerian-propagator-in-cartesian-coordinates">
-<h3>Zero Hold Keplerian Propagator in Cartesian coordinates<a class="headerlink" href="#zero-hold-keplerian-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h3>
+<section id="zero-order-hold-keplerian-propagator-in-cartesian-coordinates">
+<h2>Zero-Order Hold Keplerian Propagator in Cartesian Coordinates<a class="headerlink" href="#zero-order-hold-keplerian-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_zoh_kep">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_zoh_kep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_zoh_kep" title="Link to this definition">#</a></dt>
@@ -1064,8 +1065,8 @@ The dynamics in the form [(x, dx), …]</p>
 </dd></dl>
 
 </section>
-<section id="zero-hold-keplerian-propagator-in-equinoctial-elements">
-<h3>Zero Hold Keplerian Propagator in Equinoctial elements<a class="headerlink" href="#zero-hold-keplerian-propagator-in-equinoctial-elements" title="Link to this heading">#</a></h3>
+<section id="zero-order-hold-keplerian-propagator-in-equinoctial-elements">
+<h2>Zero-Order Hold Keplerian Propagator in Equinoctial Elements<a class="headerlink" href="#zero-order-hold-keplerian-propagator-in-equinoctial-elements" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_zoh_eq">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_zoh_eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_zoh_eq" title="Link to this definition">#</a></dt>
@@ -1120,8 +1121,8 @@ The dynamics in the form [(x, dx), …]</p>
 </dd></dl>
 
 </section>
-<section id="zero-hold-cr3bp-propagator-in-cartesian-coordinates">
-<h3>Zero Hold CR3BP Propagator in Cartesian coordinates<a class="headerlink" href="#zero-hold-cr3bp-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h3>
+<section id="zero-order-hold-cr3bp-propagator-in-cartesian-coordinates">
+<h2>Zero-Order Hold CR3BP Propagator in Cartesian Coordinates<a class="headerlink" href="#zero-order-hold-cr3bp-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_zoh_cr3bp">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_zoh_cr3bp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_zoh_cr3bp" title="Link to this definition">#</a></dt>
@@ -1174,8 +1175,8 @@ The dynamics in the form [(x, dx), …]</p>
 </dd></dl>
 
 </section>
-<section id="zero-hold-solar-sail-propagator-in-cartesian-coordinates">
-<h3>Zero Hold Solar Sail Propagator in Cartesian coordinates<a class="headerlink" href="#zero-hold-solar-sail-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h3>
+<section id="zero-order-hold-solar-sail-propagator-in-cartesian-coordinates">
+<h2>Zero-Order Hold Solar Sail Propagator in Cartesian Coordinates<a class="headerlink" href="#zero-order-hold-solar-sail-propagator-in-cartesian-coordinates" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_zoh_ss">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_zoh_ss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_zoh_ss" title="Link to this definition">#</a></dt>
@@ -1229,7 +1230,7 @@ The dynamics in the form [(x, dx), …]</p>
 
 </section>
 <section id="low-thrust-pontryagin-cartesian-tpbvp">
-<h3>Low-thrust Pontryagin Cartesian TPBVP<a class="headerlink" href="#low-thrust-pontryagin-cartesian-tpbvp" title="Link to this heading">#</a></h3>
+<h2>Low-Thrust Pontryagin Cartesian TPBVP<a class="headerlink" href="#low-thrust-pontryagin-cartesian-tpbvp" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_pc">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_pc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimality</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_pc" title="Link to this definition">#</a></dt>
@@ -1353,7 +1354,7 @@ and the size of the parameter vector will this be three.</p>
 
 </section>
 <section id="low-thrust-pontryagin-equinoctial-tpbvp">
-<h3>Low-thrust Pontryagin Equinoctial TPBVP<a class="headerlink" href="#low-thrust-pontryagin-equinoctial-tpbvp" title="Link to this heading">#</a></h3>
+<h2>Low-Thrust Pontryagin Equinoctial TPBVP<a class="headerlink" href="#low-thrust-pontryagin-equinoctial-tpbvp" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_peq">
 <span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_peq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimality</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_peq" title="Link to this definition">#</a></dt>
@@ -1511,7 +1512,6 @@ are derived from the Hamiltonian, which depends on the chosen optimality:</p>
 
 </section>
 </section>
-</section>
 
 
                 </article>
@@ -1565,63 +1565,60 @@ are derived from the Hamiltonian, which depends on the chosen optimality:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.propagate_lagrangian_grid"><code class="docutils literal notranslate"><span class="pre">propagate_lagrangian_grid()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taylor-adaptive-propagators">Taylor adaptive propagators</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-problem-kepler">Two Body Problem (Kepler)</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep"><code class="docutils literal notranslate"><span class="pre">get_kep()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep_var"><code class="docutils literal notranslate"><span class="pre">get_kep_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.kep_dyn"><code class="docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-body-problem-kepler">Two Body Problem (Kepler)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep"><code class="docutils literal notranslate"><span class="pre">get_kep()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_kep_var"><code class="docutils literal notranslate"><span class="pre">get_kep_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.kep_dyn"><code class="docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem">Circular Restricted Three Body Problem</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_cr3bp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_cr3bp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_jacobi_C"><code class="docutils literal notranslate"><span class="pre">cr3bp_jacobi_C()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_effective_potential_U"><code class="docutils literal notranslate"><span class="pre">cr3bp_effective_potential_U()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-restricted-three-body-problem">Circular Restricted Three Body Problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_cr3bp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_cr3bp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_jacobi_C"><code class="docutils literal notranslate"><span class="pre">cr3bp_jacobi_C()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.cr3bp_effective_potential_U"><code class="docutils literal notranslate"><span class="pre">cr3bp_effective_potential_U()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bicircular-problem">Bicircular Problem</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp"><code class="docutils literal notranslate"><span class="pre">get_bcp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp_var"><code class="docutils literal notranslate"><span class="pre">get_bcp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.bcp_dyn"><code class="docutils literal notranslate"><span class="pre">bcp_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bicircular-problem">Bicircular Problem</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp"><code class="docutils literal notranslate"><span class="pre">get_bcp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_bcp_var"><code class="docutils literal notranslate"><span class="pre">get_bcp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.bcp_dyn"><code class="docutils literal notranslate"><span class="pre">bcp_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-keplerian-propagator-in-cartesian-coordinates">Zero Hold Keplerian Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_kep_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-keplerian-propagator-in-cartesian-coordinates">Zero-Order Hold Keplerian Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_kep_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_kep_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_kep_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-keplerian-propagator-in-equinoctial-elements">Zero Hold Keplerian Propagator in Equinoctial elements</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_eq_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-keplerian-propagator-in-equinoctial-elements">Zero-Order Hold Keplerian Propagator in Equinoctial Elements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_eq_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_eq_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_eq_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-cr3bp-propagator-in-cartesian-coordinates">Zero Hold CR3BP Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-cr3bp-propagator-in-cartesian-coordinates">Zero-Order Hold CR3BP Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_cr3bp_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_cr3bp_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_cr3bp_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-hold-solar-sail-propagator-in-cartesian-coordinates">Zero Hold Solar Sail Propagator in Cartesian coordinates</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_ss_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-order-hold-solar-sail-propagator-in-cartesian-coordinates">Zero-Order Hold Solar Sail Propagator in Cartesian Coordinates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_zoh_ss_var"><code class="docutils literal notranslate"><span class="pre">get_zoh_ss_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.zoh_ss_dyn"><code class="docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-cartesian-tpbvp">Low-thrust Pontryagin Cartesian TPBVP</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc"><code class="docutils literal notranslate"><span class="pre">get_pc()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc_var"><code class="docutils literal notranslate"><span class="pre">get_pc_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.pc_dyn"><code class="docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-cartesian-tpbvp">Low-Thrust Pontryagin Cartesian TPBVP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc"><code class="docutils literal notranslate"><span class="pre">get_pc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_pc_var"><code class="docutils literal notranslate"><span class="pre">get_pc_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.pc_dyn"><code class="docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-equinoctial-tpbvp">Low-thrust Pontryagin Equinoctial TPBVP</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq"><code class="docutils literal notranslate"><span class="pre">get_peq()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq_var"><code class="docutils literal notranslate"><span class="pre">get_peq_var()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.peq_dyn"><code class="docutils literal notranslate"><span class="pre">peq_dyn()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-thrust-pontryagin-equinoctial-tpbvp">Low-Thrust Pontryagin Equinoctial TPBVP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq"><code class="docutils literal notranslate"><span class="pre">get_peq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.get_peq_var"><code class="docutils literal notranslate"><span class="pre">get_peq_var()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.ta.peq_dyn"><code class="docutils literal notranslate"><span class="pre">peq_dyn()</span></code></a></li>
 </ul>
 </li>
 </ul>

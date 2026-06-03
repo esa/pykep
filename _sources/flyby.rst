@@ -12,7 +12,7 @@ In `pykep` we offer the basic routines that allow to use this technique in the c
 ------------------------------------------------------
 
 Minovitch fly-by
-****************
+########################
 .. autofunction:: fb_con
 
 .. autofunction:: fb_dv

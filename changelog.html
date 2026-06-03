@@ -212,15 +212,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -421,7 +430,11 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-system">Build system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog-3-0-0">3.0.0 (23-05-2026)</a></li>
 </ul>
             </nav>
@@ -438,6 +451,8 @@
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
 <section id="unreleased">
 <span id="changelog-3-1-0"></span><h2>3.1.0 (unreleased)<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<section id="build-system">
+<h3>Build system<a class="headerlink" href="#build-system" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added CMake option <code class="docutils literal notranslate"><span class="pre">kep3_BUILD_CPP_LIBRARY</span></code> (default <code class="docutils literal notranslate"><span class="pre">ON</span></code>). When set to
 <code class="docutils literal notranslate"><span class="pre">OFF</span></code>, the C++ library is not built from source and CMake will instead
@@ -445,6 +460,22 @@ locate an existing installation via <code class="docutils literal notranslate"><
 <code class="docutils literal notranslate"><span class="pre">FATAL_ERROR</span></code> is emitted if the library cannot be found. This makes it
 possible to build only the Python bindings, tests, or benchmarks against an
 already-installed <code class="docutils literal notranslate"><span class="pre">kep3</span></code>.</p></li>
+</ul>
+</section>
+<section id="bug-fixes">
+<h3>Bug fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fixed pickling of TOPS gym classes. The lambdas passed as <code class="docutils literal notranslate"><span class="pre">state2cart</span></code>
+and equivalent callbacks to the internal UDP prevented serialization. They were
+replaced with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> wrapping small module-level helper
+functions (<code class="docutils literal notranslate"><span class="pre">_cart_scale</span></code>, <code class="docutils literal notranslate"><span class="pre">_mee_to_cart</span></code>, <code class="docutils literal notranslate"><span class="pre">_cfunc_call</span></code>), which are
+picklable by name.</p></li>
+<li><p>Fixed pickling of <a class="reference internal" href="leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh</span></code></a>. The C++ class is bound as
+<code class="docutils literal notranslate"><span class="pre">_zoh_cpp</span></code> in <code class="docutils literal notranslate"><span class="pre">pykep.core</span></code>, so pickle looked for <code class="docutils literal notranslate"><span class="pre">pykep.leg._zoh_cpp</span></code>
+when reconstructing objects. The alias was missing from <code class="docutils literal notranslate"><span class="pre">pykep/leg/__init__.py</span></code>
+(only <code class="docutils literal notranslate"><span class="pre">_zoh</span></code> was defined). Added <code class="docutils literal notranslate"><span class="pre">_zoh_cpp</span> <span class="pre">=</span> <span class="pre">_core._zoh_cpp</span></code> to make the
+lookup succeed, consistent with the existing <code class="docutils literal notranslate"><span class="pre">_sims_flanagan</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_sims_flanagan_alpha</span></code> aliases.</p></li>
 <li><p>Fixed several bugs in <a class="reference internal" href="trajopt.html#pykep.trajopt.pl2pl_N_impulses" title="pykep.trajopt.pl2pl_N_impulses"><code class="xref py py-class docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a>: a crash when
 <code class="docutils literal notranslate"><span class="pre">phase_free=False</span></code> and <code class="docutils literal notranslate"><span class="pre">t0_bounds=None</span></code> (<code class="docutils literal notranslate"><span class="pre">t0</span></code> was assigned instead of
 <code class="docutils literal notranslate"><span class="pre">t0_bounds</span></code>); a dead/unreachable <code class="docutils literal notranslate"><span class="pre">N_max</span> <span class="pre">&lt;</span> <span class="pre">2</span></code> guard; <code class="docutils literal notranslate"><span class="pre">plot_primer_vector</span></code>
@@ -454,6 +485,7 @@ avoid <code class="docutils literal notranslate"><span class="pre">log(0)</span>
 to print times-of-flight in days (the internal <code class="docutils literal notranslate"><span class="pre">decode</span></code> stores durations in
 seconds, and the conversion was missing).</p></li>
 </ul>
+</section>
 </section>
 <section id="changelog-3-0-0">
 <span id="id2"></span><h2>3.0.0 (23-05-2026)<a class="headerlink" href="#changelog-3-0-0" title="Link to this heading">#</a></h2>
@@ -511,7 +543,11 @@ set of low-thrust transcriptions and benchmark problems.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-system">Build system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog-3-0-0">3.0.0 (23-05-2026)</a></li>
 </ul>
   </nav></div>

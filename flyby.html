@@ -214,15 +214,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -423,13 +432,15 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minovitch-fly-by">Minovitch fly-by</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_con"><code class="docutils literal notranslate"><span class="pre">fb_con()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_dv"><code class="docutils literal notranslate"><span class="pre">fb_dv()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_vout"><code class="docutils literal notranslate"><span class="pre">fb_vout()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fly-by routines</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#minovitch-fly-by">Minovitch fly-by</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_con"><code class="docutils literal notranslate"><span class="pre">fb_con()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_dv"><code class="docutils literal notranslate"><span class="pre">fb_dv()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_vout"><code class="docutils literal notranslate"><span class="pre">fb_vout()</span></code></a></li>
 </ul>
 </li>
 </ul>
+
             </nav>
         </div>
     </div>
@@ -446,9 +457,10 @@
 graduate student working as intern at NASA’s Jet Propulsion Laboratory. Many authors later refined the technique which, avoiding to solve
 directly the full three body problem, is based on patching the planetocentric hyperbola with incoming and outgoing (elliptic) trajectories.
 In <cite>pykep</cite> we offer the basic routines that allow to use this technique in the context of trajectory optimization and patched conics propagations.</p>
+</section>
 <hr class="docutils" />
 <section id="minovitch-fly-by">
-<h2>Minovitch fly-by<a class="headerlink" href="#minovitch-fly-by" title="Link to this heading">#</a></h2>
+<h1>Minovitch fly-by<a class="headerlink" href="#minovitch-fly-by" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.fb_con">
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">fb_con</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_rel_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_rel_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.fb_con" title="Link to this definition">#</a></dt>
@@ -600,7 +612,6 @@ impulsive manoeuvres are allowed between planetary fly-bys.</p>
 </dd></dl>
 
 </section>
-</section>
 
 
                 </article>
@@ -649,13 +660,15 @@ impulsive manoeuvres are allowed between planetary fly-bys.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minovitch-fly-by">Minovitch fly-by</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_con"><code class="docutils literal notranslate"><span class="pre">fb_con()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_dv"><code class="docutils literal notranslate"><span class="pre">fb_dv()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_vout"><code class="docutils literal notranslate"><span class="pre">fb_vout()</span></code></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fly-by routines</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#minovitch-fly-by">Minovitch fly-by</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_con"><code class="docutils literal notranslate"><span class="pre">fb_con()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_dv"><code class="docutils literal notranslate"><span class="pre">fb_dv()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.fb_vout"><code class="docutils literal notranslate"><span class="pre">fb_vout()</span></code></a></li>
 </ul>
 </li>
 </ul>
+
   </nav></div>
 
 </div></div>

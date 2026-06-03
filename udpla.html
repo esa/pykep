@@ -212,15 +212,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -421,6 +430,8 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">User defined planets (UDPLAs)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#basic">Basic</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.null_udpla"><code class="docutils literal notranslate"><span class="pre">null_udpla</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.keplerian"><code class="docutils literal notranslate"><span class="pre">keplerian</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.jpl_lp"><code class="docutils literal notranslate"><span class="pre">jpl_lp</span></code></a><ul class="nav section-nav flex-column">
@@ -430,6 +441,9 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.jpl_lp.set_safe_radius"><code class="docutils literal notranslate"><span class="pre">jpl_lp.set_safe_radius()</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced">Advanced</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.vsop2013"><code class="docutils literal notranslate"><span class="pre">vsop2013</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.tle"><code class="docutils literal notranslate"><span class="pre">tle</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.tle.eph"><code class="docutils literal notranslate"><span class="pre">tle.eph()</span></code></a></li>
@@ -459,6 +473,9 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -471,6 +488,9 @@
                   
   <section id="user-defined-planets-udplas">
 <span id="udpla"></span><h1>User defined planets (UDPLAs)<a class="headerlink" href="#user-defined-planets-udplas" title="Link to this heading">#</a></h1>
+</section>
+<section id="basic">
+<h1>Basic<a class="headerlink" href="#basic" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.udpla.null_udpla">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.udpla.</span></span><span class="sig-name descname"><span class="pre">null_udpla</span></span><a class="headerlink" href="#pykep.udpla.null_udpla" title="Link to this definition">#</a></dt>
@@ -564,6 +584,9 @@ The planet’s radius.</p>
 
 </dd></dl>
 
+</section>
+<section id="advanced">
+<h1>Advanced<a class="headerlink" href="#advanced" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.udpla.vsop2013">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.udpla.</span></span><span class="sig-name descname"><span class="pre">vsop2013</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mercury'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.vsop2013" title="Link to this definition">#</a></dt>
@@ -878,6 +901,8 @@ optional <code class="docutils literal notranslate"><span class="pre">acc</span>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">User defined planets (UDPLAs)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#basic">Basic</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.null_udpla"><code class="docutils literal notranslate"><span class="pre">null_udpla</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.keplerian"><code class="docutils literal notranslate"><span class="pre">keplerian</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.jpl_lp"><code class="docutils literal notranslate"><span class="pre">jpl_lp</span></code></a><ul class="nav section-nav flex-column">
@@ -887,6 +912,9 @@ optional <code class="docutils literal notranslate"><span class="pre">acc</span>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.jpl_lp.set_safe_radius"><code class="docutils literal notranslate"><span class="pre">jpl_lp.set_safe_radius()</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced">Advanced</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.vsop2013"><code class="docutils literal notranslate"><span class="pre">vsop2013</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.tle"><code class="docutils literal notranslate"><span class="pre">tle</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.udpla.tle.eph"><code class="docutils literal notranslate"><span class="pre">tle.eph()</span></code></a></li>
@@ -916,6 +944,9 @@ optional <code class="docutils literal notranslate"><span class="pre">acc</span>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

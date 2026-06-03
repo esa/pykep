@@ -212,15 +212,24 @@
 
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Global constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="epoch.html">Epoch class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="planet.html">Planet class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+
+
 <li class="toctree-l2"><a class="reference internal" href="lambert.html">Lambert class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html">Numerical Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
 <li class="toctree-l2"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot.html">The plot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
@@ -465,14 +474,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Global constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="elements.html">Orbital Elements</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html">Orbital Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html#conversions">Conversions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.ic2par"><code class="docutils literal notranslate"><span class="pre">ic2par()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.par2ic"><code class="docutils literal notranslate"><span class="pre">par2ic()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.ic2mee"><code class="docutils literal notranslate"><span class="pre">ic2mee()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.mee2ic"><code class="docutils literal notranslate"><span class="pre">mee2ic()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.mee2par"><code class="docutils literal notranslate"><span class="pre">mee2par()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.par2mee"><code class="docutils literal notranslate"><span class="pre">par2mee()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html#types">Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="elements.html#pykep.el_type"><code class="docutils literal notranslate"><span class="pre">el_type</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="epoch.html">Epoch class</a><ul>
@@ -483,10 +496,14 @@
 <li class="toctree-l2"><a class="reference internal" href="planet.html#pykep.planet"><code class="docutils literal notranslate"><span class="pre">planet</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="udpla.html">User defined planets (UDPLAs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="udpla.html#basic">Basic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.null_udpla"><code class="docutils literal notranslate"><span class="pre">null_udpla</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.keplerian"><code class="docutils literal notranslate"><span class="pre">keplerian</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.jpl_lp"><code class="docutils literal notranslate"><span class="pre">jpl_lp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="udpla.html#advanced">Advanced</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.vsop2013"><code class="docutils literal notranslate"><span class="pre">vsop2013</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.tle"><code class="docutils literal notranslate"><span class="pre">tle</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="udpla.html#pykep.udpla.spice"><code class="docutils literal notranslate"><span class="pre">spice</span></code></a></li>
@@ -498,8 +515,11 @@
 <li class="toctree-l2"><a class="reference internal" href="lambert.html#pykep.lambert_problem"><code class="docutils literal notranslate"><span class="pre">lambert_problem</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="flyby.html">Fly-by routines</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="flyby.html#minovitch-fly-by">Minovitch fly-by</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flyby.html">Fly-by routines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flyby.html#minovitch-fly-by">Minovitch fly-by</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html#pykep.fb_con"><code class="docutils literal notranslate"><span class="pre">fb_con()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html#pykep.fb_dv"><code class="docutils literal notranslate"><span class="pre">fb_dv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="flyby.html#pykep.fb_vout"><code class="docutils literal notranslate"><span class="pre">fb_vout()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="approximations.html">Various approximations for orbital transfers</a><ul>
@@ -510,7 +530,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="propagation.html">Numerical Propagation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="propagation.html#keplerian">Keplerian</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propagation.html#taylor-adaptive-propagators">Taylor adaptive propagators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#two-body-problem-kepler">Two Body Problem (Kepler)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#circular-restricted-three-body-problem">Circular Restricted Three Body Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#bicircular-problem">Bicircular Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#zero-order-hold-keplerian-propagator-in-cartesian-coordinates">Zero-Order Hold Keplerian Propagator in Cartesian Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#zero-order-hold-keplerian-propagator-in-equinoctial-elements">Zero-Order Hold Keplerian Propagator in Equinoctial Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#zero-order-hold-cr3bp-propagator-in-cartesian-coordinates">Zero-Order Hold CR3BP Propagator in Cartesian Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#zero-order-hold-solar-sail-propagator-in-cartesian-coordinates">Zero-Order Hold Solar Sail Propagator in Cartesian Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#low-thrust-pontryagin-cartesian-tpbvp">Low-Thrust Pontryagin Cartesian TPBVP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagation.html#low-thrust-pontryagin-equinoctial-tpbvp">Low-Thrust Pontryagin Equinoctial TPBVP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="leg.html">Interplanetary transfer legs</a><ul>
@@ -518,11 +546,29 @@
 <li class="toctree-l2"><a class="reference internal" href="leg.html#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="trajopt.html#direct">Direct</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajopt.html#indirect">Indirect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajopt.html#evolutionary-encodings">Evolutionary Encodings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajopt.html#utilities">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html">Trajectory Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html#direct">Direct</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#sims-flanagan">Sims-Flanagan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#zero-order-hold">Zero-Order-Hold</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html#indirect">Indirect</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.pontryagin_cartesian_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_mass</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.pontryagin_cartesian_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_cartesian_time</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.pontryagin_equinoctial_mass"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_mass</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.pontryagin_equinoctial_time"><code class="docutils literal notranslate"><span class="pre">pontryagin_equinoctial_time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html#evolutionary-encodings">Evolutionary Encodings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.mga"><code class="docutils literal notranslate"><span class="pre">mga</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.mga_1dsm"><code class="docutils literal notranslate"><span class="pre">mga_1dsm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.pl2pl_N_impulses"><code class="docutils literal notranslate"><span class="pre">pl2pl_N_impulses</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trajopt.html#utilities">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.primer_vector"><code class="docutils literal notranslate"><span class="pre">primer_vector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt.primer_vector_surrogate"><code class="docutils literal notranslate"><span class="pre">primer_vector_surrogate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="trajopt.html#pykep.trajopt._launchers"><code class="docutils literal notranslate"><span class="pre">_launchers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gym.html">Trajectory Optimization Gym</a><ul>
