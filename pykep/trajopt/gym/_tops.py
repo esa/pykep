@@ -1,7 +1,21 @@
 import pykep as _pk
 import numpy as _np
 import heyoka as _hy
+import functools as _functools
 from matplotlib import pyplot as _plt
+
+
+
+def _cart_scale(x, L, V):
+    return _np.asarray([x[0] * L, x[1] * L, x[2] * L, x[3] * V, x[4] * V, x[5] * V])
+
+
+def _mee_to_cart(x, L):
+    return _np.array(_pk.mee2ic([x[0] * L, x[1], x[2], x[3], x[4], x[5]], mu=1.0)).flatten()
+
+
+def _cfunc_call(cfunc, pars, x):
+    return cfunc(x, pars=pars)
 
 
 class tops_twobody:
@@ -111,9 +125,7 @@ class tops_twobody:
             cut=cut,
             tas=[ta_twobody, ta_twobody_var],
             time_encoding=time_encoding,
-            state2cart=lambda x, L=self.L, V=self.V: _np.asarray(
-                [x[0] * L, x[1] * L, x[2] * L, x[3] * V, x[4] * V, x[5] * V]
-            ),
+            state2cart=_functools.partial(_cart_scale, L=self.L, V=self.V),
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
@@ -508,9 +520,7 @@ class tops_mee:
             cut=cut,
             tas=[ta_twobody_mee, ta_twobody_mee_var],
             time_encoding=time_encoding,
-            state2cart=lambda x, L=self.L: _np.array(
-                _pk.mee2ic([x[0] * L, x[1], x[2], x[3], x[4], x[5]], mu=1.0)
-            ).flatten(),
+            state2cart=_functools.partial(_mee_to_cart, L=self.L),
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
         )
@@ -717,9 +727,9 @@ class tops_mee_mb:
         state2cart_cfunc = _hy.cfunc(state2cart, vars=[p, f, g, h, k, L_anom])
         # We create the call signature required by the API of the zoh_pl2pl class and
         # account here for the nrevs in the mean longitude.
-        cart2state_zoh = lambda x: cart2state_cfunc(x, pars=[1, 1])
-        cart2state_J_zoh = lambda x: cart2state_J_cfunc(x, pars=[gym_problem["mu"], 1])
-        state2cart_zoh = lambda x: state2cart_cfunc(x, pars=[1, 1])
+        cart2state_zoh = _functools.partial(_cfunc_call, cart2state_cfunc, [1, 1])
+        cart2state_J_zoh = _functools.partial(_cfunc_call, cart2state_J_cfunc, [gym_problem["mu"], 1])
+        state2cart_zoh = _functools.partial(_cfunc_call, state2cart_cfunc, [1, 1])
 
         self.udp = _pk.trajopt.zoh_pl2pl(
             pls=self.pls,

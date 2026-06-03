@@ -34,10 +34,8 @@ optionally returned if the user set the flag ``jacobian`` to ``True``.
 
 .. currentmodule:: pykep
 
------------------------------------------
-
-.. autoclass:: el_type
-   :members: 
+Conversions
+###########################
 
 .. autofunction:: ic2par
 
@@ -50,3 +48,8 @@ optionally returned if the user set the flag ``jacobian`` to ``True``.
 .. autofunction:: mee2par
 
 .. autofunction:: par2mee
+
+Types
+###########################
+.. autoclass:: el_type
+   :members: 

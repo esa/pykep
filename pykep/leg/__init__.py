@@ -17,6 +17,7 @@ from .. import core as _core
 _sims_flanagan = _core._sims_flanagan
 _sims_flanagan_alpha = _core._sims_flanagan_alpha
 _zoh = _core._zoh_cpp
+_zoh_cpp = _core._zoh_cpp
 
 # Renaming cpp legs (we need to create an alias first and then 
 # to fool sphinx into thinking these are not aliases, else the sphinx built docs
