@@ -245,7 +245,7 @@ auto pc_dyn_cfunc_factory(kep3::optimality_type optimality)
     auto [x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm]
         = make_vars("x", "y", "z", "vx", "vy", "vz", "m", "lx", "ly", "lz", "lvx", "lvy", "lvz", "lm");
     auto rhs = std::get<5>(pc_expression_factory(optimality));
-    return heyoka::cfunc<double>({rhs[0], rhs[1], rhs[2], rhs[3], rhs[4], rhs[5], rhs[13]},
+    return heyoka::cfunc<double>(rhs,
                                  {x, y, z, vx, vy, vz, m, lx, ly, lz, lvx, lvy, lvz, lm});
 }
 

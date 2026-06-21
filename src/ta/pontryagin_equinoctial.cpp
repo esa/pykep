@@ -16,6 +16,7 @@
 
 #include <heyoka/config.hpp>
 #include <heyoka/expression.hpp>
+#include <heyoka/math/exp.hpp>
 #include <heyoka/math/cos.hpp>
 #include <heyoka/math/log.hpp>
 #include <heyoka/math/pow.hpp>
@@ -102,7 +103,7 @@ peq_expression_factory(kep3::optimality_type optimality)
 
     // fx + D, fm
     fx[5] = fx[5] + sqrt(par[0] / p / p / p) * w * w;
-    auto fm = -par[1] / par[2] * u;
+    auto fm = - par[1] / par[2] * u * heyoka::exp(-1. / m / 1e16);
 
     // BTlam = B.T@lx
     std::array<expression, 6> lx = {lp, lf, lg, lh, lk, lL};
