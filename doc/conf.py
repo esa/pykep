@@ -77,7 +77,7 @@ nb_execution_excludepatterns = [
     "udp_zoh*",
     "pontryagin_cartesian*",
     "approximations*",
-    "maximum_initial_mass"
+    "maximum_initial_mass*"
 ]
 
 latex_engine = "xelatex"
