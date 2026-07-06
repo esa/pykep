@@ -17,6 +17,7 @@
 #include <heyoka/config.hpp>
 #include <heyoka/expression.hpp>
 #include <heyoka/math/cos.hpp>
+#include <heyoka/math/exp.hpp>
 #include <heyoka/math/log.hpp>
 #include <heyoka/math/pow.hpp>
 #include <heyoka/math/sin.hpp>
@@ -102,7 +103,7 @@ peq_expression_factory(kep3::optimality_type optimality)
 
     // fx + D, fm
     fx[5] = fx[5] + sqrt(par[0] / p / p / p) * w * w;
-    auto fm = -par[1] / par[2] * u;
+    auto fm = -par[1] / par[2] * u * heyoka::exp(-1. / m / 1e10);
 
     // BTlam = B.T@lx
     std::array<expression, 6> lx = {lp, lf, lg, lh, lk, lL};
@@ -296,7 +297,7 @@ auto peq_dyn_cfunc_factory(kep3::optimality_type optimality)
     auto [p, f, g, h, k, L, m, lp, lf, lg, lh, lk, lL, lm]
         = make_vars("p", "f", "g", "h", "k", "L", "m", "lp", "lf", "lg", "lh", "lk", "lL", "lm");
     auto rhs = std::get<5>(peq_expression_factory(optimality));
-    return heyoka::cfunc<double>({rhs[0], rhs[1], rhs[2], rhs[3], rhs[4], rhs[5], rhs[13]},
+    return heyoka::cfunc<double>(rhs,
                                  {p, f, g, h, k, L, m, lp, lf, lg, lh, lk, lL, lm});
 }
 

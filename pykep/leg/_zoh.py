@@ -3,13 +3,14 @@ import heyoka as _hy
 
 
 class zoh:
-    """Generic zero-order-hold trajectory leg.
+    """Generic zero-order-hold trajectory leg. (fwd-bck shooting)
 
     This class propagates a state of dimension ``dim_dynamics`` using piecewise-constant
-    controls of size ``dim_controls`` over a user-supplied non-uniform time grid.
+    controls of size ``dim_controls`` over a user-supplied time grid and forms
+    one single defect (mismatch constraint) in the middle.
 
-    A transfer is feasible when the mismatch constraints are zero. Any additional
-    constraints on controls are intentionally left to the calling UDP.
+    A transfer is feasible when all compnents of the mismatch constraints are zero.
+    Any additional constraints on controls are intentionally left to the calling UDP.
     """
 
     def __init__(
@@ -19,7 +20,7 @@ class zoh:
         state1,
         tgrid,
         cut,
-        tas,
+        tas, 
         max_steps=None,
         dim_dynamics=7,
         dim_controls=4,
