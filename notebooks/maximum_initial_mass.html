@@ -502,11 +502,12 @@
 <h1>Maximum Initial Mass<a class="headerlink" href="#maximum-initial-mass" title="Link to this heading">#</a></h1>
 <p>This notebook is a hands-on tutorial to reproduce the homotopy results of the paper <em>The Maximum Initial Mass</em> (<span class="bibtex-citation" id="id1">[]</span>). In that work, the optimal-control formulation of <strong>maximum-initial-mass (MIM)</strong> is introduced and analyzed, opening practical applications in homotopy methods, reachability analysis, and low-thrust optimization.</p>
 <p>For fixed transfer time and fixed final state, the <strong>maximum-initial-mass (MIM)</strong> problem asks for the largest admissible initial mass that still allows a feasible low-thrust transfer. In Pontryagin form, this leads to the same thrust-direction law as the minimum-time problem and, in the nondegenerate case, to full throttle along the trajectory.</p>
-<p>A practical consequence for continuation is that, instead of continuing in thrust, one can work on the smooth surface
-$<span class="math notranslate nohighlight">\(
+<p>A practical consequence for continuation is that, instead of continuing in thrust, one can work on the smooth surface</p>
+<div class="math notranslate nohighlight">
+\[
 \mathcal{M}:(t_f, N_{\mathrm{rev}}) \mapsto m_0^*(t_f, N_{\mathrm{rev}}),
-\)</span><span class="math notranslate nohighlight">\(
-and track iso-\)</span>\mathcal{M}$ curves to recover multi-revolution minimum-time branches.</p>
+\]</div>
+<p>and track iso-<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> curves to recover multi-revolution minimum-time branches.</p>
 <p>In this notebook we formulate the TPBVP with the <code class="docutils literal notranslate"><span class="pre">pykep</span></code> time-optimal machinery, then modify the shooting function to fix <span class="math notranslate nohighlight">\(t_f\)</span> and solve for <span class="math notranslate nohighlight">\(m_0\)</span>, finally constructing and exploring the homotopy path on the MIM surface.</p>
 <section id="tpbvp-setup-in-pykep">
 <h2>1) TPBVP Setup in pykep<a class="headerlink" href="#tpbvp-setup-in-pykep" title="Link to this heading">#</a></h2>
@@ -518,7 +519,7 @@ and track iso-\)</span>\mathcal{M}$ curves to recover multi-revolution minimum-t
 <li><p>We enforce terminal constraints on the orbital state together with <span class="math notranslate nohighlight">\(\lambda_m(t_f)=0\)</span>.</p></li>
 <li><p>Depending on the stage, we either fix terminal longitude <span class="math notranslate nohighlight">\(L_f\)</span> or leave it free through the associated transversality residual.</p></li>
 </ul>
-<p>In this section we import the required libraries and build the numerical objects used throughout the notebook.</p>
+<p>In the next section we import the required libraries.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -536,41 +537,24 @@ and track iso-\)</span>\mathcal{M}$ curves to recover multi-revolution minimum-t
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> 
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">root</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;pygmo_plugins_nonfree&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="dynamics-costates-and-shooting-functions">
 <h2>2) Dynamics, Costates, and Shooting Functions<a class="headerlink" href="#dynamics-costates-and-shooting-functions" title="Link to this heading">#</a></h2>
-<p>This preamble defines:</p>
+<p>This section defines:</p>
 <ul class="simple">
 <li><p>The augmented dynamics in modified equinoctial elements.</p></li>
 <li><p>A variational integrator to obtain analytical Jacobians for shooting.</p></li>
-<li><p>Utility callable functions for Hamiltonian, switching function, throttle, and thrust direction.</p></li>
-<li><p>The residual and Jacobian functions for the MIM shooting method.</p></li>
+<li><p>Utility callable functions for Hamiltonian.</p></li>
+<li><p>The residual and Jacobian shooting functions for the MIM shooting method.</p></li>
 </ul>
-<p>Mathematically, we solve a root-finding problem of the form</p>
+<p>Mathematically, we will solve a root-finding problem of the form</p>
 <div class="math notranslate nohighlight">
 \[
 F(z)=0,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(z\)</span> contains the free initial mass and initial costates (plus optional free-final-time variable), and <span class="math notranslate nohighlight">\(F\)</span> collects terminal-constraint mismatches.</p>
-<p>When <code class="docutils literal notranslate"><span class="pre">free_time=True</span></code>, this notebook appends one additional scalar Hamiltonian-based condition (<code class="docutils literal notranslate"><span class="pre">H_0=0</span></code>) to close the numerical system during continuation. (this is to be considered as a gauge condition or a necessary condition accordingly)</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">free_time=True</span></code>, the shooting functions append one additional scalar Hamiltonian-based condition (<span class="math notranslate nohighlight">\(\mathcal H_0=0\)</span>) to close the numerical system during continuation (as discussed in the paper, this is to be considered as a gauge condition or a necessary condition distinguishing free-time from minimum-time problems).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The raw augmented dynamics</span>
@@ -585,12 +569,6 @@ F(z)=0,
 <span class="n">ic_var_mim</span> <span class="o">=</span> <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">14</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="c1"># The Hamiltonian</span>
 <span class="n">H_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_H_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
-<span class="c1"># The switching function (always negative, not useful for this time optimal case, but still)</span>
-<span class="n">SF_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_SF_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
-<span class="c1"># The magnitude of the throttle (always 1, but still)</span>
-<span class="n">u_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_u_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
-<span class="c1"># The thrust direction</span>
-<span class="n">i_vers_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_i_vers_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
 <span class="c1"># The dynamics cfunc</span>
 <span class="n">vars_s</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lp&#39;</span><span class="p">,</span> <span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;lg&#39;</span><span class="p">,</span> <span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="s1">&#39;lk&#39;</span><span class="p">,</span> <span class="s1">&#39;lL&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">)</span>
 <span class="n">dyn_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">ta</span><span class="o">.</span><span class="n">sys</span><span class="p">],</span> <span class="nb">vars</span> <span class="o">=</span> <span class="n">vars_s</span><span class="p">)</span>
@@ -601,6 +579,7 @@ F(z)=0,
 </div>
 </div>
 </div>
+<p>These are the shooting function …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_Lf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -655,6 +634,7 @@ F(z)=0,
 </div>
 </div>
 </div>
+<p>… and its jacobian</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_mim_grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_Lf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_time</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -774,7 +754,7 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 </section>
 <section id="benchmark-problem-definition-gto-to-geo">
 <h2>3) Benchmark Problem Definition (GTO to GEO)<a class="headerlink" href="#benchmark-problem-definition-gto-to-geo" title="Link to this heading">#</a></h2>
-<p>We reproduce the benchmark transfer discussed in the paper: a low-thrust multi-revolution GTO-to-GEO rendezvous.</p>
+<p>We reproduce the benchmark transfer discussed in the paper <span class="bibtex-citation" id="id2">[]</span>.</p>
 <p>This cell sets:</p>
 <ul class="simple">
 <li><p>Nondimensional units and scaling factors.</p></li>
@@ -786,8 +766,8 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># units</span>
-<span class="n">L</span> <span class="o">=</span> <span class="mi">6378137</span>
-<span class="n">MU</span> <span class="o">=</span> <span class="mf">398600441800000.0</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">6378137</span> <span class="c1"># Earth radius</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="mf">398600441800000.0</span> <span class="c1"># Earth gravitational parameter</span>
 <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">MU</span> <span class="o">/</span> <span class="n">L</span><span class="p">)</span>
 <span class="n">TIME</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">V</span>
 <span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">TIME</span>
@@ -795,8 +775,8 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 <span class="n">FORCE</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
 
 <span class="c1"># Problem setting</span>
-<span class="n">gto_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">26571430</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">7.</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span>
-<span class="n">geo_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">42165000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">gto_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">26571430</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">7.</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span> <span class="c1"># SI</span>
+<span class="n">geo_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">42165000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># SI</span>
 <span class="c1"># Used for visualization later on</span>
 <span class="n">gto</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="n">gto_param</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">mu_central_body</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span><span class="p">))</span>
 <span class="n">geo</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="n">geo_param</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">mu_central_body</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span><span class="p">))</span>
@@ -823,7 +803,7 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T_max</span>  <span class="c1"># max thrust</span>
 <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">veff</span>  <span class="c1"># veff</span>
 
-<span class="n">tf</span> <span class="o">=</span> <span class="mf">10.</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="mf">10.</span> <span class="c1"># not actually used, just a placeholder for the shooting function</span>
 </pre></div>
 </div>
 </div>
@@ -874,8 +854,8 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 Mim: 88.61 kg
 Tof: 2.24 hours
 Nrev: 1.09
-Decision vector: [  5.90761529e-02  -4.44999445e-02  -1.86853222e-01  -5.72598811e-02
-   3.34701942e-02   8.48163816e-05   5.63154165e-02   7.43498018e+01]
+Decision vector: [  5.90761529e-02  -4.44999444e-02  -1.86853221e-01  -5.72598813e-02
+   3.34701943e-02   8.48156320e-05   5.63154164e-02   7.43498018e+01]
 </pre></div>
 </div>
 </div>
@@ -897,9 +877,9 @@ Decision vector: [  5.90761529e-02  -4.44999445e-02  -1.86853222e-01  -5.7259881
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
-<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">t0_days</span><span class="o">+</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
@@ -907,7 +887,7 @@ Decision vector: [  5.90761529e-02  -4.44999445e-02  -1.86853222e-01  -5.7259881
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c5d2e6359d4d3a44626e38b9141e5fa1c2c2d4b5331517717e808bb347193d4d.png" src="../_images/c5d2e6359d4d3a44626e38b9141e5fa1c2c2d4b5331517717e808bb347193d4d.png" />
+<img alt="../_images/513e4b37f92fcbfeebdbfcac90d3db0238fba49b7617e66024cc6951576fdc17.png" src="../_images/513e4b37f92fcbfeebdbfcac90d3db0238fba49b7617e66024cc6951576fdc17.png" />
 </div>
 </div>
 </section>
@@ -985,9 +965,9 @@ Nrev: 14.35
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
-<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">t0_days</span><span class="o">+</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
@@ -1002,7 +982,7 @@ Nrev: 14.35
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/da723219dbd1a4a8493121d006222d0f886b80cba997a7a9566e3afa40f049c1.png" src="../_images/da723219dbd1a4a8493121d006222d0f886b80cba997a7a9566e3afa40f049c1.png" />
+<img alt="../_images/c29d3bb5c2c771bbffcda0edd61adf41531f7ec48d436a7fb2a71ed8b42bc485.png" src="../_images/c29d3bb5c2c771bbffcda0edd61adf41531f7ec48d436a7fb2a71ed8b42bc485.png" />
 </div>
 </div>
 <section id="mass-evolution-along-continuation">
@@ -1017,7 +997,7 @@ A smooth trend is a useful indicator that continuation is following a consistent
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x31ec242d0&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x312744cd0&gt;]
 </pre></div>
 </div>
 <img alt="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" src="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" />
@@ -1450,9 +1430,9 @@ A smooth trend is a useful indicator that continuation is following a consistent
     <span class="n">r</span> <span class="o">=</span> <span class="n">traj_to_r</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
     <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
@@ -1474,7 +1454,7 @@ A smooth trend is a useful indicator that continuation is following a consistent
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ec281d130d08b907ba4513160ee91ce3de1dabb926c1fcb0dbc1cf0f86cad848.png" src="../_images/ec281d130d08b907ba4513160ee91ce3de1dabb926c1fcb0dbc1cf0f86cad848.png" />
+<img alt="../_images/125b5784ffde4902e6be1da41c2ee49ac62f1da9f0b029a1c0ee261348f52885.png" src="../_images/125b5784ffde4902e6be1da41c2ee49ac62f1da9f0b029a1c0ee261348f52885.png" />
 </div>
 </div>
 </section>
