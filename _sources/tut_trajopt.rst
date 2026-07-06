@@ -40,3 +40,4 @@ Trajectory Optimization
   notebooks/pontryagin_equinoctial_time
   notebooks/primer_vector
   notebooks/surrogate_primer_vector
+  notebooks/maximum_initial_mass

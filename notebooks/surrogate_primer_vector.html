@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/surrogate_primer_vector';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Basic API" href="../api.html" />
+    <link rel="next" title="Maximum Initial Mass" href="maximum_initial_mass.html" />
     <link rel="prev" title="Primer Vector" href="primer_vector.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -182,12 +182,12 @@
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold I</a></li>
 
 
 
 
-<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold: TOPS problems II (free boundaries)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold II</a></li>
 
 
 
@@ -203,6 +203,7 @@
 <li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Surrogate Primer Vector</a></li>
 
+<li class="toctree-l2"><a class="reference internal" href="maximum_initial_mass.html">Maximum Initial Mass</a></li>
 </ul>
 </details></li>
 </ul>
@@ -697,10 +698,10 @@ Larger then one! -&gt; Trajectory can be improved
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7ff53ea22510&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f4ea4a42510&gt;
 </pre></div>
 </div>
-<img alt="../_images/8bb9b951c0d36159931f4615380f39f26814b081628f49ea354bc532b2f184d4.png" src="../_images/8bb9b951c0d36159931f4615380f39f26814b081628f49ea354bc532b2f184d4.png" />
+<img alt="../_images/b1d87d53f2c9da336a31a2e5afb638d945c86b1e4072dbfdbfeddf61bf5c9eef.png" src="../_images/b1d87d53f2c9da336a31a2e5afb638d945c86b1e4072dbfdbfeddf61bf5c9eef.png" />
 </div>
 </div>
 <p>Revealing all areas where adding two impulses would improve the trajectory leaving all boundary conditions unchanged.</p>
@@ -792,8 +793,8 @@ Larger then one! -&gt; Trajectory can be improved
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multi-start:
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.33129844854405954
-The best solution found has a DV of 3.31298e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.3105383444444589
+The best solution found has a DV of 3.10538e-01
 </pre></div>
 </div>
 </div>
@@ -822,7 +823,7 @@ The best solution found has a DV of 3.31298e-01
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e272d461d931b93539e0e27f7884bf9360b04e2fd2e691aabcc31b1acb4c3540.png" src="../_images/e272d461d931b93539e0e27f7884bf9360b04e2fd2e691aabcc31b1acb4c3540.png" />
+<img alt="../_images/e4d86d875fd76251437be9f7fb1777a38b8f7f77ac537f04033dac4105a47113.png" src="../_images/e4d86d875fd76251437be9f7fb1777a38b8f7f77ac537f04033dac4105a47113.png" />
 </div>
 </div>
 <p>The <strong>surrogate primer vector</strong> correctly had us try to add impulses and, in this case, halved the needed <span class="math notranslate nohighlight">\(\Delta V\)</span>!</p>
@@ -849,11 +850,11 @@ The best solution found has a DV of 3.31298e-01
       </div>
     </a>
     <a class="right-next"
-       href="../api.html"
+       href="maximum_initial_mass.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Basic API</p>
+        <p class="prev-next-title">Maximum Initial Mass</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
