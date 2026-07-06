@@ -1,0 +1,1600 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Maximum Initial Mass &#8212; pykep 3.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=d1bd4290"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/maximum_initial_mass';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.1 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.1 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold: TOPS problems I</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold: TOPS problems II (free boundaries)</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">Basic API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/pykep/main?urlpath=lab/tree/doc/notebooks/maximum_initial_mass.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Fnotebooks/maximum_initial_mass.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/maximum_initial_mass.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Maximum Initial Mass</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpbvp-setup-in-pykep">1) TPBVP Setup in pykep</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamics-costates-and-shooting-functions">2) Dynamics, Costates, and Shooting Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sanity-check-analytical-vs-numerical-jacobian">2.1) Sanity Check: Analytical vs Numerical Jacobian</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-problem-definition-gto-to-geo">3) Benchmark Problem Definition (GTO to GEO)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seed-solution-for-continuation">4) Seed Solution for Continuation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-check-of-the-seed-trajectory">4.1) Visual Check of the Seed Trajectory</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuation-in-terminal-longitude-with-free-time">5) Continuation in Terminal Longitude with Free Time</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-evolution-along-continuation">5.1) Mass Evolution Along Continuation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-mathcal-m-t-f-n-mathrm-rev-surface">6) Building the <span class="math notranslate nohighlight">\(\mathcal{M}(t_f, N_{\mathrm{rev}})\)</span> Surface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-parameter-continuation-on-a-grid">6.0) Two-Parameter Continuation on a Grid</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persisting-and-reloading-the-surface">6.2) Persisting and Reloading the Surface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-visualization">6.3) Surface Visualization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectory-datasets-for-labeled-branches">7) Trajectory Datasets for Labeled Branches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-tutorial-figure-and-interpretation">8) Final Tutorial Figure and Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">9) Wrap-Up</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="maximum-initial-mass">
+<h1>Maximum Initial Mass<a class="headerlink" href="#maximum-initial-mass" title="Link to this heading">#</a></h1>
+<p>This notebook is a hands-on tutorial to reproduce the homotopy results of the paper <em>The Maximum Initial Mass</em> (<span class="bibtex-citation" id="id1">[]</span>). In that work, the optimal-control formulation of <strong>maximum-initial-mass (MIM)</strong> is introduced and analyzed, opening practical applications in homotopy methods, reachability analysis, and low-thrust optimization.</p>
+<p>For fixed transfer time and fixed final state, the <strong>maximum-initial-mass (MIM)</strong> problem asks for the largest admissible initial mass that still allows a feasible low-thrust transfer. In Pontryagin form, this leads to the same thrust-direction law as the minimum-time problem and, in the nondegenerate case, to full throttle along the trajectory.</p>
+<p>A practical consequence for continuation is that, instead of continuing in thrust, one can work on the smooth surface
+$<span class="math notranslate nohighlight">\(
+\mathcal{M}:(t_f, N_{\mathrm{rev}}) \mapsto m_0^*(t_f, N_{\mathrm{rev}}),
+\)</span><span class="math notranslate nohighlight">\(
+and track iso-\)</span>\mathcal{M}$ curves to recover multi-revolution minimum-time branches.</p>
+<p>In this notebook we formulate the TPBVP with the <code class="docutils literal notranslate"><span class="pre">pykep</span></code> time-optimal machinery, then modify the shooting function to fix <span class="math notranslate nohighlight">\(t_f\)</span> and solve for <span class="math notranslate nohighlight">\(m_0\)</span>, finally constructing and exploring the homotopy path on the MIM surface.</p>
+<section id="tpbvp-setup-in-pykep">
+<h2>1) TPBVP Setup in pykep<a class="headerlink" href="#tpbvp-setup-in-pykep" title="Link to this heading">#</a></h2>
+<p>The MIM TPBVP can be implemented with the same augmented dynamics used for time-optimal low-thrust transfers.</p>
+<p>The key changes are in the boundary conditions and shooting residuals, not in the dynamics:</p>
+<ul class="simple">
+<li><p>We fix transfer time <span class="math notranslate nohighlight">\(t_f\)</span> (or optionally keep it free in the early continuation stage).</p></li>
+<li><p>We free the initial mass <span class="math notranslate nohighlight">\(m_0\)</span> and solve for the largest feasible one.</p></li>
+<li><p>We enforce terminal constraints on the orbital state together with <span class="math notranslate nohighlight">\(\lambda_m(t_f)=0\)</span>.</p></li>
+<li><p>Depending on the stage, we either fix terminal longitude <span class="math notranslate nohighlight">\(L_f\)</span> or leave it free through the associated transversality residual.</p></li>
+</ul>
+<p>In this section we import the required libraries and build the numerical objects used throughout the notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">root</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pkl</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pygmo_plugins_nonfree</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ppnf</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> 
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">root</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pygmo_plugins_nonfree&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dynamics-costates-and-shooting-functions">
+<h2>2) Dynamics, Costates, and Shooting Functions<a class="headerlink" href="#dynamics-costates-and-shooting-functions" title="Link to this heading">#</a></h2>
+<p>This preamble defines:</p>
+<ul class="simple">
+<li><p>The augmented dynamics in modified equinoctial elements.</p></li>
+<li><p>A variational integrator to obtain analytical Jacobians for shooting.</p></li>
+<li><p>Utility callable functions for Hamiltonian, switching function, throttle, and thrust direction.</p></li>
+<li><p>The residual and Jacobian functions for the MIM shooting method.</p></li>
+</ul>
+<p>Mathematically, we solve a root-finding problem of the form</p>
+<div class="math notranslate nohighlight">
+\[
+F(z)=0,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(z\)</span> contains the free initial mass and initial costates (plus optional free-final-time variable), and <span class="math notranslate nohighlight">\(F\)</span> collects terminal-constraint mismatches.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">free_time=True</span></code>, this notebook appends one additional scalar Hamiltonian-based condition (<code class="docutils literal notranslate"><span class="pre">H_0=0</span></code>) to close the numerical system during continuation. (this is to be considered as a gauge condition or a necessary condition accordingly)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The raw augmented dynamics</span>
+<span class="n">dyn</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">peq_dyn</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="c1"># Its variational form (only needed entries)</span>
+<span class="n">m</span><span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lp&#39;</span><span class="p">,</span> <span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;lg&#39;</span><span class="p">,</span> <span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="s1">&#39;lk&#39;</span><span class="p">,</span> <span class="s1">&#39;lL&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">)</span>
+<span class="n">dyn_var_mim</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">var_ode_sys</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># The Taylor integrator</span>
+<span class="n">ta</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">dyn</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># The Variational Taylor integrator (8 digits generally enough)</span>
+<span class="n">ta_var_mim</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">dyn_var_mim</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ic_var_mim</span> <span class="o">=</span> <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">14</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="c1"># The Hamiltonian</span>
+<span class="n">H_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_H_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="c1"># The switching function (always negative, not useful for this time optimal case, but still)</span>
+<span class="n">SF_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_SF_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="c1"># The magnitude of the throttle (always 1, but still)</span>
+<span class="n">u_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_u_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="c1"># The thrust direction</span>
+<span class="n">i_vers_func</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_peq_i_vers_cfunc</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">optimality_type</span><span class="o">.</span><span class="n">TIME</span><span class="p">)</span>
+<span class="c1"># The dynamics cfunc</span>
+<span class="n">vars_s</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;lp&#39;</span><span class="p">,</span> <span class="s1">&#39;lf&#39;</span><span class="p">,</span> <span class="s1">&#39;lg&#39;</span><span class="p">,</span> <span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="s1">&#39;lk&#39;</span><span class="p">,</span> <span class="s1">&#39;lL&#39;</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">)</span>
+<span class="n">dyn_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">it</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">ta</span><span class="o">.</span><span class="n">sys</span><span class="p">],</span> <span class="nb">vars</span> <span class="o">=</span> <span class="n">vars_s</span><span class="p">)</span>
+<span class="c1"># Hamiltonian&#39;s derivatives</span>
+<span class="n">dH_symfunc</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">diff_tensors</span><span class="p">(</span><span class="n">func</span> <span class="o">=</span> <span class="n">H_func</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">diff_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span><span class="p">],</span> <span class="n">diff_order</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">gradient</span>
+<span class="n">dH_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span><span class="n">dH_symfunc</span><span class="p">,</span> <span class="nb">vars</span> <span class="o">=</span> <span class="n">H_func</span><span class="o">.</span><span class="n">vars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_Lf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Decision vector:</span>
+    <span class="c1">#   free_time=True  -&gt; [m0, lp0, lf0, lg0, lh0, lk0, lL0, (l0), tf]</span>
+    <span class="c1">#   free_time=False -&gt; [m0, lp0, lf0, lg0, lh0, lk0, lL0, (l0)]</span>
+    <span class="c1"># Return value:</span>
+    <span class="c1">#   In general -&gt; [p(tf)-pf, f(tf)-ff, g(tf)-gf, h(tf)-hf, k(tf)-kf, L_condition, lm(tf)-lmf, (H0), (normalization)]</span>
+    <span class="c1">#   free_Lf=True    -&gt; L_condition = lLf</span>
+    <span class="c1">#   free_Lf=False   -&gt; L_condition = L(tf)-Lf</span>
+    <span class="c1">#   free_time=True  -&gt; H0 = H(initial_conditions) should be zero</span>
+    <span class="c1">#   normalize_lambdas=True -&gt; normalization = l0^2 + lp0^2 + lf0^2 + lg0^2 + lh0^2 + lk0^2 + lL0^2 + l0^2 - 1</span>
+    <span class="n">n_expected</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_expected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shooting_mim expected len(x)=</span><span class="si">{</span><span class="n">n_expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">tf_eval</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">free_time</span> <span class="k">else</span> <span class="n">tf</span>
+    
+    <span class="n">lambda0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="k">if</span> <span class="n">normalize_lambdas</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">initial_conditions</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">mee0</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span class="n">lambda0</span><span class="p">]</span>
+
+    <span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">initial_conditions</span>
+
+    <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ta</span><span class="o">.</span><span class="n">propagate_grid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_eval</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+    
+    <span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">tf_eval</span><span class="p">)</span>
+
+    <span class="n">pf</span><span class="p">,</span> <span class="n">ff</span><span class="p">,</span> <span class="n">gf</span><span class="p">,</span> <span class="n">hf</span><span class="p">,</span> <span class="n">kf</span><span class="p">,</span> <span class="n">Lf</span><span class="p">,</span> <span class="n">mf</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span>
+    <span class="n">lpf</span><span class="p">,</span> <span class="n">lff</span><span class="p">,</span> <span class="n">lgf</span><span class="p">,</span> <span class="n">lhf</span><span class="p">,</span> <span class="n">lkf</span><span class="p">,</span> <span class="n">lLf</span><span class="p">,</span> <span class="n">lmf</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span>
+
+    <span class="n">L_condition</span> <span class="o">=</span> <span class="n">lLf</span> <span class="k">if</span> <span class="n">free_Lf</span> <span class="k">else</span> <span class="n">Lf</span> <span class="o">-</span> <span class="n">meef</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="n">retval</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pf</span> <span class="o">-</span> <span class="n">meef</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ff</span><span class="p">,</span>
+        <span class="n">gf</span><span class="p">,</span>
+        <span class="n">hf</span><span class="p">,</span>
+        <span class="n">kf</span><span class="p">,</span>
+        <span class="n">L_condition</span><span class="p">,</span> <span class="c1"># (L free or L fixed)</span>
+        <span class="n">lmf</span>  <span class="c1"># mf free</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">free_time</span><span class="p">:</span>
+        <span class="n">H0</span> <span class="o">=</span> <span class="n">H_func</span><span class="p">(</span><span class="n">initial_conditions</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Hamiltonian should be zero (free time (not min time))</span>
+        <span class="n">retval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H0</span><span class="p">)</span>  <span class="c1"># free time</span>
+        
+    <span class="k">if</span> <span class="n">normalize_lambdas</span><span class="p">:</span>
+        <span class="n">retval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>        
+    <span class="k">return</span> <span class="n">retval</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_mim_grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_Lf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_time</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># Decision vector (dv):</span>
+    <span class="c1">#   free_time=True  -&gt; [m0, lp0, lf0, lg0, lh0, lk0, lL0, (l0), tf]</span>
+    <span class="c1">#   free_time=False -&gt; [m0, lp0, lf0, lg0, lh0, lk0, lL0, (l0)]</span>
+    <span class="c1"># Return value of shooting_mim (f):</span>
+    <span class="c1">#   In general -&gt; [p(tf)-pf, f(tf)-ff, g(tf)-gf, h(tf)-hf, k(tf)-kf, L_condition, lm(tf)-lmf, (H0), (normalization)]</span>
+    <span class="c1">#   free_Lf=True    -&gt; L_condition = lLf</span>
+    <span class="c1">#   free_Lf=False   -&gt; L_condition = L(tf)-Lf</span>
+    <span class="c1">#   free_time=True  -&gt; H0 = H(initial_conditions) should be zero</span>
+    <span class="c1">#   normalize_lambdas=True -&gt; normalization = l0^2 + lp0^2 + lf0^2 + lg0^2 + lh0^2 + lk0^2 + lL0^2 + l0^2 - 1</span>
+    <span class="c1">#</span>
+    <span class="c1"># We seek to compute df/dv</span>
+    
+    <span class="n">n_expected</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_expected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;shooting_mim expected len(x)=</span><span class="si">{</span><span class="n">n_expected</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">tf_eval</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">free_time</span> <span class="k">else</span> <span class="n">tf</span>
+    
+    <span class="n">lambda0</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="k">if</span> <span class="n">normalize_lambdas</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">initial_conditions</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">mee0</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span class="n">lambda0</span><span class="p">]</span>
+
+    <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">initial_conditions</span>
+    <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">14</span><span class="p">:]</span> <span class="o">=</span> <span class="n">ic_var_mim</span>
+    <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">tf_eval</span><span class="p">)</span>
+
+    <span class="n">st</span> <span class="o">=</span> <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">state</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sens</span><span class="p">(</span><span class="n">component</span><span class="p">):</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="n">ta_var_mim</span><span class="o">.</span><span class="n">get_vslice</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">sl</span><span class="p">])[:</span><span class="mi">7</span><span class="p">]</span>  <span class="c1"># sensitivities w.r.t. [m0, lp0, ..., lL0]</span>
+        
+        <span class="k">if</span> <span class="n">normalize_lambdas</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">sl</span><span class="p">])[</span><span class="mi">7</span><span class="p">]]])</span>  <span class="c1"># add d/dl0</span>
+        
+        <span class="k">if</span> <span class="n">free_time</span><span class="p">:</span>
+            <span class="n">dcomp_dtf</span> <span class="o">=</span> <span class="n">dyn_func</span><span class="p">(</span><span class="n">st</span><span class="p">[:</span><span class="mi">14</span><span class="p">],</span> <span class="n">pars</span><span class="o">=</span><span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">)[</span><span class="n">component</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">result</span><span class="p">,</span> <span class="p">[</span><span class="n">dcomp_dtf</span><span class="p">]])</span>  <span class="c1"># add d/dtf</span>
+    
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Residuals p, f, g, h, k, L, lm</span>
+    <span class="n">L_residual</span> <span class="o">=</span> <span class="mi">12</span> <span class="k">if</span> <span class="n">free_Lf</span> <span class="k">else</span> <span class="mi">5</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">L_residual</span><span class="p">,</span> <span class="mi">13</span><span class="p">]:</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sens</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="c1"># Residual H0 (if free time)</span>
+    <span class="k">if</span> <span class="n">free_time</span><span class="p">:</span>
+        <span class="n">dHdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dH_func</span><span class="p">(</span><span class="n">initial_conditions</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="c1"># dHdx has derivatives [dH/dm, dH/dlp, ..., dH/dlL, dH/dl0]</span>
+        
+        <span class="k">if</span> <span class="n">normalize_lambdas</span><span class="p">:</span>
+            <span class="c1"># Decision vector: [m, lp, lf, lg, lh, lk, lL, l0, tf]</span>
+            <span class="c1"># We need:     [dH/dm, dH/dlp, ..., dH/dlL, dH/dl0, dH/dtf]</span>
+            <span class="n">h0_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">dHdx</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]])</span>  <span class="c1"># 8 derivatives + 1 for tf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Decision vector: [m, lp, lf, lg, lh, lk, lL, tf]</span>
+            <span class="c1"># We need:     [dH/dm, dH/dlp, ..., dH/dlL, dH/dtf]</span>
+            <span class="n">h0_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">dHdx</span><span class="p">[:</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]])</span>  <span class="c1"># 7 derivatives + 1 for tf</span>
+        
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h0_row</span><span class="p">)</span>
+
+    <span class="c1"># Residual normalization (if normalize_lambdas)</span>
+    <span class="k">if</span> <span class="n">normalize_lambdas</span><span class="p">:</span>
+        <span class="n">norm_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">free_time</span><span class="p">:</span>
+            <span class="n">norm_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">norm_grad</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]])</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">norm_grad</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_expected</span><span class="p">,</span> <span class="n">n_expected</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<section id="sanity-check-analytical-vs-numerical-jacobian">
+<h3>2.1) Sanity Check: Analytical vs Numerical Jacobian<a class="headerlink" href="#sanity-check-analytical-vs-numerical-jacobian" title="Link to this heading">#</a></h3>
+<p>Before running large continuation loops, we verify the Jacobian in <code class="docutils literal notranslate"><span class="pre">shooting_mim_grad</span></code> against finite differences.</p>
+<p>A small maximum error indicates that the analytical Jacobian is implemented consistently and is suitable for robust Newton/hybrid solves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mee0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="n">meef</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0003</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
+<span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0003</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">normalize_lambdas</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">free_Lf</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">free_time</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.3</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">7</span><span class="o">+</span><span class="n">normalize_lambdas</span><span class="o">+</span><span class="n">free_time</span><span class="p">)</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient_h</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">4.3535</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">),</span> <span class="n">x0</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+            <span class="n">an</span> <span class="o">=</span> <span class="n">shooting_mim_grad</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="o">=</span><span class="mf">4.3535</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">num</span><span class="o">-</span><span class="n">an</span>
+            <span class="n">error_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;normalize_lambdas=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;5</span><span class="si">}</span><span class="s2"> | free_Lf=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">free_Lf</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;5</span><span class="si">}</span><span class="s2"> | free_time=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;5</span><span class="si">}</span><span class="s2"> | max error=</span><span class="si">{</span><span class="n">error_max</span><span class="si">:</span><span class="s2">10.3e</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>normalize_lambdas=False | free_Lf=False | free_time=False | max error= 1.452e-07
+normalize_lambdas=False | free_Lf=False | free_time=True  | max error= 1.381e-08
+normalize_lambdas=False | free_Lf=True  | free_time=False | max error= 5.884e-08
+normalize_lambdas=False | free_Lf=True  | free_time=True  | max error= 1.381e-08
+normalize_lambdas=True  | free_Lf=False | free_time=False | max error= 1.452e-07
+normalize_lambdas=True  | free_Lf=False | free_time=True  | max error= 1.102e-08
+normalize_lambdas=True  | free_Lf=True  | free_time=False | max error= 5.884e-08
+normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="benchmark-problem-definition-gto-to-geo">
+<h2>3) Benchmark Problem Definition (GTO to GEO)<a class="headerlink" href="#benchmark-problem-definition-gto-to-geo" title="Link to this heading">#</a></h2>
+<p>We reproduce the benchmark transfer discussed in the paper: a low-thrust multi-revolution GTO-to-GEO rendezvous.</p>
+<p>This cell sets:</p>
+<ul class="simple">
+<li><p>Nondimensional units and scaling factors.</p></li>
+<li><p>Initial and target orbits.</p></li>
+<li><p>Propulsion parameters (<span class="math notranslate nohighlight">\(T_{\max}\)</span>, <span class="math notranslate nohighlight">\(v_{eff}\)</span>).</p></li>
+<li><p>Initial/final MEE states used in shooting.</p></li>
+</ul>
+<p>These constants define the physical scenario for all continuation stages below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># units</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">6378137</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="mf">398600441800000.0</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">MU</span> <span class="o">/</span> <span class="n">L</span><span class="p">)</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">V</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">V</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="mf">1500.</span>
+<span class="n">FORCE</span> <span class="o">=</span> <span class="n">MASS</span> <span class="o">*</span> <span class="n">ACC</span>
+
+<span class="c1"># Problem setting</span>
+<span class="n">gto_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">26571430</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">7.</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DEG2RAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span>
+<span class="n">geo_param</span> <span class="o">=</span> <span class="p">[</span><span class="mi">42165000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Used for visualization later on</span>
+<span class="n">gto</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="n">gto_param</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">mu_central_body</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span><span class="p">))</span>
+<span class="n">geo</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">keplerian</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="n">geo_param</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">mu_central_body</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span><span class="p">))</span>
+<span class="n">t0_days</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tf_days</span> <span class="o">=</span> <span class="mf">0.55</span> <span class="c1"># days</span>
+<span class="n">tof_days</span> <span class="o">=</span> <span class="n">tf_days</span> <span class="o">-</span> <span class="n">t0_days</span>
+<span class="n">tof</span> <span class="o">=</span> <span class="p">(</span><span class="n">tof_days</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">r0</span><span class="p">,</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0_days</span><span class="p">)</span>
+<span class="n">r0</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">r0</span><span class="p">]</span>
+<span class="n">v0</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">v0</span><span class="p">]</span>
+<span class="n">mee0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">r0</span><span class="p">,</span> <span class="n">v0</span><span class="p">],</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">rf</span><span class="p">,</span> <span class="n">vf</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0_days</span> <span class="o">+</span> <span class="n">tof_days</span><span class="p">)</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">L</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">rf</span><span class="p">]</span>
+<span class="n">vf</span> <span class="o">=</span> <span class="p">[</span><span class="n">it</span> <span class="o">/</span> <span class="n">V</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">vf</span><span class="p">]</span>
+<span class="n">meef</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">([</span><span class="n">rf</span><span class="p">,</span> <span class="n">vf</span><span class="p">],</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">T_max</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">/</span> <span class="n">FORCE</span>
+<span class="n">veff</span> <span class="o">=</span> <span class="mf">1994.75</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">/</span> <span class="n">V</span>
+
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># mu</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T_max</span>  <span class="c1"># max thrust</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">veff</span>  <span class="c1"># veff</span>
+
+<span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># mu</span>
+<span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T_max</span>  <span class="c1"># max thrust</span>
+<span class="n">ta_var_mim</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">veff</span>  <span class="c1"># veff</span>
+
+<span class="n">tf</span> <span class="o">=</span> <span class="mf">10.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="seed-solution-for-continuation">
+<h2>4) Seed Solution for Continuation<a class="headerlink" href="#seed-solution-for-continuation" title="Link to this heading">#</a></h2>
+<p>We first compute a feasible seed extremal with free final time and fixed terminal longitude.</p>
+<p>This seed plays the same role as a low-complexity initialization in classical homotopy: it provides a numerically stable starting point from which we can continue toward higher-revolution, higher-mass solutions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_Lf</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">meef</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.</span>
+<span class="n">free_time</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_trials</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_trials</span><span class="p">):</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="c1"># initial guess for [m0, lambdas, lambda_0]</span>
+    <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>   <span class="c1"># m0 should be positive</span>
+    <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="mi">50</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">),</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="p">)},</span> <span class="n">jac</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">shooting_mim_grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">))</span>  <span class="c1"># factor=1 is very important for convergence</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;fun&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-8</span> <span class="ow">and</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">time_end</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+<span class="n">initial</span> <span class="o">=</span> <span class="p">[</span><span class="n">sol</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">sol</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mim: </span><span class="si">{</span><span class="n">initial</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">MASS</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> kg&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tof: </span><span class="si">{</span><span class="n">tf</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nrev: </span><span class="si">{</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">-</span><span class="n">mee0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decision vector: </span><span class="si">{</span><span class="n">initial</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>xx.
+Mim: 88.61 kg
+Tof: 2.24 hours
+Nrev: 1.09
+Decision vector: [  5.90761529e-02  -4.44999445e-02  -1.86853222e-01  -5.72598811e-02
+   3.34701942e-02   8.48163816e-05   5.63154165e-02   7.43498018e+01]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="visual-check-of-the-seed-trajectory">
+<h3>4.1) Visual Check of the Seed Trajectory<a class="headerlink" href="#visual-check-of-the-seed-trajectory" title="Link to this heading">#</a></h3>
+<p>We plot the seed transfer in Cartesian space to ensure that the numerically converged extremal is physically consistent before launching continuation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="c1"># Getting the data</span>
+<span class="n">sol_initial</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="o">*</span><span class="n">initial</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">r</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sol_initial</span><span class="p">:</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">item</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="c1"># create 3D figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">t0_days</span><span class="o">+</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c5d2e6359d4d3a44626e38b9141e5fa1c2c2d4b5331517717e808bb347193d4d.png" src="../_images/c5d2e6359d4d3a44626e38b9141e5fa1c2c2d4b5331517717e808bb347193d4d.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="continuation-in-terminal-longitude-with-free-time">
+<h2>5) Continuation in Terminal Longitude with Free Time<a class="headerlink" href="#continuation-in-terminal-longitude-with-free-time" title="Link to this heading">#</a></h2>
+<p>Starting from the seed, we increase terminal longitude <span class="math notranslate nohighlight">\(L_f\)</span> while keeping final time free inside the shooting solve.</p>
+<p>This traces a smooth continuation path and increases the maximum admissible initial mass until we reach the target mass level (1500 kg in this benchmark).</p>
+<p>In the paper notation, this corresponds to moving along the MIM manifold while allowing the solver to adapt <span class="math notranslate nohighlight">\(t_f\)</span>. This stage is used here as a practical homotopy mechanism to reach the 1500 kg level set robustly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">current</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf_current</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span>
+<span class="n">mim_history</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tof_history</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">L_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_Lf</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_time</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">increment</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">target_mass</span> <span class="o">=</span> <span class="mi">1500</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">+=</span><span class="n">increment</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf_current</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">),</span> <span class="n">current</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hybr&quot;</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;factor&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="p">)},</span> <span class="n">jac</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">shooting_mim_grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf_current</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">))</span>  <span class="c1"># factor=1 is very important for convergence</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">mass</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">MASS</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mass</span><span class="o">-</span><span class="n">target_mass</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">mass</span> <span class="o">&gt;</span> <span class="n">target_mass</span><span class="p">:</span>
+            <span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">-=</span><span class="n">increment</span>
+            <span class="n">increment</span> <span class="o">*=</span> <span class="mf">0.5</span>
+            <span class="k">continue</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">mim_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mass</span><span class="p">)</span>
+        <span class="n">tof_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span> 
+        <span class="n">L_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mim: </span><span class="si">{</span><span class="n">mass</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> kg&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tof: </span><span class="si">{</span><span class="n">current</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nrev: </span><span class="si">{</span><span class="p">(</span><span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">-</span><span class="n">mee0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">homotopy1</span> <span class="o">=</span> <span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">current</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.......................................
+Mim: 1500.00 kg
+Tof: 308.34 hours
+Nrev: 14.35
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="c1"># Getting the data</span>
+<span class="n">sol_initial</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="o">*</span><span class="n">homotopy1</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">r</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sol_initial</span><span class="p">:</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">item</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="c1"># create 3D figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">t0_days</span><span class="o">+</span><span class="n">tof_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">D</span><span class="o">=</span><span class="mi">8</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
+
+<span class="c1"># switching off the grid and axis</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/da723219dbd1a4a8493121d006222d0f886b80cba997a7a9566e3afa40f049c1.png" src="../_images/da723219dbd1a4a8493121d006222d0f886b80cba997a7a9566e3afa40f049c1.png" />
+</div>
+</div>
+<section id="mass-evolution-along-continuation">
+<h3>5.1) Mass Evolution Along Continuation<a class="headerlink" href="#mass-evolution-along-continuation" title="Link to this heading">#</a></h3>
+<p>This diagnostic plot reports how recovered MIM changes with the terminal-revolution proxy <span class="math notranslate nohighlight">\(L_f/(2\pi)\)</span>.
+A smooth trend is a useful indicator that continuation is following a consistent branch.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L_history</span><span class="p">,</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L_history</span><span class="p">,</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x31ec242d0&gt;]
+</pre></div>
+</div>
+<img alt="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" src="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="building-the-mathcal-m-t-f-n-mathrm-rev-surface">
+<h2>6) Building the <span class="math notranslate nohighlight">\(\mathcal{M}(t_f, N_{\mathrm{rev}})\)</span> Surface<a class="headerlink" href="#building-the-mathcal-m-t-f-n-mathrm-rev-surface" title="Link to this heading">#</a></h2>
+<p>After reaching the target-mass branch, we switch to fixed-time solves and sweep a grid in <span class="math notranslate nohighlight">\((t_f, L_f)\)</span>.</p>
+<p>Each successful solve gives one point on the MIM surface, i.e. the maximal feasible initial mass for that pair of parameters. The resulting grid is then used to visualize iso-mass contours and recover candidate minimum-time branches.</p>
+<p>Important interpretation note: points on the 1500 kg iso-<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> curve are fixed-mass extremals; local minima of <span class="math notranslate nohighlight">\(t_f\)</span> along that curve are minimum-time candidates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">current</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf_current</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">homotopy1</span><span class="p">)</span>
+
+<span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_Lf</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_time</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+
+<span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">mass</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">MASS</span>
+<span class="n">tof</span> <span class="o">=</span> <span class="n">tf_current</span>
+<span class="n">Lf</span> <span class="o">=</span> <span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mim: </span><span class="si">{</span><span class="n">mass</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> kg, Tof: </span><span class="si">{</span><span class="n">tof</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> nd, Lf: </span><span class="si">{</span><span class="n">Lf</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mim: 1500.00 kg, Tof: 1375.80 nd, Lf: 93.29
+</pre></div>
+</div>
+</div>
+</div>
+<section id="two-parameter-continuation-on-a-grid">
+<h3>6.0) Two-Parameter Continuation on a Grid<a class="headerlink" href="#two-parameter-continuation-on-a-grid" title="Link to this heading">#</a></h3>
+<p>We define the <span class="math notranslate nohighlight">\((L_f, t_f)\)</span> grid where the MIM surface is sampled, then allocate arrays for solved masses and decision vectors.</p>
+<p>We use row-wise continuation over <span class="math notranslate nohighlight">\(t_f\)</span>, and within each row continue over <span class="math notranslate nohighlight">\(L_f\)</span> using the previous solution as seed.</p>
+<p>Running the full sweep can take a long time because it solves <span class="math notranslate nohighlight">\(100\times100\)</span> TPBVPs. The code below is intentionally guarded by a flag; by default we rely on the precomputed dataset loaded in the next section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Lf_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Lf</span><span class="p">,</span> <span class="mf">1.3</span><span class="o">*</span><span class="n">Lf</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">tf_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">tof</span><span class="p">,</span> <span class="n">tof</span><span class="o">/</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">mim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">tf_grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lf_grid</span><span class="p">)))</span>
+<span class="n">sols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">tf_grid</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lf_grid</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#current_row_seed = deepcopy(current)</span>
+<span class="c1">#for i, tf in enumerate(tf_grid):</span>
+<span class="c1">#    current = deepcopy(current_row_seed)</span>
+<span class="c1">#    print(&quot;\n Row&quot;, i, &quot;: &quot;, np.linalg.norm(current), end=&quot;&quot;)</span>
+<span class="c1">#    for j, Lf in enumerate(Lf_grid):</span>
+<span class="c1">#        meef_current[5] = Lf</span>
+<span class="c1">#        res = root(lambda x: shooting_mim(x, mee0, meef_current, tf, normalize_lambdas = normalize_lambdas, free_Lf = free_Lf, free_time = free_time), current, method=&quot;hybr&quot;, tol=1e-8, options = {&quot;factor&quot;: 1., &quot;diag&quot;: [1]*(n)}, jac=lambda x: shooting_mim_grad(x, mee0, meef_current, tf, normalize_lambdas = normalize_lambdas, free_Lf = free_Lf, free_time = free_time))  # factor=1 is very important for convergence</span>
+<span class="c1">#        if res.success:</span>
+<span class="c1">#            print(f&quot;.&quot;, end=&quot;&quot;)</span>
+<span class="c1">#            current = res.x</span>
+<span class="c1">#            mim[i][j] = current[0]*MASS</span>
+<span class="c1">#            sols[i][j] = current</span>
+<span class="c1">#            if j==0:</span>
+<span class="c1">#                current_row_seed = deepcopy(current)</span>
+<span class="c1">#        else:</span>
+<span class="c1">#            print(f&quot;x&quot;, end=&quot;&quot;)</span>
+<span class="c1">#            break</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you do run the full grid cell above, it is a good idea to store the results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import pickle as pkl</span>
+<span class="c1">#with open(&quot;data/MY_mim_surface.pkl&quot;, &quot;wb&quot;) as f:</span>
+<span class="c1">#    pkl.dump((Lf_grid, tf_grid, mim), f)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="persisting-and-reloading-the-surface">
+<h3>6.2) Persisting and Reloading the Surface<a class="headerlink" href="#persisting-and-reloading-the-surface" title="Link to this heading">#</a></h3>
+<p>Surface generation is expensive. Save the computed grid once, then reload it for plotting and branch analysis.</p>
+<p>The notebook ships with a precomputed dataset at <code class="docutils literal notranslate"><span class="pre">data/mim_surface.pkl</span></code>, so the tutorial remains runnable in a reasonable time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Lf_grid</span><span class="p">,</span> <span class="n">tf_grid</span><span class="p">,</span> <span class="n">mim</span> <span class="o">=</span> <span class="n">pkl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;data/mim_surface.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize the mim surface Lf_grid, tf_grid, mim</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">Lf_grid</span><span class="o">-</span><span class="n">mee0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tf_grid</span><span class="p">)</span>   <span class="c1"># both (2, 100)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1500</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1550</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1600</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">67</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/dff3cd4576feb211b02e158d468e33a144a581e263e02bb998c3546e10ef6ce6.png" src="../_images/dff3cd4576feb211b02e158d468e33a144a581e263e02bb998c3546e10ef6ce6.png" />
+</div>
+</div>
+</section>
+<section id="surface-visualization">
+<h3>6.3) Surface Visualization<a class="headerlink" href="#surface-visualization" title="Link to this heading">#</a></h3>
+<p>We first inspect the 3D surface <span class="math notranslate nohighlight">\(m_0^*(t_f, N_{\mathrm{rev}})\)</span>, then the 2D contour map.</p>
+<p>The 1500 kg iso-<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> contour is the key object: extrema of <span class="math notranslate nohighlight">\(t_f\)</span> along this curve correspond to candidate minimum-time branches in the fixed-initial-mass viewpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize mim with colored map + contour lines</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="c1"># Filled color map</span>
+<span class="n">fill_levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">mim</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">mim</span><span class="p">),</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">fill_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cividis&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+
+<span class="c1"># Contour lines: dashed for all except 1500</span>
+<span class="n">other_levels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1450</span><span class="p">,</span> <span class="mi">1550</span><span class="p">,</span> <span class="mi">1600</span><span class="p">]</span>
+<span class="n">cs_other</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span>
+    <span class="n">levels</span><span class="o">=</span><span class="n">other_levels</span><span class="p">,</span>
+    <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+    <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span>
+<span class="p">)</span>
+
+<span class="c1"># 1500 contour as the only solid line</span>
+<span class="n">cs_1500</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span>
+    <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1500</span><span class="p">],</span>
+    <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+    <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.8</span>
+<span class="p">)</span>
+
+<span class="c1"># Labels</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_other</span><span class="p">,</span> <span class="n">cs_other</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_1500</span><span class="p">,</span> <span class="n">cs_1500</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="c1"># --- User-editable annotation specification ---</span>
+<span class="c1"># Set target points on the 1500 contour by x coordinate (Nrev) and label.</span>
+<span class="c1"># If two labels share the same x_target, points are chosen as distinct points on the contour.</span>
+<span class="n">point_specs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;x_target&quot;</span><span class="p">:</span> <span class="mf">15.15</span><span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;x_target&quot;</span><span class="p">:</span> <span class="mf">15.65</span><span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;x_target&quot;</span><span class="p">:</span> <span class="mf">16.65</span><span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;x_target&quot;</span><span class="p">:</span> <span class="mf">15.35</span><span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;x_target&quot;</span><span class="p">:</span> <span class="mf">16.32</span><span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># Optional per-label text offsets for readability</span>
+<span class="n">text_offsets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># Point color configuration</span>
+<span class="n">default_point_color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+<span class="n">highlight_point_color</span> <span class="o">=</span> <span class="s2">&quot;yellow&quot;</span>
+<span class="n">highlight_labels</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">}</span>
+
+<span class="c1"># Extract vertices of the 1500 contour in a Matplotlib-version-safe way</span>
+<span class="n">segs_1500</span> <span class="o">=</span> <span class="n">cs_1500</span><span class="o">.</span><span class="n">allsegs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">verts_1500</span> <span class="o">=</span> <span class="p">[</span><span class="n">seg</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segs_1500</span> <span class="k">if</span> <span class="n">seg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">verts_1500</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No 1500 contour segment found in current plotting range&quot;</span><span class="p">)</span>
+
+<span class="n">pts_1500</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">verts_1500</span><span class="p">)</span>
+
+<span class="c1"># Keep already-used points apart to avoid stacking markers when x_target repeats</span>
+<span class="n">used_points</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">min_dist</span> <span class="o">=</span> <span class="mf">0.15</span>
+
+<span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">point_specs</span><span class="p">:</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+    <span class="n">x_target</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;x_target&quot;</span><span class="p">]</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pts_1500</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_target</span><span class="p">))</span>
+    <span class="n">chosen</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="n">pts_1500</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cand</span> <span class="o">-</span> <span class="n">up</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">min_dist</span> <span class="k">for</span> <span class="n">up</span> <span class="ow">in</span> <span class="n">used_points</span><span class="p">):</span>
+            <span class="n">chosen</span> <span class="o">=</span> <span class="n">cand</span>
+            <span class="k">break</span>
+
+    <span class="c1"># Fallback in case all candidates are too close</span>
+    <span class="k">if</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">chosen</span> <span class="o">=</span> <span class="n">pts_1500</span><span class="p">[</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="n">used_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chosen</span><span class="p">)</span>
+    <span class="n">xv</span><span class="p">,</span> <span class="n">yv</span> <span class="o">=</span> <span class="n">chosen</span>
+
+    <span class="n">point_color</span> <span class="o">=</span> <span class="n">highlight_point_color</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">highlight_labels</span> <span class="k">else</span> <span class="n">default_point_color</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">point_color</span><span class="p">,</span> <span class="n">markeredgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">text_offsets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xv</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">yv</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Nrev&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Tof [hours]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f32e63d91e8b4ff44f1f580b4597a365331d6a375e8b7d1a2a072ef42264de05.png" src="../_images/f32e63d91e8b4ff44f1f580b4597a365331d6a375e8b7d1a2a072ef42264de05.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="trajectory-datasets-for-labeled-branches">
+<h2>7) Trajectory Datasets for Labeled Branches<a class="headerlink" href="#trajectory-datasets-for-labeled-branches" title="Link to this heading">#</a></h2>
+<p>The following cells define decision vectors for A/B/C/D/E and evaluate dense trajectory histories for plotting.</p>
+<p>This mirrors the paper-style branch comparison on a common MIM level set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000268</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39203057</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.32360439</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01497821</span><span class="p">,</span>  <span class="mf">0.42668529</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01022831</span><span class="p">,</span>  <span class="mf">0.01188412</span><span class="p">])</span>
+<span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lf_grid</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">tf_grid</span><span class="p">[</span><span class="mi">89</span><span class="p">]</span><span class="o">+</span><span class="mf">0.82</span>
+<span class="n">data_A</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x_A</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.99999759</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.33491311</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.91152179</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01065958</span><span class="p">,</span>  <span class="mf">0.44993837</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01011572</span><span class="p">,</span>  <span class="mf">0.00863597</span><span class="p">])</span>
+<span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lf_grid</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">tf_grid</span><span class="p">[</span><span class="mi">93</span><span class="p">]</span><span class="o">-</span><span class="mf">0.16</span>
+<span class="n">data_B</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x_B</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000014</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20400227</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04617363</span><span class="p">,</span>  <span class="mf">0.00517522</span><span class="p">,</span>  <span class="mf">0.46687152</span><span class="p">,</span><span class="o">-</span><span class="mf">0.00935368</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00244366</span><span class="p">])</span>
+<span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lf_grid</span><span class="p">[</span><span class="mi">40</span><span class="p">]</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">tf_grid</span><span class="p">[</span><span class="mi">87</span><span class="p">]</span><span class="o">+</span><span class="mf">0.39</span>
+<span class="n">data_C</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x_C</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000067</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3565124</span> <span class="p">,</span> <span class="o">-</span><span class="mf">1.08335089</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01131665</span><span class="p">,</span>  <span class="mf">0.43498536</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00985441</span><span class="p">,</span>  <span class="mf">0.00917867</span><span class="p">])</span>
+<span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lf_grid</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">tf_grid</span><span class="p">[</span><span class="mi">85</span><span class="p">]</span><span class="o">-</span><span class="mf">0.5</span>
+<span class="n">data_D</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x_D</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000225</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.20970184</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.09911761</span><span class="p">,</span>  <span class="mf">0.00412833</span><span class="p">,</span>  <span class="mf">0.45504409</span><span class="p">,</span><span class="o">-</span><span class="mf">0.01026745</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.00280334</span><span class="p">])</span>
+<span class="n">meef_current</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lf_grid</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span>
+<span class="n">tf</span> <span class="o">=</span> <span class="n">tf_grid</span><span class="p">[</span><span class="mi">80</span><span class="p">]</span><span class="o">+</span><span class="mf">0.36</span>
+<span class="n">data_E</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="n">x_E</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_Lf</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_time</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">normalize_lambdas</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">free_time</span><span class="p">)</span>
+<span class="n">data_0</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="o">*</span><span class="n">initial</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_O</span> <span class="o">=</span> <span class="n">shooting_mim</span><span class="p">(</span><span class="o">*</span><span class="n">homotopy1</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">,</span> <span class="n">normalize_lambdas</span> <span class="o">=</span> <span class="n">normalize_lambdas</span><span class="p">,</span> <span class="n">free_Lf</span> <span class="o">=</span> <span class="n">free_Lf</span><span class="p">,</span> <span class="n">free_time</span> <span class="o">=</span> <span class="n">free_time</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="final-tutorial-figure-and-interpretation">
+<h2>8) Final Tutorial Figure and Interpretation<a class="headerlink" href="#final-tutorial-figure-and-interpretation" title="Link to this heading">#</a></h2>
+<p>This final panel reproduces the paper-style narrative view: contour map plus representative trajectories.</p>
+<p>Read it as follows:</p>
+<ul class="simple">
+<li><p>The contour map organizes the solution space in ((N_{\mathrm{rev}}, t_f)).</p></li>
+<li><p>The 1500 kg iso-curve is the fixed-initial-mass family.</p></li>
+<li><p>Labeled trajectories correspond to different extremals on that same family, including locally fast and locally slow branches.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display contour map first, then data_0, data_O, data_A, data_B, data_C, data_D, data_E trajectories</span>
+
+<span class="c1"># User-editable panel configuration</span>
+<span class="n">orbit_panels</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Seed&quot;</span><span class="p">,</span> <span class="n">data_0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="n">data_O</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">data_A</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">data_B</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">data_C</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">data_D</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="n">data_E</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># User-editable free text overlay positions in axes coordinates</span>
+<span class="n">label_positions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Seed&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+    <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">traj_to_r</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">sol</span><span class="p">])</span>
+
+
+<span class="n">n_orbits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">orbit_panels</span><span class="p">)</span>
+<span class="n">ncols</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">nrows</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">,</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">nrows</span><span class="p">))</span>
+
+<span class="c1"># Build 8 slots: first one is contour (2D), next 7 are orbit panels (3D).</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrows</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n_orbits</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="c1"># First panel: contour map</span>
+<span class="n">axc</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fill_levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">mim</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">mim</span><span class="p">),</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">fill_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;cividis&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">cs_other_map</span> <span class="o">=</span> <span class="n">axc</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1450</span><span class="p">,</span> <span class="mi">1550</span><span class="p">,</span> <span class="mi">1600</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">cs_1500_map</span> <span class="o">=</span> <span class="n">axc</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1500</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_other_map</span><span class="p">,</span> <span class="n">cs_other_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_1500_map</span><span class="p">,</span> <span class="n">cs_1500_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="c1"># Explicit letter placements on the contour subplot (same style as original index-based placement)</span>
+<span class="c1"># Indices are (i_lf, j_tf) where:</span>
+<span class="c1">#   i_lf indexes Lf_grid / X columns</span>
+<span class="c1">#   j_tf indexes tf_grid / Y rows</span>
+<span class="n">contour_label_grid_indices</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">89</span><span class="p">),</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">93</span><span class="p">),</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">87</span><span class="p">),</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">85</span><span class="p">),</span>
+    <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># Per-letter text offsets in plot units for the contour subplot</span>
+<span class="n">contour_label_text_offsets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+    <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># Keep color settings consistent with the contour cell if available</span>
+<span class="n">default_c</span> <span class="o">=</span> <span class="n">default_point_color</span> <span class="k">if</span> <span class="s2">&quot;default_point_color&quot;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;white&quot;</span>
+<span class="n">highlight_c</span> <span class="o">=</span> <span class="n">highlight_point_color</span> <span class="k">if</span> <span class="s2">&quot;highlight_point_color&quot;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;yellow&quot;</span>
+<span class="n">highlight_set</span> <span class="o">=</span> <span class="n">highlight_labels</span> <span class="k">if</span> <span class="s2">&quot;highlight_labels&quot;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">lbl</span><span class="p">,</span> <span class="p">(</span><span class="n">i_lf</span><span class="p">,</span> <span class="n">j_tf</span><span class="p">)</span> <span class="ow">in</span> <span class="n">contour_label_grid_indices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">xv</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">j_tf</span><span class="p">,</span> <span class="n">i_lf</span><span class="p">]</span>
+    <span class="n">yv</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="n">j_tf</span><span class="p">,</span> <span class="n">i_lf</span><span class="p">]</span>
+
+    <span class="n">point_c</span> <span class="o">=</span> <span class="n">highlight_c</span> <span class="k">if</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">highlight_set</span> <span class="k">else</span> <span class="n">default_c</span>
+    <span class="n">axc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">point_c</span><span class="p">,</span> <span class="n">markeredgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">contour_label_text_offsets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">axc</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xv</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">yv</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">lbl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+
+<span class="c1"># User-editable S annotation for the top-left contour corner</span>
+<span class="n">s_arrow_target_xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+<span class="n">s_text_xy_axes_fraction</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+    <span class="s2">&quot;S&quot;</span><span class="p">,</span>
+    <span class="n">xy</span><span class="o">=</span><span class="n">s_arrow_target_xy</span><span class="p">,</span>
+    <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="n">xytext</span><span class="o">=</span><span class="n">s_text_xy_axes_fraction</span><span class="p">,</span>
+    <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+    <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.1</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">axc</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Nrev&quot;</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Tof [hours]&quot;</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+
+<span class="c1"># Orbit panels (same order as orbit_panels)</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_orbits</span><span class="p">],</span> <span class="n">orbit_panels</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">traj_to_r</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">t0_days</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">gto</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">L</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="o">-</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Free-position overlay text in each panel (not a title)</span>
+    <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span> <span class="o">=</span> <span class="n">label_positions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text2D</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+
+<span class="c1"># Hide any remaining unused slots</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_orbits</span><span class="p">:]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ec281d130d08b907ba4513160ee91ce3de1dabb926c1fcb0dbc1cf0f86cad848.png" src="../_images/ec281d130d08b907ba4513160ee91ce3de1dabb926c1fcb0dbc1cf0f86cad848.png" />
+</div>
+</div>
+</section>
+<section id="wrap-up">
+<h2>9) Wrap-Up<a class="headerlink" href="#wrap-up" title="Link to this heading">#</a></h2>
+<p>This notebook demonstrated the homotopy workflow around the maximum-initial-mass formulation:</p>
+<ul class="simple">
+<li><p>Build the MIM shooting TPBVP.</p></li>
+<li><p>Continue from a seed to the target-mass branch.</p></li>
+<li><p>Sample and visualize the smooth <span class="math notranslate nohighlight">\(\mathcal{M}(t_f, N_{\mathrm{rev}})\)</span> surface.</p></li>
+<li><p>Extract representative extremal trajectories on an iso-mass contour.</p></li>
+</ul>
+<p>As in the paper, this viewpoint provides a practical route to explore multi-revolution minimum-time structure through MIM continuation.</p>
+<p>For reproducibility and rigor, interpret numerical values as solver-dependent (initial guess, tolerances, and continuation step sizes can shift branch labels slightly), while the qualitative geometry of the surface and iso-<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> branches should remain consistent.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpbvp-setup-in-pykep">1) TPBVP Setup in pykep</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamics-costates-and-shooting-functions">2) Dynamics, Costates, and Shooting Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sanity-check-analytical-vs-numerical-jacobian">2.1) Sanity Check: Analytical vs Numerical Jacobian</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-problem-definition-gto-to-geo">3) Benchmark Problem Definition (GTO to GEO)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seed-solution-for-continuation">4) Seed Solution for Continuation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-check-of-the-seed-trajectory">4.1) Visual Check of the Seed Trajectory</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuation-in-terminal-longitude-with-free-time">5) Continuation in Terminal Longitude with Free Time</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-evolution-along-continuation">5.1) Mass Evolution Along Continuation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-mathcal-m-t-f-n-mathrm-rev-surface">6) Building the <span class="math notranslate nohighlight">\(\mathcal{M}(t_f, N_{\mathrm{rev}})\)</span> Surface</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-parameter-continuation-on-a-grid">6.0) Two-Parameter Continuation on a Grid</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persisting-and-reloading-the-surface">6.2) Persisting and Reloading the Surface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-visualization">6.3) Surface Visualization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectory-datasets-for-labeled-branches">7) Trajectory Datasets for Labeled Branches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-tutorial-figure-and-interpretation">8) Final Tutorial Figure and Interpretation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-up">9) Wrap-Up</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Copyright (c) 2023-2026 Advanced Concepts Team, European Space Agency (ESA).
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
