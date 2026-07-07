@@ -23,9 +23,9 @@ bibliography: paper.bib
 current emphasis on the preliminary analysis of interplanetary spacecraft trajectories. It provides
 the mathematical building blocks for orbit propagation, orbital element conversions, Lambert arc
 solvers, gravity-assist flyby modelling, and both direct and indirect low-thrust transcriptions.
-Given a mission scenario—a spacecraft departing from one body in the solar system and arriving at
-another, possibly via intermediate gravity-assist flybys and with low-thrust propulsion phases—`pykep`
-allows researchers to compute transfer costs (in terms of propellant mass and time of flight), set
+Given a mission scenario, for example a spacecraft departing from one body in the solar system and arriving at
+another, possibly via intermediate gravity-assist flybys and with low-thrust propulsion phases, `pykep`
+allows researchers to develop workflows able to compute or estimate transfer costs (in terms of propellant mass and time of flight), set
 up the corresponding optimization problems, and interface with state-of-the-art numerical optimizers.
 The library's C++ core can evaluate thousands of candidate trajectories per second, enabling the
 large-scale search over launch dates, flyby sequences, and thrust profiles that is essential during
@@ -53,13 +53,12 @@ design or for use in certified flight dynamics pipelines; it is a research tool 
 frontier of what is computable at the earliest stages of mission analysis.
 
 `pykep` deliberately exposes its mathematical primitives—Lambert arc solvers, low-thrust trajectory
-legs, orbital element conversions—as first-class objects that can be composed freely and embedded in
+legs, orbital element conversions, as first-class objects that can be composed freely and embedded in
 optimization loops. By integrating natively with `pagmo` [@pagmo] (a parallel global optimization
 library) and `Heyoka` [@biscaniheyoka1] (a Taylor integration suite), `pykep` provides a full stack
-from ephemeris evaluation to global trajectory search within a single Python environment—a
-coherent collection of well-defined, composable primitives ready to be assembled into novel
-research workflows. The many algorithms available in the library are largely the result of original
-research carried out at the ACT over more than a decade, complemented by implementations of
+from ephemeris evaluation to global trajectory search within a single Python environment. 
+The many original algorithms available in the library are largely the result of
+research carried out at ESA's ACT over more than a decade, complemented by implementations of
 best-in-class methods from the broader astrodynamics literature.
 
 # State of the Field
@@ -102,7 +101,7 @@ library explicitly designed to support the development of novel algorithms.
 computational core is implemented in modern C++23 and exposed to Python via `pybind11`. This
 architecture ensures that the innermost evaluation loops—Lambert arcs, Sims-Flanagan mismatch
 constraints [@sims], zero-order-hold propagation [@izzo2026zoh], orbital element conversions
-[@equinoctialelems]—run at native speed while remaining fully accessible from Python.
+[@equinoctialelems], run at native speed while remaining fully accessible from Python.
 
 A central abstraction is the *user-defined planet-like object* (`udpla`): any object that provides
 position and velocity as a function of epoch can serve as a trajectory endpoint or flyby body,
@@ -117,15 +116,14 @@ coupling, fragile hierarchies, and verbose boilerplate, `pykep` relies on *type 
 that satisfies a documented concept (i.e., exposes the right methods with the right signatures) is
 accepted by the corresponding algorithm or container, regardless of its type. This gives rise to the
 pervasive *user-defined* vocabulary in the API: `udpla` (user-defined planet-like object), `udp`
-(user-defined problem), `uda` (user-defined algorithm), and so on. Each prefix signals that the
-corresponding slot in the system accepts any conforming type, not a prescribed class hierarchy. The
+(user-defined problem), `uda` (user-defined algorithm), and so on. The
 result is an interface that is simultaneously extensible, a researcher can plug in a custom ephemeris,
-propagator, or objective function with a handful of Python lines—and free from the cognitive overhead
+propagator, or objective function with a handful of Python lines, and free from the cognitive overhead
 of classical object-oriented inheritance patterns.
 
 Trajectory optimization problems are exposed as *user-defined problem* (`udp`) objects compatible
 with `pagmo` [@pagmo], so that any optimizer in the `pagmo` ecosystem (e.g. differential evolution,
-particle swarm, self-adaptive evolution strategies, and branch-and-bound) can be applied without
+particle swarm, self-adaptive evolution strategies, and more) can be applied without
 modification. The design separates the mathematical primitives (C++) from the optimization problem
 definitions (Python/C++) and auxiliary tools such as visualization and low-thrust approximations
 [@approximations] (pure Python). This layering keeps the library maintainable and makes it
@@ -143,7 +141,7 @@ in the ACT's participation in multiple editions of the Global Trajectory Optimiz
 as among the most demanding trajectory optimization problems in the field, and a venue where the
 library has consistently enabled top-tier results against leading astrodynamics teams worldwide.
 
-Beyond competition, `pykep` has underpinned preliminary mission analysis for several ESA concepts,
+Beyond competitions, `pykep` has underpinned preliminary mission analysis for several ESA concepts,
 including the Hera asteroid deflection mission, the M-ARGO interplanetary CubeSat, and early
 feasibility studies for the Titan and Enceladus Mission (TandEM) and the Laplace mission to the
 outer solar system. It has supported peer-reviewed research on novel indirect methods via surrogate
