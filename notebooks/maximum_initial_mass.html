@@ -500,7 +500,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="maximum-initial-mass">
 <h1>Maximum Initial Mass<a class="headerlink" href="#maximum-initial-mass" title="Link to this heading">#</a></h1>
-<p>This notebook is a hands-on tutorial to reproduce the homotopy results of the paper <em>The Maximum Initial Mass</em> (<span class="bibtex-citation" id="id1">[]</span>). In that work, the optimal-control formulation of <strong>maximum-initial-mass (MIM)</strong> is introduced and analyzed, opening practical applications in homotopy methods, reachability analysis, and low-thrust optimization.</p>
+<p>This notebook is a hands-on tutorial to reproduce the homotopy results of the paper <em>The Maximum Initial Mass</em> (<span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id22" title="Dario Izzo and Giacomo Acciarini. The maximum initial mass. arXiv preprint arXiv:2606.29289, 2026.">IA26</a>]</span>). In that work, the optimal-control formulation of <strong>maximum-initial-mass (MIM)</strong> is introduced and analyzed, opening practical applications in homotopy methods, reachability analysis, and low-thrust optimization.</p>
 <p>For fixed transfer time and fixed final state, the <strong>maximum-initial-mass (MIM)</strong> problem asks for the largest admissible initial mass that still allows a feasible low-thrust transfer. In Pontryagin form, this leads to the same thrust-direction law as the minimum-time problem and, in the nondegenerate case, to full throttle along the trajectory.</p>
 <p>A practical consequence for continuation is that, instead of continuing in thrust, one can work on the smooth surface</p>
 <div class="math notranslate nohighlight">
@@ -579,7 +579,7 @@ F(z)=0,
 </div>
 </div>
 </div>
-<p>These are the shooting function …</p>
+<p>These is the shooting function …</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_mim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">normalize_lambdas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_Lf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">free_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -709,7 +709,6 @@ F(z)=0,
         <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">norm_grad</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_expected</span><span class="p">,</span> <span class="n">n_expected</span><span class="p">)</span>
-    
 </pre></div>
 </div>
 </div>
@@ -754,7 +753,7 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 </section>
 <section id="benchmark-problem-definition-gto-to-geo">
 <h2>3) Benchmark Problem Definition (GTO to GEO)<a class="headerlink" href="#benchmark-problem-definition-gto-to-geo" title="Link to this heading">#</a></h2>
-<p>We reproduce the benchmark transfer discussed in the paper <span class="bibtex-citation" id="id2">[]</span>.</p>
+<p>We reproduce the benchmark transfer discussed in the paper <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../bibliography.html#id22" title="Dario Izzo and Giacomo Acciarini. The maximum initial mass. arXiv preprint arXiv:2606.29289, 2026.">IA26</a>]</span>.</p>
 <p>This cell sets:</p>
 <ul class="simple">
 <li><p>Nondimensional units and scaling factors.</p></li>
@@ -850,12 +849,12 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>xx.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>xxxxxxxxxxxxxxxxxxxxxxxxxxx.
 Mim: 88.61 kg
 Tof: 2.24 hours
 Nrev: 1.09
 Decision vector: [  5.90761529e-02  -4.44999444e-02  -1.86853221e-01  -5.72598813e-02
-   3.34701943e-02   8.48156320e-05   5.63154164e-02   7.43498018e+01]
+   3.34701943e-02   8.48156356e-05   5.63154164e-02   7.43498018e+01]
 </pre></div>
 </div>
 </div>
@@ -982,25 +981,25 @@ Nrev: 14.35
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c29d3bb5c2c771bbffcda0edd61adf41531f7ec48d436a7fb2a71ed8b42bc485.png" src="../_images/c29d3bb5c2c771bbffcda0edd61adf41531f7ec48d436a7fb2a71ed8b42bc485.png" />
+<img alt="../_images/da6c1669068f4861f9dd07df33e313157ecec02ec50a5c68f37dab39a9a39440.png" src="../_images/da6c1669068f4861f9dd07df33e313157ecec02ec50a5c68f37dab39a9a39440.png" />
 </div>
 </div>
 <section id="mass-evolution-along-continuation">
 <h3>5.1) Mass Evolution Along Continuation<a class="headerlink" href="#mass-evolution-along-continuation" title="Link to this heading">#</a></h3>
-<p>This diagnostic plot reports how recovered MIM changes with the terminal-revolution proxy <span class="math notranslate nohighlight">\(L_f/(2\pi)\)</span>.
+<p>This diagnostic plot reports how recovered MIM changes with the terminal-revolution count <span class="math notranslate nohighlight">\((L_f-L_0)/(2\pi)\)</span>.
 A smooth trend is a useful indicator that continuation is following a consistent branch.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L_history</span><span class="p">,</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L_history</span><span class="p">,</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a</span><span class="o">-</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">L_history</span><span class="p">],</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">a</span><span class="o">-</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">L_history</span><span class="p">],</span> <span class="n">mim_history</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x312744cd0&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x311248cd0&gt;]
 </pre></div>
 </div>
-<img alt="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" src="../_images/aa0c0919d71a3971e0d9ea6213d907701783eefa921b10eade1728ae8e5b2458.png" />
+<img alt="../_images/12018d30b65b106eb317185b291735674647cb3cb6eeadcafa95132c5365ca8c.png" src="../_images/12018d30b65b106eb317185b291735674647cb3cb6eeadcafa95132c5365ca8c.png" />
 </div>
 </div>
 </section>
@@ -1009,7 +1008,6 @@ A smooth trend is a useful indicator that continuation is following a consistent
 <h2>6) Building the <span class="math notranslate nohighlight">\(\mathcal{M}(t_f, N_{\mathrm{rev}})\)</span> Surface<a class="headerlink" href="#building-the-mathcal-m-t-f-n-mathrm-rev-surface" title="Link to this heading">#</a></h2>
 <p>After reaching the target-mass branch, we switch to fixed-time solves and sweep a grid in <span class="math notranslate nohighlight">\((t_f, L_f)\)</span>.</p>
 <p>Each successful solve gives one point on the MIM surface, i.e. the maximal feasible initial mass for that pair of parameters. The resulting grid is then used to visualize iso-mass contours and recover candidate minimum-time branches.</p>
-<p>Important interpretation note: points on the 1500 kg iso-<span class="math notranslate nohighlight">\(\mathcal{M}\)</span> curve are fixed-mass extremals; local minima of <span class="math notranslate nohighlight">\(t_f\)</span> along that curve are minimum-time candidates.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">current</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">meef_current</span><span class="p">,</span> <span class="n">tf_current</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">homotopy1</span><span class="p">)</span>
@@ -1233,7 +1231,6 @@ A smooth trend is a useful indicator that continuation is following a consistent
 <section id="trajectory-datasets-for-labeled-branches">
 <h2>7) Trajectory Datasets for Labeled Branches<a class="headerlink" href="#trajectory-datasets-for-labeled-branches" title="Link to this heading">#</a></h2>
 <p>The following cells define decision vectors for A/B/C/D/E and evaluate dense trajectory histories for plotting.</p>
-<p>This mirrors the paper-style branch comparison on a common MIM level set.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.00000268</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39203057</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.32360439</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01497821</span><span class="p">,</span>  <span class="mf">0.42668529</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01022831</span><span class="p">,</span>  <span class="mf">0.01188412</span><span class="p">])</span>
@@ -1306,12 +1303,6 @@ A smooth trend is a useful indicator that continuation is following a consistent
 <section id="final-tutorial-figure-and-interpretation">
 <h2>8) Final Tutorial Figure and Interpretation<a class="headerlink" href="#final-tutorial-figure-and-interpretation" title="Link to this heading">#</a></h2>
 <p>This final panel reproduces the paper-style narrative view: contour map plus representative trajectories.</p>
-<p>Read it as follows:</p>
-<ul class="simple">
-<li><p>The contour map organizes the solution space in ((N_{\mathrm{rev}}, t_f)).</p></li>
-<li><p>The 1500 kg iso-curve is the fixed-initial-mass family.</p></li>
-<li><p>Labeled trajectories correspond to different extremals on that same family, including locally fast and locally slow branches.</p></li>
-</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display contour map first, then data_0, data_O, data_A, data_B, data_C, data_D, data_E trajectories</span>
