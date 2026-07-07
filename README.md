@@ -27,7 +27,7 @@
 
 # Pykep version 3
 
-This is the official repo for **kep3** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update — it's a full reimagining of what a space trajectory coolbox can be.
+This is the official repo for **kep3** (C++ library) and its twin **pykep** (python package) version 3, the next-generation astrodynamics toolbox. Version 3 is not just an update: it's a full reimagining of what a space trajectory coolbox can be.
 
 The code is still under development and we will only release the conda and PyPi packages when we are confidnt all is well coordinated. In the meantime, feel free to play around discuss API and help us debug :)
 
@@ -83,10 +83,6 @@ Use pip if you prefer Python wheels from PyPI.
 ```bash
 pip install pykep
 ```
-
-Current status: PyPI currently provides the stable v1 line.
-
-Wheel availability: currently Linux `arm64` and `amd64`.
 
 ### 3. Build from source (recommended for v3 development now)
 
