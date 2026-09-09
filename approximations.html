@@ -27,18 +27,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=d1bd4290"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -47,6 +47,7 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'approximations';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Numerical Propagation" href="propagation.html" />
@@ -54,20 +55,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -93,7 +100,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -400,11 +451,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -432,7 +490,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-transfers">Basic transfers</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.hohmann"><code class="docutils literal notranslate"><span class="pre">hohmann()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.bielliptic"><code class="docutils literal notranslate"><span class="pre">bielliptic()</span></code></a></li>
@@ -496,10 +554,10 @@ difficulty of a certain orbital geometry.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="mi">9000000</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dv_total</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="p">[</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">]</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">hohmann</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total delta v:&quot;</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transfer time:&quot;</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First delta v:&quot;</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Second delta v:&quot;</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Total delta v:"</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Transfer time:"</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">"s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"First delta v:"</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Second delta v:"</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -527,11 +585,11 @@ difficulty of a certain orbital geometry.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rb</span> <span class="o">=</span> <span class="mi">11000000</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_EARTH</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dv_total</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="p">[</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">dv3</span><span class="p">]</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">bielliptic</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total delta v:&quot;</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transfer time:&quot;</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First delta v:&quot;</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Second delta v:&quot;</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Third delta v:&quot;</span><span class="p">,</span> <span class="n">dv3</span><span class="p">,</span> <span class="s2">&quot;m/s&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Total delta v:"</span><span class="p">,</span> <span class="n">dv_total</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Transfer time:"</span><span class="p">,</span> <span class="n">t_transfer</span><span class="p">,</span> <span class="s2">"s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"First delta v:"</span><span class="p">,</span> <span class="n">dv1</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Second delta v:"</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Third delta v:"</span><span class="p">,</span> <span class="n">dv3</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -578,7 +636,7 @@ return None.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mim_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_f</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum initial mass:"</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">)</span>  
 </pre></div>
 </div>
 </dd></dl>
@@ -609,8 +667,8 @@ that transfer in low-thrust.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dv2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">510</span><span class="p">,</span><span class="mi">175</span><span class="p">,</span><span class="mi">87</span><span class="p">])</span> <span class="c1">#m/s</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tof</span> <span class="o">=</span> <span class="mi">150</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span> <span class="c1">#seconds</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span><span class="p">,</span> <span class="n">a_required</span>  <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">Tmax</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">veff</span><span class="o">=</span><span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum initial mass:"</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Required acceleration:"</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"mm/s)</span>
 </pre></div>
 </div>
 </dd>
@@ -643,8 +701,8 @@ for the global trajectory optimization competitions. Space Engineering: Modeling
 <span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mima</span><span class="p">,</span> <span class="n">a_required</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_t</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum initial mass:"</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Required acceleration:"</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"mm/s)</span>
 </pre></div>
 </div>
 </dd>
@@ -700,8 +758,8 @@ that transfer in low-thrust.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">veff</span> <span class="o">=</span> <span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mima2</span><span class="p">,</span> <span class="n">a_required</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">mima2_from_hop</span><span class="p">(</span><span class="n">pl_s</span><span class="p">,</span> <span class="n">pl_t</span><span class="p">,</span> <span class="n">when_s</span><span class="p">,</span> <span class="n">when_t</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">veff</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum initial mass:&quot;</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Required acceleration:&quot;</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;mm/s)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum initial mass:"</span><span class="p">,</span> <span class="n">mima</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Required acceleration:"</span><span class="p">,</span> <span class="n">a_required</span><span class="o">*</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"mm/s)</span>
 </pre></div>
 </div>
 </dd>
@@ -746,9 +804,9 @@ The distance returned will thus be in m/s.</p></li>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="n">pl_list</span> <span class="o">=</span> <span class="o">......</span> <span class="c1"># a list of planets</span>
-<span class="n">knn</span> <span class="o">=</span> <span class="n">phasing</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">pl_list</span><span class="p">,</span> <span class="n">epoch</span><span class="p">(</span><span class="n">t0</span><span class="p">),</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;orbital&#39;</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
-<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">dists</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">&#39;knn&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
-<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">&#39;ball&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+<span class="n">knn</span> <span class="o">=</span> <span class="n">phasing</span><span class="o">.</span><span class="n">knn</span><span class="p">(</span><span class="n">pl_list</span><span class="p">,</span> <span class="n">epoch</span><span class="p">(</span><span class="n">t0</span><span class="p">),</span> <span class="n">metric</span><span class="o">=</span><span class="s1">'orbital'</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">dists</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">'knn'</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">neighb</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">find_neighbours</span><span class="p">(</span><span class="n">pl_list</span><span class="p">[</span><span class="n">ast_0</span><span class="p">],</span> <span class="n">query_type</span><span class="o">=</span><span class="s1">'ball'</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -829,7 +887,7 @@ For arguments, see:
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-transfers">Basic transfers</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.hohmann"><code class="docutils literal notranslate"><span class="pre">hohmann()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.bielliptic"><code class="docutils literal notranslate"><span class="pre">bielliptic()</span></code></a></li>
@@ -898,8 +956,8 @@ By Dario Izzo
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>
