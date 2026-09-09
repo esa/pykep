@@ -194,7 +194,7 @@ TEST_CASE("reynolds_vs_lagrange")
     }
 
     { // Targeting Hyperbolas
-        std::uniform_real_distribution<double> sma_d(-1.1, -10.);
+        std::uniform_real_distribution<double> sma_d(-10., -1.1);
         std::uniform_real_distribution<double> ecc_d(1.1, 10.);
         std::uniform_real_distribution<double> incl_d(0., kep3::pi);
         std::uniform_real_distribution<double> Omega_d(0, 2 * kep3::pi);

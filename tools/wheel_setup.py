@@ -51,6 +51,18 @@ setup(
     install_requires=INSTALL_REQUIRES,
     packages=find_packages(include=["pykep", "pykep.*"]),
     include_package_data=True,
-    package_data={"pykep": ["*.so", "*.so.*"]},
+    # These non-.py resource directories have no __init__.py, so find_packages()
+    # does not detect them as packages: list their contents explicitly here or
+    # they get silently dropped from the wheel.
+    package_data={
+        "pykep": [
+            "*.so",
+            "*.so.*",
+            "data/*.bsp",
+            "data/*.tls",
+            "data/*.txt",
+            "trajopt/gym/tops/*.json",
+        ]
+    },
     distclass=BinaryDistribution,
 )
