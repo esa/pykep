@@ -185,6 +185,9 @@ class knn:
 
         query_type = 'knn':
             The kwarg 'k' determines how many k-nearest neighbours are returned.
+            Missing neighbours (when k exceeds the catalogue size or a
+            distance_upper_bound excludes them) are omitted from the result.
+            If none are found, three empty lists are returned.
             For arguments, see:
             https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html
 
@@ -193,6 +196,8 @@ class knn:
             For arguments, see:
             https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html
         """
+        import numpy as np
+
         if type(query_planet) == int:
             query_planet = self._asteroids[query_planet]
 
@@ -219,7 +224,8 @@ class knn:
         neighb = [
             # (ast. object, ast. ID, distance)
             (self._asteroids[i], i, d)
-            for i, d in zip(idxs, dists)
+            for i, d in zip(np.atleast_1d(idxs), np.atleast_1d(dists))
+            if i < self._kdtree.n
         ]
 
         # split into three lists, one of objects, one of IDs, and one for
