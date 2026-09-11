@@ -45,6 +45,19 @@ option(kep3_BUILD_BENCHMARKS "Build benchmarks." OFF)
 option(kep3_BUILD_PYTHON_BINDINGS "Build Python bindings." OFF)
 option(kep3_BUILD_CPP_LIBRARY "Build the kep3 C++ library from source." ON)
 
+# By default CMake omits -I/-isystem flags for directories the compiler already
+# searches implicitly. In a conda env that hides <prefix>/include (boost, fmt,
+# ...) from compile_commands.json, so IDE tooling such as clangd cannot resolve
+# those headers. Dropping the prefix from the implicit list makes the exported
+# compile database self-contained without affecting the actual build.
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+  foreach(_kep3_prefix IN LISTS CMAKE_PREFIX_PATH CMAKE_INSTALL_PREFIX)
+    list(REMOVE_ITEM CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "${_kep3_prefix}/include")
+    list(REMOVE_ITEM CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "${_kep3_prefix}/include")
+  endforeach()
+  unset(_kep3_prefix)
+endif()
+
 # NOTE: on Unix systems, the correct library installation path could be
 # something other than just "lib", such as "lib64", "lib32", etc., depending on
 # platform/configuration. Apparently, CMake provides this information via the

@@ -20,9 +20,9 @@
 
 #include <kep3/core_astro/constants.hpp>
 #include <kep3/core_astro/convert_anomalies.hpp>
-#include <kep3/core_astro/mee2par2mee.hpp>
 #include <kep3/core_astro/ic2mee2ic.hpp>
 #include <kep3/core_astro/ic2par2ic.hpp>
+#include <kep3/core_astro/mee2par2mee.hpp>
 #include <kep3/core_astro/propagate_lagrangian.hpp>
 #include <kep3/epoch.hpp>
 #include <kep3/planet.hpp>
@@ -37,9 +37,11 @@ keplerian::keplerian(const epoch &ref_epoch, const std::array<std::array<double,
       m_radius(added_params[1]), m_safe_radius(added_params[2]), m_period(), m_ellipse(), m_pos_vel_0(pos_vel),
       m_kep_f_elements()
 {
-    const double R = std::sqrt(pos_vel[0][0] * pos_vel[0][0] + pos_vel[0][1] * pos_vel[0][1] + pos_vel[0][2] * pos_vel[0][2]);
-    const double en = (pos_vel[1][0] * pos_vel[1][0] + pos_vel[1][1] * pos_vel[1][1] + pos_vel[1][2] * pos_vel[1][2]) / 2.
-                - mu_central_body / R;
+    const double R
+        = std::sqrt(pos_vel[0][0] * pos_vel[0][0] + pos_vel[0][1] * pos_vel[0][1] + pos_vel[0][2] * pos_vel[0][2]);
+    const double en
+        = (pos_vel[1][0] * pos_vel[1][0] + pos_vel[1][1] * pos_vel[1][1] + pos_vel[1][2] * pos_vel[1][2]) / 2.
+          - mu_central_body / R;
     (en > 0) ? m_ellipse = false : m_ellipse = true;
     const double a = -m_mu_central_body / 2. / en;
     if (m_ellipse) {
@@ -139,33 +141,33 @@ kep3::epoch keplerian::get_ref_epoch() const
     return m_ref_epoch;
 }
 
-//std::array<double, 6> keplerian::elements(double, kep3::elements_type el_type) const
+// std::array<double, 6> keplerian::elements(double, kep3::elements_type el_type) const
 //{
-//    std::array<double, 6> retval{};
-//    switch (el_type) {
-//        case kep3::elements_type::KEP_F:
-//            retval = m_kep_f_elements;
-//            break;
-//        case kep3::elements_type::KEP_M:
-//            if (!m_ellipse) {
-//                throw std::logic_error("Mean anomaly is only available for ellipses.");
-//            }
-//            retval = m_kep_f_elements;
-//            retval[5] = kep3::f2m(retval[5], retval[1]);
-//            break;
-//        case kep3::elements_type::MEE:
-//            retval = m_kep_f_elements;
-//            retval = kep3::par2mee(retval, false);
-//            break;
-//        case kep3::elements_type::MEE_R:
-//            retval = m_kep_f_elements;
-//            retval = kep3::par2mee(retval, true);
-//            break;
-//        default:
-//            throw std::logic_error("You should not go here!");
-//    }
-//    return retval;
-//}
+//     std::array<double, 6> retval{};
+//     switch (el_type) {
+//         case kep3::elements_type::KEP_F:
+//             retval = m_kep_f_elements;
+//             break;
+//         case kep3::elements_type::KEP_M:
+//             if (!m_ellipse) {
+//                 throw std::logic_error("Mean anomaly is only available for ellipses.");
+//             }
+//             retval = m_kep_f_elements;
+//             retval[5] = kep3::f2m(retval[5], retval[1]);
+//             break;
+//         case kep3::elements_type::MEE:
+//             retval = m_kep_f_elements;
+//             retval = kep3::par2mee(retval, false);
+//             break;
+//         case kep3::elements_type::MEE_R:
+//             retval = m_kep_f_elements;
+//             retval = kep3::par2mee(retval, true);
+//             break;
+//         default:
+//             throw std::logic_error("You should not go here!");
+//     }
+//     return retval;
+// }
 
 std::string keplerian::get_extra_info() const
 {
