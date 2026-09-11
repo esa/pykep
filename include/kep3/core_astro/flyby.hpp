@@ -12,8 +12,8 @@
 #define kep3_FLYBY_H
 
 #include <array>
-#include <utility>
 #include <optional>
+#include <utility>
 
 #include <heyoka/expression.hpp>
 
@@ -35,8 +35,8 @@ kep3_DLL_PUBLIC std::pair<double, double> fb_con(const std::array<double, 3> &v_
 
 // Returns symbolic expressions [eq_V2, ineq_delta] and, optionally, their Jacobian wrt
 // [vx_i, vy_i, vz_i, vx_o, vy_o, vz_o].
-kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>> fb_con(bool jacobian = false);
-
+kep3_DLL_PUBLIC std::pair<std::vector<heyoka::expression>, std::optional<std::vector<heyoka::expression>>>
+fb_con(bool jacobian = false);
 
 // Returns the dv needed to make a fly-by feasible. (assuming one DV at the out conditions).
 kep3_DLL_PUBLIC double fb_dv(const std::array<double, 3> &v_rel_in, const std::array<double, 3> &v_rel_out, double mu,

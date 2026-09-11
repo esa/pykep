@@ -120,7 +120,7 @@ jpl_lp::jpl_lp(std::string name)
         default: {
             throw std::logic_error("unknown planet name: ");
         }
-        // LCOV_EXCL_END
+        // LCOV_EXCL_STOP
     }
     m_name = m_name + "(jpl_lp)";
 }

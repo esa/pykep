@@ -178,3 +178,62 @@ cmake -S . -B build -G Ninja \
   -Dkep3_BUILD_BENCHMARKS=ON
 ```
 
+---
+
+## IDE setup (C++ code intelligence)
+
+`kep3` is developed against C++23, so code navigation, completion and diagnostics require a
+reasonably recent language server. We use [clangd](https://clangd.llvm.org/), which is shipped
+by the development environment itself (`clang-tools` in `kep3_devel.yml`).
+
+Everything clangd needs is produced by the configure step described above: as long as you pass
+`-DCMAKE_EXPORT_COMPILE_COMMANDS=1`, the resulting `build/compile_commands.json` is
+self-contained and no additional configuration file is required.
+
+### Steps
+
+1. Create the environment and configure the project as described in
+   [Build from source](#3-build-from-source-recommended-for-v3-development-now). clangd discovers
+   `compile_commands.json` automatically in the `build/` sub-directory.
+
+2. Install the
+   [clangd extension](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)
+   in VS Code (the Microsoft C/C++ extension is *not* needed, and the two should not be enabled
+   together as they conflict).
+
+3. Point the extension at the clangd from the active environment, otherwise it silently downloads
+   and uses its own (often outdated) copy. Print the path with:
+
+```bash
+echo "$CONDA_PREFIX/bin/clangd"
+```
+
+   and put it in `.vscode/settings.json` (this file is git-ignored, as the path is machine-specific):
+
+```json
+{
+    "clangd.path": "/paste/the/path/printed/above",
+    "clangd.checkUpdates": false
+}
+```
+
+4. Run `clangd: Restart language server` from the command palette (`Ctrl+Shift+P`).
+
+### Troubleshooting
+
+Diagnostics can be reproduced outside the editor, which is the quickest way to tell a genuine code
+error from a misconfigured language server:
+
+```bash
+clangd --check=src/udpla/keplerian.cpp
+```
+
+- `Invalid value 'c++23' in '-std=c++23'` — the language server is too old for C++23. The
+  extension is not using the clangd from the environment; re-check step 3, then confirm the
+  version reported at the top of the `clangd: Open log` output.
+- `'boost/...' file not found`, `'fmt/core.h' file not found` — the project was configured without
+  `-DCMAKE_EXPORT_COMPILE_COMMANDS=1`, or clangd is reading a stale/different build directory.
+- `'stddef.h' file not found` — `clang-tools` and `clangxx` are installed at mismatched major
+  versions; they locate each other through `lib/clang/<major>` and must agree. Re-create the
+  environment from `kep3_devel.yml`, which pins both.
+

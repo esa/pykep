@@ -4,7 +4,10 @@ channels:
 dependencies:
   - c-compiler
   - cxx-compiler
-  - clang-tools
+  # clangd (clang-tools) and the clang builtin headers (clangxx) must share the
+  # same major version, they locate each other via lib/clang/<major>.
+  - clang-tools 23.*
+  - clangxx 23.*
   - ninja
   - cmake >=3.28,<3.31
   - libboost >=1.73
