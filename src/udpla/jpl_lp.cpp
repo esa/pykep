@@ -116,11 +116,11 @@ jpl_lp::jpl_lp(std::string name)
             m_safe_radius = 1.1 * m_radius;
             m_mu_self = 6836529e9;
         } break;
-            // LCOV_EXCL_START
+        // LCOV_EXCL_START
         default: {
             throw std::logic_error("unknown planet name: ");
-            // LCOV_EXCL_END
         }
+        // LCOV_EXCL_END
     }
     m_name = m_name + "(jpl_lp)";
 }
