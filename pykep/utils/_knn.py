@@ -204,12 +204,21 @@ class knn:
             DV1, DV2 = self._orbital_metric(x[0], x[1])
             x = DV1 + DV2
 
+        import numpy as np
+
+        n = len(self._asteroids)
+
         if query_type == "knn":
-            # Query for the k nearest neighbors
             # http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html
             dists, idxs = self._kdtree.query(x, *args, **kwargs)
+            # k=1 returns scalars; normalize to arrays
+            idxs = np.atleast_1d(idxs)
+            dists = np.atleast_1d(dists)
+            # filter sentinel indices (tree size) used for missing neighbours
+            mask = idxs < n
+            idxs = idxs[mask]
+            dists = dists[mask]
         elif query_type == "ball":
-            # Query for all neighbors within a sphere of given radius
             # http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html
             idxs = self._kdtree.query_ball_point(x, *args, **kwargs)
             dists = [None] * len(idxs)
@@ -217,13 +226,10 @@ class knn:
             raise Exception("Unrecognized query type: %s" % str(query_type))
 
         neighb = [
-            # (ast. object, ast. ID, distance)
             (self._asteroids[i], i, d)
             for i, d in zip(idxs, dists)
         ]
 
-        # split into three lists, one of objects, one of IDs, and one for
-        # distances
         neighb, neighb_ids, dists = list(zip(*neighb)) if neighb != [] else ([], [], [])
 
         return neighb, neighb_ids, dists
