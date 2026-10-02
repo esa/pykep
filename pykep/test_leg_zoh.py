@@ -16,6 +16,34 @@ def compute_mismatch_constraints_n(leg, state0, controls, state1, tgrid):
 
 # The actual tests.
 class leg_zoh_test(_ut.TestCase):
+    def test_zoh_mutable_data_validation(self):
+        """We test that malformed mutable leg data raises ValueError before propagation."""
+        ta = _pk.ta.get_zoh_kep(1e-12)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-12)
+        state0 = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0]
+        state1 = state0.copy()
+        controls = [0.0] * 8
+        tgrid = [0.0, 0.5, 1.0]
+
+        with self.assertRaises(ValueError):
+            _pk.leg.zoh_py(state0[:-1], controls, state1, tgrid, 0.5, [ta, ta_var])
+
+        leg = _pk.leg.zoh_py(state0, controls, state1, tgrid, 0.5, [ta, ta_var])
+
+        leg.controls = controls[:-1]
+        with self.assertRaises(ValueError):
+            leg.compute_mismatch_constraints()
+
+        leg.controls = controls
+        leg.state1 = state1[:-1]
+        with self.assertRaises(ValueError):
+            leg.compute_mc_grad()
+
+        leg.state1 = state1
+        leg.tgrid = tgrid[:-1]
+        with self.assertRaises(ValueError):
+            leg.get_state_info()
+
     def test_zoh_mc_ballistic(self):
         import numpy as np
         import pykep as _pk

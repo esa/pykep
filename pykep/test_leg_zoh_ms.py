@@ -55,7 +55,7 @@ class leg_zoh_ms_test(_ut.TestCase):
         rng = np.random.default_rng(42)
         nseg, d, h = 4, 7, 1e-7
 
-        for cut in [0.0, 0.5, 1.0]:
+        for cut in [0.0, 0.25, 0.5, 0.75, 1.0]:
             # Random leg with non-zero defects around a circular orbit
             node = [1.0, 0.1, 0.0, 0.0, 1.0, 0.1, 1.0]
             states = (np.tile(node, nseg + 1) + rng.uniform(-0.05, 0.05, d * (nseg + 1))).tolist()

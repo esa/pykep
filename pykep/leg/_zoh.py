@@ -49,7 +49,7 @@ class zoh:
             dim_controls (:class:`int`, optional): Dimension of the control. Default is 4.
 
         Raises:
-            ValueError: If the integrators, ``controls`` and ``tgrid`` have inconsistent dimensions.
+            ValueError: If the integrators, endpoint states, ``controls`` or ``tgrid`` have inconsistent dimensions.
 
         Notes:
             ``state0``, ``controls``, ``state1`` and ``tgrid`` are stored as passed and are meant to be lists,
@@ -69,24 +69,45 @@ class zoh:
         self.ta = tas[0]
         self.ta_var = tas[1]
 
-        # Save non-control parameter values for cfunc calls
-        self.pars_no_control = self.ta.pars[self.dim_controls :].tolist()
-
         # Convenient quantities
+        if self.dim_controls <= 0:
+            raise ValueError("The control dimension must be positive")
         self.nseg = len(self.controls) // self.dim_controls
         self.nseg_fwd = int(self.nseg * cut)
         self.nseg_bck = self.nseg - self.nseg_fwd
 
-        # Sanity checks on integrators
+        # Guard against mutations to the leg data before using it.
+        self._validate_leg()
+
+        # Save non-control parameter values for cfunc calls
+        self.pars_no_control = self.ta.pars[self.dim_controls :].tolist()
+
+        if self.ta_var is not None:
+            self.ic_var = _np.hstack(
+                (
+                    _np.eye(self.dim_dynamics, self.dim_dynamics),
+                    _np.zeros((self.dim_dynamics, self.dim_controls)),
+                )
+            ).flatten()
+
+        # Compile dynamics cfunc used in gradient computations
+        sys = self.ta.sys
+        vars = [it[0] for it in sys]
+        dyn = [it[1] for it in sys]
+        self.dyn_cfunc = _hy.cfunc_dbl(dyn, vars, compact_mode=True)
+
+    def _validate_leg(self):
+        """Validate integrator dimensions and the mutable leg data."""
+        if self.dim_dynamics <= 0:
+            raise ValueError("The dynamics dimension must be positive")
         if len(self.ta.state) != self.dim_dynamics:
             raise ValueError(
-                f"Attempting to construct a zoh_leg with a Taylor Adaptive integrator state dimension of {len(self.ta.state)}, while {self.dim_dynamics} is required"
+                f"Attempting to use a zoh_leg with a Taylor Adaptive integrator state dimension of {len(self.ta.state)}, while {self.dim_dynamics} is required"
             )
         if len(self.ta.pars) < self.dim_controls:
             raise ValueError(
-                f"Attempting to construct a zoh_leg with a Taylor Adaptive integrator parameters dimension of {len(self.ta.pars)}, while >={self.dim_controls} is required"
+                f"Attempting to use a zoh_leg with a Taylor Adaptive integrator parameters dimension of {len(self.ta.pars)}, while >={self.dim_controls} is required"
             )
-
         if self.ta_var is not None:
             expected_var_dim = (
                 self.dim_dynamics
@@ -95,34 +116,32 @@ class zoh:
             )
             if len(self.ta_var.state) != expected_var_dim:
                 raise ValueError(
-                    f"Attempting to construct a zoh_leg with a variational Taylor Adaptive integrator state dimension of {len(self.ta_var.state)}, while {expected_var_dim} is required"
+                    f"Attempting to use a zoh_leg with a variational Taylor Adaptive integrator state dimension of {len(self.ta_var.state)}, while {expected_var_dim} is required"
                 )
             if len(self.ta_var.pars) != len(self.ta.pars):
                 raise ValueError(
-                    "While constructing a zoh_leg, the number of parameters in the variational and non-variational integrators must be equal"
+                    "While using a zoh_leg, the number of parameters in the variational and non-variational integrators must be equal"
                 )
-            self.ic_var = _np.hstack(
-                (
-                    _np.eye(self.dim_dynamics, self.dim_dynamics),
-                    _np.zeros((self.dim_dynamics, self.dim_controls)),
-                )
-            ).flatten()
-
-        # Sanity checks on grids/controls
         if len(self.controls) % self.dim_controls > 0:
             raise ValueError(
-                f"In a zoh_leg controls must be multiple of {self.dim_controls}: control * nseg"
+                f"Attempting to use a zoh_leg with a number of controls ({len(self.controls)}) that is not a multiple of the control dimension ({self.dim_controls})"
             )
-        if len(tgrid) != self.nseg + 1:
+        if len(self.controls) != self.nseg * self.dim_controls:
             raise ValueError(
-                f"The t_grid and the controls have incompatible lengths. It must be nseg*{self.dim_controls} and nseg+1"
+                f"Attempting to use a zoh_leg with a controls array of length {len(self.controls)}, while {self.nseg * self.dim_controls} is required"
             )
-
-        # Compile dynamics cfunc used in gradient computations
-        sys = self.ta.sys
-        vars = [it[0] for it in sys]
-        dyn = [it[1] for it in sys]
-        self.dyn_cfunc = _hy.cfunc_dbl(dyn, vars, compact_mode=True)
+        if len(self.state0) != self.dim_dynamics:
+            raise ValueError(
+                f"Attempting to use a zoh_leg with an initial state of length {len(self.state0)}, while {self.dim_dynamics} is required"
+            )
+        if len(self.state1) != self.dim_dynamics:
+            raise ValueError(
+                f"Attempting to use a zoh_leg with a final state of length {len(self.state1)}, while {self.dim_dynamics} is required"
+            )
+        if len(self.tgrid) != self.nseg + 1:
+            raise ValueError(
+                f"Attempting to use a zoh_leg with a time grid of length {len(self.tgrid)}, while {self.nseg + 1} is required"
+            )
 
     def _propagate_until(self, ta, t_end):
         """Propagate safely and restore state if the integrator fails.
@@ -148,6 +167,8 @@ class zoh:
         Returns:
             :class:`list`: Mismatch vector of length ``dim_dynamics``.
         """
+        # Guard against mutations to the leg data before using it.
+        self._validate_leg()
         c = self.dim_controls
 
         # Forward segments (up to failure or cut)
@@ -180,6 +201,8 @@ class zoh:
             ``(dmc_dx0, dmc_dx1, dmc_dcontrols, dmc_dtgrid)`` with shapes
             ``(d,d)``, ``(d,d)``, ``(d,c*nseg)``, ``(d,nseg+1)``.
         """
+        # Guard against mutations to the leg data before using it.
+        self._validate_leg()
         if self.ta_var is None:
             raise RuntimeError(
                 "compute_mc_grad requires a variational integrator (tas[1] must not be None)"
@@ -313,6 +336,8 @@ class zoh:
             ``success`` is ``True`` only if every requested segment returns all
             ``N`` samples.
         """
+        # Guard against mutations to the leg data before using it.
+        self._validate_leg()
         c = self.dim_controls
         success = True
 
