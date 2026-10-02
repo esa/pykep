@@ -13,3 +13,8 @@ Interplanetary transfer legs
 .. autoclass:: zoh
    :members: compute_mc_grad, get_state_info 
 
+-----------------------------------------------------
+
+.. autoclass:: zoh_ms_py
+   :members: compute_defects_grad, get_state_info 
+
