@@ -70,6 +70,7 @@ For private helpers or very simple functions, use only the concise summary when 
 ## Comments and numerical code
 
 - Use comments to describe the overall logic, construction, and flow of a non-trivial algorithm, especially how its stages or transformations fit together.
+- Start each test with a brief docstring stating the test philosophy, i.e. what property is being tested, phrased as "We test that ..." (e.g. "We test that the initial guess is actually set", "We test for malformed input").
 - In non-trivial tests, use short comments to record the test logic at its meaningful stages: what mathematical or numerical object is constructed, how the implementation under test is evaluated, and what reference result or invariant is used for comparison.
 - Place a short orienting comment before a complex block when it helps explain the purpose of the block and how it connects to the surrounding computation.
 - Use additional comments for mathematical intent, numerical details, algorithmic choices, or non-obvious implementation constraints.

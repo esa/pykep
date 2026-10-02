@@ -38,3 +38,4 @@ zoh.__module__ = "pykep.leg"
 del _core
 
 from ._zoh import zoh as zoh_py
+from ._zoh_ms import zoh_ms as zoh_ms_py

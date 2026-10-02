@@ -25,6 +25,36 @@ class zoh:
         dim_dynamics=7,
         dim_controls=4,
     ):
+        """zoh(state0, controls, state1, tgrid, cut, tas, max_steps=None, dim_dynamics=7, dim_controls=4)
+
+        Args:
+            state0 (:class:`list`): Initial state, of length ``dim_dynamics``.
+
+            controls (:class:`list`): Flat vector of the piecewise-constant controls, of length ``nseg * dim_controls``.
+
+            state1 (:class:`list`): Final state, of length ``dim_dynamics``.
+
+            tgrid (:class:`list`): Time grid of ``nseg + 1`` points.
+
+            cut (:class:`float`): Fraction of segments, in :math:`[0, 1]`, propagated forward.
+
+            tas (:class:`tuple`): Pair ``(ta, ta_var)`` of :class:`heyoka.taylor_adaptive` integrators. The first
+            has ``dim_dynamics`` states and at least ``dim_controls`` parameters (controls first); the second is its
+            variational counterpart w.r.t. states and controls, or None.
+
+            max_steps (:class:`int`, optional): Maximum number of integration steps per segment. Default is None (no limit).
+
+            dim_dynamics (:class:`int`, optional): Dimension of the state. Default is 7.
+
+            dim_controls (:class:`int`, optional): Dimension of the control. Default is 4.
+
+        Raises:
+            ValueError: If the integrators, ``controls`` and ``tgrid`` have inconsistent dimensions.
+
+        Notes:
+            ``state0``, ``controls``, ``state1`` and ``tgrid`` are stored as passed and are meant to be lists,
+            mirroring ``std::vector``. Other sequences, such as NumPy arrays, also work.
+        """
         # We store the constructor args
         self.state0 = state0
         self.controls = controls
@@ -262,11 +292,26 @@ class zoh:
         dmc_dcontrols = _np.hstack((C_fwd, -C_bck))
         return dmc_dx0, dmc_dx1, dmc_dcontrols, dmcdtgrid
 
-    def get_state_info(self, N=2):
-        """Returns sampled state histories on each forward/backward segment.
+    def get_state_info(self, N=50):
+        """Returns sampled state histories on each forward and backward segment.
+
+        Each segment contains ``N`` states, including its endpoints. Forward
+        segments are ordered from the initial time toward the cut, and their
+        samples are in increasing-time order. Backward segments are ordered
+        from the final time toward the cut, and their samples are in
+        decreasing-time order. The state components retain the ordering used
+        by the integrator.
+
+        Args:
+            N (:class:`int`, optional): Number of sampling points per segment,
+                including both endpoints. Default is 50.
 
         Returns:
             tuple[list, list, bool]: ``(state_fwd, state_bck, success)``.
+            Each history is a list of per-segment state arrays; either list may
+            be shorter than its expected length if propagation fails.
+            ``success`` is ``True`` only if every requested segment returns all
+            ``N`` samples.
         """
         c = self.dim_controls
         success = True
