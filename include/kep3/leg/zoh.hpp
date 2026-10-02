@@ -59,12 +59,13 @@ public:
     // Setters
     void set_state0(const std::vector<double> &state0);
     void set_state1(const std::vector<double> &state1);
+    // These setters preserve nseg; use set() to change the segment count.
     void set_controls(const std::vector<double> &controls);
     void set_tgrid(const std::vector<double> &tgrid);
     void set_cut(double cut);
     void set_max_steps(std::optional<unsigned> max_steps);
     void set(const std::vector<double> &state0, const std::vector<double> &controls,
-             const std::vector<double> &state1, const std::vector<double> &tgrid, double cut,
+             const std::vector<double> &state1, const std::vector<double> &tgrid, std::optional<double> cut = std::nullopt,
              std::optional<unsigned> max_steps = std::nullopt);
 
     // Getters

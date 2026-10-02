@@ -9,6 +9,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include <array>
+#include <stdexcept>
 #include <vector>
 
 #include <kep3/core_astro/constants.hpp>
@@ -85,6 +86,37 @@ zoh_reference_case make_reference_case()
 }
 
 } // namespace
+
+TEST_CASE("zoh segment updates preserve state on invalid sizes")
+{
+    // We test that rejected size changes leave the leg's stored segment data unchanged.
+    auto data = make_reference_case();
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
+    const auto original_controls = leg.get_controls();
+    const auto original_tgrid = leg.get_tgrid();
+
+    REQUIRE_THROWS_AS(leg.set_controls(std::vector<double>(16u, 0.0)), std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+
+    REQUIRE_THROWS_AS(leg.set_tgrid(std::vector<double>(5u, 0.0)), std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+
+    REQUIRE_THROWS_AS(leg.set(data.state0, std::vector<double>(16u, 0.0), data.state1, data.tgrid, data.cut),
+                      std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+
+    const std::vector<double> resized_controls(16u, 0.0);
+    const std::vector<double> resized_tgrid{data.tgrid.front(), data.tgrid[1u], data.tgrid[2u], data.tgrid[3u],
+                                            data.tgrid.back()};
+    leg.set(data.state0, resized_controls, data.state1, resized_tgrid);
+    REQUIRE(leg.get_controls() == resized_controls);
+    REQUIRE(leg.get_tgrid() == resized_tgrid);
+    REQUIRE(leg.get_cut() == data.cut);
+    REQUIRE(leg.get_nseg() == 4u);
+}
 
 TEST_CASE("compute_mismatch_constraints")
 {
