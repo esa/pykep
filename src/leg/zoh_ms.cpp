@@ -58,7 +58,6 @@ zoh_ms::zoh_ms(const std::vector<double> &states, const std::vector<double> &con
 {
     update_nseg();
     update_pars_no_control();
-
     sanity_checks();
 }
 
