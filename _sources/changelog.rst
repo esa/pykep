@@ -21,6 +21,16 @@ Build system
 Bug fixes
 ---------
 
+- Fixed :class:`~pykep.utils.knn` nearest-neighbour queries. ``cKDTree.query``
+  returns scalar results for the default ``k=1`` and uses the size of the tree as
+  the index of a neighbour it could not find, while ``find_neighbours`` assumed
+  iterable, valid indices. A single-neighbour query therefore raised
+  ``TypeError``, and an ``IndexError`` was raised whenever fewer than ``k``
+  neighbours existed or a ``distance_upper_bound`` excluded some of them. Results
+  are now normalised to arrays and the unreachable entries dropped, so a query
+  that matches nothing returns three empty lists. Both the ``orbital`` and the
+  ``euclidean`` metrics were affected.
+
 - Fixed pickling of TOPS gym classes. The lambdas passed as ``state2cart``
   and equivalent callbacks to the internal UDP prevented serialization. They were
   replaced with :func:`functools.partial` wrapping small module-level helper

@@ -530,12 +530,12 @@ also including leap seconds, he will have to account for the offset himself. As 
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.epoch">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MJD2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">julian_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MJD2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.epoch" title="Link to this definition">#</a></dt>
 <dd><p>Represents a specific point in time.</p>
 <blockquote>
 <div><p>Constructs an epoch from a Julian Date.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the Julian Date (days since reference)</p>
+<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the Julian Date (days since reference)</p>
 <p><em>julian_type</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">julian_type</span></code>): one of MJD2000, JD or MJD</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -550,7 +550,7 @@ also including leap seconds, he will have to account for the offset himself. As 
 <dt><strong>Alternative Constructor:</strong></dt><dd><p><strong>__init__(</strong> <em>when: str</em>, <em>string_format = pk.epoch.string_format.ISO</em> <strong>)</strong></p>
 <p>Constructs an epoch from a string.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): a date</p>
+<dt>Args:</dt><dd><p><em>when</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): a date</p>
 <p><em>string_format</em> (<a class="reference internal" href="#pykep.epoch.string_format" title="pykep.epoch.string_format"><code class="xref py py-class docutils literal notranslate"><span class="pre">string_format</span></code></a>): string format.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>

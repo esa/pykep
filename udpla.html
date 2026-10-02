@@ -563,10 +563,10 @@
 <p>Constructs a Keplerian udpla from its orbital elements at epoch.</p>
 <dl>
 <dt>Args:</dt><dd><p><em>when</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the epoch at which the orbital elements are provided.</p>
-<p><em>elem</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): the orbital elements. by default.</p>
-<p><em>mu_central_body</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the gravitational parameter of the main attracting body.</p>
-<p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the orbiting body.</p>
-<p><em>added_params</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): the body gravitational parameter, its radius and its safe radius. (if -1 they are assumed unknown)</p>
+<p><em>elem</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): the orbital elements. by default.</p>
+<p><em>mu_central_body</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the gravitational parameter of the main attracting body.</p>
+<p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the orbiting body.</p>
+<p><em>added_params</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): the body gravitational parameter, its radius and its safe radius. (if -1 they are assumed unknown)</p>
 <p><em>el_type</em> (<a class="reference internal" href="elements.html#pykep.el_type" title="pykep.el_type"><code class="xref py py-class docutils literal notranslate"><span class="pre">el_type</span></code></a>): the elements type. Defaults to osculating Keplerian (a ,e ,i, W, w, f) with true anomaly.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -583,10 +583,10 @@
 <p>Constructs a Keplerian udpla from its position and velocity at epoch.</p>
 <dl>
 <dt>Args:</dt><dd><p><em>ep</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the epoch at which the orbital elements are provided.</p>
-<p><em>posvel</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]): the body position and velocty.</p>
-<p><em>mu_central_body</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the gravitational parameter of the main attracting body.</p>
-<p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the orbiting body.</p>
-<p><em>added_params</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): the body gravitational parameter, its radius and its safe radius. (if -1 they are assumed unknown)</p>
+<p><em>posvel</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]): the body position and velocty.</p>
+<p><em>mu_central_body</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the gravitational parameter of the main attracting body.</p>
+<p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the orbiting body.</p>
+<p><em>added_params</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): the body gravitational parameter, its radius and its safe radius. (if -1 they are assumed unknown)</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
@@ -607,7 +607,7 @@
 <p>Constructs a solar system planet with ephemerides computed using a low-precision (non Keplerian)
 model from JPL (<a class="reference external" href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">https://ssd.jpl.nasa.gov/planets/approx_pos.html</a>).</p>
 <dl>
-<dt>Args:</dt><dd><p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the solar system planet.</p>
+<dt>Args:</dt><dd><p><em>name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the solar system planet.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udpla</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"mercury"</span><span class="p">)</span>
@@ -653,8 +653,8 @@ The planet’s radius.</p>
 <p>Constructs a solar system planet with ephemerides computed using the VSOP2013 analytical
 theory (<a class="reference external" href="https://en.wikipedia.org/wiki/VSOP_model">https://en.wikipedia.org/wiki/VSOP_model</a>).</p>
 <dl>
-<dt>Args:</dt><dd><p><em>body</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the solar system planet.</p>
-<p><em>thresh</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the truncation threshold for the theory’s coefficients.</p>
+<dt>Args:</dt><dd><p><em>body</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): the name of the solar system planet.</p>
+<p><em>thresh</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the truncation threshold for the theory’s coefficients.</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">udpla</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">vsop2013</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s2">"venus"</span><span class="p">)</span>
@@ -671,8 +671,8 @@ theory (<a class="reference external" href="https://en.wikipedia.org/wiki/VSOP_m
 <dd><p>This User Defined Planet (UDPLA) represents a satellite orbiting the Earth and defined in the TLE format
 and propagated using the SGP4 propagator.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>line1</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): The first line of a TLE</p>
-<p><em>line2</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): The second line of a TLE</p>
+<dt>Args:</dt><dd><p><em>line1</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): The first line of a TLE</p>
+<p><em>line2</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): The second line of a TLE</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -695,9 +695,9 @@ and propagated using the SGP4 propagator.</p>
 <span class="sig-name descname"><span class="pre">eph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.tle.eph" title="Link to this definition">#</a></dt>
 <dd><p>Mandatory method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Modified Julian Date 2000.</p>
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Modified Julian Date 2000.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: the planet ephemerides.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: the planet ephemerides.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -719,7 +719,7 @@ and propagated using the SGP4 propagator.</p>
 <span class="sig-name descname"><span class="pre">get_extra_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.tle.get_extra_info" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: Extra info on the udpla</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: Extra info on the udpla</p>
 </dd>
 </dl>
 </dd></dl>
@@ -729,7 +729,7 @@ and propagated using the SGP4 propagator.</p>
 <span class="sig-name descname"><span class="pre">get_mu_central_body</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.tle.get_mu_central_body" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: the graviational parameter of the Earth.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: the graviational parameter of the Earth.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -739,7 +739,7 @@ and propagated using the SGP4 propagator.</p>
 <span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.tle.get_name" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
 </dd>
 </dl>
 </dd></dl>
@@ -771,9 +771,9 @@ fail rising an exception.</p>
 <span class="sig-name descname"><span class="pre">eph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.spice.eph" title="Link to this definition">#</a></dt>
 <dd><p>Mandatory method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Modified Julian Date 2000</p>
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Modified Julian Date 2000</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: the planet ephemerides.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: the planet ephemerides.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -783,7 +783,7 @@ fail rising an exception.</p>
 <span class="sig-name descname"><span class="pre">get_extra_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.spice.get_extra_info" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: Extra info on the udpla</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: Extra info on the udpla</p>
 </dd>
 </dl>
 </dd></dl>
@@ -793,7 +793,7 @@ fail rising an exception.</p>
 <span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.spice.get_name" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
 </dd>
 </dl>
 </dd></dl>
@@ -806,9 +806,9 @@ fail rising an exception.</p>
 <dd><p>This User Defined Planet (UDPLA) represents a solar system planet as described by JPL 440s ephemerides.
 The correct spice kernel is preloaded upon instantiation of the class as its shipped with the pykep module.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>body</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the solar system body. Defaults to: “EARTH BARYCENTER”.</p>
-<p><em>ref_frame</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the reference frame. For example: “ECLIPJ2000”.</p>
-<p><em>obs</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the observer. For example: “SSB” (solar system barycenter).</p>
+<dt>Args:</dt><dd><p><em>body</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the solar system body. Defaults to: “EARTH BARYCENTER”.</p>
+<p><em>ref_frame</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the reference frame. For example: “ECLIPJ2000”.</p>
+<p><em>obs</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): NAIF name of the observer. For example: “SSB” (solar system barycenter).</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -817,7 +817,7 @@ The correct spice kernel is preloaded upon instantiation of the class as its shi
 <dd><p>The list of bodies contained in the de440s ephemerides. 
 This is a static method and can be queried before constructing the object.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The list of possible body names.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The list of possible body names.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -827,7 +827,7 @@ This is a static method and can be queried before constructing the object.</p>
 <span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.de440s.get_name" title="Link to this definition">#</a></dt>
 <dd><p>Optional method of the <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a> interface.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The body name</p>
 </dd>
 </dl>
 </dd></dl>
@@ -837,7 +837,7 @@ This is a static method and can be queried before constructing the object.</p>
 <span class="sig-name descname"><span class="pre">kernel_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.de440s.kernel_file" title="Link to this definition">#</a></dt>
 <dd><p>The full path for the kernel file “de440s.bsp” shipped in <cite>pykep</cite></p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The full file name.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The full file name.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -854,22 +854,22 @@ length/time scales supplied at construction, and implements the
 optional <code class="docutils literal notranslate"><span class="pre">acc</span></code> method required by gradient-enabled problems.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>when</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a>): Reference epoch (MJD2000) for the provided</dt><dd><p>reference state. If a <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a> is provided, its <code class="docutils literal notranslate"><span class="pre">mjd2000</span></code> value is used.</p>
+<dt><em>when</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a>): Reference epoch (MJD2000) for the provided</dt><dd><p>reference state. If a <a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.epoch</span></code></a> is provided, its <code class="docutils literal notranslate"><span class="pre">mjd2000</span></code> value is used.</p>
 </dd>
-<dt><em>state_nd</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): Reference 6D state in non-dimensional</dt><dd><p>CR3BP units used to initialize the internal integrator: <code class="docutils literal notranslate"><span class="pre">[x,y,z,vx,vy,vz]</span></code>.</p>
+<dt><em>state_nd</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>): Reference 6D state in non-dimensional</dt><dd><p>CR3BP units used to initialize the internal integrator: <code class="docutils literal notranslate"><span class="pre">[x,y,z,vx,vy,vz]</span></code>.</p>
 </dd>
 </dl>
-<p><em>mu_cr3bp</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): The CR3BP mass parameter (non-dimensional).</p>
+<p><em>mu_cr3bp</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): The CR3BP mass parameter (non-dimensional).</p>
 <dl class="simple">
-<dt><em>TIME</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Time scale (non-dimensional seconds) used to convert between</dt><dd><p>MJD2000/seconds and the integrator’s internal time units.</p>
+<dt><em>TIME</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Time scale (non-dimensional seconds) used to convert between</dt><dd><p>MJD2000/seconds and the integrator’s internal time units.</p>
 </dd>
 </dl>
-<p><em>L</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Length scale used to map integrator positions to SI units.</p>
+<p><em>L</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Length scale used to map integrator positions to SI units.</p>
 <dl class="simple">
-<dt><em>name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Human-readable name for the UDPLA. If omitted a default</dt><dd><p>descriptive name containing <code class="docutils literal notranslate"><span class="pre">mu_cr3bp</span></code> is assigned.</p>
+<dt><em>name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Human-readable name for the UDPLA. If omitted a default</dt><dd><p>descriptive name containing <code class="docutils literal notranslate"><span class="pre">mu_cr3bp</span></code> is assigned.</p>
 </dd>
 </dl>
-<p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Tolerance passed to the internal Taylor adaptive integrator.</p>
+<p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Tolerance passed to the internal Taylor adaptive integrator.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -877,9 +877,9 @@ optional <code class="docutils literal notranslate"><span class="pre">acc</span>
 <span class="sig-name descname"><span class="pre">acc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.acc" title="Link to this definition">#</a></dt>
 <dd><p>Return acceleration from the CR3BP dynamics at the requested epoch.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>: Acceleration at the epoch, returned in SI units (meters/second^2).</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>: Acceleration at the epoch, returned in SI units (meters/second^2).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -889,9 +889,9 @@ optional <code class="docutils literal notranslate"><span class="pre">acc</span>
 <span class="sig-name descname"><span class="pre">eph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd2000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.udpla.cr3bp.eph" title="Link to this definition">#</a></dt>
 <dd><p>Return position and velocity at the requested epoch.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
+<dt>Args:</dt><dd><p><em>mjd2000</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Epoch in MJD2000 days.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: Position and velocity in SI units (meters, meters/second).</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]: Position and velocity in SI units (meters, meters/second).</p>
 </dd>
 </dl>
 </dd></dl>

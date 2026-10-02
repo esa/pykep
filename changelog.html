@@ -524,6 +524,15 @@ already-installed <code class="docutils literal notranslate"><span class="pre">k
 <section id="bug-fixes">
 <h3>Bug fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed <a class="reference internal" href="approximations.html#pykep.utils.knn" title="pykep.utils.knn"><code class="xref py py-class docutils literal notranslate"><span class="pre">knn</span></code></a> nearest-neighbour queries. <code class="docutils literal notranslate"><span class="pre">cKDTree.query</span></code>
+returns scalar results for the default <code class="docutils literal notranslate"><span class="pre">k=1</span></code> and uses the size of the tree as
+the index of a neighbour it could not find, while <code class="docutils literal notranslate"><span class="pre">find_neighbours</span></code> assumed
+iterable, valid indices. A single-neighbour query therefore raised
+<code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, and an <code class="docutils literal notranslate"><span class="pre">IndexError</span></code> was raised whenever fewer than <code class="docutils literal notranslate"><span class="pre">k</span></code>
+neighbours existed or a <code class="docutils literal notranslate"><span class="pre">distance_upper_bound</span></code> excluded some of them. Results
+are now normalised to arrays and the unreachable entries dropped, so a query
+that matches nothing returns three empty lists. Both the <code class="docutils literal notranslate"><span class="pre">orbital</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">euclidean</span></code> metrics were affected.</p></li>
 <li><p>Fixed pickling of TOPS gym classes. The lambdas passed as <code class="docutils literal notranslate"><span class="pre">state2cart</span></code>
 and equivalent callbacks to the internal UDP prevented serialization. They were
 replaced with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> wrapping small module-level helper

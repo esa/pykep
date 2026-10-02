@@ -548,7 +548,7 @@
 <span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">load_spice_kernels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.load_spice_kernels" title="Link to this definition">#</a></dt>
 <dd><p>Loads one or more kernels for use with the NAIF spice toolkit.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>paths (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): The path (or paths) of the kernels to load</p>
+<dt>Args:</dt><dd><p>paths (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code> or <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): The path (or paths) of the kernels to load</p>
 </dd>
 </dl>
 </dd></dl>
@@ -558,7 +558,7 @@
 <span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">unload_spice_kernels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.unload_spice_kernels" title="Link to this definition">#</a></dt>
 <dd><p>Unloads from memory one or more kernels for use with the NAIF spice toolkit.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>paths (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): The path (or paths) of the kernels to load</p>
+<dt>Args:</dt><dd><p>paths (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code> or <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): The path (or paths) of the kernels to load</p>
 </dd>
 </dl>
 </dd></dl>
@@ -571,7 +571,7 @@ This is useful to understand the possibile queries to make for a certain kernel.
 <dl class="simple">
 <dt>Args:</dt><dd><p>path (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The path (or paths) of the kernels to load</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: the NAIF ids of the objects found in the kernels.</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: the NAIF ids of the objects found in the kernels.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,7 +583,7 @@ This is useful to understand the possibile queries to make for a certain kernel.
 <dl class="simple">
 <dt>Args:</dt><dd><p>name (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The name of the planet/comet/spacecraft to be found</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> the NAIF id of the the planet/comet/spacecraft</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> the NAIF id of the the planet/comet/spacecraft</p>
 </dd>
 </dl>
 </dd></dl>
@@ -600,8 +600,8 @@ of the UTC-labeled origin of pykep mjd2000; thus mjd2000_days = (et - ET0) / 864
 as (et + 43135.816087188054) * SEC2DAY.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>path (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The path (or paths) of the kernel where the ephemerides are defined in windows.
-naifid (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The NAIF id.
-window_n (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The window to consider (in case ephs are defined in multiple windows of validity)</p>
+naifid (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The NAIF id.
+window_n (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The window to consider (in case ephs are defined in multiple windows of validity)</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pk.epoch</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pk.epoch</span></code>: Starting and final epoch of the <em>n</em>-th window</p>
 </dd>
@@ -632,7 +632,7 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>name (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The name of the reference frame to be found</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> the NAIF id of the reference frame</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> the NAIF id of the reference frame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -656,7 +656,7 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">naifid2name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">naifid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.naifid2name" title="Link to this definition">#</a></dt>
 <dd><p>Retreives the planet/comet/spacecraft name from its NAIF id.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>name (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The NAIF id.</p>
+<dt>Args:</dt><dd><p>name (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): The NAIF id.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code> the name of the the planet/comet/spacecraft</p>
 </dd>
@@ -671,10 +671,10 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">alpha2direct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphas</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.alpha2direct" title="Link to this definition">#</a></dt>
 <dd><p>Converts from alpha encoded to transfer times.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>alphas</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times encoded using the alpha encoding.</p>
-<p><em>T</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the total transfer time.</p>
+<dt>Args:</dt><dd><p><em>alphas</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times encoded using the alpha encoding.</p>
+<p><em>T</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the total transfer time.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The encoded transfer times</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The encoded transfer times</p>
 </dd>
 </dl>
 </dd></dl>
@@ -684,9 +684,9 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">direct2alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.direct2alpha" title="Link to this definition">#</a></dt>
 <dd><p>Converts from transfer times to alpha encoded.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tofs</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times.</p>
+<dt>Args:</dt><dd><p><em>tofs</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: The alpha-encoded transfer times, the total transfer time (for cenvenience)</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>: The alpha-encoded transfer times, the total transfer time (for cenvenience)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -696,10 +696,10 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <span class="sig-prename descclassname"><span class="pre">pykep.</span></span><span class="sig-name descname"><span class="pre">eta2direct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">etas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.eta2direct" title="Link to this definition">#</a></dt>
 <dd><p>Converts from eta encoded to transfer times.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>etas</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times encoded using the eta encoding.</p>
-<p><em>max_tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): maximum time of flight (might actually be less according to the value of the last eta.)</p>
+<dt>Args:</dt><dd><p><em>etas</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): a sequence of transfer times encoded using the eta encoding.</p>
+<p><em>max_tof</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): maximum time of flight (might actually be less according to the value of the last eta.)</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The encoded transfer times</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The encoded transfer times</p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,10 +711,10 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <div><p>Converts from transfer times to eta encoded.</p>
 </div></blockquote>
 <dl>
-<dt>Args:</dt><dd><p><em>tofs</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>):  a sequence of transfer times</p>
-<p><em>max_tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): maximum time of flight (might actually be less according to the value of the last eta.)</p>
+<dt>Args:</dt><dd><p><em>tofs</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>):  a sequence of transfer times</p>
+<p><em>max_tof</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): maximum time of flight (might actually be less according to the value of the last eta.)</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The eta-encoded transfer times</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: The eta-encoded transfer times</p>
 </dd>
 </dl>
 </dd></dl>
@@ -726,7 +726,7 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p><em>uvV</em> (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a sequence of 3 floats representing the vector in uvV encoding.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The vector in cartesian coordinates</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The vector in cartesian coordinates</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,7 +738,7 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p><em>V</em> (<code class="docutils literal notranslate"><span class="pre">array-like</span></code>): a sequence of 3 floats representing the vector in cartesian coordinates.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The vector in uvV encoding</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>:: The vector in uvV encoding</p>
 </dd>
 </dl>
 </dd></dl>
@@ -781,7 +781,7 @@ at any epoch, but will only be matching the original ones at <em>t0</em>.</p>
 <dl>
 <dt>Args:</dt><dd><p><em>pla</em> (<a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>): the input planet.</p>
 <p><em>when</em> (<a class="reference internal" href="epoch.html#pykep.epoch" title="pykep.epoch"><code class="xref py py-class docutils literal notranslate"><span class="pre">epoch</span></code></a>): the epoch to match the osculating elements.</p>
-<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): the central body parameter. Defaults to the one computed from the input <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>.</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): the central body parameter. Defaults to the one computed from the input <a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>.</p>
 </dd>
 <dt>Returns:</dt><dd><p><a class="reference internal" href="planet.html#pykep.planet" title="pykep.planet"><code class="xref py py-class docutils literal notranslate"><span class="pre">planet</span></code></a>: a Keplerian planet.</p>
 </dd>

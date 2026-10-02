@@ -750,15 +750,15 @@ states are fixed and moving-end effects are not accounted for.</p>
 <p>Construct a two-body TOPS instance from a predefined gym case.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(two-body Cartesian dynamics). Available problem names can be found in the keys of
+<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(two-body Cartesian dynamics). Available problem names can be found in the keys of
 <code class="xref py py-data docutils literal notranslate"><span class="pre">tops_twobody_json</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">'P0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P2'</span></code>, etc.</p>
 </dd>
-<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
+<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
 </dd>
-<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
+<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
 </dd>
 </dl>
-<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
+<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: equally spaced segment boundaries over the total time of flight.</p></li>
@@ -767,7 +767,7 @@ states are fixed and moving-end effects are not accounted for.</p>
 <p>Defaults to <code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>.</p>
 </div></blockquote>
 <dl class="simple">
-<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints and</dt><dd><p>boundary relative-velocity direction constraints are formulated as inequalities
+<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints and</dt><dd><p>boundary relative-velocity direction constraints are formulated as inequalities
 (<code class="docutils literal notranslate"><span class="pre">|i_u|**2</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>), otherwise as equalities.
 Defaults to True.</p>
 </dd>
@@ -802,15 +802,15 @@ states are fixed and moving-end effects are not accounted for.</p>
 <p>Construct a two-body MEE TOPS instance from a predefined gym case.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(two-body dynamics in modified equinoctial elements). Available problem names can be found in the keys of
+<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(two-body dynamics in modified equinoctial elements). Available problem names can be found in the keys of
 <code class="xref py py-data docutils literal notranslate"><span class="pre">tops_mee_json</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">'P0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P2'</span></code>, etc.</p>
 </dd>
-<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
+<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
 </dd>
-<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
+<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
 </dd>
 </dl>
-<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
+<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: equally spaced segment boundaries over the total time of flight.</p></li>
@@ -819,7 +819,7 @@ states are fixed and moving-end effects are not accounted for.</p>
 <p>Defaults to <code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>.</p>
 </div></blockquote>
 <dl class="simple">
-<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints are</dt><dd><p>formulated as inequalities (<code class="docutils literal notranslate"><span class="pre">|i_u|**2</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>), otherwise as equalities.
+<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints are</dt><dd><p>formulated as inequalities (<code class="docutils literal notranslate"><span class="pre">|i_u|**2</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>), otherwise as equalities.
 Defaults to True.</p>
 </dd>
 </dl>
@@ -854,15 +854,15 @@ accounted for.</p>
 <p>Construct a solar-sailing TOPS instance from a predefined gym case.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(solar sail dynamics). Available problem names can be found in the keys of
+<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(solar sail dynamics). Available problem names can be found in the keys of
 <code class="xref py py-data docutils literal notranslate"><span class="pre">tops_ss_json</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">'P0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P2'</span></code>, etc.</p>
 </dd>
-<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
+<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
 </dd>
-<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
+<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. Defaults to 10.</p>
 </dd>
 </dl>
-<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
+<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: equally spaced segment boundaries over the total time of flight.</p></li>
@@ -901,16 +901,16 @@ accounted for.</p>
 <p>Construct a CR3BP TOPS instance from a predefined gym case.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
-<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(circular restricted three-body problem dynamics). Available problem names can be found in the keys of
+<dt><em>prob_name</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>): Name of the predefined gym problem case from the TOPS database</dt><dd><p>(circular restricted three-body problem dynamics). Available problem names can be found in the keys of
 <code class="xref py py-data docutils literal notranslate"><span class="pre">tops_cr3bp_json</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">'P0'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'P2'</span></code>, etc.</p>
 </dd>
-<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
+<dt><em>cut</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, optional): Cut parameter for the forward/backward split in the ZOH transcription.</dt><dd><p>Defaults to 0.5.</p>
 </dd>
-<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. CR3BP problems typically require
+<dt><em>nseg</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Number of constant-control segments for the zero-order hold transcription.</dt><dd><p>Each segment contributes to the NLP dimensionality and complexity. CR3BP problems typically require
 more segments than two-body problems. Defaults to 60.</p>
 </dd>
 </dl>
-<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
+<p><em>time_encoding</em> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional): Time-grid encoding scheme. Options are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: equally spaced segment boundaries over the total time of flight.</p></li>
@@ -919,7 +919,7 @@ more segments than two-body problems. Defaults to 60.</p>
 <p>Defaults to <code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>.</p>
 </div></blockquote>
 <dl class="simple">
-<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints are</dt><dd><p>formulated as inequalities (<code class="docutils literal notranslate"><span class="pre">|i_u|**2</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>), otherwise as equalities.
+<dt><em>inequalities_for_tc</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): If True, throttle constraints are</dt><dd><p>formulated as inequalities (<code class="docutils literal notranslate"><span class="pre">|i_u|**2</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>), otherwise as equalities.
 Defaults to False.</p>
 </dd>
 </dl>

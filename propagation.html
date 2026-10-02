@@ -593,12 +593,12 @@ the control, the Hamiltonian, the switching function, etc., are also provided.</
 <dd><p>Propagates (Keplerian) the state for an assigned time and computes the State Transition Matrix (if requested) using the Lagrangian coefficients.</p>
 <dl>
 <dt>Args:</dt><dd><p><em>rv</em> (2D array-like): Cartesian components of the initial position vector and velocity [[x0, y0, z0], [v0, vy0, vz0]]. Defaults to [[1,0,0], [0,1,0]].</p>
-<p><em>tof</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): time of flight. Defaults to <span class="math notranslate nohighlight">\(\frac{\pi}{2}\)</span>.</p>
-<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter. Defaults to 1.</p>
-<p><em>stm</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>): requests the computations of the State Transition Matrix</p>
+<p><em>tof</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): time of flight. Defaults to <span class="math notranslate nohighlight">\(\frac{\pi}{2}\)</span>.</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter. Defaults to 1.</p>
+<p><em>stm</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>): requests the computations of the State Transition Matrix</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): r and v, that is the final position and velocity after the propagation. (if <em>stm</em> is False)
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>), <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> (6,6)): (r,v) and the STM. (if <em>stm</em> is True)</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): r and v, that is the final position and velocity after the propagation. (if <em>stm</em> is False)
+<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>), <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> (6,6)): (r,v) and the STM. (if <em>stm</em> is True)</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -627,10 +627,10 @@ Nevertheless we offer this interface for convenience as it may allow more compac
 <blockquote>
 <div><p><em>tofs</em> (1D array-like): time of flight. Defaults to [<span class="math notranslate nohighlight">\(\frac{\pi}{2}\)</span>].</p>
 </div></blockquote>
-<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter. Defaults to 1.</p>
-<p><em>stm</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>): requests the computations of the State Transition Matrix</p>
+<p><em>mu</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): gravitational parameter. Defaults to 1.</p>
+<p><em>stm</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>): requests the computations of the State Transition Matrix</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> ( <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> , <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> ) ]: For each time of flight: [r,v], that is the final position
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> ( <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> , <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> ) ]: For each time of flight: [r,v], that is the final position
 and velocity after the propagation and the flattened stm (if requested).</p>
 </dd>
 <dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
@@ -661,7 +661,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 <p>In <cite>pykep</cite>, the simple keplerian dynamics is defined in Cartesian coordinates (thus it is not symplectic as not in a Hamiltonian form).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.kep_dyn" title="pykep.ta.kep_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -692,7 +692,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 <p>In <cite>pykep</cite>, the simple Keplerian dynamics is defined in Cartesian coordinates (thus it is not symplectic as not in a Hamiltonian form).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.kep_dyn" title="pykep.ta.kep_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">kep_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -724,7 +724,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 \end{array}\right.\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the only parameter.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -741,7 +741,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 <p>In <cite>pykep</cite>, the CR3BP is defined in Cartesian coordinates (thus it is not symplectic as not in a Hamiltonian form).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.cr3bp_dyn" title="pykep.ta.cr3bp_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -772,7 +772,7 @@ return the one from a global cache, thus avoiding jitting.</p>
 <p>In <cite>pykep</cite>, the CR3BP is defined in Cartesian coordinates (thus it is not symplectic as not in a Hamiltonian form).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.cr3bp_dyn" title="pykep.ta.cr3bp_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">cr3bp_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -810,7 +810,7 @@ and the period of rotation between the primaries is <span class="math notranslat
 \end{array}\right.\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the only parameter.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -857,7 +857,7 @@ retrieving one from a global cache (making a copy).</p>
 <p>The BCP is defined in Cartesian coordinates (non-symplectic, non-Hamiltonian, time-dependent)
 with Sun on the <span class="math notranslate nohighlight">\(x\)</span> axis at <span class="math notranslate nohighlight">\(t=0\)</span>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -889,7 +889,7 @@ retrieving one from a global cache (making a copy).</p>
 <p>The BCP is defined in Cartesian coordinates (non-symplectic, non-Hamiltonian, time-dependent)
 with Sun on the <span class="math notranslate nohighlight">\(x\)</span> axis at <span class="math notranslate nohighlight">\(t=0\)</span>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -917,7 +917,7 @@ with Sun on the <span class="math notranslate nohighlight">\(x\)</span> axis at 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pykep.ta.get_bcp_var">
-<span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_bcp_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_bcp_var" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pykep.ta.</span></span><span class="sig-name descname"><span class="pre">get_bcp_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.ta.get_bcp_var" title="Link to this definition">#</a></dt>
 <dd><p>Returns a (order 1) variational Taylor adaptive propagator (Heyoka) for the 
 Bicircular Problem (BCP) dynamics retrieving one from a global cache (making a copy).</p>
 <p>If the requested propagator was never created, this creates it; otherwise returns cached version
@@ -929,7 +929,7 @@ Bicircular Problem (BCP) dynamics retrieving one from a global cache (making a c
 <p>The BCP is defined in Cartesian coordinates (non-symplectic, non-Hamiltonian, time-dependent)
 with Sun on the <span class="math notranslate nohighlight">\(x\)</span> axis at <span class="math notranslate nohighlight">\(t=0\)</span>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -965,7 +965,7 @@ Bicircular Problem (BCP) dynamics retrieving one from a global cache (making a c
 <p>The BCP is defined in Cartesian coordinates (non-symplectic, non-Hamiltonian, time-dependent)
 with Sun on the <span class="math notranslate nohighlight">\(x\)</span> axis at <span class="math notranslate nohighlight">\(t=0\)</span>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -1015,7 +1015,7 @@ secondary body (i.e. placed on the positive x axis).</p>
 is <span class="math notranslate nohighlight">\(r_1, r_2\)</span> and its distance from the Sun is <span class="math notranslate nohighlight">\(r_s\)</span>. The Sun orbits at a distance <span class="math notranslate nohighlight">\(\rho\)</span> with
 angular velocity <span class="math notranslate nohighlight">\(\omega_s\)</span>:.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 <p>bcp_dyn()</p>
@@ -1040,7 +1040,7 @@ secondary body (i.e. placed on the positive x axis).</p>
 is <span class="math notranslate nohighlight">\(r_1, r_2\)</span> and its distance from the Sun is <span class="math notranslate nohighlight">\(r_s\)</span>. The Sun orbits at a distance <span class="math notranslate nohighlight">\(\rho\)</span> with
 angular velocity <span class="math notranslate nohighlight">\(\omega_s\)</span>:.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1057,7 +1057,7 @@ retrieving one from a global cache and making a copy.</p>
 version (avoiding re-jitting while keeping independent runtime state).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_kep_dyn" title="pykep.ta.zoh_kep_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -1089,7 +1089,7 @@ version (avoiding re-jitting while keeping independent runtime state).</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_kep_dyn" title="pykep.ta.zoh_kep_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_kep_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -1117,7 +1117,7 @@ orbiting a central body with unitary gravitational parameter <span class="math n
 <p>The state is: <span class="math notranslate nohighlight">\([x, y, z, v_x, v_y, v_z, m]\)</span></p>
 <p>The system parameters are (in this order): <span class="math notranslate nohighlight">\([T, i_x, i_y, i_z] + [c]\)</span>.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
 The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
@@ -1135,7 +1135,7 @@ retrieving one from a global cache and making a copy.</p>
 version (avoiding re-jitting while keeping independent runtime state).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_eq_dyn" title="pykep.ta.zoh_eq_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -1156,7 +1156,7 @@ version (avoiding re-jitting while keeping independent runtime state).</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_eq_dyn" title="pykep.ta.zoh_eq_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_eq_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -1173,7 +1173,7 @@ orbiting a central body with unitary gravitational parameter <span class="math n
 <p>The state is: <span class="math notranslate nohighlight">\([p, f, g, h, k, L, m]\)</span></p>
 <p>The system parameters are (in this order): <span class="math notranslate nohighlight">\([T, i_r, i_t, i_n] + [c]\)</span>.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
 The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
@@ -1191,7 +1191,7 @@ retrieving one from a global cache and making a copy.</p>
 version (avoiding re-jitting while keeping independent runtime state).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_cr3bp_dyn" title="pykep.ta.zoh_cr3bp_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -1212,7 +1212,7 @@ version (avoiding re-jitting while keeping independent runtime state).</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_cr3bp_dyn" title="pykep.ta.zoh_cr3bp_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_cr3bp_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -1227,7 +1227,7 @@ three-body problem (CR3BP), with thrust fixed in the rotating frame.</p>
 <p>The state is: <span class="math notranslate nohighlight">\([x, y, z, v_x, v_y, v_z, m]\)</span></p>
 <p>The system parameters are (in this order): <span class="math notranslate nohighlight">\([T, i_x, i_y, i_z] + [c, \mu]\)</span>.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
 The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
@@ -1245,7 +1245,7 @@ retrieving one from a global cache and making a copy.</p>
 version (avoiding re-jitting while keeping independent runtime state).</p>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_ss_dyn" title="pykep.ta.zoh_ss_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
 </dd>
@@ -1266,7 +1266,7 @@ version (avoiding re-jitting while keeping independent runtime state).</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.zoh_ss_dyn" title="pykep.ta.zoh_ss_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">zoh_ss_dyn()</span></code></a>.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the variational Taylor adaptive propagator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The variational Taylor adaptive propagator.</p>
 </dd>
@@ -1281,7 +1281,7 @@ with unitary gravitational parameter <span class="math notranslate nohighlight">
 <p>The state is: <span class="math notranslate nohighlight">\([x, y, z, v_x, v_y, v_z]\)</span></p>
 <p>The system parameters are (in this order): <span class="math notranslate nohighlight">\([\alpha, \beta] + [c]\)</span>.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]:
 The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
@@ -1300,7 +1300,7 @@ trigger its compilation. Otherwise, it will return the one from a global cache, 
 The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.pc_dyn" title="pykep.ta.pc_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a>.
 Both time optimal and mass optimal systems can be returned by setting the <em>optimality</em> parameter.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 <p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
@@ -1335,7 +1335,7 @@ is still considered a parameter (for consistency) but it is not used.</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.pc_dyn" title="pykep.ta.pc_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 <p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
@@ -1406,7 +1406,7 @@ and the size of the parameter vector will this be three.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1424,7 +1424,7 @@ trigger its compilation. Otherwise, it will return the one from a global cache, 
 The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.peq_dyn" title="pykep.ta.peq_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">peq_dyn()</span></code></a>.
 Both time optimal and mass optimal systems can be returned by setting the <em>optimality</em> parameter.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 <p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
@@ -1459,7 +1459,7 @@ is still considered a parameter (for consistency) but it is not used.</p>
 </div>
 <p>The specific dynamics used is that returned by <a class="reference internal" href="#pykep.ta.pc_dyn" title="pykep.ta.pc_dyn"><code class="xref py py-func docutils literal notranslate"><span class="pre">pc_dyn()</span></code></a>.</p>
 <dl>
-<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
+<dt>Args:</dt><dd><p><em>tol</em> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): the tolerance of the Taylor adaptive propagator.</p>
 <p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
 <dt>Returns:</dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">hy::taylor_adaptive</span></code>: The Taylor adaptive propagator.</p>
@@ -1564,7 +1564,7 @@ are derived from the Hamiltonian, which depends on the chosen optimality:</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p><em>optimality</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.optimality_type</span></code>): the optimality principle to be used.</p>
 </dd>
-<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> [ <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">hy::expression</span></code> )]: The dynamics in the form [(x, dx), …]</p>
 </dd>
 </dl>
 </dd></dl>
