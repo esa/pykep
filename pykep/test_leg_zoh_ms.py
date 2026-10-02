@@ -4,6 +4,36 @@ import numpy as np
 import unittest as _ut
 
 class leg_zoh_ms_test(_ut.TestCase):
+    def test_zoh_ms_copies_integrators(self):
+        """We test that propagating a leg does not mutate supplied integrators."""
+        ta = _pk.ta.get_zoh_kep(1e-12)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-12)
+        state = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0]
+        states = state * 3
+        controls = [0.01, 1.0, 0.0, 0.0] * 2
+        tgrid = [0.0, 0.5, 1.0]
+        pars = [*controls[:4], 0.2]
+
+        ta.time = ta_var.time = 0.0
+        ta.state[:] = state
+        ta_var.state[:7] = state
+        ta.pars[:] = ta_var.pars[:] = pars
+        original = [
+            (integrator.time, integrator.state.copy(), integrator.pars.copy())
+            for integrator in (ta, ta_var)
+        ]
+
+        leg = _pk.leg.zoh_ms_py(states, controls, tgrid, 0.5, [ta, ta_var])
+        leg.compute_defects()
+        leg.compute_defects_grad()
+
+        self.assertIsNot(leg.ta, ta)
+        self.assertIsNot(leg.ta_var, ta_var)
+        for integrator, (time, state, parameters) in zip((ta, ta_var), original):
+            self.assertEqual(integrator.time, time)
+            self.assertTrue(np.array_equal(integrator.state, state))
+            self.assertTrue(np.array_equal(integrator.pars, parameters))
+
     def test_zoh_ms_set_initial_guess(self):
         """We test that the initial guess actually sets the interior nodes (closing the defects when
         not ballistic) without touching endpoints, tgrid and controls, and that malformed input raises."""

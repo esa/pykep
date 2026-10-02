@@ -1,6 +1,7 @@
+import copy as _copy
+
 import numpy as _np
 import heyoka as _hy
-
 
 class zoh:
     """Generic zero-order-hold trajectory leg. (fwd-bck shooting)
@@ -53,7 +54,8 @@ class zoh:
 
         Notes:
             ``state0``, ``controls``, ``state1`` and ``tgrid`` are stored as passed and are meant to be lists,
-            mirroring ``std::vector``. Other sequences, such as NumPy arrays, also work.
+            mirroring ``std::vector``. Other sequences, such as NumPy arrays, also work. The integrators in
+            ``tas`` are deep-copied; propagation mutates the leg's copies, not the supplied integrators.
         """
         # We store the constructor args
         self.state0 = state0
@@ -66,8 +68,8 @@ class zoh:
         self.dim_controls = dim_controls
 
         # Store the integrators
-        self.ta = tas[0]
-        self.ta_var = tas[1]
+        self.ta = _copy.deepcopy(tas[0])
+        self.ta_var = _copy.deepcopy(tas[1])
 
         # Convenient quantities
         if self.dim_controls <= 0:

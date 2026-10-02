@@ -1,3 +1,5 @@
+import copy as _copy
+
 import numpy as _np
 import heyoka as _hy
 
@@ -51,7 +53,8 @@ class zoh_ms:
         Notes:
             ``states``, ``controls`` and ``tgrid`` are stored as passed and are meant to be lists, mirroring
             ``std::vector``. Other sequences, such as NumPy arrays, also work, but methods that write
-            these attributes (e.g. :meth:`set_initial_guess`) store lists.
+            these attributes (e.g. :meth:`set_initial_guess`) store lists. The integrators in ``tas`` are
+            deep-copied; propagation mutates the leg's copies, not the supplied integrators.
         """
         # We store the constructor args
         self.states = states
@@ -63,8 +66,8 @@ class zoh_ms:
         self.dim_controls = dim_controls
 
         # Store the integrators
-        self.ta = tas[0]
-        self.ta_var = tas[1]
+        self.ta = _copy.deepcopy(tas[0])
+        self.ta_var = _copy.deepcopy(tas[1])
 
         # Save non-control parameter values for cfunc calls
         self.pars_no_control = self.ta.pars[self.dim_controls :].tolist()

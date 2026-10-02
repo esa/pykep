@@ -16,6 +16,36 @@ def compute_mismatch_constraints_n(leg, state0, controls, state1, tgrid):
 
 # The actual tests.
 class leg_zoh_test(_ut.TestCase):
+    def test_zoh_copies_integrators(self):
+        """We test that propagating a leg does not mutate supplied integrators."""
+        ta = _pk.ta.get_zoh_kep(1e-12)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-12)
+        state0 = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0]
+        state1 = state0.copy()
+        controls = [0.0] * 8
+        tgrid = [0.0, 0.5, 1.0]
+        pars = [*controls[:4], 0.2]
+
+        ta.time = ta_var.time = 0.0
+        ta.state[:] = state0
+        ta_var.state[:7] = state0
+        ta.pars[:] = ta_var.pars[:] = pars
+        original = [
+            (integrator.time, integrator.state.copy(), integrator.pars.copy())
+            for integrator in (ta, ta_var)
+        ]
+
+        leg = _pk.leg.zoh_py(state0, controls, state1, tgrid, 0.5, [ta, ta_var])
+        leg.compute_mismatch_constraints()
+        leg.compute_mc_grad()
+
+        self.assertIsNot(leg.ta, ta)
+        self.assertIsNot(leg.ta_var, ta_var)
+        for integrator, (time, state, parameters) in zip((ta, ta_var), original):
+            self.assertEqual(integrator.time, time)
+            self.assertTrue(np.array_equal(integrator.state, state))
+            self.assertTrue(np.array_equal(integrator.pars, parameters))
+
     def test_zoh_mutable_data_validation(self):
         """We test that malformed mutable leg data raises ValueError before propagation."""
         ta = _pk.ta.get_zoh_kep(1e-12)
