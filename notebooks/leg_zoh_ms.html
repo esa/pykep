@@ -542,23 +542,25 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-multiple-shooting-trajectory-leg">
 <h1>The Zero-Order-Hold Multiple Shooting trajectory leg<a class="headerlink" href="#the-zero-order-hold-multiple-shooting-trajectory-leg" title="Link to this heading">#</a></h1>
-<p>The Zero-Order-Hold Multiple Shooting (ZOH-MS) trajectory leg is available as <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms</span></code></a>, implemented in C++. The pure-Python version, <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms_py" title="pykep.leg.zoh_ms_py"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms_py</span></code></a>, has the same public interface. We use the C++ version in the first example and the Python version in the second.</p>
-<p>In multiple shooting, we divide a trajectory into short segments and store a state at every mesh node. We propagate each segment and compare the result with the state stored at the other end. This difference is called a <strong>continuity defect</strong>. If every defect is zero, the segments join into one continuous trajectory. The examples below deliberately start with nonzero defects.</p>
-<p>For the Keplerian example, each node stores the seven-component state <span class="math notranslate nohighlight">\(\mathbf{x}_k=[x_k,y_k,z_k,v_{x,k},v_{y,k},v_{z,k},m_k]\)</span>: position, velocity and mass. A mesh with <span class="math notranslate nohighlight">\(n\)</span> segments therefore has <span class="math notranslate nohighlight">\(n+1\)</span> nodes and <span class="math notranslate nohighlight">\(7n\)</span> scalar continuity constraints.</p>
-<p>The control is held constant within each segment, which is the meaning of <em>zero-order hold</em>. For the Keplerian example, the four control components are
-$<span class="math notranslate nohighlight">\(
+<p>The Zero-Order-Hold Multiple Shooting (ZOH-MS) trajectory leg is available as <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms</span></code></a>, implemented in C++. The pure-Python version, <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms_py" title="pykep.leg.zoh_ms_py"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms_py</span></code></a>, has the same public interface and is intended to be a reference implementation.</p>
+<p>In ‘pykep’ version of the multiple shooting technique, we divide the trajectory into short segments and store a state at every mesh node. We propagate each segment and compare the result with the state stored at the other end. This difference is called a <strong>continuity defect</strong> or simply <strong>defect</strong>. If every defect is zero, the segments join into one continuous trajectory. Segments are propagated forward or backward depending on the <code class="docutils literal notranslate"><span class="pre">cut</span></code> parameter, making the multiple shooting leg directly comparable to the <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> leg based on single fwd-bck shooting.</p>
+<p>In the Keplerian example, each node stores the seven-component state <span class="math notranslate nohighlight">\(\mathbf{x}_k=[x_k,y_k,z_k,v_{x,k},v_{y,k},v_{z,k},m_k]\)</span>: position, velocity and mass. A mesh with <span class="math notranslate nohighlight">\(n\)</span> segments therefore has <span class="math notranslate nohighlight">\(n+1\)</span> nodes and <span class="math notranslate nohighlight">\(7n\)</span> scalar continuity constraints.</p>
+<p>The control is held constant within each segment, which is the meaning of <em>zero-order hold</em>. For the Keplerian example, the four control components are</p>
+<div class="math notranslate nohighlight">
+\[
 \mathbf{u}_k = [T_k,\ i_{x,k},\ i_{y,k},\ i_{z,k}],
-\)</span><span class="math notranslate nohighlight">\(
-where \)</span>T_k<span class="math notranslate nohighlight">\( is the thrust magnitude and \)</span>(i_{x,k},i_{y,k},i_{z,k})$ is its direction in the inertial frame. A physical thrust direction has unit length. The generic leg does not enforce physical bounds or normalize the direction; these choices belong to the supplied dynamics and the optimization problem.</p>
-<p>Let <span class="math notranslate nohighlight">\(\Phi_k(\cdot;\mathbf{u}_k)\)</span> denote propagation from <span class="math notranslate nohighlight">\(t_k\)</span> to <span class="math notranslate nohighlight">\(t_{k+1}\)</span>. The parameter <code class="docutils literal notranslate"><span class="pre">cut</span></code>, between 0 and 1, sets the number of forward-propagated segments: <span class="math notranslate nohighlight">\(n_{\mathrm{fwd}}=\lfloor n\,\mathrm{cut}\rfloor\)</span>. Each forward segment starts at its own left-hand mesh node; each backward segment starts at its own right-hand mesh node. The defect is
-$<span class="math notranslate nohighlight">\(
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(T_k\)</span> is the thrust magnitude and <span class="math notranslate nohighlight">\((i_{x,k},i_{y,k},i_{z,k})\)</span> is its direction in the inertial frame. A physical thrust direction has unit length. The generic leg does not enforce physical bounds or normalize the direction; these choices belong to the supplied dynamics and the optimization problem.</p>
+<p>Let <span class="math notranslate nohighlight">\(\Phi_k(\mathbf{x}_k;\mathbf{u}_k)\)</span> denote propagation from <span class="math notranslate nohighlight">\(t_k\)</span> to <span class="math notranslate nohighlight">\(t_{k+1}\)</span>. The parameter <code class="docutils literal notranslate"><span class="pre">cut</span></code>, between 0 and 1, sets the number of forward-propagated segments: <span class="math notranslate nohighlight">\(n_{\mathrm{fwd}}=\lfloor n\,\mathrm{cut}\rfloor\)</span>. Each forward segment starts at its own left-hand mesh node; each backward segment starts at its own right-hand mesh node. The defect is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
 \mathbf{d}_k =
 \begin{cases}
 \Phi_k(\mathbf{x}_k;\mathbf{u}_k)-\mathbf{x}_{k+1}, &amp; 0 \le k &lt; n_{\mathrm{fwd}}, \\
 \mathbf{x}_k-\Phi_k^{-1}(\mathbf{x}_{k+1};\mathbf{u}_k), &amp; n_{\mathrm{fwd}} \le k &lt; n.
 \end{cases}
-\)</span><span class="math notranslate nohighlight">\(
-Here \)</span>\Phi_k^{-1}<span class="math notranslate nohighlight">\( means integrating the same dynamics backward from \)</span>t_{k+1}<span class="math notranslate nohighlight">\( to \)</span>t_k$. Both directions describe the same continuous trajectory when the defects are zero, although their nonzero defect values can differ.</p>
+\end{split}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\Phi_k^{-1}\)</span> means integrating the same dynamics backward from <span class="math notranslate nohighlight">\(t_{k+1}\)</span> to <span class="math notranslate nohighlight">\(t_k\)</span>. Both directions describe the same continuous trajectory when the defects are zero, although their nonzero defect values can differ.</p>
 <p><code class="docutils literal notranslate"><span class="pre">compute_defects()</span></code> returns the defect components flattened in segment order. The leg also provides their analytical derivatives with respect to the node states, controls and time grid. Together, these derivatives form the <strong>Jacobian matrix</strong>.</p>
 <p>We start with the required imports:</p>
 <div class="cell docutils container">
@@ -605,7 +607,7 @@ Here \)</span>\Phi_k^{-1}<span class="math notranslate nohighlight">\( means int
 <h1>1 - Validate the Zero-Order-Hold multiple-shooting leg<a class="headerlink" href="#validate-the-zero-order-hold-multiple-shooting-leg" title="Link to this heading">#</a></h1>
 <p>We check the analytical Jacobian against finite-difference estimates. Finite differences approximate a derivative by changing an input slightly and observing the change in the defects.</p>
 <p>The Jacobian is <strong>sparse</strong>: a segment depends only on its nearby nodes, its own controls and its two endpoint times. Most matrix entries are therefore zero. The <em>sparsity pattern</em> lists the matrix positions where derivatives can be nonzero, so we do not need to store a full matrix of mostly zeros.</p>
-<p>We first construct the mesh states, controls and time grid, then evaluate the defects and derivatives. The following helper changes one input on a copy of the leg, leaving the original leg unchanged:</p>
+<p>We first construct the mesh states, controls and time grid, then evaluate the defects and gradients. The following helper changes one input on a copy of the leg, leaving the original leg unchanged:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_defects_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
@@ -618,7 +620,7 @@ Here \)</span>\Phi_k^{-1}<span class="math notranslate nohighlight">\( means int
 </div>
 <p>We create a reference mesh from a Lambert transfer between Earth and Mars. A Lambert solution is a two-body, zero-thrust trajectory connecting two positions in a specified flight time.</p>
 <p>We then apply nonzero thrust to those reference nodes. The resulting leg is deliberately infeasible: the stored nodes generally do not match propagation with the selected controls. This gives us nonzero defects to use in the derivative check.</p>
-<p>The dimensional positions and velocities are converted to the units defined above. Each node has dimensionless mass 1, corresponding to 1000 kg. The thrust scale is <span class="math notranslate nohighlight">\(\mathrm{MASS}\,L/\mathrm{TIME}^2\)</span>, so a dimensionless thrust of 0.2 represents 0.2 times this force scale.</p>
+<p>The dimensional positions and velocities are converted to the units defined above.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Earth's position at departure and Mars's position at arrival.</span>
@@ -656,8 +658,43 @@ Here \)</span>\Phi_k^{-1}<span class="math notranslate nohighlight">\( means int
 </div>
 </div>
 </div>
-<p>We now compute the defects and their analytical sparse Jacobian. <code class="docutils literal notranslate"><span class="pre">defects_grad_sparsity()</span></code> returns three arrays of <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">column)</span></code> coordinates, one each for derivatives with respect to <code class="docutils literal notranslate"><span class="pre">states</span></code>, <code class="docutils literal notranslate"><span class="pre">controls</span></code> and <code class="docutils literal notranslate"><span class="pre">tgrid</span></code>. Rows identify defect components; columns identify input components.</p>
-<p><code class="docutils literal notranslate"><span class="pre">compute_defects_grad()</span></code> returns three flat arrays of derivative values in the same order. Pairing a coordinate with its value tells us where that derivative belongs in the full Jacobian.</p>
+<p>We now compute the defects and their analytical sparse Jacobian. Stack the node states, controls, times and defects as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{X}=\begin{bmatrix}\mathbf{x}_0\\ \vdots\\ \mathbf{x}_n\end{bmatrix},
+\qquad
+\mathbf{U}=\begin{bmatrix}\mathbf{u}_0\\ \vdots\\ \mathbf{u}_{n-1}\end{bmatrix},
+\qquad
+\mathbf{T}=\begin{bmatrix}t_0\\ \vdots\\ t_n\end{bmatrix},
+\qquad
+\mathbf{D}=\begin{bmatrix}\mathbf{d}_0\\ \vdots\\ \mathbf{d}_{n-1}\end{bmatrix}.
+\end{split}\]</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">cut</span></code> held fixed, the defect Jacobian is</p>
+<div class="math notranslate nohighlight">
+\[
+J=\frac{\partial\mathbf{D}}{\partial(\mathbf{X},\mathbf{U},\mathbf{T})}
+=\begin{bmatrix}J_X &amp; J_U &amp; J_T\end{bmatrix},
+\]</div>
+<p>where each row corresponds to a defect component and each column to an input component:</p>
+<div class="math notranslate nohighlight">
+\[
+(J_X)_{ij}=\frac{\partial D_i}{\partial X_j},
+\qquad
+(J_U)_{ij}=\frac{\partial D_i}{\partial U_j},
+\qquad
+(J_T)_{ij}=\frac{\partial D_i}{\partial T_j}.
+\]</div>
+<p>For the seven-state, four-control example,</p>
+<div class="math notranslate nohighlight">
+\[
+J_X\in\mathbb{R}^{7n\times7(n+1)},
+\qquad
+J_U\in\mathbb{R}^{7n\times4n},
+\qquad
+J_T\in\mathbb{R}^{7n\times(n+1)}.
+\]</div>
+<p><code class="docutils literal notranslate"><span class="pre">compute_defects_grad()</span></code> returns three flat arrays of sparse derivative values, corresponding to <span class="math notranslate nohighlight">\((J_X,J_U,J_T)\)</span>, rather than the dense matrix <span class="math notranslate nohighlight">\(J\)</span>. <code class="docutils literal notranslate"><span class="pre">defects_grad_sparsity()</span></code> returns the matching three arrays of <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">column)</span></code> coordinates. Columns index each block’s own <code class="docutils literal notranslate"><span class="pre">states</span></code>, <code class="docutils literal notranslate"><span class="pre">controls</span></code> or <code class="docutils literal notranslate"><span class="pre">tgrid</span></code> vector, without offsets into a combined input vector.</p>
+<p>The values and coordinates have the same order within each block. Pairing a coordinate with its value tells us where that derivative belongs in the Jacobian. Structural entries are retained even when their numerical values are zero.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">defects</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_defects</span><span class="p">()</span>
