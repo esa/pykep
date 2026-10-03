@@ -8,6 +8,15 @@ Changelog
 3.1.0 (unreleased)
 ==================
 
+Features
+--------
+
+- Added generic zero-order-hold multiple-shooting trajectory legs, available as
+  :class:`~pykep.leg.zoh_ms` in C++ and :class:`~pykep.leg.zoh_ms_py` in pure
+  Python. They accept user-provided dynamics and controls, propagate each
+  segment independently in the forward or backward direction, and expose
+  segment defects for enforcing trajectory continuity.
+
 Build system
 ------------
 
