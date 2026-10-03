@@ -43,7 +43,8 @@ class leg_zoh_ms_test(_ut.TestCase):
         self.assertIsNone(leg.max_steps)
         self.assertIsNone(leg.ta_var)
         # The C++ binding returns cached coordinate arrays without requiring variations.
-        self.assertFalse(hasattr(leg, "compute_defects_grad"))
+        with self.assertRaises(RuntimeError):
+            leg.compute_defects_grad()
         sparsities = leg.defects_grad_sparsity()
         self.assertEqual([pattern.shape for pattern in sparsities], [(112, 2), (56, 2), (28, 2)])
         self.assertTrue(all(pattern.dtype == np.int64 for pattern in sparsities))
@@ -261,6 +262,12 @@ class leg_zoh_ms_py_test(_ut.TestCase):
 
             sparsities = leg.defects_grad_sparsity()
             grads = leg.compute_defects_grad()
+            cpp = _pk.leg.zoh_ms(states, controls, tgrid, cut, [ta, ta_var])
+            # Compare the native outputs with the Python results before checking finite differences.
+            for actual, expected in zip(cpp.defects_grad_sparsity(), sparsities):
+                np.testing.assert_array_equal(actual, expected)
+            for actual, expected in zip(cpp.compute_defects_grad(), grads):
+                np.testing.assert_allclose(actual, expected, rtol=1e-11, atol=1e-12)
             # Each listed matrix entry must be unique and have one derivative value.
             for name, sp, g in zip(["states", "controls", "tgrid"], sparsities, grads):
                 self.assertEqual(len(np.unique(sp, axis=0)), len(sp))
@@ -287,7 +294,69 @@ class leg_zoh_ms_py_test(_ut.TestCase):
 
 
 class leg_zoh_ms_api_test(_ut.TestCase):
-    """Tests comparing the shared non-gradient APIs and results of both implementations."""
+    """Tests comparing the shared APIs and results of both implementations."""
+
+    def test_gradients(self):
+        """We test that sparse gradients match in type, order and values, and own independent data."""
+        # A two-state model also checks a non-control parameter and non-orbital dimensions.
+        first, second = _hy.make_vars("first", "second")
+        sys = [(first, second + _hy.par[0] + _hy.par[1]), (second, 2.0 * first + _hy.par[0])]
+        ta = _hy.taylor_adaptive(sys, tol=1e-14)
+        ta_var = _hy.taylor_adaptive(_hy.var_ode_sys(sys, [first, second, _hy.par[0]], order=1), tol=1e-14)
+        ta.pars[1] = ta_var.pars[1] = 0.7
+        states = [1.0, 0.4, 1.5, 0.3, 2.0, 0.2, 2.5, 0.1]
+        controls, tgrid = [0.1, -0.2, 0.3], [0.2, 0.4, 0.9, 1.3]
+
+        # Try backward-only, mixed and forward-only propagation with the same return contract.
+        for cut in (0.0, 0.5, 1.0):
+            with self.subTest(cut=cut):
+                legs = [leg_type(states, controls, tgrid, cut, (ta, ta_var), dim_dynamics=2, dim_controls=1)
+                        for leg_type in (_pk.leg.zoh_ms, _pk.leg.zoh_ms_py)]
+                patterns = [leg.defects_grad_sparsity() for leg in legs]
+                gradients = [leg.compute_defects_grad() for leg in legs]
+                for result in patterns + gradients:
+                    self.assertIs(type(result), tuple)
+                    self.assertEqual(len(result), 3)
+                for actual, expected, count in zip(*patterns, (18, 6, 12)):
+                    self.assertIs(type(actual), np.ndarray)
+                    self.assertIs(type(expected), np.ndarray)
+                    self.assertEqual(actual.shape, (count, 2))
+                    self.assertEqual(actual.dtype, np.dtype("int64"))
+                    self.assertEqual(actual.dtype, expected.dtype)
+                    np.testing.assert_array_equal(actual, expected)
+                for actual, expected, count in zip(*gradients, (18, 6, 12)):
+                    self.assertIs(type(actual), np.ndarray)
+                    self.assertIs(type(expected), np.ndarray)
+                    self.assertEqual(actual.shape, (count,))
+                    self.assertEqual(actual.shape, expected.shape)
+                    self.assertEqual(actual.dtype, np.dtype("float64"))
+                    self.assertEqual(actual.dtype, expected.dtype)
+                    self.assertTrue(actual.flags.c_contiguous)
+                    self.assertTrue(actual.flags.writeable)
+                    self.assertFalse(actual.flags.owndata)
+                    self.assertIsNotNone(actual.base)
+                    np.testing.assert_allclose(actual, expected, rtol=1e-11, atol=1e-12)
+
+                # Modifying returned arrays must not affect later calls or the cached coordinates.
+                snapshots = [array.copy() for array in patterns[0] + gradients[0]]
+                for array in patterns[0] + gradients[0]:
+                    array.flat[0] += 1
+                fresh = legs[0].defects_grad_sparsity() + legs[0].compute_defects_grad()
+                for actual, expected in zip(fresh, snapshots):
+                    np.testing.assert_array_equal(actual, expected)
+
+                # The capsule and copied coordinates must keep their data after the leg is deleted.
+                del legs
+                _gc.collect()
+                for actual, expected in zip(patterns[0] + gradients[0], snapshots):
+                    expected.flat[0] += 1
+                    np.testing.assert_array_equal(actual, expected)
+                    actual.flat[0] += 1
+
+        # Both implementations reject gradient evaluation without variations.
+        for leg_type in (_pk.leg.zoh_ms, _pk.leg.zoh_ms_py):
+            with self.assertRaises(RuntimeError):
+                _make_leg(leg_type).compute_defects_grad()
 
     def test_shared_api(self):
         """We test that both classes expose the same shared properties and callable methods."""
@@ -307,7 +376,8 @@ class leg_zoh_ms_api_test(_ut.TestCase):
         self.assertIsNone(cpp.ta_var)
         self.assertIsNone(python.ta_var)
         # Both classes must provide the shared methods; gradients are tested separately.
-        for name in ("compute_defects", "set_initial_guess", "get_state_info"):
+        for name in ("compute_defects", "compute_defects_grad", "defects_grad_sparsity",
+                 "set_initial_guess", "get_state_info"):
             self.assertTrue(callable(getattr(cpp, name)))
             self.assertTrue(callable(getattr(python, name)))
         # Apply the same valid updates and check that the results still agree.

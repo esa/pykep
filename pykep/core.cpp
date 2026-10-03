@@ -1049,6 +1049,21 @@ PYBIND11_MODULE(core, m) // NOLINT
     zoh_ms.def("compute_defects", &kep3::leg::zoh_ms::compute_defects,
                 pykep::leg_zoh_ms_defects_docstring().c_str());
     zoh_ms.def(
+        "compute_defects_grad",
+        [](const kep3::leg::zoh_ms &leg) {
+            auto [grad_states, grad_controls, grad_tgrid] = leg.compute_defects_grad();
+            const auto to_numpy = [](std::vector<double> &&values) {
+                auto data = std::make_unique<std::vector<double>>(std::move(values));
+                py::capsule owner(data.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+                auto *ptr = data.release();
+                return py::array_t<double>(static_cast<py::ssize_t>(ptr->size()), ptr->data(), std::move(owner));
+            };
+            return py::make_tuple(to_numpy(std::move(grad_states)), to_numpy(std::move(grad_controls)),
+                                  to_numpy(std::move(grad_tgrid)));
+        },
+        "Return (grad_states, grad_controls, grad_tgrid) as flat float64 arrays in defects_grad_sparsity() order. "
+        "Requires a variational integrator; raises RuntimeError if none was provided.");
+    zoh_ms.def(
         "defects_grad_sparsity",
         [](const kep3::leg::zoh_ms &leg) {
             const auto &[sp_states, sp_controls, sp_tgrid] = leg.defects_grad_sparsity();
@@ -1063,7 +1078,9 @@ PYBIND11_MODULE(core, m) // NOLINT
             };
             return py::make_tuple(to_numpy(sp_states), to_numpy(sp_controls), to_numpy(sp_tgrid));
         },
-        "Return the sparse coordinate patterns of the defects gradients.");
+        "Return (sp_states, sp_controls, sp_tgrid) as int64 arrays of shape (nnz, 2). "
+        "Rows index defects and columns index states, controls and tgrid, respectively, "
+        "in compute_defects_grad() order.");
     zoh_ms.def("set_initial_guess", &kep3::leg::zoh_ms::set_initial_guess, py::arg("ballistic") = false,
                 pykep::leg_zoh_ms_set_initial_guess_docstring().c_str());
     zoh_ms.def(

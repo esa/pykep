@@ -24,7 +24,7 @@ endif()
 
 project(
   kep3
-  VERSION 3.0.2
+  VERSION 3.1.0
   LANGUAGES CXX C)
 
 option(KEP3_VERBOSE_CONFIGURE "Enable detailed configure-time logging." OFF)
