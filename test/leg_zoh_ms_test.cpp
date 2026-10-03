@@ -48,17 +48,35 @@ integrator make_integrator(unsigned dim, unsigned npars)
     return integrator{std::move(sys)};
 }
 
-kep3::leg::zoh_ms make_test_leg()
+// Uniform grid, state dimension 1 and control dimension 2.
+kep3::leg::zoh_ms make_test_leg_12()
 {
     const auto ta = make_integrator(1u, 2u);
     return {{0., 1., 2.}, {10., 11., 12., 13.}, {0., 1., 2.}, 0.5, {ta, std::nullopt}, std::nullopt, 1u, 2u};
+}
+
+// Nonuniform grid, state dimension 1 and control dimension 1.
+kep3::leg::zoh_ms make_test_leg_11()
+{
+    const auto ta = make_integrator(1u, 1u);
+    return {{1., 99., 4., 8.}, {0.5, 1., 1.5}, {0., 0.5, 2., 5.}, 0.5, {ta, std::nullopt}, std::nullopt, 1u, 1u};
+}
+
+// Nonuniform grid, state dimension 2 and control dimension 1.
+kep3::leg::zoh_ms make_test_leg_21()
+{
+    const std::vector<double> states{0., 1., 2., 3., 4.,5., 6., 7.};
+    const std::vector<double> controls{10., 11., 12.};
+    const std::vector<double> tgrid{0., 0.5, 2., 5.};
+    auto ta = make_integrator(2u, 1u);
+    return {states, controls, tgrid, 0.5, {ta, std::nullopt}, std::nullopt,2u, 1u};
 }
 
 } // namespace
 
 TEST_CASE("zoh_ms constructor")
 {
-    // We test that valid inputs construct a leg and every malformed constructor input is rejected.
+    // We test constructor validation on a uniform-grid 1-state, 1-control leg and malformed integrator variants.
     const std::vector<double> states(3u, 0.0);
     const std::vector<double> controls(2u, 0.0);
     const std::vector<double> tgrid{0., 1., 2.};
@@ -106,8 +124,9 @@ TEST_CASE("zoh_ms constructor")
 
 TEST_CASE("zoh_ms setters and getters")
 {
-    // We test that setters update their getters and reject incompatible inputs without changing stored data.
-    auto leg = make_test_leg();
+    // We test that setters update their getters and reject incompatible
+    // inputs without changing stored data on a uniform-grid 1-state, 2-control leg.
+    auto leg = make_test_leg_12();
     const std::vector<double> states{0., 1., 2.};
     const std::vector<double> controls{10., 11., 12., 13.};
     const std::vector<double> tgrid{0., 1., 2.};
@@ -179,13 +198,62 @@ TEST_CASE("zoh_ms setters and getters")
 }
 
 TEST_CASE("compute_defects") {
-    // We test forward and backward defects with state-dependent dynamics and non-uniform segments.
-    const std::vector<double> states{0., 1., 2., 3., 4.,5., 6., 7.};
-    const std::vector<double> controls{10., 11., 12.};
-    const std::vector<double> tgrid{0., 0.5, 2., 5.};
-    auto ta = make_integrator(2u, 1u);
-    kep3::leg::zoh_ms leg(states, controls, tgrid, 0.5, {ta, std::nullopt}, std::nullopt,2u, 1u);
+    // We test forward and backward defects on a nonuniform-grid 2-state, 1-control leg.
+    auto leg = make_test_leg_21();
     const auto defects = leg.compute_defects();
     const std::vector<double> expected{4.487212707001282, 16.901100113049495, 9.653047597773553, 13.203406906114177, 15.10383276937845, 16.952903708643585};
     REQUIRE(kep3_tests::L_infinity_norm_rel(defects, expected) < 1e-12);
+}
+
+TEST_CASE("get_state_info")
+{
+    // We test per-segment sampling order on a nonuniform-grid 1-state, 1-control leg.
+    auto leg = make_test_leg_11();
+    const auto [state_fwd, state_bck, success] = leg.get_state_info(3u);
+
+    REQUIRE(success);
+    REQUIRE(state_fwd.size() == 1u);
+    REQUIRE(state_fwd[0].size() == 3u);
+    REQUIRE(state_bck.size() == 2u);
+    REQUIRE(state_bck[0].size() == 3u);
+    REQUIRE(state_bck[1].size() == 3u);
+
+    const std::vector<double> actual_fwd{state_fwd[0][0][0], state_fwd[0][1][0], state_fwd[0][2][0]};
+    const std::vector<double> actual_bck{state_bck[0][0][0], state_bck[0][1][0], state_bck[0][2][0],
+                                         state_bck[1][0][0], state_bck[1][1][0], state_bck[1][2][0]};
+    const std::vector<double> expected_fwd{1., 1.426038125031612, 1.9730819060501923};
+    const std::vector<double> expected_bck{8., 0.6197365214100832, -1.0270228505052925, 4.,
+                                           1.3618327637050736, 0.11565080074214906};
+    REQUIRE(kep3_tests::L_infinity_norm_rel(actual_fwd, expected_fwd) < 1e-12);
+    REQUIRE(kep3_tests::L_infinity_norm_rel(actual_bck, expected_bck) < 1e-12);
+}
+
+TEST_CASE("set_initial_guess propagates with stored controls")
+{
+    // We test control-driven propagation on a nonuniform-grid 1-state, 1-control leg.
+    auto leg = make_test_leg_11();
+    const std::vector<double> controls{0.5, 1., 1.5};
+    const std::vector<double> tgrid{0., 0.5, 2., 5.};
+
+    leg.set_initial_guess();
+
+    const std::vector<double> expected_states{1., 1.9730819060501923, -1.0270228505052925, 8.};
+    REQUIRE(kep3_tests::L_infinity_norm_rel(leg.get_states(), expected_states) < 1e-12);
+    REQUIRE(leg.get_controls() == controls);
+    REQUIRE(leg.get_tgrid() == tgrid);
+}
+
+TEST_CASE("set_initial_guess propagates ballistically")
+{
+    // We test ballistic propagation on a nonuniform-grid 1-state, 1-control leg.
+    auto leg = make_test_leg_11();
+    const std::vector<double> controls{0.5, 1., 1.5};
+    const std::vector<double> tgrid{0., 0.5, 2., 5.};
+
+    leg.set_initial_guess(true);
+
+    const std::vector<double> expected_states{1., 1.6487212707001282, 0.39829654694291156, 8.};
+    REQUIRE(kep3_tests::L_infinity_norm_rel(leg.get_states(), expected_states) < 1e-12);
+    REQUIRE(leg.get_controls() == controls);
+    REQUIRE(leg.get_tgrid() == tgrid);
 }

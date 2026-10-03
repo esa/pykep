@@ -70,14 +70,21 @@ For private helpers or very simple functions, use only the concise summary when 
 ## Comments and numerical code
 
 - Use comments to describe the overall logic, construction, and flow of a non-trivial algorithm, especially how its stages or transformations fit together.
-- Start each test with a brief docstring stating the test philosophy, i.e. what property is being tested, phrased as "We test that ..." (e.g. "We test that the initial guess is actually set", "We test for malformed input").
-- In non-trivial tests, use short comments to record the test logic at its meaningful stages: what mathematical or numerical object is constructed, how the implementation under test is evaluated, and what reference result or invariant is used for comparison.
 - Place a short orienting comment before a complex block when it helps explain the purpose of the block and how it connects to the surrounding computation.
 - Use additional comments for mathematical intent, numerical details, algorithmic choices, or non-obvious implementation constraints.
 - Do not comment on syntax or restate what a clear individual line of code already says.
 - Keep equations and transformations close to the code that implements them.
 - State numerical tolerances, convergence criteria, singular cases, and domain restrictions where they affect results.
 - Preserve established terminology for orbital elements, epochs, time of flight, gravitational parameters, thrust, mass, and reference frames.
+
+## Testing
+
+- Start each test with a brief docstring stating the test philosophy, i.e. what property is being tested, phrased as "We test that ..." (e.g. "We test that the initial guess is actually set", "We test for malformed input").
+- In non-trivial tests, use short comments to record the test logic at its meaningful stages: what mathematical or numerical object is constructed, how the implementation under test is evaluated, and what reference result or invariant is used for comparison.
+- Add short, one-line comments before meaningful test blocks to explain the feature being checked or the testing strategy.
+- Use simple, student-friendly language. Explain why inputs are chosen, what is compared, and what must stay unchanged; avoid unexplained jargon.
+- Describe strategies such as saving before-and-after snapshots, trying malformed inputs, checking independent copies, comparing implementations, and estimating derivatives with small input changes.
+- Comment on the purpose of a block, not individual statements or obvious syntax. Keep comments brief and avoid repeating the test docstring.
 
 ## Editing rule
 

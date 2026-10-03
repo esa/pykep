@@ -26,6 +26,7 @@
 #include <kep3/leg/sims_flanagan.hpp>
 #include <kep3/leg/sims_flanagan_alpha.hpp>
 #include <kep3/leg/zoh.hpp>
+#include <kep3/leg/zoh_ms.hpp>
 #include <kep3/planet.hpp>
 #include <kep3/ta/bcp.hpp>
 #include <kep3/ta/cr3bp.hpp>
@@ -995,5 +996,80 @@ PYBIND11_MODULE(core, m) // NOLINT
         }, 
         py::arg("N") = 2,
         pykep::leg_zoh_get_state_info_docstring().c_str());
+
+    // Exposing the zoh_ms leg
+    py::class_<kep3::leg::zoh_ms> zoh_ms(m, "_zoh_ms_cpp", pykep::leg_zoh_ms_docstring().c_str());
+    zoh_ms.def(
+        py::init<const std::vector<double> &, const std::vector<double> &, const std::vector<double> &, double,
+                 const std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>> &,
+                 std::optional<unsigned>, unsigned, unsigned>(),
+        py::arg("states"), py::arg("controls"), py::arg("tgrid"), py::arg("cut"), py::arg("tas"),
+        py::arg("max_steps") = std::nullopt, py::arg("dim_dynamics") = 7u, py::arg("dim_controls") = 4u);
+    zoh_ms.def("__repr__", &pykep::ostream_repr<kep3::leg::zoh_ms>);
+    zoh_ms.def("__copy__", &pykep::generic_copy_wrapper<kep3::leg::zoh_ms>);
+    zoh_ms.def("__deepcopy__", &pykep::generic_deepcopy_wrapper<kep3::leg::zoh_ms>);
+    zoh_ms.def(py::pickle(
+        [](const kep3::leg::zoh_ms &leg) {
+            return py::make_tuple(leg.get_states(), leg.get_controls(), leg.get_tgrid(), leg.get_cut(),
+                                  py::make_tuple(leg.get_ta(), leg.get_ta_var()), leg.get_max_steps(),
+                                  leg.get_dim_dynamics(), leg.get_dim_controls());
+        },
+        [](const py::tuple &state) {
+            if (state.size() != 8u) {
+                throw py::value_error("Invalid zoh_ms pickle state: expected 8 elements.");
+            }
+            return kep3::leg::zoh_ms{
+                state[0].cast<std::vector<double>>(), state[1].cast<std::vector<double>>(),
+                state[2].cast<std::vector<double>>(), state[3].cast<double>(),
+                state[4].cast<std::pair<heyoka::taylor_adaptive<double>, std::optional<heyoka::taylor_adaptive<double>>>>(),
+                state[5].cast<std::optional<unsigned>>(), state[6].cast<unsigned>(), state[7].cast<unsigned>()};
+        }));
+    zoh_ms.def_property("states", &kep3::leg::zoh_ms::get_states, &kep3::leg::zoh_ms::set_states,
+                        "Flat mesh nodes, of length (nseg + 1) * dim_dynamics. Reassign to update.");
+    zoh_ms.def_property("controls", &kep3::leg::zoh_ms::get_controls, &kep3::leg::zoh_ms::set_controls,
+                        "Flat segment controls, of length nseg * dim_controls. Reassign to update.");
+    zoh_ms.def_property("tgrid", &kep3::leg::zoh_ms::get_tgrid, &kep3::leg::zoh_ms::set_tgrid,
+                        pykep::leg_zoh_tgrid_docstring().c_str());
+    zoh_ms.def_property("cut", &kep3::leg::zoh_ms::get_cut, &kep3::leg::zoh_ms::set_cut,
+                        pykep::leg_zoh_cut_docstring().c_str());
+    zoh_ms.def_property("max_steps", &kep3::leg::zoh_ms::get_max_steps, &kep3::leg::zoh_ms::set_max_steps,
+                        pykep::leg_zoh_max_steps_docstring().c_str());
+    zoh_ms.def_property_readonly("nseg", &kep3::leg::zoh_ms::get_nseg, pykep::leg_zoh_nseg_docstring().c_str());
+    zoh_ms.def_property_readonly("nseg_fwd", &kep3::leg::zoh_ms::get_nseg_fwd,
+                                 pykep::leg_zoh_nseg_fwd_docstring().c_str());
+    zoh_ms.def_property_readonly("nseg_bck", &kep3::leg::zoh_ms::get_nseg_bck,
+                                 pykep::leg_zoh_nseg_bck_docstring().c_str());
+    zoh_ms.def_property_readonly("dim_dynamics", &kep3::leg::zoh_ms::get_dim_dynamics, "Dynamics state dimension.");
+    zoh_ms.def_property_readonly("dim_controls", &kep3::leg::zoh_ms::get_dim_controls, "Segment control dimension.");
+    zoh_ms.def_property_readonly("ta", &kep3::leg::zoh_ms::get_ta, "Nominal Taylor-adaptive integrator.");
+    zoh_ms.def_property_readonly("ta_var", &kep3::leg::zoh_ms::get_ta_var,
+                                 "Optional variational Taylor-adaptive integrator, or None.");
+    zoh_ms.def("compute_defects", &kep3::leg::zoh_ms::compute_defects,
+                pykep::leg_zoh_ms_defects_docstring().c_str());
+    zoh_ms.def("set_initial_guess", &kep3::leg::zoh_ms::set_initial_guess, py::arg("ballistic") = false,
+                pykep::leg_zoh_ms_set_initial_guess_docstring().c_str());
+    zoh_ms.def(
+        "get_state_info",
+        [](const kep3::leg::zoh_ms &leg, unsigned N) {
+            auto [fwd_cpp, bck_cpp, success] = leg.get_state_info(N);
+            const auto dim = static_cast<py::ssize_t>(leg.get_dim_dynamics());
+            auto to_py_segments = [dim](const std::vector<std::vector<std::vector<double>>> &segments) {
+                py::list out;
+                for (const auto &segment : segments) {
+                    auto seg_data = std::make_unique<std::vector<double>>();
+                    seg_data->reserve(segment.size() * static_cast<std::size_t>(dim));
+                    for (const auto &state : segment) {
+                        seg_data->insert(seg_data->end(), state.begin(), state.end());
+                    }
+                    py::capsule seg_caps(seg_data.get(), [](void *ptr) { delete static_cast<std::vector<double> *>(ptr); });
+                    auto *ptr = seg_data.release();
+                    out.append(py::array_t<double>({static_cast<py::ssize_t>(segment.size()), dim}, ptr->data(),
+                                                   std::move(seg_caps)));
+                }
+                return out;
+            };
+            return py::make_tuple(to_py_segments(fwd_cpp), to_py_segments(bck_cpp), success);
+        },
+        py::arg("N") = 5, pykep::leg_zoh_ms_get_state_info_docstring().c_str());
 
 }
