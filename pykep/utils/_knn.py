@@ -193,6 +193,8 @@ class knn:
             For arguments, see:
             https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html
         """
+        import numpy as np
+
         if type(query_planet) == int:
             query_planet = self._asteroids[query_planet]
 
@@ -208,6 +210,13 @@ class knn:
             # Query for the k nearest neighbors
             # http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query.html
             dists, idxs = self._kdtree.query(x, *args, **kwargs)
+            # A single neighbour comes back as a scalar, and a neighbour that
+            # could not be found comes back as the size of the tree.
+            idxs = np.atleast_1d(idxs)
+            dists = np.atleast_1d(dists)
+            found = idxs < len(self._asteroids)
+            idxs = idxs[found]
+            dists = dists[found]
         elif query_type == "ball":
             # Query for all neighbors within a sphere of given radius
             # http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.cKDTree.query_ball_point.html

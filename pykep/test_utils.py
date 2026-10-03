@@ -65,3 +65,68 @@ class encoding_tests(_ut.TestCase):
         err = [a - b for a, b in zip(vector, vector_new)]
         err = np.linalg.norm(err)
         self.assertTrue(err < 1e-13)
+
+class knn_tests(_ut.TestCase):
+    def _planets(self):
+        import pykep as _pk
+
+        return [
+            _pk.planet(_pk.udpla.jpl_lp(name)) for name in ("earth", "mars", "venus")
+        ]
+
+    def test_single_neighbour_query(self):
+        import pykep as _pk
+
+        for metric in ("orbital", "euclidean"):
+            knn = _pk.utils.knn(self._planets(), _pk.epoch(0.0), metric=metric)
+            neighb, ids, dists = knn.find_neighbours(0)
+            self.assertEqual(len(neighb), 1)
+            self.assertEqual(len(ids), 1)
+            self.assertEqual(len(dists), 1)
+            self.assertEqual(ids[0], 0)
+            self.assertEqual(dists[0], 0.0)
+
+    def test_more_neighbours_requested_than_available(self):
+        import pykep as _pk
+
+        planets = self._planets()
+        for metric in ("orbital", "euclidean"):
+            knn = _pk.utils.knn(planets, _pk.epoch(0.0), metric=metric)
+            neighb, ids, dists = knn.find_neighbours(0, k=5)
+            self.assertEqual(len(neighb), len(planets))
+            self.assertEqual(len(ids), len(planets))
+            self.assertEqual(len(dists), len(planets))
+
+    def test_distance_upper_bound_keeps_only_reachable_neighbours(self):
+        import pykep as _pk
+
+        for metric in ("orbital", "euclidean"):
+            knn = _pk.utils.knn(self._planets(), _pk.epoch(0.0), metric=metric)
+            neighb, ids, dists = knn.find_neighbours(
+                0, k=3, distance_upper_bound=1e-10
+            )
+            self.assertEqual(len(neighb), 1)
+            self.assertEqual(ids[0], 0)
+
+    def test_no_neighbour_within_distance_upper_bound(self):
+        import pykep as _pk
+
+        outsider = _pk.planet(_pk.udpla.jpl_lp("jupiter"))
+        for metric in ("orbital", "euclidean"):
+            knn = _pk.utils.knn(self._planets(), _pk.epoch(0.0), metric=metric)
+            self.assertEqual(
+                knn.find_neighbours(outsider, k=3, distance_upper_bound=1e-10),
+                ([], [], []),
+            )
+
+    def test_nominal_query_unchanged(self):
+        import pykep as _pk
+
+        for metric in ("orbital", "euclidean"):
+            knn = _pk.utils.knn(self._planets(), _pk.epoch(0.0), metric=metric)
+            neighb, ids, dists = knn.find_neighbours(0, k=2)
+            self.assertEqual(len(neighb), 2)
+            self.assertEqual(ids[0], 0)
+
+            neighb, ids, dists = knn.find_neighbours(0, "ball", r=1e12)
+            self.assertEqual(len(neighb), 3)
