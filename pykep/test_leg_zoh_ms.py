@@ -42,9 +42,16 @@ class leg_zoh_ms_test(_ut.TestCase):
         self.assertEqual((leg.nseg, leg.nseg_fwd, leg.nseg_bck), (2, 1, 1))
         self.assertIsNone(leg.max_steps)
         self.assertIsNone(leg.ta_var)
-        # Gradient methods are deliberately not exposed in the C++ binding yet.
+        # The C++ binding returns cached coordinate arrays without requiring variations.
         self.assertFalse(hasattr(leg, "compute_defects_grad"))
-        self.assertFalse(hasattr(leg, "defects_grad_sparsity"))
+        sparsities = leg.defects_grad_sparsity()
+        self.assertEqual([pattern.shape for pattern in sparsities], [(112, 2), (56, 2), (28, 2)])
+        self.assertTrue(all(pattern.dtype == np.int64 for pattern in sparsities))
+        np.testing.assert_array_equal(sparsities[0][:8], [[0, j] for j in range(7)] + [[0, 7]])
+        np.testing.assert_array_equal(sparsities[1][:4], [[0, j] for j in range(4)])
+        np.testing.assert_array_equal(sparsities[2][:2], [[0, 0], [0, 1]])
+        leg.cut = 0.0
+        np.testing.assert_array_equal(leg.defects_grad_sparsity()[0][:2], [[0, 0], [0, 7]])
 
         # Set each writable property, then read it back to check that it changed.
         leg = _make_leg(_pk.leg.zoh_ms)

@@ -309,7 +309,7 @@ zoh::zoh(const std::vector<double> &state0, const std::vector<double> &controls,
       m_dim_dynamics(dim_dynamics), m_dim_controls(dim_controls), m_ta(tas.first), m_ta_var(tas.second)
 {
     update_nseg();
-    update_ic_var();
+    initialize_ic_var();
     update_pars_no_control();
 
     const auto &sys = m_ta.get_sys();
@@ -641,11 +641,13 @@ void zoh::update_nseg()
     m_nseg_bck = m_nseg - m_nseg_fwd;
 }
 
-void zoh::update_ic_var()
+void zoh::initialize_ic_var()
 {
-    m_ic_var.assign(m_dim_dynamics * (m_dim_dynamics + m_dim_controls), 0.0);
-    for (unsigned i = 0u; i < m_dim_dynamics; ++i) {
-        m_ic_var[i * (m_dim_dynamics + m_dim_controls) + i] = 1.0;
+    const auto dimension = static_cast<std::size_t>(m_dim_dynamics);
+    const auto sensitivity_dimension = dimension + static_cast<std::size_t>(m_dim_controls);
+    m_ic_var.assign(dimension * sensitivity_dimension, 0.0);
+    for (std::size_t component = 0u; component < dimension; ++component) {
+        m_ic_var[component * sensitivity_dimension + component] = 1.0;
     }
 }
 

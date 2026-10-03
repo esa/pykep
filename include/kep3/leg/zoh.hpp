@@ -108,7 +108,7 @@ public:
 
 private:
     void update_nseg();
-    void update_ic_var();
+    void initialize_ic_var();
     void update_pars_no_control();
     void sanity_checks() const;
 

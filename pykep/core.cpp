@@ -9,6 +9,8 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #include <pybind11/pytypes.h>
 
+#include <cstdint>
+
 #include <fmt/chrono.h>
 
 #include <kep3/core_astro/basic_transfers.hpp>
@@ -1046,6 +1048,22 @@ PYBIND11_MODULE(core, m) // NOLINT
                                  "Optional variational Taylor-adaptive integrator, or None.");
     zoh_ms.def("compute_defects", &kep3::leg::zoh_ms::compute_defects,
                 pykep::leg_zoh_ms_defects_docstring().c_str());
+    zoh_ms.def(
+        "defects_grad_sparsity",
+        [](const kep3::leg::zoh_ms &leg) {
+            const auto &[sp_states, sp_controls, sp_tgrid] = leg.defects_grad_sparsity();
+            const auto to_numpy = [](const auto &pattern) {
+                py::array_t<std::int64_t> result({static_cast<py::ssize_t>(pattern.size()), py::ssize_t{2}});
+                auto coordinates = result.mutable_unchecked<2>();
+                for (py::ssize_t i = 0; i < coordinates.shape(0); ++i) {
+                    coordinates(i, 0) = static_cast<std::int64_t>(pattern[static_cast<std::size_t>(i)].first);
+                    coordinates(i, 1) = static_cast<std::int64_t>(pattern[static_cast<std::size_t>(i)].second);
+                }
+                return result;
+            };
+            return py::make_tuple(to_numpy(sp_states), to_numpy(sp_controls), to_numpy(sp_tgrid));
+        },
+        "Return the sparse coordinate patterns of the defects gradients.");
     zoh_ms.def("set_initial_guess", &kep3::leg::zoh_ms::set_initial_guess, py::arg("ballistic") = false,
                 pykep::leg_zoh_ms_set_initial_guess_docstring().c_str());
     zoh_ms.def(

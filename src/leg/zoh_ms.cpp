@@ -16,6 +16,7 @@
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 
+#include <heyoka/expression.hpp>
 #include <heyoka/kw.hpp>
 #include <heyoka/taylor.hpp>
 
@@ -56,9 +57,25 @@ zoh_ms::zoh_ms(const std::vector<double> &states, const std::vector<double> &con
     : m_states(states), m_controls(controls), m_tgrid(tgrid), m_cut(cut), m_max_steps(max_steps),
       m_dim_dynamics(dim_dynamics), m_dim_controls(dim_controls), m_ta(tas.first), m_ta_var(tas.second)
 {
+    if (m_dim_dynamics == 0u || m_dim_controls == 0u) {
+        throw std::logic_error("dim_dynamics and dim_controls must be positive.");
+    }
+    if (m_cut < 0. || m_cut > 1.) {
+        throw std::logic_error("The cut parameter of a zoh_ms leg must be in the [0, 1] interval.");
+    }
+
     update_nseg();
-    update_pars_no_control();
     sanity_checks();
+    initialize_ic_var();
+    update_pars_no_control();
+
+    const auto &sys = m_ta.get_sys();
+    std::vector<heyoka::expression> dyn, vars;
+    for (const auto &equation : sys) {
+        vars.push_back(equation.first);
+        dyn.push_back(equation.second);
+    }
+    m_dyn_cfunc = heyoka::cfunc<double>(dyn, vars, heyoka::kw::compact_mode = true);
 }
 
 void zoh_ms::set_states(const std::vector<double> &states)
@@ -188,6 +205,119 @@ unsigned zoh_ms::get_nseg_fwd() const
 unsigned zoh_ms::get_nseg_bck() const
 {
     return m_nseg_bck;
+}
+
+const std::tuple<zoh_ms::sparsity_pattern, zoh_ms::sparsity_pattern, zoh_ms::sparsity_pattern> &
+zoh_ms::defects_grad_sparsity() const
+{
+    return m_defects_grad_sparsity;
+}
+
+std::tuple<std::vector<double>, std::vector<double>, std::vector<double>> zoh_ms::compute_defects_grad() const
+{
+    if (!m_ta_var) {
+        throw std::logic_error("zoh_ms::compute_defects_grad() requires a variational integrator (ta_var)");
+    }
+
+    auto &ta_var = *m_ta_var;
+    const auto dimension = static_cast<std::size_t>(m_dim_dynamics);
+    const auto control_dimension = static_cast<std::size_t>(m_dim_controls);
+    const auto sensitivity_dimension = dimension + control_dimension;
+    std::vector<double> grad_states;
+    std::vector<double> grad_controls;
+    std::vector<double> grad_tgrid;
+    grad_states.reserve(static_cast<std::size_t>(m_nseg) * (dimension * dimension + dimension));
+    grad_controls.reserve(static_cast<std::size_t>(m_nseg) * dimension * control_dimension);
+    grad_tgrid.reserve(static_cast<std::size_t>(m_nseg) * dimension * 2u);
+
+    for (unsigned segment = 0u; segment < m_nseg; ++segment) {
+        const bool forward = segment < m_nseg_fwd;
+        const auto start_node = forward ? segment : segment + 1u;
+        const auto end_node = forward ? segment + 1u : segment;
+        const auto state_offset = static_cast<std::size_t>(m_dim_dynamics * start_node);
+        const auto control_offset = static_cast<std::size_t>(m_dim_controls * segment);
+
+        std::vector<double> initial_state(dimension);
+        std::copy_n(m_states.begin() + static_cast<std::ptrdiff_t>(state_offset),
+                    static_cast<std::ptrdiff_t>(dimension), initial_state.begin());
+        std::vector<double> parameters;
+        parameters.reserve(m_ta.get_pars().size());
+        parameters.insert(parameters.end(), m_controls.begin() + static_cast<std::ptrdiff_t>(control_offset),
+                          m_controls.begin() + static_cast<std::ptrdiff_t>(control_offset + control_dimension));
+        parameters.insert(parameters.end(), m_pars_no_control.begin(), m_pars_no_control.end());
+
+        // Each defect uses sensitivities initialized at its own starting node.
+        ta_var.set_time(m_tgrid[start_node]);
+        std::copy(initial_state.begin(), initial_state.end(), ta_var.get_state_data());
+        std::copy(m_ic_var.begin(), m_ic_var.end(), ta_var.get_state_data() + dimension);
+        std::copy(parameters.begin(), parameters.end(), ta_var.get_pars_data());
+        const bool success = propagate_until_safe_impl(ta_var, m_tgrid[end_node], m_max_steps);
+
+        // A failed propagation restores [x0, I, 0], which is also the required fallback.
+        std::vector<double> state_transition(dimension * dimension, 0.0);
+        std::vector<double> control_sensitivity(dimension * control_dimension, 0.0);
+        if (success) {
+            const auto &variational_state = ta_var.get_state();
+            for (std::size_t row = 0u; row < dimension; ++row) {
+                for (std::size_t column = 0u; column < dimension; ++column) {
+                    state_transition[row * dimension + column]
+                        = variational_state[dimension + row * sensitivity_dimension + column];
+                }
+                for (std::size_t column = 0u; column < control_dimension; ++column) {
+                    control_sensitivity[row * control_dimension + column]
+                        = variational_state[dimension + row * sensitivity_dimension + dimension + column];
+                }
+            }
+        } else {
+            for (std::size_t component = 0u; component < dimension; ++component) {
+                state_transition[component * dimension + component] = 1.0;
+            }
+        }
+
+        std::vector<double> dynamics_start(dimension, 0.0);
+        std::vector<double> dynamics_end(dimension, 0.0);
+        if (success) {
+            std::vector<double> final_state(dimension);
+            std::copy_n(ta_var.get_state().begin(), static_cast<std::ptrdiff_t>(dimension), final_state.begin());
+            m_dyn_cfunc(dynamics_start, initial_state, heyoka::kw::pars = parameters);
+            m_dyn_cfunc(dynamics_end, final_state, heyoka::kw::pars = parameters);
+        }
+
+        // Moving the segment start changes the flow by -M f(x0); moving its end gives f(x1).
+        std::vector<double> time_derivative_start(dimension, 0.0);
+        if (success) {
+            for (std::size_t row = 0u; row < dimension; ++row) {
+                for (std::size_t column = 0u; column < dimension; ++column) {
+                    time_derivative_start[row] -= state_transition[row * dimension + column] * dynamics_start[column];
+                }
+            }
+        }
+
+        // Append each row in the same order as the cached sparsity coordinates.
+        for (std::size_t row = 0u; row < dimension; ++row) {
+            if (forward) {
+                for (std::size_t column = 0u; column < dimension; ++column) {
+                    grad_states.push_back(state_transition[row * dimension + column]);
+                }
+                grad_states.push_back(-1.0);
+            } else {
+                grad_states.push_back(1.0);
+                for (std::size_t column = 0u; column < dimension; ++column) {
+                    grad_states.push_back(-state_transition[row * dimension + column]);
+                }
+            }
+
+            const double control_sign = forward ? 1.0 : -1.0;
+            for (std::size_t column = 0u; column < control_dimension; ++column) {
+                grad_controls.push_back(control_sign * control_sensitivity[row * control_dimension + column]);
+            }
+
+            grad_tgrid.push_back(forward ? time_derivative_start[row] : -dynamics_end[row]);
+            grad_tgrid.push_back(forward ? dynamics_end[row] : -time_derivative_start[row]);
+        }
+    }
+
+    return {std::move(grad_states), std::move(grad_controls), std::move(grad_tgrid)};
 }
 
 std::vector<double> zoh_ms::compute_defects() const
@@ -347,6 +477,55 @@ void zoh_ms::update_nseg()
     m_nseg = static_cast<unsigned>(m_controls.size() / m_dim_controls);
     m_nseg_fwd = static_cast<unsigned>(static_cast<double>(m_nseg) * m_cut);
     m_nseg_bck = m_nseg - m_nseg_fwd;
+    update_sparsity();
+}
+
+void zoh_ms::initialize_ic_var()
+{
+    const auto dimension = static_cast<std::size_t>(m_dim_dynamics);
+    const auto sensitivity_dimension = dimension + static_cast<std::size_t>(m_dim_controls);
+    m_ic_var.assign(dimension * sensitivity_dimension, 0.0);
+    for (std::size_t component = 0u; component < dimension; ++component) {
+        m_ic_var[component * sensitivity_dimension + component] = 1.0;
+    }
+}
+
+void zoh_ms::update_sparsity()
+{
+    auto &[sp_states, sp_controls, sp_tgrid] = m_defects_grad_sparsity;
+    sp_states.clear();
+    sp_controls.clear();
+    sp_tgrid.clear();
+
+    const auto d = static_cast<std::size_t>(m_dim_dynamics);
+    const auto c = static_cast<std::size_t>(m_dim_controls);
+    const auto nseg = static_cast<std::size_t>(m_nseg);
+    sp_states.reserve(nseg * (d * d + d));
+    sp_controls.reserve(nseg * d * c);
+    sp_tgrid.reserve(nseg * d * 2u);
+
+    for (unsigned i = 0u; i < m_nseg; ++i) {
+        for (unsigned k = 0u; k < m_dim_dynamics; ++k) {
+            const auto row = static_cast<std::size_t>(m_dim_dynamics * i + k);
+            if (i < m_nseg_fwd) {
+                for (unsigned j = 0u; j < m_dim_dynamics; ++j) {
+                    sp_states.emplace_back(row, static_cast<std::size_t>(m_dim_dynamics * i + j));
+                }
+                sp_states.emplace_back(row, static_cast<std::size_t>(m_dim_dynamics * (i + 1u) + k));
+            } else {
+                sp_states.emplace_back(row, static_cast<std::size_t>(m_dim_dynamics * i + k));
+                for (unsigned j = 0u; j < m_dim_dynamics; ++j) {
+                    sp_states.emplace_back(row, static_cast<std::size_t>(m_dim_dynamics * (i + 1u) + j));
+                }
+            }
+
+            for (unsigned j = 0u; j < m_dim_controls; ++j) {
+                sp_controls.emplace_back(row, static_cast<std::size_t>(m_dim_controls * i + j));
+            }
+            sp_tgrid.emplace_back(row, static_cast<std::size_t>(i));
+            sp_tgrid.emplace_back(row, static_cast<std::size_t>(i + 1u));
+        }
+    }
 }
 
 void zoh_ms::update_pars_no_control()

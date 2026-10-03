@@ -10,6 +10,7 @@
 
 #include <heyoka/expression.hpp>
 #include <optional>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -19,6 +20,7 @@
 #include <heyoka/taylor.hpp>
 
 #include <kep3/leg/zoh_ms.hpp>
+#include <kep3/detail/s11n.hpp>
 
 #include <fmt/core.h>
 #include <fmt/ranges.h>
@@ -46,6 +48,14 @@ integrator make_integrator(unsigned dim, unsigned npars)
         sys.emplace_back(var, rate * (var + control));
     }
     return integrator{std::move(sys)};
+}
+
+integrator make_variational_integrator()
+{
+    auto ta = make_integrator(1u, 2u);
+    const auto &sys = ta.get_sys();
+    auto var_sys = heyoka::var_ode_sys(sys, {sys[0].first, heyoka::par[0]}, 1u);
+    return integrator{std::move(var_sys)};
 }
 
 // Uniform grid, state dimension 1 and control dimension 2.
@@ -197,12 +207,129 @@ TEST_CASE("zoh_ms setters and getters")
     REQUIRE(leg.get_nseg_bck() == 2u);
 }
 
+TEST_CASE("zoh_ms cached defect gradient sparsity")
+{
+    // A two-state leg makes the different forward and backward state blocks visible.
+    auto leg = make_test_leg_21();
+    const auto &[sp_states, sp_controls, sp_tgrid] = leg.defects_grad_sparsity();
+    const kep3::leg::zoh_ms::sparsity_pattern expected_states{
+        {0u, 0u}, {0u, 1u}, {0u, 2u}, {1u, 0u}, {1u, 1u}, {1u, 3u},
+        {2u, 2u}, {2u, 4u}, {2u, 5u}, {3u, 3u}, {3u, 4u}, {3u, 5u},
+        {4u, 4u}, {4u, 6u}, {4u, 7u}, {5u, 5u}, {5u, 6u}, {5u, 7u}};
+    const kep3::leg::zoh_ms::sparsity_pattern expected_controls{
+        {0u, 0u}, {1u, 0u}, {2u, 1u}, {3u, 1u}, {4u, 2u}, {5u, 2u}};
+    const kep3::leg::zoh_ms::sparsity_pattern expected_tgrid{
+        {0u, 0u}, {0u, 1u}, {1u, 0u}, {1u, 1u}, {2u, 1u}, {2u, 2u},
+        {3u, 1u}, {3u, 2u}, {4u, 2u}, {4u, 3u}, {5u, 2u}, {5u, 3u}};
+    REQUIRE(sp_states == expected_states);
+    REQUIRE(sp_controls == expected_controls);
+    REQUIRE(sp_tgrid == expected_tgrid);
+
+    // Value-only setters must leave the structural coordinates unchanged.
+    leg.set_states(std::vector<double>(leg.get_states().size(), 1.0));
+    leg.set_controls(std::vector<double>(leg.get_controls().size(), 2.0));
+    leg.set_tgrid({0.0, 1.0, 2.0, 3.0});
+    leg.set_max_steps(10u);
+    const auto &[same_states, same_controls, same_tgrid] = leg.defects_grad_sparsity();
+    REQUIRE(same_states == expected_states);
+    REQUIRE(same_controls == expected_controls);
+    REQUIRE(same_tgrid == expected_tgrid);
+
+    // Changing the cut updates which node contributes the full state block.
+    leg.set_cut(0.0);
+    REQUIRE(std::get<0>(leg.defects_grad_sparsity())[0] == std::pair<std::size_t, std::size_t>{0u, 0u});
+    REQUIRE(std::get<0>(leg.defects_grad_sparsity())[1] == std::pair<std::size_t, std::size_t>{0u, 2u});
+    leg.set_cut(1.0);
+    REQUIRE(std::get<0>(leg.defects_grad_sparsity())[0] == std::pair<std::size_t, std::size_t>{0u, 0u});
+    REQUIRE(std::get<0>(leg.defects_grad_sparsity())[3] == std::pair<std::size_t, std::size_t>{1u, 0u});
+
+    // Resizing the mesh rebuilds all three blocks for the new segment count.
+    leg.set({0.0, 1.0, 2.0, 3.0, 4.0, 5.0}, {0.1, 0.2}, {0.0, 1.0, 2.0}, 0.5);
+    const auto &[resized_states, resized_controls, resized_tgrid] = leg.defects_grad_sparsity();
+    REQUIRE(leg.get_nseg() == 2u);
+    REQUIRE(resized_states.size() == 12u);
+    REQUIRE(resized_controls.size() == 4u);
+    REQUIRE(resized_tgrid.size() == 8u);
+
+    // The zero-segment case has valid, empty coordinate patterns.
+    const auto ta = make_integrator(2u, 1u);
+    kep3::leg::zoh_ms empty_leg{{0.0, 0.0}, {}, {0.0}, 0.5, {ta, std::nullopt}, std::nullopt, 2u, 1u};
+    const auto &[empty_states, empty_controls, empty_tgrid] = empty_leg.defects_grad_sparsity();
+    REQUIRE(empty_states.empty());
+    REQUIRE(empty_controls.empty());
+    REQUIRE(empty_tgrid.empty());
+
+    // Loading an archive reconstructs the derived cache from the restored structure.
+    std::stringstream archive_data;
+    {
+        boost::archive::binary_oarchive archive(archive_data);
+        archive << leg;
+    }
+    kep3::leg::zoh_ms restored_leg{};
+    {
+        boost::archive::binary_iarchive archive(archive_data);
+        archive >> restored_leg;
+    }
+    REQUIRE(restored_leg.defects_grad_sparsity() == leg.defects_grad_sparsity());
+}
+
 TEST_CASE("compute_defects") {
     // We test forward and backward defects on a nonuniform-grid 2-state, 1-control leg.
     auto leg = make_test_leg_21();
     const auto defects = leg.compute_defects();
     const std::vector<double> expected{4.487212707001282, 16.901100113049495, 9.653047597773553, 13.203406906114177, 15.10383276937845, 16.952903708643585};
     REQUIRE(kep3_tests::L_infinity_norm_rel(defects, expected) < 1e-12);
+}
+
+TEST_CASE("compute_defects_grad")
+{
+    // We test that sparse gradients match finite differences for states, controls and node times.
+    const auto ta = make_integrator(1u, 2u);
+    const auto ta_var = make_variational_integrator();
+    kep3::leg::zoh_ms leg{{0.2, 0.5, -0.1}, {0.3, -0.2}, {0.0, 0.2, 0.7}, 0.5,
+                          {ta, ta_var}, std::nullopt, 1u, 1u};
+    const auto [grad_states, grad_controls, grad_tgrid] = leg.compute_defects_grad();
+    const auto [sp_states, sp_controls, sp_tgrid] = leg.defects_grad_sparsity();
+    const auto states = leg.get_states();
+    const auto controls = leg.get_controls();
+    const auto tgrid = leg.get_tgrid();
+    const double step = 1e-5;
+
+    // Perturb one input at a time and compare the matching sparse entries.
+    const auto check_gradient = [&](const std::vector<double> &values, const auto &sparsity,
+                                    const std::vector<double> &gradient, const auto &set_values) {
+        REQUIRE(gradient.size() == sparsity.size());
+        for (std::size_t column = 0u; column < values.size(); ++column) {
+            auto plus = values;
+            auto minus = values;
+            plus[column] += step;
+            minus[column] -= step;
+            set_values(plus);
+            const auto defects_plus = leg.compute_defects();
+            set_values(minus);
+            const auto defects_minus = leg.compute_defects();
+
+            for (std::size_t entry = 0u; entry < sparsity.size(); ++entry) {
+                if (sparsity[entry].second == column) {
+                    const auto row = sparsity[entry].first;
+                    const auto estimate = (defects_plus[row] - defects_minus[row]) / (2.0 * step);
+                    REQUIRE(std::abs(gradient[entry] - estimate) < 2e-6);
+                }
+            }
+        }
+        set_values(values);
+    };
+
+    check_gradient(states, sp_states, grad_states,
+                   [&](const auto &values) { leg.set_states(values); });
+    check_gradient(controls, sp_controls, grad_controls,
+                   [&](const auto &values) { leg.set_controls(values); });
+    check_gradient(tgrid, sp_tgrid, grad_tgrid,
+                   [&](const auto &values) { leg.set_tgrid(values); });
+
+    // A nominal-only leg must reject gradient requests.
+    auto nominal_only = make_test_leg_11();
+    REQUIRE_THROWS_AS(nominal_only.compute_defects_grad(), std::logic_error);
 }
 
 TEST_CASE("get_state_info")
