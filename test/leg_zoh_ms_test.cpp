@@ -95,6 +95,7 @@ TEST_CASE("zoh_ms constructor")
     const integrator_pair wrong_ta_dimension{make_integrator(2u, 1u), std::nullopt};
     const integrator_pair wrong_var_dimension{ta, ta};
     const integrator_pair wrong_var_pars{ta, make_integrator(3u, 2u)};
+    const integrator_pair two_control_pars{make_integrator(1u, 2u), std::nullopt};
     const auto make_leg = [](const std::vector<double> &leg_states, const std::vector<double> &leg_controls,
                              const std::vector<double> &leg_tgrid, double cut, const integrator_pair &tas,
                              unsigned dim_dynamics = 1u, unsigned dim_controls = 1u) {
@@ -115,6 +116,10 @@ TEST_CASE("zoh_ms constructor")
     REQUIRE(leg.get_nseg_bck() == 1u);
     REQUIRE_FALSE(leg.has_ta_var());
 
+    // The accessors expose the stored nominal integrator and the empty variational slot.
+    REQUIRE(leg.get_ta().get_dim() == 1u);
+    REQUIRE_FALSE(leg.get_ta_var().has_value());
+
     REQUIRE_THROWS_AS(make_leg(states, controls, tgrid, 0.5, nominal_only, 0u), std::logic_error);
     REQUIRE_THROWS_AS(make_leg(states, controls, tgrid, 0.5, nominal_only, 1u, 0u), std::logic_error);
     REQUIRE_THROWS_AS(make_leg(states, controls, tgrid, -0.1, nominal_only), std::logic_error);
@@ -130,6 +135,11 @@ TEST_CASE("zoh_ms constructor")
     REQUIRE_THROWS_AS(make_leg(states, controls, std::vector<double>{0., 2.}, 0.5, nominal_only), std::logic_error);
     REQUIRE_THROWS_AS(make_leg(states, controls, tgrid, 0.5, wrong_var_dimension), std::logic_error);
     REQUIRE_THROWS_AS(make_leg(states, controls, tgrid, 0.5, wrong_var_pars), std::logic_error);
+
+    // A controls vector whose length is not a multiple of dim_controls is rejected.
+    REQUIRE_THROWS_AS(make_leg(std::vector<double>(2u, 0.0), std::vector<double>(3u, 0.0),
+                               std::vector<double>{0., 1.}, 0.5, two_control_pars, 1u, 2u),
+                      std::logic_error);
 }
 
 TEST_CASE("zoh_ms setters and getters")
@@ -288,6 +298,9 @@ TEST_CASE("compute_defects_grad")
     const auto ta_var = make_variational_integrator();
     kep3::leg::zoh_ms leg{{0.2, 0.5, -0.1}, {0.3, -0.2}, {0.0, 0.2, 0.7}, 0.5,
                           {ta, ta_var}, std::nullopt, 1u, 1u};
+
+    // The variational accessor is populated for a leg built with a variational integrator.
+    REQUIRE(leg.get_ta_var().has_value());
     const auto [grad_states, grad_controls, grad_tgrid] = leg.compute_defects_grad();
     const auto [sp_states, sp_controls, sp_tgrid] = leg.defects_grad_sparsity();
     const auto states = leg.get_states();
@@ -336,6 +349,10 @@ TEST_CASE("get_state_info")
 {
     // We test per-segment sampling order on a nonuniform-grid 1-state, 1-control leg.
     auto leg = make_test_leg_11();
+
+    // Requesting zero samples is meaningless and must be rejected.
+    REQUIRE_THROWS_AS(leg.get_state_info(0u), std::logic_error);
+
     const auto [state_fwd, state_bck, success] = leg.get_state_info(3u);
 
     REQUIRE(success);
@@ -383,4 +400,31 @@ TEST_CASE("set_initial_guess propagates ballistically")
     REQUIRE(kep3_tests::L_infinity_norm_rel(leg.get_states(), expected_states) < 1e-12);
     REQUIRE(leg.get_controls() == controls);
     REQUIRE(leg.get_tgrid() == tgrid);
+}
+
+TEST_CASE("zoh_ms stream operator")
+{
+    // We test that streaming a leg reports its structural fields.
+    const auto leg = make_test_leg_11();
+    std::ostringstream oss;
+    oss << leg;
+    const auto text = oss.str();
+    REQUIRE(text.find("Dynamics dimension: 1") != std::string::npos);
+    REQUIRE(text.find("Number of segments: 3") != std::string::npos);
+    REQUIRE(text.find("Maximum propagation steps: none") != std::string::npos);
+
+    // A leg with a step budget reports the value instead of "none".
+    auto bounded = make_test_leg_11();
+    bounded.set_max_steps(5u);
+    std::ostringstream bounded_stream;
+    bounded_stream << bounded;
+    REQUIRE(bounded_stream.str().find("Maximum propagation steps: 5") != std::string::npos);
+}
+
+TEST_CASE("zoh_ms max_steps propagation")
+{
+    // We test that a step budget is forwarded to the integrator during propagation.
+    auto leg = make_test_leg_11();
+    leg.set_max_steps(1000000u);
+    REQUIRE(leg.compute_defects().size() == leg.get_nseg() * leg.get_dim_dynamics());
 }
