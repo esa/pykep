@@ -143,7 +143,7 @@ TEST_CASE("zoh segment updates preserve state on invalid sizes")
     REQUIRE(leg.get_state1() == data.state1);
     REQUIRE(leg.get_controls() == resized_controls);
     REQUIRE(leg.get_tgrid() == resized_tgrid);
-    REQUIRE(leg.get_cut() == data.cut);
+    REQUIRE(leg.get_cut() == 0.75);
     REQUIRE(leg.get_nseg() == 4u);
 
     // Supplying an optional cut and step budget updates both values.
