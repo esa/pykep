@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Surrogate Primer Vector &#8212; pykep 3.0.2 documentation</title>
+    <title>Surrogate Primer Vector &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=c6c9c2f6"></script>
+    <script src="../_static/documentation_options.js?v=969bf561"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
@@ -183,8 +183,8 @@
       
     
     
-    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.2 documentation - Home"/>
-    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.2 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -224,6 +224,9 @@
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
@@ -756,7 +759,7 @@ Larger then one! -&gt; Trajectory can be improved
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa5bc5cf770&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f083cd738c0&gt;
 </pre></div>
 </div>
 <img alt="../_images/d9690e1c521aa29ae98b960cafadc3ff48e9c873171d0a9c78d6032f75002717.png" src="../_images/d9690e1c521aa29ae98b960cafadc3ff48e9c873171d0a9c78d6032f75002717.png" />
@@ -851,8 +854,8 @@ Larger then one! -&gt; Trajectory can be improved
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Multi-start:
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.6302531685549823
-The best solution found has a DV of 6.30253e-01
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 0.33129832802118264
+The best solution found has a DV of 3.31298e-01
 </pre></div>
 </div>
 </div>
@@ -881,7 +884,7 @@ The best solution found has a DV of 6.30253e-01
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/4a62e0d1be017cbbf65f7aea7f9912965dbfcfd579b0f0de300e938030128891.png" src="../_images/4a62e0d1be017cbbf65f7aea7f9912965dbfcfd579b0f0de300e938030128891.png" />
+<img alt="../_images/759254551af6c87a2b5bc0d99459deb3a886e5ae22af7cb932067252541a6442.png" src="../_images/759254551af6c87a2b5bc0d99459deb3a886e5ae22af7cb932067252541a6442.png" />
 </div>
 </div>
 <p>The <strong>surrogate primer vector</strong> correctly had us try to add impulses and, in this case, halved the needed <span class="math notranslate nohighlight">\(\Delta V\)</span>!</p>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; pykep 3.0.2 documentation</title>
+    <title>Changelog &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="_static/documentation_options.js?v=c6c9c2f6"></script>
+    <script src="_static/documentation_options.js?v=969bf561"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
@@ -181,8 +181,8 @@
       
     
     
-    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.2 documentation - Home"/>
-    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.2 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -222,6 +222,9 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ms.html">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
@@ -490,6 +493,7 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-system">Build system</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bug-fixes">Bug fixes</a></li>
 </ul>
@@ -510,6 +514,16 @@
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
 <section id="unreleased">
 <span id="changelog-3-1-0"></span><h2>3.1.0 (unreleased)<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Added generic zero-order-hold multiple-shooting trajectory legs, available as
+<a class="reference internal" href="leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ms</span></code></a> in C++ and <a class="reference internal" href="leg.html#pykep.leg.zoh_ms_py" title="pykep.leg.zoh_ms_py"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ms_py</span></code></a> in pure
+Python. They accept user-provided dynamics and controls, propagate each
+segment independently in the forward or backward direction, and expose
+segment defects for enforcing trajectory continuity.</p></li>
+</ul>
+</section>
 <section id="build-system">
 <h3>Build system<a class="headerlink" href="#build-system" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -524,12 +538,7 @@ already-installed <code class="docutils literal notranslate"><span class="pre">k
 <section id="bug-fixes">
 <h3>Bug fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fixed <a class="reference internal" href="approximations.html#pykep.utils.knn" title="pykep.utils.knn"><code class="xref py py-class docutils literal notranslate"><span class="pre">knn</span></code></a> nearest-neighbour queries. <code class="docutils literal notranslate"><span class="pre">cKDTree.query</span></code>
-returns scalar results for the default <code class="docutils literal notranslate"><span class="pre">k=1</span></code> and uses the size of the tree as
-the index of a neighbour it could not find, while <code class="docutils literal notranslate"><span class="pre">find_neighbours</span></code> assumed
-iterable, valid indices. A single-neighbour query therefore raised
-<code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, and an <code class="docutils literal notranslate"><span class="pre">IndexError</span></code> was raised whenever fewer than <code class="docutils literal notranslate"><span class="pre">k</span></code>
-neighbours existed or a <code class="docutils literal notranslate"><span class="pre">distance_upper_bound</span></code> excluded some of them. Results
+<li><p>Fixed <a class="reference internal" href="approximations.html#pykep.utils.knn" title="pykep.utils.knn"><code class="xref py py-class docutils literal notranslate"><span class="pre">knn</span></code></a> nearest-neighbour queries. Results
 are now normalised to arrays and the unreachable entries dropped, so a query
 that matches nothing returns three empty lists. Both the <code class="docutils literal notranslate"><span class="pre">orbital</span></code> and the
 <code class="docutils literal notranslate"><span class="pre">euclidean</span></code> metrics were affected.</p></li>
@@ -612,6 +621,7 @@ set of low-thrust transcriptions and benchmark problems.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">3.1.0 (unreleased)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-system">Build system</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bug-fixes">Bug fixes</a></li>
 </ul>

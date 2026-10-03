@@ -28,16 +28,32 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-grad_an_mc = leg.compute_mc_grad()
-tcgrad_an_tc = leg.compute_tc_grad()
+ax = pk.plot.make_3Daxis()
+pk.plot.add_planet_orbit(ax, pl0, units=pk.AU)
+pk.plot.add_planet_orbit(ax, pl1, units=pk.AU)
+fwd, bck = leg.get_state_info(100)
+for segment in fwd:
+    ax.scatter(segment[0,0], segment[0,1], segment[0,2], c = 'blue') 
+    ax.plot(segment[:,0], segment[:,1], segment[:,2], c= 'blue') 
+for segment in bck:
+    ax.scatter(segment[0,0], segment[0,1], segment[0,2], c = 'darkorange') 
+    ax.plot(segment[:,0], segment[:,1], segment[:,2], c= 'darkorange') 
+
+ax.view_init(90,-90)
+
 ------------------
 
 
 [31m---------------------------------------------------------------------------[39m
-[31mAttributeError[39m                            Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[5][39m[32m, line 2[39m
-[32m      1[39m grad_an_mc = leg.compute_mc_grad()
-[32m----> [39m[32m2[39m tcgrad_an_tc = leg.compute_tc_grad()
+[31mValueError[39m                                Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[7][39m[32m, line 4[39m
+[32m      1[39m ax = pk.plot.make_3Daxis()
+[32m      2[39m pk.plot.add_planet_orbit(ax, pl0, units=pk.AU)
+[32m      3[39m pk.plot.add_planet_orbit(ax, pl1, units=pk.AU)
+[32m----> [39m[32m4[39m fwd, bck = leg.get_state_info([32m100[39m)
+[32m      5[39m [38;5;28;01mfor[39;00m segment [38;5;28;01min[39;00m fwd:
+[32m      6[39m     ax.scatter(segment[[32m0[39m,[32m0[39m], segment[[32m0[39m,[32m1[39m], segment[[32m0[39m,[32m2[39m], c = [33m'blue'[39m)
+[32m      7[39m     ax.plot(segment[:,[32m0[39m], segment[:,[32m1[39m], segment[:,[32m2[39m], c= [33m'blue'[39m)
 
-[31mAttributeError[39m: 'zoh' object has no attribute 'compute_tc_grad'
+[31mValueError[39m: too many values to unpack (expected 2)
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Interplanetary transfer legs &#8212; pykep 3.0.2 documentation</title>
+    <title>Interplanetary transfer legs &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="_static/documentation_options.js?v=c6c9c2f6"></script>
+    <script src="_static/documentation_options.js?v=969bf561"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
@@ -183,8 +183,8 @@
       
     
     
-    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.2 documentation - Home"/>
-    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.2 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -224,6 +224,9 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ms.html">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
@@ -514,6 +517,13 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_mc_grad()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms_py"><code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms"><code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.compute_defects"><code class="docutils literal notranslate"><span class="pre">zoh_ms.compute_defects()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ms.get_state_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.set_initial_guess"><code class="docutils literal notranslate"><span class="pre">zoh_ms.set_initial_guess()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -830,6 +840,98 @@ must be preserved, call this method on a dedicated copy.</p>
 
 </dd></dl>
 
+<hr class="docutils" />
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pykep.leg.zoh_ms_py">
+<span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh_ms_py</span></span><a class="headerlink" href="#pykep.leg.zoh_ms_py" title="Link to this definition">#</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ms</span></code></p>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py" id="pykep.leg.zoh_ms">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_dynamics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_controls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms" title="Link to this definition">#</a></dt>
+<dd><p>Generic zero-order-hold multiple-shooting leg. Each segment is propagated independently
+from its mesh node, forward or backward according to <code class="docutils literal notranslate"><span class="pre">cut</span></code>. A transfer is feasible when
+all defects vanish. Additional control constraints are left to the caller.</p>
+<dl>
+<dt>Args:</dt><dd><p>states (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): Flat mesh nodes, of length <code class="docutils literal notranslate"><span class="pre">(nseg</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">*</span> <span class="pre">dim_dynamics</span></code>.</p>
+<p>controls (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): Flat segment controls, of length <code class="docutils literal notranslate"><span class="pre">nseg</span> <span class="pre">*</span> <span class="pre">dim_controls</span></code>.</p>
+<p>tgrid (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>): Node times, of length <code class="docutils literal notranslate"><span class="pre">nseg</span> <span class="pre">+</span> <span class="pre">1</span></code>, in the integrator’s time units.</p>
+<p>cut (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>): Fraction of segments propagated forward, in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<dl class="simple">
+<dt>tas (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>): Pair <code class="docutils literal notranslate"><span class="pre">(ta,</span> <span class="pre">ta_var)</span></code> of compatible <code class="xref py py-class docutils literal notranslate"><span class="pre">heyoka.taylor_adaptive</span></code></dt><dd><p>integrators. The nominal integrator has <code class="docutils literal notranslate"><span class="pre">dim_dynamics</span></code> states and at least
+<code class="docutils literal notranslate"><span class="pre">dim_controls</span></code> parameters, with controls first. The optional variational integrator
+varies states and controls only; it may be None.</p>
+</dd>
+</dl>
+<p>max_steps (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Maximum integration steps per segment. Default is None (no limit).</p>
+<p>dim_dynamics (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): State dimension. Default is 7.</p>
+<p>dim_controls (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Control dimension. Default is 4.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RuntimeError: If the mesh, dimensions, cut or integrators are inconsistent.</p>
+</dd>
+<dt>Notes:</dt><dd><p>Mesh data and integrators are copied. Propagation mutates the leg’s nominal integrator,
+not the supplied integrators. Vector properties return list copies; reassign a property
+to update its values. Setters validate immediately. Dimensions and segment counts are readonly.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.leg.zoh_ms.compute_defects">
+<span class="sig-name descname"><span class="pre">compute_defects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms.compute_defects" title="Link to this definition">#</a></dt>
+<dd><p>Propagates each segment independently and returns its defect. For forward segments the
+defect is the propagated initial node minus the next node; for backward segments it is
+the initial node minus the backward-propagated next node. Feasibility is independent of
+<code class="docutils literal notranslate"><span class="pre">cut</span></code>, but off-feasibility defects depend on it.</p>
+<dl class="simple">
+<dt>Notes:</dt><dd><p>Failed propagation restores the segment starting state, which replaces the flow in the defect.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: Flat defects of length <code class="docutils literal notranslate"><span class="pre">nseg</span> <span class="pre">*</span> <span class="pre">dim_dynamics</span></code>, ordered by segment then state component.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.leg.zoh_ms.get_state_info">
+<span class="sig-name descname"><span class="pre">get_state_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms.get_state_info" title="Link to this definition">#</a></dt>
+<dd><p>Samples each segment independently from its corresponding mesh node. Forward segments are
+ordered from node 0 toward the cut and sampled in increasing time. Backward segments are
+ordered from the final node toward the cut and sampled in decreasing time.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>N (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional): Sampling points per segment, including endpoints. Default is 5.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RuntimeError: If N is zero.</p>
+</dd>
+<dt>Notes:</dt><dd><p>The nominal integrator is modified. Each direction stops at its first incomplete segment.
+With N=1, only each segment’s starting node is returned.
+Returned arrays own their data independently of the leg.</p>
+</dd>
+<dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>: <code class="docutils literal notranslate"><span class="pre">(state_fwd,</span> <span class="pre">state_bck,</span> <span class="pre">success)</span></code>. Each direction is a list of float64
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects of shape <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">dim_dynamics)</span></code>, possibly shorter on failure.
+Success is True only if all requested segments return all N samples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pykep.leg.zoh_ms.set_initial_guess">
+<span class="sig-name descname"><span class="pre">set_initial_guess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ballistic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms.set_initial_guess" title="Link to this definition">#</a></dt>
+<dd><p>Replaces interior nodes by propagating inward from the endpoint states.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>ballistic (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, optional): Use zero controls without changing stored controls.</dt><dd><p>Default is False.</p>
+</dd>
+</dl>
+</dd>
+<dt>Notes:</dt><dd><p>Endpoints, time grid and stored controls are preserved. With stored controls and successful
+propagation, only the segment where the forward and backward meshes meet may have a defect.
+Ballistic propagation may leave defects on every segment. Failed propagation restores its starting state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -902,6 +1004,13 @@ must be preserved, call this method on a dedicated copy.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh"><code class="docutils literal notranslate"><span class="pre">zoh</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.compute_mc_grad"><code class="docutils literal notranslate"><span class="pre">zoh.compute_mc_grad()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms_py"><code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms"><code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.compute_defects"><code class="docutils literal notranslate"><span class="pre">zoh_ms.compute_defects()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ms.get_state_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.set_initial_guess"><code class="docutils literal notranslate"><span class="pre">zoh_ms.set_initial_guess()</span></code></a></li>
 </ul>
 </li>
 </ul>

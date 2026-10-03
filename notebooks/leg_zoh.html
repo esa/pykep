@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The Zero-Order-Hold trajectory leg &#8212; pykep 3.0.2 documentation</title>
+    <title>The Zero-Order-Hold trajectory leg &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=c6c9c2f6"></script>
+    <script src="../_static/documentation_options.js?v=969bf561"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Plotting" href="plotting.html" />
+    <link rel="next" title="The Zero-Order-Hold Multiple Shooting trajectory leg" href="leg_zoh_ms.html" />
     <link rel="prev" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -183,8 +183,8 @@
       
     
     
-    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.0.2 documentation - Home"/>
-    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.0.2 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -224,6 +224,9 @@
 <li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
@@ -540,16 +543,16 @@
   <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-trajectory-leg">
 <h1>The Zero-Order-Hold trajectory leg<a class="headerlink" href="#the-zero-order-hold-trajectory-leg" title="Link to this heading">#</a></h1>
 <p>The Zero-Order-Hold (ZOH, parameterized by the <em>cut</em> parameter) trajectory leg is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> as <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. The method is described in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> as a ZOH <span class="math notranslate nohighlight">\(_\alpha\)</span> transcription. Conceptually, it extends the Sims-Flanagan leg by modeling thrust as a piecewise-constant continuous acceleration over each segment, while supporting generic dynamics and nonuniform segment durations.</p>
-<p>Given an initial state <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span>, a final state <span class="math notranslate nohighlight">\(\mathbf{x}_f\)</span>, and a time grid <span class="math notranslate nohighlight">\(\{t_k\}_{k=0}^{N}\)</span>, the leg is partitioned into <span class="math notranslate nohighlight">\(N\)</span> segments. On each segment <span class="math notranslate nohighlight">\(k\)</span>, the control is represented by
+<p>Let the mesh contain <span class="math notranslate nohighlight">\(n\)</span> segments, with initial and final states <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> at times <span class="math notranslate nohighlight">\(t_0\)</span> and <span class="math notranslate nohighlight">\(t_n\)</span>, and time grid <span class="math notranslate nohighlight">\(\{t_k\}_{k=0}^{n}\)</span>. On each segment <span class="math notranslate nohighlight">\(k\)</span>, the control is
 $<span class="math notranslate nohighlight">\(
-\mathbf{u}_k = [T_k,\ i_{x,k},\ i_{y,k},\ i_{z,k}],
+\mathbf{u}_k = [T_k,\ i_{x,k},\ i_{y,k},\ i_{z,k}], \qquad k=0,\ldots,n-1,
 \)</span><span class="math notranslate nohighlight">\(
-where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle magnitude and \)</span>(i_{x,k}, i_{y,k}, i_{z,k})<span class="math notranslate nohighlight">\( defines the throttle direction in the selected frame. The full control vector is
+where \)</span>T_k<span class="math notranslate nohighlight">\( is the thrust magnitude and \)</span>(i_{x,k}, i_{y,k}, i_{z,k})<span class="math notranslate nohighlight">\( specifies the thrust direction in the selected frame. The full control vector is \)</span>\mathbf{u}=[\mathbf{u}<em>0,\ldots,\mathbf{u}</em>{n-1}]$.</p>
+<p>The cut defines <span class="math notranslate nohighlight">\(n_{\mathrm{fwd}}=\lfloor n\,\mathrm{cut}\rfloor\)</span> forward segments and <span class="math notranslate nohighlight">\(n_{\mathrm{bck}}=n-n_{\mathrm{fwd}}\)</span> backward segments. Both endpoint states are propagated to the matching time <span class="math notranslate nohighlight">\(t_c=t_{n_{\mathrm{fwd}}}\)</span>, and the leg returns the single mismatch constraint
+$<span class="math notranslate nohighlight">\(
+\mathbf{m}=\mathbf{x}_{\mathrm{fwd}}(t_c)-\mathbf{x}_{\mathrm{bck}}(t_c),
 \)</span><span class="math notranslate nohighlight">\(
-\mathbf{u} = [\mathbf{u}_0,\mathbf{u}_1,\ldots,\mathbf{u}_{N-1}].
-\)</span>$</p>
-<p>A forward-backward shooting construction enforces continuity at the matching point, yielding the <em>mismatch (defect) constraints</em>. The class provides these constraints and their analytical Jacobians with respect to states, controls, and time-grid variables, making it suitable for gradient-based trajectory optimization (including multiphase and moving-endpoint formulations).</p>
-<p><em>Throttle constraints</em>, and corresponding gradients, are also available, in the form <span class="math notranslate nohighlight">\(|\mathbf i_k| \le 1 \)</span></p>
+where the two states are obtained by forward and backward propagation, respectively. Feasibility requires \)</span>\mathbf{m}=\mathbf{0}$. The class provides the analytical Jacobians of this mismatch with respect to the endpoint states, controls, and time-grid variables, making it suitable for gradient-based trajectory optimization (including multiphase and moving-endpoint formulations).</p>
 <p>We start with the required imports:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -598,18 +601,10 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <p>We start with two helper functions used for numerical differentiation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># These assume some copy of the leg as they will modify it.</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">state0</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">):</span>
-   <span class="n">leg_mod</span><span class="o">.</span><span class="n">tgrid</span> <span class="o">=</span> <span class="n">tgrid</span>
-   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state0</span> <span class="o">=</span> <span class="n">state0</span>
-   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state1</span> <span class="o">=</span> <span class="n">state1</span>
-   <span class="n">leg_mod</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span>
-   <span class="n">leg_mod</span><span class="o">.</span><span class="n">state1</span> <span class="o">=</span> <span class="n">state1</span>
-   <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">()</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_throttle_constraints_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">controls</span><span class="p">):</span>
-    <span class="n">leg_mod</span><span class="o">.</span><span class="n">controls</span> <span class="o">=</span> <span class="n">controls</span>
-    <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_throttle_constraints</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This assumes a copy of the leg, since it modifies one of its attributes.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -656,22 +651,10 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 </div>
-<p>We now compute and store the analytical Jacobians: mismatch-constraint Jacobians and throttle-constraint Jacobian.</p>
+<p>We now compute and store the analytical Jacobians of the mismatch constraint.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grad_an_mc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_mc_grad</span><span class="p">()</span>
-<span class="n">tcgrad_an_tc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_tc_grad</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">grad_an_mc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_mc_grad</span><span class="p">()</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">tcgrad_an_tc</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_tc_grad</span><span class="p">()</span>
-
-<span class="ne">AttributeError</span>: 'zoh' object has no attribute 'compute_tc_grad'
 </pre></div>
 </div>
 </div>
@@ -679,73 +662,25 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <p>… and compare with numerical estimates. We use <code class="docutils literal notranslate"><span class="pre">pagmo</span></code> finite differences as a consistency check.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dx0</span>
-<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
-<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">state0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare analytical mismatch Jacobians with finite-difference estimates.</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">grad_an</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"state0"</span><span class="p">,</span> <span class="s2">"state1"</span><span class="p">,</span> <span class="s2">"controls"</span><span class="p">,</span> <span class="s2">"tgrid"</span><span class="p">],</span> <span class="n">grad_an_mc</span><span class="p">):</span>
+    <span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">estimate_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"dx"</span><span class="p">:</span> <span class="mf">1e-8</span><span class="p">}</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"controls"</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span>
+        <span class="n">values</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">estimate_options</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">state0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span> <span class="o">-</span> <span class="n">grad_an</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.7472969614811818e-07
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dxf</span>
-<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
-<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">state1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.3313971559876023e-07
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check on dmc/dcontrols</span>
-<span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
-<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">tgrid</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.4101124140165991e-07
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
-<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_mismatch_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state0</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">controls</span><span class="p">,</span> <span class="n">leg_copy</span><span class="o">.</span><span class="n">state1</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">tgrid</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">grad_an_mc</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.5313263390850063e-08
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
-<span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_throttle_constraints_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">leg</span><span class="o">.</span><span class="n">controls</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nseg</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_num</span><span class="o">-</span><span class="n">tcgrad_an_tc</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.9570551748922567e-08
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>state0 2.21770676099e-07
+state1 7.08730526836e-08
+controls 2.37328942513e-07
+tgrid 3.86829814668e-08
 </pre></div>
 </div>
 </div>
@@ -770,19 +705,30 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/50af14730bf96f97a4ffe8a274afc88991068d3fa0348f913b4ad637ce2d0a0f.png" src="../_images/50af14730bf96f97a4ffe8a274afc88991068d3fa0348f913b4ad637ce2d0a0f.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: too many values to unpack (expected 2)
+</pre></div>
+</div>
+<img alt="../_images/ddeca6d1f01bdce17adb71ae482a3d0b8dad78ed876bd5f1b91f6a42c677045b.png" src="../_images/ddeca6d1f01bdce17adb71ae482a3d0b8dad78ed876bd5f1b91f6a42c677045b.png" />
 </div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="use-with-arbitrary-dynamics">
 <h1>2 - Use with arbitrary dynamics<a class="headerlink" href="#use-with-arbitrary-dynamics" title="Link to this heading">#</a></h1>
 <p>A key feature of <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> is that it is not restricted to Keplerian Cartesian dynamics. Any dynamics compatible with the interface can be used (e.g., CR3BP, equinoctial dynamics, higher-fidelity models).</p>
-<p>For compatibility with <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>, the dynamics must satisfy:</p>
-<ul class="simple">
-<li><p>State dimension is 7.</p></li>
-<li><p>The first four <code class="docutils literal notranslate"><span class="pre">heyoka</span></code> parameters are, in order: <code class="docutils literal notranslate"><span class="pre">hy.par[0]=T</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[1]=i_x</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[2]=i_y</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[3]=i_z</span></code>.</p></li>
-<li><p>Variational integrator state dimension is 84, corresponding to 7 state equations plus first-order sensitivities with respect to 7 state variables and 4 control parameters: <span class="math notranslate nohighlight">\(7 + 7\times 7 + 7\times 4\)</span>.</p></li>
-</ul>
+<p>The state dimension is not fixed by the leg. Set <code class="docutils literal notranslate"><span class="pre">dim_dynamics</span></code> and provide endpoint states and a nominal Taylor-adaptive integrator with that same state dimension. If there are <span class="math notranslate nohighlight">\(c=\texttt{dim\_controls}\)</span> controls, the first <span class="math notranslate nohighlight">\(c\)</span> nominal-integrator parameters are the segment controls; the integrator must have at least <span class="math notranslate nohighlight">\(c\)</span> parameters. Any remaining parameters may be used by the supplied dynamics.</p>
+<p>If a variational integrator is provided, it must implement first-order sensitivities with respect to the <span class="math notranslate nohighlight">\(d=\texttt{dim\_dynamics}\)</span> state variables and the <span class="math notranslate nohighlight">\(c\)</span> controls. Its state dimension is therefore <span class="math notranslate nohighlight">\(d+d^2+dc\)</span>, and it must expose the same number of parameters as the nominal integrator. The leg constructor defaults to <span class="math notranslate nohighlight">\(d=7\)</span> and <span class="math notranslate nohighlight">\(c=4\)</span>, but both dimensions can be set to match other dynamics.</p>
+<p>In the CR3BP example below, <span class="math notranslate nohighlight">\(d=7\)</span> and <span class="math notranslate nohighlight">\(c=4\)</span>, so the variational integrator has <span class="math notranslate nohighlight">\(7+7\times7+7\times4=84\)</span> states. The first four parameters are, specifically for these example dynamics, <code class="docutils literal notranslate"><span class="pre">hy.par[0]=T_norm</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[1]=i_x</span></code>, <code class="docutils literal notranslate"><span class="pre">hy.par[2]=i_y</span></code>, and <code class="docutils literal notranslate"><span class="pre">hy.par[3]=i_z</span></code>.</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">pykep</span></code>, compatible integrators are already provided (e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_kep</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_eq</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> and their variational counterparts).</p>
 <p>Below, for didactic clarity, we explicitly define a CR3BP ZOH dynamics, even though <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.ta.zoh_cr3bp</span></code> could be used directly.</p>
 <div class="cell docutils container">
@@ -880,8 +826,11 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"periodic reference"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -907,15 +856,18 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'green'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"periodic reference"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xs</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"green"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"start"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xf</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"end"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/91b5525835ffd478539edcd7baf67f6952699e2831df94a1ddb34e49971608c7.png" src="../_images/91b5525835ffd478539edcd7baf67f6952699e2831df94a1ddb34e49971608c7.png" />
+<img alt="../_images/5854d774c9c6cd614a60efbd1032cc9e789336c5401e7d6cc242838121763800.png" src="../_images/5854d774c9c6cd614a60efbd1032cc9e789336c5401e7d6cc242838121763800.png" />
 </div>
 </div>
 <p>Instantiate the ZOH leg in the CR3BP dynamics with the selected boundaries and time grid.</p>
@@ -938,25 +890,31 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <p>Visualize the forward/backward segment propagation and compare with the reference orbit.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'green'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"periodic reference"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xs</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"green"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"start"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xf</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"end"</span><span class="p">)</span>
 
-<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span> 
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">'darkorange'</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'darkorange'</span><span class="p">)</span> 
+    <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"darkorange"</span><span class="p">)</span>
 
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">leg_cr3bp</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ffb416c148c8885facdc7002025625e8193e8f94973464e53ac4d4579e24b117.png" src="../_images/ffb416c148c8885facdc7002025625e8193e8f94973464e53ac4d4579e24b117.png" />
+<img alt="../_images/69b761b80e6f16afc79d89acb54e4c4c848c85899d2576e2d1bfee886ae407e3.png" src="../_images/69b761b80e6f16afc79d89acb54e4c4c848c85899d2576e2d1bfee886ae407e3.png" />
 </div>
 </div>
 <p>This no-thrust case yields a near-zero mismatch, as expected from consistency with the reference dynamics.</p>
@@ -965,39 +923,26 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiate the leg</span>
 <span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">nseg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nseg</span> <span class="c1"># no thrust</span>
+<span class="n">controls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nseg</span> <span class="c1"># no thrust</span>
 <span class="n">leg_cr3bp</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_cr3bp</span><span class="p">,</span> <span class="n">ta_cr3bp_var</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"The mismatch constraints are: "</span><span class="p">,</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">compute_mismatch_constraints</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-0.08237193006874788, 0.005291237018280492, -1.4514539439469395e-31, 0.086780402871281, 0.06605752972759138, -3.16512818033977e-32, -0.4872013925400698]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The mismatch constraints are:  [-1.0037172748750471, -0.31101434941352546, -2.102304274565298e-30, 0.91693944082219, 0.09178632008572529, 2.6689693736228807e-31, -0.6719599164459205]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">sol</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'red'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">xf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">xf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'green'</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span> <span class="o">=</span> <span class="n">leg_cr3bp</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">fwd</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span> 
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">bck</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="s1">'darkorange'</span><span class="p">)</span> 
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'darkorange'</span><span class="p">)</span> 
-
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">leg_cr3bp</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3862eeca7a669f5edf55868589bfa9e6427e81fe9b2cf5c159d23c83555db59a.png" src="../_images/3862eeca7a669f5edf55868589bfa9e6427e81fe9b2cf5c159d23c83555db59a.png" />
+<img alt="../_images/62971b3d62032fbaecde93112f6ff30f7205cf8f94ad8906e0c40a7be850b314.png" src="../_images/62971b3d62032fbaecde93112f6ff30f7205cf8f94ad8906e0c40a7be850b314.png" />
 </div>
 </div>
 <p>The result is consistent: introducing non-zero controls with fixed boundaries generally increases mismatch unless controls are optimized.</p>
@@ -1024,11 +969,11 @@ where \)</span>T_k<span class="math notranslate nohighlight">\( is the throttle 
       </div>
     </a>
     <a class="right-next"
-       href="plotting.html"
+       href="leg_zoh_ms.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Plotting</p>
+        <p class="prev-next-title">The Zero-Order-Hold Multiple Shooting trajectory leg</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

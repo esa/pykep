@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Zero-Order-Hold Multiple Shooting trajectory leg &#8212; pykep 3.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=969bf561"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/leg_zoh_ms';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Plotting" href="plotting.html" />
+    <link rel="prev" title="The Zero-Order-Hold trajectory leg" href="leg_zoh.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold I</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold II</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="maximum_initial_mass.html">Maximum Initial Mass</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">Basic API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/pykep/main?urlpath=lab/tree/doc/notebooks/leg_zoh_ms.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Fnotebooks/leg_zoh_ms.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/leg_zoh_ms.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Zero-Order-Hold Multiple Shooting trajectory leg</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-multiple-shooting-leg">1 - Validate the Zero-Order-Hold multiple-shooting leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-a-supplied-generic-propagator">2 - Use with a supplied generic propagator</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-multiple-shooting-trajectory-leg">
+<h1>The Zero-Order-Hold Multiple Shooting trajectory leg<a class="headerlink" href="#the-zero-order-hold-multiple-shooting-trajectory-leg" title="Link to this heading">#</a></h1>
+<p>The Zero-Order-Hold Multiple Shooting (ZOH-MS) trajectory leg is available as <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms</span></code></a>, implemented in C++. The pure-Python version, <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms_py" title="pykep.leg.zoh_ms_py"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms_py</span></code></a>, has the same public interface. We use the C++ version in the first example and the Python version in the second.</p>
+<p>In multiple shooting, we divide a trajectory into short segments and store a state at every mesh node. We propagate each segment and compare the result with the state stored at the other end. This difference is called a <strong>continuity defect</strong>. If every defect is zero, the segments join into one continuous trajectory. The examples below deliberately start with nonzero defects.</p>
+<p>For the Keplerian example, each node stores the seven-component state <span class="math notranslate nohighlight">\(\mathbf{x}_k=[x_k,y_k,z_k,v_{x,k},v_{y,k},v_{z,k},m_k]\)</span>: position, velocity and mass. A mesh with <span class="math notranslate nohighlight">\(n\)</span> segments therefore has <span class="math notranslate nohighlight">\(n+1\)</span> nodes and <span class="math notranslate nohighlight">\(7n\)</span> scalar continuity constraints.</p>
+<p>The control is held constant within each segment, which is the meaning of <em>zero-order hold</em>. For the Keplerian example, the four control components are
+$<span class="math notranslate nohighlight">\(
+\mathbf{u}_k = [T_k,\ i_{x,k},\ i_{y,k},\ i_{z,k}],
+\)</span><span class="math notranslate nohighlight">\(
+where \)</span>T_k<span class="math notranslate nohighlight">\( is the thrust magnitude and \)</span>(i_{x,k},i_{y,k},i_{z,k})$ is its direction in the inertial frame. A physical thrust direction has unit length. The generic leg does not enforce physical bounds or normalize the direction; these choices belong to the supplied dynamics and the optimization problem.</p>
+<p>Let <span class="math notranslate nohighlight">\(\Phi_k(\cdot;\mathbf{u}_k)\)</span> denote propagation from <span class="math notranslate nohighlight">\(t_k\)</span> to <span class="math notranslate nohighlight">\(t_{k+1}\)</span>. The parameter <code class="docutils literal notranslate"><span class="pre">cut</span></code>, between 0 and 1, sets the number of forward-propagated segments: <span class="math notranslate nohighlight">\(n_{\mathrm{fwd}}=\lfloor n\,\mathrm{cut}\rfloor\)</span>. Each forward segment starts at its own left-hand mesh node; each backward segment starts at its own right-hand mesh node. The defect is
+$<span class="math notranslate nohighlight">\(
+\mathbf{d}_k =
+\begin{cases}
+\Phi_k(\mathbf{x}_k;\mathbf{u}_k)-\mathbf{x}_{k+1}, &amp; 0 \le k &lt; n_{\mathrm{fwd}}, \\
+\mathbf{x}_k-\Phi_k^{-1}(\mathbf{x}_{k+1};\mathbf{u}_k), &amp; n_{\mathrm{fwd}} \le k &lt; n.
+\end{cases}
+\)</span><span class="math notranslate nohighlight">\(
+Here \)</span>\Phi_k^{-1}<span class="math notranslate nohighlight">\( means integrating the same dynamics backward from \)</span>t_{k+1}<span class="math notranslate nohighlight">\( to \)</span>t_k$. Both directions describe the same continuous trajectory when the defects are zero, although their nonzero defect values can differ.</p>
+<p><code class="docutils literal notranslate"><span class="pre">compute_defects()</span></code> returns the defect components flattened in segment order. The leg also provides their analytical derivatives with respect to the node states, controls and time grid. Together, these derivatives form the <strong>Jacobian matrix</strong>.</p>
+<p>We start with the required imports:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygmo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Smaller integrator tolerances request greater accuracy and usually take more computation.</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="n">tol_var</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># The nominal integrator propagates the seven state components.</span>
+<span class="c1"># The variational integrator also propagates their sensitivities to states and controls.</span>
+<span class="c1"># We use a looser tolerance for sensitivities; tighten it if more accurate derivatives are needed.</span>
+<span class="n">ta_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">ta_var_global</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_kep_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+
+<span class="c1"># Parameter 4 is 1/veff. Choose dimensionless veff = 1 so thrust consumes mass.</span>
+<span class="c1"># Mass changes then contribute to the defects and their derivatives.</span>
+<span class="n">ta_global</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">ta_var_global</span><span class="o">.</span><span class="n">pars</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="c1"># Divide SI positions, times, velocities and masses by these scales.</span>
+<span class="c1"># With this choice of time scale, the dimensionless gravitational parameter is 1.</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">TIME</span>
+<span class="n">MASS</span> <span class="o">=</span> <span class="mf">1000.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="validate-the-zero-order-hold-multiple-shooting-leg">
+<h1>1 - Validate the Zero-Order-Hold multiple-shooting leg<a class="headerlink" href="#validate-the-zero-order-hold-multiple-shooting-leg" title="Link to this heading">#</a></h1>
+<p>We check the analytical Jacobian against finite-difference estimates. Finite differences approximate a derivative by changing an input slightly and observing the change in the defects.</p>
+<p>The Jacobian is <strong>sparse</strong>: a segment depends only on its nearby nodes, its own controls and its two endpoint times. Most matrix entries are therefore zero. The <em>sparsity pattern</em> lists the matrix positions where derivatives can be nonzero, so we do not need to store a full matrix of mostly zeros.</p>
+<p>We first construct the mesh states, controls and time grid, then evaluate the defects and derivatives. The following helper changes one input on a copy of the leg, leaving the original leg unchanged:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_defects_n</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Evaluate the defects after changing one input on a copy of the leg."""</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">leg_mod</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">leg_mod</span><span class="o">.</span><span class="n">compute_defects</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We create a reference mesh from a Lambert transfer between Earth and Mars. A Lambert solution is a two-body, zero-thrust trajectory connecting two positions in a specified flight time.</p>
+<p>We then apply nonzero thrust to those reference nodes. The resulting leg is deliberately infeasible: the stored nodes generally do not match propagation with the selected controls. This gives us nonzero defects to use in the derivative check.</p>
+<p>The dimensional positions and velocities are converted to the units defined above. Each node has dimensionless mass 1, corresponding to 1000 kg. The thrust scale is <span class="math notranslate nohighlight">\(\mathrm{MASS}\,L/\mathrm{TIME}^2\)</span>, so a dimensionless thrust of 0.2 represents 0.2 times this force scale.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Earth's position at departure and Mars's position at arrival.</span>
+<span class="n">pl0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"earth"</span><span class="p">))</span>
+<span class="n">epoch0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">1345.0</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="o">.</span><span class="n">julian_type</span><span class="o">.</span><span class="n">MJD2000</span><span class="p">)</span>
+<span class="n">posvel0</span> <span class="o">=</span> <span class="n">pl0</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch0</span><span class="p">)</span>
+<span class="n">pl1</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"mars"</span><span class="p">))</span>
+<span class="n">epoch1</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mf">1745.0</span><span class="p">,</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="o">.</span><span class="n">julian_type</span><span class="o">.</span><span class="n">MJD2000</span><span class="p">)</span>
+<span class="n">posvel1</span> <span class="o">=</span> <span class="n">pl1</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">epoch1</span><span class="p">)</span>
+
+<span class="c1"># Solve for a zero-thrust transfer with this flight time, expressed in seconds.</span>
+<span class="n">tof</span> <span class="o">=</span> <span class="p">(</span><span class="n">epoch1</span><span class="o">.</span><span class="n">mjd2000</span> <span class="o">-</span> <span class="n">epoch0</span><span class="o">.</span><span class="n">mjd2000</span><span class="p">)</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span>
+<span class="n">lambert</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">lambert_problem</span><span class="p">(</span><span class="n">r0</span><span class="o">=</span><span class="n">posvel0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r1</span><span class="o">=</span><span class="n">posvel1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tof</span><span class="o">=</span><span class="n">tof</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">pl0</span><span class="o">.</span><span class="n">mu_central_body</span><span class="p">)</span>
+
+<span class="c1"># Sample ten nodes on the reference transfer: ten nodes give nine segments.</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">r0</span><span class="p">,</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">posvel0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lambert</span><span class="o">.</span><span class="n">v0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tof</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">propagate_lagrangian_grid</span><span class="p">([</span><span class="n">r0</span><span class="p">,</span> <span class="n">v0</span><span class="p">],</span> <span class="n">tgrid</span><span class="p">,</span> <span class="n">pl0</span><span class="o">.</span><span class="n">mu_central_body</span><span class="p">)</span>
+
+<span class="c1"># Store each node as dimensionless position, velocity and mass, in that order.</span>
+<span class="n">states_flattened_nd</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+    <span class="n">states_flattened_nd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">position</span> <span class="o">/</span> <span class="n">L</span> <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">states_flattened_nd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">velocity</span> <span class="o">/</span> <span class="n">V</span> <span class="k">for</span> <span class="n">velocity</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">states_flattened_nd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">tgrid_nd</span> <span class="o">=</span> <span class="n">tgrid</span> <span class="o">/</span> <span class="n">TIME</span>
+
+<span class="c1"># Apply nonzero thrust in the positive inertial y direction to the ballistic nodes.</span>
+<span class="n">controls_nd</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">leg</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh_ms</span><span class="p">(</span>
+    <span class="n">states_flattened_nd</span><span class="p">,</span> <span class="n">controls_nd</span><span class="p">,</span> <span class="n">tgrid_nd</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">ta_global</span><span class="p">,</span> <span class="n">ta_var_global</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now compute the defects and their analytical sparse Jacobian. <code class="docutils literal notranslate"><span class="pre">defects_grad_sparsity()</span></code> returns three arrays of <code class="docutils literal notranslate"><span class="pre">(row,</span> <span class="pre">column)</span></code> coordinates, one each for derivatives with respect to <code class="docutils literal notranslate"><span class="pre">states</span></code>, <code class="docutils literal notranslate"><span class="pre">controls</span></code> and <code class="docutils literal notranslate"><span class="pre">tgrid</span></code>. Rows identify defect components; columns identify input components.</p>
+<p><code class="docutils literal notranslate"><span class="pre">compute_defects_grad()</span></code> returns three flat arrays of derivative values in the same order. Pairing a coordinate with its value tells us where that derivative belongs in the full Jacobian.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">defects</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_defects</span><span class="p">()</span>
+<span class="n">sparsities</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">defects_grad_sparsity</span><span class="p">()</span>
+<span class="n">grads</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">compute_defects_grad</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We use <code class="docutils literal notranslate"><span class="pre">pygmo</span></code> to estimate the full Jacobian by finite differences and make two checks: the derivatives at the listed coordinates agree with the analytical values, and all entries outside the sparsity pattern are approximately zero.</p>
+<p>The absolute and relative tolerances below allow for finite-difference error and the accuracy of the numerical integrations. We use an absolute tolerance of <span class="math notranslate nohighlight">\(10^{-8}\)</span> for entries that should be zero; exact equality would not be a suitable numerical test.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">grad</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"states"</span><span class="p">,</span> <span class="s2">"controls"</span><span class="p">,</span> <span class="s2">"tgrid"</span><span class="p">],</span> <span class="n">sparsities</span><span class="p">,</span> <span class="n">grads</span><span class="p">):</span>
+    <span class="n">leg_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">grad_num</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">estimate_gradient</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_defects_n</span><span class="p">(</span><span class="n">leg_copy</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">values</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">defects</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Check the derivative values at every listed matrix position.</span>
+    <span class="n">listed</span> <span class="o">=</span> <span class="n">grad_num</span><span class="p">[</span><span class="n">sp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">listed</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+
+    <span class="c1"># Check that no nonzero derivative was left out of the sparsity pattern.</span>
+    <span class="n">in_pattern</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">grad_num</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">in_pattern</span><span class="p">[</span><span class="n">sp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">outside</span> <span class="o">=</span> <span class="n">grad_num</span><span class="p">[</span><span class="o">~</span><span class="n">in_pattern</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">outside</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: error at listed entries = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">listed</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">grad</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">; "</span>
+          <span class="sa">f</span><span class="s2">"largest derivative outside the pattern = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">outside</span><span class="p">),</span><span class="w"> </span><span class="n">initial</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>states: error at listed entries = 1.20e-07; largest derivative outside the pattern = 0.00e+00
+controls: error at listed entries = 8.99e-08; largest derivative outside the pattern = 0.00e+00
+tgrid: error at listed entries = 2.65e-08; largest derivative outside the pattern = 0.00e+00
+</pre></div>
+</div>
+</div>
+</div>
+<p>If these checks pass, the analytical derivatives agree with finite differences within the chosen tolerances, and the numerical Jacobian has no significant entries outside the listed sparsity pattern. The printed errors show the agreement for this example. Analytical derivatives avoid repeatedly perturbing every input, which is useful when optimizing larger meshes.</p>
+<p>We can now plot the forward and backward trajectory segments together with the planetary orbits. Gaps between a propagated segment endpoint and a stored node illustrate the continuity defects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">fwd</span><span class="p">,</span> <span class="n">bck</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">get_state_info</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">segment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'blue'</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">segment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bck</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">segment</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span> <span class="s1">'darkorange'</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">tgrid</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">leg</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">7</span><span class="p">],</span> <span class="n">leg</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">7</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">leg</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">7</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">'gray'</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">'x'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">'gray'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">'gray'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d9121191d487d7a8b36daabd43aa9b7cc01d7464371b3e3a3ccf83c08eae4b5c.png" src="../_images/d9121191d487d7a8b36daabd43aa9b7cc01d7464371b3e3a3ccf83c08eae4b5c.png" />
+</div>
+</div>
+<p>Unlike the forward/backward single-shooting leg, <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>, multiple shooting stores the interior node states as additional unknowns. An optimizer must adjust these states as well as the controls, so it needs an initial guess for them.</p>
+<p>Both <code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code> and <code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code> provide <code class="docutils literal notranslate"><span class="pre">set_initial_guess(ballistic=False)</span></code>. This method preserves the endpoint states, controls and time grid, and rebuilds the interior nodes by propagating from both ends.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">ballistic=False</span></code>, it uses the stored controls. If propagation succeeds, every segment except the one joining the forward and backward portions satisfies continuity, up to numerical error. With <code class="docutils literal notranslate"><span class="pre">ballistic=True</span></code>, it builds the nodes using zero controls, without changing the leg’s stored controls. Evaluating that guess with nonzero stored controls can therefore produce defects in several segments.</p>
+<p>These are starting guesses, not guaranteed feasible trajectories. Concentrating the defects into one segment does not necessarily reduce their total size.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">leg</span><span class="o">.</span><span class="n">set_initial_guess</span><span class="p">(</span><span class="n">ballistic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">leg</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">'gray'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pl1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">'gray'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">'equal'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/036b52b805935dfde2baf75cf31e9cf91285780ac130f092c0abe85c743ed771.png" src="../_images/036b52b805935dfde2baf75cf31e9cf91285780ac130f092c0abe85c743ed771.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="use-with-a-supplied-generic-propagator">
+<h1>2 - Use with a supplied generic propagator<a class="headerlink" href="#use-with-a-supplied-generic-propagator" title="Link to this heading">#</a></h1>
+<p>The same leg interface works with other compatible dynamics. Here we use the <strong>circular restricted three-body problem (CR3BP)</strong>: a spacecraft moves under the gravity of Earth and Moon, whose circular motion is prescribed. The spacecraft’s gravitational influence on the two bodies is neglected.</p>
+<p>The state still contains position, velocity and mass, but position and velocity are now measured in the frame rotating with Earth and Moon. The origin is their centre of mass. The length unit is the Earth-Moon separation and the time unit is the inverse of their orbital angular speed. In these units the bodies remain at <span class="math notranslate nohighlight">\((-\mu,0,0)\)</span> and <span class="math notranslate nohighlight">\((1-\mu,0,0)\)</span>, where <span class="math notranslate nohighlight">\(\mu\)</span> is the Moon’s fraction of their combined mass. Thrust directions are also expressed in this rotating frame.</p>
+<p>We reuse the periodic Lyapunov-orbit reference from the single-shooting notebook to choose the initial mesh nodes. That reference uses zero thrust. We then apply nonzero controls to construct an intentionally infeasible leg and compare two guesses for its interior states. This section uses <code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code>; replacing it with <code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code> leaves the interface unchanged.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr3bp_ta</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_cr3bp</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="n">cr3bp_ta_var</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">ta</span><span class="o">.</span><span class="n">get_zoh_cr3bp_var</span><span class="p">(</span><span class="n">tol_var</span><span class="p">)</span>
+<span class="n">cr3bp_mu</span> <span class="o">=</span> <span class="mf">0.01215058560962404</span>
+
+<span class="c1"># Parameters: thrust, three direction components, mass-flow coefficient and mass ratio.</span>
+<span class="c1"># Zero thrust gives the reference orbit; the chosen mass-flow coefficient is 1.</span>
+<span class="n">cr3bp_pars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">cr3bp_mu</span><span class="p">]</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cr3bp_pars</span>
+<span class="n">cr3bp_ta_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cr3bp_pars</span>
+
+<span class="c1"># A reference initial state and period, expressed in the rotating-frame units.</span>
+<span class="n">cr3bp_state0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.5643551520142581e-02</span><span class="p">,</span> <span class="mf">9.2420772211102929e-27</span><span class="p">,</span> <span class="mf">1.3616512785913887e-31</span><span class="p">,</span> <span class="mf">2.6173746491479341e-12</span><span class="p">,</span> <span class="mf">5.2390814115699671e+00</span><span class="p">,</span> <span class="mf">5.3268092625591314e-30</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="n">cr3bp_period</span> <span class="o">=</span> <span class="mf">6.301205688481844</span>
+
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cr3bp_state0</span>
+<span class="n">cr3bp_reference</span> <span class="o">=</span> <span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">propagate_grid</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cr3bp_period</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We select an interval starting before and ending after the reference initial time, using the same boundary times as in the single-shooting example. Propagating the zero-thrust dynamics gives six nodes for a five-segment mesh. We then choose nonzero thrust in the rotating frame’s positive <span class="math notranslate nohighlight">\(x\)</span> direction, so these reference nodes are not a continuous solution for the leg’s selected controls.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr3bp_t0</span><span class="p">,</span> <span class="n">cr3bp_tf</span> <span class="o">=</span> <span class="o">-</span><span class="n">cr3bp_period</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cr3bp_period</span> <span class="o">/</span> <span class="mi">5</span>
+<span class="n">cr3bp_nseg</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">cr3bp_tgrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">cr3bp_t0</span><span class="p">,</span> <span class="n">cr3bp_tf</span><span class="p">,</span> <span class="n">cr3bp_nseg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Reset the reference integrator and propagate to the mesh's first time.</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cr3bp_pars</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">cr3bp_state0</span>
+<span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">cr3bp_t0</span><span class="p">)</span>
+<span class="n">cr3bp_nodes</span> <span class="o">=</span> <span class="n">cr3bp_ta</span><span class="o">.</span><span class="n">propagate_grid</span><span class="p">(</span><span class="n">cr3bp_tgrid</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Apply nonzero thrust to the zero-thrust reference nodes.</span>
+<span class="n">cr3bp_controls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cr3bp_nseg</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Construct the leg from the reference nodes and selected controls, and overlay its propagated segments with the zero-thrust reference orbit. The gaps show that the initial mesh is infeasible. With the positive mass-flow coefficient, thrust also decreases mass, whereas all reference nodes have mass 1; this difference contributes to the defects.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr3bp_leg</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">leg</span><span class="o">.</span><span class="n">zoh_ms_py</span><span class="p">(</span>
+    <span class="n">cr3bp_nodes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+    <span class="n">cr3bp_controls</span><span class="p">,</span>
+    <span class="n">cr3bp_tgrid</span><span class="p">,</span>
+    <span class="n">cut</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">tas</span><span class="o">=</span><span class="p">[</span><span class="n">cr3bp_ta</span><span class="p">,</span> <span class="n">cr3bp_ta_var</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Save the original continuity error before changing the interior nodes.</span>
+<span class="n">cr3bp_defect_norm_before</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cr3bp_leg</span><span class="o">.</span><span class="n">compute_defects</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">cr3bp_leg</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="n">c</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"periodic reference"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">cr3bp_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"green"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"start"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">cr3bp_nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"end"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/16a4d2073ab8d23b2acf5482a39d7f5c24e21030b4ebb580b34c2b35e3f68a1b.png" src="../_images/16a4d2073ab8d23b2acf5482a39d7f5c24e21030b4ebb580b34c2b35e3f68a1b.png" />
+</div>
+</div>
+<p>We now rebuild the interior nodes with <code class="docutils literal notranslate"><span class="pre">set_initial_guess(ballistic=False)</span></code>, which uses the stored nonzero controls. We compare the Euclidean norm of the full defect vector before and after this update, as well as the norm for each segment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr3bp_leg</span><span class="o">.</span><span class="n">set_initial_guess</span><span class="p">(</span><span class="n">ballistic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">cr3bp_defects_after</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cr3bp_leg</span><span class="o">.</span><span class="n">compute_defects</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+    <span class="n">cr3bp_leg</span><span class="o">.</span><span class="n">nseg</span><span class="p">,</span> <span class="n">cr3bp_leg</span><span class="o">.</span><span class="n">dim_dynamics</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Defect norm before rebuilding: </span><span class="si">{</span><span class="n">cr3bp_defect_norm_before</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Defect norm after rebuilding:  </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cr3bp_defects_after</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Defect norm for each segment:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cr3bp_defects_after</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Defect norm before rebuilding: 1.111
+Defect norm after rebuilding:  1.660
+Defect norm for each segment: [ 0.          0.          1.65989136  0.          0.        ]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plot_leg</span><span class="p">(</span><span class="n">cr3bp_leg</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">cr3bp_reference</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="n">c</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"periodic reference"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">cr3bp_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"green"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"start"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">cr3bp_nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"end"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/06b41ddc441d8bb2d8b9508bbaa691dfd2fba2190cce8e6836962fd6bf757fc4.png" src="../_images/06b41ddc441d8bb2d8b9508bbaa691dfd2fba2190cce8e6836962fd6bf757fc4.png" />
+</div>
+</div>
+<p>Rebuilding the interior nodes concentrates the continuity error into one segment, but does not necessarily reduce its size. Here the full defect norm increases. The new guess is therefore less feasible by this measure, even though four of the five segments now satisfy continuity.</p>
+<p>The original nodes came from a zero-thrust reference orbit, not from a feasible trajectory with the selected nonzero controls. Both meshes are valid starting guesses for the leg. Their comparison shows why an initial-guess method can improve some continuity constraints while worsening the total error.</p>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="leg_zoh.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Zero-Order-Hold trajectory leg</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plotting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Plotting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-multiple-shooting-leg">1 - Validate the Zero-Order-Hold multiple-shooting leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-a-supplied-generic-propagator">2 - Use with a supplied generic propagator</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Copyright (c) 2023-2026 Advanced Concepts Team, European Space Agency (ESA).
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
