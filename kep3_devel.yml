@@ -6,8 +6,8 @@ dependencies:
   - cxx-compiler
   # clangd (clang-tools) and the clang builtin headers (clangxx) must share the
   # same major version, they locate each other via lib/clang/<major>.
-  - clang-tools 23.*
-  - clangxx 23.*
+  - clang-tools
+  - clangxx
   - ninja
   - cmake >=3.28,<3.31
   - libboost >=1.73

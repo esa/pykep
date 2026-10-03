@@ -18,6 +18,7 @@ _sims_flanagan = _core._sims_flanagan
 _sims_flanagan_alpha = _core._sims_flanagan_alpha
 _zoh = _core._zoh_cpp
 _zoh_cpp = _core._zoh_cpp
+_zoh_ms_cpp = _core._zoh_ms_cpp
 
 # Renaming cpp legs (we need to create an alias first and then 
 # to fool sphinx into thinking these are not aliases, else the sphinx built docs
@@ -34,7 +35,12 @@ zoh = _core._zoh_cpp
 zoh.__name__ = "zoh"
 zoh.__module__ = "pykep.leg"
 
+zoh_ms = _core._zoh_ms_cpp
+zoh_ms.__name__ = "zoh_ms"
+zoh_ms.__module__ = "pykep.leg"
+
 # Removing core from the list of imported symbols.
 del _core
 
 from ._zoh import zoh as zoh_py
+from ._zoh_ms import zoh_ms as zoh_ms_py

@@ -309,7 +309,7 @@ zoh::zoh(const std::vector<double> &state0, const std::vector<double> &controls,
       m_dim_dynamics(dim_dynamics), m_dim_controls(dim_controls), m_ta(tas.first), m_ta_var(tas.second)
 {
     update_nseg();
-    update_ic_var();
+    initialize_ic_var();
     update_pars_no_control();
 
     const auto &sys = m_ta.get_sys();
@@ -325,34 +325,43 @@ zoh::zoh(const std::vector<double> &state0, const std::vector<double> &controls,
 
 void zoh::set_state0(const std::vector<double> &state0)
 {
+    if (state0.size() != m_dim_dynamics) {
+        throw std::logic_error("state0/state1 sizes must match dim_dynamics.");
+    }
     m_state0 = state0;
-    sanity_checks();
 }
 
 void zoh::set_state1(const std::vector<double> &state1)
 {
+    if (state1.size() != m_dim_dynamics) {
+        throw std::logic_error("state0/state1 sizes must match dim_dynamics.");
+    }
     m_state1 = state1;
-    sanity_checks();
 }
 
 void zoh::set_controls(const std::vector<double> &controls)
 {
+    if (controls.size() != m_controls.size()) {
+        throw std::logic_error("controls size must match the existing controls size.");
+    }
     m_controls = controls;
-    update_nseg();
-    sanity_checks();
 }
 
 void zoh::set_tgrid(const std::vector<double> &tgrid)
 {
+    if (tgrid.size() != m_tgrid.size()) {
+        throw std::logic_error("tgrid size must match the existing tgrid size.");
+    }
     m_tgrid = tgrid;
-    sanity_checks();
 }
 
 void zoh::set_cut(double cut)
 {
+    if (cut < 0. || cut > 1.) {
+        throw std::logic_error("The cut parameter of a zoh leg must be in the [0, 1] interval.");
+    }
     m_cut = cut;
     update_nseg();
-    sanity_checks();
 }
 
 void zoh::set_max_steps(std::optional<unsigned> max_steps)
@@ -361,16 +370,31 @@ void zoh::set_max_steps(std::optional<unsigned> max_steps)
 }
 
 void zoh::set(const std::vector<double> &state0, const std::vector<double> &controls, const std::vector<double> &state1,
-              const std::vector<double> &tgrid, double cut, std::optional<unsigned> max_steps)
+              const std::vector<double> &tgrid, std::optional<double> cut, std::optional<unsigned> max_steps)
 {
+    if (m_dim_dynamics == 0u || m_dim_controls == 0u) {
+        throw std::logic_error("dim_dynamics and dim_controls must be positive.");
+    }
+    if (state0.size() != m_dim_dynamics || state1.size() != m_dim_dynamics) {
+        throw std::logic_error("state0/state1 sizes must match dim_dynamics.");
+    }
+    if (cut && (*cut < 0. || *cut > 1.)) {
+        throw std::logic_error("The cut parameter of a zoh leg must be in the [0, 1] interval.");
+    }
+    if ((controls.size() % m_dim_controls) != 0u || tgrid.size() != controls.size() / m_dim_controls + 1u) {
+        throw std::logic_error(
+            "The tgrid and controls have incompatible sizes. They must be nseg + 1 and dim_controls * nseg.");
+    }
+
     m_state0 = state0;
     m_controls = controls;
     m_state1 = state1;
     m_tgrid = tgrid;
-    m_cut = cut;
+    if (cut) {
+        m_cut = *cut;
+    }
     m_max_steps = max_steps;
     update_nseg();
-    sanity_checks();
 }
 
 const std::vector<double> &zoh::get_state0() const
@@ -617,11 +641,13 @@ void zoh::update_nseg()
     m_nseg_bck = m_nseg - m_nseg_fwd;
 }
 
-void zoh::update_ic_var()
+void zoh::initialize_ic_var()
 {
-    m_ic_var.assign(m_dim_dynamics * (m_dim_dynamics + m_dim_controls), 0.0);
-    for (unsigned i = 0u; i < m_dim_dynamics; ++i) {
-        m_ic_var[i * (m_dim_dynamics + m_dim_controls) + i] = 1.0;
+    const auto dimension = static_cast<std::size_t>(m_dim_dynamics);
+    const auto sensitivity_dimension = dimension + static_cast<std::size_t>(m_dim_controls);
+    m_ic_var.assign(dimension * sensitivity_dimension, 0.0);
+    for (std::size_t component = 0u; component < dimension; ++component) {
+        m_ic_var[component * sensitivity_dimension + component] = 1.0;
     }
 }
 

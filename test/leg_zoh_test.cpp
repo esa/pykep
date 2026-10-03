@@ -9,6 +9,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include <array>
+#include <stdexcept>
 #include <vector>
 
 #include <kep3/core_astro/constants.hpp>
@@ -85,6 +86,71 @@ zoh_reference_case make_reference_case()
 }
 
 } // namespace
+
+TEST_CASE("zoh segment updates preserve state on invalid sizes")
+{
+    // We test that rejected size changes leave the leg's stored segment data unchanged.
+    auto data = make_reference_case();
+    kep3::leg::zoh leg{data.state0, data.controls, data.state1, data.tgrid, data.cut, {data.ta, std::nullopt}};
+    const auto original_state0 = leg.get_state0();
+    const auto original_state1 = leg.get_state1();
+    const auto original_controls = leg.get_controls();
+    const auto original_tgrid = leg.get_tgrid();
+
+    // Endpoint setters reject wrong dimensions and update valid values.
+    REQUIRE_THROWS_AS(leg.set_state0(std::vector<double>(6u, 0.0)), std::logic_error);
+    REQUIRE_THROWS_AS(leg.set_state1(std::vector<double>(6u, 0.0)), std::logic_error);
+    auto updated_state0 = original_state0;
+    auto updated_state1 = original_state1;
+    updated_state0[0] += 0.01;
+    updated_state1[0] -= 0.01;
+    leg.set_state0(updated_state0);
+    leg.set_state1(updated_state1);
+    REQUIRE(leg.get_state0() == updated_state0);
+    REQUIRE(leg.get_state1() == updated_state1);
+
+    REQUIRE_THROWS_AS(leg.set_controls(std::vector<double>(16u, 0.0)), std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+
+    REQUIRE_THROWS_AS(leg.set_tgrid(std::vector<double>(5u, 0.0)), std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+
+    // The cut and step-budget setters update their corresponding settings.
+    REQUIRE_THROWS_AS(leg.set_cut(-0.1), std::logic_error);
+    leg.set_cut(0.75);
+    REQUIRE(leg.get_cut() == 0.75);
+    leg.set_max_steps(8u);
+    REQUIRE(leg.get_max_steps() == std::optional<unsigned>{8u});
+
+    REQUIRE_THROWS_AS(leg.set(data.state0, std::vector<double>(16u, 0.0), data.state1, data.tgrid, data.cut),
+                      std::logic_error);
+    REQUIRE_THROWS_AS(leg.set(std::vector<double>(6u, 0.0), data.controls, data.state1, data.tgrid, data.cut),
+                      std::logic_error);
+    REQUIRE_THROWS_AS(leg.set(data.state0, data.controls, std::vector<double>(6u, 0.0), data.tgrid, data.cut),
+                      std::logic_error);
+    REQUIRE(leg.get_controls() == original_controls);
+    REQUIRE(leg.get_tgrid() == original_tgrid);
+    REQUIRE(leg.get_state0() == updated_state0);
+    REQUIRE(leg.get_state1() == updated_state1);
+
+    const std::vector<double> resized_controls(16u, 0.0);
+    const std::vector<double> resized_tgrid{data.tgrid.front(), data.tgrid[1u], data.tgrid[2u], data.tgrid[3u],
+                                            data.tgrid.back()};
+    leg.set(data.state0, resized_controls, data.state1, resized_tgrid);
+    REQUIRE(leg.get_state0() == data.state0);
+    REQUIRE(leg.get_state1() == data.state1);
+    REQUIRE(leg.get_controls() == resized_controls);
+    REQUIRE(leg.get_tgrid() == resized_tgrid);
+    REQUIRE(leg.get_cut() == 0.75);
+    REQUIRE(leg.get_nseg() == 4u);
+
+    // Supplying an optional cut and step budget updates both values.
+    leg.set(data.state0, resized_controls, data.state1, resized_tgrid, 0.25, 4u);
+    REQUIRE(leg.get_cut() == 0.25);
+    REQUIRE(leg.get_max_steps() == std::optional<unsigned>{4u});
+}
 
 TEST_CASE("compute_mismatch_constraints")
 {

@@ -3284,6 +3284,104 @@ std::string leg_zoh_get_state_info_docstring()
   ")";
 }
 
+std::string leg_zoh_ms_docstring()
+{
+  return R"(__init__(states, controls, tgrid, cut, tas, max_steps=None, dim_dynamics=7, dim_controls=4)
+
+Generic zero-order-hold multiple-shooting leg. Each segment is propagated independently
+from its mesh node, forward or backward according to ``cut``. A transfer is feasible when
+all defects vanish. Additional control constraints are left to the caller.
+
+Args:
+  states (:class:`list`): Flat mesh nodes, of length ``(nseg + 1) * dim_dynamics``.
+
+  controls (:class:`list`): Flat segment controls, of length ``nseg * dim_controls``.
+
+  tgrid (:class:`list`): Node times, of length ``nseg + 1``, in the integrator's time units.
+
+  cut (:class:`float`): Fraction of segments propagated forward, in ``[0, 1]``.
+
+  tas (:class:`tuple`): Pair ``(ta, ta_var)`` of compatible :class:`heyoka.taylor_adaptive`
+    integrators. The nominal integrator has ``dim_dynamics`` states and at least
+    ``dim_controls`` parameters, with controls first. The optional variational integrator
+    varies states and controls only; it may be None.
+
+  max_steps (:class:`int`, optional): Maximum integration steps per segment. Default is None (no limit).
+
+  dim_dynamics (:class:`int`, optional): State dimension. Default is 7.
+
+  dim_controls (:class:`int`, optional): Control dimension. Default is 4.
+
+Raises:
+  RuntimeError: If the mesh, dimensions, cut or integrators are inconsistent.
+
+Notes:
+  Mesh data and integrators are copied. Propagation mutates the leg's nominal integrator,
+  not the supplied integrators. Vector properties return list copies; reassign a property
+  to update its values. Setters validate immediately. Dimensions and segment counts are readonly.
+)";
+}
+
+std::string leg_zoh_ms_defects_docstring()
+{
+  return R"(compute_defects()
+
+Propagates each segment independently and returns its defect. For forward segments the
+defect is the propagated initial node minus the next node; for backward segments it is
+the initial node minus the backward-propagated next node. Feasibility is independent of
+``cut``, but off-feasibility defects depend on it.
+
+Notes:
+  Failed propagation restores the segment starting state, which replaces the flow in the defect.
+
+Returns:
+  :class:`list`: Flat defects of length ``nseg * dim_dynamics``, ordered by segment then state component.
+)";
+}
+
+std::string leg_zoh_ms_set_initial_guess_docstring()
+{
+  return R"(set_initial_guess(ballistic=False)
+
+Replaces interior nodes by propagating inward from the endpoint states.
+
+Args:
+  ballistic (:class:`bool`, optional): Use zero controls without changing stored controls.
+    Default is False.
+
+Notes:
+  Endpoints, time grid and stored controls are preserved. With stored controls and successful
+  propagation, only the segment where the forward and backward meshes meet may have a defect.
+  Ballistic propagation may leave defects on every segment. Failed propagation restores its starting state.
+)";
+}
+
+std::string leg_zoh_ms_get_state_info_docstring()
+{
+  return R"(get_state_info(N=5)
+
+Samples each segment independently from its corresponding mesh node. Forward segments are
+ordered from node 0 toward the cut and sampled in increasing time. Backward segments are
+ordered from the final node toward the cut and sampled in decreasing time.
+
+Args:
+  N (:class:`int`, optional): Sampling points per segment, including endpoints. Default is 5.
+
+Raises:
+  RuntimeError: If N is zero.
+
+Notes:
+  The nominal integrator is modified. Each direction stops at its first incomplete segment.
+  With N=1, only each segment's starting node is returned.
+  Returned arrays own their data independently of the leg.
+
+Returns:
+  :class:`tuple`: ``(state_fwd, state_bck, success)``. Each direction is a list of float64
+  :class:`numpy.ndarray` objects of shape ``(N, dim_dynamics)``, possibly shorter on failure.
+  Success is True only if all requested segments return all N samples.
+)";
+}
+
 std::string fb_con_docstring()
 {
     return R"(fb_con(v_rel_in, v_rel_out, mu, safe_radius)

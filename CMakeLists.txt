@@ -24,7 +24,7 @@ endif()
 
 project(
   kep3
-  VERSION 3.0.2
+  VERSION 3.1.0
   LANGUAGES CXX C)
 
 option(KEP3_VERBOSE_CONFIGURE "Enable detailed configure-time logging." OFF)
@@ -176,6 +176,7 @@ if(kep3_BUILD_CPP_LIBRARY)
       "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sims_flanagan.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sims_flanagan_alpha.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/zoh.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/zoh_ms.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/leg/sf_checks.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/core_astro/flyby.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/core_astro/ic2par2ic.cpp"

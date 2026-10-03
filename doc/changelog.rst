@@ -8,6 +8,15 @@ Changelog
 3.1.0 (unreleased)
 ==================
 
+Features
+--------
+
+- Added generic zero-order-hold multiple-shooting trajectory legs, available as
+  :class:`~pykep.leg.zoh_ms` in C++ and :class:`~pykep.leg.zoh_ms_py` in pure
+  Python. They accept user-provided dynamics and controls, propagate each
+  segment independently in the forward or backward direction, and expose
+  segment defects for enforcing trajectory continuity.
+
 Build system
 ------------
 
@@ -21,12 +30,7 @@ Build system
 Bug fixes
 ---------
 
-- Fixed :class:`~pykep.utils.knn` nearest-neighbour queries. ``cKDTree.query``
-  returns scalar results for the default ``k=1`` and uses the size of the tree as
-  the index of a neighbour it could not find, while ``find_neighbours`` assumed
-  iterable, valid indices. A single-neighbour query therefore raised
-  ``TypeError``, and an ``IndexError`` was raised whenever fewer than ``k``
-  neighbours existed or a ``distance_upper_bound`` excluded some of them. Results
+- Fixed :class:`~pykep.utils.knn` nearest-neighbour queries. Results
   are now normalised to arrays and the unreachable entries dropped, so a query
   that matches nothing returns three empty lists. Both the ``orbital`` and the
   ``euclidean`` metrics were affected.

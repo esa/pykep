@@ -13,6 +13,7 @@ set(PYKEP_PYTHON_FILES
     test_utils.py 
     test_leg_sims_flanagan.py
     test_leg_zoh.py
+    test_leg_zoh_ms.py
     test_core.py
     test_udplas.py)
 
