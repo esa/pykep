@@ -1,10 +1,7 @@
-coverage:
-  ignore:
+ignore:
   - "test/.*"
   - "include/kep3/detail/tanuki.hpp"
   - "include/kep3/detail/tanuki_impl.hpp"
-codecov: 
- token: c29e9be0-08f0-46b6-aa0d-6dd1aa3bfc9f
 
 comment:                  # this is a top-level key
   layout: " diff, flags, files"
