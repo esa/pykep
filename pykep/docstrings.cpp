@@ -3183,16 +3183,6 @@ Returns:
   :class:`list`: Mismatch vector of length 7. All entries are zero for a feasible transfer.
 )";
 }
-std::string leg_zoh_tc_docstring()
-{
-    return R"(compute_throttle_constraints()
-
-Computes the throttle unit-norm constraints :math:`i_x^2 + i_y^2 + i_z^2 - 1` for every segment.
-
-Returns:
-  :class:`list`: Constraint values of length nseg. All entries are zero when the direction vector is unit-norm on every segment.
-)";
-}
 std::string leg_zoh_mc_grad_docstring()
 {
     return R"(compute_mc_grad()
@@ -3219,21 +3209,6 @@ Returns:
   :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]: The four gradients. Sizes will be (7,7), (7,7), (7,4nseg), and (7,nseg+1).
 )";
 }
-std::string leg_zoh_tc_grad_docstring()
-{
-    return R"(compute_tc_grad()
-
-Computes the gradients of the throttle constraints. Introducing the control vector as :math:`\mathbf u = [T_0, i_{x0}, i_{y0}, i_{z0}, T_1, i_{x1}, i_{y1}, i_{z1}, ...]`, this method computes the following gradient:
-
-.. math::
-   
-   \frac{\partial \mathbf {tc}}{\partial \mathbf u} \rightarrow (\mathbf{nseg} \times 4\mathbf{nseg})
-
-Returns:
-  :class:`tuple` [:class:`numpy.ndarray`]: The gradient. Size will be (nseg,4nseg).
-)";
-}
-
 std::string leg_zoh_get_state_info_docstring()
 {
     return R"(
@@ -3324,18 +3299,151 @@ Notes:
 
 std::string leg_zoh_ms_defects_docstring()
 {
-  return R"(compute_defects()
+    return R"(compute_defects()
 
-Propagates each segment independently and returns its defect. For forward segments the
-defect is the propagated initial node minus the next node; for backward segments it is
-the initial node minus the backward-propagated next node. Feasibility is independent of
-``cut``, but off-feasibility defects depend on it.
+Propagates each segment independently and returns its continuity defect. Let
+:math:`n = \mathrm{nseg}`, :math:`\mathbf{x}_k` be the state at mesh node :math:`k`,
+:math:`\mathbf{u}_k` the constant control on segment :math:`k`, and
+:math:`\Phi_k(\mathbf{x}_k;\mathbf{u}_k)` the flow from :math:`t_k` to :math:`t_{k+1}`.
+With :math:`n_{\mathrm{fwd}} = \lfloor n\,\mathrm{cut}\rfloor`, the defects are:
+
+.. math::
+
+   \mathbf{d}_k =
+   \begin{cases}
+   \Phi_k(\mathbf{x}_k;\mathbf{u}_k) - \mathbf{x}_{k+1},
+       & 0 \leq k < n_{\mathrm{fwd}}, \\
+   \mathbf{x}_k - \Phi_k^{-1}(\mathbf{x}_{k+1};\mathbf{u}_k),
+       & n_{\mathrm{fwd}} \leq k < n.
+   \end{cases}
+
+Here :math:`\Phi_k^{-1}` means integrating the same dynamics backward from
+:math:`t_{k+1}` to :math:`t_k`. The returned vector stacks the defects in segment order:
+
+.. math::
+
+   \mathbf{D} = [\mathbf{d}_0^\mathsf{T}, \ldots, \mathbf{d}_{n-1}^\mathsf{T}]^\mathsf{T}.
+
+A transfer is feasible when :math:`\mathbf{D} = \mathbf{0}`. For invertible flows,
+feasibility is independent of ``cut``, but off-feasibility defects depend on it.
 
 Notes:
   Failed propagation restores the segment starting state, which replaces the flow in the defect.
+  This method modifies the leg's nominal integrator.
 
 Returns:
   :class:`list`: Flat defects of length ``nseg * dim_dynamics``, ordered by segment then state component.
+)";
+}
+
+std::string leg_zoh_ms_defects_grad_docstring()
+{
+    return R"(compute_defects_grad()
+
+Computes the analytical gradients of the continuity defects defined by
+:meth:`~pykep.leg.zoh_ms.compute_defects`, with ``cut`` held fixed. Let
+:math:`n = \mathrm{nseg}`, :math:`d = \mathrm{dim\_dynamics}` and
+:math:`c = \mathrm{dim\_controls}`. Introducing the stacked node states, segment controls
+and time grid:
+
+.. math::
+
+   \mathbf{X} = [\mathbf{x}_0^\mathsf{T}, \ldots, \mathbf{x}_n^\mathsf{T}]^\mathsf{T},
+   \qquad
+   \mathbf{U} = [\mathbf{u}_0^\mathsf{T}, \ldots, \mathbf{u}_{n-1}^\mathsf{T}]^\mathsf{T},
+   \qquad
+   \mathbf{T} = [t_0, \ldots, t_n]^\mathsf{T},
+
+this method computes the three blocks of the defect Jacobian:
+
+.. math::
+
+   J = \frac{\partial \mathbf{D}}{\partial(\mathbf{X}, \mathbf{U}, \mathbf{T})}
+     = \begin{bmatrix} J_X & J_U & J_T \end{bmatrix}.
+
+.. math::
+
+   J_X = \frac{\partial \mathbf{D}}{\partial \mathbf{X}}
+       \in \mathbb{R}^{nd \times (n+1)d},
+   \qquad
+   J_U = \frac{\partial \mathbf{D}}{\partial \mathbf{U}}
+       \in \mathbb{R}^{nd \times nc},
+   \qquad
+   J_T = \frac{\partial \mathbf{D}}{\partial \mathbf{T}}
+       \in \mathbb{R}^{nd \times (n+1)}.
+
+For the default seven-state, four-control configuration, these shapes are
+:math:`(7n, 7(n+1))`, :math:`(7n, 4n)` and :math:`(7n, n+1)`, respectively.
+The matrices are sparse: each segment depends only on its two mesh nodes, its own controls
+and its two endpoint times. This method returns only the structurally stored derivative
+values, not dense matrices.
+
+Returns:
+  :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]:
+  ``(grad_states, grad_controls, grad_tgrid)``, three flat float64 arrays containing the
+  values of :math:`J_X`, :math:`J_U` and :math:`J_T`, respectively. Their lengths are
+  :math:`n(d^2+d)`, :math:`ndc` and :math:`2nd`. Each array follows the coordinate order
+  returned by :meth:`~pykep.leg.zoh_ms.defects_grad_sparsity`.
+
+Raises:
+  RuntimeError: If no variational integrator was provided.
+
+Notes:
+  Structural entries are retained even when their numerical values are zero.
+  This method modifies the leg's variational integrator. On propagation failure,
+  flow sensitivities reduce to the identity for states and zero for controls and times.
+)";
+}
+
+std::string leg_zoh_ms_defects_grad_sparsity_docstring()
+{
+    return R"(defects_grad_sparsity()
+
+Returns the structural sparsity patterns of the three defect Jacobian blocks
+:math:`J_X = \partial\mathbf{D}/\partial\mathbf{X}`,
+:math:`J_U = \partial\mathbf{D}/\partial\mathbf{U}` and
+:math:`J_T = \partial\mathbf{D}/\partial\mathbf{T}`, defined in
+:meth:`~pykep.leg.zoh_ms.compute_defects_grad`.
+With :math:`n = \mathrm{nseg}`, :math:`d = \mathrm{dim\_dynamics}` and
+:math:`c = \mathrm{dim\_controls}`, their matrix shapes are:
+
+.. math::
+
+   J_X \in \mathbb{R}^{nd \times (n+1)d},
+   \qquad J_U \in \mathbb{R}^{nd \times nc},
+   \qquad J_T \in \mathbb{R}^{nd \times (n+1)}.
+
+Each defect :math:`\mathbf{d}_k` depends only on :math:`\mathbf{x}_k`,
+:math:`\mathbf{x}_{k+1}`, :math:`\mathbf{u}_k`, :math:`t_k` and :math:`t_{k+1}`.
+For a forward segment, the state blocks are
+:math:`[\partial\Phi_k/\partial\mathbf{x}_k,\,-I_d]`; for a backward segment, they are
+:math:`[I_d,\,-\partial\Phi_k^{-1}/\partial\mathbf{x}_{k+1}]`.
+The flow derivative is stored as a full :math:`d \times d` block, while the signed
+identity contributes only its :math:`d` diagonal entries. The control block contains
+:math:`dc` entries per segment and the time block contains :math:`2d`.
+
+Returns:
+  :class:`tuple` [:class:`numpy.ndarray`, :class:`numpy.ndarray`, :class:`numpy.ndarray`]:
+  ``(sp_states, sp_controls, sp_tgrid)``, three int64 arrays of zero-based
+  ``(row, column)`` coordinates. Their shapes are :math:`(n(d^2+d), 2)`,
+  :math:`(ndc, 2)` and :math:`(2nd, 2)`, respectively. Rows index the flat defects;
+  columns index each block's own ``states``, ``controls`` or ``tgrid`` vector,
+  without offsets into a combined input vector.
+
+Notes:
+  Coordinates are in row-major order within each block and match the value arrays
+  returned by :meth:`~pykep.leg.zoh_ms.compute_defects_grad`. For example, if
+  ``(row, col) = sp_states[j]``, then:
+
+  .. math::
+
+     (J_X)_{\mathrm{row},\mathrm{col}}
+       = \frac{\partial D_{\mathrm{row}}}{\partial X_{\mathrm{col}}}
+       = \mathrm{grad\_states}[j].
+
+  Structural entries are listed even when their numerical values are zero.
+  No variational integrator or propagation is required. The patterns are refreshed
+  when setters change the segment count or the forward/backward split.
 )";
 }
 

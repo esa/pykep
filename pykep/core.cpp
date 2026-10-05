@@ -1061,8 +1061,7 @@ PYBIND11_MODULE(core, m) // NOLINT
             return py::make_tuple(to_numpy(std::move(grad_states)), to_numpy(std::move(grad_controls)),
                                   to_numpy(std::move(grad_tgrid)));
         },
-        "Return (grad_states, grad_controls, grad_tgrid) as flat float64 arrays in defects_grad_sparsity() order. "
-        "Requires a variational integrator; raises RuntimeError if none was provided.");
+        pykep::leg_zoh_ms_defects_grad_docstring().c_str());
     zoh_ms.def(
         "defects_grad_sparsity",
         [](const kep3::leg::zoh_ms &leg) {
@@ -1078,9 +1077,7 @@ PYBIND11_MODULE(core, m) // NOLINT
             };
             return py::make_tuple(to_numpy(sp_states), to_numpy(sp_controls), to_numpy(sp_tgrid));
         },
-        "Return (sp_states, sp_controls, sp_tgrid) as int64 arrays of shape (nnz, 2). "
-        "Rows index defects and columns index states, controls and tgrid, respectively, "
-        "in compute_defects_grad() order.");
+        pykep::leg_zoh_ms_defects_grad_sparsity_docstring().c_str());
     zoh_ms.def("set_initial_guess", &kep3::leg::zoh_ms::set_initial_guess, py::arg("ballistic") = false,
                 pykep::leg_zoh_ms_set_initial_guess_docstring().c_str());
     zoh_ms.def(
