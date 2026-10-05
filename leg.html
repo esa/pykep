@@ -879,12 +879,28 @@ to update its values. Setters validate immediately. Dimensions and segment count
 <dl class="py method">
 <dt class="sig sig-object py" id="pykep.leg.zoh_ms.compute_defects">
 <span class="sig-name descname"><span class="pre">compute_defects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms.compute_defects" title="Link to this definition">#</a></dt>
-<dd><p>Propagates each segment independently and returns its defect. For forward segments the
-defect is the propagated initial node minus the next node; for backward segments it is
-the initial node minus the backward-propagated next node. Feasibility is independent of
-<code class="docutils literal notranslate"><span class="pre">cut</span></code>, but off-feasibility defects depend on it.</p>
+<dd><p>Propagates each segment independently and returns its continuity defect. Let
+<span class="math notranslate nohighlight">\(n = \mathrm{nseg}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{x}_k\)</span> be the state at mesh node <span class="math notranslate nohighlight">\(k\)</span>,
+<span class="math notranslate nohighlight">\(\mathbf{u}_k\)</span> the constant control on segment <span class="math notranslate nohighlight">\(k\)</span>, and
+<span class="math notranslate nohighlight">\(\Phi_k(\mathbf{x}_k;\mathbf{u}_k)\)</span> the flow from <span class="math notranslate nohighlight">\(t_k\)</span> to <span class="math notranslate nohighlight">\(t_{k+1}\)</span>.
+With <span class="math notranslate nohighlight">\(n_{\mathrm{fwd}} = \lfloor n\,\mathrm{cut}\rfloor\)</span>, the defects are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{d}_k =
+\begin{cases}
+\Phi_k(\mathbf{x}_k;\mathbf{u}_k) - \mathbf{x}_{k+1},
+    &amp; 0 \leq k &lt; n_{\mathrm{fwd}}, \\
+\mathbf{x}_k - \Phi_k^{-1}(\mathbf{x}_{k+1};\mathbf{u}_k),
+    &amp; n_{\mathrm{fwd}} \leq k &lt; n.
+\end{cases}\end{split}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\Phi_k^{-1}\)</span> means integrating the same dynamics backward from
+<span class="math notranslate nohighlight">\(t_{k+1}\)</span> to <span class="math notranslate nohighlight">\(t_k\)</span>. The returned vector stacks the defects in segment order:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{D} = [\mathbf{d}_0^\mathsf{T}, \ldots, \mathbf{d}_{n-1}^\mathsf{T}]^\mathsf{T}.\]</div>
+<p>A transfer is feasible when <span class="math notranslate nohighlight">\(\mathbf{D} = \mathbf{0}\)</span>. For invertible flows,
+feasibility is independent of <code class="docutils literal notranslate"><span class="pre">cut</span></code>, but off-feasibility defects depend on it.</p>
 <dl class="simple">
-<dt>Notes:</dt><dd><p>Failed propagation restores the segment starting state, which replaces the flow in the defect.</p>
+<dt>Notes:</dt><dd><p>Failed propagation restores the segment starting state, which replaces the flow in the defect.
+This method modifies the leg’s nominal integrator.</p>
 </dd>
 <dt>Returns:</dt><dd><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>: Flat defects of length <code class="docutils literal notranslate"><span class="pre">nseg</span> <span class="pre">*</span> <span class="pre">dim_dynamics</span></code>, ordered by segment then state component.</p>
 </dd>
