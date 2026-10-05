@@ -199,13 +199,13 @@ std::string leg_zoh_nseg_docstring();
 std::string leg_zoh_nseg_fwd_docstring();
 std::string leg_zoh_nseg_bck_docstring();
 std::string leg_zoh_mc_docstring();
-std::string leg_zoh_tc_docstring();
 std::string leg_zoh_mc_grad_docstring();
-std::string leg_zoh_tc_grad_docstring();
 std::string leg_zoh_get_state_info_docstring();
 
 std::string leg_zoh_ms_docstring();
 std::string leg_zoh_ms_defects_docstring();
+std::string leg_zoh_ms_defects_grad_docstring();
+std::string leg_zoh_ms_defects_grad_sparsity_docstring();
 std::string leg_zoh_ms_set_initial_guess_docstring();
 std::string leg_zoh_ms_get_state_info_docstring();
 

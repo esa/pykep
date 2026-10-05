@@ -24,5 +24,4 @@ dependencies:
   - matplotlib
   - pygmo_plugins_nonfree
   - scipy
-  - eigen >=3, <5
   - nlopt < 2.10.1
