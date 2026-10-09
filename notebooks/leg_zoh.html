@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The Zero-Order-Hold trajectory leg &#8212; pykep 3.1.0 documentation</title>
+    <title>Zero-Order-Hold leg &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -51,7 +51,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Zero-Order-Hold Multiple Shooting leg" href="leg_zoh_ms.html" />
-    <link rel="prev" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
+    <link rel="prev" title="Sims-Flanagan leg" href="leg_sims_flanagan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -221,9 +221,9 @@
 
 
 <li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Low-thrust approximations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">Sims-Flanagan leg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero-Order-Hold leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">Zero-Order-Hold Multiple Shooting leg</a></li>
@@ -515,7 +515,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Zero-Order-Hold trajectory leg</h1>
+    <h1>Zero-Order-Hold leg</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -525,7 +525,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-leg">1 - Validate the Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
 </ul>
@@ -540,8 +540,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-trajectory-leg">
-<h1>The Zero-Order-Hold trajectory leg<a class="headerlink" href="#the-zero-order-hold-trajectory-leg" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-leg">
+<h1>Zero-Order-Hold leg<a class="headerlink" href="#zero-order-hold-leg" title="Link to this heading">#</a></h1>
 <p>The Zero-Order-Hold (ZOH, parameterized by the <em>cut</em> parameter) trajectory leg is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> as <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a>. The method is described in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id21" title="Dario Izzo, Harry Holt, Giacomo Acciarini, Laurent Beauregard, and Yuri Shimane. A practical guide to implementing generic zero-hold interplanetary trajectory legs. In Proceedings of the 30th International Symposium on Space Flight Dynamics (ISSFD). Toulouse, France, 2026. Oral presentation.">IHA+26</a>]</span> as a ZOH <span class="math notranslate nohighlight">\(_\alpha\)</span> transcription. Conceptually, it extends the Sims-Flanagan leg by modeling thrust as a piecewise-constant continuous acceleration over each segment, while supporting generic dynamics and nonuniform segment durations.</p>
 <p>Let the mesh contain <span class="math notranslate nohighlight">\(n\)</span> segments, with initial and final states <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> at times <span class="math notranslate nohighlight">\(t_0\)</span> and <span class="math notranslate nohighlight">\(t_n\)</span>, and time grid <span class="math notranslate nohighlight">\(\{t_k\}_{k=0}^{n}\)</span>. On each segment <span class="math notranslate nohighlight">\(k\)</span>, the control is
 $<span class="math notranslate nohighlight">\(
@@ -677,10 +677,10 @@ where the two states are obtained by forward and backward propagation, respectiv
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>state0 7.69318490014e-08
-state1 6.74063429076e-07
-controls 4.20376906338e-07
-tgrid 6.90438626388e-08
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>state0 4.40394491084e-08
+state1 2.04572042305e-06
+controls 1.05657505592e-06
+tgrid 1.5640934968e-07
 </pre></div>
 </div>
 </div>
@@ -965,7 +965,7 @@ tgrid 6.90438626388e-08
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">The Sims-Flanagan trajectory leg</p>
+        <p class="prev-next-title">Sims-Flanagan leg</p>
       </div>
     </a>
     <a class="right-next"
@@ -995,7 +995,7 @@ tgrid 6.90438626388e-08
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-leg">1 - Validate the Zero-Order-Hold leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-arbitrary-dynamics">2 - Use with arbitrary dynamics</a></li>
 </ul>

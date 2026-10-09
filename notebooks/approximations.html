@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Approximators for low-thrust transfers &#8212; pykep 3.1.0 documentation</title>
+    <title>Low-thrust approximations &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Sims-Flanagan trajectory leg" href="leg_sims_flanagan.html" />
+    <link rel="next" title="Sims-Flanagan leg" href="leg_sims_flanagan.html" />
     <link rel="prev" title="The CR3BP and BCP dynamics" href="ta_cr3bp_bcp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -221,9 +221,9 @@
 
 
 <li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Approximators for low-thrust transfers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Low-thrust approximations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">Sims-Flanagan leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">Zero-Order-Hold leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">Zero-Order-Hold Multiple Shooting leg</a></li>
@@ -515,7 +515,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Approximators for low-thrust transfers</h1>
+    <h1>Low-thrust approximations</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -540,8 +540,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="approximators-for-low-thrust-transfers">
-<h1>Approximators for low-thrust transfers<a class="headerlink" href="#approximators-for-low-thrust-transfers" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="low-thrust-approximations">
+<h1>Low-thrust approximations<a class="headerlink" href="#low-thrust-approximations" title="Link to this heading">#</a></h1>
 <p>Before computing a full low-thrust transfer is often convenent to compute approximations that are computationally less heavy and help anyway to establish the worth of a given transfer opportunity. The main purpose of these is to avoid computing eventually the low-thrust transfer altogether, and thus prune out uninteresting cases.</p>
 <p>In the old-school one would use Edelbaum, Lambert as well as Hohmann <span class="math notranslate nohighlight">\(\Delta V\)</span> and transfer times <span class="math notranslate nohighlight">\(T\)</span> as to produce quick estimates for these quantities, maybe incomprating some gravity loss coefficident set to an arbitrary value (argauble learned from experience). In the last decade, also thanks to the many <a class="reference external" href="https://sophia.estec.esa.int/gtoc_portal/">GTOC competitions</a> new concpets and approximations have been developed that are much more informative and precise. In <em>pykep</em> we implemented a few, mainly from our own work and developments and that have since been embraced by the larger trajectory design community.</p>
 <p>In this notebook we give some examples of their usage.</p>
@@ -887,7 +887,7 @@ idx: 55344: minumum time: 292.73, mass: 984.18
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Sims-Flanagan trajectory leg</p>
+        <p class="prev-next-title">Sims-Flanagan leg</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

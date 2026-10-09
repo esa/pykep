@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The Sims-Flanagan trajectory leg &#8212; pykep 3.1.0 documentation</title>
+    <title>Sims-Flanagan leg &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -50,8 +50,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Zero-Order-Hold trajectory leg" href="leg_zoh.html" />
-    <link rel="prev" title="Approximators for low-thrust transfers" href="approximations.html" />
+    <link rel="next" title="Zero-Order-Hold leg" href="leg_zoh.html" />
+    <link rel="prev" title="Low-thrust approximations" href="approximations.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -217,9 +217,9 @@
 
 
 <li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="approximations.html">Approximators for low-thrust transfers</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Sims-Flanagan trajectory leg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Low-thrust approximations</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Sims-Flanagan leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">Zero-Order-Hold leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">Zero-Order-Hold Multiple Shooting leg</a></li>
@@ -509,7 +509,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Sims-Flanagan trajectory leg</h1>
+    <h1>Sims-Flanagan leg</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -523,8 +523,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-sims-flanagan-trajectory-leg">
-<h1>The Sims-Flanagan trajectory leg<a class="headerlink" href="#the-sims-flanagan-trajectory-leg" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="sims-flanagan-leg">
+<h1>Sims-Flanagan leg<a class="headerlink" href="#sims-flanagan-leg" title="Link to this heading">#</a></h1>
 <p>The Sims-Flanagan trajectory leg <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../bibliography.html#id7" title="Jon A. Sims and Steve N. Flanagan. Preliminary design of low-thrust interplanetary missions. Paper AAS 99-338, AAS/AIAA Astrodynamics Specialist Conference, Girdwood, Alaska, August 16-18, 1999, 1997.">SF97</a>]</span> is implemented in <code class="docutils literal notranslate"><span class="pre">pykep</span></code> in the class <a class="reference internal" href="../leg.html#pykep.leg.sims_flanagan" title="pykep.leg.sims_flanagan"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.sims_flanagan</span></code></a>. The leg can be used to describe efficiently a low-thrust leg with low-fidelity as it assumes Keplerian dynamics
 and approximates the continuous thrust via a sequence of impulsive, equally-spaced manoeuvres. The leg is defined by a starting position <span class="math notranslate nohighlight">\(\mathbf x_s = [\mathbf r_s, \mathbf v_s, m_s]\)</span>, an arrival position <span class="math notranslate nohighlight">\(\mathbf x_f = [\mathbf r_f, \mathbf v_f, m_f]\)</span> and a time of flight <span class="math notranslate nohighlight">\(T\)</span>.</p>
 <p>A sequence of throttles <span class="math notranslate nohighlight">\(\mathbf u = [u_{x0}, u_{y0}, u_{z0}, u_{x1}, u_{y1}, u_{z1}, u_{x2}, u_{y2}, u_{z2}, ... ]\)</span> define an equal number of impulsive <span class="math notranslate nohighlight">\(\Delta \mathbf V\)</span> applied in the middle of the leg’s <span class="math notranslate nohighlight">\(n\)</span> segments (i.e. trajectory parts of equal temporal length <span class="math notranslate nohighlight">\(\frac Tn\)</span>).</p>
@@ -604,7 +604,7 @@ and approximates the continuous thrust via a sequence of impulsive, equally-spac
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/bd979a650dd8534df0b23eab00af101eb7af08c9d68103acdfee889584541a5f.png" src="../_images/bd979a650dd8534df0b23eab00af101eb7af08c9d68103acdfee889584541a5f.png" />
+<img alt="../_images/dc4ec449b50f170ef74f454e79fd17cf67e1074ced2a3f5ee0f1fed9cc83cfea.png" src="../_images/dc4ec449b50f170ef74f454e79fd17cf67e1074ced2a3f5ee0f1fed9cc83cfea.png" />
 </div>
 </div>
 </section>
@@ -626,7 +626,7 @@ and approximates the continuous thrust via a sequence of impulsive, equally-spac
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Approximators for low-thrust transfers</p>
+        <p class="prev-next-title">Low-thrust approximations</p>
       </div>
     </a>
     <a class="right-next"
@@ -634,7 +634,7 @@ and approximates the continuous thrust via a sequence of impulsive, equally-spac
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">The Zero-Order-Hold trajectory leg</p>
+        <p class="prev-next-title">Zero-Order-Hold leg</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
