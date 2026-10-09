@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>The Zero-Order-Hold Multiple Shooting trajectory leg &#8212; pykep 3.1.0 documentation</title>
+    <title>Zero-Order-Hold Multiple Shooting leg &#8212; pykep 3.1.0 documentation</title>
   
   
   
@@ -226,7 +226,7 @@
 <li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Zero-Order-Hold Multiple Shooting leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
@@ -515,7 +515,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The Zero-Order-Hold Multiple Shooting trajectory leg</h1>
+    <h1>Zero-Order-Hold Multiple Shooting leg</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -525,7 +525,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order-Hold Multiple Shooting leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-multiple-shooting-leg">1 - Validate the Zero-Order-Hold multiple-shooting leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-a-supplied-generic-propagator">2 - Use with a supplied generic propagator</a></li>
 </ul>
@@ -540,9 +540,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="the-zero-order-hold-multiple-shooting-trajectory-leg">
-<h1>The Zero-Order-Hold Multiple Shooting trajectory leg<a class="headerlink" href="#the-zero-order-hold-multiple-shooting-trajectory-leg" title="Link to this heading">#</a></h1>
-<p>The Zero-Order-Hold Multiple Shooting (ZOH-MS) trajectory leg is available as <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms</span></code></a>, implemented in C++. The pure-Python version, <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms_py" title="pykep.leg.zoh_ms_py"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms_py</span></code></a>, has the same public interface and is intended to be a reference implementation.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="zero-order-hold-multiple-shooting-leg">
+<h1>Zero-Order-Hold Multiple Shooting leg<a class="headerlink" href="#zero-order-hold-multiple-shooting-leg" title="Link to this heading">#</a></h1>
+<p>The Zero-Order-Hold Multiple Shooting (ZOH-MS) trajectory leg is available as <a class="reference internal" href="../leg.html#pykep.leg.zoh_ms" title="pykep.leg.zoh_ms"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms</span></code></a>, implemented in C++. The pure-Python version, <code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh_ms_py</span></code>, has the same public interface and is intended to be a reference implementation.</p>
 <p>In ‘pykep’ version of the multiple shooting technique, we divide the trajectory into short segments and store a state at every mesh node. We propagate each segment and compare the result with the state stored at the other end. This difference is called a <strong>continuity defect</strong> or simply <strong>defect</strong>. If every defect is zero, the segments join into one continuous trajectory. Segments are propagated forward or backward depending on the <code class="docutils literal notranslate"><span class="pre">cut</span></code> parameter, making the multiple shooting leg directly comparable to the <a class="reference internal" href="../leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">pykep.leg.zoh</span></code></a> leg based on single fwd-bck shooting.</p>
 <p>In the Keplerian example, each node stores the seven-component state <span class="math notranslate nohighlight">\(\mathbf{x}_k=[x_k,y_k,z_k,v_{x,k},v_{y,k},v_{z,k},m_k]\)</span>: position, velocity and mass. A mesh with <span class="math notranslate nohighlight">\(n\)</span> segments therefore has <span class="math notranslate nohighlight">\(n+1\)</span> nodes and <span class="math notranslate nohighlight">\(7n\)</span> scalar continuity constraints.</p>
 <p>The control is held constant within each segment, which is the meaning of <em>zero-order hold</em>. For the Keplerian example, the four control components are</p>
@@ -982,7 +982,7 @@ Defect norm for each segment: [ 0.          0.          1.65989136  0.          
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Zero-Order-Hold Multiple Shooting leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-zero-order-hold-multiple-shooting-leg">1 - Validate the Zero-Order-Hold multiple-shooting leg</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-with-a-supplied-generic-propagator">2 - Use with a supplied generic propagator</a></li>
 </ul>

@@ -226,7 +226,7 @@
 <li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh.html">The Zero-Order-Hold trajectory leg</a></li>
 
 
-<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ms.html">The Zero-Order-Hold Multiple Shooting trajectory leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/leg_zoh_ms.html">Zero-Order-Hold Multiple Shooting leg</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="notebooks/plotting.html">Plotting</a></li>
@@ -519,7 +519,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms_py"><code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms"><code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.compute_defects"><code class="docutils literal notranslate"><span class="pre">zoh_ms.compute_defects()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ms.get_state_info()</span></code></a></li>
@@ -841,13 +840,6 @@ must be preserved, call this method on a dedicated copy.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pykep.leg.zoh_ms_py">
-<span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh_ms_py</span></span><a class="headerlink" href="#pykep.leg.zoh_ms_py" title="Link to this definition">#</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">zoh_ms</span></code></p>
-</dd></dl>
-
-<hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py" id="pykep.leg.zoh_ms">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pykep.leg.</span></span><span class="sig-name descname"><span class="pre">zoh_ms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_dynamics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_controls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.leg.zoh_ms" title="Link to this definition">#</a></dt>
@@ -1022,7 +1014,6 @@ Ballistic propagation may leave defects on every segment. Failed propagation res
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh.get_state_info()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms_py"><code class="docutils literal notranslate"><span class="pre">zoh_ms_py</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms"><code class="docutils literal notranslate"><span class="pre">zoh_ms</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.compute_defects"><code class="docutils literal notranslate"><span class="pre">zoh_ms.compute_defects()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pykep.leg.zoh_ms.get_state_info"><code class="docutils literal notranslate"><span class="pre">zoh_ms.get_state_info()</span></code></a></li>
