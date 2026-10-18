@@ -221,6 +221,6 @@ def add_solar_system(
             label="",
             plot_range=[-40000, -40000 + 164.8 * 365.25],
         )
-        _pk.plot.add_planet(ax, neptune, when=ep, c="orchid", s=s[7], label = "Neptune")
+        _pk.plot.add_planet(ax, neptune, when=when, c="orchid", s=s[8], label = "Neptune")
 
     return ax
