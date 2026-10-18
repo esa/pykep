@@ -15,7 +15,8 @@ set(PYKEP_PYTHON_FILES
     test_leg_zoh.py
     test_leg_zoh_ms.py
     test_core.py
-    test_udplas.py)
+    test_udplas.py
+    test_plot.py)
 
 # Core module.
 Python3_add_library(core MODULE WITH_SOABI 
