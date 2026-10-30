@@ -596,14 +596,14 @@ class pontryagin_equinoctial_time:
         # When lambda is not selected we need to account for a different indexing
         retval = []
         # We compute the dynamics along the optimal trajectory candidate dx/dt
-        dyn = self.dyn_func(self.ta_var.state[:14], pars=self.ta_var.pars[:2]) # only 2 parameters
+        dyn = self.dyn_func(self.ta_var.state[:14], pars=self.ta_var.pars[:3]) # only 2 parameters
         # We compute the dL/dt of the target body using the augmented dynamics and putting Tmax to 0, mass to 1.0 as its not used anyway (it all a work around, but not too unefficient)
         posvelf = self.target.eph(self.t0 + x[-1] * self.TIME * _pk.SEC2DAY)
         eqf = _pk.ic2mee(posvelf, self.target.get_mu_central_body())
         # We normalize units (only one parameter of the mee is dimensional)
         eqf[0] /= self.L
         # No need to wrap L here since only sin cos appear in the equation.
-        dLdt = self.dyn_func(list(eqf) + [1.0] + [0.1]*7, pars=[self.mu, 0.])[5]
+        dLdt = self.dyn_func(list(eqf) + [1.0] + [0.1]*7, pars=[self.mu, 0., 0.])[5]
         # Accounts for lambda0 being or not in the decision vector (chromosome)
         if self.lambda0 == None:
             final_idx = 8
