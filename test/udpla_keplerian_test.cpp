@@ -16,6 +16,7 @@
 #include <kep3/core_astro/convert_anomalies.hpp>
 #include <kep3/core_astro/ic2mee2ic.hpp>
 #include <kep3/core_astro/ic2par2ic.hpp>
+#include <kep3/core_astro/mee2par2mee.hpp>
 #include <kep3/epoch.hpp>
 #include <kep3/exceptions.hpp>
 #include <kep3/planet.hpp>
@@ -89,6 +90,14 @@ TEST_CASE("constructor")
         std::array<std::array<double, 3>, 2> posvel{{{1, 0, 0}, {0, 10, 0}}};
         keplerian udpla2{ref_epoch, posvel, 1., "unknown", {-1, -1, -1}};
         REQUIRE(!std::isfinite(udpla2.period()));
+    }
+    { // a hyperbola expressed as MEE / MEE_R must be accepted (gh-231): the a,e
+      // consistency check used to run on the raw (p, f) MEE input and reject it
+        std::array<double, 6> hyp_kep{{-10., 2., 0.1, 0.2, 0.3, 0.4}};
+        REQUIRE_NOTHROW((keplerian{ref_epoch, kep3::par2mee(hyp_kep, false), 1., "unknown",
+                                   {-1, -1, -1}, kep3::elements_type::MEE}));
+        REQUIRE_NOTHROW((keplerian{ref_epoch, kep3::par2mee(hyp_kep, true), 1., "unknown",
+                                   {-1, -1, -1}, kep3::elements_type::MEE_R}));
     }
 }
 
