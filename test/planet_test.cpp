@@ -90,6 +90,32 @@ private:
 
 KEP3_S11N_EXPORT_WRAP(simple_udpla_mu, kep3::detail::planet_iface)
 
+struct simple_udpla_mu_small_a {
+    simple_udpla_mu_small_a() = default;
+    static std::array<std::array<double, 3>, 2> eph(double)
+    {
+        // bound ellipse whose semi-major axis is sub-unit (a ~= 0.57)
+        std::array<double, 3> pos = {1., 0., 0.};
+        std::array<double, 3> vel = {0., 0.5, 0.};
+        return {pos, vel};
+    };
+    static std::string get_name()
+    {
+        return "A simple planet with mu and a sub-unit semi-major axis";
+    }
+    static double get_mu_central_body()
+    {
+        return 1.;
+    }
+
+private:
+    friend class boost::serialization::access;
+    template <typename Archive>
+    void serialize(Archive &, unsigned)
+    {
+    }
+};
+
 struct simple_udpla_mu_h {
     simple_udpla_mu_h() = default;
     static std::array<std::array<double, 3>, 2> eph(double)
@@ -303,6 +329,17 @@ TEST_CASE("construction")
         REQUIRE(pla.elements(kep3::epoch(), kep3::elements_type::MEE)[0] > 0);
         REQUIRE(pla.elements(kep3::epoch(), kep3::elements_type::MEE_R)[0] > 0);
         REQUIRE(pla.elements(kep3::epoch(), kep3::elements_type::KEP_F)[0] > 0);
+    }
+    {
+        // Constructor from a simple udpla whose ellipse has a sub-unit semi-major
+        // axis: the mean anomaly must still be available (gh-230).
+        simple_udpla_mu_small_a udpla{};
+        planet pla(udpla);
+        REQUIRE(pla.elements()[0] > 0);
+        REQUIRE(pla.elements()[0] < 1);
+        REQUIRE(pla.elements()[1] < 1);
+        REQUIRE_NOTHROW(pla.elements(kep3::epoch(), kep3::elements_type::KEP_M));
+        REQUIRE(pla.elements(kep3::epoch(), kep3::elements_type::KEP_M)[0] > 0);
     }
     {
         // Constructor from a more complete udpla
