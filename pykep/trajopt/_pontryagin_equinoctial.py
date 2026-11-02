@@ -490,9 +490,6 @@ class pontryagin_equinoctial_time:
         # We normalize units (only one parameter of the mee is dimensional)
         self.eq0[0] /= L
 
-        self.m0 = m0 / MASS
-        self.tof_guess = tof_guess * _pk.DAY2SEC / TIME # nd
-
         self.ta = _pk.ta.get_peq(taylor_tolerance, _pk.optimality_type.TIME)
         self.ta_var = _pk.ta.get_peq_var(taylor_tolerance_var, _pk.optimality_type.TIME)
         self.ic_var = _deepcopy(self.ta_var.state[14:])
