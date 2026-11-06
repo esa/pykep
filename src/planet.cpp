@@ -52,7 +52,7 @@ std::array<double, 6> elements_from_posvel(const std::array<std::array<double, 3
             break;
         case kep3::elements_type::KEP_M:
             retval = kep3::ic2par(pos_vel, mu);
-            if (retval[0] < 1) {
+            if (retval[0] < 0) {
                 throw std::logic_error("Mean anomaly is only available for ellipses.");
             }
             retval[5] = kep3::f2m(retval[5], retval[1]);
