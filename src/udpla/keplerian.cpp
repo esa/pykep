@@ -58,14 +58,7 @@ keplerian::keplerian(const epoch &ref_epoch, const std::array<double, 6> &elem, 
       m_radius(added_params[1]), m_safe_radius(added_params[2]), m_period(), m_ellipse(), m_pos_vel_0(),
       m_kep_f_elements(elem)
 {
-    // We check if the input is consistent with the pykep convention of a,e
-    if (m_kep_f_elements[0] * (1 - m_kep_f_elements[1]) <= 0) {
-        throw std::domain_error("A Keplerian planet constructor was called with with non compatible "
-                                "a,e:"
-                                "The following must hold: a<0 -> e>1 [a>0 -> e<1].");
-    }
-
-    // If so, we convert to the kep_f elements according to the chosen type for the input elem
+    // We convert to the kep_f elements according to the chosen type for the input elem
     switch (el_type) {
         case kep3::elements_type::KEP_F:
             break;
@@ -83,6 +76,15 @@ keplerian::keplerian(const epoch &ref_epoch, const std::array<double, 6> &elem, 
             break;
         default:
             throw std::logic_error("You should not go here!");
+    }
+
+    // We check that the converted a,e are consistent with the pykep convention. This
+    // runs after the conversion: for MEE/MEE_R the raw input is (p, f, ...) rather than
+    // (a, e), so a pre-conversion check wrongly rejects valid hyperbolae (gh-231).
+    if (m_kep_f_elements[0] * (1 - m_kep_f_elements[1]) <= 0) {
+        throw std::domain_error("A Keplerian planet constructor was called with with non compatible "
+                                "a,e:"
+                                "The following must hold: a<0 -> e>1 [a>0 -> e<1].");
     }
 
     m_pos_vel_0 = kep3::par2ic(m_kep_f_elements, mu_central_body);
