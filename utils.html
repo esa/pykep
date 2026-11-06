@@ -644,6 +644,8 @@ is loaded to enable correct ET↔UTC conversion.</p>
 <dt class="sig sig-object py" id="pykep.utils.rotation_matrix">
 <span class="sig-prename descclassname"><span class="pre">pykep.utils.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">_pk.epoch(0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pykep.utils.rotation_matrix" title="Link to this definition">#</a></dt>
 <dd><p>Rotation matrix between frames at epoch.</p>
+<p>The epoch is converted to SPICE ET with the same convention used by <a class="reference internal" href="udpla.html#pykep.udpla.spice" title="pykep.udpla.spice"><code class="xref py py-class docutils literal notranslate"><span class="pre">spice</span></code></a>
+and <a class="reference internal" href="#pykep.utils.epoch2utc" title="pykep.utils.epoch2utc"><code class="xref py py-func docutils literal notranslate"><span class="pre">epoch2utc()</span></code></a>, i.e. et = mjd2000*86400 + str2et(“2000-01-01 00:00:00 UTC”).</p>
 <dl>
 <dt>Args:</dt><dd><p>origin (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The name of the origin reference frame.</p>
 <p>destination (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>): The name of the destination reference frame.</p>
