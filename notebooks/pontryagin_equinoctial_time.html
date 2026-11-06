@@ -819,17 +819,24 @@
 <p>As a test case, we use the same baseline transfer as in the <a class="reference internal" href="pontryagin_equinoctial_mass.html"><span class="std std-doc">equinoctial mass-optimal notebook</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testcase 1 </span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testcase</span>
 <span class="n">source</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"earth"</span><span class="p">))</span>
 <span class="n">target</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"mars"</span><span class="p">))</span>
 
-<span class="n">tof_guess</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">tof_guess</span> <span class="o">=</span> <span class="mi">250</span> <span class="c1"># days</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span>
-<span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-5</span>
-<span class="n">T_max</span> <span class="o">=</span> <span class="mf">6.</span>
-<span class="n">Isp</span> <span class="o">=</span> <span class="mi">3000</span>
-<span class="n">m0</span> <span class="o">=</span> <span class="mi">1500</span>
+<span class="n">T_max</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="c1"># maximum thrust (N)</span>
+<span class="n">Isp</span> <span class="o">=</span> <span class="mi">3000</span> <span class="c1"># specific impulse (s)</span>
+<span class="n">m0</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># initial mass (kg)</span>
 <span class="n">n_rev</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+<span class="c1"># Units</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">MU</span> <span class="o">=</span> <span class="n">mu</span>
+<span class="n">TIME</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">MU</span><span class="p">)</span>  <span class="c1"># Unit for time (1 year)</span>
+<span class="n">VEL</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">TIME</span>  <span class="c1"># Unit for velocity (1 AU/year)</span>
+<span class="n">ACC</span> <span class="o">=</span> <span class="n">VEL</span> <span class="o">/</span> <span class="n">TIME</span>  <span class="c1"># Unit for acceleration (1 AU/year^2)</span>
 </pre></div>
 </div>
 </div>
@@ -846,7 +853,7 @@
         <span class="n">t0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">400</span><span class="p">),</span>
         <span class="n">lambda0</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># We normalize the costates</span>
         <span class="n">T_max</span><span class="o">=</span><span class="n">T_max</span><span class="p">,</span>
-        <span class="n">veff</span><span class="o">=</span><span class="mi">3000</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">,</span>
+        <span class="n">veff</span><span class="o">=</span><span class="n">Isp</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">G0</span><span class="p">,</span>
         <span class="n">m0</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
         <span class="n">n_rev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">L</span><span class="o">=</span><span class="n">pk</span><span class="o">.</span><span class="n">AU</span><span class="p">,</span>
@@ -857,11 +864,12 @@
         <span class="n">taylor_tolerance_var</span><span class="o">=</span><span class="mf">1e-10</span>
     <span class="p">)</span>
     <span class="n">udp</span><span class="o">.</span><span class="n">ta</span> <span class="o">=</span> <span class="n">ta</span>
+    <span class="n">udp</span><span class="o">.</span><span class="n">ta_var</span> <span class="o">=</span> <span class="n">ta_var</span>
     <span class="n">prob</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">problem</span><span class="p">(</span><span class="n">udp</span><span class="p">)</span>
     <span class="n">prob</span><span class="o">.</span><span class="n">c_tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
     <span class="k">return</span> <span class="n">prob</span>
 
-<span class="n">prob</span> <span class="o">=</span> <span class="n">prob_factory</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">prob_factory</span><span class="p">(</span><span class="n">T_max</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
 <span class="n">sparsity</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">gradient_sparsity</span><span class="p">()</span>
 <span class="n">udp</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">trajopt</span><span class="o">.</span><span class="n">pontryagin_equinoctial_time</span><span class="p">)</span>
 </pre></div>
@@ -961,10 +969,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>...x.....x
-Final mass is: 1049.4338611857288
-Total time to success: 12.165 seconds
-Number of successes: 8 over 10 trials (80.0 %)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>.x.x.x....
+Final mass is: 1049.4338612353408
+Total time to success: 16.910 seconds
+Number of successes: 7 over 10 trials (70.0 %)
 </pre></div>
 </div>
 </div>
@@ -976,10 +984,10 @@ Number of successes: 8 over 10 trials (80.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>...x......
-Final mass is: 1049.43386119149
-Total time to success: 2.154 seconds
-Number of successes: 9 over 10 trials (90.0 %)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x.x....xx.
+Final mass is: 1049.4338612562965
+Total time to success: 2.186 seconds
+Number of successes: 6 over 10 trials (60.0 %)
 </pre></div>
 </div>
 </div>
@@ -992,7 +1000,7 @@ Number of successes: 9 over 10 trials (90.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1f8856bff7f4f8024e67919a1ffb7ba5d77fec48f0f2743cb5db3d2f45af7ea3.png" src="../_images/1f8856bff7f4f8024e67919a1ffb7ba5d77fec48f0f2743cb5db3d2f45af7ea3.png" />
+<img alt="../_images/c9c18b6f67a7a5460195a331d001925d5fc3061bee2acab0756a441af2778241.png" src="../_images/c9c18b6f67a7a5460195a331d001925d5fc3061bee2acab0756a441af2778241.png" />
 </div>
 </div>
 <p>Thrust arcs are indicated with a red color, ballistic with blue.</p>
@@ -1003,7 +1011,7 @@ Number of successes: 9 over 10 trials (90.0 %)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/19789479d7cf5f32aa63fdfd04184bd2d5d5e973eb62cd3f60d00f285285f394.png" src="../_images/19789479d7cf5f32aa63fdfd04184bd2d5d5e973eb62cd3f60d00f285285f394.png" />
+<img alt="../_images/990772dc4cfe2d85c95c0419a1ba26d2933c0a2ff7d4ded2b6b1b7d836084633.png" src="../_images/990772dc4cfe2d85c95c0419a1ba26d2933c0a2ff7d4ded2b6b1b7d836084633.png" />
 </div>
 </div>
 </section>

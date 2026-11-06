@@ -903,19 +903,19 @@ normalize_lambdas=True  | free_Lf=True  | free_time=True  | max error= 8.828e-09
 <span class="n">time_end</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 <span class="n">initial</span> <span class="o">=</span> <span class="p">[</span><span class="n">sol</span><span class="p">,</span> <span class="n">mee0</span><span class="p">,</span> <span class="n">meef</span><span class="p">,</span> <span class="n">sol</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Mim: </span><span class="si">{</span><span class="n">initial</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">MASS</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> kg"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tof: </span><span class="si">{</span><span class="n">tf</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hours"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tof: </span><span class="si">{</span><span class="n">sol</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">TIME</span><span class="o">*</span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="o">*</span><span class="mi">24</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> hours"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Nrev: </span><span class="si">{</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">-</span><span class="n">mee0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Decision vector: </span><span class="si">{</span><span class="n">initial</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>xxxxxxxxxxxxxxxxxxxxxxxxxxx.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>xxx.
 Mim: 88.61 kg
-Tof: 2.24 hours
+Tof: 16.66 hours
 Nrev: 1.09
-Decision vector: [  5.90761529e-02  -4.44999444e-02  -1.86853221e-01  -5.72598813e-02
-   3.34701943e-02   8.48156356e-05   5.63154164e-02   7.43498018e+01]
+Decision vector: [  5.90761529e-02  -4.44999443e-02  -1.86853221e-01  -5.72598813e-02
+   3.34701943e-02   8.48156267e-05   5.63154164e-02   7.43498018e+01]
 </pre></div>
 </div>
 </div>
@@ -947,7 +947,7 @@ Decision vector: [  5.90761529e-02  -4.44999444e-02  -1.86853221e-01  -5.7259881
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/513e4b37f92fcbfeebdbfcac90d3db0238fba49b7617e66024cc6951576fdc17.png" src="../_images/513e4b37f92fcbfeebdbfcac90d3db0238fba49b7617e66024cc6951576fdc17.png" />
+<img alt="../_images/ed8d12f47995d1a0faf73f2bd1e1e4ad705998873c28f55cf2dbad3271b31bf4.png" src="../_images/ed8d12f47995d1a0faf73f2bd1e1e4ad705998873c28f55cf2dbad3271b31bf4.png" />
 </div>
 </div>
 </section>
@@ -1042,7 +1042,7 @@ Nrev: 14.35
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/da6c1669068f4861f9dd07df33e313157ecec02ec50a5c68f37dab39a9a39440.png" src="../_images/da6c1669068f4861f9dd07df33e313157ecec02ec50a5c68f37dab39a9a39440.png" />
+<img alt="../_images/b925efb02c4658c588ae3166310ec4623ae4b84e7f676df5923cfa3c3605a0a4.png" src="../_images/b925efb02c4658c588ae3166310ec4623ae4b84e7f676df5923cfa3c3605a0a4.png" />
 </div>
 </div>
 <section id="mass-evolution-along-continuation">
@@ -1057,10 +1057,10 @@ A smooth trend is a useful indicator that continuation is following a consistent
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x311248cd0&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x3412830e0&gt;]
 </pre></div>
 </div>
-<img alt="../_images/12018d30b65b106eb317185b291735674647cb3cb6eeadcafa95132c5365ca8c.png" src="../_images/12018d30b65b106eb317185b291735674647cb3cb6eeadcafa95132c5365ca8c.png" />
+<img alt="../_images/3ccb68dd5d2ba7a45a216db6bf647143db00560e809bb33d5912699e5e8c27d6.png" src="../_images/3ccb68dd5d2ba7a45a216db6bf647143db00560e809bb33d5912699e5e8c27d6.png" />
 </div>
 </div>
 </section>
@@ -1174,7 +1174,7 @@ A smooth trend is a useful indicator that continuation is following a consistent
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/dff3cd4576feb211b02e158d468e33a144a581e263e02bb998c3546e10ef6ce6.png" src="../_images/dff3cd4576feb211b02e158d468e33a144a581e263e02bb998c3546e10ef6ce6.png" />
+<img alt="../_images/4f4390a5dfec09be0004fe6e4c5b1a4604ca4fa9b2c3869b146bbca4e557fe0a.png" src="../_images/4f4390a5dfec09be0004fe6e4c5b1a4604ca4fa9b2c3869b146bbca4e557fe0a.png" />
 </div>
 </div>
 </section>
@@ -1284,7 +1284,7 @@ A smooth trend is a useful indicator that continuation is following a consistent
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f32e63d91e8b4ff44f1f580b4597a365331d6a375e8b7d1a2a072ef42264de05.png" src="../_images/f32e63d91e8b4ff44f1f580b4597a365331d6a375e8b7d1a2a072ef42264de05.png" />
+<img alt="../_images/f54589f9fd1da99a5ed9c9a604fee3addd03fbd43384a8528476f5b749df19ff.png" src="../_images/f54589f9fd1da99a5ed9c9a604fee3addd03fbd43384a8528476f5b749df19ff.png" />
 </div>
 </div>
 </section>
@@ -1366,7 +1366,8 @@ A smooth trend is a useful indicator that continuation is following a consistent
 <p>This final panel reproduces the paper-style narrative view: contour map plus representative trajectories.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display contour map first, then data_0, data_O, data_A, data_B, data_C, data_D, data_E trajectories</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display contour map first, then data_0, data_O, data_A, data_B, data_C, data_D</span>
+<span class="c1"># trajectories</span>
 
 <span class="c1"># User-editable panel configuration</span>
 <span class="n">orbit_panels</span> <span class="o">=</span> <span class="p">[</span>
@@ -1418,8 +1419,8 @@ A smooth trend is a useful indicator that continuation is following a consistent
 <span class="n">axc</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">fill_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"cividis"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 <span class="n">cs_other_map</span> <span class="o">=</span> <span class="n">axc</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1450</span><span class="p">,</span> <span class="mi">1550</span><span class="p">,</span> <span class="mi">1600</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">"--"</span><span class="p">)</span>
 <span class="n">cs_1500_map</span> <span class="o">=</span> <span class="n">axc</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mim</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="mi">1500</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">"-"</span><span class="p">)</span>
-<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_other_map</span><span class="p">,</span> <span class="n">cs_other_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_1500_map</span><span class="p">,</span> <span class="n">cs_1500_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_other_map</span><span class="p">,</span> <span class="n">cs_other_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs_1500_map</span><span class="p">,</span> <span class="n">cs_1500_map</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">%.0f</span><span class="s2">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
 <span class="c1"># Explicit letter placements on the contour subplot (same style as original index-based placement)</span>
 <span class="c1"># Indices are (i_lf, j_tf) where:</span>
@@ -1455,7 +1456,7 @@ A smooth trend is a useful indicator that continuation is following a consistent
     <span class="n">axc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span class="n">yv</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">point_c</span><span class="p">,</span> <span class="n">markeredgecolor</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">contour_label_text_offsets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
-    <span class="n">axc</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xv</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">yv</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">lbl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">)</span>
+    <span class="n">axc</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xv</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">yv</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">lbl</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">)</span>
 
 <span class="c1"># User-editable S annotation for the top-left contour corner</span>
 <span class="n">s_arrow_target_xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
@@ -1466,14 +1467,15 @@ A smooth trend is a useful indicator that continuation is following a consistent
     <span class="n">xycoords</span><span class="o">=</span><span class="s2">"data"</span><span class="p">,</span>
     <span class="n">xytext</span><span class="o">=</span><span class="n">s_text_xy_axes_fraction</span><span class="p">,</span>
     <span class="n">textcoords</span><span class="o">=</span><span class="s2">"axes fraction"</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span>
     <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">,</span>
     <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span>
     <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">"-&gt;"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.1</span><span class="p">),</span>
 <span class="p">)</span>
 
-<span class="n">axc</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Nrev"</span><span class="p">)</span>
-<span class="n">axc</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Tof [hours]"</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Nrev"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Tof [hours]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">axc</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">axc</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">)</span>
 
 <span class="c1"># Orbit panels (same order as orbit_panels)</span>
@@ -1502,11 +1504,12 @@ A smooth trend is a useful indicator that continuation is following a consistent
     <span class="n">ax</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"maximum_initial_mass.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/125b5784ffde4902e6be1da41c2ee49ac62f1da9f0b029a1c0ee261348f52885.png" src="../_images/125b5784ffde4902e6be1da41c2ee49ac62f1da9f0b029a1c0ee261348f52885.png" />
+<img alt="../_images/fa735536f75ffd11ed8deee133c9666ca4d2f17184dfd55ab09c6c2b7669497d.png" src="../_images/fa735536f75ffd11ed8deee133c9666ca4d2f17184dfd55ab09c6c2b7669497d.png" />
 </div>
 </div>
 </section>

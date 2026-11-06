@@ -544,7 +544,7 @@ that matches nothing returns three empty lists. Both the <code class="docutils l
 <code class="docutils literal notranslate"><span class="pre">euclidean</span></code> metrics were affected.</p></li>
 <li><p>Fixed pickling of TOPS gym classes. The lambdas passed as <code class="docutils literal notranslate"><span class="pre">state2cart</span></code>
 and equivalent callbacks to the internal UDP prevented serialization. They were
-replaced with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.14)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> wrapping small module-level helper
+replaced with <a class="reference external" href="https://docs.python.org/3/library/functools.html#functools.partial" title="(in Python v3.15)"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> wrapping small module-level helper
 functions (<code class="docutils literal notranslate"><span class="pre">_cart_scale</span></code>, <code class="docutils literal notranslate"><span class="pre">_mee_to_cart</span></code>, <code class="docutils literal notranslate"><span class="pre">_cfunc_call</span></code>), which are
 picklable by name.</p></li>
 <li><p>Fixed pickling of <a class="reference internal" href="leg.html#pykep.leg.zoh" title="pykep.leg.zoh"><code class="xref py py-class docutils literal notranslate"><span class="pre">zoh</span></code></a>. The C++ class is bound as
