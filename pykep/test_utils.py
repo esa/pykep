@@ -130,3 +130,34 @@ class knn_tests(_ut.TestCase):
 
             neighb, ids, dists = knn.find_neighbours(0, "ball", r=1e12)
             self.assertEqual(len(neighb), 3)
+
+
+class spice_tests(_ut.TestCase):
+    def test_rotation_matrix_epoch_convention(self):
+        """We test that rotation_matrix maps the epoch to ET as the rest of the SPICE interface does."""
+        import os
+        import tempfile
+        import spiceypy as pyspice
+
+        leap = os.path.join(_pk.__path__[0], "data", "naif0012.tls")
+        _pk.utils.load_spice_kernels(leap)
+        with tempfile.TemporaryDirectory() as tmp:
+            # A minimal text PCK so that IAU_EARTH, a frame rotating with the Earth, is defined
+            pck = os.path.join(tmp, "earth_minimal.tpc")
+            with open(pck, "w") as f:
+                f.write(
+                    "KPL/PCK\n\\begindata\n"
+                    "BODY399_POLE_RA = ( 0. -0.641 0. )\n"
+                    "BODY399_POLE_DEC = ( 90. -0.557 0. )\n"
+                    "BODY399_PM = ( 190.147 360.9856235 0. )\n"
+                    "\\begintext\n"
+                )
+            _pk.utils.load_spice_kernels(pck)
+
+            # pk.epoch(0) is 2000-01-01 00:00:00 UTC, so the reference is computed by SPICE at that UTC instant
+            R = _pk.utils.rotation_matrix("J2000", "IAU_EARTH", _pk.epoch(0))
+            R_ref = pyspice.pxform("J2000", "IAU_EARTH", pyspice.str2et("2000-01-01 00:00:00 UTC"))
+            _pk.utils.unload_spice_kernels(pck)
+
+        # A 64.184 s time offset rotates IAU_EARTH by about 0.27 deg, far above this tolerance
+        self.assertTrue(np.max(np.abs(R - R_ref)) < 1e-12)

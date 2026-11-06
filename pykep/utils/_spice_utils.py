@@ -117,6 +117,9 @@ def framename2naifid(name):
 def rotation_matrix(origin, destination, ep = _pk.epoch(0)):
     """Rotation matrix between frames at epoch.
 
+    The epoch is converted to SPICE ET with the same convention used by :class:`~pykep.udpla.spice`
+    and :func:`~pykep.utils.epoch2utc`, i.e. et = mjd2000*86400 + str2et("2000-01-01 00:00:00 UTC").
+
     Args:
         origin (:class:`string`): The name of the origin reference frame.
 
@@ -127,7 +130,8 @@ def rotation_matrix(origin, destination, ep = _pk.epoch(0)):
     Returns:
         :class:`npumpy.ndarray`: The rotation matrix.
     """
-    return pyspice.pxform(origin, destination, (ep-0.5).mjd2000*_pk.DAY2SEC)
+    et = -43135.816087188054 + ep.mjd2000 * _pk.DAY2SEC # magic number is str2et("2000-01-01 00:00:00 UTC")
+    return pyspice.pxform(origin, destination, et)
 
 
 # These are taken from:
