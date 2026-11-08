@@ -1,0 +1,1044 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Indirect methods in pykep &#8212; pykep 3.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=969bf561"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/indirect_methods';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Plotting" href="plotting.html" />
+    <link rel="prev" title="Zero-Order-Hold Multiple Shooting leg" href="leg_zoh_ms.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pykep_logo.png" class="logo__image only-light" alt="pykep 3.1.0 documentation - Home"/>
+    <img src="../_static/pykep_logo.png" class="logo__image only-dark pst-js-only" alt="pykep 3.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bibliography.html">Bibliography</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../tut_basic.html">Basic</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="anomalies.html">The various anomalies in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equinoctial_elements.html">Modified equinoctial elements in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="epochs.html">Epochs and Julian Dates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="planet.html">Planets and User Defined Planets (UDPLAs)</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="interface_to_spice.html">Interfacing to SPICE and JPL DE ephs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="propagate_lagrangian.html">Lagrange Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ta_zoh_ss.html">The Zero Hold simple sail dynamics</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="ta_cr3bp_bcp.html">The CR3BP and BCP dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="approximations.html">Low-thrust approximations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_sims_flanagan.html">Sims-Flanagan leg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh.html">Zero-Order-Hold leg</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="leg_zoh_ms.html">Zero-Order-Hold Multiple Shooting leg</a></li>
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Indirect methods in pykep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tut_trajopt.html">Trajectory Optimization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_point2point.html">Sims-Flanagan: point to point low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl.html">Sims-Flanagan: planet to plane low-thrust transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_sf_pl2pl_alpha.html">Sims-Flanagan: planet to plane low-thrust transfer (with Alpha encoding)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_point2point.html">Zero-Order Hold I</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_zoh_pl2pl.html">Zero-Order Hold II</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="udp_mga.html">Multiple Gravity Assist (MGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_mga_1dsm.html">Multiple Gravity Assist with one DSM (MGA-1DSM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="udp_pl2pl_N_impulses.html">Multiple impulses: planet to planet transfer</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_mass.html">Indirect methods I (minimum propellant, fixed time)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_cartesian_time.html">Indirect methods II (minimum time, Cartesian)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_mass.html">Indirect methods III (minimum propellant, fixed time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pontryagin_equinoctial_time.html">Indirect methods IV (minimum time, MEE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="primer_vector.html">Primer Vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surrogate_primer_vector.html">Surrogate Primer Vector</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="maximum_initial_mass.html">Maximum Initial Mass</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">Basic API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../anomalies.html">Anomalies Conversions</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">Global constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elements.html">Orbital Elements</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../epoch.html">Epoch class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../planet.html">Planet class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../udpla.html">User defined planets (UDPLAs)</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../lambert.html">Lambert class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flyby.html">Fly-by routines</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../approximations.html">Various approximations for orbital transfers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../propagation.html">Numerical Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../leg.html">Interplanetary transfer legs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../trajopt.html">Trajectory Optimization</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../gym.html">Trajectory Optimization Gym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plot.html">The plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils.html">Utils</a></li>
+
+
+
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/esa/pykep/main?urlpath=lab/tree/doc/notebooks/indirect_methods.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/esa/pykep/issues/new?title=Issue%20on%20page%20%2Fnotebooks/indirect_methods.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/indirect_methods.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Indirect methods in pykep</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-construction-of-the-tpbvp">1 - Manual construction of the TPBVP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shooting-function-and-its-gradient">2 - Shooting function and its gradient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-problem-in-single-shooting">3 - Solving the problem in single shooting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-plot">4 - Make a plot</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="indirect-methods-in-pykep">
+<h1>Indirect methods in pykep<a class="headerlink" href="#indirect-methods-in-pykep" title="Link to this heading">#</a></h1>
+<p>Indirect methods turn an optimal-control problem into a boundary-value problem: guess the missing initial costates and final time, integrate once, and drive the terminal errors to zero. This is a root-finding problem, not an optimization problem in disguise.</p>
+<p>For smooth, square shooting systems, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html#scipy.optimize.root" title="(in SciPy v1.18.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.root()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">method=&quot;hybr&quot;</span></code>, MINPACK’s modified Powell hybrid method, is an excellent first choice. It is not a universal winner: scaling, initial guesses, singular arcs and the problem itself still matter. Shooting can be sensitive enough to make a good initial guess feel like a superpower.</p>
+<p>The <a class="reference internal" href="pontryagin_equinoctial_time.html"><span class="std std-doc">Pontryagin notebook</span></a> packages the shooting equations as a <a class="reference external" href="https://esa.github.io/pygmo2/">pygmo</a> UDP and wraps MINPACK in a pygmo UDA because one of its goals is a single-thread algorithmic comparison, including IPOPT. For ordinary single-problem solves, call SciPy directly on the shooting function: this avoids pygmo wrapper overhead and is generally faster, although timings depend on the problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">heyoka</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pykep</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">root</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">LineCollection</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="manual-construction-of-the-tpbvp">
+<h2>1 - Manual construction of the TPBVP<a class="headerlink" href="#manual-construction-of-the-tpbvp" title="Link to this heading">#</a></h2>
+<p>We minimize transfer time between two fixed orbital states under central gravity and bounded low thrust. The final time and final mass are free. We consider <strong>normal extremals only</strong>, normalize the objective multiplier to one, and use the minimum-Hamiltonian convention. Abnormal extremals are not represented here.</p>
+<p>Let <span class="math notranslate nohighlight">\(\mathbf x=(p,f,g,h,k,L)\)</span> be the prograde modified equinoctial elements (<a class="reference internal" href="../elements.html"><span class="std std-doc">definitions</span></a>), <span class="math notranslate nohighlight">\(m\)</span> the mass, <span class="math notranslate nohighlight">\(u\in[0,1]\)</span> the throttle, and <span class="math notranslate nohighlight">\(\mathbf i\)</span> the unit thrust direction in the radial-transverse-normal frame. With <span class="math notranslate nohighlight">\(c_1=T_{\max}\)</span> and <span class="math notranslate nohighlight">\(c_2=I_{sp}g_0\)</span>, the equations are</p>
+<div class="math notranslate nohighlight">
+\[
+\dot{\mathbf x}=\frac{c_1u}{m}\mathbf B(\mathbf x)\mathbf i+\mathbf D(\mathbf x),\qquad
+\dot m=-\frac{c_1}{c_2}u.
+\]</div>
+<p>Writing <span class="math notranslate nohighlight">\(w=1+f\cos L+g\sin L\)</span> and <span class="math notranslate nohighlight">\(s^2=1+h^2+k^2\)</span>, the coefficients are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf B=\sqrt{\frac{p}{\mu}}
+\begin{bmatrix}
+0 &amp; 2p/w &amp; 0 \\
+\sin L &amp; ((1+w)\cos L+f)/w &amp; -g(h\sin L-k\cos L)/w \\
+-\cos L &amp; ((1+w)\sin L+g)/w &amp; f(h\sin L-k\cos L)/w \\
+0 &amp; 0 &amp; s^2\cos L/(2w) \\
+0 &amp; 0 &amp; s^2\sin L/(2w) \\
+0 &amp; 0 &amp; (h\sin L-k\cos L)/w
+\end{bmatrix},\qquad
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathbf D=\begin{bmatrix}0&amp;0&amp;0&amp;0&amp;0&amp;\sqrt{\mu/p^3}\,w^2\end{bmatrix}^{T}.
+\]</div>
+<p>We construct the equations symbolically with <a class="reference external" href="https://bluescarni.github.io/heyoka.py/">heyoka.py</a>, which <code class="docutils literal notranslate"><span class="pre">pykep</span></code> uses for its Taylor integrators.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># State variables</span>
+<span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">"p"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"g"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">,</span> <span class="s2">"k"</span><span class="p">,</span> <span class="s2">"L"</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">)</span>
+<span class="c1"># Costate variables</span>
+<span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span>
+    <span class="s2">"lp"</span><span class="p">,</span> <span class="s2">"lf"</span><span class="p">,</span> <span class="s2">"lg"</span><span class="p">,</span> <span class="s2">"lh"</span><span class="p">,</span> <span class="s2">"lk"</span><span class="p">,</span> <span class="s2">"lL"</span><span class="p">,</span> <span class="s2">"lm"</span>
+<span class="p">)</span>
+<span class="c1"># Control variables: throttle and RTN thrust direction</span>
+<span class="n">u</span><span class="p">,</span> <span class="n">i_r</span><span class="p">,</span> <span class="n">i_t</span><span class="p">,</span> <span class="n">i_n</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">make_vars</span><span class="p">(</span><span class="s2">"u"</span><span class="p">,</span> <span class="s2">"ir"</span><span class="p">,</span> <span class="s2">"it"</span><span class="p">,</span> <span class="s2">"in"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To keep the derivation readable, we define compact expressions and vectorized groupings.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reusable scalar expressions</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">f</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">k</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p</span> <span class="o">/</span> <span class="n">w</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="p">[</span>
+            <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">),</span>
+            <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span> <span class="o">/</span> <span class="n">w</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">g</span> <span class="o">/</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)),</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="o">-</span><span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">),</span>
+            <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="p">)</span> <span class="o">/</span> <span class="n">w</span><span class="p">,</span>
+            <span class="n">f</span> <span class="o">/</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)),</span>
+        <span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s2</span> <span class="o">/</span> <span class="n">w</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">)],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s2</span> <span class="o">/</span> <span class="n">w</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">L</span><span class="p">))],</span>
+    <span class="p">]</span>
+<span class="p">)</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p</span> <span class="o">/</span> <span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">w</span><span class="p">])</span>
+
+<span class="n">i_vers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i_r</span><span class="p">,</span> <span class="n">i_t</span><span class="p">,</span> <span class="n">i_n</span><span class="p">])</span>
+<span class="n">lx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The dynamics can then be written as:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dynamics</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">i_vers</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">m</span> <span class="o">+</span> <span class="n">D</span>
+<span class="n">fm</span> <span class="o">=</span> <span class="o">-</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">hy</span><span class="o">.</span><span class="n">par</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">u</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With costates <span class="math notranslate nohighlight">\(\boldsymbol\lambda_x\)</span> and <span class="math notranslate nohighlight">\(\lambda_m\)</span>, the normal Hamiltonian is</p>
+<div class="math notranslate nohighlight">
+\[
+H=1+\boldsymbol\lambda_x\cdot\dot{\mathbf x}+\lambda_m\dot m.
+\]</div>
+<p>Its additive <span class="math notranslate nohighlight">\(1\)</span> fixes the normal multiplier. Do not remove it when imposing the free-time condition: <span class="math notranslate nohighlight">\(H(t_f)=0\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">H_full</span> <span class="o">=</span> <span class="n">lx</span> <span class="o">@</span> <span class="n">fx</span> <span class="o">+</span> <span class="n">lm</span> <span class="o">*</span> <span class="n">fm</span> <span class="o">+</span> <span class="mf">1.0</span>
+<span class="n">BTlam</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">lx</span>
+<span class="n">BTlam_norm</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">BTlam</span> <span class="o">@</span> <span class="n">BTlam</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <a class="reference external" href="https://bluescarni.github.io/heyoka.py/">heyoka.py</a> parameters are <span class="math notranslate nohighlight">\([\mu,c_1,c_2]\)</span>. We will nondimensionalize all quantities before integrating.</p>
+<p>For the full state <span class="math notranslate nohighlight">\(\mathbf q=(\mathbf x,m)\)</span> and costate <span class="math notranslate nohighlight">\(\boldsymbol\lambda=(\boldsymbol\lambda_x,\lambda_m)\)</span>, Hamilton’s equations are</p>
+<div class="math notranslate nohighlight">
+\[
+\dot{\mathbf q}=\frac{\partial H}{\partial\boldsymbol\lambda},\qquad
+\dot{\boldsymbol\lambda}=-\frac{\partial H}{\partial\mathbf q}.
+\]</div>
+<p>Differentiate before substituting the minimizing control.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Augmented equations of motion</span>
+<span class="n">rhs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">hy</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">H_full</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">):</span>
+    <span class="n">rhs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">rhs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Minimizing over the thrust direction gives <span class="math notranslate nohighlight">\(\mathbf i^*=-\mathbf B^T\boldsymbol\lambda_x/\|\mathbf B^T\boldsymbol\lambda_x\|\)</span> when the denominator is nonzero. The throttle coefficient is <span class="math notranslate nohighlight">\(-c_1(\|\mathbf B^T\boldsymbol\lambda_x\|/m+\lambda_m/c_2)\)</span>. Since <span class="math notranslate nohighlight">\(\lambda_m(t_f)=0\)</span> and <span class="math notranslate nohighlight">\(\dot\lambda_m=-c_1u\|\mathbf B^T\boldsymbol\lambda_x\|/m^2\leq 0\)</span>, it is nonpositive along an extremal: full throttle is a minimizer. Singular cases require separate treatment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">argmin_H_full</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">i_r</span><span class="p">:</span> <span class="o">-</span><span class="n">BTlam</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">BTlam_norm</span><span class="p">,</span>
+    <span class="n">i_t</span><span class="p">:</span> <span class="o">-</span><span class="n">BTlam</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">BTlam_norm</span><span class="p">,</span>
+    <span class="n">i_n</span><span class="p">:</span> <span class="o">-</span><span class="n">BTlam</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">BTlam_norm</span><span class="p">,</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">hy</span><span class="o">.</span><span class="n">expression</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Substitution closes the augmented dynamics in <span class="math notranslate nohighlight">\((\mathbf q,\boldsymbol\lambda)\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rhs</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">argmin_H_full</span><span class="p">)</span>
+
+<span class="c1"># We also build the Hamiltonian as a function of the state / co-state only</span>
+<span class="c1"># (i.e. no longer of controls now solved thanks to the minimum principle)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">H_full</span><span class="p">,</span> <span class="n">argmin_H_full</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We compile the minimized Hamiltonian, its gradient, and the closed dynamics. The <a class="reference external" href="https://bluescarni.github.io/heyoka.py/autosummary_generated/heyoka.taylor_adaptive.html#heyoka.taylor_adaptive" title="(in heyoka.py)"><code class="xref py py-func docutils literal notranslate"><span class="pre">taylor_adaptive()</span></code></a> integrator propagates the <a class="reference external" href="https://bluescarni.github.io/heyoka.py/autosummary_generated/heyoka.var_ode_sys.html#heyoka.var_ode_sys" title="(in heyoka.py)"><code class="xref py py-class docutils literal notranslate"><span class="pre">var_ode_sys</span></code></a> derivatives with respect to the seven initial costates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_state</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span><span class="p">]</span>
+<span class="n">H_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">H</span><span class="p">],</span> <span class="n">full_state</span><span class="p">)</span>
+<span class="n">H_grad</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">([</span><span class="n">hy</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">full_state</span><span class="p">],</span> <span class="n">full_state</span><span class="p">)</span>
+<span class="n">dyn_func</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">cfunc</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="n">full_state</span><span class="p">)</span>
+<span class="n">sys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">full_state</span><span class="p">,</span> <span class="n">rhs</span><span class="p">))</span>
+<span class="n">ta</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">14</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_sys</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">var_ode_sys</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">lp</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">lg</span><span class="p">,</span> <span class="n">lh</span><span class="p">,</span> <span class="n">lk</span><span class="p">,</span> <span class="n">lL</span><span class="p">,</span> <span class="n">lm</span><span class="p">])</span>
+<span class="n">ta_var</span> <span class="o">=</span> <span class="n">hy</span><span class="o">.</span><span class="n">taylor_adaptive</span><span class="p">(</span><span class="n">var_sys</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">compact_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ic_var</span> <span class="o">=</span> <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">14</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="shooting-function-and-its-gradient">
+<h2>2 - Shooting function and its gradient<a class="headerlink" href="#shooting-function-and-its-gradient" title="Link to this heading">#</a></h2>
+<p>We use Earth’s state at MJD2000 400 and a <strong>fixed</strong> target state sampled from Mars 255.702802384 days later. The target does not move when the solver changes the flight time: this is a fixed-endpoint example, not a general moving-planet rendezvous. Its longitude is unwrapped onto the chosen zero-revolution branch.</p>
+<p>Lengths are scaled by one AU, mass by the initial mass, and time by <span class="math notranslate nohighlight">\(\sqrt{\mathrm{AU}^3/\mu_{\odot}}\)</span> (about 58 days, not one year). The costates and time below are in these nondimensional units.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"earth"</span><span class="p">))</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">planet</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">udpla</span><span class="o">.</span><span class="n">jpl_lp</span><span class="p">(</span><span class="s2">"mars"</span><span class="p">))</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">epoch</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+<span class="n">target_epoch</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="mf">255.70280238443087</span>
+
+<span class="n">length_unit</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">AU</span>
+<span class="n">mass_unit</span> <span class="o">=</span> <span class="mf">1500.0</span>
+<span class="n">time_unit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">length_unit</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">)</span>
+<span class="n">velocity_unit</span> <span class="o">=</span> <span class="n">length_unit</span> <span class="o">/</span> <span class="n">time_unit</span>
+<span class="n">acceleration_unit</span> <span class="o">=</span> <span class="n">velocity_unit</span> <span class="o">/</span> <span class="n">time_unit</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">/</span> <span class="p">(</span><span class="n">mass_unit</span> <span class="o">*</span> <span class="n">acceleration_unit</span><span class="p">)</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="mf">3000.0</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">G0</span> <span class="o">/</span> <span class="n">velocity_unit</span>
+<span class="n">m0</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">eq0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0</span><span class="p">),</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">eqf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pk</span><span class="o">.</span><span class="n">ic2mee</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">target_epoch</span><span class="p">),</span> <span class="n">pk</span><span class="o">.</span><span class="n">MU_SUN</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">eq0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="n">length_unit</span>
+<span class="n">eqf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="n">length_unit</span>
+<span class="k">if</span> <span class="n">eqf</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">eq0</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="n">eqf</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+<span class="n">pars</span> <span class="o">=</span> <span class="p">[</span><span class="n">mu</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">pars</span>
+<span class="n">ta_var</span><span class="o">.</span><span class="n">pars</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">pars</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_function</span><span class="p">(</span><span class="n">guess</span><span class="p">):</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">eq0</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">m0</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">guess</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span>
+    <span class="n">ta</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">guess</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">-</span> <span class="n">eqf</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">H_func</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="n">pars</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The eight unknowns are <span class="math notranslate nohighlight">\(\mathbf z=(\boldsymbol\lambda_x(0),\lambda_m(0),t_f)\)</span>. Their eight residuals are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf F(\mathbf z)=\begin{bmatrix}
+\mathbf x(t_f)-\mathbf x_f \\
+\lambda_m(t_f) \\
+H(t_f)
+\end{bmatrix}=\mathbf 0.
+\end{split}\]</div>
+<p>The first six fix the terminal orbit state, the seventh comes from free final mass, and the last from free final time with a fixed terminal state. These mutable integrators are reused, so these functions are not thread-safe.</p>
+<p>For <span class="math notranslate nohighlight">\(\mathbf y=(\mathbf x,m,\boldsymbol\lambda_x,\lambda_m)\)</span>, let <span class="math notranslate nohighlight">\(S=\partial\mathbf y(t_f)/\partial\boldsymbol\lambda(0)\)</span>. The variational equations supply <span class="math notranslate nohighlight">\(S\)</span>; the final-time derivative is <span class="math notranslate nohighlight">\(\dot{\mathbf y}(t_f)\)</span>. Thus the last Jacobian row is <span class="math notranslate nohighlight">\(\nabla H\,[S\;\dot{\mathbf y}]\)</span>. For this autonomous problem its last entry is zero analytically, but computing it also makes the chain rule visible.</p>
+<p>The final time is measured from departure, not an absolute epoch. A moving target would add its own time derivative to the terminal-state residuals and modify the free-time transversality condition.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shooting_jacobian</span><span class="p">(</span><span class="n">guess</span><span class="p">):</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">eq0</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">m0</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">guess</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">14</span><span class="p">:]</span> <span class="o">=</span> <span class="n">ic_var</span>
+    <span class="n">ta_var</span><span class="o">.</span><span class="n">propagate_until</span><span class="p">(</span><span class="n">guess</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+    <span class="n">final_state</span> <span class="o">=</span> <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">14</span><span class="p">]</span>
+    <span class="n">sensitivities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
+        <span class="n">ta_var</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">ta_var</span><span class="o">.</span><span class="n">get_vslice</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">index</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">dyn_func</span><span class="p">(</span><span class="n">final_state</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="n">pars</span><span class="p">)</span>
+    <span class="n">terminal_derivatives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">sensitivities</span><span class="p">,</span> <span class="n">flow</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
+        <span class="n">terminal_derivatives</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">terminal_derivatives</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">H_grad</span><span class="p">(</span><span class="n">final_state</span><span class="p">,</span> <span class="n">pars</span><span class="o">=</span><span class="n">pars</span><span class="p">)</span> <span class="o">@</span> <span class="n">terminal_derivatives</span><span class="p">,</span>
+    <span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A central finite-difference check catches ordering mistakes before the solver has a chance to become mysterious.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">250</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">DAY2SEC</span> <span class="o">/</span> <span class="n">time_unit</span><span class="p">]</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">finite_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span>
+    <span class="p">(</span><span class="n">shooting_function</span><span class="p">(</span><span class="n">guess</span> <span class="o">+</span> <span class="n">step</span> <span class="o">*</span> <span class="n">direction</span><span class="p">)</span> <span class="o">-</span> <span class="n">shooting_function</span><span class="p">(</span><span class="n">guess</span> <span class="o">-</span> <span class="n">step</span> <span class="o">*</span> <span class="n">direction</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">step</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">basis</span>
+<span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">shooting_jacobian</span><span class="p">(</span><span class="n">guess</span><span class="p">),</span> <span class="n">finite_difference</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">2e-7</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum Jacobian difference:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">shooting_jacobian</span><span class="p">(</span><span class="n">guess</span><span class="p">)</span> <span class="o">-</span> <span class="n">finite_difference</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Maximum Jacobian difference: 4.08109046557e-09
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="solving-the-problem-in-single-shooting">
+<h2>3 - Solving the problem in single shooting<a class="headerlink" href="#solving-the-problem-in-single-shooting" title="Link to this heading">#</a></h2>
+<p>The fixed random seed gives a reproducible starting point; it is not a promise that an arbitrary guess will converge. <code class="docutils literal notranslate"><span class="pre">factor</span></code> controls MINPACK’s initial step bound. Always inspect the residual and physical solution, not just the solver’s status message. A root is a candidate extremal, not by itself a proof of global optimality.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span>
+    <span class="n">shooting_function</span><span class="p">,</span>
+    <span class="n">guess</span><span class="p">,</span>
+    <span class="n">jac</span><span class="o">=</span><span class="n">shooting_jacobian</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">"hybr"</span><span class="p">,</span>
+    <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">"factor"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">shooting_function</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+<span class="n">residual_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="ow">or</span> <span class="n">residual_norm</span> <span class="o">&gt;</span> <span class="mf">1e-8</span> <span class="ow">or</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shooting did not converge to a physical solution: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">; residual=</span><span class="si">{</span><span class="n">residual_norm</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Flight time: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">time_unit</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> days"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Final mass: </span><span class="si">{</span><span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mass_unit</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> kg"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Residual norm: </span><span class="si">{</span><span class="n">residual_norm</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Flight time: 255.703 days
+Final mass: 1049.434 kg
+Residual norm: 2.649e-12
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="make-a-plot">
+<h2>4 - Make a plot<a class="headerlink" href="#make-a-plot" title="Link to this heading">#</a></h2>
+<p>We propagate the converged extremal again and make a plot of the trajectory. The <code class="docutils literal notranslate"><span class="pre">pykep</span></code> functions <a class="reference internal" href="../plot.html#pykep.plot.make_3Daxis" title="pykep.plot.make_3Daxis"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_3Daxis()</span></code></a>, <a class="reference internal" href="../plot.html#pykep.plot.add_sun" title="pykep.plot.add_sun"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_sun()</span></code></a>, <a class="reference internal" href="../plot.html#pykep.plot.add_planet_orbit" title="pykep.plot.add_planet_orbit"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_planet_orbit()</span></code></a> and <a class="reference internal" href="../plot.html#pykep.plot.add_planet" title="pykep.plot.add_planet"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_planet()</span></code></a> set the scene.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">eq0</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">m0</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">propagate_grid</span><span class="p">(</span><span class="n">times</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pk</span><span class="o">.</span><span class="n">mee2ic</span><span class="p">(</span><span class="n">state</span><span class="p">[:</span><span class="mi">6</span><span class="p">],</span> <span class="n">mu</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">])</span>
+<span class="n">days</span> <span class="o">=</span> <span class="n">times</span> <span class="o">*</span> <span class="n">time_unit</span> <span class="o">*</span> <span class="n">pk</span><span class="o">.</span><span class="n">SEC2DAY</span>
+<span class="n">earth_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">source</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">day</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">])</span> <span class="o">/</span> <span class="n">length_unit</span>
+<span class="n">mars_path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">target</span><span class="o">.</span><span class="n">eph</span><span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">day</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">])</span> <span class="o">/</span> <span class="n">length_unit</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d.art3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line3DCollection</span>
+
+<span class="c1"># Plot the Sun, and planets</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">make_3Daxis</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">"constrained"</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">"#101820"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">"#101820"</span><span class="p">)</span>
+<span class="n">plot_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">t0</span><span class="o">.</span><span class="n">mjd2000</span><span class="p">,</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">days</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">mjd2000</span><span class="p">]</span>
+
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_sun</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"#f6ca6b"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Sun"</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">plot_range</span><span class="o">=</span><span class="n">plot_range</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">length_unit</span><span class="p">,</span>
+                         <span class="n">color</span><span class="o">=</span><span class="s2">"#82b8d5"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Earth path"</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet_orbit</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">plot_range</span><span class="o">=</span><span class="n">plot_range</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">length_unit</span><span class="p">,</span>
+                         <span class="n">color</span><span class="o">=</span><span class="s2">"#dc8e7c"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Mars path"</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">length_unit</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"#82b8d5"</span><span class="p">,</span>
+                   <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Earth at departure"</span><span class="p">)</span>
+<span class="n">pk</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">add_planet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">target_epoch</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">length_unit</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"#dc8e7c"</span><span class="p">,</span>
+                   <span class="n">marker</span><span class="o">=</span><span class="s2">"D"</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Fixed target"</span><span class="p">)</span>
+
+<span class="c1"># Plot the trajectory of the spacecraft</span>
+<span class="n">segments_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">trajectory</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">trajectory</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">track_3d</span> <span class="o">=</span> <span class="n">Line3DCollection</span><span class="p">(</span><span class="n">segments_3d</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"plasma"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="n">track_3d</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">days</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">track_3d</span><span class="p">)</span>
+
+<span class="c1"># Set the plot limits and view angle</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_box_aspect</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">azim</span><span class="o">=-</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Time optimal, Earth to a fixed Mars orbital state"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">"#101820"</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"#52616a"</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"lower left"</span><span class="p">)</span>
+<span class="n">colorbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">track_3d</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Elapsed time [days]"</span><span class="p">)</span>
+<span class="n">colorbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s2">"white"</span><span class="p">)</span>
+<span class="n">colorbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="s2">"white"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/70c56ca2b7896cab8e5169ab643f0a0454e6d21dd6f037436f25c169c5b7ea52.png" src="../_images/70c56ca2b7896cab8e5169ab643f0a0454e6d21dd6f037436f25c169c5b7ea52.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="leg_zoh_ms.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Zero-Order-Hold Multiple Shooting leg</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plotting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Plotting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-construction-of-the-tpbvp">1 - Manual construction of the TPBVP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shooting-function-and-its-gradient">2 - Shooting function and its gradient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-problem-in-single-shooting">3 - Solving the problem in single shooting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-plot">4 - Make a plot</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dario Izzo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright Copyright (c) 2023-2026 Advanced Concepts Team, European Space Agency (ESA).
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
