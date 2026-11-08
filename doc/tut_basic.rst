@@ -40,4 +40,5 @@ astrodynamical notation and computations.
   notebooks/leg_sims_flanagan
   notebooks/leg_zoh
   notebooks/leg_zoh_ms
+  notebooks/indirect_methods
   notebooks/plotting
