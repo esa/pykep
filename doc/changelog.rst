@@ -5,7 +5,7 @@ Changelog
 
 .. _changelog_3_1_0:
 
-3.1.0 (unreleased)
+3.1.0 (09-11-2026)
 ==================
 
 Features
@@ -30,10 +30,10 @@ Build system
 Bug fixes
 ---------
 
-- Fixed :class:`~pykep.utils.knn` nearest-neighbour queries. Results
-  are now normalised to arrays and the unreachable entries dropped, so a query
-  that matches nothing returns three empty lists. Both the ``orbital`` and the
-  ``euclidean`` metrics were affected.
+- Fixed :class:`~pykep.utils.knn` nearest-neighbour queries. The KD-tree results
+  are now normalised to arrays before unreachable entries are dropped, so a
+  query that matches nothing returns three empty lists. Both the ``orbital``
+  and ``euclidean`` metrics were affected.
 
 - Fixed pickling of TOPS gym classes. The lambdas passed as ``state2cart``
   and equivalent callbacks to the internal UDP prevented serialization. They were
