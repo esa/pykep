@@ -27,11 +27,11 @@ class tops_twobody:
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
-    Space, are low-thrust trajectory optimization
-    problems described in json format. In this specific
-    instance the spacecraft dynamics are modeled in Cartesian coordinates under
-    two-body motion and. The transcription to a Non Linear Programming priblem (NLP) uses
-    a forward-backward shooting scheme, which introduces highly nonlinear
+    space, are low-thrust trajectory optimization
+    problems transcribed into nonlinear programs by a direct method. In this
+    instance the spacecraft is controlled by a solar sail. By default the
+    transcription uses forward-backward single shooting; ``ms=True`` selects
+    multiple shooting with bounded interior states.
     mismatch constraints, together with throttle constraints on the segment controls.
 
     The control is represented with a zero-order hold over each segment, so the
@@ -868,12 +868,12 @@ class tops_ss:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. Unlike the non solar-sail
     TOPS instances, this formulation does not include throttle constraints. The
-    formulation is built on :class:`~pykep.trajopt.zoh_ss_point2point`, so the
-    departure and arrival states are fixed and moving-end effects are not
-    accounted for.
+    formulation is built on :class:`~pykep.trajopt.zoh_ss_point2point` by
+    default, or :class:`~pykep.trajopt.zoh_ms_ss_point2point` when ``ms=True``.
+    The departure and arrival states remain fixed.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
+    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", ms=False):
         """Construct a solar-sailing TOPS instance from a predefined gym case.
 
         Args:
@@ -893,6 +893,9 @@ class tops_ss:
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
 
                 Defaults to ``'uniform'``.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
@@ -931,7 +934,10 @@ class tops_ss:
         ta_ss.pars[2] = c_sail
         ta_ss_var.pars[2] = c_sail
 
-        self.udp = _pk.trajopt.zoh_ss_point2point(
+        udp_type = (
+            _pk.trajopt.zoh_ms_ss_point2point if ms else _pk.trajopt.zoh_ss_point2point
+        )
+        self.udp = udp_type(
             states=states,
             statef=statef,
             tof_bounds=tof_bounds,
@@ -984,11 +990,11 @@ class tops_ss_mb:
         epoch to move by 1/4 of the period of the departure planet.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
-    Space, are low-thrust trajectory optimization
+    space, are low-thrust trajectory optimization
     problems transcribed into nonlinear programs by a direct method. In this
-    instance the spacecraft is controlled by a solar sail and the transcription
-    uses a forward-backward shooting scheme, which introduces highly nonlinear
-    mismatch constraints.
+    instance the spacecraft is controlled by a solar sail. By default the
+    transcription uses forward-backward single shooting; ``ms=True`` selects
+    multiple shooting with bounded interior states.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
@@ -996,9 +1002,9 @@ class tops_ss_mb:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. Unlike the non solar-sail
     TOPS instances, this formulation does not include throttle constraints. The
-    formulation is built on :class:`~pykep.trajopt.zoh_ss_pl2pl`, so the
-    departure and arrival states are moving boundaries and moving-end effects are
-    accounted for.
+    formulation is built on :class:`~pykep.trajopt.zoh_ss_pl2pl` by default, or
+    :class:`~pykep.trajopt.zoh_ms_ss_pl2pl` when ``ms=True``. Departure and
+    arrival states are moving boundaries, and moving-end effects are accounted for.
     """
 
     def __init__(
@@ -1008,6 +1014,7 @@ class tops_ss_mb:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a solar-sailing TOPS instance with moving boundaries from a predefined gym case.
 
@@ -1032,6 +1039,9 @@ class tops_ss_mb:
             *inequalities_for_tc* (:class:`bool`, optional): If True, boundary relative-velocity
                 direction constraints are formulated as inequalities, otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
@@ -1078,7 +1088,8 @@ class tops_ss_mb:
         ta.pars[2] = gym_problem["c_sail"]
         ta_var.pars[2] = gym_problem["c_sail"]
 
-        self.udp = _pk.trajopt.zoh_ss_pl2pl(
+        udp_type = _pk.trajopt.zoh_ms_ss_pl2pl if ms else _pk.trajopt.zoh_ss_pl2pl
+        self.udp = udp_type(
             pls=self.pls,
             plf=self.plf,
             nseg=nseg,

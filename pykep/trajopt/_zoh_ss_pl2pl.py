@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MPL-2.0
 import numpy as _np
 import pykep as _pk
-from matplotlib import pyplot as _plt
+from . import _zoh_udp_plot_utils as _zoh_plot
 
 
 class zoh_ss_pl2pl:
@@ -503,8 +503,6 @@ class zoh_ss_pl2pl:
         sail_size=0.05,
         **kwargs,
     ):
-        from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-
         x_arr = _np.asarray(x)
         self._set_leg_from_x(x_arr)
         fwd, bck, success = self.leg.get_state_info(N=N)
@@ -514,80 +512,6 @@ class zoh_ss_pl2pl:
 
         if ax is None:
             ax = _pk.plot.make_3Daxis()
-
-        def _set_axes_equal(ax):
-            limits = _np.array([
-                ax.get_xlim3d(),
-                ax.get_ylim3d(),
-                ax.get_zlim3d(),
-            ])
-            origin = _np.mean(limits, axis=1)
-            radius = 0.5 * _np.max(_np.abs(limits[:, 1] - limits[:, 0]))
-            ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
-            ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
-            ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
-
-        def _rtn_basis(state_cartesian):
-            r = _np.array(state_cartesian[:3], dtype=float)
-            v = _np.array(state_cartesian[3:6], dtype=float)
-            R_hat = r / _np.linalg.norm(r)
-            h = _np.cross(r, v)
-            N_hat = h / _np.linalg.norm(h)
-            T_hat = _np.cross(N_hat, R_hat)
-            return R_hat, T_hat, N_hat
-
-        def _sail_normal_cartesian(alpha, beta, R_hat, T_hat, N_hat):
-            n_rtn = _np.array([
-                _np.cos(alpha),
-                _np.sin(alpha) * _np.sin(beta),
-                _np.sin(alpha) * _np.cos(beta),
-            ])
-            M = _np.column_stack([R_hat, T_hat, N_hat])
-            return M @ n_rtn
-
-        def _sail_patch_vertices(center, normal, size):
-            ref = _np.array([0.0, 0.0, 1.0])
-            if abs(_np.dot(normal, ref)) > 0.9:
-                ref = _np.array([0.0, 1.0, 0.0])
-            u = _np.cross(normal, ref)
-            u /= _np.linalg.norm(u)
-            v = _np.cross(normal, u)
-            v /= _np.linalg.norm(v)
-            corners = _np.array([
-                center + size * (u + v),
-                center + size * (-u + v),
-                center + size * (-u - v),
-                center + size * (u - v),
-            ])
-            return corners
-
-        def _draw_sail(segment, alpha, beta):
-            mid_idx = len(segment) // 2
-            state_mid = segment[mid_idx]
-            center = _np.array(state_mid[:3], dtype=float)
-            R_hat, T_hat, N_hat = _rtn_basis(state_mid)
-            n_cart = _sail_normal_cartesian(alpha, beta, R_hat, T_hat, N_hat)
-            corners = _sail_patch_vertices(center, n_cart, sail_size)
-            poly = Poly3DCollection(
-                [corners],
-                alpha=0.45,
-                facecolor="silver",
-                edgecolor="dimgray",
-                linewidth=0.8,
-                zorder=5,
-            )
-            ax.add_collection3d(poly)
-            ax.quiver(
-                center[0],
-                center[1],
-                center[2],
-                n_cart[0] * sail_size * 2,
-                n_cart[1] * sail_size * 2,
-                n_cart[2] * sail_size * 2,
-                color="tab:blue",
-                linewidth=1.2,
-                arrow_length_ratio=0.3,
-            )
 
         def _sail_active(alpha):
             return _np.abs(_np.abs(alpha) - _np.pi / 2) > 1e-3
@@ -602,7 +526,9 @@ class zoh_ss_pl2pl:
             if plot_sail:
                 alpha, beta = sail_angles[i]
                 if _sail_active(alpha):
-                    _draw_sail(segment, alpha, beta)
+                    _zoh_plot.draw_solar_sail(
+                        ax, segment[len(segment) // 2], alpha, beta, sail_size
+                    )
 
         if mark_mismatch and last_point is not None:
             ax.scatter(last_point[0], last_point[1], last_point[2], marker="^", **kwargs)
@@ -617,11 +543,12 @@ class zoh_ss_pl2pl:
                 seg_idx = nseg - 1 - i
                 alpha, beta = sail_angles[seg_idx]
                 if _sail_active(alpha):
-                    _draw_sail(segment, alpha, beta)
+                    _zoh_plot.draw_solar_sail(
+                        ax, segment[len(segment) // 2], alpha, beta, sail_size
+                    )
 
         if mark_mismatch and last_point is not None:
             ax.scatter(last_point[0], last_point[1], last_point[2], marker="^", **kwargs)
 
-        ax.set_box_aspect([1, 1, 1])
-        _set_axes_equal(ax)
+        _zoh_plot.set_3d_axes_equal(ax)
         return ax

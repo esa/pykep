@@ -61,6 +61,21 @@ class trajopt_mga_tests(_ut.TestCase):
 
 
 class gym_tests(_ut.TestCase):
+    def test_tops_solar_sail_multiple_shooting(self):
+        """We test that solar-sail TOPS wrappers keep single shooting as the default."""
+        cases = (
+            (_pk.trajopt.gym.tops_ss, _pk.trajopt.zoh_ss_point2point,
+             _pk.trajopt.zoh_ms_ss_point2point),
+            (_pk.trajopt.gym.tops_ss_mb, _pk.trajopt.zoh_ss_pl2pl,
+             _pk.trajopt.zoh_ms_ss_pl2pl),
+        )
+        for wrapper, single_type, multi_type in cases:
+            with self.subTest(wrapper=wrapper.__name__):
+                default = wrapper("P0", nseg=3)
+                multi = wrapper("P0", nseg=3, ms=True)
+                self.assertIsInstance(default.udp, single_type)
+                self.assertIsInstance(multi.udp, multi_type)
+
     def test_tops_multiple_shooting(self):
         """We test that two-body, MEE and CR3BP switches preserve defaults and provide valid MS gradients."""
         for wrapper in (_pk.trajopt.gym.tops_twobody, _pk.trajopt.gym.tops_mee, _pk.trajopt.gym.tops_cr3bp):
@@ -606,6 +621,8 @@ class trajopt_zoh_pl2pl_tests(_ut.TestCase):
 
         # Compare analytical and numerical gradients
         self.assertTrue(np.allclose(J_analytical, J_numerical, atol=1e-4, rtol=1e-4))
+
+
     def test_gradient_softmax(self):
         # Build the variational integrators needed for gradients
         ta = _pk.ta.get_zoh_kep(1e-14)
@@ -632,3 +649,114 @@ class trajopt_zoh_pl2pl_tests(_ut.TestCase):
         J_numerical_flat = pg.estimate_gradient_h(callable=udp_softmax.fitness, x=x, dx=1e-6)
         J_numerical = np.array(J_numerical_flat).reshape((nf, nx), order="C")
         self.assertTrue(np.allclose(J_analytical, J_numerical, atol=1e-4, rtol=1e-4))
+
+
+class trajopt_zoh_ms_ss_tests(_ut.TestCase):
+    def _check_sparse_gradient(self, udp, x):
+        # Compare the sparse variational Jacobian with independent input perturbations.
+        values = udp.fitness(x)
+        analytical = np.zeros((len(values), len(x)))
+        for (row, column), value in zip(udp.gradient_sparsity(), udp.gradient(x)):
+            analytical[row, column] = value
+        numerical = pg.estimate_gradient_h(udp.fitness, x, dx=1e-6).reshape(analytical.shape)
+        np.testing.assert_allclose(analytical, numerical, rtol=5e-4, atol=5e-5)
+
+    def test_point2point(self):
+        """We test that fixed-endpoint solar-sail defects and gradients work for both grids."""
+        for encoding in ("uniform", "softmax"):
+            with self.subTest(encoding=encoding):
+                udp = _pk.trajopt.zoh_ms_ss_point2point(
+                    nseg=3,
+                    tof_bounds=[0.2, 0.3],
+                    time_encoding=encoding,
+                    tas=(_pk.ta.get_zoh_ss(1e-13), _pk.ta.get_zoh_ss_var(1e-10)),
+                )
+                lower, upper = udp.get_bounds()
+                single = np.array([(lo + hi) / 2.0 for lo, hi in zip(lower, upper)])
+                x = udp.guess_internal_states(single[:udp._single_shooting_size])
+                self.assertEqual(len(x), udp._expected_nx())
+                self.assertEqual(udp.get_nec(), 6 * udp.nseg)
+                self.assertEqual(len(udp.fitness(x)), 1 + 6 * udp.nseg)
+                self.assertTrue(np.all(np.asarray(x) >= lower))
+                self.assertTrue(np.all(np.asarray(x) <= upper))
+                self._check_sparse_gradient(udp, x)
+
+    def test_planet_to_planet(self):
+        """We test moving ephemeris boundaries and direction constraints for both grids."""
+        for encoding in ("uniform", "softmax"):
+            with self.subTest(encoding=encoding):
+                udp = _pk.trajopt.zoh_ms_ss_pl2pl(
+                    nseg=3,
+                    time_encoding=encoding,
+                    tas=(_pk.ta.get_zoh_ss(1e-13), _pk.ta.get_zoh_ss_var(1e-10)),
+                )
+                lower, upper = udp.get_bounds()
+                single = np.array([(lo + hi) / 2.0 for lo, hi in zip(lower, upper)])
+                single[2:5] = [1.0 / np.sqrt(3.0)] * 3
+                single[6:9] = [1.0 / np.sqrt(3.0)] * 3
+                x = udp.guess_internal_states(single[:udp._single_shooting_size])
+                self.assertEqual(len(x), udp._expected_nx())
+                self.assertEqual(udp.get_nec(), 6 * udp.nseg + 2)
+                self.assertEqual(udp.get_nic(), 0)
+                self.assertEqual(len(udp.fitness(x)), 1 + 6 * udp.nseg + 2)
+                self._check_sparse_gradient(udp, x)
+
+
+class trajopt_zoh_ms_pl2pl_tests(_ut.TestCase):
+    def _make_udp(self, encoding, cart2state=None):
+        ta = _pk.ta.get_zoh_kep(1e-14)
+        ta_var = _pk.ta.get_zoh_kep_var(1e-10)
+        return _pk.trajopt.zoh_ms_pl2pl(
+            nseg=3,
+            tas=(ta, ta_var),
+            time_encoding=encoding,
+            t0_bounds=[6700.0, 6800.0],
+            tof_bounds=[3.4, 8.6],
+            cart2state=cart2state,
+        )
+
+    def _make_guess(self, udp):
+        lower, upper = udp.get_bounds()
+        x = np.array([(lo + hi) / 2.0 for lo, hi in zip(lower, upper)])
+        for start in (3, 7):
+            x[start : start + 3] = [1.0 / np.sqrt(3.0)] * 3
+        return udp.guess_internal_states(x[:udp._single_shooting_size])
+
+    def test_guess_and_constraints(self):
+        """We test that planet boundary states seed bounded interior shooting nodes."""
+        udp = self._make_udp("uniform")
+        x = self._make_guess(udp)
+        self.assertEqual(len(x), udp._expected_nx())
+        self.assertEqual(udp.get_nec(), 7 * udp.nseg + udp.nseg + 2)
+        self.assertEqual(udp.get_nic(), 0)
+        values = udp.fitness(x)
+        self.assertEqual(len(values), 1 + udp.get_nec())
+        self.assertTrue(np.all(np.isfinite(values)))
+        lower, upper = udp.get_bounds()
+        self.assertTrue(np.all(np.asarray(x) >= lower))
+        self.assertTrue(np.all(np.asarray(x) <= upper))
+
+    def test_sparse_gradient(self):
+        """We test that sparse analytical gradients match small decision-vector changes."""
+        for encoding in ("uniform", "softmax"):
+            with self.subTest(encoding=encoding):
+                udp = self._make_udp(encoding)
+                x = self._make_guess(udp)
+                values = udp.fitness(x)
+                analytical = np.zeros((len(values), len(x)))
+                for (row, column), value in zip(udp.gradient_sparsity(), udp.gradient(x)):
+                    analytical[row, column] = value
+                numerical = pg.estimate_gradient_h(udp.fitness, x, dx=1e-6).reshape(analytical.shape)
+                np.testing.assert_allclose(analytical, numerical, rtol=2e-4, atol=2e-5)
+
+    def test_transform_gradient(self):
+        """We test that boundary gradients include the coordinate-transform Jacobian."""
+        transform = [lambda state: state, lambda state: np.eye(6)]
+        udp = self._make_udp("uniform", cart2state=transform)
+        x = self._make_guess(udp)
+        values = udp.fitness(x)
+        analytical = np.zeros((len(values), len(x)))
+        for (row, column), value in zip(udp.gradient_sparsity(), udp.gradient(x)):
+            analytical[row, column] = value
+        numerical = pg.estimate_gradient_h(udp.fitness, x, dx=1e-6).reshape(analytical.shape)
+        np.testing.assert_allclose(analytical, numerical, rtol=2e-4, atol=2e-5)

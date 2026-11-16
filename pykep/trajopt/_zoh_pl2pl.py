@@ -10,7 +10,7 @@
 
 import numpy as _np
 import pykep as _pk
-from matplotlib import pyplot as _plt
+from . import _zoh_udp_plot_utils as _zoh_plot
 
 
 class zoh_pl2pl:
@@ -791,6 +791,9 @@ class zoh_pl2pl:
             # We need to append the mass to the state after conversion since self.state2cart uses a state vector without mass
             state2cart = lambda state: list(self.state2cart(state[:-1])) + [state[-1]]
 
+        if ax is None:
+            ax = _pk.plot.make_3Daxis()
+
         # We start with the boundaries ....
         if orbit_color is not None:
             if tof is None:
@@ -815,66 +818,18 @@ class zoh_pl2pl:
 
         # And then the trajectory
         self._set_leg_from_x(x_arr)
-        fwd, bck, _ = self.leg.get_state_info(N=N)
-        # compute the color scheme
         throttles = x_arr[10 : 10 + 4 * self.nseg : 4]
-        if ax is None:
-            ax = _pk.plot.make_3Daxis()
-        # plot
-        last_point = None
-        for i, segment in enumerate(fwd):
-            color = (
-                0.25 + (0.80 - 0.25) * throttles[i],
-                0.41 + (0.36 - 0.41) * throttles[i],
-                0.88 + (0.36 - 0.88) * throttles[i],
-            )
-            # We obtain the state in Cartesian
-            segment_cart = _np.array([state2cart(it) for it in segment])
-            if mark_segments:
-                ax.scatter(
-                    segment_cart[0, 0],
-                    segment_cart[0, 1],
-                    segment_cart[0, 2],
-                    **kwargs,
-                )
-            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
-            last_point = segment_cart[-1, :3]
-        if mark_mismatch and last_point is not None:
-            ax.scatter(
-                last_point[0],
-                last_point[1],
-                last_point[2],
-                marker="^",
-                **kwargs,
-            )
-        for i, segment in enumerate(bck):
-            color = (
-                0.25 + (0.80 - 0.25) * throttles[-1 - i],
-                0.41 + (0.36 - 0.41) * throttles[-1 - i],
-                0.88 + (0.36 - 0.88) * throttles[-1 - i],
-            )
-            # We obtain the state in Cartesian
-            segment_cart = _np.array([state2cart(it) for it in segment])
-            if mark_segments:
-                ax.scatter(
-                    segment_cart[0, 0],
-                    segment_cart[0, 1],
-                    segment_cart[0, 2],
-                    **kwargs,
-                )
-            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
-            last_point = segment_cart[-1, :3]
-        if mark_mismatch and last_point is not None:
-            ax.scatter(
-                last_point[0],
-                last_point[1],
-                last_point[2],
-                marker="^",
-                **kwargs
-            )
-
-
-        return ax
+        return _zoh_plot.plot_low_thrust_segments(
+            self.leg,
+            throttles,
+            ax=ax,
+            N=N,
+            mark_segments=mark_segments,
+            mark_mismatch=mark_mismatch,
+            mismatch_at_cut=True,
+            state_to_cartesian=state2cart,
+            **kwargs,
+        )
 
     def plot_throttle(self, x, ax=None, **kwargs):
         """
@@ -893,18 +848,6 @@ class zoh_pl2pl:
         Returns:
             The matplotlib axes with the throttle profile plotted.
         """
-        if ax is None:
-            _, ax = _plt.subplots()
-
         self._set_leg_from_x(x)
-        tgrid = _np.asarray(self.leg.tgrid)  # length nseg+1
-        throttles = _np.asarray(x[10 : 10 + 4 * self.nseg : 4])  # length nseg
-
-        # Repeat the last throttle so that the last tgrid point is included in the step plot
-        u_plot = _np.r_[throttles, throttles[-1]]
-
-        ax.step(tgrid, u_plot, where="post", **kwargs)
-
-        ax.set_xlabel("time grid")
-        ax.set_ylabel("throttle value (nd)")
-        return ax
+        throttles = _np.asarray(x[10 : 10 + 4 * self.nseg : 4])
+        return _zoh_plot.plot_throttle_profile(self.leg.tgrid, throttles, ax=ax, **kwargs)
