@@ -61,6 +61,43 @@ class trajopt_mga_tests(_ut.TestCase):
 
 
 class gym_tests(_ut.TestCase):
+    def test_tops_multiple_shooting(self):
+        """We test that two-body, MEE and CR3BP switches preserve defaults and provide valid MS gradients."""
+        for wrapper in (_pk.trajopt.gym.tops_twobody, _pk.trajopt.gym.tops_mee, _pk.trajopt.gym.tops_cr3bp):
+            for encoding in ("uniform", "softmax"):
+                for inequalities in (False, True):
+                    with self.subTest(wrapper=wrapper.__name__, encoding=encoding, inequalities=inequalities):
+                        options = dict(nseg=3, time_encoding=encoding, inequalities_for_tc=inequalities)
+                        default = wrapper("P0", **options)
+                        single = wrapper("P0", ms=False, **options)
+                        multi = wrapper("P0", ms=True, **options)
+                        self.assertIsInstance(default.udp, _pk.trajopt.zoh_point2point)
+                        self.assertIsInstance(multi.udp, _pk.trajopt.zoh_ms_point2point)
+
+                        # The MS vector keeps the old prefix and adds two seven-component nodes.
+                        lower, upper = single.get_bounds()
+                        guess = (np.array(lower) + upper) / 2.0
+                        guess[1:13] = [0.01, 1.0, 0.0, 0.0] * 3
+                        np.testing.assert_array_equal(default.fitness(guess), single.fitness(guess))
+                        full = multi.guess_internal_states(guess)
+                        np.testing.assert_array_equal(full[:len(guess)], guess)
+                        self.assertEqual(len(full), len(guess) + 14)
+                        self.assertEqual(multi.get_nec(), 21 + (0 if inequalities else 3))
+                        self.assertEqual(multi.get_nic(), 3 if inequalities else 0)
+                        values = multi.fitness(full)
+                        self.assertEqual(len(values), 25)
+                        self.assertTrue(np.all(np.isfinite(values)))
+                        node_lower, node_upper = multi.get_bounds()
+                        self.assertTrue(np.all(np.array(full) >= node_lower))
+                        self.assertTrue(np.all(np.array(full) <= node_upper))
+
+                        # Compare the sparse analytical gradient with independent small input changes.
+                        analytical = np.zeros((len(values), len(full)))
+                        for (row, column), value in zip(multi.gradient_sparsity(), multi.gradient(full)):
+                            analytical[row, column] = value
+                        numerical = pg.estimate_gradient_h(multi.fitness, full, dx=1e-6).reshape(analytical.shape)
+                        np.testing.assert_allclose(analytical, numerical, rtol=1e-4, atol=1e-5)
+
     def test_cassini1(self):
         import pykep as _pk
 

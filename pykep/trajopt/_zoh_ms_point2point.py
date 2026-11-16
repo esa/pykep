@@ -80,7 +80,7 @@ class zoh_ms_point2point:
         if len(states) != 6 or len(statef) != 6:
             raise ValueError("states and statef must each contain six components")
         if state_bounds is None:
-            state_bounds = ([-10.0] * 6, [10.0] * 6)
+            state_bounds = ([-100.0] * 6, [100.0] * 6)
         bounds = _np.asarray(state_bounds, dtype=float)
         if bounds.shape != (2, 6) or not _np.all(_np.isfinite(bounds)) or _np.any(bounds[0] > bounds[1]):
             raise ValueError("state_bounds must contain finite, ordered six-component lower and upper bounds")
