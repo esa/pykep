@@ -10,6 +10,7 @@
 
 import numpy as _np
 import pykep as _pk
+from . import _zoh_udp_plot_utils as _zoh_plot
 
 class zoh_ss_point2point:
     """Represents the time optimal Solar Sail transfer between two fixed points using Zero Order Hold (direct) trajectory legs.
@@ -340,8 +341,6 @@ class zoh_ss_point2point:
             successfully propagated forward/backward segments. This is intentional so
             users can visually inspect where and how the trajectory integration breaks.
         """
-        from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-
         x_arr = _np.asarray(x)
         self._set_leg_from_x(x_arr)
         # Intentionally keep plotting even when propagation is only partial.
@@ -353,89 +352,6 @@ class zoh_ss_point2point:
 
         if ax is None:
             ax = _pk.plot.make_3Daxis()
-
-        def _set_axes_equal(ax):
-            """Force equal aspect ratio on a 3D matplotlib axis."""
-            limits = _np.array([
-                ax.get_xlim3d(),
-                ax.get_ylim3d(),
-                ax.get_zlim3d(),
-            ])
-            origin = _np.mean(limits, axis=1)
-            radius = 0.5 * _np.max(_np.abs(limits[:, 1] - limits[:, 0]))
-            ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
-            ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
-            ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
-
-        def _rtn_basis(state_cartesian):
-            """Returns (R̂, T̂, N̂) unit vectors from a Cartesian state [rx,ry,rz,vx,vy,vz,...]."""
-            r = _np.array(state_cartesian[:3], dtype=float)
-            v = _np.array(state_cartesian[3:6], dtype=float)
-            R_hat = r / _np.linalg.norm(r)
-            h = _np.cross(r, v)
-            N_hat = h / _np.linalg.norm(h)
-            T_hat = _np.cross(N_hat, R_hat)
-            return R_hat, T_hat, N_hat
-
-        def _sail_normal_cartesian(alpha, beta, R_hat, T_hat, N_hat):
-            """
-            Cone angle alpha: angle between sail normal and R̂ (radial).
-            Clock angle beta: azimuth in the T̂-N̂ plane.
-            Normal/acceleration direction in RTN (matching ta.zoh_ss dynamics):
-            n = [cos(alpha), sin(alpha)*sin(beta), sin(alpha)*cos(beta)]
-            """
-            n_rtn = _np.array([
-                _np.cos(alpha),
-                _np.sin(alpha) * _np.sin(beta),
-                _np.sin(alpha) * _np.cos(beta),
-            ])
-            M = _np.column_stack([R_hat, T_hat, N_hat])
-            return M @ n_rtn
-
-        def _sail_patch_vertices(center, normal, size):
-            """
-            Build 4 corners of a square sail of half-side `size` centered at `center`,
-            lying in the plane perpendicular to `normal`.
-            """
-            ref = _np.array([0.0, 0.0, 1.0])
-            if abs(_np.dot(normal, ref)) > 0.9:
-                ref = _np.array([0.0, 1.0, 0.0])
-            u = _np.cross(normal, ref)
-            u /= _np.linalg.norm(u)
-            v = _np.cross(normal, u)
-            v /= _np.linalg.norm(v)
-            corners = _np.array([
-                center + size * ( u + v),
-                center + size * (-u + v),
-                center + size * (-u - v),
-                center + size * ( u - v),
-            ])
-            return corners
-
-        def _draw_sail(segment, alpha, beta):
-            """Draw sail patch and normal quiver at the midpoint of a segment."""
-            mid_idx = len(segment) // 2
-            state_mid = to_cartesian(segment[mid_idx])
-            center = _np.array(state_mid[:3], dtype=float)
-            R_hat, T_hat, N_hat = _rtn_basis(state_mid)
-            n_cart = _sail_normal_cartesian(alpha, beta, R_hat, T_hat, N_hat)
-            corners = _sail_patch_vertices(center, n_cart, sail_size)
-            poly = Poly3DCollection(
-                [corners],
-                alpha=0.45,
-                facecolor='silver',
-                edgecolor='dimgray',
-                linewidth=0.8,
-                zorder=5,
-            )
-            ax.add_collection3d(poly)
-            ax.quiver(
-                center[0], center[1], center[2],
-                n_cart[0] * sail_size * 2,
-                n_cart[1] * sail_size * 2,
-                n_cart[2] * sail_size * 2,
-                color='tab:blue', linewidth=1.2, arrow_length_ratio=0.3,
-            )
 
         def _sail_active(alpha):
             """Returns True if the sail is delivering a non-zero force."""
@@ -458,7 +374,10 @@ class zoh_ss_point2point:
             if plot_sail:
                 alpha, beta = sail_angles[i]
                 if _sail_active(alpha):
-                    _draw_sail(segment, alpha, beta)
+                    _zoh_plot.draw_solar_sail(
+                        ax, segment[len(segment) // 2], alpha, beta, sail_size,
+                        state_to_cartesian=to_cartesian,
+                    )
 
         if mark_mismatch and last_point is not None:
             ax.scatter(
@@ -487,7 +406,10 @@ class zoh_ss_point2point:
                 seg_idx = nseg - 1 - i
                 alpha, beta = sail_angles[seg_idx]
                 if _sail_active(alpha):
-                    _draw_sail(segment, alpha, beta)
+                    _zoh_plot.draw_solar_sail(
+                        ax, segment[len(segment) // 2], alpha, beta, sail_size,
+                        state_to_cartesian=to_cartesian,
+                    )
 
         if mark_mismatch and last_point is not None:
             ax.scatter(
@@ -498,6 +420,5 @@ class zoh_ss_point2point:
                 **kwargs,
             )
 
-        ax.set_box_aspect([1, 1, 1])
-        _set_axes_equal(ax)
+        _zoh_plot.set_3d_axes_equal(ax)
         return ax

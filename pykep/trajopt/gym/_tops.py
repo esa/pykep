@@ -27,11 +27,11 @@ class tops_twobody:
         so they are not moving-end problems.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
-    Space, are low-thrust trajectory optimization
-    problems described in json format. In this specific
-    instance the spacecraft dynamics are modeled in Cartesian coordinates under
-    two-body motion and. The transcription to a Non Linear Programming priblem (NLP) uses
-    a forward-backward shooting scheme, which introduces highly nonlinear
+    space, are low-thrust trajectory optimization
+    problems transcribed into nonlinear programs by a direct method. In this
+    instance the spacecraft is controlled by a solar sail. By default the
+    transcription uses forward-backward single shooting; ``ms=True`` selects
+    multiple shooting with bounded interior states.
     mismatch constraints, together with throttle constraints on the segment controls.
 
     The control is represented with a zero-order hold over each segment, so the
@@ -39,7 +39,8 @@ class tops_twobody:
     the selected time encoding. Different choices of ``nseg`` and
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. The formulation is built on
-    :class:`~pykep.trajopt.zoh_point2point`, so the departure and arrival
+    :class:`~pykep.trajopt.zoh_point2point` or, with ``ms=True``,
+    :class:`~pykep.trajopt.zoh_ms_point2point`. The departure and arrival
     states are fixed and moving-end effects are not accounted for.
     """
 
@@ -50,6 +51,7 @@ class tops_twobody:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a two-body TOPS instance from a predefined gym case.
 
@@ -75,6 +77,9 @@ class tops_twobody:
                 boundary relative-velocity direction constraints are formulated as inequalities
                 (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with seven state variables
+                at each interior node and seven defect constraints per segment. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
@@ -105,7 +110,7 @@ class tops_twobody:
         statef = [it / self.L for it in gym_problem["state_f"][:3]] + [
             it / self.V for it in gym_problem["state_f"][3:6]
         ]
-        ms = gym_problem["m_s"] / self.MASS
+        initial_mass = gym_problem["m_s"] / self.MASS
         max_thrust = gym_problem["max_thrust"] / self.F
         tof_bounds = [it / self.TIME for it in gym_problem["tof_bounds"]]
 
@@ -114,13 +119,16 @@ class tops_twobody:
         ta_twobody.pars[4] = 1.0 / veff_nd
         ta_twobody_var.pars[4] = 1.0 / veff_nd
 
-        self.udp = _pk.trajopt.zoh_point2point(
+        # MS interior-state bounds use the UDP defaults. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        udp_type = _pk.trajopt.zoh_ms_point2point if ms else _pk.trajopt.zoh_point2point
+        self.udp = udp_type(
             states=states,  # 6D state only (mass handled separately)
             statef=statef,
-            ms=ms,
+            ms=initial_mass,
             max_thrust=max_thrust,
             tof_bounds=tof_bounds,
-            mf_bounds=[ms / 2.0, ms],
+            mf_bounds=[initial_mass / 2.0, initial_mass],
             nseg=nseg,
             cut=cut,
             tas=[ta_twobody, ta_twobody_var],
@@ -202,14 +210,17 @@ class tops_twobody_mb:
     two-body motion and. The transcription to a Non Linear Programming priblem (NLP) uses
     a forward-backward shooting scheme, which introduces highly nonlinear
     mismatch constraints, together with throttle constraints on the segment controls.
+    By default the transcription uses forward-backward single shooting; ``ms=True``
+    selects multiple shooting with bounded interior states.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
     the selected time encoding. Different choices of ``nseg`` and
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. The formulation is built on
-    :class:`~pykep.trajopt.zoh_pl2pl`, so the departure and arrival
-    states are moving boundaries and moving-end effects are accounted for.
+    :class:`~pykep.trajopt.zoh_pl2pl` by default, or
+    :class:`~pykep.trajopt.zoh_ms_pl2pl` when ``ms=True``, so the departure and
+    arrival states are moving boundaries and moving-end effects are accounted for.
     """
 
     def __init__(
@@ -219,6 +230,7 @@ class tops_twobody_mb:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a two-body TOPS instance with moving boundaries from a predefined gym case.
 
@@ -244,6 +256,9 @@ class tops_twobody_mb:
                 boundary relative-velocity direction constraints are formulated as inequalities
                 (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_twobody_json[prob_name]
@@ -304,7 +319,10 @@ class tops_twobody_mb:
         ta.pars[4] = 1.0 / veff_nd
         ta_var.pars[4] = 1.0 / veff_nd
 
-        self.udp = _pk.trajopt.zoh_pl2pl(
+        # MS interior-state bounds use the UDP defaults. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        udp_type = _pk.trajopt.zoh_ms_pl2pl if ms else _pk.trajopt.zoh_pl2pl
+        self.udp = udp_type(
             pls=self.pls,
             plf=self.plf,
             ms=1.0,
@@ -432,7 +450,8 @@ class tops_mee:
     the selected time encoding. Different choices of ``nseg`` and
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. The formulation is built on
-    :class:`~pykep.trajopt.zoh_point2point`, so the departure and arrival
+    :class:`~pykep.trajopt.zoh_point2point` or, with ``ms=True``,
+    :class:`~pykep.trajopt.zoh_ms_point2point`. The departure and arrival
     states are fixed and moving-end effects are not accounted for.
     """
 
@@ -443,6 +462,7 @@ class tops_mee:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a two-body MEE TOPS instance from a predefined gym case.
 
@@ -467,6 +487,9 @@ class tops_mee:
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
                 formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to True.
+
+            ms (:class:`bool`, optional): Use multiple shooting with seven state variables
+                at each interior node and seven defect constraints per segment. Default is False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
@@ -500,7 +523,7 @@ class tops_mee:
         statef = [it / self.L for it in gym_problem["state_f"][:1]] + [
             it for it in gym_problem["state_f"][1:6]
         ]
-        ms = gym_problem["m_s"] / self.MASS
+        initial_mass = gym_problem["m_s"] / self.MASS
         max_thrust = gym_problem["max_thrust"] / self.F
         tof_bounds = [it / self.TIME for it in gym_problem["tof_bounds"]]
 
@@ -509,13 +532,19 @@ class tops_mee:
         ta_twobody_mee.pars[4] = 1.0 / veff_nd
         ta_twobody_mee_var.pars[4] = 1.0 / veff_nd
 
-        self.udp = _pk.trajopt.zoh_point2point(
+        # MS interior-state bounds use the UDP defaults, except p >= 1e-8. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        ms_options = {}
+        if ms:
+            ms_options["state_bounds"] = ([1e-8] + [-100.0] * 5, [100.0] * 6)
+        udp_type = _pk.trajopt.zoh_ms_point2point if ms else _pk.trajopt.zoh_point2point
+        self.udp = udp_type(
             states=states,
             statef=statef,
-            ms=ms,
+            ms=initial_mass,
             max_thrust=max_thrust,
             tof_bounds=tof_bounds,
-            mf_bounds=[ms / 2.0, ms],
+            mf_bounds=[initial_mass / 2.0, initial_mass],
             nseg=nseg,
             cut=cut,
             tas=[ta_twobody_mee, ta_twobody_mee_var],
@@ -523,6 +552,7 @@ class tops_mee:
             state2cart=_functools.partial(_mee_to_cart, L=self.L),
             inequalities_for_tc=inequalities_for_tc,
             max_steps=1000,
+            **ms_options,
         )
 
     def get_name(self):
@@ -596,15 +626,18 @@ class tops_mee_mb:
     instance the spacecraft dynamics are modeled in modified equinoctial
     elements under two-body motion. The transcription uses a forward-backward
     shooting scheme, which introduces highly nonlinear mismatch constraints,
-    together with throttle constraints on the segment controls.
+    together with throttle constraints on the segment controls. By default the
+    transcription uses forward-backward single shooting; ``ms=True`` selects
+    multiple shooting with bounded interior states.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
     the selected time encoding. Different choices of ``nseg`` and
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. The formulation is built on
-    :class:`~pykep.trajopt.zoh_pl2pl`, so the departure and arrival
-    states are moving boundaries and moving-end effects are accounted for.
+    :class:`~pykep.trajopt.zoh_pl2pl` by default, or
+    :class:`~pykep.trajopt.zoh_ms_pl2pl` when ``ms=True``, so the departure and
+    arrival states are moving boundaries and moving-end effects are accounted for.
     """
 
     def __init__(
@@ -614,6 +647,7 @@ class tops_mee_mb:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a two-body MEE TOPS instance with moving boundaries from a predefined gym case.
 
@@ -638,6 +672,9 @@ class tops_mee_mb:
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
                 formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_mee_json[prob_name]
@@ -731,7 +768,10 @@ class tops_mee_mb:
         cart2state_J_zoh = _functools.partial(_cfunc_call, cart2state_J_cfunc, [gym_problem["mu"], 1])
         state2cart_zoh = _functools.partial(_cfunc_call, state2cart_cfunc, [1, 1])
 
-        self.udp = _pk.trajopt.zoh_pl2pl(
+        # MS interior-state bounds use the UDP defaults. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        udp_type = _pk.trajopt.zoh_ms_pl2pl if ms else _pk.trajopt.zoh_pl2pl
+        self.udp = udp_type(
             pls=self.pls,
             plf=self.plf,
             ms=gym_problem["m_s"] * MASS / MASS_ta,
@@ -848,12 +888,12 @@ class tops_ss:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. Unlike the non solar-sail
     TOPS instances, this formulation does not include throttle constraints. The
-    formulation is built on :class:`~pykep.trajopt.zoh_ss_point2point`, so the
-    departure and arrival states are fixed and moving-end effects are not
-    accounted for.
+    formulation is built on :class:`~pykep.trajopt.zoh_ss_point2point` by
+    default, or :class:`~pykep.trajopt.zoh_ms_ss_point2point` when ``ms=True``.
+    The departure and arrival states remain fixed.
     """
 
-    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform"):
+    def __init__(self, prob_name, cut=0.5, nseg=10, time_encoding="uniform", ms=False):
         """Construct a solar-sailing TOPS instance from a predefined gym case.
 
         Args:
@@ -873,6 +913,9 @@ class tops_ss:
                 - ``'softmax'``: variable segment lengths controlled by softmax weights added to the decision vector.
 
                 Defaults to ``'uniform'``.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
@@ -911,7 +954,10 @@ class tops_ss:
         ta_ss.pars[2] = c_sail
         ta_ss_var.pars[2] = c_sail
 
-        self.udp = _pk.trajopt.zoh_ss_point2point(
+        udp_type = (
+            _pk.trajopt.zoh_ms_ss_point2point if ms else _pk.trajopt.zoh_ss_point2point
+        )
+        self.udp = udp_type(
             states=states,
             statef=statef,
             tof_bounds=tof_bounds,
@@ -964,11 +1010,11 @@ class tops_ss_mb:
         epoch to move by 1/4 of the period of the departure planet.
 
     The TOPS benchmark problems, from Trajectory Optimisation Problems in
-    Space, are low-thrust trajectory optimization
+    space, are low-thrust trajectory optimization
     problems transcribed into nonlinear programs by a direct method. In this
-    instance the spacecraft is controlled by a solar sail and the transcription
-    uses a forward-backward shooting scheme, which introduces highly nonlinear
-    mismatch constraints.
+    instance the spacecraft is controlled by a solar sail. By default the
+    transcription uses forward-backward single shooting; ``ms=True`` selects
+    multiple shooting with bounded interior states.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
@@ -976,9 +1022,9 @@ class tops_ss_mb:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. Unlike the non solar-sail
     TOPS instances, this formulation does not include throttle constraints. The
-    formulation is built on :class:`~pykep.trajopt.zoh_ss_pl2pl`, so the
-    departure and arrival states are moving boundaries and moving-end effects are
-    accounted for.
+    formulation is built on :class:`~pykep.trajopt.zoh_ss_pl2pl` by default, or
+    :class:`~pykep.trajopt.zoh_ms_ss_pl2pl` when ``ms=True``. Departure and
+    arrival states are moving boundaries, and moving-end effects are accounted for.
     """
 
     def __init__(
@@ -988,6 +1034,7 @@ class tops_ss_mb:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a solar-sailing TOPS instance with moving boundaries from a predefined gym case.
 
@@ -1012,6 +1059,9 @@ class tops_ss_mb:
             *inequalities_for_tc* (:class:`bool`, optional): If True, boundary relative-velocity
                 direction constraints are formulated as inequalities, otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_ss_json[prob_name]
@@ -1058,7 +1108,8 @@ class tops_ss_mb:
         ta.pars[2] = gym_problem["c_sail"]
         ta_var.pars[2] = gym_problem["c_sail"]
 
-        self.udp = _pk.trajopt.zoh_ss_pl2pl(
+        udp_type = _pk.trajopt.zoh_ms_ss_pl2pl if ms else _pk.trajopt.zoh_ss_pl2pl
+        self.udp = udp_type(
             pls=self.pls,
             plf=self.plf,
             nseg=nseg,
@@ -1154,8 +1205,9 @@ class tops_cr3bp:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. In this CR3BP formulation
     throttle constraints are not exposed as separate inequalities. The
-    formulation is built on :class:`~pykep.trajopt.zoh_point2point`, so the
-    departure and arrival states are fixed and moving-end effects are not
+    formulation is built on :class:`~pykep.trajopt.zoh_point2point` or, with
+    ``ms=True``, :class:`~pykep.trajopt.zoh_ms_point2point`. The departure
+    and arrival states are fixed and moving-end effects are not
     accounted for.
     """
 
@@ -1166,6 +1218,7 @@ class tops_cr3bp:
         nseg=60,
         time_encoding="uniform",
         inequalities_for_tc=False,
+        ms=False,
     ):
         """Construct a CR3BP TOPS instance from a predefined gym case.
 
@@ -1191,6 +1244,9 @@ class tops_cr3bp:
             *inequalities_for_tc* (:class:`bool`, optional): If True, throttle constraints are
                 formulated as inequalities (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to False.
+
+            ms (:class:`bool`, optional): Use multiple shooting with seven state variables
+                at each interior node and seven defect constraints per segment. Default is False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
@@ -1222,7 +1278,10 @@ class tops_cr3bp:
         ta_cr3bp.pars[5] = mu_cr3bp
         ta_cr3bp_var.pars[5] = mu_cr3bp
 
-        self.udp = _pk.trajopt.zoh_point2point(
+        # MS interior-state bounds use the UDP defaults. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        udp_type = _pk.trajopt.zoh_ms_point2point if ms else _pk.trajopt.zoh_point2point
+        self.udp = udp_type(
             states=gym_problem["state_s"],
             statef=gym_problem["state_f"],
             ms=gym_problem["m_s"],
@@ -1305,6 +1364,8 @@ class tops_cr3bp_mb:
     instance the spacecraft dynamics are modeled in the circular restricted
     three-body problem. The transcription uses a forward-backward shooting
     scheme, which introduces highly nonlinear mismatch constraints.
+    By default the transcription uses forward-backward single shooting; ``ms=True``
+    selects multiple shooting with bounded interior states.
 
     The control is represented with a zero-order hold over each segment, so the
     resulting NLP size and difficulty depend on the number of segments and on
@@ -1312,7 +1373,8 @@ class tops_cr3bp_mb:
     ``time_encoding`` therefore provide a convenient way to regulate the
     dimensionality and complexity of the benchmark. In this CR3BP formulation
     throttle constraints are not exposed as separate inequalities. The
-    formulation is built on :class:`~pykep.trajopt.zoh_pl2pl`, so the
+    formulation is built on :class:`~pykep.trajopt.zoh_pl2pl` by default, or
+    :class:`~pykep.trajopt.zoh_ms_pl2pl` when ``ms=True``, so the
     departure and arrival states are moving boundaries and moving-end effects are
     accounted for.
     """
@@ -1324,6 +1386,7 @@ class tops_cr3bp_mb:
         nseg=10,
         time_encoding="uniform",
         inequalities_for_tc=True,
+        ms=False,
     ):
         """Construct a CR3BP TOPS instance with moving boundaries from a predefined gym case.
 
@@ -1350,6 +1413,9 @@ class tops_cr3bp_mb:
                 boundary relative-velocity direction constraints are formulated as inequalities
                 (``|i_u|**2 - 1 <= 0``), otherwise as equalities.
                 Defaults to True.
+
+            *ms* (:class:`bool`, optional): Use multiple shooting with bounded interior
+                states. Defaults to False.
         """
         self.prob_name = prob_name
         gym_problem = _pk.trajopt.gym.tops_cr3bp_json[prob_name]
@@ -1409,7 +1475,10 @@ class tops_cr3bp_mb:
         ta.pars[5] = mu_cr3bp
         ta_var.pars[5] = mu_cr3bp
 
-        self.udp = _pk.trajopt.zoh_pl2pl(
+        # MS interior-state bounds use the UDP defaults. The user is expected to override them as needed
+        # before defining an initial guess for the multiple shooting problem via `guess_internal_states`.
+        udp_type = _pk.trajopt.zoh_ms_pl2pl if ms else _pk.trajopt.zoh_pl2pl
+        self.udp = udp_type(
             pls=self.pls,
             plf=self.plf,
             ms=gym_problem["m_s"],

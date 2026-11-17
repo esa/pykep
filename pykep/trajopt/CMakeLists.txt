@@ -4,6 +4,11 @@ set(PYKEP_TRAJOPT_PYTHON_FILES
     _sf_pl2pl.py 
     _sf_pl2pl_alpha.py 
     _zoh_point2point.py
+    _zoh_ms_point2point.py
+    _zoh_ms_pl2pl.py
+    _zoh_ms_ss_point2point.py
+    _zoh_ms_ss_pl2pl.py
+    _zoh_udp_plot_utils.py
     _zoh_ss_point2point.py
     _zoh_pl2pl.py
     _zoh_ss_pl2pl.py

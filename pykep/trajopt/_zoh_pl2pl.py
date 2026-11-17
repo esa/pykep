@@ -10,7 +10,7 @@
 
 import numpy as _np
 import pykep as _pk
-from matplotlib import pyplot as _plt
+from . import _zoh_udp_plot_utils as _zoh_plot
 
 
 class zoh_pl2pl:
@@ -495,9 +495,9 @@ class zoh_pl2pl:
 
         # Extract components for clarity
         vinf_dep_mag = x[2]
-        idep = x[3:6]
+        idep = _np.asarray(x[3:6])
         vinf_arr_mag = x[6]
-        iarr = x[7:10]
+        iarr = _np.asarray(x[7:10])
 
         # Initialize the gradient matrix
         nf = 1 + 7 + self.nseg + 2
@@ -522,91 +522,35 @@ class zoh_pl2pl:
         as_nd = as_si / self.ACC
         af_nd = af_si / self.ACC
 
-        # Partials of mismatch constraints w.r.t. t0
-        # d(rs_nd)/dt0 = d(rs/L)/dt0_days = vs * DAY2SEC / L = vs_nd * (V/L) * DAY2SEC
-        # d(vs_nd)/dt0 = (1/V) * as * DAY2SEC = (as_nd * V/TIME) / V * DAY2SEC = as_nd * DAY2SEC / TIME
-        dx0_dt0_cart = _np.concatenate(
-            [
-                vs_nd * _pk.DAY2SEC / self.TIME,
-                as_nd * _pk.DAY2SEC / self.TIME,
-                [0.0],
-            ]
-        )
-        
-        # Apply Jacobian of cart2state transformation if provided
+        # Mismatch partials w.r.t. the Cartesian boundary states, chaining the cart2state Jacobian
+        # evaluated at the spacecraft (not planet) states used in _set_leg_from_x
         if self.cart2state is not None:
-            cart_state0 = _np.concatenate([rs_nd, vs_nd])
-            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
-            dx0_dt0_nd = J0 @ dx0_dt0_cart[:6]
-            dx0_dt0_nd = _np.concatenate([dx0_dt0_nd, [0.0]])
+            J0 = _np.asarray(self.cart2state[1](_np.r_[rs_nd, vs_nd + vinf_dep_mag * idep])).reshape((6, 6))
+            J1 = _np.asarray(self.cart2state[1](_np.r_[rf_nd, vf_nd + vinf_arr_mag * iarr])).reshape((6, 6))
+            dmc_dc0 = dmc_dx0[:, :6] @ J0
+            dmc_dc1 = dmc_dx1[:, :6] @ J1
         else:
-            dx0_dt0_nd = dx0_dt0_cart
-        
-        gradient[1:8, 0] = dmc_dx0 @ dx0_dt0_nd
+            dmc_dc0 = dmc_dx0[:, :6]
+            dmc_dc1 = dmc_dx1[:, :6]
 
-        # Also account for final state change through t0 (since tf = t0 + tof * TIME / DAY2SEC)
-        # dtf/dt0 = 1, so d(rf_nd)/dt0 = vf_nd * (V/L) * DAY2SEC, d(vf_nd)/dt0 = af_nd * DAY2SEC/TIME
-        dx1_dt0_cart = _np.concatenate(
-            [
-                vf_nd * _pk.DAY2SEC / self.TIME,
-                af_nd * _pk.DAY2SEC / self.TIME,
-                [0.0],
-            ]
-        )
-        
-        # Apply Jacobian of cart2state transformation if provided
-        if self.cart2state is not None:
-            cart_state1 = _np.concatenate([rf_nd, vf_nd])
-            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
-            dx1_dt0_nd = J1 @ dx1_dt0_cart[:6]
-            dx1_dt0_nd = _np.concatenate([dx1_dt0_nd, [0.0]])
-        else:
-            dx1_dt0_nd = dx1_dt0_cart
-        
-        gradient[1:8, 0] += dmc_dx1 @ dx1_dt0_nd
+        # Partials of mismatch constraints w.r.t. t0 (days), both boundaries move with t0
+        # d(r_nd)/dt0 = v_nd * DAY2SEC / TIME, d(v_nd)/dt0 = a_nd * DAY2SEC / TIME
+        gradient[1:8, 0] = (
+            dmc_dc0 @ _np.r_[vs_nd, as_nd] + dmc_dc1 @ _np.r_[vf_nd, af_nd]
+        ) * _pk.DAY2SEC / self.TIME
 
         # Partials w.r.t. final mass
         gradient[1:8, 1] = dmc_dx1[:, 6]
 
-        # Partials w.r.t. departure velocity magnitude
-        if self.cart2state is not None:
-            cart_state0 = _np.concatenate([rs_nd, vs_nd])
-            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
-            dx0_dvinf_dep_nd = _np.zeros(7)
-            dx0_dvinf_dep_nd[:6] = J0[:, 3:6] @ idep
-            gradient[1:8, 2] = dmc_dx0 @ dx0_dvinf_dep_nd
-        else:
-            gradient[1:8, 2] = dmc_dx0[:, 3:6] @ idep
+        # Partials w.r.t. departure and arrival excess velocities (magnitude and direction)
+        gradient[1:8, 2] = dmc_dc0[:, 3:6] @ idep
+        gradient[1:8, 3:6] = dmc_dc0[:, 3:6] * vinf_dep_mag
+        gradient[1:8, 6] = dmc_dc1[:, 3:6] @ iarr
+        gradient[1:8, 7:10] = dmc_dc1[:, 3:6] * vinf_arr_mag
 
-        # Partials w.r.t. departure direction
-        if self.cart2state is not None:
-            cart_state0 = _np.concatenate([rs_nd, vs_nd])
-            J0 = self.cart2state[1](cart_state0).reshape((6, 6))
-            dx0_ddir_nd = _np.zeros((7, 3))
-            dx0_ddir_nd[:6, :] = J0[:, 3:6] * vinf_dep_mag
-            gradient[1:8, 3:6] = dmc_dx0 @ dx0_ddir_nd
-        else:
-            gradient[1:8, 3:6] = dmc_dx0[:, 3:6] * vinf_dep_mag
-
-        # Partials w.r.t. arrival velocity magnitude
-        if self.cart2state is not None:
-            cart_state1 = _np.concatenate([rf_nd, vf_nd])
-            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
-            dx1_dvinf_arr_nd = _np.zeros(7)
-            dx1_dvinf_arr_nd[:6] = J1[:, 3:6] @ iarr
-            gradient[1:8, 6] = dmc_dx1 @ dx1_dvinf_arr_nd
-        else:
-            gradient[1:8, 6] = dmc_dx1[:, 3:6] @ iarr
-
-        # Partials w.r.t. arrival direction
-        if self.cart2state is not None:
-            cart_state1 = _np.concatenate([rf_nd, vf_nd])
-            J1 = self.cart2state[1](cart_state1).reshape((6, 6))
-            dx1_ddir_nd = _np.zeros((7, 3))
-            dx1_ddir_nd[:6, :] = J1[:, 3:6] * vinf_arr_mag
-            gradient[1:8, 7:10] = dmc_dx1 @ dx1_ddir_nd
-        else:
-            gradient[1:8, 7:10] = dmc_dx1[:, 3:6] * vinf_arr_mag
+        # Contribution of the arrival planet state change w.r.t. tof (non-dimensional)
+        # d(rf_nd)/d(tof_nd) = vf_nd, d(vf_nd)/d(tof_nd) = af_nd
+        dmc_dtof_arr = dmc_dc1 @ _np.r_[vf_nd, af_nd]
 
         # Partials w.r.t. controls
         for i in range(self.nseg):
@@ -619,15 +563,7 @@ class zoh_pl2pl:
         if self.time_encoding == "uniform":
             # dtgrid/dtof in non-dimensional time
             dtgrid_dtof = _np.linspace(0, 1, self.nseg + 1)
-            gradient[1:8, -1] = dmcdtgrid @ dtgrid_dtof
-
-            # Add contribution from final state change w.r.t tof (non-dimensional)
-            # d(rf_nd)/d(tof_nd) = vf_nd * (V/L) * TIME  [simplifies to vf_nd for V = L/TIME]
-            # d(vf_nd)/d(tof_nd) = af_nd
-            dx1_dtof_nd = _np.concatenate(
-                [vf_nd, af_nd, [0.0]]
-            )
-            gradient[1:8, -1] += dmc_dx1 @ dx1_dtof_nd
+            gradient[1:8, -1] = dmcdtgrid @ dtgrid_dtof + dmc_dtof_arr
 
         elif self.time_encoding == "softmax":
             w = x[11 + 4 * self.nseg : 11 + 4 * self.nseg + self.nseg]
@@ -636,13 +572,7 @@ class zoh_pl2pl:
             # Gradient w.r.t. tof (non-dimensional)
             dtgrid_dtof = _np.zeros(self.nseg + 1)
             dtgrid_dtof[1:] = _np.cumsum(softmax_weights)
-            gradient[1:8, 10 + 4 * self.nseg] = dmcdtgrid @ dtgrid_dtof
-
-            # Add contribution from final state change
-            dx1_dtof_nd = _np.concatenate(
-                [vf_nd, af_nd, [0.0]]
-            )
-            gradient[1:8, 10 + 4 * self.nseg] += dmc_dx1 @ dx1_dtof_nd
+            gradient[1:8, 10 + 4 * self.nseg] = dmcdtgrid @ dtgrid_dtof + dmc_dtof_arr
 
             # Gradient w.r.t. softmax weights
             tril_matrix = _np.tril(_np.ones((self.nseg, self.nseg)))
@@ -691,9 +621,9 @@ class zoh_pl2pl:
 
         # Extract velocity components (non-dimensional)
         vinf_dep_mag = x[2]
-        idep = x[3:6]
+        idep = _np.asarray(x[3:6])
         vinf_arr_mag = x[6]
-        iarr = x[7:10]
+        iarr = _np.asarray(x[7:10])
 
         dv_dep_nd = vinf_dep_mag * idep
         dv_arr_nd = vinf_arr_mag * iarr
@@ -784,12 +714,15 @@ class zoh_pl2pl:
             The matplotlib Axes object with the trajectory added.
         """
         x_arr = _np.asarray(x)
-        state2cart = self.state2cart if self.state2cart is not None else (lambda state: state)
+        self._set_leg_from_x(x_arr)
         if self.state2cart is None:
             state2cart = lambda state: state  # Identity if no conversion provided
         else:
             # We need to append the mass to the state after conversion since self.state2cart uses a state vector without mass
             state2cart = lambda state: list(self.state2cart(state[:-1])) + [state[-1]]
+
+        if ax is None:
+            ax = _pk.plot.make_3Daxis()
 
         # We start with the boundaries ....
         if orbit_color is not None:
@@ -814,67 +747,18 @@ class zoh_pl2pl:
             ax.plot(sol_cart_f[:,0], sol_cart_f[:,1], sol_cart_f[:,2], orbit_color, alpha=0.5)
 
         # And then the trajectory
-        self._set_leg_from_x(x_arr)
-        fwd, bck, _ = self.leg.get_state_info(N=N)
-        # compute the color scheme
         throttles = x_arr[10 : 10 + 4 * self.nseg : 4]
-        if ax is None:
-            ax = _pk.plot.make_3Daxis()
-        # plot
-        last_point = None
-        for i, segment in enumerate(fwd):
-            color = (
-                0.25 + (0.80 - 0.25) * throttles[i],
-                0.41 + (0.36 - 0.41) * throttles[i],
-                0.88 + (0.36 - 0.88) * throttles[i],
-            )
-            # We obtain the state in Cartesian
-            segment_cart = _np.array([state2cart(it) for it in segment])
-            if mark_segments:
-                ax.scatter(
-                    segment_cart[0, 0],
-                    segment_cart[0, 1],
-                    segment_cart[0, 2],
-                    **kwargs,
-                )
-            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
-            last_point = segment_cart[-1, :3]
-        if mark_mismatch and last_point is not None:
-            ax.scatter(
-                last_point[0],
-                last_point[1],
-                last_point[2],
-                marker="^",
-                **kwargs,
-            )
-        for i, segment in enumerate(bck):
-            color = (
-                0.25 + (0.80 - 0.25) * throttles[-1 - i],
-                0.41 + (0.36 - 0.41) * throttles[-1 - i],
-                0.88 + (0.36 - 0.88) * throttles[-1 - i],
-            )
-            # We obtain the state in Cartesian
-            segment_cart = _np.array([state2cart(it) for it in segment])
-            if mark_segments:
-                ax.scatter(
-                    segment_cart[0, 0],
-                    segment_cart[0, 1],
-                    segment_cart[0, 2],
-                    **kwargs,
-                )
-            ax.plot(segment_cart[:, 0], segment_cart[:, 1], segment_cart[:, 2], c=color)
-            last_point = segment_cart[-1, :3]
-        if mark_mismatch and last_point is not None:
-            ax.scatter(
-                last_point[0],
-                last_point[1],
-                last_point[2],
-                marker="^",
-                **kwargs
-            )
-
-
-        return ax
+        return _zoh_plot.plot_low_thrust_segments(
+            self.leg,
+            throttles,
+            ax=ax,
+            N=N,
+            mark_segments=mark_segments,
+            mark_mismatch=mark_mismatch,
+            mismatch_at_cut=True,
+            state_to_cartesian=state2cart,
+            **kwargs,
+        )
 
     def plot_throttle(self, x, ax=None, **kwargs):
         """
@@ -886,25 +770,13 @@ class zoh_pl2pl:
 
         Args:
             *x* (:class:`list`): The decision vector containing the segment throttles.
-                The throttle values are read from ``x[1:4*self.nseg:4]``.
+                The throttle values are read from ``x[10:10+4*self.nseg:4]``.
             *ax* (:class:`matplotlib.axes.Axes`): The matplotlib axes to plot on.
                 If None, a new figure and axes will be created.
 
         Returns:
             The matplotlib axes with the throttle profile plotted.
         """
-        if ax is None:
-            _, ax = _plt.subplots()
-
         self._set_leg_from_x(x)
-        tgrid = _np.asarray(self.leg.tgrid)  # length nseg+1
-        throttles = _np.asarray(x[10 : 10 + 4 * self.nseg : 4])  # length nseg
-
-        # Repeat the last throttle so that the last tgrid point is included in the step plot
-        u_plot = _np.r_[throttles, throttles[-1]]
-
-        ax.step(tgrid, u_plot, where="post", **kwargs)
-
-        ax.set_xlabel("time grid")
-        ax.set_ylabel("throttle value (nd)")
-        return ax
+        throttles = _np.asarray(x[10 : 10 + 4 * self.nseg : 4])
+        return _zoh_plot.plot_throttle_profile(self.leg.tgrid, throttles, ax=ax, **kwargs)

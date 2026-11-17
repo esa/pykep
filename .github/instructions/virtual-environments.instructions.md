@@ -9,4 +9,5 @@ description: "Use when managing, creating, using virtual environments of any sor
 - Check that added dependencies are actually used in the project
 - use the conda environment called kep3_devel when testing or developing the project
 - activate the conda environment before running any scripts or commands related to the project.
+- When testing pykep, check `pykep.__file__`: running from the repository root may import the source tree, which may not contain the built `pykep.core` extension. Run installed-package checks outside the source tree; 
 

@@ -17,6 +17,10 @@ from ._sf_point2point import sf_point2point
 from ._sf_pl2pl import sf_pl2pl
 from ._sf_pl2pl_alpha import sf_pl2pl_alpha
 from ._zoh_point2point import zoh_point2point
+from ._zoh_ms_point2point import zoh_ms_point2point
+from ._zoh_ms_pl2pl import zoh_ms_pl2pl
+from ._zoh_ms_ss_point2point import zoh_ms_ss_point2point
+from ._zoh_ms_ss_pl2pl import zoh_ms_ss_pl2pl
 from ._zoh_ss_point2point import zoh_ss_point2point
 from ._zoh_pl2pl import zoh_pl2pl
 from ._zoh_ss_pl2pl import zoh_ss_pl2pl
