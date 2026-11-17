@@ -327,9 +327,9 @@ class zoh_ss_pl2pl:
         rs, vs, rf, vf, rs_nd, vs_nd, rf_nd, vf_nd = self._set_leg_from_x(x)
 
         vinf_dep_mag = x[1]
-        idep = x[2:5]
+        idep = _np.asarray(x[2:5])
         vinf_arr_mag = x[5]
-        iarr = x[6:9]
+        iarr = _np.asarray(x[6:9])
 
         # objective + mismatch(6) + 2 direction normalization constraints
         nf = 1 + 6 + 2
@@ -406,8 +406,6 @@ class zoh_ss_pl2pl:
             )
 
         # Direction normalization constraints gradients
-        idep = x[2:5]
-        iarr = x[6:9]
         gradient[7, 2:5] = 2.0 * idep
         gradient[8, 6:9] = 2.0 * iarr
 
